@@ -10,6 +10,7 @@ import (
 	"github.com/aws/aws-sdk-go/aws/awsutil"
 	"github.com/aws/aws-sdk-go/aws/request"
 	"github.com/aws/aws-sdk-go/private/protocol"
+	"github.com/aws/aws-sdk-go/private/protocol/jsonrpc"
 )
 
 const opAllocateStaticIp = "AllocateStaticIp"
@@ -73,9 +74,9 @@ func (c *Lightsail) AllocateStaticIpRequest(input *AllocateStaticIpInput) (req *
 //   Lightsail throws this exception when user input does not conform to the validation
 //   rules of an input field.
 //
-//   Domain-related APIs are only available in the N. Virginia (us-east-1) Region.
-//   Please set your AWS Region configuration to us-east-1 to create, view, or
-//   edit these resources.
+//   Domain and distribution APIs are only available in the N. Virginia (us-east-1)
+//   AWS Region. Please set your AWS Region configuration to us-east-1 to create,
+//   view, or edit these resources.
 //
 //   * NotFoundException
 //   Lightsail throws this exception when it cannot find a resource.
@@ -189,9 +190,9 @@ func (c *Lightsail) AttachCertificateToDistributionRequest(input *AttachCertific
 //   Lightsail throws this exception when user input does not conform to the validation
 //   rules of an input field.
 //
-//   Domain-related APIs are only available in the N. Virginia (us-east-1) Region.
-//   Please set your AWS Region configuration to us-east-1 to create, view, or
-//   edit these resources.
+//   Domain and distribution APIs are only available in the N. Virginia (us-east-1)
+//   AWS Region. Please set your AWS Region configuration to us-east-1 to create,
+//   view, or edit these resources.
 //
 //   * NotFoundException
 //   Lightsail throws this exception when it cannot find a resource.
@@ -277,7 +278,7 @@ func (c *Lightsail) AttachDiskRequest(input *AttachDiskInput) (req *request.Requ
 //
 // The attach disk operation supports tag-based access control via resource
 // tags applied to the resource identified by disk name. For more information,
-// see the Lightsail Dev Guide (https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags).
+// see the Amazon Lightsail Developer Guide (https://lightsail.aws.amazon.com/ls/docs/en_us/articles/amazon-lightsail-controlling-access-using-tags).
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -294,9 +295,9 @@ func (c *Lightsail) AttachDiskRequest(input *AttachDiskInput) (req *request.Requ
 //   Lightsail throws this exception when user input does not conform to the validation
 //   rules of an input field.
 //
-//   Domain-related APIs are only available in the N. Virginia (us-east-1) Region.
-//   Please set your AWS Region configuration to us-east-1 to create, view, or
-//   edit these resources.
+//   Domain and distribution APIs are only available in the N. Virginia (us-east-1)
+//   AWS Region. Please set your AWS Region configuration to us-east-1 to create,
+//   view, or edit these resources.
 //
 //   * NotFoundException
 //   Lightsail throws this exception when it cannot find a resource.
@@ -388,7 +389,7 @@ func (c *Lightsail) AttachInstancesToLoadBalancerRequest(input *AttachInstancesT
 //
 // The attach instances to load balancer operation supports tag-based access
 // control via resource tags applied to the resource identified by load balancer
-// name. For more information, see the Lightsail Dev Guide (https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags).
+// name. For more information, see the Lightsail Developer Guide (https://lightsail.aws.amazon.com/ls/docs/en_us/articles/amazon-lightsail-controlling-access-using-tags).
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -405,9 +406,9 @@ func (c *Lightsail) AttachInstancesToLoadBalancerRequest(input *AttachInstancesT
 //   Lightsail throws this exception when user input does not conform to the validation
 //   rules of an input field.
 //
-//   Domain-related APIs are only available in the N. Virginia (us-east-1) Region.
-//   Please set your AWS Region configuration to us-east-1 to create, view, or
-//   edit these resources.
+//   Domain and distribution APIs are only available in the N. Virginia (us-east-1)
+//   AWS Region. Please set your AWS Region configuration to us-east-1 to create,
+//   view, or edit these resources.
 //
 //   * NotFoundException
 //   Lightsail throws this exception when it cannot find a resource.
@@ -503,7 +504,7 @@ func (c *Lightsail) AttachLoadBalancerTlsCertificateRequest(input *AttachLoadBal
 //
 // The AttachLoadBalancerTlsCertificate operation supports tag-based access
 // control via resource tags applied to the resource identified by load balancer
-// name. For more information, see the Lightsail Dev Guide (https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags).
+// name. For more information, see the Amazon Lightsail Developer Guide (https://lightsail.aws.amazon.com/ls/docs/en_us/articles/amazon-lightsail-controlling-access-using-tags).
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -520,9 +521,9 @@ func (c *Lightsail) AttachLoadBalancerTlsCertificateRequest(input *AttachLoadBal
 //   Lightsail throws this exception when user input does not conform to the validation
 //   rules of an input field.
 //
-//   Domain-related APIs are only available in the N. Virginia (us-east-1) Region.
-//   Please set your AWS Region configuration to us-east-1 to create, view, or
-//   edit these resources.
+//   Domain and distribution APIs are only available in the N. Virginia (us-east-1)
+//   AWS Region. Please set your AWS Region configuration to us-east-1 to create,
+//   view, or edit these resources.
 //
 //   * NotFoundException
 //   Lightsail throws this exception when it cannot find a resource.
@@ -624,9 +625,9 @@ func (c *Lightsail) AttachStaticIpRequest(input *AttachStaticIpInput) (req *requ
 //   Lightsail throws this exception when user input does not conform to the validation
 //   rules of an input field.
 //
-//   Domain-related APIs are only available in the N. Virginia (us-east-1) Region.
-//   Please set your AWS Region configuration to us-east-1 to create, view, or
-//   edit these resources.
+//   Domain and distribution APIs are only available in the N. Virginia (us-east-1)
+//   AWS Region. Please set your AWS Region configuration to us-east-1 to create,
+//   view, or edit these resources.
 //
 //   * NotFoundException
 //   Lightsail throws this exception when it cannot find a resource.
@@ -715,7 +716,7 @@ func (c *Lightsail) CloseInstancePublicPortsRequest(input *CloseInstancePublicPo
 //
 // The CloseInstancePublicPorts action supports tag-based access control via
 // resource tags applied to the resource identified by instanceName. For more
-// information, see the Lightsail Dev Guide (https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags).
+// information, see the Amazon Lightsail Developer Guide (https://lightsail.aws.amazon.com/ls/docs/en_us/articles/amazon-lightsail-controlling-access-using-tags).
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -732,9 +733,9 @@ func (c *Lightsail) CloseInstancePublicPortsRequest(input *CloseInstancePublicPo
 //   Lightsail throws this exception when user input does not conform to the validation
 //   rules of an input field.
 //
-//   Domain-related APIs are only available in the N. Virginia (us-east-1) Region.
-//   Please set your AWS Region configuration to us-east-1 to create, view, or
-//   edit these resources.
+//   Domain and distribution APIs are only available in the N. Virginia (us-east-1)
+//   AWS Region. Please set your AWS Region configuration to us-east-1 to create,
+//   view, or edit these resources.
 //
 //   * NotFoundException
 //   Lightsail throws this exception when it cannot find a resource.
@@ -846,9 +847,9 @@ func (c *Lightsail) CopySnapshotRequest(input *CopySnapshotInput) (req *request.
 //   Lightsail throws this exception when user input does not conform to the validation
 //   rules of an input field.
 //
-//   Domain-related APIs are only available in the N. Virginia (us-east-1) Region.
-//   Please set your AWS Region configuration to us-east-1 to create, view, or
-//   edit these resources.
+//   Domain and distribution APIs are only available in the N. Virginia (us-east-1)
+//   AWS Region. Please set your AWS Region configuration to us-east-1 to create,
+//   view, or edit these resources.
 //
 //   * NotFoundException
 //   Lightsail throws this exception when it cannot find a resource.
@@ -884,6 +885,215 @@ func (c *Lightsail) CopySnapshot(input *CopySnapshotInput) (*CopySnapshotOutput,
 // for more information on using Contexts.
 func (c *Lightsail) CopySnapshotWithContext(ctx aws.Context, input *CopySnapshotInput, opts ...request.Option) (*CopySnapshotOutput, error) {
 	req, out := c.CopySnapshotRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opCreateBucket = "CreateBucket"
+
+// CreateBucketRequest generates a "aws/request.Request" representing the
+// client's request for the CreateBucket operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See CreateBucket for more information on using the CreateBucket
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the CreateBucketRequest method.
+//    req, resp := client.CreateBucketRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/lightsail-2016-11-28/CreateBucket
+func (c *Lightsail) CreateBucketRequest(input *CreateBucketInput) (req *request.Request, output *CreateBucketOutput) {
+	op := &request.Operation{
+		Name:       opCreateBucket,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &CreateBucketInput{}
+	}
+
+	output = &CreateBucketOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// CreateBucket API operation for Amazon Lightsail.
+//
+// Creates an Amazon Lightsail bucket.
+//
+// A bucket is a cloud storage resource available in the Lightsail object storage
+// service. Use buckets to store objects such as data and its descriptive metadata.
+// For more information about buckets, see Buckets in Amazon Lightsail (https://lightsail.aws.amazon.com/ls/docs/en_us/articles/buckets-in-amazon-lightsail)
+// in the Amazon Lightsail Developer Guide.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Lightsail's
+// API operation CreateBucket for usage and error information.
+//
+// Returned Error Types:
+//   * AccessDeniedException
+//   Lightsail throws this exception when the user cannot be authenticated or
+//   uses invalid credentials to access a resource.
+//
+//   * InvalidInputException
+//   Lightsail throws this exception when user input does not conform to the validation
+//   rules of an input field.
+//
+//   Domain and distribution APIs are only available in the N. Virginia (us-east-1)
+//   AWS Region. Please set your AWS Region configuration to us-east-1 to create,
+//   view, or edit these resources.
+//
+//   * ServiceException
+//   A general service exception.
+//
+//   * UnauthenticatedException
+//   Lightsail throws this exception when the user has not been authenticated.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/lightsail-2016-11-28/CreateBucket
+func (c *Lightsail) CreateBucket(input *CreateBucketInput) (*CreateBucketOutput, error) {
+	req, out := c.CreateBucketRequest(input)
+	return out, req.Send()
+}
+
+// CreateBucketWithContext is the same as CreateBucket with the addition of
+// the ability to pass a context and additional request options.
+//
+// See CreateBucket for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Lightsail) CreateBucketWithContext(ctx aws.Context, input *CreateBucketInput, opts ...request.Option) (*CreateBucketOutput, error) {
+	req, out := c.CreateBucketRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opCreateBucketAccessKey = "CreateBucketAccessKey"
+
+// CreateBucketAccessKeyRequest generates a "aws/request.Request" representing the
+// client's request for the CreateBucketAccessKey operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See CreateBucketAccessKey for more information on using the CreateBucketAccessKey
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the CreateBucketAccessKeyRequest method.
+//    req, resp := client.CreateBucketAccessKeyRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/lightsail-2016-11-28/CreateBucketAccessKey
+func (c *Lightsail) CreateBucketAccessKeyRequest(input *CreateBucketAccessKeyInput) (req *request.Request, output *CreateBucketAccessKeyOutput) {
+	op := &request.Operation{
+		Name:       opCreateBucketAccessKey,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &CreateBucketAccessKeyInput{}
+	}
+
+	output = &CreateBucketAccessKeyOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// CreateBucketAccessKey API operation for Amazon Lightsail.
+//
+// Creates a new access key for the specified Amazon Lightsail bucket. Access
+// keys consist of an access key ID and corresponding secret access key.
+//
+// Access keys grant full programmatic access to the specified bucket and its
+// objects. You can have a maximum of two access keys per bucket. Use the GetBucketAccessKeys
+// action to get a list of current access keys for a specific bucket. For more
+// information about access keys, see Creating access keys for a bucket in Amazon
+// Lightsail (https://lightsail.aws.amazon.com/ls/docs/en_us/articles/amazon-lightsail-creating-bucket-access-keys)
+// in the Amazon Lightsail Developer Guide.
+//
+// The secretAccessKey value is returned only in response to the CreateBucketAccessKey
+// action. You can get a secret access key only when you first create an access
+// key; you cannot get the secret access key later. If you lose the secret access
+// key, you must create a new access key.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Lightsail's
+// API operation CreateBucketAccessKey for usage and error information.
+//
+// Returned Error Types:
+//   * AccessDeniedException
+//   Lightsail throws this exception when the user cannot be authenticated or
+//   uses invalid credentials to access a resource.
+//
+//   * NotFoundException
+//   Lightsail throws this exception when it cannot find a resource.
+//
+//   * InvalidInputException
+//   Lightsail throws this exception when user input does not conform to the validation
+//   rules of an input field.
+//
+//   Domain and distribution APIs are only available in the N. Virginia (us-east-1)
+//   AWS Region. Please set your AWS Region configuration to us-east-1 to create,
+//   view, or edit these resources.
+//
+//   * ServiceException
+//   A general service exception.
+//
+//   * UnauthenticatedException
+//   Lightsail throws this exception when the user has not been authenticated.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/lightsail-2016-11-28/CreateBucketAccessKey
+func (c *Lightsail) CreateBucketAccessKey(input *CreateBucketAccessKeyInput) (*CreateBucketAccessKeyOutput, error) {
+	req, out := c.CreateBucketAccessKeyRequest(input)
+	return out, req.Send()
+}
+
+// CreateBucketAccessKeyWithContext is the same as CreateBucketAccessKey with the addition of
+// the ability to pass a context and additional request options.
+//
+// See CreateBucketAccessKey for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Lightsail) CreateBucketAccessKeyWithContext(ctx aws.Context, input *CreateBucketAccessKeyInput, opts ...request.Option) (*CreateBucketAccessKeyOutput, error) {
+	req, out := c.CreateBucketAccessKeyRequest(input)
 	req.SetContext(ctx)
 	req.ApplyOptions(opts...)
 	return out, req.Send()
@@ -933,11 +1143,13 @@ func (c *Lightsail) CreateCertificateRequest(input *CreateCertificateInput) (req
 
 // CreateCertificate API operation for Amazon Lightsail.
 //
-// Creates an SSL/TLS certificate for a Amazon Lightsail content delivery network
-// (CDN) distribution.
+// Creates an SSL/TLS certificate for an Amazon Lightsail content delivery network
+// (CDN) distribution and a container service.
 //
-// After the certificate is created, use the AttachCertificateToDistribution
-// action to attach the certificate to your distribution.
+// After the certificate is valid, use the AttachCertificateToDistribution action
+// to use the certificate and its domains with your distribution. Or use the
+// UpdateContainerService action to use the certificate and its domains with
+// your container service.
 //
 // Only certificates created in the us-east-1 AWS Region can be attached to
 // Lightsail distributions. Lightsail distributions are global resources that
@@ -959,9 +1171,9 @@ func (c *Lightsail) CreateCertificateRequest(input *CreateCertificateInput) (req
 //   Lightsail throws this exception when user input does not conform to the validation
 //   rules of an input field.
 //
-//   Domain-related APIs are only available in the N. Virginia (us-east-1) Region.
-//   Please set your AWS Region configuration to us-east-1 to create, view, or
-//   edit these resources.
+//   Domain and distribution APIs are only available in the N. Virginia (us-east-1)
+//   AWS Region. Please set your AWS Region configuration to us-east-1 to create,
+//   view, or edit these resources.
 //
 //   * NotFoundException
 //   Lightsail throws this exception when it cannot find a resource.
@@ -1064,9 +1276,9 @@ func (c *Lightsail) CreateCloudFormationStackRequest(input *CreateCloudFormation
 //   Lightsail throws this exception when user input does not conform to the validation
 //   rules of an input field.
 //
-//   Domain-related APIs are only available in the N. Virginia (us-east-1) Region.
-//   Please set your AWS Region configuration to us-east-1 to create, view, or
-//   edit these resources.
+//   Domain and distribution APIs are only available in the N. Virginia (us-east-1)
+//   AWS Region. Please set your AWS Region configuration to us-east-1 to create,
+//   view, or edit these resources.
 //
 //   * NotFoundException
 //   Lightsail throws this exception when it cannot find a resource.
@@ -1174,9 +1386,9 @@ func (c *Lightsail) CreateContactMethodRequest(input *CreateContactMethodInput) 
 //   Lightsail throws this exception when user input does not conform to the validation
 //   rules of an input field.
 //
-//   Domain-related APIs are only available in the N. Virginia (us-east-1) Region.
-//   Please set your AWS Region configuration to us-east-1 to create, view, or
-//   edit these resources.
+//   Domain and distribution APIs are only available in the N. Virginia (us-east-1)
+//   AWS Region. Please set your AWS Region configuration to us-east-1 to create,
+//   view, or edit these resources.
 //
 //   * NotFoundException
 //   Lightsail throws this exception when it cannot find a resource.
@@ -1208,6 +1420,334 @@ func (c *Lightsail) CreateContactMethod(input *CreateContactMethodInput) (*Creat
 // for more information on using Contexts.
 func (c *Lightsail) CreateContactMethodWithContext(ctx aws.Context, input *CreateContactMethodInput, opts ...request.Option) (*CreateContactMethodOutput, error) {
 	req, out := c.CreateContactMethodRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opCreateContainerService = "CreateContainerService"
+
+// CreateContainerServiceRequest generates a "aws/request.Request" representing the
+// client's request for the CreateContainerService operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See CreateContainerService for more information on using the CreateContainerService
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the CreateContainerServiceRequest method.
+//    req, resp := client.CreateContainerServiceRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/lightsail-2016-11-28/CreateContainerService
+func (c *Lightsail) CreateContainerServiceRequest(input *CreateContainerServiceInput) (req *request.Request, output *CreateContainerServiceOutput) {
+	op := &request.Operation{
+		Name:       opCreateContainerService,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &CreateContainerServiceInput{}
+	}
+
+	output = &CreateContainerServiceOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// CreateContainerService API operation for Amazon Lightsail.
+//
+// Creates an Amazon Lightsail container service.
+//
+// A Lightsail container service is a compute resource to which you can deploy
+// containers. For more information, see Container services in Amazon Lightsail
+// (https://lightsail.aws.amazon.com/ls/docs/en_us/articles/amazon-lightsail-container-services)
+// in the Lightsail Dev Guide.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Lightsail's
+// API operation CreateContainerService for usage and error information.
+//
+// Returned Error Types:
+//   * ServiceException
+//   A general service exception.
+//
+//   * InvalidInputException
+//   Lightsail throws this exception when user input does not conform to the validation
+//   rules of an input field.
+//
+//   Domain and distribution APIs are only available in the N. Virginia (us-east-1)
+//   AWS Region. Please set your AWS Region configuration to us-east-1 to create,
+//   view, or edit these resources.
+//
+//   * NotFoundException
+//   Lightsail throws this exception when it cannot find a resource.
+//
+//   * AccessDeniedException
+//   Lightsail throws this exception when the user cannot be authenticated or
+//   uses invalid credentials to access a resource.
+//
+//   * UnauthenticatedException
+//   Lightsail throws this exception when the user has not been authenticated.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/lightsail-2016-11-28/CreateContainerService
+func (c *Lightsail) CreateContainerService(input *CreateContainerServiceInput) (*CreateContainerServiceOutput, error) {
+	req, out := c.CreateContainerServiceRequest(input)
+	return out, req.Send()
+}
+
+// CreateContainerServiceWithContext is the same as CreateContainerService with the addition of
+// the ability to pass a context and additional request options.
+//
+// See CreateContainerService for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Lightsail) CreateContainerServiceWithContext(ctx aws.Context, input *CreateContainerServiceInput, opts ...request.Option) (*CreateContainerServiceOutput, error) {
+	req, out := c.CreateContainerServiceRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opCreateContainerServiceDeployment = "CreateContainerServiceDeployment"
+
+// CreateContainerServiceDeploymentRequest generates a "aws/request.Request" representing the
+// client's request for the CreateContainerServiceDeployment operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See CreateContainerServiceDeployment for more information on using the CreateContainerServiceDeployment
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the CreateContainerServiceDeploymentRequest method.
+//    req, resp := client.CreateContainerServiceDeploymentRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/lightsail-2016-11-28/CreateContainerServiceDeployment
+func (c *Lightsail) CreateContainerServiceDeploymentRequest(input *CreateContainerServiceDeploymentInput) (req *request.Request, output *CreateContainerServiceDeploymentOutput) {
+	op := &request.Operation{
+		Name:       opCreateContainerServiceDeployment,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &CreateContainerServiceDeploymentInput{}
+	}
+
+	output = &CreateContainerServiceDeploymentOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// CreateContainerServiceDeployment API operation for Amazon Lightsail.
+//
+// Creates a deployment for your Amazon Lightsail container service.
+//
+// A deployment specifies the containers that will be launched on the container
+// service and their settings, such as the ports to open, the environment variables
+// to apply, and the launch command to run. It also specifies the container
+// that will serve as the public endpoint of the deployment and its settings,
+// such as the HTTP or HTTPS port to use, and the health check configuration.
+//
+// You can deploy containers to your container service using container images
+// from a public registry like Docker Hub, or from your local machine. For more
+// information, see Creating container images for your Amazon Lightsail container
+// services (https://lightsail.aws.amazon.com/ls/docs/en_us/articles/amazon-lightsail-creating-container-images)
+// in the Amazon Lightsail Developer Guide.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Lightsail's
+// API operation CreateContainerServiceDeployment for usage and error information.
+//
+// Returned Error Types:
+//   * ServiceException
+//   A general service exception.
+//
+//   * InvalidInputException
+//   Lightsail throws this exception when user input does not conform to the validation
+//   rules of an input field.
+//
+//   Domain and distribution APIs are only available in the N. Virginia (us-east-1)
+//   AWS Region. Please set your AWS Region configuration to us-east-1 to create,
+//   view, or edit these resources.
+//
+//   * NotFoundException
+//   Lightsail throws this exception when it cannot find a resource.
+//
+//   * AccessDeniedException
+//   Lightsail throws this exception when the user cannot be authenticated or
+//   uses invalid credentials to access a resource.
+//
+//   * UnauthenticatedException
+//   Lightsail throws this exception when the user has not been authenticated.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/lightsail-2016-11-28/CreateContainerServiceDeployment
+func (c *Lightsail) CreateContainerServiceDeployment(input *CreateContainerServiceDeploymentInput) (*CreateContainerServiceDeploymentOutput, error) {
+	req, out := c.CreateContainerServiceDeploymentRequest(input)
+	return out, req.Send()
+}
+
+// CreateContainerServiceDeploymentWithContext is the same as CreateContainerServiceDeployment with the addition of
+// the ability to pass a context and additional request options.
+//
+// See CreateContainerServiceDeployment for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Lightsail) CreateContainerServiceDeploymentWithContext(ctx aws.Context, input *CreateContainerServiceDeploymentInput, opts ...request.Option) (*CreateContainerServiceDeploymentOutput, error) {
+	req, out := c.CreateContainerServiceDeploymentRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opCreateContainerServiceRegistryLogin = "CreateContainerServiceRegistryLogin"
+
+// CreateContainerServiceRegistryLoginRequest generates a "aws/request.Request" representing the
+// client's request for the CreateContainerServiceRegistryLogin operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See CreateContainerServiceRegistryLogin for more information on using the CreateContainerServiceRegistryLogin
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the CreateContainerServiceRegistryLoginRequest method.
+//    req, resp := client.CreateContainerServiceRegistryLoginRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/lightsail-2016-11-28/CreateContainerServiceRegistryLogin
+func (c *Lightsail) CreateContainerServiceRegistryLoginRequest(input *CreateContainerServiceRegistryLoginInput) (req *request.Request, output *CreateContainerServiceRegistryLoginOutput) {
+	op := &request.Operation{
+		Name:       opCreateContainerServiceRegistryLogin,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &CreateContainerServiceRegistryLoginInput{}
+	}
+
+	output = &CreateContainerServiceRegistryLoginOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// CreateContainerServiceRegistryLogin API operation for Amazon Lightsail.
+//
+// Creates a temporary set of log in credentials that you can use to log in
+// to the Docker process on your local machine. After you're logged in, you
+// can use the native Docker commands to push your local container images to
+// the container image registry of your Amazon Lightsail account so that you
+// can use them with your Lightsail container service. The log in credentials
+// expire 12 hours after they are created, at which point you will need to create
+// a new set of log in credentials.
+//
+// You can only push container images to the container service registry of your
+// Lightsail account. You cannot pull container images or perform any other
+// container image management actions on the container service registry.
+//
+// After you push your container images to the container image registry of your
+// Lightsail account, use the RegisterContainerImage action to register the
+// pushed images to a specific Lightsail container service.
+//
+// This action is not required if you install and use the Lightsail Control
+// (lightsailctl) plugin to push container images to your Lightsail container
+// service. For more information, see Pushing and managing container images
+// on your Amazon Lightsail container services (https://lightsail.aws.amazon.com/ls/docs/en_us/articles/amazon-lightsail-pushing-container-images)
+// in the Amazon Lightsail Developer Guide.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Lightsail's
+// API operation CreateContainerServiceRegistryLogin for usage and error information.
+//
+// Returned Error Types:
+//   * ServiceException
+//   A general service exception.
+//
+//   * InvalidInputException
+//   Lightsail throws this exception when user input does not conform to the validation
+//   rules of an input field.
+//
+//   Domain and distribution APIs are only available in the N. Virginia (us-east-1)
+//   AWS Region. Please set your AWS Region configuration to us-east-1 to create,
+//   view, or edit these resources.
+//
+//   * NotFoundException
+//   Lightsail throws this exception when it cannot find a resource.
+//
+//   * AccessDeniedException
+//   Lightsail throws this exception when the user cannot be authenticated or
+//   uses invalid credentials to access a resource.
+//
+//   * UnauthenticatedException
+//   Lightsail throws this exception when the user has not been authenticated.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/lightsail-2016-11-28/CreateContainerServiceRegistryLogin
+func (c *Lightsail) CreateContainerServiceRegistryLogin(input *CreateContainerServiceRegistryLoginInput) (*CreateContainerServiceRegistryLoginOutput, error) {
+	req, out := c.CreateContainerServiceRegistryLoginRequest(input)
+	return out, req.Send()
+}
+
+// CreateContainerServiceRegistryLoginWithContext is the same as CreateContainerServiceRegistryLogin with the addition of
+// the ability to pass a context and additional request options.
+//
+// See CreateContainerServiceRegistryLogin for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Lightsail) CreateContainerServiceRegistryLoginWithContext(ctx aws.Context, input *CreateContainerServiceRegistryLoginInput, opts ...request.Option) (*CreateContainerServiceRegistryLoginOutput, error) {
+	req, out := c.CreateContainerServiceRegistryLoginRequest(input)
 	req.SetContext(ctx)
 	req.ApplyOptions(opts...)
 	return out, req.Send()
@@ -1261,7 +1801,7 @@ func (c *Lightsail) CreateDiskRequest(input *CreateDiskInput) (req *request.Requ
 // instance in the same Availability Zone (e.g., us-east-2a).
 //
 // The create disk operation supports tag-based access control via request tags.
-// For more information, see the Lightsail Dev Guide (https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags).
+// For more information, see the Amazon Lightsail Developer Guide (https://lightsail.aws.amazon.com/ls/docs/en_us/articles/amazon-lightsail-controlling-access-using-tags).
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -1278,9 +1818,9 @@ func (c *Lightsail) CreateDiskRequest(input *CreateDiskInput) (req *request.Requ
 //   Lightsail throws this exception when user input does not conform to the validation
 //   rules of an input field.
 //
-//   Domain-related APIs are only available in the N. Virginia (us-east-1) Region.
-//   Please set your AWS Region configuration to us-east-1 to create, view, or
-//   edit these resources.
+//   Domain and distribution APIs are only available in the N. Virginia (us-east-1)
+//   AWS Region. Please set your AWS Region configuration to us-east-1 to create,
+//   view, or edit these resources.
 //
 //   * NotFoundException
 //   Lightsail throws this exception when it cannot find a resource.
@@ -1371,7 +1911,8 @@ func (c *Lightsail) CreateDiskFromSnapshotRequest(input *CreateDiskFromSnapshotI
 //
 // The create disk from snapshot operation supports tag-based access control
 // via request tags and resource tags applied to the resource identified by
-// disk snapshot name. For more information, see the Lightsail Dev Guide (https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags).
+// disk snapshot name. For more information, see the Amazon Lightsail Developer
+// Guide (https://lightsail.aws.amazon.com/ls/docs/en_us/articles/amazon-lightsail-controlling-access-using-tags).
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -1388,9 +1929,9 @@ func (c *Lightsail) CreateDiskFromSnapshotRequest(input *CreateDiskFromSnapshotI
 //   Lightsail throws this exception when user input does not conform to the validation
 //   rules of an input field.
 //
-//   Domain-related APIs are only available in the N. Virginia (us-east-1) Region.
-//   Please set your AWS Region configuration to us-east-1 to create, view, or
-//   edit these resources.
+//   Domain and distribution APIs are only available in the N. Virginia (us-east-1)
+//   AWS Region. Please set your AWS Region configuration to us-east-1 to create,
+//   view, or edit these resources.
 //
 //   * NotFoundException
 //   Lightsail throws this exception when it cannot find a resource.
@@ -1501,7 +2042,8 @@ func (c *Lightsail) CreateDiskSnapshotRequest(input *CreateDiskSnapshotInput) (r
 // disk.
 //
 // The create disk snapshot operation supports tag-based access control via
-// request tags. For more information, see the Lightsail Dev Guide (https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags).
+// request tags. For more information, see the Amazon Lightsail Developer Guide
+// (https://lightsail.aws.amazon.com/ls/docs/en_us/articles/amazon-lightsail-controlling-access-using-tags).
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -1518,9 +2060,9 @@ func (c *Lightsail) CreateDiskSnapshotRequest(input *CreateDiskSnapshotInput) (r
 //   Lightsail throws this exception when user input does not conform to the validation
 //   rules of an input field.
 //
-//   Domain-related APIs are only available in the N. Virginia (us-east-1) Region.
-//   Please set your AWS Region configuration to us-east-1 to create, view, or
-//   edit these resources.
+//   Domain and distribution APIs are only available in the N. Virginia (us-east-1)
+//   AWS Region. Please set your AWS Region configuration to us-east-1 to create,
+//   view, or edit these resources.
 //
 //   * NotFoundException
 //   Lightsail throws this exception when it cannot find a resource.
@@ -1610,7 +2152,7 @@ func (c *Lightsail) CreateDistributionRequest(input *CreateDistributionInput) (r
 // A distribution is a globally distributed network of caching servers that
 // improve the performance of your website or web application hosted on a Lightsail
 // instance. For more information, see Content delivery networks in Amazon Lightsail
-// (https://lightsail.aws.amazon.com/ls/docs/en_us/articles/amazon-lightsail-content-delivery-networks).
+// (https://lightsail.aws.amazon.com/ls/docs/en_us/articles/amazon-lightsail-content-delivery-network-distributions).
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -1627,9 +2169,9 @@ func (c *Lightsail) CreateDistributionRequest(input *CreateDistributionInput) (r
 //   Lightsail throws this exception when user input does not conform to the validation
 //   rules of an input field.
 //
-//   Domain-related APIs are only available in the N. Virginia (us-east-1) Region.
-//   Please set your AWS Region configuration to us-east-1 to create, view, or
-//   edit these resources.
+//   Domain and distribution APIs are only available in the N. Virginia (us-east-1)
+//   AWS Region. Please set your AWS Region configuration to us-east-1 to create,
+//   view, or edit these resources.
 //
 //   * NotFoundException
 //   Lightsail throws this exception when it cannot find a resource.
@@ -1713,7 +2255,7 @@ func (c *Lightsail) CreateDomainRequest(input *CreateDomainInput) (req *request.
 // Creates a domain resource for the specified domain (e.g., example.com).
 //
 // The create domain operation supports tag-based access control via request
-// tags. For more information, see the Lightsail Dev Guide (https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags).
+// tags. For more information, see the Amazon Lightsail Developer Guide (https://lightsail.aws.amazon.com/ls/docs/en_us/articles/amazon-lightsail-controlling-access-using-tags).
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -1730,9 +2272,9 @@ func (c *Lightsail) CreateDomainRequest(input *CreateDomainInput) (req *request.
 //   Lightsail throws this exception when user input does not conform to the validation
 //   rules of an input field.
 //
-//   Domain-related APIs are only available in the N. Virginia (us-east-1) Region.
-//   Please set your AWS Region configuration to us-east-1 to create, view, or
-//   edit these resources.
+//   Domain and distribution APIs are only available in the N. Virginia (us-east-1)
+//   AWS Region. Please set your AWS Region configuration to us-east-1 to create,
+//   view, or edit these resources.
 //
 //   * NotFoundException
 //   Lightsail throws this exception when it cannot find a resource.
@@ -1817,13 +2359,13 @@ func (c *Lightsail) CreateDomainEntryRequest(input *CreateDomainEntryInput) (req
 
 // CreateDomainEntry API operation for Amazon Lightsail.
 //
-// Creates one of the following entry records associated with the domain: Address
-// (A), canonical name (CNAME), mail exchanger (MX), name server (NS), start
-// of authority (SOA), service locator (SRV), or text (TXT).
+// Creates one of the following domain name system (DNS) records in a domain
+// DNS zone: Address (A), canonical name (CNAME), mail exchanger (MX), name
+// server (NS), start of authority (SOA), service locator (SRV), or text (TXT).
 //
 // The create domain entry operation supports tag-based access control via resource
 // tags applied to the resource identified by domain name. For more information,
-// see the Lightsail Dev Guide (https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags).
+// see the Amazon Lightsail Developer Guide (https://lightsail.aws.amazon.com/ls/docs/en_us/articles/amazon-lightsail-controlling-access-using-tags).
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -1840,9 +2382,9 @@ func (c *Lightsail) CreateDomainEntryRequest(input *CreateDomainEntryInput) (req
 //   Lightsail throws this exception when user input does not conform to the validation
 //   rules of an input field.
 //
-//   Domain-related APIs are only available in the N. Virginia (us-east-1) Region.
-//   Please set your AWS Region configuration to us-east-1 to create, view, or
-//   edit these resources.
+//   Domain and distribution APIs are only available in the N. Virginia (us-east-1)
+//   AWS Region. Please set your AWS Region configuration to us-east-1 to create,
+//   view, or edit these resources.
 //
 //   * NotFoundException
 //   Lightsail throws this exception when it cannot find a resource.
@@ -1931,7 +2473,8 @@ func (c *Lightsail) CreateInstanceSnapshotRequest(input *CreateInstanceSnapshotI
 // can use a snapshot to create a new instance that is based on that snapshot.
 //
 // The create instance snapshot operation supports tag-based access control
-// via request tags. For more information, see the Lightsail Dev Guide (https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags).
+// via request tags. For more information, see the Amazon Lightsail Developer
+// Guide (https://lightsail.aws.amazon.com/ls/docs/en_us/articles/amazon-lightsail-controlling-access-using-tags).
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -1948,9 +2491,9 @@ func (c *Lightsail) CreateInstanceSnapshotRequest(input *CreateInstanceSnapshotI
 //   Lightsail throws this exception when user input does not conform to the validation
 //   rules of an input field.
 //
-//   Domain-related APIs are only available in the N. Virginia (us-east-1) Region.
-//   Please set your AWS Region configuration to us-east-1 to create, view, or
-//   edit these resources.
+//   Domain and distribution APIs are only available in the N. Virginia (us-east-1)
+//   AWS Region. Please set your AWS Region configuration to us-east-1 to create,
+//   view, or edit these resources.
 //
 //   * NotFoundException
 //   Lightsail throws this exception when it cannot find a resource.
@@ -2038,7 +2581,7 @@ func (c *Lightsail) CreateInstancesRequest(input *CreateInstancesInput) (req *re
 // Creates one or more Amazon Lightsail instances.
 //
 // The create instances operation supports tag-based access control via request
-// tags. For more information, see the Lightsail Dev Guide (https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags).
+// tags. For more information, see the Lightsail Developer Guide (https://lightsail.aws.amazon.com/ls/docs/en_us/articles/amazon-lightsail-controlling-access-using-tags).
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -2055,9 +2598,9 @@ func (c *Lightsail) CreateInstancesRequest(input *CreateInstancesInput) (req *re
 //   Lightsail throws this exception when user input does not conform to the validation
 //   rules of an input field.
 //
-//   Domain-related APIs are only available in the N. Virginia (us-east-1) Region.
-//   Please set your AWS Region configuration to us-east-1 to create, view, or
-//   edit these resources.
+//   Domain and distribution APIs are only available in the N. Virginia (us-east-1)
+//   AWS Region. Please set your AWS Region configuration to us-east-1 to create,
+//   view, or edit these resources.
 //
 //   * NotFoundException
 //   Lightsail throws this exception when it cannot find a resource.
@@ -2147,8 +2690,8 @@ func (c *Lightsail) CreateInstancesFromSnapshotRequest(input *CreateInstancesFro
 //
 // The create instances from snapshot operation supports tag-based access control
 // via request tags and resource tags applied to the resource identified by
-// instance snapshot name. For more information, see the Lightsail Dev Guide
-// (https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags).
+// instance snapshot name. For more information, see the Amazon Lightsail Developer
+// Guide (https://lightsail.aws.amazon.com/ls/docs/en_us/articles/amazon-lightsail-controlling-access-using-tags).
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -2165,9 +2708,9 @@ func (c *Lightsail) CreateInstancesFromSnapshotRequest(input *CreateInstancesFro
 //   Lightsail throws this exception when user input does not conform to the validation
 //   rules of an input field.
 //
-//   Domain-related APIs are only available in the N. Virginia (us-east-1) Region.
-//   Please set your AWS Region configuration to us-east-1 to create, view, or
-//   edit these resources.
+//   Domain and distribution APIs are only available in the N. Virginia (us-east-1)
+//   AWS Region. Please set your AWS Region configuration to us-east-1 to create,
+//   view, or edit these resources.
 //
 //   * NotFoundException
 //   Lightsail throws this exception when it cannot find a resource.
@@ -2255,7 +2798,7 @@ func (c *Lightsail) CreateKeyPairRequest(input *CreateKeyPairInput) (req *reques
 // Creates an SSH key pair.
 //
 // The create key pair operation supports tag-based access control via request
-// tags. For more information, see the Lightsail Dev Guide (https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags).
+// tags. For more information, see the Amazon Lightsail Developer Guide (https://lightsail.aws.amazon.com/ls/docs/en_us/articles/amazon-lightsail-controlling-access-using-tags).
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -2272,9 +2815,9 @@ func (c *Lightsail) CreateKeyPairRequest(input *CreateKeyPairInput) (req *reques
 //   Lightsail throws this exception when user input does not conform to the validation
 //   rules of an input field.
 //
-//   Domain-related APIs are only available in the N. Virginia (us-east-1) Region.
-//   Please set your AWS Region configuration to us-east-1 to create, view, or
-//   edit these resources.
+//   Domain and distribution APIs are only available in the N. Virginia (us-east-1)
+//   AWS Region. Please set your AWS Region configuration to us-east-1 to create,
+//   view, or edit these resources.
 //
 //   * NotFoundException
 //   Lightsail throws this exception when it cannot find a resource.
@@ -2361,7 +2904,7 @@ func (c *Lightsail) CreateLoadBalancerRequest(input *CreateLoadBalancerInput) (r
 //
 // Creates a Lightsail load balancer. To learn more about deciding whether to
 // load balance your application, see Configure your Lightsail instances for
-// load balancing (https://lightsail.aws.amazon.com/ls/docs/how-to/article/configure-lightsail-instances-for-load-balancing).
+// load balancing (https://lightsail.aws.amazon.com/ls/docs/en_us/articles/configure-lightsail-instances-for-load-balancing).
 // You can create up to 5 load balancers per AWS Region in your account.
 //
 // When you create a load balancer, you can specify a unique name and port settings.
@@ -2369,7 +2912,8 @@ func (c *Lightsail) CreateLoadBalancerRequest(input *CreateLoadBalancerInput) (r
 // operation.
 //
 // The create load balancer operation supports tag-based access control via
-// request tags. For more information, see the Lightsail Dev Guide (https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags).
+// request tags. For more information, see the Amazon Lightsail Developer Guide
+// (https://lightsail.aws.amazon.com/ls/docs/en_us/articles/amazon-lightsail-controlling-access-using-tags).
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -2386,9 +2930,9 @@ func (c *Lightsail) CreateLoadBalancerRequest(input *CreateLoadBalancerInput) (r
 //   Lightsail throws this exception when user input does not conform to the validation
 //   rules of an input field.
 //
-//   Domain-related APIs are only available in the N. Virginia (us-east-1) Region.
-//   Please set your AWS Region configuration to us-east-1 to create, view, or
-//   edit these resources.
+//   Domain and distribution APIs are only available in the N. Virginia (us-east-1)
+//   AWS Region. Please set your AWS Region configuration to us-east-1 to create,
+//   view, or edit these resources.
 //
 //   * NotFoundException
 //   Lightsail throws this exception when it cannot find a resource.
@@ -2473,13 +3017,13 @@ func (c *Lightsail) CreateLoadBalancerTlsCertificateRequest(input *CreateLoadBal
 
 // CreateLoadBalancerTlsCertificate API operation for Amazon Lightsail.
 //
-// Creates a Lightsail load balancer TLS certificate.
+// Creates an SSL/TLS certificate for an Amazon Lightsail load balancer.
 //
 // TLS is just an updated, more secure version of Secure Socket Layer (SSL).
 //
 // The CreateLoadBalancerTlsCertificate operation supports tag-based access
 // control via resource tags applied to the resource identified by load balancer
-// name. For more information, see the Lightsail Dev Guide (https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags).
+// name. For more information, see the Amazon Lightsail Developer Guide (https://lightsail.aws.amazon.com/ls/docs/en_us/articles/amazon-lightsail-controlling-access-using-tags).
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -2496,9 +3040,9 @@ func (c *Lightsail) CreateLoadBalancerTlsCertificateRequest(input *CreateLoadBal
 //   Lightsail throws this exception when user input does not conform to the validation
 //   rules of an input field.
 //
-//   Domain-related APIs are only available in the N. Virginia (us-east-1) Region.
-//   Please set your AWS Region configuration to us-east-1 to create, view, or
-//   edit these resources.
+//   Domain and distribution APIs are only available in the N. Virginia (us-east-1)
+//   AWS Region. Please set your AWS Region configuration to us-east-1 to create,
+//   view, or edit these resources.
 //
 //   * NotFoundException
 //   Lightsail throws this exception when it cannot find a resource.
@@ -2586,7 +3130,8 @@ func (c *Lightsail) CreateRelationalDatabaseRequest(input *CreateRelationalDatab
 // Creates a new database in Amazon Lightsail.
 //
 // The create relational database operation supports tag-based access control
-// via request tags. For more information, see the Lightsail Dev Guide (https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags).
+// via request tags. For more information, see the Amazon Lightsail Developer
+// Guide (https://lightsail.aws.amazon.com/ls/docs/en_us/articles/amazon-lightsail-controlling-access-using-tags).
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -2603,9 +3148,9 @@ func (c *Lightsail) CreateRelationalDatabaseRequest(input *CreateRelationalDatab
 //   Lightsail throws this exception when user input does not conform to the validation
 //   rules of an input field.
 //
-//   Domain-related APIs are only available in the N. Virginia (us-east-1) Region.
-//   Please set your AWS Region configuration to us-east-1 to create, view, or
-//   edit these resources.
+//   Domain and distribution APIs are only available in the N. Virginia (us-east-1)
+//   AWS Region. Please set your AWS Region configuration to us-east-1 to create,
+//   view, or edit these resources.
 //
 //   * NotFoundException
 //   Lightsail throws this exception when it cannot find a resource.
@@ -2699,7 +3244,7 @@ func (c *Lightsail) CreateRelationalDatabaseFromSnapshotRequest(input *CreateRel
 // The create relational database from snapshot operation supports tag-based
 // access control via request tags and resource tags applied to the resource
 // identified by relationalDatabaseSnapshotName. For more information, see the
-// Lightsail Dev Guide (https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags).
+// Amazon Lightsail Developer Guide (https://lightsail.aws.amazon.com/ls/docs/en_us/articles/amazon-lightsail-controlling-access-using-tags).
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -2716,9 +3261,9 @@ func (c *Lightsail) CreateRelationalDatabaseFromSnapshotRequest(input *CreateRel
 //   Lightsail throws this exception when user input does not conform to the validation
 //   rules of an input field.
 //
-//   Domain-related APIs are only available in the N. Virginia (us-east-1) Region.
-//   Please set your AWS Region configuration to us-east-1 to create, view, or
-//   edit these resources.
+//   Domain and distribution APIs are only available in the N. Virginia (us-east-1)
+//   AWS Region. Please set your AWS Region configuration to us-east-1 to create,
+//   view, or edit these resources.
 //
 //   * NotFoundException
 //   Lightsail throws this exception when it cannot find a resource.
@@ -2808,8 +3353,8 @@ func (c *Lightsail) CreateRelationalDatabaseSnapshotRequest(input *CreateRelatio
 // a database.
 //
 // The create relational database snapshot operation supports tag-based access
-// control via request tags. For more information, see the Lightsail Dev Guide
-// (https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags).
+// control via request tags. For more information, see the Amazon Lightsail
+// Developer Guide (https://lightsail.aws.amazon.com/ls/docs/en_us/articles/amazon-lightsail-controlling-access-using-tags).
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -2826,9 +3371,9 @@ func (c *Lightsail) CreateRelationalDatabaseSnapshotRequest(input *CreateRelatio
 //   Lightsail throws this exception when user input does not conform to the validation
 //   rules of an input field.
 //
-//   Domain-related APIs are only available in the N. Virginia (us-east-1) Region.
-//   Please set your AWS Region configuration to us-east-1 to create, view, or
-//   edit these resources.
+//   Domain and distribution APIs are only available in the N. Virginia (us-east-1)
+//   AWS Region. Please set your AWS Region configuration to us-east-1 to create,
+//   view, or edit these resources.
 //
 //   * NotFoundException
 //   Lightsail throws this exception when it cannot find a resource.
@@ -2935,9 +3480,9 @@ func (c *Lightsail) DeleteAlarmRequest(input *DeleteAlarmInput) (req *request.Re
 //   Lightsail throws this exception when user input does not conform to the validation
 //   rules of an input field.
 //
-//   Domain-related APIs are only available in the N. Virginia (us-east-1) Region.
-//   Please set your AWS Region configuration to us-east-1 to create, view, or
-//   edit these resources.
+//   Domain and distribution APIs are only available in the N. Virginia (us-east-1)
+//   AWS Region. Please set your AWS Region configuration to us-east-1 to create,
+//   view, or edit these resources.
 //
 //   * OperationFailureException
 //   Lightsail throws this exception when an operation fails to execute.
@@ -3019,7 +3564,7 @@ func (c *Lightsail) DeleteAutoSnapshotRequest(input *DeleteAutoSnapshotInput) (r
 // DeleteAutoSnapshot API operation for Amazon Lightsail.
 //
 // Deletes an automatic snapshot of an instance or disk. For more information,
-// see the Lightsail Dev Guide (https://lightsail.aws.amazon.com/ls/docs/en_us/articles/amazon-lightsail-configuring-automatic-snapshots).
+// see the Amazon Lightsail Developer Guide (https://lightsail.aws.amazon.com/ls/docs/en_us/articles/amazon-lightsail-configuring-automatic-snapshots).
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -3036,9 +3581,9 @@ func (c *Lightsail) DeleteAutoSnapshotRequest(input *DeleteAutoSnapshotInput) (r
 //   Lightsail throws this exception when user input does not conform to the validation
 //   rules of an input field.
 //
-//   Domain-related APIs are only available in the N. Virginia (us-east-1) Region.
-//   Please set your AWS Region configuration to us-east-1 to create, view, or
-//   edit these resources.
+//   Domain and distribution APIs are only available in the N. Virginia (us-east-1)
+//   AWS Region. Please set your AWS Region configuration to us-east-1 to create,
+//   view, or edit these resources.
 //
 //   * NotFoundException
 //   Lightsail throws this exception when it cannot find a resource.
@@ -3070,6 +3615,209 @@ func (c *Lightsail) DeleteAutoSnapshot(input *DeleteAutoSnapshotInput) (*DeleteA
 // for more information on using Contexts.
 func (c *Lightsail) DeleteAutoSnapshotWithContext(ctx aws.Context, input *DeleteAutoSnapshotInput, opts ...request.Option) (*DeleteAutoSnapshotOutput, error) {
 	req, out := c.DeleteAutoSnapshotRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opDeleteBucket = "DeleteBucket"
+
+// DeleteBucketRequest generates a "aws/request.Request" representing the
+// client's request for the DeleteBucket operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See DeleteBucket for more information on using the DeleteBucket
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the DeleteBucketRequest method.
+//    req, resp := client.DeleteBucketRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/lightsail-2016-11-28/DeleteBucket
+func (c *Lightsail) DeleteBucketRequest(input *DeleteBucketInput) (req *request.Request, output *DeleteBucketOutput) {
+	op := &request.Operation{
+		Name:       opDeleteBucket,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &DeleteBucketInput{}
+	}
+
+	output = &DeleteBucketOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// DeleteBucket API operation for Amazon Lightsail.
+//
+// Deletes a Amazon Lightsail bucket.
+//
+// When you delete your bucket, the bucket name is released and can be reused
+// for a new bucket in your account or another AWS account.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Lightsail's
+// API operation DeleteBucket for usage and error information.
+//
+// Returned Error Types:
+//   * AccessDeniedException
+//   Lightsail throws this exception when the user cannot be authenticated or
+//   uses invalid credentials to access a resource.
+//
+//   * InvalidInputException
+//   Lightsail throws this exception when user input does not conform to the validation
+//   rules of an input field.
+//
+//   Domain and distribution APIs are only available in the N. Virginia (us-east-1)
+//   AWS Region. Please set your AWS Region configuration to us-east-1 to create,
+//   view, or edit these resources.
+//
+//   * NotFoundException
+//   Lightsail throws this exception when it cannot find a resource.
+//
+//   * ServiceException
+//   A general service exception.
+//
+//   * UnauthenticatedException
+//   Lightsail throws this exception when the user has not been authenticated.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/lightsail-2016-11-28/DeleteBucket
+func (c *Lightsail) DeleteBucket(input *DeleteBucketInput) (*DeleteBucketOutput, error) {
+	req, out := c.DeleteBucketRequest(input)
+	return out, req.Send()
+}
+
+// DeleteBucketWithContext is the same as DeleteBucket with the addition of
+// the ability to pass a context and additional request options.
+//
+// See DeleteBucket for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Lightsail) DeleteBucketWithContext(ctx aws.Context, input *DeleteBucketInput, opts ...request.Option) (*DeleteBucketOutput, error) {
+	req, out := c.DeleteBucketRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opDeleteBucketAccessKey = "DeleteBucketAccessKey"
+
+// DeleteBucketAccessKeyRequest generates a "aws/request.Request" representing the
+// client's request for the DeleteBucketAccessKey operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See DeleteBucketAccessKey for more information on using the DeleteBucketAccessKey
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the DeleteBucketAccessKeyRequest method.
+//    req, resp := client.DeleteBucketAccessKeyRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/lightsail-2016-11-28/DeleteBucketAccessKey
+func (c *Lightsail) DeleteBucketAccessKeyRequest(input *DeleteBucketAccessKeyInput) (req *request.Request, output *DeleteBucketAccessKeyOutput) {
+	op := &request.Operation{
+		Name:       opDeleteBucketAccessKey,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &DeleteBucketAccessKeyInput{}
+	}
+
+	output = &DeleteBucketAccessKeyOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// DeleteBucketAccessKey API operation for Amazon Lightsail.
+//
+// Deletes an access key for the specified Amazon Lightsail bucket.
+//
+// We recommend that you delete an access key if the secret access key is compromised.
+//
+// For more information about access keys, see Creating access keys for a bucket
+// in Amazon Lightsail (https://lightsail.aws.amazon.com/ls/docs/en_us/articles/amazon-lightsail-creating-bucket-access-keys)
+// in the Amazon Lightsail Developer Guide.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Lightsail's
+// API operation DeleteBucketAccessKey for usage and error information.
+//
+// Returned Error Types:
+//   * AccessDeniedException
+//   Lightsail throws this exception when the user cannot be authenticated or
+//   uses invalid credentials to access a resource.
+//
+//   * InvalidInputException
+//   Lightsail throws this exception when user input does not conform to the validation
+//   rules of an input field.
+//
+//   Domain and distribution APIs are only available in the N. Virginia (us-east-1)
+//   AWS Region. Please set your AWS Region configuration to us-east-1 to create,
+//   view, or edit these resources.
+//
+//   * NotFoundException
+//   Lightsail throws this exception when it cannot find a resource.
+//
+//   * ServiceException
+//   A general service exception.
+//
+//   * UnauthenticatedException
+//   Lightsail throws this exception when the user has not been authenticated.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/lightsail-2016-11-28/DeleteBucketAccessKey
+func (c *Lightsail) DeleteBucketAccessKey(input *DeleteBucketAccessKeyInput) (*DeleteBucketAccessKeyOutput, error) {
+	req, out := c.DeleteBucketAccessKeyRequest(input)
+	return out, req.Send()
+}
+
+// DeleteBucketAccessKeyWithContext is the same as DeleteBucketAccessKey with the addition of
+// the ability to pass a context and additional request options.
+//
+// See DeleteBucketAccessKey for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Lightsail) DeleteBucketAccessKeyWithContext(ctx aws.Context, input *DeleteBucketAccessKeyInput, opts ...request.Option) (*DeleteBucketAccessKeyOutput, error) {
+	req, out := c.DeleteBucketAccessKeyRequest(input)
 	req.SetContext(ctx)
 	req.ApplyOptions(opts...)
 	return out, req.Send()
@@ -3141,9 +3889,9 @@ func (c *Lightsail) DeleteCertificateRequest(input *DeleteCertificateInput) (req
 //   Lightsail throws this exception when user input does not conform to the validation
 //   rules of an input field.
 //
-//   Domain-related APIs are only available in the N. Virginia (us-east-1) Region.
-//   Please set your AWS Region configuration to us-east-1 to create, view, or
-//   edit these resources.
+//   Domain and distribution APIs are only available in the N. Virginia (us-east-1)
+//   AWS Region. Please set your AWS Region configuration to us-east-1 to create,
+//   view, or edit these resources.
 //
 //   * AccessDeniedException
 //   Lightsail throws this exception when the user cannot be authenticated or
@@ -3244,9 +3992,9 @@ func (c *Lightsail) DeleteContactMethodRequest(input *DeleteContactMethodInput) 
 //   Lightsail throws this exception when user input does not conform to the validation
 //   rules of an input field.
 //
-//   Domain-related APIs are only available in the N. Virginia (us-east-1) Region.
-//   Please set your AWS Region configuration to us-east-1 to create, view, or
-//   edit these resources.
+//   Domain and distribution APIs are only available in the N. Virginia (us-east-1)
+//   AWS Region. Please set your AWS Region configuration to us-east-1 to create,
+//   view, or edit these resources.
 //
 //   * OperationFailureException
 //   Lightsail throws this exception when an operation fails to execute.
@@ -3278,6 +4026,203 @@ func (c *Lightsail) DeleteContactMethod(input *DeleteContactMethodInput) (*Delet
 // for more information on using Contexts.
 func (c *Lightsail) DeleteContactMethodWithContext(ctx aws.Context, input *DeleteContactMethodInput, opts ...request.Option) (*DeleteContactMethodOutput, error) {
 	req, out := c.DeleteContactMethodRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opDeleteContainerImage = "DeleteContainerImage"
+
+// DeleteContainerImageRequest generates a "aws/request.Request" representing the
+// client's request for the DeleteContainerImage operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See DeleteContainerImage for more information on using the DeleteContainerImage
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the DeleteContainerImageRequest method.
+//    req, resp := client.DeleteContainerImageRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/lightsail-2016-11-28/DeleteContainerImage
+func (c *Lightsail) DeleteContainerImageRequest(input *DeleteContainerImageInput) (req *request.Request, output *DeleteContainerImageOutput) {
+	op := &request.Operation{
+		Name:       opDeleteContainerImage,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &DeleteContainerImageInput{}
+	}
+
+	output = &DeleteContainerImageOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
+	return
+}
+
+// DeleteContainerImage API operation for Amazon Lightsail.
+//
+// Deletes a container image that is registered to your Amazon Lightsail container
+// service.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Lightsail's
+// API operation DeleteContainerImage for usage and error information.
+//
+// Returned Error Types:
+//   * ServiceException
+//   A general service exception.
+//
+//   * InvalidInputException
+//   Lightsail throws this exception when user input does not conform to the validation
+//   rules of an input field.
+//
+//   Domain and distribution APIs are only available in the N. Virginia (us-east-1)
+//   AWS Region. Please set your AWS Region configuration to us-east-1 to create,
+//   view, or edit these resources.
+//
+//   * NotFoundException
+//   Lightsail throws this exception when it cannot find a resource.
+//
+//   * AccessDeniedException
+//   Lightsail throws this exception when the user cannot be authenticated or
+//   uses invalid credentials to access a resource.
+//
+//   * UnauthenticatedException
+//   Lightsail throws this exception when the user has not been authenticated.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/lightsail-2016-11-28/DeleteContainerImage
+func (c *Lightsail) DeleteContainerImage(input *DeleteContainerImageInput) (*DeleteContainerImageOutput, error) {
+	req, out := c.DeleteContainerImageRequest(input)
+	return out, req.Send()
+}
+
+// DeleteContainerImageWithContext is the same as DeleteContainerImage with the addition of
+// the ability to pass a context and additional request options.
+//
+// See DeleteContainerImage for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Lightsail) DeleteContainerImageWithContext(ctx aws.Context, input *DeleteContainerImageInput, opts ...request.Option) (*DeleteContainerImageOutput, error) {
+	req, out := c.DeleteContainerImageRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opDeleteContainerService = "DeleteContainerService"
+
+// DeleteContainerServiceRequest generates a "aws/request.Request" representing the
+// client's request for the DeleteContainerService operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See DeleteContainerService for more information on using the DeleteContainerService
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the DeleteContainerServiceRequest method.
+//    req, resp := client.DeleteContainerServiceRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/lightsail-2016-11-28/DeleteContainerService
+func (c *Lightsail) DeleteContainerServiceRequest(input *DeleteContainerServiceInput) (req *request.Request, output *DeleteContainerServiceOutput) {
+	op := &request.Operation{
+		Name:       opDeleteContainerService,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &DeleteContainerServiceInput{}
+	}
+
+	output = &DeleteContainerServiceOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
+	return
+}
+
+// DeleteContainerService API operation for Amazon Lightsail.
+//
+// Deletes your Amazon Lightsail container service.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Lightsail's
+// API operation DeleteContainerService for usage and error information.
+//
+// Returned Error Types:
+//   * ServiceException
+//   A general service exception.
+//
+//   * InvalidInputException
+//   Lightsail throws this exception when user input does not conform to the validation
+//   rules of an input field.
+//
+//   Domain and distribution APIs are only available in the N. Virginia (us-east-1)
+//   AWS Region. Please set your AWS Region configuration to us-east-1 to create,
+//   view, or edit these resources.
+//
+//   * NotFoundException
+//   Lightsail throws this exception when it cannot find a resource.
+//
+//   * AccessDeniedException
+//   Lightsail throws this exception when the user cannot be authenticated or
+//   uses invalid credentials to access a resource.
+//
+//   * UnauthenticatedException
+//   Lightsail throws this exception when the user has not been authenticated.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/lightsail-2016-11-28/DeleteContainerService
+func (c *Lightsail) DeleteContainerService(input *DeleteContainerServiceInput) (*DeleteContainerServiceOutput, error) {
+	req, out := c.DeleteContainerServiceRequest(input)
+	return out, req.Send()
+}
+
+// DeleteContainerServiceWithContext is the same as DeleteContainerService with the addition of
+// the ability to pass a context and additional request options.
+//
+// See DeleteContainerService for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Lightsail) DeleteContainerServiceWithContext(ctx aws.Context, input *DeleteContainerServiceInput, opts ...request.Option) (*DeleteContainerServiceOutput, error) {
+	req, out := c.DeleteContainerServiceRequest(input)
 	req.SetContext(ctx)
 	req.ApplyOptions(opts...)
 	return out, req.Send()
@@ -3334,7 +4279,7 @@ func (c *Lightsail) DeleteDiskRequest(input *DeleteDiskInput) (req *request.Requ
 //
 // The delete disk operation supports tag-based access control via resource
 // tags applied to the resource identified by disk name. For more information,
-// see the Lightsail Dev Guide (https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags).
+// see the Amazon Lightsail Developer Guide (https://lightsail.aws.amazon.com/ls/docs/en_us/articles/amazon-lightsail-controlling-access-using-tags).
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -3351,9 +4296,9 @@ func (c *Lightsail) DeleteDiskRequest(input *DeleteDiskInput) (req *request.Requ
 //   Lightsail throws this exception when user input does not conform to the validation
 //   rules of an input field.
 //
-//   Domain-related APIs are only available in the N. Virginia (us-east-1) Region.
-//   Please set your AWS Region configuration to us-east-1 to create, view, or
-//   edit these resources.
+//   Domain and distribution APIs are only available in the N. Virginia (us-east-1)
+//   AWS Region. Please set your AWS Region configuration to us-east-1 to create,
+//   view, or edit these resources.
 //
 //   * NotFoundException
 //   Lightsail throws this exception when it cannot find a resource.
@@ -3449,7 +4394,7 @@ func (c *Lightsail) DeleteDiskSnapshotRequest(input *DeleteDiskSnapshotInput) (r
 //
 // The delete disk snapshot operation supports tag-based access control via
 // resource tags applied to the resource identified by disk snapshot name. For
-// more information, see the Lightsail Dev Guide (https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags).
+// more information, see the Amazon Lightsail Developer Guide (https://lightsail.aws.amazon.com/ls/docs/en_us/articles/amazon-lightsail-controlling-access-using-tags).
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -3466,9 +4411,9 @@ func (c *Lightsail) DeleteDiskSnapshotRequest(input *DeleteDiskSnapshotInput) (r
 //   Lightsail throws this exception when user input does not conform to the validation
 //   rules of an input field.
 //
-//   Domain-related APIs are only available in the N. Virginia (us-east-1) Region.
-//   Please set your AWS Region configuration to us-east-1 to create, view, or
-//   edit these resources.
+//   Domain and distribution APIs are only available in the N. Virginia (us-east-1)
+//   AWS Region. Please set your AWS Region configuration to us-east-1 to create,
+//   view, or edit these resources.
 //
 //   * NotFoundException
 //   Lightsail throws this exception when it cannot find a resource.
@@ -3570,9 +4515,9 @@ func (c *Lightsail) DeleteDistributionRequest(input *DeleteDistributionInput) (r
 //   Lightsail throws this exception when user input does not conform to the validation
 //   rules of an input field.
 //
-//   Domain-related APIs are only available in the N. Virginia (us-east-1) Region.
-//   Please set your AWS Region configuration to us-east-1 to create, view, or
-//   edit these resources.
+//   Domain and distribution APIs are only available in the N. Virginia (us-east-1)
+//   AWS Region. Please set your AWS Region configuration to us-east-1 to create,
+//   view, or edit these resources.
 //
 //   * NotFoundException
 //   Lightsail throws this exception when it cannot find a resource.
@@ -3657,7 +4602,7 @@ func (c *Lightsail) DeleteDomainRequest(input *DeleteDomainInput) (req *request.
 //
 // The delete domain operation supports tag-based access control via resource
 // tags applied to the resource identified by domain name. For more information,
-// see the Lightsail Dev Guide (https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags).
+// see the Amazon Lightsail Developer Guide (https://lightsail.aws.amazon.com/ls/docs/en_us/articles/amazon-lightsail-controlling-access-using-tags).
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -3674,9 +4619,9 @@ func (c *Lightsail) DeleteDomainRequest(input *DeleteDomainInput) (req *request.
 //   Lightsail throws this exception when user input does not conform to the validation
 //   rules of an input field.
 //
-//   Domain-related APIs are only available in the N. Virginia (us-east-1) Region.
-//   Please set your AWS Region configuration to us-east-1 to create, view, or
-//   edit these resources.
+//   Domain and distribution APIs are only available in the N. Virginia (us-east-1)
+//   AWS Region. Please set your AWS Region configuration to us-east-1 to create,
+//   view, or edit these resources.
 //
 //   * NotFoundException
 //   Lightsail throws this exception when it cannot find a resource.
@@ -3765,7 +4710,7 @@ func (c *Lightsail) DeleteDomainEntryRequest(input *DeleteDomainEntryInput) (req
 //
 // The delete domain entry operation supports tag-based access control via resource
 // tags applied to the resource identified by domain name. For more information,
-// see the Lightsail Dev Guide (https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags).
+// see the Amazon Lightsail Developer Guide (https://lightsail.aws.amazon.com/ls/docs/en_us/articles/amazon-lightsail-controlling-access-using-tags).
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -3782,9 +4727,9 @@ func (c *Lightsail) DeleteDomainEntryRequest(input *DeleteDomainEntryInput) (req
 //   Lightsail throws this exception when user input does not conform to the validation
 //   rules of an input field.
 //
-//   Domain-related APIs are only available in the N. Virginia (us-east-1) Region.
-//   Please set your AWS Region configuration to us-east-1 to create, view, or
-//   edit these resources.
+//   Domain and distribution APIs are only available in the N. Virginia (us-east-1)
+//   AWS Region. Please set your AWS Region configuration to us-east-1 to create,
+//   view, or edit these resources.
 //
 //   * NotFoundException
 //   Lightsail throws this exception when it cannot find a resource.
@@ -3873,7 +4818,7 @@ func (c *Lightsail) DeleteInstanceRequest(input *DeleteInstanceInput) (req *requ
 //
 // The delete instance operation supports tag-based access control via resource
 // tags applied to the resource identified by instance name. For more information,
-// see the Lightsail Dev Guide (https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags).
+// see the Amazon Lightsail Developer Guide (https://lightsail.aws.amazon.com/ls/docs/en_us/articles/amazon-lightsail-controlling-access-using-tags).
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -3890,9 +4835,9 @@ func (c *Lightsail) DeleteInstanceRequest(input *DeleteInstanceInput) (req *requ
 //   Lightsail throws this exception when user input does not conform to the validation
 //   rules of an input field.
 //
-//   Domain-related APIs are only available in the N. Virginia (us-east-1) Region.
-//   Please set your AWS Region configuration to us-east-1 to create, view, or
-//   edit these resources.
+//   Domain and distribution APIs are only available in the N. Virginia (us-east-1)
+//   AWS Region. Please set your AWS Region configuration to us-east-1 to create,
+//   view, or edit these resources.
 //
 //   * NotFoundException
 //   Lightsail throws this exception when it cannot find a resource.
@@ -3981,7 +4926,7 @@ func (c *Lightsail) DeleteInstanceSnapshotRequest(input *DeleteInstanceSnapshotI
 //
 // The delete instance snapshot operation supports tag-based access control
 // via resource tags applied to the resource identified by instance snapshot
-// name. For more information, see the Lightsail Dev Guide (https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags).
+// name. For more information, see the Amazon Lightsail Developer Guide (https://lightsail.aws.amazon.com/ls/docs/en_us/articles/amazon-lightsail-controlling-access-using-tags).
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -3998,9 +4943,9 @@ func (c *Lightsail) DeleteInstanceSnapshotRequest(input *DeleteInstanceSnapshotI
 //   Lightsail throws this exception when user input does not conform to the validation
 //   rules of an input field.
 //
-//   Domain-related APIs are only available in the N. Virginia (us-east-1) Region.
-//   Please set your AWS Region configuration to us-east-1 to create, view, or
-//   edit these resources.
+//   Domain and distribution APIs are only available in the N. Virginia (us-east-1)
+//   AWS Region. Please set your AWS Region configuration to us-east-1 to create,
+//   view, or edit these resources.
 //
 //   * NotFoundException
 //   Lightsail throws this exception when it cannot find a resource.
@@ -4089,7 +5034,7 @@ func (c *Lightsail) DeleteKeyPairRequest(input *DeleteKeyPairInput) (req *reques
 //
 // The delete key pair operation supports tag-based access control via resource
 // tags applied to the resource identified by key pair name. For more information,
-// see the Lightsail Dev Guide (https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags).
+// see the Amazon Lightsail Developer Guide (https://lightsail.aws.amazon.com/ls/docs/en_us/articles/amazon-lightsail-controlling-access-using-tags).
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -4106,9 +5051,9 @@ func (c *Lightsail) DeleteKeyPairRequest(input *DeleteKeyPairInput) (req *reques
 //   Lightsail throws this exception when user input does not conform to the validation
 //   rules of an input field.
 //
-//   Domain-related APIs are only available in the N. Virginia (us-east-1) Region.
-//   Please set your AWS Region configuration to us-east-1 to create, view, or
-//   edit these resources.
+//   Domain and distribution APIs are only available in the N. Virginia (us-east-1)
+//   AWS Region. Please set your AWS Region configuration to us-east-1 to create,
+//   view, or edit these resources.
 //
 //   * NotFoundException
 //   Lightsail throws this exception when it cannot find a resource.
@@ -4201,7 +5146,7 @@ func (c *Lightsail) DeleteKnownHostKeysRequest(input *DeleteKnownHostKeysInput) 
 // Perform this operation only if you were expecting the host key or certificate
 // mismatch or if you are familiar with the new host key or certificate on the
 // instance. For more information, see Troubleshooting connection issues when
-// using the Amazon Lightsail browser-based SSH or RDP client (https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-troubleshooting-browser-based-ssh-rdp-client-connection).
+// using the Amazon Lightsail browser-based SSH or RDP client (https://lightsail.aws.amazon.com/ls/docs/en_us/articles/amazon-lightsail-troubleshooting-browser-based-ssh-rdp-client-connection).
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -4218,9 +5163,9 @@ func (c *Lightsail) DeleteKnownHostKeysRequest(input *DeleteKnownHostKeysInput) 
 //   Lightsail throws this exception when user input does not conform to the validation
 //   rules of an input field.
 //
-//   Domain-related APIs are only available in the N. Virginia (us-east-1) Region.
-//   Please set your AWS Region configuration to us-east-1 to create, view, or
-//   edit these resources.
+//   Domain and distribution APIs are only available in the N. Virginia (us-east-1)
+//   AWS Region. Please set your AWS Region configuration to us-east-1 to create,
+//   view, or edit these resources.
 //
 //   * NotFoundException
 //   Lightsail throws this exception when it cannot find a resource.
@@ -4311,7 +5256,7 @@ func (c *Lightsail) DeleteLoadBalancerRequest(input *DeleteLoadBalancerInput) (r
 //
 // The delete load balancer operation supports tag-based access control via
 // resource tags applied to the resource identified by load balancer name. For
-// more information, see the Lightsail Dev Guide (https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags).
+// more information, see the Amazon Lightsail Developer Guide (https://lightsail.aws.amazon.com/ls/docs/en_us/articles/amazon-lightsail-controlling-access-using-tags).
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -4328,9 +5273,9 @@ func (c *Lightsail) DeleteLoadBalancerRequest(input *DeleteLoadBalancerInput) (r
 //   Lightsail throws this exception when user input does not conform to the validation
 //   rules of an input field.
 //
-//   Domain-related APIs are only available in the N. Virginia (us-east-1) Region.
-//   Please set your AWS Region configuration to us-east-1 to create, view, or
-//   edit these resources.
+//   Domain and distribution APIs are only available in the N. Virginia (us-east-1)
+//   AWS Region. Please set your AWS Region configuration to us-east-1 to create,
+//   view, or edit these resources.
 //
 //   * NotFoundException
 //   Lightsail throws this exception when it cannot find a resource.
@@ -4419,7 +5364,7 @@ func (c *Lightsail) DeleteLoadBalancerTlsCertificateRequest(input *DeleteLoadBal
 //
 // The DeleteLoadBalancerTlsCertificate operation supports tag-based access
 // control via resource tags applied to the resource identified by load balancer
-// name. For more information, see the Lightsail Dev Guide (https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags).
+// name. For more information, see the Amazon Lightsail Developer Guide (https://lightsail.aws.amazon.com/ls/docs/en_us/articles/amazon-lightsail-controlling-access-using-tags).
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -4436,9 +5381,9 @@ func (c *Lightsail) DeleteLoadBalancerTlsCertificateRequest(input *DeleteLoadBal
 //   Lightsail throws this exception when user input does not conform to the validation
 //   rules of an input field.
 //
-//   Domain-related APIs are only available in the N. Virginia (us-east-1) Region.
-//   Please set your AWS Region configuration to us-east-1 to create, view, or
-//   edit these resources.
+//   Domain and distribution APIs are only available in the N. Virginia (us-east-1)
+//   AWS Region. Please set your AWS Region configuration to us-east-1 to create,
+//   view, or edit these resources.
 //
 //   * NotFoundException
 //   Lightsail throws this exception when it cannot find a resource.
@@ -4527,7 +5472,7 @@ func (c *Lightsail) DeleteRelationalDatabaseRequest(input *DeleteRelationalDatab
 //
 // The delete relational database operation supports tag-based access control
 // via resource tags applied to the resource identified by relationalDatabaseName.
-// For more information, see the Lightsail Dev Guide (https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags).
+// For more information, see the Amazon Lightsail Developer Guide (https://lightsail.aws.amazon.com/ls/docs/en_us/articles/amazon-lightsail-controlling-access-using-tags).
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -4544,9 +5489,9 @@ func (c *Lightsail) DeleteRelationalDatabaseRequest(input *DeleteRelationalDatab
 //   Lightsail throws this exception when user input does not conform to the validation
 //   rules of an input field.
 //
-//   Domain-related APIs are only available in the N. Virginia (us-east-1) Region.
-//   Please set your AWS Region configuration to us-east-1 to create, view, or
-//   edit these resources.
+//   Domain and distribution APIs are only available in the N. Virginia (us-east-1)
+//   AWS Region. Please set your AWS Region configuration to us-east-1 to create,
+//   view, or edit these resources.
 //
 //   * NotFoundException
 //   Lightsail throws this exception when it cannot find a resource.
@@ -4635,7 +5580,7 @@ func (c *Lightsail) DeleteRelationalDatabaseSnapshotRequest(input *DeleteRelatio
 //
 // The delete relational database snapshot operation supports tag-based access
 // control via resource tags applied to the resource identified by relationalDatabaseName.
-// For more information, see the Lightsail Dev Guide (https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags).
+// For more information, see the Amazon Lightsail Developer Guide (https://lightsail.aws.amazon.com/ls/docs/en_us/articles/amazon-lightsail-controlling-access-using-tags).
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -4652,9 +5597,9 @@ func (c *Lightsail) DeleteRelationalDatabaseSnapshotRequest(input *DeleteRelatio
 //   Lightsail throws this exception when user input does not conform to the validation
 //   rules of an input field.
 //
-//   Domain-related APIs are only available in the N. Virginia (us-east-1) Region.
-//   Please set your AWS Region configuration to us-east-1 to create, view, or
-//   edit these resources.
+//   Domain and distribution APIs are only available in the N. Virginia (us-east-1)
+//   AWS Region. Please set your AWS Region configuration to us-east-1 to create,
+//   view, or edit these resources.
 //
 //   * NotFoundException
 //   Lightsail throws this exception when it cannot find a resource.
@@ -4760,9 +5705,9 @@ func (c *Lightsail) DetachCertificateFromDistributionRequest(input *DetachCertif
 //   Lightsail throws this exception when user input does not conform to the validation
 //   rules of an input field.
 //
-//   Domain-related APIs are only available in the N. Virginia (us-east-1) Region.
-//   Please set your AWS Region configuration to us-east-1 to create, view, or
-//   edit these resources.
+//   Domain and distribution APIs are only available in the N. Virginia (us-east-1)
+//   AWS Region. Please set your AWS Region configuration to us-east-1 to create,
+//   view, or edit these resources.
 //
 //   * NotFoundException
 //   Lightsail throws this exception when it cannot find a resource.
@@ -4849,7 +5794,7 @@ func (c *Lightsail) DetachDiskRequest(input *DetachDiskInput) (req *request.Requ
 //
 // The detach disk operation supports tag-based access control via resource
 // tags applied to the resource identified by disk name. For more information,
-// see the Lightsail Dev Guide (https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags).
+// see the Amazon Lightsail Developer Guide (https://lightsail.aws.amazon.com/ls/docs/en_us/articles/amazon-lightsail-controlling-access-using-tags).
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -4866,9 +5811,9 @@ func (c *Lightsail) DetachDiskRequest(input *DetachDiskInput) (req *request.Requ
 //   Lightsail throws this exception when user input does not conform to the validation
 //   rules of an input field.
 //
-//   Domain-related APIs are only available in the N. Virginia (us-east-1) Region.
-//   Please set your AWS Region configuration to us-east-1 to create, view, or
-//   edit these resources.
+//   Domain and distribution APIs are only available in the N. Virginia (us-east-1)
+//   AWS Region. Please set your AWS Region configuration to us-east-1 to create,
+//   view, or edit these resources.
 //
 //   * NotFoundException
 //   Lightsail throws this exception when it cannot find a resource.
@@ -4960,7 +5905,7 @@ func (c *Lightsail) DetachInstancesFromLoadBalancerRequest(input *DetachInstance
 //
 // The detach instances from load balancer operation supports tag-based access
 // control via resource tags applied to the resource identified by load balancer
-// name. For more information, see the Lightsail Dev Guide (https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags).
+// name. For more information, see the Amazon Lightsail Developer Guide (https://lightsail.aws.amazon.com/ls/docs/en_us/articles/amazon-lightsail-controlling-access-using-tags).
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -4977,9 +5922,9 @@ func (c *Lightsail) DetachInstancesFromLoadBalancerRequest(input *DetachInstance
 //   Lightsail throws this exception when user input does not conform to the validation
 //   rules of an input field.
 //
-//   Domain-related APIs are only available in the N. Virginia (us-east-1) Region.
-//   Please set your AWS Region configuration to us-east-1 to create, view, or
-//   edit these resources.
+//   Domain and distribution APIs are only available in the N. Virginia (us-east-1)
+//   AWS Region. Please set your AWS Region configuration to us-east-1 to create,
+//   view, or edit these resources.
 //
 //   * NotFoundException
 //   Lightsail throws this exception when it cannot find a resource.
@@ -5081,9 +6026,9 @@ func (c *Lightsail) DetachStaticIpRequest(input *DetachStaticIpInput) (req *requ
 //   Lightsail throws this exception when user input does not conform to the validation
 //   rules of an input field.
 //
-//   Domain-related APIs are only available in the N. Virginia (us-east-1) Region.
-//   Please set your AWS Region configuration to us-east-1 to create, view, or
-//   edit these resources.
+//   Domain and distribution APIs are only available in the N. Virginia (us-east-1)
+//   AWS Region. Please set your AWS Region configuration to us-east-1 to create,
+//   view, or edit these resources.
 //
 //   * NotFoundException
 //   Lightsail throws this exception when it cannot find a resource.
@@ -5169,7 +6114,7 @@ func (c *Lightsail) DisableAddOnRequest(input *DisableAddOnInput) (req *request.
 // DisableAddOn API operation for Amazon Lightsail.
 //
 // Disables an add-on for an Amazon Lightsail resource. For more information,
-// see the Lightsail Dev Guide (https://lightsail.aws.amazon.com/ls/docs/en_us/articles/amazon-lightsail-configuring-automatic-snapshots).
+// see the Amazon Lightsail Developer Guide (https://lightsail.aws.amazon.com/ls/docs/en_us/articles/amazon-lightsail-configuring-automatic-snapshots).
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -5186,9 +6131,9 @@ func (c *Lightsail) DisableAddOnRequest(input *DisableAddOnInput) (req *request.
 //   Lightsail throws this exception when user input does not conform to the validation
 //   rules of an input field.
 //
-//   Domain-related APIs are only available in the N. Virginia (us-east-1) Region.
-//   Please set your AWS Region configuration to us-east-1 to create, view, or
-//   edit these resources.
+//   Domain and distribution APIs are only available in the N. Virginia (us-east-1)
+//   AWS Region. Please set your AWS Region configuration to us-east-1 to create,
+//   view, or edit these resources.
 //
 //   * NotFoundException
 //   Lightsail throws this exception when it cannot find a resource.
@@ -5286,9 +6231,9 @@ func (c *Lightsail) DownloadDefaultKeyPairRequest(input *DownloadDefaultKeyPairI
 //   Lightsail throws this exception when user input does not conform to the validation
 //   rules of an input field.
 //
-//   Domain-related APIs are only available in the N. Virginia (us-east-1) Region.
-//   Please set your AWS Region configuration to us-east-1 to create, view, or
-//   edit these resources.
+//   Domain and distribution APIs are only available in the N. Virginia (us-east-1)
+//   AWS Region. Please set your AWS Region configuration to us-east-1 to create,
+//   view, or edit these resources.
 //
 //   * NotFoundException
 //   Lightsail throws this exception when it cannot find a resource.
@@ -5374,7 +6319,7 @@ func (c *Lightsail) EnableAddOnRequest(input *EnableAddOnInput) (req *request.Re
 // EnableAddOn API operation for Amazon Lightsail.
 //
 // Enables or modifies an add-on for an Amazon Lightsail resource. For more
-// information, see the Lightsail Dev Guide (https://lightsail.aws.amazon.com/ls/docs/en_us/articles/amazon-lightsail-configuring-automatic-snapshots).
+// information, see the Amazon Lightsail Developer Guide (https://lightsail.aws.amazon.com/ls/docs/en_us/articles/amazon-lightsail-configuring-automatic-snapshots).
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -5391,9 +6336,9 @@ func (c *Lightsail) EnableAddOnRequest(input *EnableAddOnInput) (req *request.Re
 //   Lightsail throws this exception when user input does not conform to the validation
 //   rules of an input field.
 //
-//   Domain-related APIs are only available in the N. Virginia (us-east-1) Region.
-//   Please set your AWS Region configuration to us-east-1 to create, view, or
-//   edit these resources.
+//   Domain and distribution APIs are only available in the N. Virginia (us-east-1)
+//   AWS Region. Please set your AWS Region configuration to us-east-1 to create,
+//   view, or edit these resources.
 //
 //   * NotFoundException
 //   Lightsail throws this exception when it cannot find a resource.
@@ -5487,7 +6432,7 @@ func (c *Lightsail) ExportSnapshotRequest(input *ExportSnapshotInput) (req *requ
 //
 // The export snapshot operation supports tag-based access control via resource
 // tags applied to the resource identified by source snapshot name. For more
-// information, see the Lightsail Dev Guide (https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags).
+// information, see the Amazon Lightsail Developer Guide (https://lightsail.aws.amazon.com/ls/docs/en_us/articles/amazon-lightsail-controlling-access-using-tags).
 //
 // Use the get instance snapshots or get disk snapshots operations to get a
 // list of snapshots that you can export to Amazon EC2.
@@ -5507,9 +6452,9 @@ func (c *Lightsail) ExportSnapshotRequest(input *ExportSnapshotInput) (req *requ
 //   Lightsail throws this exception when user input does not conform to the validation
 //   rules of an input field.
 //
-//   Domain-related APIs are only available in the N. Virginia (us-east-1) Region.
-//   Please set your AWS Region configuration to us-east-1 to create, view, or
-//   edit these resources.
+//   Domain and distribution APIs are only available in the N. Virginia (us-east-1)
+//   AWS Region. Please set your AWS Region configuration to us-east-1 to create,
+//   view, or edit these resources.
 //
 //   * NotFoundException
 //   Lightsail throws this exception when it cannot find a resource.
@@ -5611,9 +6556,9 @@ func (c *Lightsail) GetActiveNamesRequest(input *GetActiveNamesInput) (req *requ
 //   Lightsail throws this exception when user input does not conform to the validation
 //   rules of an input field.
 //
-//   Domain-related APIs are only available in the N. Virginia (us-east-1) Region.
-//   Please set your AWS Region configuration to us-east-1 to create, view, or
-//   edit these resources.
+//   Domain and distribution APIs are only available in the N. Virginia (us-east-1)
+//   AWS Region. Please set your AWS Region configuration to us-east-1 to create,
+//   view, or edit these resources.
 //
 //   * NotFoundException
 //   Lightsail throws this exception when it cannot find a resource.
@@ -5722,9 +6667,9 @@ func (c *Lightsail) GetAlarmsRequest(input *GetAlarmsInput) (req *request.Reques
 //   Lightsail throws this exception when user input does not conform to the validation
 //   rules of an input field.
 //
-//   Domain-related APIs are only available in the N. Virginia (us-east-1) Region.
-//   Please set your AWS Region configuration to us-east-1 to create, view, or
-//   edit these resources.
+//   Domain and distribution APIs are only available in the N. Virginia (us-east-1)
+//   AWS Region. Please set your AWS Region configuration to us-east-1 to create,
+//   view, or edit these resources.
 //
 //   * OperationFailureException
 //   Lightsail throws this exception when an operation fails to execute.
@@ -5806,7 +6751,7 @@ func (c *Lightsail) GetAutoSnapshotsRequest(input *GetAutoSnapshotsInput) (req *
 // GetAutoSnapshots API operation for Amazon Lightsail.
 //
 // Returns the available automatic snapshots for an instance or disk. For more
-// information, see the Lightsail Dev Guide (https://lightsail.aws.amazon.com/ls/docs/en_us/articles/amazon-lightsail-configuring-automatic-snapshots).
+// information, see the Amazon Lightsail Developer Guide (https://lightsail.aws.amazon.com/ls/docs/en_us/articles/amazon-lightsail-configuring-automatic-snapshots).
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -5823,9 +6768,9 @@ func (c *Lightsail) GetAutoSnapshotsRequest(input *GetAutoSnapshotsInput) (req *
 //   Lightsail throws this exception when user input does not conform to the validation
 //   rules of an input field.
 //
-//   Domain-related APIs are only available in the N. Virginia (us-east-1) Region.
-//   Please set your AWS Region configuration to us-east-1 to create, view, or
-//   edit these resources.
+//   Domain and distribution APIs are only available in the N. Virginia (us-east-1)
+//   AWS Region. Please set your AWS Region configuration to us-east-1 to create,
+//   view, or edit these resources.
 //
 //   * NotFoundException
 //   Lightsail throws this exception when it cannot find a resource.
@@ -5931,9 +6876,9 @@ func (c *Lightsail) GetBlueprintsRequest(input *GetBlueprintsInput) (req *reques
 //   Lightsail throws this exception when user input does not conform to the validation
 //   rules of an input field.
 //
-//   Domain-related APIs are only available in the N. Virginia (us-east-1) Region.
-//   Please set your AWS Region configuration to us-east-1 to create, view, or
-//   edit these resources.
+//   Domain and distribution APIs are only available in the N. Virginia (us-east-1)
+//   AWS Region. Please set your AWS Region configuration to us-east-1 to create,
+//   view, or edit these resources.
 //
 //   * NotFoundException
 //   Lightsail throws this exception when it cannot find a resource.
@@ -5969,6 +6914,408 @@ func (c *Lightsail) GetBlueprints(input *GetBlueprintsInput) (*GetBlueprintsOutp
 // for more information on using Contexts.
 func (c *Lightsail) GetBlueprintsWithContext(ctx aws.Context, input *GetBlueprintsInput, opts ...request.Option) (*GetBlueprintsOutput, error) {
 	req, out := c.GetBlueprintsRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opGetBucketAccessKeys = "GetBucketAccessKeys"
+
+// GetBucketAccessKeysRequest generates a "aws/request.Request" representing the
+// client's request for the GetBucketAccessKeys operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See GetBucketAccessKeys for more information on using the GetBucketAccessKeys
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the GetBucketAccessKeysRequest method.
+//    req, resp := client.GetBucketAccessKeysRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/lightsail-2016-11-28/GetBucketAccessKeys
+func (c *Lightsail) GetBucketAccessKeysRequest(input *GetBucketAccessKeysInput) (req *request.Request, output *GetBucketAccessKeysOutput) {
+	op := &request.Operation{
+		Name:       opGetBucketAccessKeys,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &GetBucketAccessKeysInput{}
+	}
+
+	output = &GetBucketAccessKeysOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// GetBucketAccessKeys API operation for Amazon Lightsail.
+//
+// Returns the existing access key IDs for the specified Amazon Lightsail bucket.
+//
+// This action does not return the secret access key value of an access key.
+// You can get a secret access key only when you create it from the response
+// of the CreateBucketAccessKey action. If you lose the secret access key, you
+// must create a new access key.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Lightsail's
+// API operation GetBucketAccessKeys for usage and error information.
+//
+// Returned Error Types:
+//   * AccessDeniedException
+//   Lightsail throws this exception when the user cannot be authenticated or
+//   uses invalid credentials to access a resource.
+//
+//   * InvalidInputException
+//   Lightsail throws this exception when user input does not conform to the validation
+//   rules of an input field.
+//
+//   Domain and distribution APIs are only available in the N. Virginia (us-east-1)
+//   AWS Region. Please set your AWS Region configuration to us-east-1 to create,
+//   view, or edit these resources.
+//
+//   * NotFoundException
+//   Lightsail throws this exception when it cannot find a resource.
+//
+//   * ServiceException
+//   A general service exception.
+//
+//   * UnauthenticatedException
+//   Lightsail throws this exception when the user has not been authenticated.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/lightsail-2016-11-28/GetBucketAccessKeys
+func (c *Lightsail) GetBucketAccessKeys(input *GetBucketAccessKeysInput) (*GetBucketAccessKeysOutput, error) {
+	req, out := c.GetBucketAccessKeysRequest(input)
+	return out, req.Send()
+}
+
+// GetBucketAccessKeysWithContext is the same as GetBucketAccessKeys with the addition of
+// the ability to pass a context and additional request options.
+//
+// See GetBucketAccessKeys for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Lightsail) GetBucketAccessKeysWithContext(ctx aws.Context, input *GetBucketAccessKeysInput, opts ...request.Option) (*GetBucketAccessKeysOutput, error) {
+	req, out := c.GetBucketAccessKeysRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opGetBucketBundles = "GetBucketBundles"
+
+// GetBucketBundlesRequest generates a "aws/request.Request" representing the
+// client's request for the GetBucketBundles operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See GetBucketBundles for more information on using the GetBucketBundles
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the GetBucketBundlesRequest method.
+//    req, resp := client.GetBucketBundlesRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/lightsail-2016-11-28/GetBucketBundles
+func (c *Lightsail) GetBucketBundlesRequest(input *GetBucketBundlesInput) (req *request.Request, output *GetBucketBundlesOutput) {
+	op := &request.Operation{
+		Name:       opGetBucketBundles,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &GetBucketBundlesInput{}
+	}
+
+	output = &GetBucketBundlesOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// GetBucketBundles API operation for Amazon Lightsail.
+//
+// Returns the bundles that you can apply to a Amazon Lightsail bucket.
+//
+// The bucket bundle specifies the monthly cost, storage quota, and data transfer
+// quota for a bucket.
+//
+// Use the UpdateBucketBundle action to update the bundle for a bucket.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Lightsail's
+// API operation GetBucketBundles for usage and error information.
+//
+// Returned Error Types:
+//   * AccessDeniedException
+//   Lightsail throws this exception when the user cannot be authenticated or
+//   uses invalid credentials to access a resource.
+//
+//   * InvalidInputException
+//   Lightsail throws this exception when user input does not conform to the validation
+//   rules of an input field.
+//
+//   Domain and distribution APIs are only available in the N. Virginia (us-east-1)
+//   AWS Region. Please set your AWS Region configuration to us-east-1 to create,
+//   view, or edit these resources.
+//
+//   * ServiceException
+//   A general service exception.
+//
+//   * UnauthenticatedException
+//   Lightsail throws this exception when the user has not been authenticated.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/lightsail-2016-11-28/GetBucketBundles
+func (c *Lightsail) GetBucketBundles(input *GetBucketBundlesInput) (*GetBucketBundlesOutput, error) {
+	req, out := c.GetBucketBundlesRequest(input)
+	return out, req.Send()
+}
+
+// GetBucketBundlesWithContext is the same as GetBucketBundles with the addition of
+// the ability to pass a context and additional request options.
+//
+// See GetBucketBundles for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Lightsail) GetBucketBundlesWithContext(ctx aws.Context, input *GetBucketBundlesInput, opts ...request.Option) (*GetBucketBundlesOutput, error) {
+	req, out := c.GetBucketBundlesRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opGetBucketMetricData = "GetBucketMetricData"
+
+// GetBucketMetricDataRequest generates a "aws/request.Request" representing the
+// client's request for the GetBucketMetricData operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See GetBucketMetricData for more information on using the GetBucketMetricData
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the GetBucketMetricDataRequest method.
+//    req, resp := client.GetBucketMetricDataRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/lightsail-2016-11-28/GetBucketMetricData
+func (c *Lightsail) GetBucketMetricDataRequest(input *GetBucketMetricDataInput) (req *request.Request, output *GetBucketMetricDataOutput) {
+	op := &request.Operation{
+		Name:       opGetBucketMetricData,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &GetBucketMetricDataInput{}
+	}
+
+	output = &GetBucketMetricDataOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// GetBucketMetricData API operation for Amazon Lightsail.
+//
+// Returns the data points of a specific metric for an Amazon Lightsail bucket.
+//
+// Metrics report the utilization of a bucket. View and collect metric data
+// regularly to monitor the number of objects stored in a bucket (including
+// object versions) and the storage space used by those objects.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Lightsail's
+// API operation GetBucketMetricData for usage and error information.
+//
+// Returned Error Types:
+//   * AccessDeniedException
+//   Lightsail throws this exception when the user cannot be authenticated or
+//   uses invalid credentials to access a resource.
+//
+//   * InvalidInputException
+//   Lightsail throws this exception when user input does not conform to the validation
+//   rules of an input field.
+//
+//   Domain and distribution APIs are only available in the N. Virginia (us-east-1)
+//   AWS Region. Please set your AWS Region configuration to us-east-1 to create,
+//   view, or edit these resources.
+//
+//   * NotFoundException
+//   Lightsail throws this exception when it cannot find a resource.
+//
+//   * ServiceException
+//   A general service exception.
+//
+//   * UnauthenticatedException
+//   Lightsail throws this exception when the user has not been authenticated.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/lightsail-2016-11-28/GetBucketMetricData
+func (c *Lightsail) GetBucketMetricData(input *GetBucketMetricDataInput) (*GetBucketMetricDataOutput, error) {
+	req, out := c.GetBucketMetricDataRequest(input)
+	return out, req.Send()
+}
+
+// GetBucketMetricDataWithContext is the same as GetBucketMetricData with the addition of
+// the ability to pass a context and additional request options.
+//
+// See GetBucketMetricData for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Lightsail) GetBucketMetricDataWithContext(ctx aws.Context, input *GetBucketMetricDataInput, opts ...request.Option) (*GetBucketMetricDataOutput, error) {
+	req, out := c.GetBucketMetricDataRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opGetBuckets = "GetBuckets"
+
+// GetBucketsRequest generates a "aws/request.Request" representing the
+// client's request for the GetBuckets operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See GetBuckets for more information on using the GetBuckets
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the GetBucketsRequest method.
+//    req, resp := client.GetBucketsRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/lightsail-2016-11-28/GetBuckets
+func (c *Lightsail) GetBucketsRequest(input *GetBucketsInput) (req *request.Request, output *GetBucketsOutput) {
+	op := &request.Operation{
+		Name:       opGetBuckets,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &GetBucketsInput{}
+	}
+
+	output = &GetBucketsOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// GetBuckets API operation for Amazon Lightsail.
+//
+// Returns information about one or more Amazon Lightsail buckets.
+//
+// For more information about buckets, see Buckets in Amazon Lightsail (https://lightsail.aws.amazon.com/ls/docs/en_us/articles/buckets-in-amazon-lightsail)
+// in the Amazon Lightsail Developer Guide..
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Lightsail's
+// API operation GetBuckets for usage and error information.
+//
+// Returned Error Types:
+//   * AccessDeniedException
+//   Lightsail throws this exception when the user cannot be authenticated or
+//   uses invalid credentials to access a resource.
+//
+//   * InvalidInputException
+//   Lightsail throws this exception when user input does not conform to the validation
+//   rules of an input field.
+//
+//   Domain and distribution APIs are only available in the N. Virginia (us-east-1)
+//   AWS Region. Please set your AWS Region configuration to us-east-1 to create,
+//   view, or edit these resources.
+//
+//   * NotFoundException
+//   Lightsail throws this exception when it cannot find a resource.
+//
+//   * ServiceException
+//   A general service exception.
+//
+//   * UnauthenticatedException
+//   Lightsail throws this exception when the user has not been authenticated.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/lightsail-2016-11-28/GetBuckets
+func (c *Lightsail) GetBuckets(input *GetBucketsInput) (*GetBucketsOutput, error) {
+	req, out := c.GetBucketsRequest(input)
+	return out, req.Send()
+}
+
+// GetBucketsWithContext is the same as GetBuckets with the addition of
+// the ability to pass a context and additional request options.
+//
+// See GetBuckets for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Lightsail) GetBucketsWithContext(ctx aws.Context, input *GetBucketsInput, opts ...request.Option) (*GetBucketsOutput, error) {
+	req, out := c.GetBucketsRequest(input)
 	req.SetContext(ctx)
 	req.ApplyOptions(opts...)
 	return out, req.Send()
@@ -6036,9 +7383,9 @@ func (c *Lightsail) GetBundlesRequest(input *GetBundlesInput) (req *request.Requ
 //   Lightsail throws this exception when user input does not conform to the validation
 //   rules of an input field.
 //
-//   Domain-related APIs are only available in the N. Virginia (us-east-1) Region.
-//   Please set your AWS Region configuration to us-east-1 to create, view, or
-//   edit these resources.
+//   Domain and distribution APIs are only available in the N. Virginia (us-east-1)
+//   AWS Region. Please set your AWS Region configuration to us-east-1 to create,
+//   view, or edit these resources.
 //
 //   * NotFoundException
 //   Lightsail throws this exception when it cannot find a resource.
@@ -6144,9 +7491,9 @@ func (c *Lightsail) GetCertificatesRequest(input *GetCertificatesInput) (req *re
 //   Lightsail throws this exception when user input does not conform to the validation
 //   rules of an input field.
 //
-//   Domain-related APIs are only available in the N. Virginia (us-east-1) Region.
-//   Please set your AWS Region configuration to us-east-1 to create, view, or
-//   edit these resources.
+//   Domain and distribution APIs are only available in the N. Virginia (us-east-1)
+//   AWS Region. Please set your AWS Region configuration to us-east-1 to create,
+//   view, or edit these resources.
 //
 //   * NotFoundException
 //   Lightsail throws this exception when it cannot find a resource.
@@ -6245,9 +7592,9 @@ func (c *Lightsail) GetCloudFormationStackRecordsRequest(input *GetCloudFormatio
 //   Lightsail throws this exception when user input does not conform to the validation
 //   rules of an input field.
 //
-//   Domain-related APIs are only available in the N. Virginia (us-east-1) Region.
-//   Please set your AWS Region configuration to us-east-1 to create, view, or
-//   edit these resources.
+//   Domain and distribution APIs are only available in the N. Virginia (us-east-1)
+//   AWS Region. Please set your AWS Region configuration to us-east-1 to create,
+//   view, or edit these resources.
 //
 //   * NotFoundException
 //   Lightsail throws this exception when it cannot find a resource.
@@ -6356,9 +7703,9 @@ func (c *Lightsail) GetContactMethodsRequest(input *GetContactMethodsInput) (req
 //   Lightsail throws this exception when user input does not conform to the validation
 //   rules of an input field.
 //
-//   Domain-related APIs are only available in the N. Virginia (us-east-1) Region.
-//   Please set your AWS Region configuration to us-east-1 to create, view, or
-//   edit these resources.
+//   Domain and distribution APIs are only available in the N. Virginia (us-east-1)
+//   AWS Region. Please set your AWS Region configuration to us-east-1 to create,
+//   view, or edit these resources.
 //
 //   * NotFoundException
 //   Lightsail throws this exception when it cannot find a resource.
@@ -6390,6 +7737,711 @@ func (c *Lightsail) GetContactMethods(input *GetContactMethodsInput) (*GetContac
 // for more information on using Contexts.
 func (c *Lightsail) GetContactMethodsWithContext(ctx aws.Context, input *GetContactMethodsInput, opts ...request.Option) (*GetContactMethodsOutput, error) {
 	req, out := c.GetContactMethodsRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opGetContainerAPIMetadata = "GetContainerAPIMetadata"
+
+// GetContainerAPIMetadataRequest generates a "aws/request.Request" representing the
+// client's request for the GetContainerAPIMetadata operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See GetContainerAPIMetadata for more information on using the GetContainerAPIMetadata
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the GetContainerAPIMetadataRequest method.
+//    req, resp := client.GetContainerAPIMetadataRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/lightsail-2016-11-28/GetContainerAPIMetadata
+func (c *Lightsail) GetContainerAPIMetadataRequest(input *GetContainerAPIMetadataInput) (req *request.Request, output *GetContainerAPIMetadataOutput) {
+	op := &request.Operation{
+		Name:       opGetContainerAPIMetadata,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &GetContainerAPIMetadataInput{}
+	}
+
+	output = &GetContainerAPIMetadataOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// GetContainerAPIMetadata API operation for Amazon Lightsail.
+//
+// Returns information about Amazon Lightsail containers, such as the current
+// version of the Lightsail Control (lightsailctl) plugin.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Lightsail's
+// API operation GetContainerAPIMetadata for usage and error information.
+//
+// Returned Error Types:
+//   * ServiceException
+//   A general service exception.
+//
+//   * AccessDeniedException
+//   Lightsail throws this exception when the user cannot be authenticated or
+//   uses invalid credentials to access a resource.
+//
+//   * UnauthenticatedException
+//   Lightsail throws this exception when the user has not been authenticated.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/lightsail-2016-11-28/GetContainerAPIMetadata
+func (c *Lightsail) GetContainerAPIMetadata(input *GetContainerAPIMetadataInput) (*GetContainerAPIMetadataOutput, error) {
+	req, out := c.GetContainerAPIMetadataRequest(input)
+	return out, req.Send()
+}
+
+// GetContainerAPIMetadataWithContext is the same as GetContainerAPIMetadata with the addition of
+// the ability to pass a context and additional request options.
+//
+// See GetContainerAPIMetadata for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Lightsail) GetContainerAPIMetadataWithContext(ctx aws.Context, input *GetContainerAPIMetadataInput, opts ...request.Option) (*GetContainerAPIMetadataOutput, error) {
+	req, out := c.GetContainerAPIMetadataRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opGetContainerImages = "GetContainerImages"
+
+// GetContainerImagesRequest generates a "aws/request.Request" representing the
+// client's request for the GetContainerImages operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See GetContainerImages for more information on using the GetContainerImages
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the GetContainerImagesRequest method.
+//    req, resp := client.GetContainerImagesRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/lightsail-2016-11-28/GetContainerImages
+func (c *Lightsail) GetContainerImagesRequest(input *GetContainerImagesInput) (req *request.Request, output *GetContainerImagesOutput) {
+	op := &request.Operation{
+		Name:       opGetContainerImages,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &GetContainerImagesInput{}
+	}
+
+	output = &GetContainerImagesOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// GetContainerImages API operation for Amazon Lightsail.
+//
+// Returns the container images that are registered to your Amazon Lightsail
+// container service.
+//
+// If you created a deployment on your Lightsail container service that uses
+// container images from a public registry like Docker Hub, those images are
+// not returned as part of this action. Those images are not registered to your
+// Lightsail container service.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Lightsail's
+// API operation GetContainerImages for usage and error information.
+//
+// Returned Error Types:
+//   * ServiceException
+//   A general service exception.
+//
+//   * InvalidInputException
+//   Lightsail throws this exception when user input does not conform to the validation
+//   rules of an input field.
+//
+//   Domain and distribution APIs are only available in the N. Virginia (us-east-1)
+//   AWS Region. Please set your AWS Region configuration to us-east-1 to create,
+//   view, or edit these resources.
+//
+//   * NotFoundException
+//   Lightsail throws this exception when it cannot find a resource.
+//
+//   * AccessDeniedException
+//   Lightsail throws this exception when the user cannot be authenticated or
+//   uses invalid credentials to access a resource.
+//
+//   * UnauthenticatedException
+//   Lightsail throws this exception when the user has not been authenticated.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/lightsail-2016-11-28/GetContainerImages
+func (c *Lightsail) GetContainerImages(input *GetContainerImagesInput) (*GetContainerImagesOutput, error) {
+	req, out := c.GetContainerImagesRequest(input)
+	return out, req.Send()
+}
+
+// GetContainerImagesWithContext is the same as GetContainerImages with the addition of
+// the ability to pass a context and additional request options.
+//
+// See GetContainerImages for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Lightsail) GetContainerImagesWithContext(ctx aws.Context, input *GetContainerImagesInput, opts ...request.Option) (*GetContainerImagesOutput, error) {
+	req, out := c.GetContainerImagesRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opGetContainerLog = "GetContainerLog"
+
+// GetContainerLogRequest generates a "aws/request.Request" representing the
+// client's request for the GetContainerLog operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See GetContainerLog for more information on using the GetContainerLog
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the GetContainerLogRequest method.
+//    req, resp := client.GetContainerLogRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/lightsail-2016-11-28/GetContainerLog
+func (c *Lightsail) GetContainerLogRequest(input *GetContainerLogInput) (req *request.Request, output *GetContainerLogOutput) {
+	op := &request.Operation{
+		Name:       opGetContainerLog,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &GetContainerLogInput{}
+	}
+
+	output = &GetContainerLogOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// GetContainerLog API operation for Amazon Lightsail.
+//
+// Returns the log events of a container of your Amazon Lightsail container
+// service.
+//
+// If your container service has more than one node (i.e., a scale greater than
+// 1), then the log events that are returned for the specified container are
+// merged from all nodes on your container service.
+//
+// Container logs are retained for a certain amount of time. For more information,
+// see Amazon Lightsail endpoints and quotas (https://docs.aws.amazon.com/general/latest/gr/lightsail.html)
+// in the AWS General Reference.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Lightsail's
+// API operation GetContainerLog for usage and error information.
+//
+// Returned Error Types:
+//   * ServiceException
+//   A general service exception.
+//
+//   * InvalidInputException
+//   Lightsail throws this exception when user input does not conform to the validation
+//   rules of an input field.
+//
+//   Domain and distribution APIs are only available in the N. Virginia (us-east-1)
+//   AWS Region. Please set your AWS Region configuration to us-east-1 to create,
+//   view, or edit these resources.
+//
+//   * NotFoundException
+//   Lightsail throws this exception when it cannot find a resource.
+//
+//   * AccessDeniedException
+//   Lightsail throws this exception when the user cannot be authenticated or
+//   uses invalid credentials to access a resource.
+//
+//   * UnauthenticatedException
+//   Lightsail throws this exception when the user has not been authenticated.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/lightsail-2016-11-28/GetContainerLog
+func (c *Lightsail) GetContainerLog(input *GetContainerLogInput) (*GetContainerLogOutput, error) {
+	req, out := c.GetContainerLogRequest(input)
+	return out, req.Send()
+}
+
+// GetContainerLogWithContext is the same as GetContainerLog with the addition of
+// the ability to pass a context and additional request options.
+//
+// See GetContainerLog for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Lightsail) GetContainerLogWithContext(ctx aws.Context, input *GetContainerLogInput, opts ...request.Option) (*GetContainerLogOutput, error) {
+	req, out := c.GetContainerLogRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opGetContainerServiceDeployments = "GetContainerServiceDeployments"
+
+// GetContainerServiceDeploymentsRequest generates a "aws/request.Request" representing the
+// client's request for the GetContainerServiceDeployments operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See GetContainerServiceDeployments for more information on using the GetContainerServiceDeployments
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the GetContainerServiceDeploymentsRequest method.
+//    req, resp := client.GetContainerServiceDeploymentsRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/lightsail-2016-11-28/GetContainerServiceDeployments
+func (c *Lightsail) GetContainerServiceDeploymentsRequest(input *GetContainerServiceDeploymentsInput) (req *request.Request, output *GetContainerServiceDeploymentsOutput) {
+	op := &request.Operation{
+		Name:       opGetContainerServiceDeployments,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &GetContainerServiceDeploymentsInput{}
+	}
+
+	output = &GetContainerServiceDeploymentsOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// GetContainerServiceDeployments API operation for Amazon Lightsail.
+//
+// Returns the deployments for your Amazon Lightsail container service
+//
+// A deployment specifies the settings, such as the ports and launch command,
+// of containers that are deployed to your container service.
+//
+// The deployments are ordered by version in ascending order. The newest version
+// is listed at the top of the response.
+//
+// A set number of deployments are kept before the oldest one is replaced with
+// the newest one. For more information, see Amazon Lightsail endpoints and
+// quotas (https://docs.aws.amazon.com/general/latest/gr/lightsail.html) in
+// the AWS General Reference.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Lightsail's
+// API operation GetContainerServiceDeployments for usage and error information.
+//
+// Returned Error Types:
+//   * ServiceException
+//   A general service exception.
+//
+//   * InvalidInputException
+//   Lightsail throws this exception when user input does not conform to the validation
+//   rules of an input field.
+//
+//   Domain and distribution APIs are only available in the N. Virginia (us-east-1)
+//   AWS Region. Please set your AWS Region configuration to us-east-1 to create,
+//   view, or edit these resources.
+//
+//   * NotFoundException
+//   Lightsail throws this exception when it cannot find a resource.
+//
+//   * AccessDeniedException
+//   Lightsail throws this exception when the user cannot be authenticated or
+//   uses invalid credentials to access a resource.
+//
+//   * UnauthenticatedException
+//   Lightsail throws this exception when the user has not been authenticated.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/lightsail-2016-11-28/GetContainerServiceDeployments
+func (c *Lightsail) GetContainerServiceDeployments(input *GetContainerServiceDeploymentsInput) (*GetContainerServiceDeploymentsOutput, error) {
+	req, out := c.GetContainerServiceDeploymentsRequest(input)
+	return out, req.Send()
+}
+
+// GetContainerServiceDeploymentsWithContext is the same as GetContainerServiceDeployments with the addition of
+// the ability to pass a context and additional request options.
+//
+// See GetContainerServiceDeployments for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Lightsail) GetContainerServiceDeploymentsWithContext(ctx aws.Context, input *GetContainerServiceDeploymentsInput, opts ...request.Option) (*GetContainerServiceDeploymentsOutput, error) {
+	req, out := c.GetContainerServiceDeploymentsRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opGetContainerServiceMetricData = "GetContainerServiceMetricData"
+
+// GetContainerServiceMetricDataRequest generates a "aws/request.Request" representing the
+// client's request for the GetContainerServiceMetricData operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See GetContainerServiceMetricData for more information on using the GetContainerServiceMetricData
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the GetContainerServiceMetricDataRequest method.
+//    req, resp := client.GetContainerServiceMetricDataRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/lightsail-2016-11-28/GetContainerServiceMetricData
+func (c *Lightsail) GetContainerServiceMetricDataRequest(input *GetContainerServiceMetricDataInput) (req *request.Request, output *GetContainerServiceMetricDataOutput) {
+	op := &request.Operation{
+		Name:       opGetContainerServiceMetricData,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &GetContainerServiceMetricDataInput{}
+	}
+
+	output = &GetContainerServiceMetricDataOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// GetContainerServiceMetricData API operation for Amazon Lightsail.
+//
+// Returns the data points of a specific metric of your Amazon Lightsail container
+// service.
+//
+// Metrics report the utilization of your resources. Monitor and collect metric
+// data regularly to maintain the reliability, availability, and performance
+// of your resources.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Lightsail's
+// API operation GetContainerServiceMetricData for usage and error information.
+//
+// Returned Error Types:
+//   * ServiceException
+//   A general service exception.
+//
+//   * InvalidInputException
+//   Lightsail throws this exception when user input does not conform to the validation
+//   rules of an input field.
+//
+//   Domain and distribution APIs are only available in the N. Virginia (us-east-1)
+//   AWS Region. Please set your AWS Region configuration to us-east-1 to create,
+//   view, or edit these resources.
+//
+//   * NotFoundException
+//   Lightsail throws this exception when it cannot find a resource.
+//
+//   * AccessDeniedException
+//   Lightsail throws this exception when the user cannot be authenticated or
+//   uses invalid credentials to access a resource.
+//
+//   * UnauthenticatedException
+//   Lightsail throws this exception when the user has not been authenticated.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/lightsail-2016-11-28/GetContainerServiceMetricData
+func (c *Lightsail) GetContainerServiceMetricData(input *GetContainerServiceMetricDataInput) (*GetContainerServiceMetricDataOutput, error) {
+	req, out := c.GetContainerServiceMetricDataRequest(input)
+	return out, req.Send()
+}
+
+// GetContainerServiceMetricDataWithContext is the same as GetContainerServiceMetricData with the addition of
+// the ability to pass a context and additional request options.
+//
+// See GetContainerServiceMetricData for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Lightsail) GetContainerServiceMetricDataWithContext(ctx aws.Context, input *GetContainerServiceMetricDataInput, opts ...request.Option) (*GetContainerServiceMetricDataOutput, error) {
+	req, out := c.GetContainerServiceMetricDataRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opGetContainerServicePowers = "GetContainerServicePowers"
+
+// GetContainerServicePowersRequest generates a "aws/request.Request" representing the
+// client's request for the GetContainerServicePowers operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See GetContainerServicePowers for more information on using the GetContainerServicePowers
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the GetContainerServicePowersRequest method.
+//    req, resp := client.GetContainerServicePowersRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/lightsail-2016-11-28/GetContainerServicePowers
+func (c *Lightsail) GetContainerServicePowersRequest(input *GetContainerServicePowersInput) (req *request.Request, output *GetContainerServicePowersOutput) {
+	op := &request.Operation{
+		Name:       opGetContainerServicePowers,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &GetContainerServicePowersInput{}
+	}
+
+	output = &GetContainerServicePowersOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// GetContainerServicePowers API operation for Amazon Lightsail.
+//
+// Returns the list of powers that can be specified for your Amazon Lightsail
+// container services.
+//
+// The power specifies the amount of memory, the number of vCPUs, and the base
+// price of the container service.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Lightsail's
+// API operation GetContainerServicePowers for usage and error information.
+//
+// Returned Error Types:
+//   * ServiceException
+//   A general service exception.
+//
+//   * InvalidInputException
+//   Lightsail throws this exception when user input does not conform to the validation
+//   rules of an input field.
+//
+//   Domain and distribution APIs are only available in the N. Virginia (us-east-1)
+//   AWS Region. Please set your AWS Region configuration to us-east-1 to create,
+//   view, or edit these resources.
+//
+//   * NotFoundException
+//   Lightsail throws this exception when it cannot find a resource.
+//
+//   * AccessDeniedException
+//   Lightsail throws this exception when the user cannot be authenticated or
+//   uses invalid credentials to access a resource.
+//
+//   * UnauthenticatedException
+//   Lightsail throws this exception when the user has not been authenticated.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/lightsail-2016-11-28/GetContainerServicePowers
+func (c *Lightsail) GetContainerServicePowers(input *GetContainerServicePowersInput) (*GetContainerServicePowersOutput, error) {
+	req, out := c.GetContainerServicePowersRequest(input)
+	return out, req.Send()
+}
+
+// GetContainerServicePowersWithContext is the same as GetContainerServicePowers with the addition of
+// the ability to pass a context and additional request options.
+//
+// See GetContainerServicePowers for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Lightsail) GetContainerServicePowersWithContext(ctx aws.Context, input *GetContainerServicePowersInput, opts ...request.Option) (*GetContainerServicePowersOutput, error) {
+	req, out := c.GetContainerServicePowersRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opGetContainerServices = "GetContainerServices"
+
+// GetContainerServicesRequest generates a "aws/request.Request" representing the
+// client's request for the GetContainerServices operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See GetContainerServices for more information on using the GetContainerServices
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the GetContainerServicesRequest method.
+//    req, resp := client.GetContainerServicesRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/lightsail-2016-11-28/GetContainerServices
+func (c *Lightsail) GetContainerServicesRequest(input *GetContainerServicesInput) (req *request.Request, output *GetContainerServicesOutput) {
+	op := &request.Operation{
+		Name:       opGetContainerServices,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &GetContainerServicesInput{}
+	}
+
+	output = &GetContainerServicesOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// GetContainerServices API operation for Amazon Lightsail.
+//
+// Returns information about one or more of your Amazon Lightsail container
+// services.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Lightsail's
+// API operation GetContainerServices for usage and error information.
+//
+// Returned Error Types:
+//   * ServiceException
+//   A general service exception.
+//
+//   * InvalidInputException
+//   Lightsail throws this exception when user input does not conform to the validation
+//   rules of an input field.
+//
+//   Domain and distribution APIs are only available in the N. Virginia (us-east-1)
+//   AWS Region. Please set your AWS Region configuration to us-east-1 to create,
+//   view, or edit these resources.
+//
+//   * NotFoundException
+//   Lightsail throws this exception when it cannot find a resource.
+//
+//   * AccessDeniedException
+//   Lightsail throws this exception when the user cannot be authenticated or
+//   uses invalid credentials to access a resource.
+//
+//   * UnauthenticatedException
+//   Lightsail throws this exception when the user has not been authenticated.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/lightsail-2016-11-28/GetContainerServices
+func (c *Lightsail) GetContainerServices(input *GetContainerServicesInput) (*GetContainerServicesOutput, error) {
+	req, out := c.GetContainerServicesRequest(input)
+	return out, req.Send()
+}
+
+// GetContainerServicesWithContext is the same as GetContainerServices with the addition of
+// the ability to pass a context and additional request options.
+//
+// See GetContainerServices for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Lightsail) GetContainerServicesWithContext(ctx aws.Context, input *GetContainerServicesInput, opts ...request.Option) (*GetContainerServicesOutput, error) {
+	req, out := c.GetContainerServicesRequest(input)
 	req.SetContext(ctx)
 	req.ApplyOptions(opts...)
 	return out, req.Send()
@@ -6456,9 +8508,9 @@ func (c *Lightsail) GetDiskRequest(input *GetDiskInput) (req *request.Request, o
 //   Lightsail throws this exception when user input does not conform to the validation
 //   rules of an input field.
 //
-//   Domain-related APIs are only available in the N. Virginia (us-east-1) Region.
-//   Please set your AWS Region configuration to us-east-1 to create, view, or
-//   edit these resources.
+//   Domain and distribution APIs are only available in the N. Virginia (us-east-1)
+//   AWS Region. Please set your AWS Region configuration to us-east-1 to create,
+//   view, or edit these resources.
 //
 //   * NotFoundException
 //   Lightsail throws this exception when it cannot find a resource.
@@ -6560,9 +8612,9 @@ func (c *Lightsail) GetDiskSnapshotRequest(input *GetDiskSnapshotInput) (req *re
 //   Lightsail throws this exception when user input does not conform to the validation
 //   rules of an input field.
 //
-//   Domain-related APIs are only available in the N. Virginia (us-east-1) Region.
-//   Please set your AWS Region configuration to us-east-1 to create, view, or
-//   edit these resources.
+//   Domain and distribution APIs are only available in the N. Virginia (us-east-1)
+//   AWS Region. Please set your AWS Region configuration to us-east-1 to create,
+//   view, or edit these resources.
 //
 //   * NotFoundException
 //   Lightsail throws this exception when it cannot find a resource.
@@ -6665,9 +8717,9 @@ func (c *Lightsail) GetDiskSnapshotsRequest(input *GetDiskSnapshotsInput) (req *
 //   Lightsail throws this exception when user input does not conform to the validation
 //   rules of an input field.
 //
-//   Domain-related APIs are only available in the N. Virginia (us-east-1) Region.
-//   Please set your AWS Region configuration to us-east-1 to create, view, or
-//   edit these resources.
+//   Domain and distribution APIs are only available in the N. Virginia (us-east-1)
+//   AWS Region. Please set your AWS Region configuration to us-east-1 to create,
+//   view, or edit these resources.
 //
 //   * NotFoundException
 //   Lightsail throws this exception when it cannot find a resource.
@@ -6770,9 +8822,9 @@ func (c *Lightsail) GetDisksRequest(input *GetDisksInput) (req *request.Request,
 //   Lightsail throws this exception when user input does not conform to the validation
 //   rules of an input field.
 //
-//   Domain-related APIs are only available in the N. Virginia (us-east-1) Region.
-//   Please set your AWS Region configuration to us-east-1 to create, view, or
-//   edit these resources.
+//   Domain and distribution APIs are only available in the N. Virginia (us-east-1)
+//   AWS Region. Please set your AWS Region configuration to us-east-1 to create,
+//   view, or edit these resources.
 //
 //   * NotFoundException
 //   Lightsail throws this exception when it cannot find a resource.
@@ -6857,7 +8909,7 @@ func (c *Lightsail) GetDistributionBundlesRequest(input *GetDistributionBundlesI
 
 // GetDistributionBundles API operation for Amazon Lightsail.
 //
-// Returns the list bundles that can be applied to you Amazon Lightsail content
+// Returns the bundles that can be applied to your Amazon Lightsail content
 // delivery network (CDN) distributions.
 //
 // A distribution bundle specifies the monthly network transfer quota and monthly
@@ -6878,9 +8930,9 @@ func (c *Lightsail) GetDistributionBundlesRequest(input *GetDistributionBundlesI
 //   Lightsail throws this exception when user input does not conform to the validation
 //   rules of an input field.
 //
-//   Domain-related APIs are only available in the N. Virginia (us-east-1) Region.
-//   Please set your AWS Region configuration to us-east-1 to create, view, or
-//   edit these resources.
+//   Domain and distribution APIs are only available in the N. Virginia (us-east-1)
+//   AWS Region. Please set your AWS Region configuration to us-east-1 to create,
+//   view, or edit these resources.
 //
 //   * NotFoundException
 //   Lightsail throws this exception when it cannot find a resource.
@@ -6979,9 +9031,9 @@ func (c *Lightsail) GetDistributionLatestCacheResetRequest(input *GetDistributio
 //   Lightsail throws this exception when user input does not conform to the validation
 //   rules of an input field.
 //
-//   Domain-related APIs are only available in the N. Virginia (us-east-1) Region.
-//   Please set your AWS Region configuration to us-east-1 to create, view, or
-//   edit these resources.
+//   Domain and distribution APIs are only available in the N. Virginia (us-east-1)
+//   AWS Region. Please set your AWS Region configuration to us-east-1 to create,
+//   view, or edit these resources.
 //
 //   * NotFoundException
 //   Lightsail throws this exception when it cannot find a resource.
@@ -7084,9 +9136,9 @@ func (c *Lightsail) GetDistributionMetricDataRequest(input *GetDistributionMetri
 //   Lightsail throws this exception when user input does not conform to the validation
 //   rules of an input field.
 //
-//   Domain-related APIs are only available in the N. Virginia (us-east-1) Region.
-//   Please set your AWS Region configuration to us-east-1 to create, view, or
-//   edit these resources.
+//   Domain and distribution APIs are only available in the N. Virginia (us-east-1)
+//   AWS Region. Please set your AWS Region configuration to us-east-1 to create,
+//   view, or edit these resources.
 //
 //   * NotFoundException
 //   Lightsail throws this exception when it cannot find a resource.
@@ -7185,9 +9237,9 @@ func (c *Lightsail) GetDistributionsRequest(input *GetDistributionsInput) (req *
 //   Lightsail throws this exception when user input does not conform to the validation
 //   rules of an input field.
 //
-//   Domain-related APIs are only available in the N. Virginia (us-east-1) Region.
-//   Please set your AWS Region configuration to us-east-1 to create, view, or
-//   edit these resources.
+//   Domain and distribution APIs are only available in the N. Virginia (us-east-1)
+//   AWS Region. Please set your AWS Region configuration to us-east-1 to create,
+//   view, or edit these resources.
 //
 //   * NotFoundException
 //   Lightsail throws this exception when it cannot find a resource.
@@ -7285,9 +9337,9 @@ func (c *Lightsail) GetDomainRequest(input *GetDomainInput) (req *request.Reques
 //   Lightsail throws this exception when user input does not conform to the validation
 //   rules of an input field.
 //
-//   Domain-related APIs are only available in the N. Virginia (us-east-1) Region.
-//   Please set your AWS Region configuration to us-east-1 to create, view, or
-//   edit these resources.
+//   Domain and distribution APIs are only available in the N. Virginia (us-east-1)
+//   AWS Region. Please set your AWS Region configuration to us-east-1 to create,
+//   view, or edit these resources.
 //
 //   * NotFoundException
 //   Lightsail throws this exception when it cannot find a resource.
@@ -7389,9 +9441,9 @@ func (c *Lightsail) GetDomainsRequest(input *GetDomainsInput) (req *request.Requ
 //   Lightsail throws this exception when user input does not conform to the validation
 //   rules of an input field.
 //
-//   Domain-related APIs are only available in the N. Virginia (us-east-1) Region.
-//   Please set your AWS Region configuration to us-east-1 to create, view, or
-//   edit these resources.
+//   Domain and distribution APIs are only available in the N. Virginia (us-east-1)
+//   AWS Region. Please set your AWS Region configuration to us-east-1 to create,
+//   view, or edit these resources.
 //
 //   * NotFoundException
 //   Lightsail throws this exception when it cannot find a resource.
@@ -7476,11 +9528,11 @@ func (c *Lightsail) GetExportSnapshotRecordsRequest(input *GetExportSnapshotReco
 
 // GetExportSnapshotRecords API operation for Amazon Lightsail.
 //
-// Returns the export snapshot record created as a result of the export snapshot
+// Returns all export snapshot records created as a result of the export snapshot
 // operation.
 //
 // An export snapshot record can be used to create a new Amazon EC2 instance
-// and its related resources with the create cloud formation stack operation.
+// and its related resources with the CreateCloudFormationStack action.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -7497,9 +9549,9 @@ func (c *Lightsail) GetExportSnapshotRecordsRequest(input *GetExportSnapshotReco
 //   Lightsail throws this exception when user input does not conform to the validation
 //   rules of an input field.
 //
-//   Domain-related APIs are only available in the N. Virginia (us-east-1) Region.
-//   Please set your AWS Region configuration to us-east-1 to create, view, or
-//   edit these resources.
+//   Domain and distribution APIs are only available in the N. Virginia (us-east-1)
+//   AWS Region. Please set your AWS Region configuration to us-east-1 to create,
+//   view, or edit these resources.
 //
 //   * NotFoundException
 //   Lightsail throws this exception when it cannot find a resource.
@@ -7602,9 +9654,9 @@ func (c *Lightsail) GetInstanceRequest(input *GetInstanceInput) (req *request.Re
 //   Lightsail throws this exception when user input does not conform to the validation
 //   rules of an input field.
 //
-//   Domain-related APIs are only available in the N. Virginia (us-east-1) Region.
-//   Please set your AWS Region configuration to us-east-1 to create, view, or
-//   edit these resources.
+//   Domain and distribution APIs are only available in the N. Virginia (us-east-1)
+//   AWS Region. Please set your AWS Region configuration to us-east-1 to create,
+//   view, or edit these resources.
 //
 //   * NotFoundException
 //   Lightsail throws this exception when it cannot find a resource.
@@ -7694,7 +9746,7 @@ func (c *Lightsail) GetInstanceAccessDetailsRequest(input *GetInstanceAccessDeta
 //
 // The get instance access details operation supports tag-based access control
 // via resource tags applied to the resource identified by instance name. For
-// more information, see the Lightsail Dev Guide (https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags).
+// more information, see the Amazon Lightsail Developer Guide (https://lightsail.aws.amazon.com/ls/docs/en_us/articles/amazon-lightsail-controlling-access-using-tags).
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -7711,9 +9763,9 @@ func (c *Lightsail) GetInstanceAccessDetailsRequest(input *GetInstanceAccessDeta
 //   Lightsail throws this exception when user input does not conform to the validation
 //   rules of an input field.
 //
-//   Domain-related APIs are only available in the N. Virginia (us-east-1) Region.
-//   Please set your AWS Region configuration to us-east-1 to create, view, or
-//   edit these resources.
+//   Domain and distribution APIs are only available in the N. Virginia (us-east-1)
+//   AWS Region. Please set your AWS Region configuration to us-east-1 to create,
+//   view, or edit these resources.
 //
 //   * NotFoundException
 //   Lightsail throws this exception when it cannot find a resource.
@@ -7820,9 +9872,9 @@ func (c *Lightsail) GetInstanceMetricDataRequest(input *GetInstanceMetricDataInp
 //   Lightsail throws this exception when user input does not conform to the validation
 //   rules of an input field.
 //
-//   Domain-related APIs are only available in the N. Virginia (us-east-1) Region.
-//   Please set your AWS Region configuration to us-east-1 to create, view, or
-//   edit these resources.
+//   Domain and distribution APIs are only available in the N. Virginia (us-east-1)
+//   AWS Region. Please set your AWS Region configuration to us-east-1 to create,
+//   view, or edit these resources.
 //
 //   * NotFoundException
 //   Lightsail throws this exception when it cannot find a resource.
@@ -7926,9 +9978,9 @@ func (c *Lightsail) GetInstancePortStatesRequest(input *GetInstancePortStatesInp
 //   Lightsail throws this exception when user input does not conform to the validation
 //   rules of an input field.
 //
-//   Domain-related APIs are only available in the N. Virginia (us-east-1) Region.
-//   Please set your AWS Region configuration to us-east-1 to create, view, or
-//   edit these resources.
+//   Domain and distribution APIs are only available in the N. Virginia (us-east-1)
+//   AWS Region. Please set your AWS Region configuration to us-east-1 to create,
+//   view, or edit these resources.
 //
 //   * NotFoundException
 //   Lightsail throws this exception when it cannot find a resource.
@@ -8030,9 +10082,9 @@ func (c *Lightsail) GetInstanceSnapshotRequest(input *GetInstanceSnapshotInput) 
 //   Lightsail throws this exception when user input does not conform to the validation
 //   rules of an input field.
 //
-//   Domain-related APIs are only available in the N. Virginia (us-east-1) Region.
-//   Please set your AWS Region configuration to us-east-1 to create, view, or
-//   edit these resources.
+//   Domain and distribution APIs are only available in the N. Virginia (us-east-1)
+//   AWS Region. Please set your AWS Region configuration to us-east-1 to create,
+//   view, or edit these resources.
 //
 //   * NotFoundException
 //   Lightsail throws this exception when it cannot find a resource.
@@ -8134,9 +10186,9 @@ func (c *Lightsail) GetInstanceSnapshotsRequest(input *GetInstanceSnapshotsInput
 //   Lightsail throws this exception when user input does not conform to the validation
 //   rules of an input field.
 //
-//   Domain-related APIs are only available in the N. Virginia (us-east-1) Region.
-//   Please set your AWS Region configuration to us-east-1 to create, view, or
-//   edit these resources.
+//   Domain and distribution APIs are only available in the N. Virginia (us-east-1)
+//   AWS Region. Please set your AWS Region configuration to us-east-1 to create,
+//   view, or edit these resources.
 //
 //   * NotFoundException
 //   Lightsail throws this exception when it cannot find a resource.
@@ -8238,9 +10290,9 @@ func (c *Lightsail) GetInstanceStateRequest(input *GetInstanceStateInput) (req *
 //   Lightsail throws this exception when user input does not conform to the validation
 //   rules of an input field.
 //
-//   Domain-related APIs are only available in the N. Virginia (us-east-1) Region.
-//   Please set your AWS Region configuration to us-east-1 to create, view, or
-//   edit these resources.
+//   Domain and distribution APIs are only available in the N. Virginia (us-east-1)
+//   AWS Region. Please set your AWS Region configuration to us-east-1 to create,
+//   view, or edit these resources.
 //
 //   * NotFoundException
 //   Lightsail throws this exception when it cannot find a resource.
@@ -8343,9 +10395,9 @@ func (c *Lightsail) GetInstancesRequest(input *GetInstancesInput) (req *request.
 //   Lightsail throws this exception when user input does not conform to the validation
 //   rules of an input field.
 //
-//   Domain-related APIs are only available in the N. Virginia (us-east-1) Region.
-//   Please set your AWS Region configuration to us-east-1 to create, view, or
-//   edit these resources.
+//   Domain and distribution APIs are only available in the N. Virginia (us-east-1)
+//   AWS Region. Please set your AWS Region configuration to us-east-1 to create,
+//   view, or edit these resources.
 //
 //   * NotFoundException
 //   Lightsail throws this exception when it cannot find a resource.
@@ -8447,9 +10499,9 @@ func (c *Lightsail) GetKeyPairRequest(input *GetKeyPairInput) (req *request.Requ
 //   Lightsail throws this exception when user input does not conform to the validation
 //   rules of an input field.
 //
-//   Domain-related APIs are only available in the N. Virginia (us-east-1) Region.
-//   Please set your AWS Region configuration to us-east-1 to create, view, or
-//   edit these resources.
+//   Domain and distribution APIs are only available in the N. Virginia (us-east-1)
+//   AWS Region. Please set your AWS Region configuration to us-east-1 to create,
+//   view, or edit these resources.
 //
 //   * NotFoundException
 //   Lightsail throws this exception when it cannot find a resource.
@@ -8551,9 +10603,9 @@ func (c *Lightsail) GetKeyPairsRequest(input *GetKeyPairsInput) (req *request.Re
 //   Lightsail throws this exception when user input does not conform to the validation
 //   rules of an input field.
 //
-//   Domain-related APIs are only available in the N. Virginia (us-east-1) Region.
-//   Please set your AWS Region configuration to us-east-1 to create, view, or
-//   edit these resources.
+//   Domain and distribution APIs are only available in the N. Virginia (us-east-1)
+//   AWS Region. Please set your AWS Region configuration to us-east-1 to create,
+//   view, or edit these resources.
 //
 //   * NotFoundException
 //   Lightsail throws this exception when it cannot find a resource.
@@ -8655,9 +10707,9 @@ func (c *Lightsail) GetLoadBalancerRequest(input *GetLoadBalancerInput) (req *re
 //   Lightsail throws this exception when user input does not conform to the validation
 //   rules of an input field.
 //
-//   Domain-related APIs are only available in the N. Virginia (us-east-1) Region.
-//   Please set your AWS Region configuration to us-east-1 to create, view, or
-//   edit these resources.
+//   Domain and distribution APIs are only available in the N. Virginia (us-east-1)
+//   AWS Region. Please set your AWS Region configuration to us-east-1 to create,
+//   view, or edit these resources.
 //
 //   * NotFoundException
 //   Lightsail throws this exception when it cannot find a resource.
@@ -8763,9 +10815,9 @@ func (c *Lightsail) GetLoadBalancerMetricDataRequest(input *GetLoadBalancerMetri
 //   Lightsail throws this exception when user input does not conform to the validation
 //   rules of an input field.
 //
-//   Domain-related APIs are only available in the N. Virginia (us-east-1) Region.
-//   Please set your AWS Region configuration to us-east-1 to create, view, or
-//   edit these resources.
+//   Domain and distribution APIs are only available in the N. Virginia (us-east-1)
+//   AWS Region. Please set your AWS Region configuration to us-east-1 to create,
+//   view, or edit these resources.
 //
 //   * NotFoundException
 //   Lightsail throws this exception when it cannot find a resource.
@@ -8873,9 +10925,9 @@ func (c *Lightsail) GetLoadBalancerTlsCertificatesRequest(input *GetLoadBalancer
 //   Lightsail throws this exception when user input does not conform to the validation
 //   rules of an input field.
 //
-//   Domain-related APIs are only available in the N. Virginia (us-east-1) Region.
-//   Please set your AWS Region configuration to us-east-1 to create, view, or
-//   edit these resources.
+//   Domain and distribution APIs are only available in the N. Virginia (us-east-1)
+//   AWS Region. Please set your AWS Region configuration to us-east-1 to create,
+//   view, or edit these resources.
 //
 //   * NotFoundException
 //   Lightsail throws this exception when it cannot find a resource.
@@ -8977,9 +11029,9 @@ func (c *Lightsail) GetLoadBalancersRequest(input *GetLoadBalancersInput) (req *
 //   Lightsail throws this exception when user input does not conform to the validation
 //   rules of an input field.
 //
-//   Domain-related APIs are only available in the N. Virginia (us-east-1) Region.
-//   Please set your AWS Region configuration to us-east-1 to create, view, or
-//   edit these resources.
+//   Domain and distribution APIs are only available in the N. Virginia (us-east-1)
+//   AWS Region. Please set your AWS Region configuration to us-east-1 to create,
+//   view, or edit these resources.
 //
 //   * NotFoundException
 //   Lightsail throws this exception when it cannot find a resource.
@@ -9083,9 +11135,9 @@ func (c *Lightsail) GetOperationRequest(input *GetOperationInput) (req *request.
 //   Lightsail throws this exception when user input does not conform to the validation
 //   rules of an input field.
 //
-//   Domain-related APIs are only available in the N. Virginia (us-east-1) Region.
-//   Please set your AWS Region configuration to us-east-1 to create, view, or
-//   edit these resources.
+//   Domain and distribution APIs are only available in the N. Virginia (us-east-1)
+//   AWS Region. Please set your AWS Region configuration to us-east-1 to create,
+//   view, or edit these resources.
 //
 //   * NotFoundException
 //   Lightsail throws this exception when it cannot find a resource.
@@ -9191,9 +11243,9 @@ func (c *Lightsail) GetOperationsRequest(input *GetOperationsInput) (req *reques
 //   Lightsail throws this exception when user input does not conform to the validation
 //   rules of an input field.
 //
-//   Domain-related APIs are only available in the N. Virginia (us-east-1) Region.
-//   Please set your AWS Region configuration to us-east-1 to create, view, or
-//   edit these resources.
+//   Domain and distribution APIs are only available in the N. Virginia (us-east-1)
+//   AWS Region. Please set your AWS Region configuration to us-east-1 to create,
+//   view, or edit these resources.
 //
 //   * NotFoundException
 //   Lightsail throws this exception when it cannot find a resource.
@@ -9295,9 +11347,9 @@ func (c *Lightsail) GetOperationsForResourceRequest(input *GetOperationsForResou
 //   Lightsail throws this exception when user input does not conform to the validation
 //   rules of an input field.
 //
-//   Domain-related APIs are only available in the N. Virginia (us-east-1) Region.
-//   Please set your AWS Region configuration to us-east-1 to create, view, or
-//   edit these resources.
+//   Domain and distribution APIs are only available in the N. Virginia (us-east-1)
+//   AWS Region. Please set your AWS Region configuration to us-east-1 to create,
+//   view, or edit these resources.
 //
 //   * NotFoundException
 //   Lightsail throws this exception when it cannot find a resource.
@@ -9400,9 +11452,9 @@ func (c *Lightsail) GetRegionsRequest(input *GetRegionsInput) (req *request.Requ
 //   Lightsail throws this exception when user input does not conform to the validation
 //   rules of an input field.
 //
-//   Domain-related APIs are only available in the N. Virginia (us-east-1) Region.
-//   Please set your AWS Region configuration to us-east-1 to create, view, or
-//   edit these resources.
+//   Domain and distribution APIs are only available in the N. Virginia (us-east-1)
+//   AWS Region. Please set your AWS Region configuration to us-east-1 to create,
+//   view, or edit these resources.
 //
 //   * NotFoundException
 //   Lightsail throws this exception when it cannot find a resource.
@@ -9504,9 +11556,9 @@ func (c *Lightsail) GetRelationalDatabaseRequest(input *GetRelationalDatabaseInp
 //   Lightsail throws this exception when user input does not conform to the validation
 //   rules of an input field.
 //
-//   Domain-related APIs are only available in the N. Virginia (us-east-1) Region.
-//   Please set your AWS Region configuration to us-east-1 to create, view, or
-//   edit these resources.
+//   Domain and distribution APIs are only available in the N. Virginia (us-east-1)
+//   AWS Region. Please set your AWS Region configuration to us-east-1 to create,
+//   view, or edit these resources.
 //
 //   * NotFoundException
 //   Lightsail throws this exception when it cannot find a resource.
@@ -9612,9 +11664,9 @@ func (c *Lightsail) GetRelationalDatabaseBlueprintsRequest(input *GetRelationalD
 //   Lightsail throws this exception when user input does not conform to the validation
 //   rules of an input field.
 //
-//   Domain-related APIs are only available in the N. Virginia (us-east-1) Region.
-//   Please set your AWS Region configuration to us-east-1 to create, view, or
-//   edit these resources.
+//   Domain and distribution APIs are only available in the N. Virginia (us-east-1)
+//   AWS Region. Please set your AWS Region configuration to us-east-1 to create,
+//   view, or edit these resources.
 //
 //   * NotFoundException
 //   Lightsail throws this exception when it cannot find a resource.
@@ -9720,9 +11772,9 @@ func (c *Lightsail) GetRelationalDatabaseBundlesRequest(input *GetRelationalData
 //   Lightsail throws this exception when user input does not conform to the validation
 //   rules of an input field.
 //
-//   Domain-related APIs are only available in the N. Virginia (us-east-1) Region.
-//   Please set your AWS Region configuration to us-east-1 to create, view, or
-//   edit these resources.
+//   Domain and distribution APIs are only available in the N. Virginia (us-east-1)
+//   AWS Region. Please set your AWS Region configuration to us-east-1 to create,
+//   view, or edit these resources.
 //
 //   * NotFoundException
 //   Lightsail throws this exception when it cannot find a resource.
@@ -9824,9 +11876,9 @@ func (c *Lightsail) GetRelationalDatabaseEventsRequest(input *GetRelationalDatab
 //   Lightsail throws this exception when user input does not conform to the validation
 //   rules of an input field.
 //
-//   Domain-related APIs are only available in the N. Virginia (us-east-1) Region.
-//   Please set your AWS Region configuration to us-east-1 to create, view, or
-//   edit these resources.
+//   Domain and distribution APIs are only available in the N. Virginia (us-east-1)
+//   AWS Region. Please set your AWS Region configuration to us-east-1 to create,
+//   view, or edit these resources.
 //
 //   * NotFoundException
 //   Lightsail throws this exception when it cannot find a resource.
@@ -9928,9 +11980,9 @@ func (c *Lightsail) GetRelationalDatabaseLogEventsRequest(input *GetRelationalDa
 //   Lightsail throws this exception when user input does not conform to the validation
 //   rules of an input field.
 //
-//   Domain-related APIs are only available in the N. Virginia (us-east-1) Region.
-//   Please set your AWS Region configuration to us-east-1 to create, view, or
-//   edit these resources.
+//   Domain and distribution APIs are only available in the N. Virginia (us-east-1)
+//   AWS Region. Please set your AWS Region configuration to us-east-1 to create,
+//   view, or edit these resources.
 //
 //   * NotFoundException
 //   Lightsail throws this exception when it cannot find a resource.
@@ -10033,9 +12085,9 @@ func (c *Lightsail) GetRelationalDatabaseLogStreamsRequest(input *GetRelationalD
 //   Lightsail throws this exception when user input does not conform to the validation
 //   rules of an input field.
 //
-//   Domain-related APIs are only available in the N. Virginia (us-east-1) Region.
-//   Please set your AWS Region configuration to us-east-1 to create, view, or
-//   edit these resources.
+//   Domain and distribution APIs are only available in the N. Virginia (us-east-1)
+//   AWS Region. Please set your AWS Region configuration to us-east-1 to create,
+//   view, or edit these resources.
 //
 //   * NotFoundException
 //   Lightsail throws this exception when it cannot find a resource.
@@ -10141,9 +12193,9 @@ func (c *Lightsail) GetRelationalDatabaseMasterUserPasswordRequest(input *GetRel
 //   Lightsail throws this exception when user input does not conform to the validation
 //   rules of an input field.
 //
-//   Domain-related APIs are only available in the N. Virginia (us-east-1) Region.
-//   Please set your AWS Region configuration to us-east-1 to create, view, or
-//   edit these resources.
+//   Domain and distribution APIs are only available in the N. Virginia (us-east-1)
+//   AWS Region. Please set your AWS Region configuration to us-east-1 to create,
+//   view, or edit these resources.
 //
 //   * NotFoundException
 //   Lightsail throws this exception when it cannot find a resource.
@@ -10250,9 +12302,9 @@ func (c *Lightsail) GetRelationalDatabaseMetricDataRequest(input *GetRelationalD
 //   Lightsail throws this exception when user input does not conform to the validation
 //   rules of an input field.
 //
-//   Domain-related APIs are only available in the N. Virginia (us-east-1) Region.
-//   Please set your AWS Region configuration to us-east-1 to create, view, or
-//   edit these resources.
+//   Domain and distribution APIs are only available in the N. Virginia (us-east-1)
+//   AWS Region. Please set your AWS Region configuration to us-east-1 to create,
+//   view, or edit these resources.
 //
 //   * NotFoundException
 //   Lightsail throws this exception when it cannot find a resource.
@@ -10360,9 +12412,9 @@ func (c *Lightsail) GetRelationalDatabaseParametersRequest(input *GetRelationalD
 //   Lightsail throws this exception when user input does not conform to the validation
 //   rules of an input field.
 //
-//   Domain-related APIs are only available in the N. Virginia (us-east-1) Region.
-//   Please set your AWS Region configuration to us-east-1 to create, view, or
-//   edit these resources.
+//   Domain and distribution APIs are only available in the N. Virginia (us-east-1)
+//   AWS Region. Please set your AWS Region configuration to us-east-1 to create,
+//   view, or edit these resources.
 //
 //   * NotFoundException
 //   Lightsail throws this exception when it cannot find a resource.
@@ -10464,9 +12516,9 @@ func (c *Lightsail) GetRelationalDatabaseSnapshotRequest(input *GetRelationalDat
 //   Lightsail throws this exception when user input does not conform to the validation
 //   rules of an input field.
 //
-//   Domain-related APIs are only available in the N. Virginia (us-east-1) Region.
-//   Please set your AWS Region configuration to us-east-1 to create, view, or
-//   edit these resources.
+//   Domain and distribution APIs are only available in the N. Virginia (us-east-1)
+//   AWS Region. Please set your AWS Region configuration to us-east-1 to create,
+//   view, or edit these resources.
 //
 //   * NotFoundException
 //   Lightsail throws this exception when it cannot find a resource.
@@ -10568,9 +12620,9 @@ func (c *Lightsail) GetRelationalDatabaseSnapshotsRequest(input *GetRelationalDa
 //   Lightsail throws this exception when user input does not conform to the validation
 //   rules of an input field.
 //
-//   Domain-related APIs are only available in the N. Virginia (us-east-1) Region.
-//   Please set your AWS Region configuration to us-east-1 to create, view, or
-//   edit these resources.
+//   Domain and distribution APIs are only available in the N. Virginia (us-east-1)
+//   AWS Region. Please set your AWS Region configuration to us-east-1 to create,
+//   view, or edit these resources.
 //
 //   * NotFoundException
 //   Lightsail throws this exception when it cannot find a resource.
@@ -10672,9 +12724,9 @@ func (c *Lightsail) GetRelationalDatabasesRequest(input *GetRelationalDatabasesI
 //   Lightsail throws this exception when user input does not conform to the validation
 //   rules of an input field.
 //
-//   Domain-related APIs are only available in the N. Virginia (us-east-1) Region.
-//   Please set your AWS Region configuration to us-east-1 to create, view, or
-//   edit these resources.
+//   Domain and distribution APIs are only available in the N. Virginia (us-east-1)
+//   AWS Region. Please set your AWS Region configuration to us-east-1 to create,
+//   view, or edit these resources.
 //
 //   * NotFoundException
 //   Lightsail throws this exception when it cannot find a resource.
@@ -10759,7 +12811,7 @@ func (c *Lightsail) GetStaticIpRequest(input *GetStaticIpInput) (req *request.Re
 
 // GetStaticIp API operation for Amazon Lightsail.
 //
-// Returns information about a specific static IP.
+// Returns information about an Amazon Lightsail static IP.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -10776,9 +12828,9 @@ func (c *Lightsail) GetStaticIpRequest(input *GetStaticIpInput) (req *request.Re
 //   Lightsail throws this exception when user input does not conform to the validation
 //   rules of an input field.
 //
-//   Domain-related APIs are only available in the N. Virginia (us-east-1) Region.
-//   Please set your AWS Region configuration to us-east-1 to create, view, or
-//   edit these resources.
+//   Domain and distribution APIs are only available in the N. Virginia (us-east-1)
+//   AWS Region. Please set your AWS Region configuration to us-east-1 to create,
+//   view, or edit these resources.
 //
 //   * NotFoundException
 //   Lightsail throws this exception when it cannot find a resource.
@@ -10880,9 +12932,9 @@ func (c *Lightsail) GetStaticIpsRequest(input *GetStaticIpsInput) (req *request.
 //   Lightsail throws this exception when user input does not conform to the validation
 //   rules of an input field.
 //
-//   Domain-related APIs are only available in the N. Virginia (us-east-1) Region.
-//   Please set your AWS Region configuration to us-east-1 to create, view, or
-//   edit these resources.
+//   Domain and distribution APIs are only available in the N. Virginia (us-east-1)
+//   AWS Region. Please set your AWS Region configuration to us-east-1 to create,
+//   view, or edit these resources.
 //
 //   * NotFoundException
 //   Lightsail throws this exception when it cannot find a resource.
@@ -10984,9 +13036,9 @@ func (c *Lightsail) ImportKeyPairRequest(input *ImportKeyPairInput) (req *reques
 //   Lightsail throws this exception when user input does not conform to the validation
 //   rules of an input field.
 //
-//   Domain-related APIs are only available in the N. Virginia (us-east-1) Region.
-//   Please set your AWS Region configuration to us-east-1 to create, view, or
-//   edit these resources.
+//   Domain and distribution APIs are only available in the N. Virginia (us-east-1)
+//   AWS Region. Please set your AWS Region configuration to us-east-1 to create,
+//   view, or edit these resources.
 //
 //   * NotFoundException
 //   Lightsail throws this exception when it cannot find a resource.
@@ -11088,9 +13140,9 @@ func (c *Lightsail) IsVpcPeeredRequest(input *IsVpcPeeredInput) (req *request.Re
 //   Lightsail throws this exception when user input does not conform to the validation
 //   rules of an input field.
 //
-//   Domain-related APIs are only available in the N. Virginia (us-east-1) Region.
-//   Please set your AWS Region configuration to us-east-1 to create, view, or
-//   edit these resources.
+//   Domain and distribution APIs are only available in the N. Virginia (us-east-1)
+//   AWS Region. Please set your AWS Region configuration to us-east-1 to create,
+//   view, or edit these resources.
 //
 //   * NotFoundException
 //   Lightsail throws this exception when it cannot find a resource.
@@ -11180,7 +13232,7 @@ func (c *Lightsail) OpenInstancePublicPortsRequest(input *OpenInstancePublicPort
 //
 // The OpenInstancePublicPorts action supports tag-based access control via
 // resource tags applied to the resource identified by instanceName. For more
-// information, see the Lightsail Dev Guide (https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags).
+// information, see the Amazon Lightsail Developer Guide (https://lightsail.aws.amazon.com/ls/docs/en_us/articles/amazon-lightsail-controlling-access-using-tags).
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -11197,9 +13249,9 @@ func (c *Lightsail) OpenInstancePublicPortsRequest(input *OpenInstancePublicPort
 //   Lightsail throws this exception when user input does not conform to the validation
 //   rules of an input field.
 //
-//   Domain-related APIs are only available in the N. Virginia (us-east-1) Region.
-//   Please set your AWS Region configuration to us-east-1 to create, view, or
-//   edit these resources.
+//   Domain and distribution APIs are only available in the N. Virginia (us-east-1)
+//   AWS Region. Please set your AWS Region configuration to us-east-1 to create,
+//   view, or edit these resources.
 //
 //   * NotFoundException
 //   Lightsail throws this exception when it cannot find a resource.
@@ -11284,7 +13336,7 @@ func (c *Lightsail) PeerVpcRequest(input *PeerVpcInput) (req *request.Request, o
 
 // PeerVpc API operation for Amazon Lightsail.
 //
-// Tries to peer the Lightsail VPC with the user's default VPC.
+// Peers the Lightsail VPC with the user's default VPC.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -11301,9 +13353,9 @@ func (c *Lightsail) PeerVpcRequest(input *PeerVpcInput) (req *request.Request, o
 //   Lightsail throws this exception when user input does not conform to the validation
 //   rules of an input field.
 //
-//   Domain-related APIs are only available in the N. Virginia (us-east-1) Region.
-//   Please set your AWS Region configuration to us-east-1 to create, view, or
-//   edit these resources.
+//   Domain and distribution APIs are only available in the N. Virginia (us-east-1)
+//   AWS Region. Please set your AWS Region configuration to us-east-1 to create,
+//   view, or edit these resources.
 //
 //   * NotFoundException
 //   Lightsail throws this exception when it cannot find a resource.
@@ -11418,9 +13470,9 @@ func (c *Lightsail) PutAlarmRequest(input *PutAlarmInput) (req *request.Request,
 //   Lightsail throws this exception when user input does not conform to the validation
 //   rules of an input field.
 //
-//   Domain-related APIs are only available in the N. Virginia (us-east-1) Region.
-//   Please set your AWS Region configuration to us-east-1 to create, view, or
-//   edit these resources.
+//   Domain and distribution APIs are only available in the N. Virginia (us-east-1)
+//   AWS Region. Please set your AWS Region configuration to us-east-1 to create,
+//   view, or edit these resources.
 //
 //   * OperationFailureException
 //   Lightsail throws this exception when an operation fails to execute.
@@ -11510,7 +13562,7 @@ func (c *Lightsail) PutInstancePublicPortsRequest(input *PutInstancePublicPortsI
 //
 // The PutInstancePublicPorts action supports tag-based access control via resource
 // tags applied to the resource identified by instanceName. For more information,
-// see the Lightsail Dev Guide (https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags).
+// see the Amazon Lightsail Developer Guide (https://lightsail.aws.amazon.com/ls/docs/en_us/articles/amazon-lightsail-controlling-access-using-tags).
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -11527,9 +13579,9 @@ func (c *Lightsail) PutInstancePublicPortsRequest(input *PutInstancePublicPortsI
 //   Lightsail throws this exception when user input does not conform to the validation
 //   rules of an input field.
 //
-//   Domain-related APIs are only available in the N. Virginia (us-east-1) Region.
-//   Please set your AWS Region configuration to us-east-1 to create, view, or
-//   edit these resources.
+//   Domain and distribution APIs are only available in the N. Virginia (us-east-1)
+//   AWS Region. Please set your AWS Region configuration to us-east-1 to create,
+//   view, or edit these resources.
 //
 //   * NotFoundException
 //   Lightsail throws this exception when it cannot find a resource.
@@ -11618,7 +13670,7 @@ func (c *Lightsail) RebootInstanceRequest(input *RebootInstanceInput) (req *requ
 //
 // The reboot instance operation supports tag-based access control via resource
 // tags applied to the resource identified by instance name. For more information,
-// see the Lightsail Dev Guide (https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags).
+// see the Amazon Lightsail Developer Guide (https://lightsail.aws.amazon.com/ls/docs/en_us/articles/amazon-lightsail-controlling-access-using-tags).
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -11635,9 +13687,9 @@ func (c *Lightsail) RebootInstanceRequest(input *RebootInstanceInput) (req *requ
 //   Lightsail throws this exception when user input does not conform to the validation
 //   rules of an input field.
 //
-//   Domain-related APIs are only available in the N. Virginia (us-east-1) Region.
-//   Please set your AWS Region configuration to us-east-1 to create, view, or
-//   edit these resources.
+//   Domain and distribution APIs are only available in the N. Virginia (us-east-1)
+//   AWS Region. Please set your AWS Region configuration to us-east-1 to create,
+//   view, or edit these resources.
 //
 //   * NotFoundException
 //   Lightsail throws this exception when it cannot find a resource.
@@ -11726,7 +13778,7 @@ func (c *Lightsail) RebootRelationalDatabaseRequest(input *RebootRelationalDatab
 //
 // The reboot relational database operation supports tag-based access control
 // via resource tags applied to the resource identified by relationalDatabaseName.
-// For more information, see the Lightsail Dev Guide (https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags).
+// For more information, see the Amazon Lightsail Developer Guide (https://lightsail.aws.amazon.com/ls/docs/en_us/articles/amazon-lightsail-controlling-access-using-tags).
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -11743,9 +13795,9 @@ func (c *Lightsail) RebootRelationalDatabaseRequest(input *RebootRelationalDatab
 //   Lightsail throws this exception when user input does not conform to the validation
 //   rules of an input field.
 //
-//   Domain-related APIs are only available in the N. Virginia (us-east-1) Region.
-//   Please set your AWS Region configuration to us-east-1 to create, view, or
-//   edit these resources.
+//   Domain and distribution APIs are only available in the N. Virginia (us-east-1)
+//   AWS Region. Please set your AWS Region configuration to us-east-1 to create,
+//   view, or edit these resources.
 //
 //   * NotFoundException
 //   Lightsail throws this exception when it cannot find a resource.
@@ -11781,6 +13833,109 @@ func (c *Lightsail) RebootRelationalDatabase(input *RebootRelationalDatabaseInpu
 // for more information on using Contexts.
 func (c *Lightsail) RebootRelationalDatabaseWithContext(ctx aws.Context, input *RebootRelationalDatabaseInput, opts ...request.Option) (*RebootRelationalDatabaseOutput, error) {
 	req, out := c.RebootRelationalDatabaseRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opRegisterContainerImage = "RegisterContainerImage"
+
+// RegisterContainerImageRequest generates a "aws/request.Request" representing the
+// client's request for the RegisterContainerImage operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See RegisterContainerImage for more information on using the RegisterContainerImage
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the RegisterContainerImageRequest method.
+//    req, resp := client.RegisterContainerImageRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/lightsail-2016-11-28/RegisterContainerImage
+func (c *Lightsail) RegisterContainerImageRequest(input *RegisterContainerImageInput) (req *request.Request, output *RegisterContainerImageOutput) {
+	op := &request.Operation{
+		Name:       opRegisterContainerImage,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &RegisterContainerImageInput{}
+	}
+
+	output = &RegisterContainerImageOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// RegisterContainerImage API operation for Amazon Lightsail.
+//
+// Registers a container image to your Amazon Lightsail container service.
+//
+// This action is not required if you install and use the Lightsail Control
+// (lightsailctl) plugin to push container images to your Lightsail container
+// service. For more information, see Pushing and managing container images
+// on your Amazon Lightsail container services (https://lightsail.aws.amazon.com/ls/docs/en_us/articles/amazon-lightsail-pushing-container-images)
+// in the Amazon Lightsail Developer Guide.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Lightsail's
+// API operation RegisterContainerImage for usage and error information.
+//
+// Returned Error Types:
+//   * ServiceException
+//   A general service exception.
+//
+//   * InvalidInputException
+//   Lightsail throws this exception when user input does not conform to the validation
+//   rules of an input field.
+//
+//   Domain and distribution APIs are only available in the N. Virginia (us-east-1)
+//   AWS Region. Please set your AWS Region configuration to us-east-1 to create,
+//   view, or edit these resources.
+//
+//   * NotFoundException
+//   Lightsail throws this exception when it cannot find a resource.
+//
+//   * AccessDeniedException
+//   Lightsail throws this exception when the user cannot be authenticated or
+//   uses invalid credentials to access a resource.
+//
+//   * UnauthenticatedException
+//   Lightsail throws this exception when the user has not been authenticated.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/lightsail-2016-11-28/RegisterContainerImage
+func (c *Lightsail) RegisterContainerImage(input *RegisterContainerImageInput) (*RegisterContainerImageOutput, error) {
+	req, out := c.RegisterContainerImageRequest(input)
+	return out, req.Send()
+}
+
+// RegisterContainerImageWithContext is the same as RegisterContainerImage with the addition of
+// the ability to pass a context and additional request options.
+//
+// See RegisterContainerImage for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Lightsail) RegisterContainerImageWithContext(ctx aws.Context, input *RegisterContainerImageInput, opts ...request.Option) (*RegisterContainerImageOutput, error) {
+	req, out := c.RegisterContainerImageRequest(input)
 	req.SetContext(ctx)
 	req.ApplyOptions(opts...)
 	return out, req.Send()
@@ -11847,9 +14002,9 @@ func (c *Lightsail) ReleaseStaticIpRequest(input *ReleaseStaticIpInput) (req *re
 //   Lightsail throws this exception when user input does not conform to the validation
 //   rules of an input field.
 //
-//   Domain-related APIs are only available in the N. Virginia (us-east-1) Region.
-//   Please set your AWS Region configuration to us-east-1 to create, view, or
-//   edit these resources.
+//   Domain and distribution APIs are only available in the N. Virginia (us-east-1)
+//   AWS Region. Please set your AWS Region configuration to us-east-1 to create,
+//   view, or edit these resources.
 //
 //   * NotFoundException
 //   Lightsail throws this exception when it cannot find a resource.
@@ -11955,9 +14110,9 @@ func (c *Lightsail) ResetDistributionCacheRequest(input *ResetDistributionCacheI
 //   Lightsail throws this exception when user input does not conform to the validation
 //   rules of an input field.
 //
-//   Domain-related APIs are only available in the N. Virginia (us-east-1) Region.
-//   Please set your AWS Region configuration to us-east-1 to create, view, or
-//   edit these resources.
+//   Domain and distribution APIs are only available in the N. Virginia (us-east-1)
+//   AWS Region. Please set your AWS Region configuration to us-east-1 to create,
+//   view, or edit these resources.
 //
 //   * NotFoundException
 //   Lightsail throws this exception when it cannot find a resource.
@@ -12069,9 +14224,9 @@ func (c *Lightsail) SendContactMethodVerificationRequest(input *SendContactMetho
 //   Lightsail throws this exception when user input does not conform to the validation
 //   rules of an input field.
 //
-//   Domain-related APIs are only available in the N. Virginia (us-east-1) Region.
-//   Please set your AWS Region configuration to us-east-1 to create, view, or
-//   edit these resources.
+//   Domain and distribution APIs are only available in the N. Virginia (us-east-1)
+//   AWS Region. Please set your AWS Region configuration to us-east-1 to create,
+//   view, or edit these resources.
 //
 //   * OperationFailureException
 //   Lightsail throws this exception when an operation fails to execute.
@@ -12103,6 +14258,215 @@ func (c *Lightsail) SendContactMethodVerification(input *SendContactMethodVerifi
 // for more information on using Contexts.
 func (c *Lightsail) SendContactMethodVerificationWithContext(ctx aws.Context, input *SendContactMethodVerificationInput, opts ...request.Option) (*SendContactMethodVerificationOutput, error) {
 	req, out := c.SendContactMethodVerificationRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opSetIpAddressType = "SetIpAddressType"
+
+// SetIpAddressTypeRequest generates a "aws/request.Request" representing the
+// client's request for the SetIpAddressType operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See SetIpAddressType for more information on using the SetIpAddressType
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the SetIpAddressTypeRequest method.
+//    req, resp := client.SetIpAddressTypeRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/lightsail-2016-11-28/SetIpAddressType
+func (c *Lightsail) SetIpAddressTypeRequest(input *SetIpAddressTypeInput) (req *request.Request, output *SetIpAddressTypeOutput) {
+	op := &request.Operation{
+		Name:       opSetIpAddressType,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &SetIpAddressTypeInput{}
+	}
+
+	output = &SetIpAddressTypeOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// SetIpAddressType API operation for Amazon Lightsail.
+//
+// Sets the IP address type for an Amazon Lightsail resource.
+//
+// Use this action to enable dual-stack for a resource, which enables IPv4 and
+// IPv6 for the specified resource. Alternately, you can use this action to
+// disable dual-stack, and enable IPv4 only.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Lightsail's
+// API operation SetIpAddressType for usage and error information.
+//
+// Returned Error Types:
+//   * ServiceException
+//   A general service exception.
+//
+//   * InvalidInputException
+//   Lightsail throws this exception when user input does not conform to the validation
+//   rules of an input field.
+//
+//   Domain and distribution APIs are only available in the N. Virginia (us-east-1)
+//   AWS Region. Please set your AWS Region configuration to us-east-1 to create,
+//   view, or edit these resources.
+//
+//   * NotFoundException
+//   Lightsail throws this exception when it cannot find a resource.
+//
+//   * OperationFailureException
+//   Lightsail throws this exception when an operation fails to execute.
+//
+//   * AccessDeniedException
+//   Lightsail throws this exception when the user cannot be authenticated or
+//   uses invalid credentials to access a resource.
+//
+//   * AccountSetupInProgressException
+//   Lightsail throws this exception when an account is still in the setup in
+//   progress state.
+//
+//   * UnauthenticatedException
+//   Lightsail throws this exception when the user has not been authenticated.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/lightsail-2016-11-28/SetIpAddressType
+func (c *Lightsail) SetIpAddressType(input *SetIpAddressTypeInput) (*SetIpAddressTypeOutput, error) {
+	req, out := c.SetIpAddressTypeRequest(input)
+	return out, req.Send()
+}
+
+// SetIpAddressTypeWithContext is the same as SetIpAddressType with the addition of
+// the ability to pass a context and additional request options.
+//
+// See SetIpAddressType for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Lightsail) SetIpAddressTypeWithContext(ctx aws.Context, input *SetIpAddressTypeInput, opts ...request.Option) (*SetIpAddressTypeOutput, error) {
+	req, out := c.SetIpAddressTypeRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opSetResourceAccessForBucket = "SetResourceAccessForBucket"
+
+// SetResourceAccessForBucketRequest generates a "aws/request.Request" representing the
+// client's request for the SetResourceAccessForBucket operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See SetResourceAccessForBucket for more information on using the SetResourceAccessForBucket
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the SetResourceAccessForBucketRequest method.
+//    req, resp := client.SetResourceAccessForBucketRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/lightsail-2016-11-28/SetResourceAccessForBucket
+func (c *Lightsail) SetResourceAccessForBucketRequest(input *SetResourceAccessForBucketInput) (req *request.Request, output *SetResourceAccessForBucketOutput) {
+	op := &request.Operation{
+		Name:       opSetResourceAccessForBucket,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &SetResourceAccessForBucketInput{}
+	}
+
+	output = &SetResourceAccessForBucketOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// SetResourceAccessForBucket API operation for Amazon Lightsail.
+//
+// Sets the Amazon Lightsail resources that can access the specified Lightsail
+// bucket.
+//
+// Lightsail buckets currently support setting access for Lightsail instances
+// in the same AWS Region.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Lightsail's
+// API operation SetResourceAccessForBucket for usage and error information.
+//
+// Returned Error Types:
+//   * AccessDeniedException
+//   Lightsail throws this exception when the user cannot be authenticated or
+//   uses invalid credentials to access a resource.
+//
+//   * InvalidInputException
+//   Lightsail throws this exception when user input does not conform to the validation
+//   rules of an input field.
+//
+//   Domain and distribution APIs are only available in the N. Virginia (us-east-1)
+//   AWS Region. Please set your AWS Region configuration to us-east-1 to create,
+//   view, or edit these resources.
+//
+//   * NotFoundException
+//   Lightsail throws this exception when it cannot find a resource.
+//
+//   * ServiceException
+//   A general service exception.
+//
+//   * UnauthenticatedException
+//   Lightsail throws this exception when the user has not been authenticated.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/lightsail-2016-11-28/SetResourceAccessForBucket
+func (c *Lightsail) SetResourceAccessForBucket(input *SetResourceAccessForBucketInput) (*SetResourceAccessForBucketOutput, error) {
+	req, out := c.SetResourceAccessForBucketRequest(input)
+	return out, req.Send()
+}
+
+// SetResourceAccessForBucketWithContext is the same as SetResourceAccessForBucket with the addition of
+// the ability to pass a context and additional request options.
+//
+// See SetResourceAccessForBucket for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Lightsail) SetResourceAccessForBucketWithContext(ctx aws.Context, input *SetResourceAccessForBucketInput, opts ...request.Option) (*SetResourceAccessForBucketOutput, error) {
+	req, out := c.SetResourceAccessForBucketRequest(input)
 	req.SetContext(ctx)
 	req.ApplyOptions(opts...)
 	return out, req.Send()
@@ -12158,11 +14522,11 @@ func (c *Lightsail) StartInstanceRequest(input *StartInstanceInput) (req *reques
 // When you start a stopped instance, Lightsail assigns a new public IP address
 // to the instance. To use the same IP address after stopping and starting an
 // instance, create a static IP address and attach it to the instance. For more
-// information, see the Lightsail Dev Guide (https://lightsail.aws.amazon.com/ls/docs/en/articles/lightsail-create-static-ip).
+// information, see the Amazon Lightsail Developer Guide (https://lightsail.aws.amazon.com/ls/docs/en_us/articles/lightsail-create-static-ip).
 //
 // The start instance operation supports tag-based access control via resource
 // tags applied to the resource identified by instance name. For more information,
-// see the Lightsail Dev Guide (https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags).
+// see the Amazon Lightsail Developer Guide (https://lightsail.aws.amazon.com/ls/docs/en_us/articles/amazon-lightsail-controlling-access-using-tags).
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -12179,9 +14543,9 @@ func (c *Lightsail) StartInstanceRequest(input *StartInstanceInput) (req *reques
 //   Lightsail throws this exception when user input does not conform to the validation
 //   rules of an input field.
 //
-//   Domain-related APIs are only available in the N. Virginia (us-east-1) Region.
-//   Please set your AWS Region configuration to us-east-1 to create, view, or
-//   edit these resources.
+//   Domain and distribution APIs are only available in the N. Virginia (us-east-1)
+//   AWS Region. Please set your AWS Region configuration to us-east-1 to create,
+//   view, or edit these resources.
 //
 //   * NotFoundException
 //   Lightsail throws this exception when it cannot find a resource.
@@ -12271,7 +14635,7 @@ func (c *Lightsail) StartRelationalDatabaseRequest(input *StartRelationalDatabas
 //
 // The start relational database operation supports tag-based access control
 // via resource tags applied to the resource identified by relationalDatabaseName.
-// For more information, see the Lightsail Dev Guide (https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags).
+// For more information, see the Amazon Lightsail Developer Guide (https://lightsail.aws.amazon.com/ls/docs/en_us/articles/amazon-lightsail-controlling-access-using-tags).
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -12288,9 +14652,9 @@ func (c *Lightsail) StartRelationalDatabaseRequest(input *StartRelationalDatabas
 //   Lightsail throws this exception when user input does not conform to the validation
 //   rules of an input field.
 //
-//   Domain-related APIs are only available in the N. Virginia (us-east-1) Region.
-//   Please set your AWS Region configuration to us-east-1 to create, view, or
-//   edit these resources.
+//   Domain and distribution APIs are only available in the N. Virginia (us-east-1)
+//   AWS Region. Please set your AWS Region configuration to us-east-1 to create,
+//   view, or edit these resources.
 //
 //   * NotFoundException
 //   Lightsail throws this exception when it cannot find a resource.
@@ -12380,11 +14744,11 @@ func (c *Lightsail) StopInstanceRequest(input *StopInstanceInput) (req *request.
 // When you start a stopped instance, Lightsail assigns a new public IP address
 // to the instance. To use the same IP address after stopping and starting an
 // instance, create a static IP address and attach it to the instance. For more
-// information, see the Lightsail Dev Guide (https://lightsail.aws.amazon.com/ls/docs/en/articles/lightsail-create-static-ip).
+// information, see the Amazon Lightsail Developer Guide (https://lightsail.aws.amazon.com/ls/docs/en_us/articles/lightsail-create-static-ip).
 //
 // The stop instance operation supports tag-based access control via resource
 // tags applied to the resource identified by instance name. For more information,
-// see the Lightsail Dev Guide (https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags).
+// see the Amazon Lightsail Developer Guide (https://lightsail.aws.amazon.com/ls/docs/en_us/articles/amazon-lightsail-controlling-access-using-tags).
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -12401,9 +14765,9 @@ func (c *Lightsail) StopInstanceRequest(input *StopInstanceInput) (req *request.
 //   Lightsail throws this exception when user input does not conform to the validation
 //   rules of an input field.
 //
-//   Domain-related APIs are only available in the N. Virginia (us-east-1) Region.
-//   Please set your AWS Region configuration to us-east-1 to create, view, or
-//   edit these resources.
+//   Domain and distribution APIs are only available in the N. Virginia (us-east-1)
+//   AWS Region. Please set your AWS Region configuration to us-east-1 to create,
+//   view, or edit these resources.
 //
 //   * NotFoundException
 //   Lightsail throws this exception when it cannot find a resource.
@@ -12492,7 +14856,7 @@ func (c *Lightsail) StopRelationalDatabaseRequest(input *StopRelationalDatabaseI
 //
 // The stop relational database operation supports tag-based access control
 // via resource tags applied to the resource identified by relationalDatabaseName.
-// For more information, see the Lightsail Dev Guide (https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags).
+// For more information, see the Amazon Lightsail Developer Guide (https://lightsail.aws.amazon.com/ls/docs/en_us/articles/amazon-lightsail-controlling-access-using-tags).
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -12509,9 +14873,9 @@ func (c *Lightsail) StopRelationalDatabaseRequest(input *StopRelationalDatabaseI
 //   Lightsail throws this exception when user input does not conform to the validation
 //   rules of an input field.
 //
-//   Domain-related APIs are only available in the N. Virginia (us-east-1) Region.
-//   Please set your AWS Region configuration to us-east-1 to create, view, or
-//   edit these resources.
+//   Domain and distribution APIs are only available in the N. Virginia (us-east-1)
+//   AWS Region. Please set your AWS Region configuration to us-east-1 to create,
+//   view, or edit these resources.
 //
 //   * NotFoundException
 //   Lightsail throws this exception when it cannot find a resource.
@@ -12599,11 +14963,11 @@ func (c *Lightsail) TagResourceRequest(input *TagResourceInput) (req *request.Re
 // Adds one or more tags to the specified Amazon Lightsail resource. Each resource
 // can have a maximum of 50 tags. Each tag consists of a key and an optional
 // value. Tag keys must be unique per resource. For more information about tags,
-// see the Lightsail Dev Guide (https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-tags).
+// see the Amazon Lightsail Developer Guide (https://lightsail.aws.amazon.com/ls/docs/en_us/articles/amazon-lightsail-tags).
 //
 // The tag resource operation supports tag-based access control via request
 // tags and resource tags applied to the resource identified by resource name.
-// For more information, see the Lightsail Dev Guide (https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags).
+// For more information, see the Amazon Lightsail Developer Guide (https://lightsail.aws.amazon.com/ls/docs/en_us/articles/amazon-lightsail-controlling-access-using-tags).
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -12620,9 +14984,9 @@ func (c *Lightsail) TagResourceRequest(input *TagResourceInput) (req *request.Re
 //   Lightsail throws this exception when user input does not conform to the validation
 //   rules of an input field.
 //
-//   Domain-related APIs are only available in the N. Virginia (us-east-1) Region.
-//   Please set your AWS Region configuration to us-east-1 to create, view, or
-//   edit these resources.
+//   Domain and distribution APIs are only available in the N. Virginia (us-east-1)
+//   AWS Region. Please set your AWS Region configuration to us-east-1 to create,
+//   view, or edit these resources.
 //
 //   * NotFoundException
 //   Lightsail throws this exception when it cannot find a resource.
@@ -12732,9 +15096,9 @@ func (c *Lightsail) TestAlarmRequest(input *TestAlarmInput) (req *request.Reques
 //   Lightsail throws this exception when user input does not conform to the validation
 //   rules of an input field.
 //
-//   Domain-related APIs are only available in the N. Virginia (us-east-1) Region.
-//   Please set your AWS Region configuration to us-east-1 to create, view, or
-//   edit these resources.
+//   Domain and distribution APIs are only available in the N. Virginia (us-east-1)
+//   AWS Region. Please set your AWS Region configuration to us-east-1 to create,
+//   view, or edit these resources.
 //
 //   * OperationFailureException
 //   Lightsail throws this exception when an operation fails to execute.
@@ -12815,7 +15179,7 @@ func (c *Lightsail) UnpeerVpcRequest(input *UnpeerVpcInput) (req *request.Reques
 
 // UnpeerVpc API operation for Amazon Lightsail.
 //
-// Attempts to unpeer the Lightsail VPC from the user's default VPC.
+// Unpeers the Lightsail VPC from the user's default VPC.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -12832,9 +15196,9 @@ func (c *Lightsail) UnpeerVpcRequest(input *UnpeerVpcInput) (req *request.Reques
 //   Lightsail throws this exception when user input does not conform to the validation
 //   rules of an input field.
 //
-//   Domain-related APIs are only available in the N. Virginia (us-east-1) Region.
-//   Please set your AWS Region configuration to us-east-1 to create, view, or
-//   edit these resources.
+//   Domain and distribution APIs are only available in the N. Virginia (us-east-1)
+//   AWS Region. Please set your AWS Region configuration to us-east-1 to create,
+//   view, or edit these resources.
 //
 //   * NotFoundException
 //   Lightsail throws this exception when it cannot find a resource.
@@ -12924,7 +15288,7 @@ func (c *Lightsail) UntagResourceRequest(input *UntagResourceInput) (req *reques
 //
 // The untag resource operation supports tag-based access control via request
 // tags and resource tags applied to the resource identified by resource name.
-// For more information, see the Lightsail Dev Guide (https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags).
+// For more information, see the Amazon Lightsail Developer Guide (https://lightsail.aws.amazon.com/ls/docs/en_us/articles/amazon-lightsail-controlling-access-using-tags).
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -12941,9 +15305,9 @@ func (c *Lightsail) UntagResourceRequest(input *UntagResourceInput) (req *reques
 //   Lightsail throws this exception when user input does not conform to the validation
 //   rules of an input field.
 //
-//   Domain-related APIs are only available in the N. Virginia (us-east-1) Region.
-//   Please set your AWS Region configuration to us-east-1 to create, view, or
-//   edit these resources.
+//   Domain and distribution APIs are only available in the N. Virginia (us-east-1)
+//   AWS Region. Please set your AWS Region configuration to us-east-1 to create,
+//   view, or edit these resources.
 //
 //   * NotFoundException
 //   Lightsail throws this exception when it cannot find a resource.
@@ -12979,6 +15343,317 @@ func (c *Lightsail) UntagResource(input *UntagResourceInput) (*UntagResourceOutp
 // for more information on using Contexts.
 func (c *Lightsail) UntagResourceWithContext(ctx aws.Context, input *UntagResourceInput, opts ...request.Option) (*UntagResourceOutput, error) {
 	req, out := c.UntagResourceRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opUpdateBucket = "UpdateBucket"
+
+// UpdateBucketRequest generates a "aws/request.Request" representing the
+// client's request for the UpdateBucket operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See UpdateBucket for more information on using the UpdateBucket
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the UpdateBucketRequest method.
+//    req, resp := client.UpdateBucketRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/lightsail-2016-11-28/UpdateBucket
+func (c *Lightsail) UpdateBucketRequest(input *UpdateBucketInput) (req *request.Request, output *UpdateBucketOutput) {
+	op := &request.Operation{
+		Name:       opUpdateBucket,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &UpdateBucketInput{}
+	}
+
+	output = &UpdateBucketOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// UpdateBucket API operation for Amazon Lightsail.
+//
+// Updates an existing Amazon Lightsail bucket.
+//
+// Use this action to update the configuration of an existing bucket, such as
+// versioning, public accessibility, and the AWS accounts that can access the
+// bucket.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Lightsail's
+// API operation UpdateBucket for usage and error information.
+//
+// Returned Error Types:
+//   * AccessDeniedException
+//   Lightsail throws this exception when the user cannot be authenticated or
+//   uses invalid credentials to access a resource.
+//
+//   * InvalidInputException
+//   Lightsail throws this exception when user input does not conform to the validation
+//   rules of an input field.
+//
+//   Domain and distribution APIs are only available in the N. Virginia (us-east-1)
+//   AWS Region. Please set your AWS Region configuration to us-east-1 to create,
+//   view, or edit these resources.
+//
+//   * NotFoundException
+//   Lightsail throws this exception when it cannot find a resource.
+//
+//   * ServiceException
+//   A general service exception.
+//
+//   * UnauthenticatedException
+//   Lightsail throws this exception when the user has not been authenticated.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/lightsail-2016-11-28/UpdateBucket
+func (c *Lightsail) UpdateBucket(input *UpdateBucketInput) (*UpdateBucketOutput, error) {
+	req, out := c.UpdateBucketRequest(input)
+	return out, req.Send()
+}
+
+// UpdateBucketWithContext is the same as UpdateBucket with the addition of
+// the ability to pass a context and additional request options.
+//
+// See UpdateBucket for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Lightsail) UpdateBucketWithContext(ctx aws.Context, input *UpdateBucketInput, opts ...request.Option) (*UpdateBucketOutput, error) {
+	req, out := c.UpdateBucketRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opUpdateBucketBundle = "UpdateBucketBundle"
+
+// UpdateBucketBundleRequest generates a "aws/request.Request" representing the
+// client's request for the UpdateBucketBundle operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See UpdateBucketBundle for more information on using the UpdateBucketBundle
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the UpdateBucketBundleRequest method.
+//    req, resp := client.UpdateBucketBundleRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/lightsail-2016-11-28/UpdateBucketBundle
+func (c *Lightsail) UpdateBucketBundleRequest(input *UpdateBucketBundleInput) (req *request.Request, output *UpdateBucketBundleOutput) {
+	op := &request.Operation{
+		Name:       opUpdateBucketBundle,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &UpdateBucketBundleInput{}
+	}
+
+	output = &UpdateBucketBundleOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// UpdateBucketBundle API operation for Amazon Lightsail.
+//
+// Updates the bundle, or storage plan, of an existing Amazon Lightsail bucket.
+//
+// A bucket bundle specifies the monthly cost, storage space, and data transfer
+// quota for a bucket. You can update a bucket's bundle only one time within
+// a monthly AWS billing cycle. To determine if you can update a bucket's bundle,
+// use the GetBuckets action. The ableToUpdateBundle parameter in the response
+// will indicate whether you can currently update a bucket's bundle.
+//
+// Update a bucket's bundle if it's consistently going over its storage space
+// or data transfer quota, or if a bucket's usage is consistently in the lower
+// range of its storage space or data transfer quota. Due to the unpredictable
+// usage fluctuations that a bucket might experience, we strongly recommend
+// that you update a bucket's bundle only as a long-term strategy, instead of
+// as a short-term, monthly cost-cutting measure. Choose a bucket bundle that
+// will provide the bucket with ample storage space and data transfer for a
+// long time to come.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Lightsail's
+// API operation UpdateBucketBundle for usage and error information.
+//
+// Returned Error Types:
+//   * AccessDeniedException
+//   Lightsail throws this exception when the user cannot be authenticated or
+//   uses invalid credentials to access a resource.
+//
+//   * InvalidInputException
+//   Lightsail throws this exception when user input does not conform to the validation
+//   rules of an input field.
+//
+//   Domain and distribution APIs are only available in the N. Virginia (us-east-1)
+//   AWS Region. Please set your AWS Region configuration to us-east-1 to create,
+//   view, or edit these resources.
+//
+//   * NotFoundException
+//   Lightsail throws this exception when it cannot find a resource.
+//
+//   * ServiceException
+//   A general service exception.
+//
+//   * UnauthenticatedException
+//   Lightsail throws this exception when the user has not been authenticated.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/lightsail-2016-11-28/UpdateBucketBundle
+func (c *Lightsail) UpdateBucketBundle(input *UpdateBucketBundleInput) (*UpdateBucketBundleOutput, error) {
+	req, out := c.UpdateBucketBundleRequest(input)
+	return out, req.Send()
+}
+
+// UpdateBucketBundleWithContext is the same as UpdateBucketBundle with the addition of
+// the ability to pass a context and additional request options.
+//
+// See UpdateBucketBundle for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Lightsail) UpdateBucketBundleWithContext(ctx aws.Context, input *UpdateBucketBundleInput, opts ...request.Option) (*UpdateBucketBundleOutput, error) {
+	req, out := c.UpdateBucketBundleRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opUpdateContainerService = "UpdateContainerService"
+
+// UpdateContainerServiceRequest generates a "aws/request.Request" representing the
+// client's request for the UpdateContainerService operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See UpdateContainerService for more information on using the UpdateContainerService
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the UpdateContainerServiceRequest method.
+//    req, resp := client.UpdateContainerServiceRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/lightsail-2016-11-28/UpdateContainerService
+func (c *Lightsail) UpdateContainerServiceRequest(input *UpdateContainerServiceInput) (req *request.Request, output *UpdateContainerServiceOutput) {
+	op := &request.Operation{
+		Name:       opUpdateContainerService,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &UpdateContainerServiceInput{}
+	}
+
+	output = &UpdateContainerServiceOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// UpdateContainerService API operation for Amazon Lightsail.
+//
+// Updates the configuration of your Amazon Lightsail container service, such
+// as its power, scale, and public domain names.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Lightsail's
+// API operation UpdateContainerService for usage and error information.
+//
+// Returned Error Types:
+//   * ServiceException
+//   A general service exception.
+//
+//   * InvalidInputException
+//   Lightsail throws this exception when user input does not conform to the validation
+//   rules of an input field.
+//
+//   Domain and distribution APIs are only available in the N. Virginia (us-east-1)
+//   AWS Region. Please set your AWS Region configuration to us-east-1 to create,
+//   view, or edit these resources.
+//
+//   * NotFoundException
+//   Lightsail throws this exception when it cannot find a resource.
+//
+//   * AccessDeniedException
+//   Lightsail throws this exception when the user cannot be authenticated or
+//   uses invalid credentials to access a resource.
+//
+//   * UnauthenticatedException
+//   Lightsail throws this exception when the user has not been authenticated.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/lightsail-2016-11-28/UpdateContainerService
+func (c *Lightsail) UpdateContainerService(input *UpdateContainerServiceInput) (*UpdateContainerServiceOutput, error) {
+	req, out := c.UpdateContainerServiceRequest(input)
+	return out, req.Send()
+}
+
+// UpdateContainerServiceWithContext is the same as UpdateContainerService with the addition of
+// the ability to pass a context and additional request options.
+//
+// See UpdateContainerService for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Lightsail) UpdateContainerServiceWithContext(ctx aws.Context, input *UpdateContainerServiceInput, opts ...request.Option) (*UpdateContainerServiceOutput, error) {
+	req, out := c.UpdateContainerServiceRequest(input)
 	req.SetContext(ctx)
 	req.ApplyOptions(opts...)
 	return out, req.Send()
@@ -13030,7 +15705,7 @@ func (c *Lightsail) UpdateDistributionRequest(input *UpdateDistributionInput) (r
 //
 // Updates an existing Amazon Lightsail content delivery network (CDN) distribution.
 //
-// Use this action to update the configuration of your existing distribution
+// Use this action to update the configuration of your existing distribution.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -13047,9 +15722,9 @@ func (c *Lightsail) UpdateDistributionRequest(input *UpdateDistributionInput) (r
 //   Lightsail throws this exception when user input does not conform to the validation
 //   rules of an input field.
 //
-//   Domain-related APIs are only available in the N. Virginia (us-east-1) Region.
-//   Please set your AWS Region configuration to us-east-1 to create, view, or
-//   edit these resources.
+//   Domain and distribution APIs are only available in the N. Virginia (us-east-1)
+//   AWS Region. Please set your AWS Region configuration to us-east-1 to create,
+//   view, or edit these resources.
 //
 //   * NotFoundException
 //   Lightsail throws this exception when it cannot find a resource.
@@ -13160,9 +15835,9 @@ func (c *Lightsail) UpdateDistributionBundleRequest(input *UpdateDistributionBun
 //   Lightsail throws this exception when user input does not conform to the validation
 //   rules of an input field.
 //
-//   Domain-related APIs are only available in the N. Virginia (us-east-1) Region.
-//   Please set your AWS Region configuration to us-east-1 to create, view, or
-//   edit these resources.
+//   Domain and distribution APIs are only available in the N. Virginia (us-east-1)
+//   AWS Region. Please set your AWS Region configuration to us-east-1 to create,
+//   view, or edit these resources.
 //
 //   * NotFoundException
 //   Lightsail throws this exception when it cannot find a resource.
@@ -13247,7 +15922,7 @@ func (c *Lightsail) UpdateDomainEntryRequest(input *UpdateDomainEntryInput) (req
 //
 // The update domain entry operation supports tag-based access control via resource
 // tags applied to the resource identified by domain name. For more information,
-// see the Lightsail Dev Guide (https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags).
+// see the Amazon Lightsail Developer Guide (https://lightsail.aws.amazon.com/ls/docs/en_us/articles/amazon-lightsail-controlling-access-using-tags).
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -13264,9 +15939,9 @@ func (c *Lightsail) UpdateDomainEntryRequest(input *UpdateDomainEntryInput) (req
 //   Lightsail throws this exception when user input does not conform to the validation
 //   rules of an input field.
 //
-//   Domain-related APIs are only available in the N. Virginia (us-east-1) Region.
-//   Please set your AWS Region configuration to us-east-1 to create, view, or
-//   edit these resources.
+//   Domain and distribution APIs are only available in the N. Virginia (us-east-1)
+//   AWS Region. Please set your AWS Region configuration to us-east-1 to create,
+//   view, or edit these resources.
 //
 //   * NotFoundException
 //   Lightsail throws this exception when it cannot find a resource.
@@ -13356,7 +16031,7 @@ func (c *Lightsail) UpdateLoadBalancerAttributeRequest(input *UpdateLoadBalancer
 //
 // The update load balancer attribute operation supports tag-based access control
 // via resource tags applied to the resource identified by load balancer name.
-// For more information, see the Lightsail Dev Guide (https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags).
+// For more information, see the Amazon Lightsail Developer Guide (https://lightsail.aws.amazon.com/ls/docs/en_us/articles/amazon-lightsail-controlling-access-using-tags).
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -13373,9 +16048,9 @@ func (c *Lightsail) UpdateLoadBalancerAttributeRequest(input *UpdateLoadBalancer
 //   Lightsail throws this exception when user input does not conform to the validation
 //   rules of an input field.
 //
-//   Domain-related APIs are only available in the N. Virginia (us-east-1) Region.
-//   Please set your AWS Region configuration to us-east-1 to create, view, or
-//   edit these resources.
+//   Domain and distribution APIs are only available in the N. Virginia (us-east-1)
+//   AWS Region. Please set your AWS Region configuration to us-east-1 to create,
+//   view, or edit these resources.
 //
 //   * NotFoundException
 //   Lightsail throws this exception when it cannot find a resource.
@@ -13467,7 +16142,7 @@ func (c *Lightsail) UpdateRelationalDatabaseRequest(input *UpdateRelationalDatab
 //
 // The update relational database operation supports tag-based access control
 // via resource tags applied to the resource identified by relationalDatabaseName.
-// For more information, see the Lightsail Dev Guide (https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags).
+// For more information, see the Amazon Lightsail Developer Guide (https://lightsail.aws.amazon.com/ls/docs/en_us/articles/amazon-lightsail-controlling-access-using-tags).
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -13484,9 +16159,9 @@ func (c *Lightsail) UpdateRelationalDatabaseRequest(input *UpdateRelationalDatab
 //   Lightsail throws this exception when user input does not conform to the validation
 //   rules of an input field.
 //
-//   Domain-related APIs are only available in the N. Virginia (us-east-1) Region.
-//   Please set your AWS Region configuration to us-east-1 to create, view, or
-//   edit these resources.
+//   Domain and distribution APIs are only available in the N. Virginia (us-east-1)
+//   AWS Region. Please set your AWS Region configuration to us-east-1 to create,
+//   view, or edit these resources.
 //
 //   * NotFoundException
 //   Lightsail throws this exception when it cannot find a resource.
@@ -13582,7 +16257,7 @@ func (c *Lightsail) UpdateRelationalDatabaseParametersRequest(input *UpdateRelat
 //
 // The update relational database parameters operation supports tag-based access
 // control via resource tags applied to the resource identified by relationalDatabaseName.
-// For more information, see the Lightsail Dev Guide (https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags).
+// For more information, see the Amazon Lightsail Developer Guide (https://lightsail.aws.amazon.com/ls/docs/en_us/articles/amazon-lightsail-controlling-access-using-tags).
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -13599,9 +16274,9 @@ func (c *Lightsail) UpdateRelationalDatabaseParametersRequest(input *UpdateRelat
 //   Lightsail throws this exception when user input does not conform to the validation
 //   rules of an input field.
 //
-//   Domain-related APIs are only available in the N. Virginia (us-east-1) Region.
-//   Please set your AWS Region configuration to us-east-1 to create, view, or
-//   edit these resources.
+//   Domain and distribution APIs are only available in the N. Virginia (us-east-1)
+//   AWS Region. Please set your AWS Region configuration to us-east-1 to create,
+//   view, or edit these resources.
 //
 //   * NotFoundException
 //   Lightsail throws this exception when it cannot find a resource.
@@ -13657,12 +16332,20 @@ type AccessDeniedException struct {
 	Tip *string `locationName:"tip" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AccessDeniedException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AccessDeniedException) GoString() string {
 	return s.String()
 }
@@ -13705,6 +16388,228 @@ func (s *AccessDeniedException) RequestID() string {
 	return s.RespMetadata.RequestID
 }
 
+// Describes an access key for an Amazon Lightsail bucket.
+//
+// Access keys grant full programmatic access to the specified bucket and its
+// objects. You can have a maximum of two access keys per bucket. Use the CreateBucketAccessKey
+// action to create an access key for a specific bucket. For more information
+// about access keys, see Creating access keys for a bucket in Amazon Lightsail
+// (https://lightsail.aws.amazon.com/ls/docs/en_us/articles/amazon-lightsail-creating-bucket-access-keys)
+// in the Amazon Lightsail Developer Guide.
+//
+// The secretAccessKey value is returned only in response to the CreateBucketAccessKey
+// action. You can get a secret access key only when you first create an access
+// key; you cannot get the secret access key later. If you lose the secret access
+// key, you must create a new access key.
+type AccessKey struct {
+	_ struct{} `type:"structure"`
+
+	// The ID of the access key.
+	//
+	// AccessKeyId is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by AccessKey's
+	// String and GoString methods.
+	AccessKeyId *string `locationName:"accessKeyId" min:"20" type:"string" sensitive:"true"`
+
+	// The timestamp when the access key was created.
+	CreatedAt *time.Time `locationName:"createdAt" type:"timestamp"`
+
+	// An object that describes the last time the access key was used.
+	//
+	// This object does not include data in the response of a CreateBucketAccessKey
+	// action. If the access key has not been used, the region and serviceName values
+	// are N/A, and the lastUsedDate value is null.
+	LastUsed *AccessKeyLastUsed `locationName:"lastUsed" type:"structure"`
+
+	// The secret access key used to sign requests.
+	//
+	// You should store the secret access key in a safe location. We recommend that
+	// you delete the access key if the secret access key is compromised.
+	SecretAccessKey *string `locationName:"secretAccessKey" type:"string"`
+
+	// The status of the access key.
+	//
+	// A status of Active means that the key is valid, while Inactive means it is
+	// not.
+	Status *string `locationName:"status" type:"string" enum:"StatusType"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s AccessKey) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s AccessKey) GoString() string {
+	return s.String()
+}
+
+// SetAccessKeyId sets the AccessKeyId field's value.
+func (s *AccessKey) SetAccessKeyId(v string) *AccessKey {
+	s.AccessKeyId = &v
+	return s
+}
+
+// SetCreatedAt sets the CreatedAt field's value.
+func (s *AccessKey) SetCreatedAt(v time.Time) *AccessKey {
+	s.CreatedAt = &v
+	return s
+}
+
+// SetLastUsed sets the LastUsed field's value.
+func (s *AccessKey) SetLastUsed(v *AccessKeyLastUsed) *AccessKey {
+	s.LastUsed = v
+	return s
+}
+
+// SetSecretAccessKey sets the SecretAccessKey field's value.
+func (s *AccessKey) SetSecretAccessKey(v string) *AccessKey {
+	s.SecretAccessKey = &v
+	return s
+}
+
+// SetStatus sets the Status field's value.
+func (s *AccessKey) SetStatus(v string) *AccessKey {
+	s.Status = &v
+	return s
+}
+
+// Describes the last time an access key was used.
+//
+// This object does not include data in the response of a CreateBucketAccessKey
+// action.
+type AccessKeyLastUsed struct {
+	_ struct{} `type:"structure"`
+
+	// The date and time when the access key was most recently used.
+	//
+	// This value is null if the access key has not been used.
+	LastUsedDate *time.Time `locationName:"lastUsedDate" type:"timestamp"`
+
+	// The AWS Region where this access key was most recently used.
+	//
+	// This value is N/A if the access key has not been used.
+	Region *string `locationName:"region" type:"string"`
+
+	// The name of the AWS service with which this access key was most recently
+	// used.
+	//
+	// This value is N/A if the access key has not been used.
+	ServiceName *string `locationName:"serviceName" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s AccessKeyLastUsed) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s AccessKeyLastUsed) GoString() string {
+	return s.String()
+}
+
+// SetLastUsedDate sets the LastUsedDate field's value.
+func (s *AccessKeyLastUsed) SetLastUsedDate(v time.Time) *AccessKeyLastUsed {
+	s.LastUsedDate = &v
+	return s
+}
+
+// SetRegion sets the Region field's value.
+func (s *AccessKeyLastUsed) SetRegion(v string) *AccessKeyLastUsed {
+	s.Region = &v
+	return s
+}
+
+// SetServiceName sets the ServiceName field's value.
+func (s *AccessKeyLastUsed) SetServiceName(v string) *AccessKeyLastUsed {
+	s.ServiceName = &v
+	return s
+}
+
+// Describes the anonymous access permissions for an Amazon Lightsail bucket
+// and its objects.
+//
+// For more information about bucket access permissions, see Understanding bucket
+// permissions in Amazon Lightsail (https://lightsail.aws.amazon.com/ls/docs/en_us/articles/amazon-lightsail-understanding-bucket-permissions)
+// in the
+//
+// Amazon Lightsail Developer Guide.
+type AccessRules struct {
+	_ struct{} `type:"structure"`
+
+	// A Boolean value that indicates whether the access control list (ACL) permissions
+	// that are applied to individual objects override the getObject option that
+	// is currently specified.
+	//
+	// When this is true, you can use the PutObjectAcl (https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutObjectAcl.html)
+	// Amazon S3 API action to set individual objects to public (read-only) using
+	// the public-read ACL, or to private using the private ACL.
+	AllowPublicOverrides *bool `locationName:"allowPublicOverrides" type:"boolean"`
+
+	// Specifies the anonymous access to all objects in a bucket.
+	//
+	// The following options can be specified:
+	//
+	//    * public - Sets all objects in the bucket to public (read-only), making
+	//    them readable by anyone in the world. If the getObject value is set to
+	//    public, then all objects in the bucket default to public regardless of
+	//    the allowPublicOverrides value.
+	//
+	//    * private - Sets all objects in the bucket to private, making them readable
+	//    only by you or anyone you give access to. If the getObject value is set
+	//    to private, and the allowPublicOverrides value is set to true, then all
+	//    objects in the bucket default to private unless they are configured with
+	//    a public-read ACL. Individual objects with a public-read ACL are readable
+	//    by anyone in the world.
+	GetObject *string `locationName:"getObject" type:"string" enum:"AccessType"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s AccessRules) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s AccessRules) GoString() string {
+	return s.String()
+}
+
+// SetAllowPublicOverrides sets the AllowPublicOverrides field's value.
+func (s *AccessRules) SetAllowPublicOverrides(v bool) *AccessRules {
+	s.AllowPublicOverrides = &v
+	return s
+}
+
+// SetGetObject sets the GetObject field's value.
+func (s *AccessRules) SetGetObject(v string) *AccessRules {
+	s.GetObject = &v
+	return s
+}
+
 // Lightsail throws this exception when an account is still in the setup in
 // progress state.
 type AccountSetupInProgressException struct {
@@ -13720,12 +16625,20 @@ type AccountSetupInProgressException struct {
 	Tip *string `locationName:"tip" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AccountSetupInProgressException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AccountSetupInProgressException) GoString() string {
 	return s.String()
 }
@@ -13795,12 +16708,20 @@ type AddOn struct {
 	Status *string `locationName:"status" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AddOn) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AddOn) GoString() string {
 	return s.String()
 }
@@ -13847,12 +16768,20 @@ type AddOnRequest struct {
 	AutoSnapshotAddOnRequest *AutoSnapshotAddOnRequest `locationName:"autoSnapshotAddOnRequest" type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AddOnRequest) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AddOnRequest) GoString() string {
 	return s.String()
 }
@@ -13884,8 +16813,8 @@ func (s *AddOnRequest) SetAutoSnapshotAddOnRequest(v *AutoSnapshotAddOnRequest) 
 
 // Describes an alarm.
 //
-// An alarm is a way to monitor your Amazon Lightsail resource metrics. For
-// more information, see Alarms in Amazon Lightsail (https://lightsail.aws.amazon.com/ls/docs/en_us/articles/amazon-lightsail-alarms).
+// An alarm is a way to monitor your Lightsail resource metrics. For more information,
+// see Alarms in Amazon Lightsail (https://lightsail.aws.amazon.com/ls/docs/en_us/articles/amazon-lightsail-alarms).
 type Alarm struct {
 	_ struct{} `type:"structure"`
 
@@ -13998,12 +16927,20 @@ type Alarm struct {
 	Unit *string `locationName:"unit" type:"string" enum:"MetricUnit"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s Alarm) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s Alarm) GoString() string {
 	return s.String()
 }
@@ -14137,12 +17074,20 @@ type AllocateStaticIpInput struct {
 	StaticIpName *string `locationName:"staticIpName" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AllocateStaticIpInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AllocateStaticIpInput) GoString() string {
 	return s.String()
 }
@@ -14175,12 +17120,20 @@ type AllocateStaticIpOutput struct {
 	Operations []*Operation `locationName:"operations" type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AllocateStaticIpOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AllocateStaticIpOutput) GoString() string {
 	return s.String()
 }
@@ -14218,12 +17171,20 @@ type AttachCertificateToDistributionInput struct {
 	DistributionName *string `locationName:"distributionName" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AttachCertificateToDistributionInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AttachCertificateToDistributionInput) GoString() string {
 	return s.String()
 }
@@ -14265,12 +17226,20 @@ type AttachCertificateToDistributionOutput struct {
 	Operation *Operation `locationName:"operation" type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AttachCertificateToDistributionOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AttachCertificateToDistributionOutput) GoString() string {
 	return s.String()
 }
@@ -14301,12 +17270,20 @@ type AttachDiskInput struct {
 	InstanceName *string `locationName:"instanceName" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AttachDiskInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AttachDiskInput) GoString() string {
 	return s.String()
 }
@@ -14357,12 +17334,20 @@ type AttachDiskOutput struct {
 	Operations []*Operation `locationName:"operations" type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AttachDiskOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AttachDiskOutput) GoString() string {
 	return s.String()
 }
@@ -14394,12 +17379,20 @@ type AttachInstancesToLoadBalancerInput struct {
 	LoadBalancerName *string `locationName:"loadBalancerName" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AttachInstancesToLoadBalancerInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AttachInstancesToLoadBalancerInput) GoString() string {
 	return s.String()
 }
@@ -14441,12 +17434,20 @@ type AttachInstancesToLoadBalancerOutput struct {
 	Operations []*Operation `locationName:"operations" type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AttachInstancesToLoadBalancerOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AttachInstancesToLoadBalancerOutput) GoString() string {
 	return s.String()
 }
@@ -14472,12 +17473,20 @@ type AttachLoadBalancerTlsCertificateInput struct {
 	LoadBalancerName *string `locationName:"loadBalancerName" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AttachLoadBalancerTlsCertificateInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AttachLoadBalancerTlsCertificateInput) GoString() string {
 	return s.String()
 }
@@ -14522,12 +17531,20 @@ type AttachLoadBalancerTlsCertificateOutput struct {
 	Operations []*Operation `locationName:"operations" type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AttachLoadBalancerTlsCertificateOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AttachLoadBalancerTlsCertificateOutput) GoString() string {
 	return s.String()
 }
@@ -14552,12 +17569,20 @@ type AttachStaticIpInput struct {
 	StaticIpName *string `locationName:"staticIpName" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AttachStaticIpInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AttachStaticIpInput) GoString() string {
 	return s.String()
 }
@@ -14599,12 +17624,20 @@ type AttachStaticIpOutput struct {
 	Operations []*Operation `locationName:"operations" type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AttachStaticIpOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AttachStaticIpOutput) GoString() string {
 	return s.String()
 }
@@ -14627,12 +17660,20 @@ type AttachedDisk struct {
 	SizeInGb *int64 `locationName:"sizeInGb" type:"integer"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AttachedDisk) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AttachedDisk) GoString() string {
 	return s.String()
 }
@@ -14696,12 +17737,20 @@ type AutoSnapshotAddOnRequest struct {
 	SnapshotTimeOfDay *string `locationName:"snapshotTimeOfDay" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AutoSnapshotAddOnRequest) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AutoSnapshotAddOnRequest) GoString() string {
 	return s.String()
 }
@@ -14730,12 +17779,20 @@ type AutoSnapshotDetails struct {
 	Status *string `locationName:"status" type:"string" enum:"AutoSnapshotStatus"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AutoSnapshotDetails) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AutoSnapshotDetails) GoString() string {
 	return s.String()
 }
@@ -14775,12 +17832,20 @@ type AvailabilityZone struct {
 	ZoneName *string `locationName:"zoneName" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AvailabilityZone) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AvailabilityZone) GoString() string {
 	return s.String()
 }
@@ -14846,12 +17911,20 @@ type Blueprint struct {
 	VersionCode *string `locationName:"versionCode" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s Blueprint) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s Blueprint) GoString() string {
 	return s.String()
 }
@@ -14928,6 +18001,322 @@ func (s *Blueprint) SetVersionCode(v string) *Blueprint {
 	return s
 }
 
+// Describes an Amazon Lightsail bucket.
+type Bucket struct {
+	_ struct{} `type:"structure"`
+
+	// Indicates whether the bundle that is currently applied to a bucket can be
+	// changed to another bundle.
+	//
+	// You can update a bucket's bundle only one time within a monthly AWS billing
+	// cycle.
+	//
+	// Use the UpdateBucketBundle action to change a bucket's bundle.
+	AbleToUpdateBundle *bool `locationName:"ableToUpdateBundle" type:"boolean"`
+
+	// An object that describes the access rules of the bucket.
+	AccessRules *AccessRules `locationName:"accessRules" type:"structure"`
+
+	// The Amazon Resource Name (ARN) of the bucket.
+	Arn *string `locationName:"arn" type:"string"`
+
+	// The ID of the bundle currently applied to the bucket.
+	//
+	// A bucket bundle specifies the monthly cost, storage space, and data transfer
+	// quota for a bucket.
+	//
+	// Use the UpdateBucketBundle action to change the bundle of a bucket.
+	BundleId *string `locationName:"bundleId" type:"string"`
+
+	// The timestamp when the distribution was created.
+	CreatedAt *time.Time `locationName:"createdAt" type:"timestamp"`
+
+	// Describes the resource location.
+	Location *ResourceLocation `locationName:"location" type:"structure"`
+
+	// The name of the bucket.
+	Name *string `locationName:"name" min:"3" type:"string"`
+
+	// Indicates whether object versioning is enabled for the bucket.
+	//
+	// The following options can be configured:
+	//
+	//    * Enabled - Object versioning is enabled.
+	//
+	//    * Suspended - Object versioning was previously enabled but is currently
+	//    suspended. Existing object versions are retained.
+	//
+	//    * NeverEnabled - Object versioning has never been enabled.
+	ObjectVersioning *string `locationName:"objectVersioning" type:"string"`
+
+	// An array of strings that specify the AWS account IDs that have read-only
+	// access to the bucket.
+	ReadonlyAccessAccounts []*string `locationName:"readonlyAccessAccounts" type:"list"`
+
+	// The Lightsail resource type of the bucket (for example, Bucket).
+	ResourceType *string `locationName:"resourceType" type:"string"`
+
+	// An array of objects that describe Lightsail instances that have access to
+	// the bucket.
+	//
+	// Use the SetResourceAccessForBucket action to update the instances that have
+	// access to a bucket.
+	ResourcesReceivingAccess []*ResourceReceivingAccess `locationName:"resourcesReceivingAccess" type:"list"`
+
+	// An object that describes the state of the bucket.
+	State *BucketState `locationName:"state" type:"structure"`
+
+	// The support code for a bucket. Include this code in your email to support
+	// when you have questions about a Lightsail bucket. This code enables our support
+	// team to look up your Lightsail information more easily.
+	SupportCode *string `locationName:"supportCode" type:"string"`
+
+	// The tag keys and optional values for the bucket. For more information, see
+	// Tags in Amazon Lightsail (https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-tags)
+	// in the Amazon Lightsail Developer Guide.
+	Tags []*Tag `locationName:"tags" type:"list"`
+
+	// The URL of the bucket.
+	Url *string `locationName:"url" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s Bucket) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s Bucket) GoString() string {
+	return s.String()
+}
+
+// SetAbleToUpdateBundle sets the AbleToUpdateBundle field's value.
+func (s *Bucket) SetAbleToUpdateBundle(v bool) *Bucket {
+	s.AbleToUpdateBundle = &v
+	return s
+}
+
+// SetAccessRules sets the AccessRules field's value.
+func (s *Bucket) SetAccessRules(v *AccessRules) *Bucket {
+	s.AccessRules = v
+	return s
+}
+
+// SetArn sets the Arn field's value.
+func (s *Bucket) SetArn(v string) *Bucket {
+	s.Arn = &v
+	return s
+}
+
+// SetBundleId sets the BundleId field's value.
+func (s *Bucket) SetBundleId(v string) *Bucket {
+	s.BundleId = &v
+	return s
+}
+
+// SetCreatedAt sets the CreatedAt field's value.
+func (s *Bucket) SetCreatedAt(v time.Time) *Bucket {
+	s.CreatedAt = &v
+	return s
+}
+
+// SetLocation sets the Location field's value.
+func (s *Bucket) SetLocation(v *ResourceLocation) *Bucket {
+	s.Location = v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *Bucket) SetName(v string) *Bucket {
+	s.Name = &v
+	return s
+}
+
+// SetObjectVersioning sets the ObjectVersioning field's value.
+func (s *Bucket) SetObjectVersioning(v string) *Bucket {
+	s.ObjectVersioning = &v
+	return s
+}
+
+// SetReadonlyAccessAccounts sets the ReadonlyAccessAccounts field's value.
+func (s *Bucket) SetReadonlyAccessAccounts(v []*string) *Bucket {
+	s.ReadonlyAccessAccounts = v
+	return s
+}
+
+// SetResourceType sets the ResourceType field's value.
+func (s *Bucket) SetResourceType(v string) *Bucket {
+	s.ResourceType = &v
+	return s
+}
+
+// SetResourcesReceivingAccess sets the ResourcesReceivingAccess field's value.
+func (s *Bucket) SetResourcesReceivingAccess(v []*ResourceReceivingAccess) *Bucket {
+	s.ResourcesReceivingAccess = v
+	return s
+}
+
+// SetState sets the State field's value.
+func (s *Bucket) SetState(v *BucketState) *Bucket {
+	s.State = v
+	return s
+}
+
+// SetSupportCode sets the SupportCode field's value.
+func (s *Bucket) SetSupportCode(v string) *Bucket {
+	s.SupportCode = &v
+	return s
+}
+
+// SetTags sets the Tags field's value.
+func (s *Bucket) SetTags(v []*Tag) *Bucket {
+	s.Tags = v
+	return s
+}
+
+// SetUrl sets the Url field's value.
+func (s *Bucket) SetUrl(v string) *Bucket {
+	s.Url = &v
+	return s
+}
+
+// Describes the specifications of a bundle that can be applied to an Amazon
+// Lightsail bucket.
+//
+// A bucket bundle specifies the monthly cost, storage space, and data transfer
+// quota for a bucket.
+type BucketBundle struct {
+	_ struct{} `type:"structure"`
+
+	// The ID of the bundle.
+	BundleId *string `locationName:"bundleId" type:"string"`
+
+	// Indicates whether the bundle is active. Use for a new or existing bucket.
+	IsActive *bool `locationName:"isActive" type:"boolean"`
+
+	// The name of the bundle.
+	Name *string `locationName:"name" type:"string"`
+
+	// The monthly price of the bundle, in US dollars.
+	Price *float64 `locationName:"price" type:"float"`
+
+	// The storage size of the bundle, in GB.
+	StoragePerMonthInGb *int64 `locationName:"storagePerMonthInGb" type:"integer"`
+
+	// The monthly network transfer quota of the bundle.
+	TransferPerMonthInGb *int64 `locationName:"transferPerMonthInGb" type:"integer"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s BucketBundle) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s BucketBundle) GoString() string {
+	return s.String()
+}
+
+// SetBundleId sets the BundleId field's value.
+func (s *BucketBundle) SetBundleId(v string) *BucketBundle {
+	s.BundleId = &v
+	return s
+}
+
+// SetIsActive sets the IsActive field's value.
+func (s *BucketBundle) SetIsActive(v bool) *BucketBundle {
+	s.IsActive = &v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *BucketBundle) SetName(v string) *BucketBundle {
+	s.Name = &v
+	return s
+}
+
+// SetPrice sets the Price field's value.
+func (s *BucketBundle) SetPrice(v float64) *BucketBundle {
+	s.Price = &v
+	return s
+}
+
+// SetStoragePerMonthInGb sets the StoragePerMonthInGb field's value.
+func (s *BucketBundle) SetStoragePerMonthInGb(v int64) *BucketBundle {
+	s.StoragePerMonthInGb = &v
+	return s
+}
+
+// SetTransferPerMonthInGb sets the TransferPerMonthInGb field's value.
+func (s *BucketBundle) SetTransferPerMonthInGb(v int64) *BucketBundle {
+	s.TransferPerMonthInGb = &v
+	return s
+}
+
+// Describes the state of an Amazon Lightsail bucket.
+type BucketState struct {
+	_ struct{} `type:"structure"`
+
+	// The state code of the bucket.
+	//
+	// The following codes are possible:
+	//
+	//    * OK - The bucket is in a running state.
+	//
+	//    * Unknown - Creation of the bucket might have timed-out. You might want
+	//    to delete the bucket and create a new one.
+	Code *string `locationName:"code" type:"string"`
+
+	// A message that describes the state of the bucket.
+	Message *string `locationName:"message" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s BucketState) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s BucketState) GoString() string {
+	return s.String()
+}
+
+// SetCode sets the Code field's value.
+func (s *BucketState) SetCode(v string) *BucketState {
+	s.Code = &v
+	return s
+}
+
+// SetMessage sets the Message field's value.
+func (s *BucketState) SetMessage(v string) *BucketState {
+	s.Message = &v
+	return s
+}
+
 // Describes a bundle, which is a set of specs describing your virtual private
 // server (or instance).
 type Bundle struct {
@@ -14974,12 +18363,20 @@ type Bundle struct {
 	TransferPerMonthInGb *int64 `locationName:"transferPerMonthInGb" type:"integer"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s Bundle) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s Bundle) GoString() string {
 	return s.String()
 }
@@ -15074,12 +18471,20 @@ type CacheBehavior struct {
 	Behavior *string `locationName:"behavior" type:"string" enum:"BehaviorEnum"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CacheBehavior) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CacheBehavior) GoString() string {
 	return s.String()
 }
@@ -15137,12 +18542,20 @@ type CacheBehaviorPerPath struct {
 	Path *string `locationName:"path" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CacheBehaviorPerPath) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CacheBehaviorPerPath) GoString() string {
 	return s.String()
 }
@@ -15232,12 +18645,20 @@ type CacheSettings struct {
 	MinimumTTL *int64 `locationName:"minimumTTL" type:"long"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CacheSettings) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CacheSettings) GoString() string {
 	return s.String()
 }
@@ -15359,7 +18780,7 @@ type Certificate struct {
 	//    request was reported as an unsafe domain by VirusTotal (https://www.virustotal.com/gui/home/url).
 	//    To correct the problem, search for your domain name on the VirusTotal
 	//    (https://www.virustotal.com/gui/home/url) website. If your domain is reported
-	//    as suspicious, see Google Help for Hacked Websites (https://www.google.com/webmasters/hacked/?hl=en)
+	//    as suspicious, see Google Help for Hacked Websites (https://developers.google.com/web/fundamentals/security/hacked)
 	//    to learn what you can do. If you believe that the result is a false positive,
 	//    notify the organization that is reporting the domain. VirusTotal is an
 	//    aggregate of several antivirus and URL scanners and cannot remove your
@@ -15407,16 +18828,24 @@ type Certificate struct {
 	SupportCode *string `locationName:"supportCode" type:"string"`
 
 	// The tag keys and optional values for the resource. For more information about
-	// tags in Lightsail, see the Lightsail Dev Guide (https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-tags).
+	// tags in Lightsail, see the Amazon Lightsail Developer Guide (https://lightsail.aws.amazon.com/ls/docs/en_us/articles/amazon-lightsail-tags).
 	Tags []*Tag `locationName:"tags" type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s Certificate) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s Certificate) GoString() string {
 	return s.String()
 }
@@ -15564,16 +18993,24 @@ type CertificateSummary struct {
 	DomainName *string `locationName:"domainName" type:"string"`
 
 	// The tag keys and optional values for the resource. For more information about
-	// tags in Lightsail, see the Lightsail Dev Guide (https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-tags).
+	// tags in Lightsail, see the Amazon Lightsail Developer Guide (https://lightsail.aws.amazon.com/ls/docs/en_us/articles/amazon-lightsail-tags).
 	Tags []*Tag `locationName:"tags" type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CertificateSummary) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CertificateSummary) GoString() string {
 	return s.String()
 }
@@ -15622,12 +19059,20 @@ type CloseInstancePublicPortsInput struct {
 	PortInfo *PortInfo `locationName:"portInfo" type:"structure" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CloseInstancePublicPortsInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CloseInstancePublicPortsInput) GoString() string {
 	return s.String()
 }
@@ -15674,12 +19119,20 @@ type CloseInstancePublicPortsOutput struct {
 	Operation *Operation `locationName:"operation" type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CloseInstancePublicPortsOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CloseInstancePublicPortsOutput) GoString() string {
 	return s.String()
 }
@@ -15691,7 +19144,7 @@ func (s *CloseInstancePublicPortsOutput) SetOperation(v *Operation) *CloseInstan
 }
 
 // Describes a CloudFormation stack record created as a result of the create
-// cloud formation stack operation.
+// cloud formation stack action.
 //
 // A CloudFormation stack record provides information about the AWS CloudFormation
 // stack used to create a new Amazon Elastic Compute Cloud instance from an
@@ -15727,12 +19180,20 @@ type CloudFormationStackRecord struct {
 	State *string `locationName:"state" type:"string" enum:"RecordState"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CloudFormationStackRecord) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CloudFormationStackRecord) GoString() string {
 	return s.String()
 }
@@ -15800,12 +19261,20 @@ type CloudFormationStackRecordSourceInfo struct {
 	ResourceType *string `locationName:"resourceType" type:"string" enum:"CloudFormationStackRecordSourceType"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CloudFormationStackRecordSourceInfo) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CloudFormationStackRecordSourceInfo) GoString() string {
 	return s.String()
 }
@@ -15876,12 +19345,20 @@ type ContactMethod struct {
 	SupportCode *string `locationName:"supportCode" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ContactMethod) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ContactMethod) GoString() string {
 	return s.String()
 }
@@ -15940,6 +19417,908 @@ func (s *ContactMethod) SetSupportCode(v string) *ContactMethod {
 	return s
 }
 
+// Describes the settings of a container that will be launched, or that is launched,
+// to an Amazon Lightsail container service.
+type Container struct {
+	_ struct{} `type:"structure"`
+
+	// The launch command for the container.
+	Command []*string `locationName:"command" type:"list"`
+
+	// The environment variables of the container.
+	Environment map[string]*string `locationName:"environment" type:"map"`
+
+	// The name of the image used for the container.
+	//
+	// Container images sourced from your Lightsail container service, that are
+	// registered and stored on your service, start with a colon (:). For example,
+	// :container-service-1.mystaticwebsite.1. Container images sourced from a public
+	// registry like Docker Hub don't start with a colon. For example, nginx:latest
+	// or nginx.
+	Image *string `locationName:"image" type:"string"`
+
+	// The open firewall ports of the container.
+	Ports map[string]*string `locationName:"ports" type:"map"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s Container) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s Container) GoString() string {
+	return s.String()
+}
+
+// SetCommand sets the Command field's value.
+func (s *Container) SetCommand(v []*string) *Container {
+	s.Command = v
+	return s
+}
+
+// SetEnvironment sets the Environment field's value.
+func (s *Container) SetEnvironment(v map[string]*string) *Container {
+	s.Environment = v
+	return s
+}
+
+// SetImage sets the Image field's value.
+func (s *Container) SetImage(v string) *Container {
+	s.Image = &v
+	return s
+}
+
+// SetPorts sets the Ports field's value.
+func (s *Container) SetPorts(v map[string]*string) *Container {
+	s.Ports = v
+	return s
+}
+
+// Describes a container image that is registered to an Amazon Lightsail container
+// service.
+type ContainerImage struct {
+	_ struct{} `type:"structure"`
+
+	// The timestamp when the container image was created.
+	CreatedAt *time.Time `locationName:"createdAt" type:"timestamp"`
+
+	// The digest of the container image.
+	Digest *string `locationName:"digest" type:"string"`
+
+	// The name of the container image.
+	Image *string `locationName:"image" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ContainerImage) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ContainerImage) GoString() string {
+	return s.String()
+}
+
+// SetCreatedAt sets the CreatedAt field's value.
+func (s *ContainerImage) SetCreatedAt(v time.Time) *ContainerImage {
+	s.CreatedAt = &v
+	return s
+}
+
+// SetDigest sets the Digest field's value.
+func (s *ContainerImage) SetDigest(v string) *ContainerImage {
+	s.Digest = &v
+	return s
+}
+
+// SetImage sets the Image field's value.
+func (s *ContainerImage) SetImage(v string) *ContainerImage {
+	s.Image = &v
+	return s
+}
+
+// Describes an Amazon Lightsail container service.
+type ContainerService struct {
+	_ struct{} `type:"structure"`
+
+	// The Amazon Resource Name (ARN) of the container service.
+	Arn *string `locationName:"arn" type:"string"`
+
+	// The name of the container service.
+	ContainerServiceName *string `locationName:"containerServiceName" min:"1" type:"string"`
+
+	// The timestamp when the container service was created.
+	CreatedAt *time.Time `locationName:"createdAt" type:"timestamp"`
+
+	// An object that describes the current container deployment of the container
+	// service.
+	CurrentDeployment *ContainerServiceDeployment `locationName:"currentDeployment" type:"structure"`
+
+	// A Boolean value indicating whether the container service is disabled.
+	IsDisabled *bool `locationName:"isDisabled" type:"boolean"`
+
+	// An object that describes the location of the container service, such as the
+	// AWS Region and Availability Zone.
+	Location *ResourceLocation `locationName:"location" type:"structure"`
+
+	// An object that describes the next deployment of the container service.
+	//
+	// This value is null when there is no deployment in a pending state.
+	NextDeployment *ContainerServiceDeployment `locationName:"nextDeployment" type:"structure"`
+
+	// The power specification of the container service.
+	//
+	// The power specifies the amount of RAM, the number of vCPUs, and the base
+	// price of the container service.
+	Power *string `locationName:"power" type:"string" enum:"ContainerServicePowerName"`
+
+	// The ID of the power of the container service.
+	PowerId *string `locationName:"powerId" type:"string"`
+
+	// The principal ARN of the container service.
+	//
+	// The principal ARN can be used to create a trust relationship between your
+	// standard AWS account and your Lightsail container service. This allows you
+	// to give your service permission to access resources in your standard AWS
+	// account.
+	PrincipalArn *string `locationName:"principalArn" type:"string"`
+
+	// The private domain name of the container service.
+	//
+	// The private domain name is accessible only by other resources within the
+	// default virtual private cloud (VPC) of your Lightsail account.
+	PrivateDomainName *string `locationName:"privateDomainName" type:"string"`
+
+	// The public domain name of the container service, such as example.com and
+	// www.example.com.
+	//
+	// You can specify up to four public domain names for a container service. The
+	// domain names that you specify are used when you create a deployment with
+	// a container configured as the public endpoint of your container service.
+	//
+	// If you don't specify public domain names, then you can use the default domain
+	// of the container service.
+	//
+	// You must create and validate an SSL/TLS certificate before you can use public
+	// domain names with your container service. Use the CreateCertificate action
+	// to create a certificate for the public domain names you want to use with
+	// your container service.
+	//
+	// See CreateContainerService or UpdateContainerService for information about
+	// how to specify public domain names for your Lightsail container service.
+	PublicDomainNames map[string][]*string `locationName:"publicDomainNames" type:"map"`
+
+	// The Lightsail resource type of the container service (i.e., ContainerService).
+	ResourceType *string `locationName:"resourceType" type:"string" enum:"ResourceType"`
+
+	// The scale specification of the container service.
+	//
+	// The scale specifies the allocated compute nodes of the container service.
+	Scale *int64 `locationName:"scale" min:"1" type:"integer"`
+
+	// The current state of the container service.
+	//
+	// The following container service states are possible:
+	//
+	//    * PENDING - The container service is being created.
+	//
+	//    * READY - The container service is running but it does not have an active
+	//    container deployment.
+	//
+	//    * DEPLOYING - The container service is launching a container deployment.
+	//
+	//    * RUNNING - The container service is running and it has an active container
+	//    deployment.
+	//
+	//    * UPDATING - The container service capacity or its custom domains are
+	//    being updated.
+	//
+	//    * DELETING - The container service is being deleted.
+	//
+	//    * DISABLED - The container service is disabled, and its active deployment
+	//    and containers, if any, are shut down.
+	State *string `locationName:"state" type:"string" enum:"ContainerServiceState"`
+
+	// An object that describes the current state of the container service.
+	//
+	// The state detail is populated only when a container service is in a PENDING,
+	// DEPLOYING, or UPDATING state.
+	StateDetail *ContainerServiceStateDetail `locationName:"stateDetail" type:"structure"`
+
+	// The tag keys and optional values for the resource. For more information about
+	// tags in Lightsail, see the Amazon Lightsail Developer Guide (https://lightsail.aws.amazon.com/ls/docs/en_us/articles/amazon-lightsail-tags).
+	Tags []*Tag `locationName:"tags" type:"list"`
+
+	// The publicly accessible URL of the container service.
+	//
+	// If no public endpoint is specified in the currentDeployment, this URL returns
+	// a 404 response.
+	Url *string `locationName:"url" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ContainerService) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ContainerService) GoString() string {
+	return s.String()
+}
+
+// SetArn sets the Arn field's value.
+func (s *ContainerService) SetArn(v string) *ContainerService {
+	s.Arn = &v
+	return s
+}
+
+// SetContainerServiceName sets the ContainerServiceName field's value.
+func (s *ContainerService) SetContainerServiceName(v string) *ContainerService {
+	s.ContainerServiceName = &v
+	return s
+}
+
+// SetCreatedAt sets the CreatedAt field's value.
+func (s *ContainerService) SetCreatedAt(v time.Time) *ContainerService {
+	s.CreatedAt = &v
+	return s
+}
+
+// SetCurrentDeployment sets the CurrentDeployment field's value.
+func (s *ContainerService) SetCurrentDeployment(v *ContainerServiceDeployment) *ContainerService {
+	s.CurrentDeployment = v
+	return s
+}
+
+// SetIsDisabled sets the IsDisabled field's value.
+func (s *ContainerService) SetIsDisabled(v bool) *ContainerService {
+	s.IsDisabled = &v
+	return s
+}
+
+// SetLocation sets the Location field's value.
+func (s *ContainerService) SetLocation(v *ResourceLocation) *ContainerService {
+	s.Location = v
+	return s
+}
+
+// SetNextDeployment sets the NextDeployment field's value.
+func (s *ContainerService) SetNextDeployment(v *ContainerServiceDeployment) *ContainerService {
+	s.NextDeployment = v
+	return s
+}
+
+// SetPower sets the Power field's value.
+func (s *ContainerService) SetPower(v string) *ContainerService {
+	s.Power = &v
+	return s
+}
+
+// SetPowerId sets the PowerId field's value.
+func (s *ContainerService) SetPowerId(v string) *ContainerService {
+	s.PowerId = &v
+	return s
+}
+
+// SetPrincipalArn sets the PrincipalArn field's value.
+func (s *ContainerService) SetPrincipalArn(v string) *ContainerService {
+	s.PrincipalArn = &v
+	return s
+}
+
+// SetPrivateDomainName sets the PrivateDomainName field's value.
+func (s *ContainerService) SetPrivateDomainName(v string) *ContainerService {
+	s.PrivateDomainName = &v
+	return s
+}
+
+// SetPublicDomainNames sets the PublicDomainNames field's value.
+func (s *ContainerService) SetPublicDomainNames(v map[string][]*string) *ContainerService {
+	s.PublicDomainNames = v
+	return s
+}
+
+// SetResourceType sets the ResourceType field's value.
+func (s *ContainerService) SetResourceType(v string) *ContainerService {
+	s.ResourceType = &v
+	return s
+}
+
+// SetScale sets the Scale field's value.
+func (s *ContainerService) SetScale(v int64) *ContainerService {
+	s.Scale = &v
+	return s
+}
+
+// SetState sets the State field's value.
+func (s *ContainerService) SetState(v string) *ContainerService {
+	s.State = &v
+	return s
+}
+
+// SetStateDetail sets the StateDetail field's value.
+func (s *ContainerService) SetStateDetail(v *ContainerServiceStateDetail) *ContainerService {
+	s.StateDetail = v
+	return s
+}
+
+// SetTags sets the Tags field's value.
+func (s *ContainerService) SetTags(v []*Tag) *ContainerService {
+	s.Tags = v
+	return s
+}
+
+// SetUrl sets the Url field's value.
+func (s *ContainerService) SetUrl(v string) *ContainerService {
+	s.Url = &v
+	return s
+}
+
+// Describes a container deployment configuration of an Amazon Lightsail container
+// service.
+//
+// A deployment specifies the settings, such as the ports and launch command,
+// of containers that are deployed to your container service.
+type ContainerServiceDeployment struct {
+	_ struct{} `type:"structure"`
+
+	// An object that describes the configuration for the containers of the deployment.
+	Containers map[string]*Container `locationName:"containers" type:"map"`
+
+	// The timestamp when the deployment was created.
+	CreatedAt *time.Time `locationName:"createdAt" type:"timestamp"`
+
+	// An object that describes the endpoint of the deployment.
+	PublicEndpoint *ContainerServiceEndpoint `locationName:"publicEndpoint" type:"structure"`
+
+	// The state of the deployment.
+	//
+	// A deployment can be in one of the following states:
+	//
+	//    * Activating - The deployment is being created.
+	//
+	//    * Active - The deployment was successfully created, and it's currently
+	//    running on the container service. The container service can have only
+	//    one deployment in an active state at a time.
+	//
+	//    * Inactive - The deployment was previously successfully created, but it
+	//    is not currently running on the container service.
+	//
+	//    * Failed - The deployment failed. Use the GetContainerLog action to view
+	//    the log events for the containers in the deployment to try to determine
+	//    the reason for the failure.
+	State *string `locationName:"state" type:"string" enum:"ContainerServiceDeploymentState"`
+
+	// The version number of the deployment.
+	Version *int64 `locationName:"version" type:"integer"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ContainerServiceDeployment) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ContainerServiceDeployment) GoString() string {
+	return s.String()
+}
+
+// SetContainers sets the Containers field's value.
+func (s *ContainerServiceDeployment) SetContainers(v map[string]*Container) *ContainerServiceDeployment {
+	s.Containers = v
+	return s
+}
+
+// SetCreatedAt sets the CreatedAt field's value.
+func (s *ContainerServiceDeployment) SetCreatedAt(v time.Time) *ContainerServiceDeployment {
+	s.CreatedAt = &v
+	return s
+}
+
+// SetPublicEndpoint sets the PublicEndpoint field's value.
+func (s *ContainerServiceDeployment) SetPublicEndpoint(v *ContainerServiceEndpoint) *ContainerServiceDeployment {
+	s.PublicEndpoint = v
+	return s
+}
+
+// SetState sets the State field's value.
+func (s *ContainerServiceDeployment) SetState(v string) *ContainerServiceDeployment {
+	s.State = &v
+	return s
+}
+
+// SetVersion sets the Version field's value.
+func (s *ContainerServiceDeployment) SetVersion(v int64) *ContainerServiceDeployment {
+	s.Version = &v
+	return s
+}
+
+// Describes a container deployment configuration of an Amazon Lightsail container
+// service.
+//
+// A deployment specifies the settings, such as the ports and launch command,
+// of containers that are deployed to your container service.
+type ContainerServiceDeploymentRequest struct {
+	_ struct{} `type:"structure"`
+
+	// An object that describes the configuration for the containers of the deployment.
+	Containers map[string]*Container `locationName:"containers" type:"map"`
+
+	// An object that describes the endpoint of the deployment.
+	PublicEndpoint *EndpointRequest `locationName:"publicEndpoint" type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ContainerServiceDeploymentRequest) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ContainerServiceDeploymentRequest) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ContainerServiceDeploymentRequest) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ContainerServiceDeploymentRequest"}
+	if s.PublicEndpoint != nil {
+		if err := s.PublicEndpoint.Validate(); err != nil {
+			invalidParams.AddNested("PublicEndpoint", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetContainers sets the Containers field's value.
+func (s *ContainerServiceDeploymentRequest) SetContainers(v map[string]*Container) *ContainerServiceDeploymentRequest {
+	s.Containers = v
+	return s
+}
+
+// SetPublicEndpoint sets the PublicEndpoint field's value.
+func (s *ContainerServiceDeploymentRequest) SetPublicEndpoint(v *EndpointRequest) *ContainerServiceDeploymentRequest {
+	s.PublicEndpoint = v
+	return s
+}
+
+// Describes the public endpoint configuration of a deployment of an Amazon
+// Lightsail container service.
+type ContainerServiceEndpoint struct {
+	_ struct{} `type:"structure"`
+
+	// The name of the container entry of the deployment that the endpoint configuration
+	// applies to.
+	ContainerName *string `locationName:"containerName" type:"string"`
+
+	// The port of the specified container to which traffic is forwarded to.
+	ContainerPort *int64 `locationName:"containerPort" type:"integer"`
+
+	// An object that describes the health check configuration of the container.
+	HealthCheck *ContainerServiceHealthCheckConfig `locationName:"healthCheck" type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ContainerServiceEndpoint) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ContainerServiceEndpoint) GoString() string {
+	return s.String()
+}
+
+// SetContainerName sets the ContainerName field's value.
+func (s *ContainerServiceEndpoint) SetContainerName(v string) *ContainerServiceEndpoint {
+	s.ContainerName = &v
+	return s
+}
+
+// SetContainerPort sets the ContainerPort field's value.
+func (s *ContainerServiceEndpoint) SetContainerPort(v int64) *ContainerServiceEndpoint {
+	s.ContainerPort = &v
+	return s
+}
+
+// SetHealthCheck sets the HealthCheck field's value.
+func (s *ContainerServiceEndpoint) SetHealthCheck(v *ContainerServiceHealthCheckConfig) *ContainerServiceEndpoint {
+	s.HealthCheck = v
+	return s
+}
+
+// Describes the health check configuration of an Amazon Lightsail container
+// service.
+type ContainerServiceHealthCheckConfig struct {
+	_ struct{} `type:"structure"`
+
+	// The number of consecutive health checks successes required before moving
+	// the container to the Healthy state. The default value is 2.
+	HealthyThreshold *int64 `locationName:"healthyThreshold" type:"integer"`
+
+	// The approximate interval, in seconds, between health checks of an individual
+	// container. You can specify between 5 and 300 seconds. The default value is
+	// 5.
+	IntervalSeconds *int64 `locationName:"intervalSeconds" type:"integer"`
+
+	// The path on the container on which to perform the health check. The default
+	// value is /.
+	Path *string `locationName:"path" type:"string"`
+
+	// The HTTP codes to use when checking for a successful response from a container.
+	// You can specify values between 200 and 499. You can specify multiple values
+	// (for example, 200,202) or a range of values (for example, 200-299).
+	SuccessCodes *string `locationName:"successCodes" type:"string"`
+
+	// The amount of time, in seconds, during which no response means a failed health
+	// check. You can specify between 2 and 60 seconds. The default value is 2.
+	TimeoutSeconds *int64 `locationName:"timeoutSeconds" type:"integer"`
+
+	// The number of consecutive health check failures required before moving the
+	// container to the Unhealthy state. The default value is 2.
+	UnhealthyThreshold *int64 `locationName:"unhealthyThreshold" type:"integer"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ContainerServiceHealthCheckConfig) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ContainerServiceHealthCheckConfig) GoString() string {
+	return s.String()
+}
+
+// SetHealthyThreshold sets the HealthyThreshold field's value.
+func (s *ContainerServiceHealthCheckConfig) SetHealthyThreshold(v int64) *ContainerServiceHealthCheckConfig {
+	s.HealthyThreshold = &v
+	return s
+}
+
+// SetIntervalSeconds sets the IntervalSeconds field's value.
+func (s *ContainerServiceHealthCheckConfig) SetIntervalSeconds(v int64) *ContainerServiceHealthCheckConfig {
+	s.IntervalSeconds = &v
+	return s
+}
+
+// SetPath sets the Path field's value.
+func (s *ContainerServiceHealthCheckConfig) SetPath(v string) *ContainerServiceHealthCheckConfig {
+	s.Path = &v
+	return s
+}
+
+// SetSuccessCodes sets the SuccessCodes field's value.
+func (s *ContainerServiceHealthCheckConfig) SetSuccessCodes(v string) *ContainerServiceHealthCheckConfig {
+	s.SuccessCodes = &v
+	return s
+}
+
+// SetTimeoutSeconds sets the TimeoutSeconds field's value.
+func (s *ContainerServiceHealthCheckConfig) SetTimeoutSeconds(v int64) *ContainerServiceHealthCheckConfig {
+	s.TimeoutSeconds = &v
+	return s
+}
+
+// SetUnhealthyThreshold sets the UnhealthyThreshold field's value.
+func (s *ContainerServiceHealthCheckConfig) SetUnhealthyThreshold(v int64) *ContainerServiceHealthCheckConfig {
+	s.UnhealthyThreshold = &v
+	return s
+}
+
+// Describes the log events of a container of an Amazon Lightsail container
+// service.
+type ContainerServiceLogEvent struct {
+	_ struct{} `type:"structure"`
+
+	// The timestamp when the container service log event was created.
+	CreatedAt *time.Time `locationName:"createdAt" type:"timestamp"`
+
+	// The message of the container service log event.
+	Message *string `locationName:"message" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ContainerServiceLogEvent) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ContainerServiceLogEvent) GoString() string {
+	return s.String()
+}
+
+// SetCreatedAt sets the CreatedAt field's value.
+func (s *ContainerServiceLogEvent) SetCreatedAt(v time.Time) *ContainerServiceLogEvent {
+	s.CreatedAt = &v
+	return s
+}
+
+// SetMessage sets the Message field's value.
+func (s *ContainerServiceLogEvent) SetMessage(v string) *ContainerServiceLogEvent {
+	s.Message = &v
+	return s
+}
+
+// Describes the powers that can be specified for an Amazon Lightsail container
+// service.
+//
+// The power specifies the amount of RAM, the number of vCPUs, and the base
+// price of the container service.
+type ContainerServicePower struct {
+	_ struct{} `type:"structure"`
+
+	// The number of vCPUs included in the power.
+	CpuCount *float64 `locationName:"cpuCount" type:"float"`
+
+	// A Boolean value indicating whether the power is active and can be specified
+	// for container services.
+	IsActive *bool `locationName:"isActive" type:"boolean"`
+
+	// The friendly name of the power (e.g., nano).
+	Name *string `locationName:"name" type:"string"`
+
+	// The ID of the power (e.g., nano-1).
+	PowerId *string `locationName:"powerId" type:"string"`
+
+	// The monthly price of the power in USD.
+	Price *float64 `locationName:"price" type:"float"`
+
+	// The amount of RAM (in GB) of the power.
+	RamSizeInGb *float64 `locationName:"ramSizeInGb" type:"float"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ContainerServicePower) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ContainerServicePower) GoString() string {
+	return s.String()
+}
+
+// SetCpuCount sets the CpuCount field's value.
+func (s *ContainerServicePower) SetCpuCount(v float64) *ContainerServicePower {
+	s.CpuCount = &v
+	return s
+}
+
+// SetIsActive sets the IsActive field's value.
+func (s *ContainerServicePower) SetIsActive(v bool) *ContainerServicePower {
+	s.IsActive = &v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *ContainerServicePower) SetName(v string) *ContainerServicePower {
+	s.Name = &v
+	return s
+}
+
+// SetPowerId sets the PowerId field's value.
+func (s *ContainerServicePower) SetPowerId(v string) *ContainerServicePower {
+	s.PowerId = &v
+	return s
+}
+
+// SetPrice sets the Price field's value.
+func (s *ContainerServicePower) SetPrice(v float64) *ContainerServicePower {
+	s.Price = &v
+	return s
+}
+
+// SetRamSizeInGb sets the RamSizeInGb field's value.
+func (s *ContainerServicePower) SetRamSizeInGb(v float64) *ContainerServicePower {
+	s.RamSizeInGb = &v
+	return s
+}
+
+// Describes the login information for the container image registry of an Amazon
+// Lightsail account.
+type ContainerServiceRegistryLogin struct {
+	_ struct{} `type:"structure"`
+
+	// The timestamp of when the container image registry username and password
+	// expire.
+	//
+	// The log in credentials expire 12 hours after they are created, at which point
+	// you will need to create a new set of log in credentials using the CreateContainerServiceRegistryLogin
+	// action.
+	ExpiresAt *time.Time `locationName:"expiresAt" type:"timestamp"`
+
+	// The container service registry password to use to push container images to
+	// the container image registry of a Lightsail account
+	Password *string `locationName:"password" type:"string"`
+
+	// The address to use to push container images to the container image registry
+	// of a Lightsail account.
+	Registry *string `locationName:"registry" type:"string"`
+
+	// The container service registry username to use to push container images to
+	// the container image registry of a Lightsail account.
+	Username *string `locationName:"username" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ContainerServiceRegistryLogin) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ContainerServiceRegistryLogin) GoString() string {
+	return s.String()
+}
+
+// SetExpiresAt sets the ExpiresAt field's value.
+func (s *ContainerServiceRegistryLogin) SetExpiresAt(v time.Time) *ContainerServiceRegistryLogin {
+	s.ExpiresAt = &v
+	return s
+}
+
+// SetPassword sets the Password field's value.
+func (s *ContainerServiceRegistryLogin) SetPassword(v string) *ContainerServiceRegistryLogin {
+	s.Password = &v
+	return s
+}
+
+// SetRegistry sets the Registry field's value.
+func (s *ContainerServiceRegistryLogin) SetRegistry(v string) *ContainerServiceRegistryLogin {
+	s.Registry = &v
+	return s
+}
+
+// SetUsername sets the Username field's value.
+func (s *ContainerServiceRegistryLogin) SetUsername(v string) *ContainerServiceRegistryLogin {
+	s.Username = &v
+	return s
+}
+
+// Describes the current state of a container service.
+type ContainerServiceStateDetail struct {
+	_ struct{} `type:"structure"`
+
+	// The state code of the container service.
+	//
+	// The following state codes are possible:
+	//
+	//    * The following state codes are possible if your container service is
+	//    in a DEPLOYING or UPDATING state: CREATING_SYSTEM_RESOURCES - The system
+	//    resources for your container service are being created. CREATING_NETWORK_INFRASTRUCTURE
+	//    - The network infrastructure for your container service are being created.
+	//    PROVISIONING_CERTIFICATE - The SSL/TLS certificate for your container
+	//    service is being created. PROVISIONING_SERVICE - Your container service
+	//    is being provisioned. CREATING_DEPLOYMENT - Your deployment is being created
+	//    on your container service. EVALUATING_HEALTH_CHECK - The health of your
+	//    deployment is being evaluated. ACTIVATING_DEPLOYMENT - Your deployment
+	//    is being activated.
+	//
+	//    * The following state codes are possible if your container service is
+	//    in a PENDING state: CERTIFICATE_LIMIT_EXCEEDED - The SSL/TLS certificate
+	//    required for your container service exceeds the maximum number of certificates
+	//    allowed for your account. UNKNOWN_ERROR - An error was experienced when
+	//    your container service was being created.
+	Code *string `locationName:"code" type:"string" enum:"ContainerServiceStateDetailCode"`
+
+	// A message that provides more information for the state code.
+	//
+	// The state detail is populated only when a container service is in a PENDING,
+	// DEPLOYING, or UPDATING state.
+	Message *string `locationName:"message" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ContainerServiceStateDetail) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ContainerServiceStateDetail) GoString() string {
+	return s.String()
+}
+
+// SetCode sets the Code field's value.
+func (s *ContainerServiceStateDetail) SetCode(v string) *ContainerServiceStateDetail {
+	s.Code = &v
+	return s
+}
+
+// SetMessage sets the Message field's value.
+func (s *ContainerServiceStateDetail) SetMessage(v string) *ContainerServiceStateDetail {
+	s.Message = &v
+	return s
+}
+
 // Describes whether an Amazon Lightsail content delivery network (CDN) distribution
 // forwards cookies to the origin and, if so, which ones.
 //
@@ -15957,12 +20336,20 @@ type CookieObject struct {
 	Option *string `locationName:"option" type:"string" enum:"ForwardValues"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CookieObject) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CookieObject) GoString() string {
 	return s.String()
 }
@@ -15994,7 +20381,8 @@ type CopySnapshotInput struct {
 	//    snapshot parameters are mutually exclusive.
 	//
 	//    * Define this parameter only when copying an automatic snapshot as a manual
-	//    snapshot. For more information, see the Lightsail Dev Guide (https://lightsail.aws.amazon.com/ls/docs/en_us/articles/amazon-lightsail-keeping-automatic-snapshots).
+	//    snapshot. For more information, see the Amazon Lightsail Developer Guide
+	//    (https://lightsail.aws.amazon.com/ls/docs/en_us/articles/amazon-lightsail-keeping-automatic-snapshots).
 	RestoreDate *string `locationName:"restoreDate" type:"string"`
 
 	// The AWS Region where the source manual or automatic snapshot is located.
@@ -16008,7 +20396,8 @@ type CopySnapshotInput struct {
 	// Constraint:
 	//
 	//    * Define this parameter only when copying an automatic snapshot as a manual
-	//    snapshot. For more information, see the Lightsail Dev Guide (https://lightsail.aws.amazon.com/ls/docs/en_us/articles/amazon-lightsail-keeping-automatic-snapshots).
+	//    snapshot. For more information, see the Amazon Lightsail Developer Guide
+	//    (https://lightsail.aws.amazon.com/ls/docs/en_us/articles/amazon-lightsail-keeping-automatic-snapshots).
 	SourceResourceName *string `locationName:"sourceResourceName" type:"string"`
 
 	// The name of the source manual snapshot to copy.
@@ -16034,16 +20423,25 @@ type CopySnapshotInput struct {
 	//    mutually exclusive.
 	//
 	//    * Define this parameter only when copying an automatic snapshot as a manual
-	//    snapshot. For more information, see the Lightsail Dev Guide (https://lightsail.aws.amazon.com/ls/docs/en_us/articles/amazon-lightsail-keeping-automatic-snapshots).
+	//    snapshot. For more information, see the Amazon Lightsail Developer Guide
+	//    (https://lightsail.aws.amazon.com/ls/docs/en_us/articles/amazon-lightsail-keeping-automatic-snapshots).
 	UseLatestRestorableAutoSnapshot *bool `locationName:"useLatestRestorableAutoSnapshot" type:"boolean"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CopySnapshotInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CopySnapshotInput) GoString() string {
 	return s.String()
 }
@@ -16109,18 +20507,261 @@ type CopySnapshotOutput struct {
 	Operations []*Operation `locationName:"operations" type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CopySnapshotOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CopySnapshotOutput) GoString() string {
 	return s.String()
 }
 
 // SetOperations sets the Operations field's value.
 func (s *CopySnapshotOutput) SetOperations(v []*Operation) *CopySnapshotOutput {
+	s.Operations = v
+	return s
+}
+
+type CreateBucketAccessKeyInput struct {
+	_ struct{} `type:"structure"`
+
+	// The name of the bucket that the new access key will belong to, and grant
+	// access to.
+	//
+	// BucketName is a required field
+	BucketName *string `locationName:"bucketName" min:"3" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateBucketAccessKeyInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateBucketAccessKeyInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *CreateBucketAccessKeyInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "CreateBucketAccessKeyInput"}
+	if s.BucketName == nil {
+		invalidParams.Add(request.NewErrParamRequired("BucketName"))
+	}
+	if s.BucketName != nil && len(*s.BucketName) < 3 {
+		invalidParams.Add(request.NewErrParamMinLen("BucketName", 3))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetBucketName sets the BucketName field's value.
+func (s *CreateBucketAccessKeyInput) SetBucketName(v string) *CreateBucketAccessKeyInput {
+	s.BucketName = &v
+	return s
+}
+
+type CreateBucketAccessKeyOutput struct {
+	_ struct{} `type:"structure"`
+
+	// An object that describes the access key that is created.
+	AccessKey *AccessKey `locationName:"accessKey" type:"structure"`
+
+	// An array of objects that describe the result of the action, such as the status
+	// of the request, the timestamp of the request, and the resources affected
+	// by the request.
+	Operations []*Operation `locationName:"operations" type:"list"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateBucketAccessKeyOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateBucketAccessKeyOutput) GoString() string {
+	return s.String()
+}
+
+// SetAccessKey sets the AccessKey field's value.
+func (s *CreateBucketAccessKeyOutput) SetAccessKey(v *AccessKey) *CreateBucketAccessKeyOutput {
+	s.AccessKey = v
+	return s
+}
+
+// SetOperations sets the Operations field's value.
+func (s *CreateBucketAccessKeyOutput) SetOperations(v []*Operation) *CreateBucketAccessKeyOutput {
+	s.Operations = v
+	return s
+}
+
+type CreateBucketInput struct {
+	_ struct{} `type:"structure"`
+
+	// The name for the bucket.
+	//
+	// For more information about bucket names, see Bucket naming rules in Amazon
+	// Lightsail (https://lightsail.aws.amazon.com/ls/docs/en_us/articles/bucket-naming-rules-in-amazon-lightsail)
+	// in the Amazon Lightsail Developer Guide.
+	//
+	// BucketName is a required field
+	BucketName *string `locationName:"bucketName" min:"3" type:"string" required:"true"`
+
+	// The ID of the bundle to use for the bucket.
+	//
+	// A bucket bundle specifies the monthly cost, storage space, and data transfer
+	// quota for a bucket.
+	//
+	// Use the GetBucketBundles action to get a list of bundle IDs that you can
+	// specify.
+	//
+	// Use the UpdateBucketBundle action to change the bundle after the bucket is
+	// created.
+	//
+	// BundleId is a required field
+	BundleId *string `locationName:"bundleId" type:"string" required:"true"`
+
+	// A Boolean value that indicates whether to enable versioning of objects in
+	// the bucket.
+	//
+	// For more information about versioning, see Enabling and suspending object
+	// versioning in a bucket in Amazon Lightsail (https://lightsail.aws.amazon.com/ls/docs/en_us/articles/amazon-lightsail-managing-bucket-object-versioning)
+	// in the Amazon Lightsail Developer Guide.
+	EnableObjectVersioning *bool `locationName:"enableObjectVersioning" type:"boolean"`
+
+	// The tag keys and optional values to add to the bucket during creation.
+	//
+	// Use the TagResource action to tag the bucket after it's created.
+	Tags []*Tag `locationName:"tags" type:"list"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateBucketInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateBucketInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *CreateBucketInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "CreateBucketInput"}
+	if s.BucketName == nil {
+		invalidParams.Add(request.NewErrParamRequired("BucketName"))
+	}
+	if s.BucketName != nil && len(*s.BucketName) < 3 {
+		invalidParams.Add(request.NewErrParamMinLen("BucketName", 3))
+	}
+	if s.BundleId == nil {
+		invalidParams.Add(request.NewErrParamRequired("BundleId"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetBucketName sets the BucketName field's value.
+func (s *CreateBucketInput) SetBucketName(v string) *CreateBucketInput {
+	s.BucketName = &v
+	return s
+}
+
+// SetBundleId sets the BundleId field's value.
+func (s *CreateBucketInput) SetBundleId(v string) *CreateBucketInput {
+	s.BundleId = &v
+	return s
+}
+
+// SetEnableObjectVersioning sets the EnableObjectVersioning field's value.
+func (s *CreateBucketInput) SetEnableObjectVersioning(v bool) *CreateBucketInput {
+	s.EnableObjectVersioning = &v
+	return s
+}
+
+// SetTags sets the Tags field's value.
+func (s *CreateBucketInput) SetTags(v []*Tag) *CreateBucketInput {
+	s.Tags = v
+	return s
+}
+
+type CreateBucketOutput struct {
+	_ struct{} `type:"structure"`
+
+	// An object that describes the bucket that is created.
+	Bucket *Bucket `locationName:"bucket" type:"structure"`
+
+	// An array of objects that describe the result of the action, such as the status
+	// of the request, the timestamp of the request, and the resources affected
+	// by the request.
+	Operations []*Operation `locationName:"operations" type:"list"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateBucketOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateBucketOutput) GoString() string {
+	return s.String()
+}
+
+// SetBucket sets the Bucket field's value.
+func (s *CreateBucketOutput) SetBucket(v *Bucket) *CreateBucketOutput {
+	s.Bucket = v
+	return s
+}
+
+// SetOperations sets the Operations field's value.
+func (s *CreateBucketOutput) SetOperations(v []*Operation) *CreateBucketOutput {
 	s.Operations = v
 	return s
 }
@@ -16153,12 +20794,20 @@ type CreateCertificateInput struct {
 	Tags []*Tag `locationName:"tags" type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateCertificateInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateCertificateInput) GoString() string {
 	return s.String()
 }
@@ -16215,12 +20864,20 @@ type CreateCertificateOutput struct {
 	Operations []*Operation `locationName:"operations" type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateCertificateOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateCertificateOutput) GoString() string {
 	return s.String()
 }
@@ -16249,12 +20906,20 @@ type CreateCloudFormationStackInput struct {
 	Instances []*InstanceEntry `locationName:"instances" type:"list" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateCloudFormationStackInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateCloudFormationStackInput) GoString() string {
 	return s.String()
 }
@@ -16297,12 +20962,20 @@ type CreateCloudFormationStackOutput struct {
 	Operations []*Operation `locationName:"operations" type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateCloudFormationStackOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateCloudFormationStackOutput) GoString() string {
 	return s.String()
 }
@@ -16357,12 +21030,20 @@ type CreateContactMethodInput struct {
 	Protocol *string `locationName:"protocol" type:"string" required:"true" enum:"ContactProtocol"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateContactMethodInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateContactMethodInput) GoString() string {
 	return s.String()
 }
@@ -16407,12 +21088,20 @@ type CreateContactMethodOutput struct {
 	Operations []*Operation `locationName:"operations" type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateContactMethodOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateContactMethodOutput) GoString() string {
 	return s.String()
 }
@@ -16420,6 +21109,367 @@ func (s CreateContactMethodOutput) GoString() string {
 // SetOperations sets the Operations field's value.
 func (s *CreateContactMethodOutput) SetOperations(v []*Operation) *CreateContactMethodOutput {
 	s.Operations = v
+	return s
+}
+
+type CreateContainerServiceDeploymentInput struct {
+	_ struct{} `type:"structure"`
+
+	// An object that describes the settings of the containers that will be launched
+	// on the container service.
+	Containers map[string]*Container `locationName:"containers" type:"map"`
+
+	// An object that describes the settings of the public endpoint for the container
+	// service.
+	PublicEndpoint *EndpointRequest `locationName:"publicEndpoint" type:"structure"`
+
+	// The name of the container service for which to create the deployment.
+	//
+	// ServiceName is a required field
+	ServiceName *string `locationName:"serviceName" min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateContainerServiceDeploymentInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateContainerServiceDeploymentInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *CreateContainerServiceDeploymentInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "CreateContainerServiceDeploymentInput"}
+	if s.ServiceName == nil {
+		invalidParams.Add(request.NewErrParamRequired("ServiceName"))
+	}
+	if s.ServiceName != nil && len(*s.ServiceName) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ServiceName", 1))
+	}
+	if s.PublicEndpoint != nil {
+		if err := s.PublicEndpoint.Validate(); err != nil {
+			invalidParams.AddNested("PublicEndpoint", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetContainers sets the Containers field's value.
+func (s *CreateContainerServiceDeploymentInput) SetContainers(v map[string]*Container) *CreateContainerServiceDeploymentInput {
+	s.Containers = v
+	return s
+}
+
+// SetPublicEndpoint sets the PublicEndpoint field's value.
+func (s *CreateContainerServiceDeploymentInput) SetPublicEndpoint(v *EndpointRequest) *CreateContainerServiceDeploymentInput {
+	s.PublicEndpoint = v
+	return s
+}
+
+// SetServiceName sets the ServiceName field's value.
+func (s *CreateContainerServiceDeploymentInput) SetServiceName(v string) *CreateContainerServiceDeploymentInput {
+	s.ServiceName = &v
+	return s
+}
+
+type CreateContainerServiceDeploymentOutput struct {
+	_ struct{} `type:"structure"`
+
+	// An object that describes a container service.
+	ContainerService *ContainerService `locationName:"containerService" type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateContainerServiceDeploymentOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateContainerServiceDeploymentOutput) GoString() string {
+	return s.String()
+}
+
+// SetContainerService sets the ContainerService field's value.
+func (s *CreateContainerServiceDeploymentOutput) SetContainerService(v *ContainerService) *CreateContainerServiceDeploymentOutput {
+	s.ContainerService = v
+	return s
+}
+
+type CreateContainerServiceInput struct {
+	_ struct{} `type:"structure"`
+
+	// An object that describes a deployment for the container service.
+	//
+	// A deployment specifies the containers that will be launched on the container
+	// service and their settings, such as the ports to open, the environment variables
+	// to apply, and the launch command to run. It also specifies the container
+	// that will serve as the public endpoint of the deployment and its settings,
+	// such as the HTTP or HTTPS port to use, and the health check configuration.
+	Deployment *ContainerServiceDeploymentRequest `locationName:"deployment" type:"structure"`
+
+	// The power specification for the container service.
+	//
+	// The power specifies the amount of memory, vCPUs, and base monthly cost of
+	// each node of the container service. The power and scale of a container service
+	// makes up its configured capacity. To determine the monthly price of your
+	// container service, multiply the base price of the power with the scale (the
+	// number of nodes) of the service.
+	//
+	// Use the GetContainerServicePowers action to get a list of power options that
+	// you can specify using this parameter, and their base monthly cost.
+	//
+	// Power is a required field
+	Power *string `locationName:"power" type:"string" required:"true" enum:"ContainerServicePowerName"`
+
+	// The public domain names to use with the container service, such as example.com
+	// and www.example.com.
+	//
+	// You can specify up to four public domain names for a container service. The
+	// domain names that you specify are used when you create a deployment with
+	// a container configured as the public endpoint of your container service.
+	//
+	// If you don't specify public domain names, then you can use the default domain
+	// of the container service.
+	//
+	// You must create and validate an SSL/TLS certificate before you can use public
+	// domain names with your container service. Use the CreateCertificate action
+	// to create a certificate for the public domain names you want to use with
+	// your container service.
+	//
+	// You can specify public domain names using a string to array map as shown
+	// in the example later on this page.
+	PublicDomainNames map[string][]*string `locationName:"publicDomainNames" type:"map"`
+
+	// The scale specification for the container service.
+	//
+	// The scale specifies the allocated compute nodes of the container service.
+	// The power and scale of a container service makes up its configured capacity.
+	// To determine the monthly price of your container service, multiply the base
+	// price of the power with the scale (the number of nodes) of the service.
+	//
+	// Scale is a required field
+	Scale *int64 `locationName:"scale" min:"1" type:"integer" required:"true"`
+
+	// The name for the container service.
+	//
+	// The name that you specify for your container service will make up part of
+	// its default domain. The default domain of a container service is typically
+	// https://<ServiceName>.<RandomGUID>.<AWSRegion>.cs.amazonlightsail.com. If
+	// the name of your container service is container-service-1, and it's located
+	// in the US East (Ohio) AWS region (us-east-2), then the domain for your container
+	// service will be like the following example: https://container-service-1.ur4EXAMPLE2uq.us-east-2.cs.amazonlightsail.com
+	//
+	// The following are the requirements for container service names:
+	//
+	//    * Must be unique within each AWS Region in your Lightsail account.
+	//
+	//    * Must contain 1 to 63 characters.
+	//
+	//    * Must contain only alphanumeric characters and hyphens.
+	//
+	//    * A hyphen (-) can separate words but cannot be at the start or end of
+	//    the name.
+	//
+	// ServiceName is a required field
+	ServiceName *string `locationName:"serviceName" min:"1" type:"string" required:"true"`
+
+	// The tag keys and optional values to add to the certificate during create.
+	//
+	// Use the TagResource action to tag a resource after it's created.
+	//
+	// For more information about tags in Lightsail, see the Amazon Lightsail Developer
+	// Guide (https://lightsail.aws.amazon.com/ls/docs/en_us/articles/amazon-lightsail-tags).
+	Tags []*Tag `locationName:"tags" type:"list"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateContainerServiceInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateContainerServiceInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *CreateContainerServiceInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "CreateContainerServiceInput"}
+	if s.Power == nil {
+		invalidParams.Add(request.NewErrParamRequired("Power"))
+	}
+	if s.Scale == nil {
+		invalidParams.Add(request.NewErrParamRequired("Scale"))
+	}
+	if s.Scale != nil && *s.Scale < 1 {
+		invalidParams.Add(request.NewErrParamMinValue("Scale", 1))
+	}
+	if s.ServiceName == nil {
+		invalidParams.Add(request.NewErrParamRequired("ServiceName"))
+	}
+	if s.ServiceName != nil && len(*s.ServiceName) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ServiceName", 1))
+	}
+	if s.Deployment != nil {
+		if err := s.Deployment.Validate(); err != nil {
+			invalidParams.AddNested("Deployment", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetDeployment sets the Deployment field's value.
+func (s *CreateContainerServiceInput) SetDeployment(v *ContainerServiceDeploymentRequest) *CreateContainerServiceInput {
+	s.Deployment = v
+	return s
+}
+
+// SetPower sets the Power field's value.
+func (s *CreateContainerServiceInput) SetPower(v string) *CreateContainerServiceInput {
+	s.Power = &v
+	return s
+}
+
+// SetPublicDomainNames sets the PublicDomainNames field's value.
+func (s *CreateContainerServiceInput) SetPublicDomainNames(v map[string][]*string) *CreateContainerServiceInput {
+	s.PublicDomainNames = v
+	return s
+}
+
+// SetScale sets the Scale field's value.
+func (s *CreateContainerServiceInput) SetScale(v int64) *CreateContainerServiceInput {
+	s.Scale = &v
+	return s
+}
+
+// SetServiceName sets the ServiceName field's value.
+func (s *CreateContainerServiceInput) SetServiceName(v string) *CreateContainerServiceInput {
+	s.ServiceName = &v
+	return s
+}
+
+// SetTags sets the Tags field's value.
+func (s *CreateContainerServiceInput) SetTags(v []*Tag) *CreateContainerServiceInput {
+	s.Tags = v
+	return s
+}
+
+type CreateContainerServiceOutput struct {
+	_ struct{} `type:"structure"`
+
+	// An object that describes a container service.
+	ContainerService *ContainerService `locationName:"containerService" type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateContainerServiceOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateContainerServiceOutput) GoString() string {
+	return s.String()
+}
+
+// SetContainerService sets the ContainerService field's value.
+func (s *CreateContainerServiceOutput) SetContainerService(v *ContainerService) *CreateContainerServiceOutput {
+	s.ContainerService = v
+	return s
+}
+
+type CreateContainerServiceRegistryLoginInput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateContainerServiceRegistryLoginInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateContainerServiceRegistryLoginInput) GoString() string {
+	return s.String()
+}
+
+type CreateContainerServiceRegistryLoginOutput struct {
+	_ struct{} `type:"structure"`
+
+	// An object that describes the log in information for the container service
+	// registry of your Lightsail account.
+	RegistryLogin *ContainerServiceRegistryLogin `locationName:"registryLogin" type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateContainerServiceRegistryLoginOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateContainerServiceRegistryLoginOutput) GoString() string {
+	return s.String()
+}
+
+// SetRegistryLogin sets the RegistryLogin field's value.
+func (s *CreateContainerServiceRegistryLoginOutput) SetRegistryLogin(v *ContainerServiceRegistryLogin) *CreateContainerServiceRegistryLoginOutput {
+	s.RegistryLogin = v
 	return s
 }
 
@@ -16466,7 +21516,8 @@ type CreateDiskFromSnapshotInput struct {
 	//    snapshot parameters are mutually exclusive.
 	//
 	//    * Define this parameter only when creating a new disk from an automatic
-	//    snapshot. For more information, see the Lightsail Dev Guide (https://lightsail.aws.amazon.com/ls/docs/en_us/articles/amazon-lightsail-configuring-automatic-snapshots).
+	//    snapshot. For more information, see the Amazon Lightsail Developer Guide
+	//    (https://lightsail.aws.amazon.com/ls/docs/en_us/articles/amazon-lightsail-configuring-automatic-snapshots).
 	RestoreDate *string `locationName:"restoreDate" type:"string"`
 
 	// The size of the disk in GB (e.g., 32).
@@ -16484,7 +21535,8 @@ type CreateDiskFromSnapshotInput struct {
 	//    mutually exclusive.
 	//
 	//    * Define this parameter only when creating a new disk from an automatic
-	//    snapshot. For more information, see the Lightsail Dev Guide (https://lightsail.aws.amazon.com/ls/docs/en_us/articles/amazon-lightsail-configuring-automatic-snapshots).
+	//    snapshot. For more information, see the Amazon Lightsail Developer Guide
+	//    (https://lightsail.aws.amazon.com/ls/docs/en_us/articles/amazon-lightsail-configuring-automatic-snapshots).
 	SourceDiskName *string `locationName:"sourceDiskName" type:"string"`
 
 	// The tag keys and optional values to add to the resource during create.
@@ -16502,16 +21554,25 @@ type CreateDiskFromSnapshotInput struct {
 	//    mutually exclusive.
 	//
 	//    * Define this parameter only when creating a new disk from an automatic
-	//    snapshot. For more information, see the Lightsail Dev Guide (https://lightsail.aws.amazon.com/ls/docs/en_us/articles/amazon-lightsail-configuring-automatic-snapshots).
+	//    snapshot. For more information, see the Amazon Lightsail Developer Guide
+	//    (https://lightsail.aws.amazon.com/ls/docs/en_us/articles/amazon-lightsail-configuring-automatic-snapshots).
 	UseLatestRestorableAutoSnapshot *bool `locationName:"useLatestRestorableAutoSnapshot" type:"boolean"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateDiskFromSnapshotInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateDiskFromSnapshotInput) GoString() string {
 	return s.String()
 }
@@ -16608,12 +21669,20 @@ type CreateDiskFromSnapshotOutput struct {
 	Operations []*Operation `locationName:"operations" type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateDiskFromSnapshotOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateDiskFromSnapshotOutput) GoString() string {
 	return s.String()
 }
@@ -16656,12 +21725,20 @@ type CreateDiskInput struct {
 	Tags []*Tag `locationName:"tags" type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateDiskInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateDiskInput) GoString() string {
 	return s.String()
 }
@@ -16734,12 +21811,20 @@ type CreateDiskOutput struct {
 	Operations []*Operation `locationName:"operations" type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateDiskOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateDiskOutput) GoString() string {
 	return s.String()
 }
@@ -16778,12 +21863,20 @@ type CreateDiskSnapshotInput struct {
 	Tags []*Tag `locationName:"tags" type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateDiskSnapshotInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateDiskSnapshotInput) GoString() string {
 	return s.String()
 }
@@ -16834,12 +21927,20 @@ type CreateDiskSnapshotOutput struct {
 	Operations []*Operation `locationName:"operations" type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateDiskSnapshotOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateDiskSnapshotOutput) GoString() string {
 	return s.String()
 }
@@ -16880,6 +21981,13 @@ type CreateDistributionInput struct {
 	// DistributionName is a required field
 	DistributionName *string `locationName:"distributionName" type:"string" required:"true"`
 
+	// The IP address type for the distribution.
+	//
+	// The possible values are ipv4 for IPv4 only, and dualstack for IPv4 and IPv6.
+	//
+	// The default value is dualstack.
+	IpAddressType *string `locationName:"ipAddressType" type:"string" enum:"IpAddressType"`
+
 	// An object that describes the origin resource for the distribution, such as
 	// a Lightsail instance or load balancer.
 	//
@@ -16894,12 +22002,20 @@ type CreateDistributionInput struct {
 	Tags []*Tag `locationName:"tags" type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateDistributionInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateDistributionInput) GoString() string {
 	return s.String()
 }
@@ -16956,6 +22072,12 @@ func (s *CreateDistributionInput) SetDistributionName(v string) *CreateDistribut
 	return s
 }
 
+// SetIpAddressType sets the IpAddressType field's value.
+func (s *CreateDistributionInput) SetIpAddressType(v string) *CreateDistributionInput {
+	s.IpAddressType = &v
+	return s
+}
+
 // SetOrigin sets the Origin field's value.
 func (s *CreateDistributionInput) SetOrigin(v *InputOrigin) *CreateDistributionInput {
 	s.Origin = v
@@ -16980,12 +22102,20 @@ type CreateDistributionOutput struct {
 	Operation *Operation `locationName:"operation" type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateDistributionOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateDistributionOutput) GoString() string {
 	return s.String()
 }
@@ -17018,12 +22148,20 @@ type CreateDomainEntryInput struct {
 	DomainName *string `locationName:"domainName" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateDomainEntryInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateDomainEntryInput) GoString() string {
 	return s.String()
 }
@@ -17065,12 +22203,20 @@ type CreateDomainEntryOutput struct {
 	Operation *Operation `locationName:"operation" type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateDomainEntryOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateDomainEntryOutput) GoString() string {
 	return s.String()
 }
@@ -17089,7 +22235,7 @@ type CreateDomainInput struct {
 	// You cannot register a new domain name using Lightsail. You must register
 	// a domain name using Amazon Route 53 or another domain name registrar. If
 	// you have already registered your domain, you can enter its name in this parameter
-	// to manage the DNS records for that domain.
+	// to manage the DNS records for that domain using Lightsail.
 	//
 	// DomainName is a required field
 	DomainName *string `locationName:"domainName" type:"string" required:"true"`
@@ -17100,12 +22246,20 @@ type CreateDomainInput struct {
 	Tags []*Tag `locationName:"tags" type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateDomainInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateDomainInput) GoString() string {
 	return s.String()
 }
@@ -17144,12 +22298,20 @@ type CreateDomainOutput struct {
 	Operation *Operation `locationName:"operation" type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateDomainOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateDomainOutput) GoString() string {
 	return s.String()
 }
@@ -17179,12 +22341,20 @@ type CreateInstanceSnapshotInput struct {
 	Tags []*Tag `locationName:"tags" type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateInstanceSnapshotInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateInstanceSnapshotInput) GoString() string {
 	return s.String()
 }
@@ -17232,12 +22402,20 @@ type CreateInstanceSnapshotOutput struct {
 	Operations []*Operation `locationName:"operations" type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateInstanceSnapshotOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateInstanceSnapshotOutput) GoString() string {
 	return s.String()
 }
@@ -17288,6 +22466,13 @@ type CreateInstancesFromSnapshotInput struct {
 	//    are mutually exclusive.
 	InstanceSnapshotName *string `locationName:"instanceSnapshotName" type:"string"`
 
+	// The IP address type for the instance.
+	//
+	// The possible values are ipv4 for IPv4 only, and dualstack for IPv4 and IPv6.
+	//
+	// The default value is dualstack.
+	IpAddressType *string `locationName:"ipAddressType" type:"string" enum:"IpAddressType"`
+
 	// The name for your key pair.
 	KeyPairName *string `locationName:"keyPairName" type:"string"`
 
@@ -17304,7 +22489,8 @@ type CreateInstancesFromSnapshotInput struct {
 	//    snapshot parameters are mutually exclusive.
 	//
 	//    * Define this parameter only when creating a new instance from an automatic
-	//    snapshot. For more information, see the Lightsail Dev Guide (https://lightsail.aws.amazon.com/ls/docs/en_us/articles/amazon-lightsail-configuring-automatic-snapshots).
+	//    snapshot. For more information, see the Amazon Lightsail Developer Guide
+	//    (https://lightsail.aws.amazon.com/ls/docs/en_us/articles/amazon-lightsail-configuring-automatic-snapshots).
 	RestoreDate *string `locationName:"restoreDate" type:"string"`
 
 	// The name of the source instance from which the source automatic snapshot
@@ -17317,7 +22503,8 @@ type CreateInstancesFromSnapshotInput struct {
 	//    are mutually exclusive.
 	//
 	//    * Define this parameter only when creating a new instance from an automatic
-	//    snapshot. For more information, see the Lightsail Dev Guide (https://lightsail.aws.amazon.com/ls/docs/en_us/articles/amazon-lightsail-configuring-automatic-snapshots).
+	//    snapshot. For more information, see the Amazon Lightsail Developer Guide
+	//    (https://lightsail.aws.amazon.com/ls/docs/en_us/articles/amazon-lightsail-configuring-automatic-snapshots).
 	SourceInstanceName *string `locationName:"sourceInstanceName" type:"string"`
 
 	// The tag keys and optional values to add to the resource during create.
@@ -17335,7 +22522,8 @@ type CreateInstancesFromSnapshotInput struct {
 	//    mutually exclusive.
 	//
 	//    * Define this parameter only when creating a new instance from an automatic
-	//    snapshot. For more information, see the Lightsail Dev Guide (https://lightsail.aws.amazon.com/ls/docs/en_us/articles/amazon-lightsail-configuring-automatic-snapshots).
+	//    snapshot. For more information, see the Amazon Lightsail Developer Guide
+	//    (https://lightsail.aws.amazon.com/ls/docs/en_us/articles/amazon-lightsail-configuring-automatic-snapshots).
 	UseLatestRestorableAutoSnapshot *bool `locationName:"useLatestRestorableAutoSnapshot" type:"boolean"`
 
 	// You can create a launch script that configures a server with additional user
@@ -17343,17 +22531,25 @@ type CreateInstancesFromSnapshotInput struct {
 	//
 	// Depending on the machine image you choose, the command to get software on
 	// your instance varies. Amazon Linux and CentOS use yum, Debian and Ubuntu
-	// use apt-get, and FreeBSD uses pkg. For a complete list, see the Dev Guide
-	// (https://lightsail.aws.amazon.com/ls/docs/getting-started/article/compare-options-choose-lightsail-instance-image).
+	// use apt-get, and FreeBSD uses pkg. For a complete list, see the Amazon Lightsail
+	// Developer Guide (https://lightsail.aws.amazon.com/ls/docs/en_us/articles/compare-options-choose-lightsail-instance-image).
 	UserData *string `locationName:"userData" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateInstancesFromSnapshotInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateInstancesFromSnapshotInput) GoString() string {
 	return s.String()
 }
@@ -17423,6 +22619,12 @@ func (s *CreateInstancesFromSnapshotInput) SetInstanceSnapshotName(v string) *Cr
 	return s
 }
 
+// SetIpAddressType sets the IpAddressType field's value.
+func (s *CreateInstancesFromSnapshotInput) SetIpAddressType(v string) *CreateInstancesFromSnapshotInput {
+	s.IpAddressType = &v
+	return s
+}
+
 // SetKeyPairName sets the KeyPairName field's value.
 func (s *CreateInstancesFromSnapshotInput) SetKeyPairName(v string) *CreateInstancesFromSnapshotInput {
 	s.KeyPairName = &v
@@ -17468,12 +22670,20 @@ type CreateInstancesFromSnapshotOutput struct {
 	Operations []*Operation `locationName:"operations" type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateInstancesFromSnapshotOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateInstancesFromSnapshotOutput) GoString() string {
 	return s.String()
 }
@@ -17531,6 +22741,13 @@ type CreateInstancesInput struct {
 	// InstanceNames is a required field
 	InstanceNames []*string `locationName:"instanceNames" type:"list" required:"true"`
 
+	// The IP address type for the instance.
+	//
+	// The possible values are ipv4 for IPv4 only, and dualstack for IPv4 and IPv6.
+	//
+	// The default value is dualstack.
+	IpAddressType *string `locationName:"ipAddressType" type:"string" enum:"IpAddressType"`
+
 	// The name of your key pair.
 	KeyPairName *string `locationName:"keyPairName" type:"string"`
 
@@ -17544,17 +22761,25 @@ type CreateInstancesInput struct {
 	//
 	// Depending on the machine image you choose, the command to get software on
 	// your instance varies. Amazon Linux and CentOS use yum, Debian and Ubuntu
-	// use apt-get, and FreeBSD uses pkg. For a complete list, see the Dev Guide
-	// (https://lightsail.aws.amazon.com/ls/docs/getting-started/article/compare-options-choose-lightsail-instance-image).
+	// use apt-get, and FreeBSD uses pkg. For a complete list, see the Amazon Lightsail
+	// Developer Guide (https://lightsail.aws.amazon.com/ls/docs/en_us/articles/compare-options-choose-lightsail-instance-image).
 	UserData *string `locationName:"userData" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateInstancesInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateInstancesInput) GoString() string {
 	return s.String()
 }
@@ -17627,6 +22852,12 @@ func (s *CreateInstancesInput) SetInstanceNames(v []*string) *CreateInstancesInp
 	return s
 }
 
+// SetIpAddressType sets the IpAddressType field's value.
+func (s *CreateInstancesInput) SetIpAddressType(v string) *CreateInstancesInput {
+	s.IpAddressType = &v
+	return s
+}
+
 // SetKeyPairName sets the KeyPairName field's value.
 func (s *CreateInstancesInput) SetKeyPairName(v string) *CreateInstancesInput {
 	s.KeyPairName = &v
@@ -17654,12 +22885,20 @@ type CreateInstancesOutput struct {
 	Operations []*Operation `locationName:"operations" type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateInstancesOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateInstancesOutput) GoString() string {
 	return s.String()
 }
@@ -17684,12 +22923,20 @@ type CreateKeyPairInput struct {
 	Tags []*Tag `locationName:"tags" type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateKeyPairInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateKeyPairInput) GoString() string {
 	return s.String()
 }
@@ -17738,12 +22985,20 @@ type CreateKeyPairOutput struct {
 	PublicKeyBase64 *string `locationName:"publicKeyBase64" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateKeyPairOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateKeyPairOutput) GoString() string {
 	return s.String()
 }
@@ -17805,6 +23060,13 @@ type CreateLoadBalancerInput struct {
 	// InstancePort is a required field
 	InstancePort *int64 `locationName:"instancePort" type:"integer" required:"true"`
 
+	// The IP address type for the load balancer.
+	//
+	// The possible values are ipv4 for IPv4 only, and dualstack for IPv4 and IPv6.
+	//
+	// The default value is dualstack.
+	IpAddressType *string `locationName:"ipAddressType" type:"string" enum:"IpAddressType"`
+
 	// The name of your load balancer.
 	//
 	// LoadBalancerName is a required field
@@ -17816,12 +23078,20 @@ type CreateLoadBalancerInput struct {
 	Tags []*Tag `locationName:"tags" type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateLoadBalancerInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateLoadBalancerInput) GoString() string {
 	return s.String()
 }
@@ -17875,6 +23145,12 @@ func (s *CreateLoadBalancerInput) SetInstancePort(v int64) *CreateLoadBalancerIn
 	return s
 }
 
+// SetIpAddressType sets the IpAddressType field's value.
+func (s *CreateLoadBalancerInput) SetIpAddressType(v string) *CreateLoadBalancerInput {
+	s.IpAddressType = &v
+	return s
+}
+
 // SetLoadBalancerName sets the LoadBalancerName field's value.
 func (s *CreateLoadBalancerInput) SetLoadBalancerName(v string) *CreateLoadBalancerInput {
 	s.LoadBalancerName = &v
@@ -17896,12 +23172,20 @@ type CreateLoadBalancerOutput struct {
 	Operations []*Operation `locationName:"operations" type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateLoadBalancerOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateLoadBalancerOutput) GoString() string {
 	return s.String()
 }
@@ -17947,12 +23231,20 @@ type CreateLoadBalancerTlsCertificateInput struct {
 	Tags []*Tag `locationName:"tags" type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateLoadBalancerTlsCertificateInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateLoadBalancerTlsCertificateInput) GoString() string {
 	return s.String()
 }
@@ -18015,12 +23307,20 @@ type CreateLoadBalancerTlsCertificateOutput struct {
 	Operations []*Operation `locationName:"operations" type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateLoadBalancerTlsCertificateOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateLoadBalancerTlsCertificateOutput) GoString() string {
 	return s.String()
 }
@@ -18058,7 +23358,7 @@ type CreateRelationalDatabaseFromSnapshotInput struct {
 	// that is smaller than the bundle of the source database.
 	RelationalDatabaseBundleId *string `locationName:"relationalDatabaseBundleId" type:"string"`
 
-	// The name to use for your new database.
+	// The name to use for your new Lightsail database resource.
 	//
 	// Constraints:
 	//
@@ -18104,12 +23404,20 @@ type CreateRelationalDatabaseFromSnapshotInput struct {
 	UseLatestRestorableTime *bool `locationName:"useLatestRestorableTime" type:"boolean"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateRelationalDatabaseFromSnapshotInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateRelationalDatabaseFromSnapshotInput) GoString() string {
 	return s.String()
 }
@@ -18190,12 +23498,20 @@ type CreateRelationalDatabaseFromSnapshotOutput struct {
 	Operations []*Operation `locationName:"operations" type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateRelationalDatabaseFromSnapshotOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateRelationalDatabaseFromSnapshotOutput) GoString() string {
 	return s.String()
 }
@@ -18217,38 +23533,101 @@ type CreateRelationalDatabaseInput struct {
 	// to your request.
 	AvailabilityZone *string `locationName:"availabilityZone" type:"string"`
 
-	// The name of the master database created when the Lightsail database resource
-	// is created.
+	// The meaning of this parameter differs according to the database engine you
+	// use.
+	//
+	// MySQL
+	//
+	// The name of the database to create when the Lightsail database resource is
+	// created. If this parameter isn't specified, no database is created in the
+	// database resource.
 	//
 	// Constraints:
 	//
-	//    * Must contain from 1 to 64 alphanumeric characters.
+	//    * Must contain 1 to 64 letters or numbers.
 	//
-	//    * Cannot be a word reserved by the specified database engine
+	//    * Must begin with a letter. Subsequent characters can be letters, underscores,
+	//    or digits (0- 9).
+	//
+	//    * Can't be a word reserved by the specified database engine. For more
+	//    information about reserved words in MySQL, see the Keywords and Reserved
+	//    Words articles for MySQL 5.6 (https://dev.mysql.com/doc/refman/5.6/en/keywords.html),
+	//    MySQL 5.7 (https://dev.mysql.com/doc/refman/5.7/en/keywords.html), and
+	//    MySQL 8.0 (https://dev.mysql.com/doc/refman/8.0/en/keywords.html).
+	//
+	// PostgreSQL
+	//
+	// The name of the database to create when the Lightsail database resource is
+	// created. If this parameter isn't specified, a database named postgres is
+	// created in the database resource.
+	//
+	// Constraints:
+	//
+	//    * Must contain 1 to 63 letters or numbers.
+	//
+	//    * Must begin with a letter. Subsequent characters can be letters, underscores,
+	//    or digits (0- 9).
+	//
+	//    * Can't be a word reserved by the specified database engine. For more
+	//    information about reserved words in PostgreSQL, see the SQL Key Words
+	//    articles for PostgreSQL 9.6 (https://www.postgresql.org/docs/9.6/sql-keywords-appendix.html),
+	//    PostgreSQL 10 (https://www.postgresql.org/docs/10/sql-keywords-appendix.html),
+	//    PostgreSQL 11 (https://www.postgresql.org/docs/11/sql-keywords-appendix.html),
+	//    and PostgreSQL 12 (https://www.postgresql.org/docs/12/sql-keywords-appendix.html).
 	//
 	// MasterDatabaseName is a required field
 	MasterDatabaseName *string `locationName:"masterDatabaseName" type:"string" required:"true"`
 
-	// The password for the master user of your new database. The password can include
-	// any printable ASCII character except "/", """, or "@".
+	// The password for the master user. The password can include any printable
+	// ASCII character except "/", """, or "@". It cannot contain spaces.
 	//
-	// Constraints: Must contain 8 to 41 characters.
+	// MySQL
+	//
+	// Constraints: Must contain from 8 to 41 characters.
+	//
+	// PostgreSQL
+	//
+	// Constraints: Must contain from 8 to 128 characters.
+	//
+	// MasterUserPassword is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by CreateRelationalDatabaseInput's
+	// String and GoString methods.
 	MasterUserPassword *string `locationName:"masterUserPassword" type:"string" sensitive:"true"`
 
-	// The master user name for your new database.
+	// The name for the master user.
+	//
+	// MySQL
 	//
 	// Constraints:
 	//
-	//    * Master user name is required.
+	//    * Required for MySQL.
 	//
-	//    * Must contain from 1 to 16 alphanumeric characters.
+	//    * Must be 1 to 16 letters or numbers. Can contain underscores.
 	//
-	//    * The first character must be a letter.
+	//    * First character must be a letter.
 	//
-	//    * Cannot be a reserved word for the database engine you choose. For more
-	//    information about reserved words in MySQL 5.6 or 5.7, see the Keywords
-	//    and Reserved Words articles for MySQL 5.6 (https://dev.mysql.com/doc/refman/5.6/en/keywords.html)
-	//    or MySQL 5.7 (https://dev.mysql.com/doc/refman/5.7/en/keywords.html) respectively.
+	//    * Can't be a reserved word for the chosen database engine. For more information
+	//    about reserved words in MySQL 5.6 or 5.7, see the Keywords and Reserved
+	//    Words articles for MySQL 5.6 (https://dev.mysql.com/doc/refman/5.6/en/keywords.html),
+	//    MySQL 5.7 (https://dev.mysql.com/doc/refman/5.7/en/keywords.html), or
+	//    MySQL 8.0 (https://dev.mysql.com/doc/refman/8.0/en/keywords.html).
+	//
+	// PostgreSQL
+	//
+	// Constraints:
+	//
+	//    * Required for PostgreSQL.
+	//
+	//    * Must be 1 to 63 letters or numbers. Can contain underscores.
+	//
+	//    * First character must be a letter.
+	//
+	//    * Can't be a reserved word for the chosen database engine. For more information
+	//    about reserved words in MySQL 5.6 or 5.7, see the Keywords and Reserved
+	//    Words articles for PostgreSQL 9.6 (https://www.postgresql.org/docs/9.6/sql-keywords-appendix.html),
+	//    PostgreSQL 10 (https://www.postgresql.org/docs/10/sql-keywords-appendix.html),
+	//    PostgreSQL 11 (https://www.postgresql.org/docs/11/sql-keywords-appendix.html),
+	//    and PostgreSQL 12 (https://www.postgresql.org/docs/12/sql-keywords-appendix.html).
 	//
 	// MasterUsername is a required field
 	MasterUsername *string `locationName:"masterUsername" type:"string" required:"true"`
@@ -18315,7 +23694,7 @@ type CreateRelationalDatabaseInput struct {
 	// RelationalDatabaseBundleId is a required field
 	RelationalDatabaseBundleId *string `locationName:"relationalDatabaseBundleId" type:"string" required:"true"`
 
-	// The name to use for your new database.
+	// The name to use for your new Lightsail database resource.
 	//
 	// Constraints:
 	//
@@ -18332,12 +23711,20 @@ type CreateRelationalDatabaseInput struct {
 	Tags []*Tag `locationName:"tags" type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateRelationalDatabaseInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateRelationalDatabaseInput) GoString() string {
 	return s.String()
 }
@@ -18442,12 +23829,20 @@ type CreateRelationalDatabaseOutput struct {
 	Operations []*Operation `locationName:"operations" type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateRelationalDatabaseOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateRelationalDatabaseOutput) GoString() string {
 	return s.String()
 }
@@ -18483,12 +23878,20 @@ type CreateRelationalDatabaseSnapshotInput struct {
 	Tags []*Tag `locationName:"tags" type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateRelationalDatabaseSnapshotInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateRelationalDatabaseSnapshotInput) GoString() string {
 	return s.String()
 }
@@ -18536,12 +23939,20 @@ type CreateRelationalDatabaseSnapshotOutput struct {
 	Operations []*Operation `locationName:"operations" type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateRelationalDatabaseSnapshotOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateRelationalDatabaseSnapshotOutput) GoString() string {
 	return s.String()
 }
@@ -18561,12 +23972,20 @@ type DeleteAlarmInput struct {
 	AlarmName *string `locationName:"alarmName" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteAlarmInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteAlarmInput) GoString() string {
 	return s.String()
 }
@@ -18599,12 +24018,20 @@ type DeleteAlarmOutput struct {
 	Operations []*Operation `locationName:"operations" type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteAlarmOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteAlarmOutput) GoString() string {
 	return s.String()
 }
@@ -18632,12 +24059,20 @@ type DeleteAutoSnapshotInput struct {
 	ResourceName *string `locationName:"resourceName" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteAutoSnapshotInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteAutoSnapshotInput) GoString() string {
 	return s.String()
 }
@@ -18679,18 +24114,233 @@ type DeleteAutoSnapshotOutput struct {
 	Operations []*Operation `locationName:"operations" type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteAutoSnapshotOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteAutoSnapshotOutput) GoString() string {
 	return s.String()
 }
 
 // SetOperations sets the Operations field's value.
 func (s *DeleteAutoSnapshotOutput) SetOperations(v []*Operation) *DeleteAutoSnapshotOutput {
+	s.Operations = v
+	return s
+}
+
+type DeleteBucketAccessKeyInput struct {
+	_ struct{} `type:"structure"`
+
+	// The ID of the access key to delete.
+	//
+	// Use the GetBucketAccessKeys action to get a list of access key IDs that you
+	// can specify.
+	//
+	// AccessKeyId is a required field
+	AccessKeyId *string `locationName:"accessKeyId" type:"string" required:"true"`
+
+	// The name of the bucket that the access key belongs to.
+	//
+	// BucketName is a required field
+	BucketName *string `locationName:"bucketName" min:"3" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeleteBucketAccessKeyInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeleteBucketAccessKeyInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DeleteBucketAccessKeyInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DeleteBucketAccessKeyInput"}
+	if s.AccessKeyId == nil {
+		invalidParams.Add(request.NewErrParamRequired("AccessKeyId"))
+	}
+	if s.BucketName == nil {
+		invalidParams.Add(request.NewErrParamRequired("BucketName"))
+	}
+	if s.BucketName != nil && len(*s.BucketName) < 3 {
+		invalidParams.Add(request.NewErrParamMinLen("BucketName", 3))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetAccessKeyId sets the AccessKeyId field's value.
+func (s *DeleteBucketAccessKeyInput) SetAccessKeyId(v string) *DeleteBucketAccessKeyInput {
+	s.AccessKeyId = &v
+	return s
+}
+
+// SetBucketName sets the BucketName field's value.
+func (s *DeleteBucketAccessKeyInput) SetBucketName(v string) *DeleteBucketAccessKeyInput {
+	s.BucketName = &v
+	return s
+}
+
+type DeleteBucketAccessKeyOutput struct {
+	_ struct{} `type:"structure"`
+
+	// An array of objects that describe the result of the action, such as the status
+	// of the request, the timestamp of the request, and the resources affected
+	// by the request.
+	Operations []*Operation `locationName:"operations" type:"list"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeleteBucketAccessKeyOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeleteBucketAccessKeyOutput) GoString() string {
+	return s.String()
+}
+
+// SetOperations sets the Operations field's value.
+func (s *DeleteBucketAccessKeyOutput) SetOperations(v []*Operation) *DeleteBucketAccessKeyOutput {
+	s.Operations = v
+	return s
+}
+
+type DeleteBucketInput struct {
+	_ struct{} `type:"structure"`
+
+	// The name of the bucket to delete.
+	//
+	// Use the GetBuckets action to get a list of bucket names that you can specify.
+	//
+	// BucketName is a required field
+	BucketName *string `locationName:"bucketName" min:"3" type:"string" required:"true"`
+
+	// A Boolean value that indicates whether to force delete the bucket.
+	//
+	// You must force delete the bucket if it has one of the following conditions:
+	//
+	//    * The bucket is the origin of a distribution.
+	//
+	//    * The bucket has instances that were granted access to it using the SetResourceAccessForBucket
+	//    action.
+	//
+	//    * The bucket has objects.
+	//
+	//    * The bucket has access keys.
+	//
+	// Force deleting a bucket might impact other resources that rely on the bucket,
+	// such as instances, distributions, or software that use the issued access
+	// keys.
+	ForceDelete *bool `locationName:"forceDelete" type:"boolean"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeleteBucketInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeleteBucketInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DeleteBucketInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DeleteBucketInput"}
+	if s.BucketName == nil {
+		invalidParams.Add(request.NewErrParamRequired("BucketName"))
+	}
+	if s.BucketName != nil && len(*s.BucketName) < 3 {
+		invalidParams.Add(request.NewErrParamMinLen("BucketName", 3))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetBucketName sets the BucketName field's value.
+func (s *DeleteBucketInput) SetBucketName(v string) *DeleteBucketInput {
+	s.BucketName = &v
+	return s
+}
+
+// SetForceDelete sets the ForceDelete field's value.
+func (s *DeleteBucketInput) SetForceDelete(v bool) *DeleteBucketInput {
+	s.ForceDelete = &v
+	return s
+}
+
+type DeleteBucketOutput struct {
+	_ struct{} `type:"structure"`
+
+	// An array of objects that describe the result of the action, such as the status
+	// of the request, the timestamp of the request, and the resources affected
+	// by the request.
+	Operations []*Operation `locationName:"operations" type:"list"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeleteBucketOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeleteBucketOutput) GoString() string {
+	return s.String()
+}
+
+// SetOperations sets the Operations field's value.
+func (s *DeleteBucketOutput) SetOperations(v []*Operation) *DeleteBucketOutput {
 	s.Operations = v
 	return s
 }
@@ -18707,12 +24357,20 @@ type DeleteCertificateInput struct {
 	CertificateName *string `locationName:"certificateName" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteCertificateInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteCertificateInput) GoString() string {
 	return s.String()
 }
@@ -18745,12 +24403,20 @@ type DeleteCertificateOutput struct {
 	Operations []*Operation `locationName:"operations" type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteCertificateOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteCertificateOutput) GoString() string {
 	return s.String()
 }
@@ -18773,12 +24439,20 @@ type DeleteContactMethodInput struct {
 	Protocol *string `locationName:"protocol" type:"string" required:"true" enum:"ContactProtocol"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteContactMethodInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteContactMethodInput) GoString() string {
 	return s.String()
 }
@@ -18811,12 +24485,20 @@ type DeleteContactMethodOutput struct {
 	Operations []*Operation `locationName:"operations" type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteContactMethodOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteContactMethodOutput) GoString() string {
 	return s.String()
 }
@@ -18825,6 +24507,172 @@ func (s DeleteContactMethodOutput) GoString() string {
 func (s *DeleteContactMethodOutput) SetOperations(v []*Operation) *DeleteContactMethodOutput {
 	s.Operations = v
 	return s
+}
+
+type DeleteContainerImageInput struct {
+	_ struct{} `type:"structure"`
+
+	// The name of the container image to delete from the container service.
+	//
+	// Use the GetContainerImages action to get the name of the container images
+	// that are registered to a container service.
+	//
+	// Container images sourced from your Lightsail container service, that are
+	// registered and stored on your service, start with a colon (:). For example,
+	// :container-service-1.mystaticwebsite.1. Container images sourced from a public
+	// registry like Docker Hub don't start with a colon. For example, nginx:latest
+	// or nginx.
+	//
+	// Image is a required field
+	Image *string `locationName:"image" type:"string" required:"true"`
+
+	// The name of the container service for which to delete a registered container
+	// image.
+	//
+	// ServiceName is a required field
+	ServiceName *string `locationName:"serviceName" min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeleteContainerImageInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeleteContainerImageInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DeleteContainerImageInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DeleteContainerImageInput"}
+	if s.Image == nil {
+		invalidParams.Add(request.NewErrParamRequired("Image"))
+	}
+	if s.ServiceName == nil {
+		invalidParams.Add(request.NewErrParamRequired("ServiceName"))
+	}
+	if s.ServiceName != nil && len(*s.ServiceName) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ServiceName", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetImage sets the Image field's value.
+func (s *DeleteContainerImageInput) SetImage(v string) *DeleteContainerImageInput {
+	s.Image = &v
+	return s
+}
+
+// SetServiceName sets the ServiceName field's value.
+func (s *DeleteContainerImageInput) SetServiceName(v string) *DeleteContainerImageInput {
+	s.ServiceName = &v
+	return s
+}
+
+type DeleteContainerImageOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeleteContainerImageOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeleteContainerImageOutput) GoString() string {
+	return s.String()
+}
+
+type DeleteContainerServiceInput struct {
+	_ struct{} `type:"structure"`
+
+	// The name of the container service to delete.
+	//
+	// ServiceName is a required field
+	ServiceName *string `locationName:"serviceName" min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeleteContainerServiceInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeleteContainerServiceInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DeleteContainerServiceInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DeleteContainerServiceInput"}
+	if s.ServiceName == nil {
+		invalidParams.Add(request.NewErrParamRequired("ServiceName"))
+	}
+	if s.ServiceName != nil && len(*s.ServiceName) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ServiceName", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetServiceName sets the ServiceName field's value.
+func (s *DeleteContainerServiceInput) SetServiceName(v string) *DeleteContainerServiceInput {
+	s.ServiceName = &v
+	return s
+}
+
+type DeleteContainerServiceOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeleteContainerServiceOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeleteContainerServiceOutput) GoString() string {
+	return s.String()
 }
 
 type DeleteDiskInput struct {
@@ -18840,12 +24688,20 @@ type DeleteDiskInput struct {
 	ForceDeleteAddOns *bool `locationName:"forceDeleteAddOns" type:"boolean"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteDiskInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteDiskInput) GoString() string {
 	return s.String()
 }
@@ -18884,12 +24740,20 @@ type DeleteDiskOutput struct {
 	Operations []*Operation `locationName:"operations" type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteDiskOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteDiskOutput) GoString() string {
 	return s.String()
 }
@@ -18909,12 +24773,20 @@ type DeleteDiskSnapshotInput struct {
 	DiskSnapshotName *string `locationName:"diskSnapshotName" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteDiskSnapshotInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteDiskSnapshotInput) GoString() string {
 	return s.String()
 }
@@ -18947,12 +24819,20 @@ type DeleteDiskSnapshotOutput struct {
 	Operations []*Operation `locationName:"operations" type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteDiskSnapshotOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteDiskSnapshotOutput) GoString() string {
 	return s.String()
 }
@@ -18973,12 +24853,20 @@ type DeleteDistributionInput struct {
 	DistributionName *string `locationName:"distributionName" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteDistributionInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteDistributionInput) GoString() string {
 	return s.String()
 }
@@ -18998,12 +24886,20 @@ type DeleteDistributionOutput struct {
 	Operation *Operation `locationName:"operation" type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteDistributionOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteDistributionOutput) GoString() string {
 	return s.String()
 }
@@ -19028,12 +24924,20 @@ type DeleteDomainEntryInput struct {
 	DomainName *string `locationName:"domainName" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteDomainEntryInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteDomainEntryInput) GoString() string {
 	return s.String()
 }
@@ -19075,12 +24979,20 @@ type DeleteDomainEntryOutput struct {
 	Operation *Operation `locationName:"operation" type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteDomainEntryOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteDomainEntryOutput) GoString() string {
 	return s.String()
 }
@@ -19100,12 +25012,20 @@ type DeleteDomainInput struct {
 	DomainName *string `locationName:"domainName" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteDomainInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteDomainInput) GoString() string {
 	return s.String()
 }
@@ -19138,12 +25058,20 @@ type DeleteDomainOutput struct {
 	Operation *Operation `locationName:"operation" type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteDomainOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteDomainOutput) GoString() string {
 	return s.String()
 }
@@ -19167,12 +25095,20 @@ type DeleteInstanceInput struct {
 	InstanceName *string `locationName:"instanceName" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteInstanceInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteInstanceInput) GoString() string {
 	return s.String()
 }
@@ -19211,12 +25147,20 @@ type DeleteInstanceOutput struct {
 	Operations []*Operation `locationName:"operations" type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteInstanceOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteInstanceOutput) GoString() string {
 	return s.String()
 }
@@ -19236,12 +25180,20 @@ type DeleteInstanceSnapshotInput struct {
 	InstanceSnapshotName *string `locationName:"instanceSnapshotName" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteInstanceSnapshotInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteInstanceSnapshotInput) GoString() string {
 	return s.String()
 }
@@ -19274,12 +25226,20 @@ type DeleteInstanceSnapshotOutput struct {
 	Operations []*Operation `locationName:"operations" type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteInstanceSnapshotOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteInstanceSnapshotOutput) GoString() string {
 	return s.String()
 }
@@ -19299,12 +25259,20 @@ type DeleteKeyPairInput struct {
 	KeyPairName *string `locationName:"keyPairName" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteKeyPairInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteKeyPairInput) GoString() string {
 	return s.String()
 }
@@ -19337,12 +25305,20 @@ type DeleteKeyPairOutput struct {
 	Operation *Operation `locationName:"operation" type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteKeyPairOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteKeyPairOutput) GoString() string {
 	return s.String()
 }
@@ -19362,12 +25338,20 @@ type DeleteKnownHostKeysInput struct {
 	InstanceName *string `locationName:"instanceName" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteKnownHostKeysInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteKnownHostKeysInput) GoString() string {
 	return s.String()
 }
@@ -19400,12 +25384,20 @@ type DeleteKnownHostKeysOutput struct {
 	Operations []*Operation `locationName:"operations" type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteKnownHostKeysOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteKnownHostKeysOutput) GoString() string {
 	return s.String()
 }
@@ -19425,12 +25417,20 @@ type DeleteLoadBalancerInput struct {
 	LoadBalancerName *string `locationName:"loadBalancerName" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteLoadBalancerInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteLoadBalancerInput) GoString() string {
 	return s.String()
 }
@@ -19463,12 +25463,20 @@ type DeleteLoadBalancerOutput struct {
 	Operations []*Operation `locationName:"operations" type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteLoadBalancerOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteLoadBalancerOutput) GoString() string {
 	return s.String()
 }
@@ -19500,12 +25508,20 @@ type DeleteLoadBalancerTlsCertificateInput struct {
 	LoadBalancerName *string `locationName:"loadBalancerName" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteLoadBalancerTlsCertificateInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteLoadBalancerTlsCertificateInput) GoString() string {
 	return s.String()
 }
@@ -19553,12 +25569,20 @@ type DeleteLoadBalancerTlsCertificateOutput struct {
 	Operations []*Operation `locationName:"operations" type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteLoadBalancerTlsCertificateOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteLoadBalancerTlsCertificateOutput) GoString() string {
 	return s.String()
 }
@@ -19601,12 +25625,20 @@ type DeleteRelationalDatabaseInput struct {
 	SkipFinalSnapshot *bool `locationName:"skipFinalSnapshot" type:"boolean"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteRelationalDatabaseInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteRelationalDatabaseInput) GoString() string {
 	return s.String()
 }
@@ -19651,12 +25683,20 @@ type DeleteRelationalDatabaseOutput struct {
 	Operations []*Operation `locationName:"operations" type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteRelationalDatabaseOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteRelationalDatabaseOutput) GoString() string {
 	return s.String()
 }
@@ -19676,12 +25716,20 @@ type DeleteRelationalDatabaseSnapshotInput struct {
 	RelationalDatabaseSnapshotName *string `locationName:"relationalDatabaseSnapshotName" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteRelationalDatabaseSnapshotInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteRelationalDatabaseSnapshotInput) GoString() string {
 	return s.String()
 }
@@ -19714,12 +25762,20 @@ type DeleteRelationalDatabaseSnapshotOutput struct {
 	Operations []*Operation `locationName:"operations" type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteRelationalDatabaseSnapshotOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteRelationalDatabaseSnapshotOutput) GoString() string {
 	return s.String()
 }
@@ -19741,12 +25797,20 @@ type DestinationInfo struct {
 	Service *string `locationName:"service" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DestinationInfo) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DestinationInfo) GoString() string {
 	return s.String()
 }
@@ -19775,12 +25839,20 @@ type DetachCertificateFromDistributionInput struct {
 	DistributionName *string `locationName:"distributionName" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DetachCertificateFromDistributionInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DetachCertificateFromDistributionInput) GoString() string {
 	return s.String()
 }
@@ -19813,12 +25885,20 @@ type DetachCertificateFromDistributionOutput struct {
 	Operation *Operation `locationName:"operation" type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DetachCertificateFromDistributionOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DetachCertificateFromDistributionOutput) GoString() string {
 	return s.String()
 }
@@ -19839,12 +25919,20 @@ type DetachDiskInput struct {
 	DiskName *string `locationName:"diskName" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DetachDiskInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DetachDiskInput) GoString() string {
 	return s.String()
 }
@@ -19877,12 +25965,20 @@ type DetachDiskOutput struct {
 	Operations []*Operation `locationName:"operations" type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DetachDiskOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DetachDiskOutput) GoString() string {
 	return s.String()
 }
@@ -19908,12 +26004,20 @@ type DetachInstancesFromLoadBalancerInput struct {
 	LoadBalancerName *string `locationName:"loadBalancerName" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DetachInstancesFromLoadBalancerInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DetachInstancesFromLoadBalancerInput) GoString() string {
 	return s.String()
 }
@@ -19955,12 +26059,20 @@ type DetachInstancesFromLoadBalancerOutput struct {
 	Operations []*Operation `locationName:"operations" type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DetachInstancesFromLoadBalancerOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DetachInstancesFromLoadBalancerOutput) GoString() string {
 	return s.String()
 }
@@ -19980,12 +26092,20 @@ type DetachStaticIpInput struct {
 	StaticIpName *string `locationName:"staticIpName" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DetachStaticIpInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DetachStaticIpInput) GoString() string {
 	return s.String()
 }
@@ -20018,12 +26138,20 @@ type DetachStaticIpOutput struct {
 	Operations []*Operation `locationName:"operations" type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DetachStaticIpOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DetachStaticIpOutput) GoString() string {
 	return s.String()
 }
@@ -20048,12 +26176,20 @@ type DisableAddOnInput struct {
 	ResourceName *string `locationName:"resourceName" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DisableAddOnInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DisableAddOnInput) GoString() string {
 	return s.String()
 }
@@ -20095,12 +26231,20 @@ type DisableAddOnOutput struct {
 	Operations []*Operation `locationName:"operations" type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DisableAddOnOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DisableAddOnOutput) GoString() string {
 	return s.String()
 }
@@ -20111,7 +26255,7 @@ func (s *DisableAddOnOutput) SetOperations(v []*Operation) *DisableAddOnOutput {
 	return s
 }
 
-// Describes a system disk or a block storage disk.
+// Describes a block storage disk.
 type Disk struct {
 	_ struct{} `type:"structure"`
 
@@ -20178,16 +26322,24 @@ type Disk struct {
 	SupportCode *string `locationName:"supportCode" type:"string"`
 
 	// The tag keys and optional values for the resource. For more information about
-	// tags in Lightsail, see the Lightsail Dev Guide (https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-tags).
+	// tags in Lightsail, see the Amazon Lightsail Developer Guide (https://lightsail.aws.amazon.com/ls/docs/en_us/articles/amazon-lightsail-tags).
 	Tags []*Tag `locationName:"tags" type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s Disk) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s Disk) GoString() string {
 	return s.String()
 }
@@ -20312,12 +26464,20 @@ type DiskInfo struct {
 	SizeInGb *int64 `locationName:"sizeInGb" type:"integer"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DiskInfo) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DiskInfo) GoString() string {
 	return s.String()
 }
@@ -20357,12 +26517,20 @@ type DiskMap struct {
 	OriginalDiskPath *string `locationName:"originalDiskPath" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DiskMap) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DiskMap) GoString() string {
 	return s.String()
 }
@@ -20414,7 +26582,7 @@ type DiskSnapshot struct {
 	// The name of the disk snapshot (e.g., my-disk-snapshot).
 	Name *string `locationName:"name" type:"string"`
 
-	// The progress of the disk snapshot operation.
+	// The progress of the snapshot.
 	Progress *string `locationName:"progress" type:"string"`
 
 	// The Lightsail resource type (e.g., DiskSnapshot).
@@ -20432,16 +26600,24 @@ type DiskSnapshot struct {
 	SupportCode *string `locationName:"supportCode" type:"string"`
 
 	// The tag keys and optional values for the resource. For more information about
-	// tags in Lightsail, see the Lightsail Dev Guide (https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-tags).
+	// tags in Lightsail, see the Amazon Lightsail Developer Guide (https://lightsail.aws.amazon.com/ls/docs/en_us/articles/amazon-lightsail-tags).
 	Tags []*Tag `locationName:"tags" type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DiskSnapshot) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DiskSnapshot) GoString() string {
 	return s.String()
 }
@@ -20544,12 +26720,20 @@ type DiskSnapshotInfo struct {
 	SizeInGb *int64 `locationName:"sizeInGb" type:"integer"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DiskSnapshotInfo) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DiskSnapshotInfo) GoString() string {
 	return s.String()
 }
@@ -20567,7 +26751,8 @@ type DistributionBundle struct {
 	// The ID of the bundle.
 	BundleId *string `locationName:"bundleId" type:"string"`
 
-	// Indicates whether the bundle is active, and can be specified for a new distribution.
+	// Indicates whether the bundle is active, and can be specified for a new or
+	// existing distribution.
 	IsActive *bool `locationName:"isActive" type:"boolean"`
 
 	// The name of the distribution bundle.
@@ -20580,12 +26765,20 @@ type DistributionBundle struct {
 	TransferPerMonthInGb *int64 `locationName:"transferPerMonthInGb" type:"integer"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DistributionBundle) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DistributionBundle) GoString() string {
 	return s.String()
 }
@@ -20620,7 +26813,7 @@ func (s *DistributionBundle) SetTransferPerMonthInGb(v int64) *DistributionBundl
 	return s
 }
 
-// Describes a domain where you are storing recordsets in Lightsail.
+// Describes a domain where you are storing recordsets.
 type Domain struct {
 	_ struct{} `type:"structure"`
 
@@ -20648,16 +26841,24 @@ type Domain struct {
 	SupportCode *string `locationName:"supportCode" type:"string"`
 
 	// The tag keys and optional values for the resource. For more information about
-	// tags in Lightsail, see the Lightsail Dev Guide (https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-tags).
+	// tags in Lightsail, see the Amazon Lightsail Developer Guide (https://lightsail.aws.amazon.com/ls/docs/en_us/articles/amazon-lightsail-tags).
 	Tags []*Tag `locationName:"tags" type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s Domain) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s Domain) GoString() string {
 	return s.String()
 }
@@ -20720,7 +26921,7 @@ type DomainEntry struct {
 	// When true, specifies whether the domain entry is an alias used by the Lightsail
 	// load balancer. You can include an alias (A type) record in your request,
 	// which points to a load balancer DNS name and routes traffic to your load
-	// balancer
+	// balancer.
 	IsAlias *bool `locationName:"isAlias" type:"boolean"`
 
 	// The name of the domain.
@@ -20734,20 +26935,24 @@ type DomainEntry struct {
 	// Deprecated: Options has been deprecated
 	Options map[string]*string `locationName:"options" deprecated:"true" type:"map"`
 
-	// The target AWS name server (e.g., ns-111.awsdns-22.com.).
+	// The target IP address (e.g., 192.0.2.0), or AWS name server (e.g., ns-111.awsdns-22.com.).
 	//
 	// For Lightsail load balancers, the value looks like ab1234c56789c6b86aba6fb203d443bc-123456789.us-east-2.elb.amazonaws.com.
-	// Be sure to also set isAlias to true when setting up an A record for a load
-	// balancer.
+	// For Lightsail distributions, the value looks like exampled1182ne.cloudfront.net.
+	// For Lightsail container services, the value looks like container-service-1.example23scljs.us-west-2.cs.amazonlightsail.com.
+	// Be sure to also set isAlias to true when setting up an A record for a Lightsail
+	// load balancer, distribution, or container service.
 	Target *string `locationName:"target" type:"string"`
 
-	// The type of domain entry, such as address (A), canonical name (CNAME), mail
-	// exchanger (MX), name server (NS), start of authority (SOA), service locator
-	// (SRV), or text (TXT).
+	// The type of domain entry, such as address for IPv4 (A), address for IPv6
+	// (AAAA), canonical name (CNAME), mail exchanger (MX), name server (NS), start
+	// of authority (SOA), service locator (SRV), or text (TXT).
 	//
 	// The following domain entry types can be used:
 	//
 	//    * A
+	//
+	//    * AAAA
 	//
 	//    * CNAME
 	//
@@ -20763,12 +26968,20 @@ type DomainEntry struct {
 	Type *string `locationName:"type" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DomainEntry) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DomainEntry) GoString() string {
 	return s.String()
 }
@@ -20822,12 +27035,20 @@ type DomainValidationRecord struct {
 	ResourceRecord *ResourceRecord `locationName:"resourceRecord" type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DomainValidationRecord) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DomainValidationRecord) GoString() string {
 	return s.String()
 }
@@ -20848,12 +27069,20 @@ type DownloadDefaultKeyPairInput struct {
 	_ struct{} `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DownloadDefaultKeyPairInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DownloadDefaultKeyPairInput) GoString() string {
 	return s.String()
 }
@@ -20868,12 +27097,20 @@ type DownloadDefaultKeyPairOutput struct {
 	PublicKeyBase64 *string `locationName:"publicKeyBase64" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DownloadDefaultKeyPairOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DownloadDefaultKeyPairOutput) GoString() string {
 	return s.String()
 }
@@ -20904,12 +27141,20 @@ type EnableAddOnInput struct {
 	ResourceName *string `locationName:"resourceName" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s EnableAddOnInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s EnableAddOnInput) GoString() string {
 	return s.String()
 }
@@ -20956,12 +27201,20 @@ type EnableAddOnOutput struct {
 	Operations []*Operation `locationName:"operations" type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s EnableAddOnOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s EnableAddOnOutput) GoString() string {
 	return s.String()
 }
@@ -20969,6 +27222,77 @@ func (s EnableAddOnOutput) GoString() string {
 // SetOperations sets the Operations field's value.
 func (s *EnableAddOnOutput) SetOperations(v []*Operation) *EnableAddOnOutput {
 	s.Operations = v
+	return s
+}
+
+// Describes the settings of a public endpoint for an Amazon Lightsail container
+// service.
+type EndpointRequest struct {
+	_ struct{} `type:"structure"`
+
+	// The name of the container for the endpoint.
+	//
+	// ContainerName is a required field
+	ContainerName *string `locationName:"containerName" type:"string" required:"true"`
+
+	// The port of the container to which traffic is forwarded to.
+	//
+	// ContainerPort is a required field
+	ContainerPort *int64 `locationName:"containerPort" type:"integer" required:"true"`
+
+	// An object that describes the health check configuration of the container.
+	HealthCheck *ContainerServiceHealthCheckConfig `locationName:"healthCheck" type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s EndpointRequest) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s EndpointRequest) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *EndpointRequest) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "EndpointRequest"}
+	if s.ContainerName == nil {
+		invalidParams.Add(request.NewErrParamRequired("ContainerName"))
+	}
+	if s.ContainerPort == nil {
+		invalidParams.Add(request.NewErrParamRequired("ContainerPort"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetContainerName sets the ContainerName field's value.
+func (s *EndpointRequest) SetContainerName(v string) *EndpointRequest {
+	s.ContainerName = &v
+	return s
+}
+
+// SetContainerPort sets the ContainerPort field's value.
+func (s *EndpointRequest) SetContainerPort(v int64) *EndpointRequest {
+	s.ContainerPort = &v
+	return s
+}
+
+// SetHealthCheck sets the HealthCheck field's value.
+func (s *EndpointRequest) SetHealthCheck(v *ContainerServiceHealthCheckConfig) *EndpointRequest {
+	s.HealthCheck = v
 	return s
 }
 
@@ -20981,12 +27305,20 @@ type ExportSnapshotInput struct {
 	SourceSnapshotName *string `locationName:"sourceSnapshotName" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ExportSnapshotInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ExportSnapshotInput) GoString() string {
 	return s.String()
 }
@@ -21019,12 +27351,20 @@ type ExportSnapshotOutput struct {
 	Operations []*Operation `locationName:"operations" type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ExportSnapshotOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ExportSnapshotOutput) GoString() string {
 	return s.String()
 }
@@ -21065,12 +27405,20 @@ type ExportSnapshotRecord struct {
 	State *string `locationName:"state" type:"string" enum:"RecordState"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ExportSnapshotRecord) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ExportSnapshotRecord) GoString() string {
 	return s.String()
 }
@@ -21152,12 +27500,20 @@ type ExportSnapshotRecordSourceInfo struct {
 	ResourceType *string `locationName:"resourceType" type:"string" enum:"ExportSnapshotRecordSourceType"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ExportSnapshotRecordSourceInfo) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ExportSnapshotRecordSourceInfo) GoString() string {
 	return s.String()
 }
@@ -21221,12 +27577,20 @@ type GetActiveNamesInput struct {
 	PageToken *string `locationName:"pageToken" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetActiveNamesInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetActiveNamesInput) GoString() string {
 	return s.String()
 }
@@ -21243,7 +27607,7 @@ type GetActiveNamesOutput struct {
 	// The list of active names returned by the get active names request.
 	ActiveNames []*string `locationName:"activeNames" type:"list"`
 
-	// The token to advance to the next page of resutls from your request.
+	// The token to advance to the next page of results from your request.
 	//
 	// A next page token is not returned if there are no more results to display.
 	//
@@ -21252,12 +27616,20 @@ type GetActiveNamesOutput struct {
 	NextPageToken *string `locationName:"nextPageToken" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetActiveNamesOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetActiveNamesOutput) GoString() string {
 	return s.String()
 }
@@ -21296,12 +27668,20 @@ type GetAlarmsInput struct {
 	PageToken *string `locationName:"pageToken" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetAlarmsInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetAlarmsInput) GoString() string {
 	return s.String()
 }
@@ -21330,7 +27710,7 @@ type GetAlarmsOutput struct {
 	// An array of objects that describe the alarms.
 	Alarms []*Alarm `locationName:"alarms" type:"list"`
 
-	// The token to advance to the next page of resutls from your request.
+	// The token to advance to the next page of results from your request.
 	//
 	// A next page token is not returned if there are no more results to display.
 	//
@@ -21339,12 +27719,20 @@ type GetAlarmsOutput struct {
 	NextPageToken *string `locationName:"nextPageToken" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetAlarmsOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetAlarmsOutput) GoString() string {
 	return s.String()
 }
@@ -21371,12 +27759,20 @@ type GetAutoSnapshotsInput struct {
 	ResourceName *string `locationName:"resourceName" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetAutoSnapshotsInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetAutoSnapshotsInput) GoString() string {
 	return s.String()
 }
@@ -21414,12 +27810,20 @@ type GetAutoSnapshotsOutput struct {
 	ResourceType *string `locationName:"resourceType" type:"string" enum:"ResourceType"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetAutoSnapshotsOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetAutoSnapshotsOutput) GoString() string {
 	return s.String()
 }
@@ -21456,12 +27860,20 @@ type GetBlueprintsInput struct {
 	PageToken *string `locationName:"pageToken" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetBlueprintsInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetBlueprintsInput) GoString() string {
 	return s.String()
 }
@@ -21485,7 +27897,7 @@ type GetBlueprintsOutput struct {
 	// blueprints.
 	Blueprints []*Blueprint `locationName:"blueprints" type:"list"`
 
-	// The token to advance to the next page of resutls from your request.
+	// The token to advance to the next page of results from your request.
 	//
 	// A next page token is not returned if there are no more results to display.
 	//
@@ -21494,12 +27906,20 @@ type GetBlueprintsOutput struct {
 	NextPageToken *string `locationName:"nextPageToken" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetBlueprintsOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetBlueprintsOutput) GoString() string {
 	return s.String()
 }
@@ -21512,6 +27932,483 @@ func (s *GetBlueprintsOutput) SetBlueprints(v []*Blueprint) *GetBlueprintsOutput
 
 // SetNextPageToken sets the NextPageToken field's value.
 func (s *GetBlueprintsOutput) SetNextPageToken(v string) *GetBlueprintsOutput {
+	s.NextPageToken = &v
+	return s
+}
+
+type GetBucketAccessKeysInput struct {
+	_ struct{} `type:"structure"`
+
+	// The name of the bucket for which to return access keys.
+	//
+	// BucketName is a required field
+	BucketName *string `locationName:"bucketName" min:"3" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetBucketAccessKeysInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetBucketAccessKeysInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *GetBucketAccessKeysInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "GetBucketAccessKeysInput"}
+	if s.BucketName == nil {
+		invalidParams.Add(request.NewErrParamRequired("BucketName"))
+	}
+	if s.BucketName != nil && len(*s.BucketName) < 3 {
+		invalidParams.Add(request.NewErrParamMinLen("BucketName", 3))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetBucketName sets the BucketName field's value.
+func (s *GetBucketAccessKeysInput) SetBucketName(v string) *GetBucketAccessKeysInput {
+	s.BucketName = &v
+	return s
+}
+
+type GetBucketAccessKeysOutput struct {
+	_ struct{} `type:"structure"`
+
+	// An object that describes the access keys for the specified bucket.
+	AccessKeys []*AccessKey `locationName:"accessKeys" type:"list"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetBucketAccessKeysOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetBucketAccessKeysOutput) GoString() string {
+	return s.String()
+}
+
+// SetAccessKeys sets the AccessKeys field's value.
+func (s *GetBucketAccessKeysOutput) SetAccessKeys(v []*AccessKey) *GetBucketAccessKeysOutput {
+	s.AccessKeys = v
+	return s
+}
+
+type GetBucketBundlesInput struct {
+	_ struct{} `type:"structure"`
+
+	// A Boolean value that indicates whether to include inactive (unavailable)
+	// bundles in the response.
+	IncludeInactive *bool `locationName:"includeInactive" type:"boolean"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetBucketBundlesInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetBucketBundlesInput) GoString() string {
+	return s.String()
+}
+
+// SetIncludeInactive sets the IncludeInactive field's value.
+func (s *GetBucketBundlesInput) SetIncludeInactive(v bool) *GetBucketBundlesInput {
+	s.IncludeInactive = &v
+	return s
+}
+
+type GetBucketBundlesOutput struct {
+	_ struct{} `type:"structure"`
+
+	// An object that describes bucket bundles.
+	Bundles []*BucketBundle `locationName:"bundles" type:"list"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetBucketBundlesOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetBucketBundlesOutput) GoString() string {
+	return s.String()
+}
+
+// SetBundles sets the Bundles field's value.
+func (s *GetBucketBundlesOutput) SetBundles(v []*BucketBundle) *GetBucketBundlesOutput {
+	s.Bundles = v
+	return s
+}
+
+type GetBucketMetricDataInput struct {
+	_ struct{} `type:"structure"`
+
+	// The name of the bucket for which to get metric data.
+	//
+	// BucketName is a required field
+	BucketName *string `locationName:"bucketName" min:"3" type:"string" required:"true"`
+
+	// The timestamp indicating the latest data to be returned.
+	//
+	// EndTime is a required field
+	EndTime *time.Time `locationName:"endTime" type:"timestamp" required:"true"`
+
+	// The metric for which you want to return information.
+	//
+	// Valid bucket metric names are listed below, along with the most useful statistics
+	// to include in your request, and the published unit value.
+	//
+	// These bucket metrics are reported once per day.
+	//
+	//    * BucketSizeBytes - The amount of data in bytes stored in a bucket. This
+	//    value is calculated by summing the size of all objects in the bucket (including
+	//    object versions), including the size of all parts for all incomplete multipart
+	//    uploads to the bucket. Statistics: The most useful statistic is Maximum.
+	//    Unit: The published unit is Bytes.
+	//
+	//    * NumberOfObjects - The total number of objects stored in a bucket. This
+	//    value is calculated by counting all objects in the bucket (including object
+	//    versions) and the total number of parts for all incomplete multipart uploads
+	//    to the bucket. Statistics: The most useful statistic is Average. Unit:
+	//    The published unit is Count.
+	//
+	// MetricName is a required field
+	MetricName *string `locationName:"metricName" type:"string" required:"true" enum:"BucketMetricName"`
+
+	// The granularity, in seconds, of the returned data points.
+	//
+	// Bucket storage metrics are reported once per day. Therefore, you should specify
+	// a period of 86400 seconds, which is the number of seconds in a day.
+	//
+	// Period is a required field
+	Period *int64 `locationName:"period" min:"60" type:"integer" required:"true"`
+
+	// The timestamp indicating the earliest data to be returned.
+	//
+	// StartTime is a required field
+	StartTime *time.Time `locationName:"startTime" type:"timestamp" required:"true"`
+
+	// The statistic for the metric.
+	//
+	// The following statistics are available:
+	//
+	//    * Minimum - The lowest value observed during the specified period. Use
+	//    this value to determine low volumes of activity for your application.
+	//
+	//    * Maximum - The highest value observed during the specified period. Use
+	//    this value to determine high volumes of activity for your application.
+	//
+	//    * Sum - The sum of all values submitted for the matching metric. You can
+	//    use this statistic to determine the total volume of a metric.
+	//
+	//    * Average - The value of Sum / SampleCount during the specified period.
+	//    By comparing this statistic with the Minimum and Maximum values, you can
+	//    determine the full scope of a metric and how close the average use is
+	//    to the Minimum and Maximum values. This comparison helps you to know when
+	//    to increase or decrease your resources.
+	//
+	//    * SampleCount - The count, or number, of data points used for the statistical
+	//    calculation.
+	//
+	// Statistics is a required field
+	Statistics []*string `locationName:"statistics" type:"list" required:"true"`
+
+	// The unit for the metric data request.
+	//
+	// Valid units depend on the metric data being requested. For the valid units
+	// with each available metric, see the metricName parameter.
+	//
+	// Unit is a required field
+	Unit *string `locationName:"unit" type:"string" required:"true" enum:"MetricUnit"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetBucketMetricDataInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetBucketMetricDataInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *GetBucketMetricDataInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "GetBucketMetricDataInput"}
+	if s.BucketName == nil {
+		invalidParams.Add(request.NewErrParamRequired("BucketName"))
+	}
+	if s.BucketName != nil && len(*s.BucketName) < 3 {
+		invalidParams.Add(request.NewErrParamMinLen("BucketName", 3))
+	}
+	if s.EndTime == nil {
+		invalidParams.Add(request.NewErrParamRequired("EndTime"))
+	}
+	if s.MetricName == nil {
+		invalidParams.Add(request.NewErrParamRequired("MetricName"))
+	}
+	if s.Period == nil {
+		invalidParams.Add(request.NewErrParamRequired("Period"))
+	}
+	if s.Period != nil && *s.Period < 60 {
+		invalidParams.Add(request.NewErrParamMinValue("Period", 60))
+	}
+	if s.StartTime == nil {
+		invalidParams.Add(request.NewErrParamRequired("StartTime"))
+	}
+	if s.Statistics == nil {
+		invalidParams.Add(request.NewErrParamRequired("Statistics"))
+	}
+	if s.Unit == nil {
+		invalidParams.Add(request.NewErrParamRequired("Unit"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetBucketName sets the BucketName field's value.
+func (s *GetBucketMetricDataInput) SetBucketName(v string) *GetBucketMetricDataInput {
+	s.BucketName = &v
+	return s
+}
+
+// SetEndTime sets the EndTime field's value.
+func (s *GetBucketMetricDataInput) SetEndTime(v time.Time) *GetBucketMetricDataInput {
+	s.EndTime = &v
+	return s
+}
+
+// SetMetricName sets the MetricName field's value.
+func (s *GetBucketMetricDataInput) SetMetricName(v string) *GetBucketMetricDataInput {
+	s.MetricName = &v
+	return s
+}
+
+// SetPeriod sets the Period field's value.
+func (s *GetBucketMetricDataInput) SetPeriod(v int64) *GetBucketMetricDataInput {
+	s.Period = &v
+	return s
+}
+
+// SetStartTime sets the StartTime field's value.
+func (s *GetBucketMetricDataInput) SetStartTime(v time.Time) *GetBucketMetricDataInput {
+	s.StartTime = &v
+	return s
+}
+
+// SetStatistics sets the Statistics field's value.
+func (s *GetBucketMetricDataInput) SetStatistics(v []*string) *GetBucketMetricDataInput {
+	s.Statistics = v
+	return s
+}
+
+// SetUnit sets the Unit field's value.
+func (s *GetBucketMetricDataInput) SetUnit(v string) *GetBucketMetricDataInput {
+	s.Unit = &v
+	return s
+}
+
+type GetBucketMetricDataOutput struct {
+	_ struct{} `type:"structure"`
+
+	// An array of objects that describe the metric data returned.
+	MetricData []*MetricDatapoint `locationName:"metricData" type:"list"`
+
+	// The name of the metric returned.
+	MetricName *string `locationName:"metricName" type:"string" enum:"BucketMetricName"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetBucketMetricDataOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetBucketMetricDataOutput) GoString() string {
+	return s.String()
+}
+
+// SetMetricData sets the MetricData field's value.
+func (s *GetBucketMetricDataOutput) SetMetricData(v []*MetricDatapoint) *GetBucketMetricDataOutput {
+	s.MetricData = v
+	return s
+}
+
+// SetMetricName sets the MetricName field's value.
+func (s *GetBucketMetricDataOutput) SetMetricName(v string) *GetBucketMetricDataOutput {
+	s.MetricName = &v
+	return s
+}
+
+type GetBucketsInput struct {
+	_ struct{} `type:"structure"`
+
+	// The name of the bucket for which to return information.
+	//
+	// When omitted, the response includes all of your buckets in the AWS Region
+	// where the request is made.
+	BucketName *string `locationName:"bucketName" min:"3" type:"string"`
+
+	// A Boolean value that indicates whether to include Lightsail instances that
+	// were given access to the bucket using the SetResourceAccessForBucket action.
+	IncludeConnectedResources *bool `locationName:"includeConnectedResources" type:"boolean"`
+
+	// The token to advance to the next page of results from your request.
+	//
+	// To get a page token, perform an initial GetBuckets request. If your results
+	// are paginated, the response will return a next page token that you can specify
+	// as the page token in a subsequent request.
+	PageToken *string `locationName:"pageToken" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetBucketsInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetBucketsInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *GetBucketsInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "GetBucketsInput"}
+	if s.BucketName != nil && len(*s.BucketName) < 3 {
+		invalidParams.Add(request.NewErrParamMinLen("BucketName", 3))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetBucketName sets the BucketName field's value.
+func (s *GetBucketsInput) SetBucketName(v string) *GetBucketsInput {
+	s.BucketName = &v
+	return s
+}
+
+// SetIncludeConnectedResources sets the IncludeConnectedResources field's value.
+func (s *GetBucketsInput) SetIncludeConnectedResources(v bool) *GetBucketsInput {
+	s.IncludeConnectedResources = &v
+	return s
+}
+
+// SetPageToken sets the PageToken field's value.
+func (s *GetBucketsInput) SetPageToken(v string) *GetBucketsInput {
+	s.PageToken = &v
+	return s
+}
+
+type GetBucketsOutput struct {
+	_ struct{} `type:"structure"`
+
+	// An array of objects that describe buckets.
+	Buckets []*Bucket `locationName:"buckets" type:"list"`
+
+	// The token to advance to the next page of results from your request.
+	//
+	// A next page token is not returned if there are no more results to display.
+	//
+	// To get the next page of results, perform another GetBuckets request and specify
+	// the next page token using the pageToken parameter.
+	NextPageToken *string `locationName:"nextPageToken" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetBucketsOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetBucketsOutput) GoString() string {
+	return s.String()
+}
+
+// SetBuckets sets the Buckets field's value.
+func (s *GetBucketsOutput) SetBuckets(v []*Bucket) *GetBucketsOutput {
+	s.Buckets = v
+	return s
+}
+
+// SetNextPageToken sets the NextPageToken field's value.
+func (s *GetBucketsOutput) SetNextPageToken(v string) *GetBucketsOutput {
 	s.NextPageToken = &v
 	return s
 }
@@ -21531,12 +28428,20 @@ type GetBundlesInput struct {
 	PageToken *string `locationName:"pageToken" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetBundlesInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetBundlesInput) GoString() string {
 	return s.String()
 }
@@ -21560,7 +28465,7 @@ type GetBundlesOutput struct {
 	// bundles.
 	Bundles []*Bundle `locationName:"bundles" type:"list"`
 
-	// The token to advance to the next page of resutls from your request.
+	// The token to advance to the next page of results from your request.
 	//
 	// A next page token is not returned if there are no more results to display.
 	//
@@ -21569,12 +28474,20 @@ type GetBundlesOutput struct {
 	NextPageToken *string `locationName:"nextPageToken" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetBundlesOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetBundlesOutput) GoString() string {
 	return s.String()
 }
@@ -21596,7 +28509,7 @@ type GetCertificatesInput struct {
 
 	// The name for the certificate for which to return information.
 	//
-	// When omitted, the response includes all of your certificates in the AWS region
+	// When omitted, the response includes all of your certificates in the AWS Region
 	// where the request is made.
 	CertificateName *string `locationName:"certificateName" type:"string"`
 
@@ -21604,7 +28517,7 @@ type GetCertificatesInput struct {
 	//
 	// For example, specify ISSUED to return only certificates with an ISSUED status.
 	//
-	// When omitted, the response includes all of your certificates in the AWS region
+	// When omitted, the response includes all of your certificates in the AWS Region
 	// where the request is made, regardless of their current status.
 	CertificateStatuses []*string `locationName:"certificateStatuses" type:"list"`
 
@@ -21616,12 +28529,20 @@ type GetCertificatesInput struct {
 	IncludeCertificateDetails *bool `locationName:"includeCertificateDetails" type:"boolean"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetCertificatesInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetCertificatesInput) GoString() string {
 	return s.String()
 }
@@ -21651,12 +28572,20 @@ type GetCertificatesOutput struct {
 	Certificates []*CertificateSummary `locationName:"certificates" type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetCertificatesOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetCertificatesOutput) GoString() string {
 	return s.String()
 }
@@ -21678,12 +28607,20 @@ type GetCloudFormationStackRecordsInput struct {
 	PageToken *string `locationName:"pageToken" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetCloudFormationStackRecordsInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetCloudFormationStackRecordsInput) GoString() string {
 	return s.String()
 }
@@ -21700,7 +28637,7 @@ type GetCloudFormationStackRecordsOutput struct {
 	// A list of objects describing the CloudFormation stack records.
 	CloudFormationStackRecords []*CloudFormationStackRecord `locationName:"cloudFormationStackRecords" type:"list"`
 
-	// The token to advance to the next page of resutls from your request.
+	// The token to advance to the next page of results from your request.
 	//
 	// A next page token is not returned if there are no more results to display.
 	//
@@ -21709,12 +28646,20 @@ type GetCloudFormationStackRecordsOutput struct {
 	NextPageToken *string `locationName:"nextPageToken" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetCloudFormationStackRecordsOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetCloudFormationStackRecordsOutput) GoString() string {
 	return s.String()
 }
@@ -21741,12 +28686,20 @@ type GetContactMethodsInput struct {
 	Protocols []*string `locationName:"protocols" type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetContactMethodsInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetContactMethodsInput) GoString() string {
 	return s.String()
 }
@@ -21764,12 +28717,20 @@ type GetContactMethodsOutput struct {
 	ContactMethods []*ContactMethod `locationName:"contactMethods" type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetContactMethodsOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetContactMethodsOutput) GoString() string {
 	return s.String()
 }
@@ -21777,6 +28738,741 @@ func (s GetContactMethodsOutput) GoString() string {
 // SetContactMethods sets the ContactMethods field's value.
 func (s *GetContactMethodsOutput) SetContactMethods(v []*ContactMethod) *GetContactMethodsOutput {
 	s.ContactMethods = v
+	return s
+}
+
+type GetContainerAPIMetadataInput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetContainerAPIMetadataInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetContainerAPIMetadataInput) GoString() string {
+	return s.String()
+}
+
+type GetContainerAPIMetadataOutput struct {
+	_ struct{} `type:"structure"`
+
+	// Metadata about Lightsail containers, such as the current version of the Lightsail
+	// Control (lightsailctl) plugin.
+	Metadata []map[string]*string `locationName:"metadata" type:"list"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetContainerAPIMetadataOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetContainerAPIMetadataOutput) GoString() string {
+	return s.String()
+}
+
+// SetMetadata sets the Metadata field's value.
+func (s *GetContainerAPIMetadataOutput) SetMetadata(v []map[string]*string) *GetContainerAPIMetadataOutput {
+	s.Metadata = v
+	return s
+}
+
+type GetContainerImagesInput struct {
+	_ struct{} `type:"structure"`
+
+	// The name of the container service for which to return registered container
+	// images.
+	//
+	// ServiceName is a required field
+	ServiceName *string `locationName:"serviceName" min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetContainerImagesInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetContainerImagesInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *GetContainerImagesInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "GetContainerImagesInput"}
+	if s.ServiceName == nil {
+		invalidParams.Add(request.NewErrParamRequired("ServiceName"))
+	}
+	if s.ServiceName != nil && len(*s.ServiceName) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ServiceName", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetServiceName sets the ServiceName field's value.
+func (s *GetContainerImagesInput) SetServiceName(v string) *GetContainerImagesInput {
+	s.ServiceName = &v
+	return s
+}
+
+type GetContainerImagesOutput struct {
+	_ struct{} `type:"structure"`
+
+	// An array of objects that describe container images that are registered to
+	// the container service.
+	ContainerImages []*ContainerImage `locationName:"containerImages" type:"list"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetContainerImagesOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetContainerImagesOutput) GoString() string {
+	return s.String()
+}
+
+// SetContainerImages sets the ContainerImages field's value.
+func (s *GetContainerImagesOutput) SetContainerImages(v []*ContainerImage) *GetContainerImagesOutput {
+	s.ContainerImages = v
+	return s
+}
+
+type GetContainerLogInput struct {
+	_ struct{} `type:"structure"`
+
+	// The name of the container that is either running or previously ran on the
+	// container service for which to return a log.
+	//
+	// ContainerName is a required field
+	ContainerName *string `locationName:"containerName" type:"string" required:"true"`
+
+	// The end of the time interval for which to get log data.
+	//
+	// Constraints:
+	//
+	//    * Specified in Coordinated Universal Time (UTC).
+	//
+	//    * Specified in the Unix time format. For example, if you wish to use an
+	//    end time of October 1, 2018, at 9 PM UTC, specify 1538427600 as the end
+	//    time.
+	//
+	// You can convert a human-friendly time to Unix time format using a converter
+	// like Epoch converter (https://www.epochconverter.com/).
+	EndTime *time.Time `locationName:"endTime" type:"timestamp"`
+
+	// The pattern to use to filter the returned log events to a specific term.
+	//
+	// The following are a few examples of filter patterns that you can specify:
+	//
+	//    * To return all log events, specify a filter pattern of "".
+	//
+	//    * To exclude log events that contain the ERROR term, and return all other
+	//    log events, specify a filter pattern of "-ERROR".
+	//
+	//    * To return log events that contain the ERROR term, specify a filter pattern
+	//    of "ERROR".
+	//
+	//    * To return log events that contain both the ERROR and Exception terms,
+	//    specify a filter pattern of "ERROR Exception".
+	//
+	//    * To return log events that contain the ERROR or the Exception term, specify
+	//    a filter pattern of "?ERROR ?Exception".
+	FilterPattern *string `locationName:"filterPattern" type:"string"`
+
+	// The token to advance to the next page of results from your request.
+	//
+	// To get a page token, perform an initial GetContainerLog request. If your
+	// results are paginated, the response will return a next page token that you
+	// can specify as the page token in a subsequent request.
+	PageToken *string `locationName:"pageToken" type:"string"`
+
+	// The name of the container service for which to get a container log.
+	//
+	// ServiceName is a required field
+	ServiceName *string `locationName:"serviceName" min:"1" type:"string" required:"true"`
+
+	// The start of the time interval for which to get log data.
+	//
+	// Constraints:
+	//
+	//    * Specified in Coordinated Universal Time (UTC).
+	//
+	//    * Specified in the Unix time format. For example, if you wish to use a
+	//    start time of October 1, 2018, at 8 PM UTC, specify 1538424000 as the
+	//    start time.
+	//
+	// You can convert a human-friendly time to Unix time format using a converter
+	// like Epoch converter (https://www.epochconverter.com/).
+	StartTime *time.Time `locationName:"startTime" type:"timestamp"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetContainerLogInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetContainerLogInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *GetContainerLogInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "GetContainerLogInput"}
+	if s.ContainerName == nil {
+		invalidParams.Add(request.NewErrParamRequired("ContainerName"))
+	}
+	if s.ServiceName == nil {
+		invalidParams.Add(request.NewErrParamRequired("ServiceName"))
+	}
+	if s.ServiceName != nil && len(*s.ServiceName) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ServiceName", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetContainerName sets the ContainerName field's value.
+func (s *GetContainerLogInput) SetContainerName(v string) *GetContainerLogInput {
+	s.ContainerName = &v
+	return s
+}
+
+// SetEndTime sets the EndTime field's value.
+func (s *GetContainerLogInput) SetEndTime(v time.Time) *GetContainerLogInput {
+	s.EndTime = &v
+	return s
+}
+
+// SetFilterPattern sets the FilterPattern field's value.
+func (s *GetContainerLogInput) SetFilterPattern(v string) *GetContainerLogInput {
+	s.FilterPattern = &v
+	return s
+}
+
+// SetPageToken sets the PageToken field's value.
+func (s *GetContainerLogInput) SetPageToken(v string) *GetContainerLogInput {
+	s.PageToken = &v
+	return s
+}
+
+// SetServiceName sets the ServiceName field's value.
+func (s *GetContainerLogInput) SetServiceName(v string) *GetContainerLogInput {
+	s.ServiceName = &v
+	return s
+}
+
+// SetStartTime sets the StartTime field's value.
+func (s *GetContainerLogInput) SetStartTime(v time.Time) *GetContainerLogInput {
+	s.StartTime = &v
+	return s
+}
+
+type GetContainerLogOutput struct {
+	_ struct{} `type:"structure"`
+
+	// An array of objects that describe the log events of a container.
+	LogEvents []*ContainerServiceLogEvent `locationName:"logEvents" type:"list"`
+
+	// The token to advance to the next page of results from your request.
+	//
+	// A next page token is not returned if there are no more results to display.
+	//
+	// To get the next page of results, perform another GetContainerLog request
+	// and specify the next page token using the pageToken parameter.
+	NextPageToken *string `locationName:"nextPageToken" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetContainerLogOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetContainerLogOutput) GoString() string {
+	return s.String()
+}
+
+// SetLogEvents sets the LogEvents field's value.
+func (s *GetContainerLogOutput) SetLogEvents(v []*ContainerServiceLogEvent) *GetContainerLogOutput {
+	s.LogEvents = v
+	return s
+}
+
+// SetNextPageToken sets the NextPageToken field's value.
+func (s *GetContainerLogOutput) SetNextPageToken(v string) *GetContainerLogOutput {
+	s.NextPageToken = &v
+	return s
+}
+
+type GetContainerServiceDeploymentsInput struct {
+	_ struct{} `type:"structure"`
+
+	// The name of the container service for which to return deployments.
+	//
+	// ServiceName is a required field
+	ServiceName *string `locationName:"serviceName" min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetContainerServiceDeploymentsInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetContainerServiceDeploymentsInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *GetContainerServiceDeploymentsInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "GetContainerServiceDeploymentsInput"}
+	if s.ServiceName == nil {
+		invalidParams.Add(request.NewErrParamRequired("ServiceName"))
+	}
+	if s.ServiceName != nil && len(*s.ServiceName) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ServiceName", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetServiceName sets the ServiceName field's value.
+func (s *GetContainerServiceDeploymentsInput) SetServiceName(v string) *GetContainerServiceDeploymentsInput {
+	s.ServiceName = &v
+	return s
+}
+
+type GetContainerServiceDeploymentsOutput struct {
+	_ struct{} `type:"structure"`
+
+	// An array of objects that describe deployments for a container service.
+	Deployments []*ContainerServiceDeployment `locationName:"deployments" type:"list"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetContainerServiceDeploymentsOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetContainerServiceDeploymentsOutput) GoString() string {
+	return s.String()
+}
+
+// SetDeployments sets the Deployments field's value.
+func (s *GetContainerServiceDeploymentsOutput) SetDeployments(v []*ContainerServiceDeployment) *GetContainerServiceDeploymentsOutput {
+	s.Deployments = v
+	return s
+}
+
+type GetContainerServiceMetricDataInput struct {
+	_ struct{} `type:"structure"`
+
+	// The end time of the time period.
+	//
+	// EndTime is a required field
+	EndTime *time.Time `locationName:"endTime" type:"timestamp" required:"true"`
+
+	// The metric for which you want to return information.
+	//
+	// Valid container service metric names are listed below, along with the most
+	// useful statistics to include in your request, and the published unit value.
+	//
+	//    * CPUUtilization - The average percentage of compute units that are currently
+	//    in use across all nodes of the container service. This metric identifies
+	//    the processing power required to run containers on each node of the container
+	//    service. Statistics: The most useful statistics are Maximum and Average.
+	//    Unit: The published unit is Percent.
+	//
+	//    * MemoryUtilization - The average percentage of available memory that
+	//    is currently in use across all nodes of the container service. This metric
+	//    identifies the memory required to run containers on each node of the container
+	//    service. Statistics: The most useful statistics are Maximum and Average.
+	//    Unit: The published unit is Percent.
+	//
+	// MetricName is a required field
+	MetricName *string `locationName:"metricName" type:"string" required:"true" enum:"ContainerServiceMetricName"`
+
+	// The granularity, in seconds, of the returned data points.
+	//
+	// All container service metric data is available in 5-minute (300 seconds)
+	// granularity.
+	//
+	// Period is a required field
+	Period *int64 `locationName:"period" min:"60" type:"integer" required:"true"`
+
+	// The name of the container service for which to get metric data.
+	//
+	// ServiceName is a required field
+	ServiceName *string `locationName:"serviceName" min:"1" type:"string" required:"true"`
+
+	// The start time of the time period.
+	//
+	// StartTime is a required field
+	StartTime *time.Time `locationName:"startTime" type:"timestamp" required:"true"`
+
+	// The statistic for the metric.
+	//
+	// The following statistics are available:
+	//
+	//    * Minimum - The lowest value observed during the specified period. Use
+	//    this value to determine low volumes of activity for your application.
+	//
+	//    * Maximum - The highest value observed during the specified period. Use
+	//    this value to determine high volumes of activity for your application.
+	//
+	//    * Sum - All values submitted for the matching metric added together. You
+	//    can use this statistic to determine the total volume of a metric.
+	//
+	//    * Average - The value of Sum / SampleCount during the specified period.
+	//    By comparing this statistic with the Minimum and Maximum values, you can
+	//    determine the full scope of a metric and how close the average use is
+	//    to the Minimum and Maximum values. This comparison helps you to know when
+	//    to increase or decrease your resources.
+	//
+	//    * SampleCount - The count, or number, of data points used for the statistical
+	//    calculation.
+	//
+	// Statistics is a required field
+	Statistics []*string `locationName:"statistics" type:"list" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetContainerServiceMetricDataInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetContainerServiceMetricDataInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *GetContainerServiceMetricDataInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "GetContainerServiceMetricDataInput"}
+	if s.EndTime == nil {
+		invalidParams.Add(request.NewErrParamRequired("EndTime"))
+	}
+	if s.MetricName == nil {
+		invalidParams.Add(request.NewErrParamRequired("MetricName"))
+	}
+	if s.Period == nil {
+		invalidParams.Add(request.NewErrParamRequired("Period"))
+	}
+	if s.Period != nil && *s.Period < 60 {
+		invalidParams.Add(request.NewErrParamMinValue("Period", 60))
+	}
+	if s.ServiceName == nil {
+		invalidParams.Add(request.NewErrParamRequired("ServiceName"))
+	}
+	if s.ServiceName != nil && len(*s.ServiceName) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ServiceName", 1))
+	}
+	if s.StartTime == nil {
+		invalidParams.Add(request.NewErrParamRequired("StartTime"))
+	}
+	if s.Statistics == nil {
+		invalidParams.Add(request.NewErrParamRequired("Statistics"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetEndTime sets the EndTime field's value.
+func (s *GetContainerServiceMetricDataInput) SetEndTime(v time.Time) *GetContainerServiceMetricDataInput {
+	s.EndTime = &v
+	return s
+}
+
+// SetMetricName sets the MetricName field's value.
+func (s *GetContainerServiceMetricDataInput) SetMetricName(v string) *GetContainerServiceMetricDataInput {
+	s.MetricName = &v
+	return s
+}
+
+// SetPeriod sets the Period field's value.
+func (s *GetContainerServiceMetricDataInput) SetPeriod(v int64) *GetContainerServiceMetricDataInput {
+	s.Period = &v
+	return s
+}
+
+// SetServiceName sets the ServiceName field's value.
+func (s *GetContainerServiceMetricDataInput) SetServiceName(v string) *GetContainerServiceMetricDataInput {
+	s.ServiceName = &v
+	return s
+}
+
+// SetStartTime sets the StartTime field's value.
+func (s *GetContainerServiceMetricDataInput) SetStartTime(v time.Time) *GetContainerServiceMetricDataInput {
+	s.StartTime = &v
+	return s
+}
+
+// SetStatistics sets the Statistics field's value.
+func (s *GetContainerServiceMetricDataInput) SetStatistics(v []*string) *GetContainerServiceMetricDataInput {
+	s.Statistics = v
+	return s
+}
+
+type GetContainerServiceMetricDataOutput struct {
+	_ struct{} `type:"structure"`
+
+	// An array of objects that describe the metric data returned.
+	MetricData []*MetricDatapoint `locationName:"metricData" type:"list"`
+
+	// The name of the metric returned.
+	MetricName *string `locationName:"metricName" type:"string" enum:"ContainerServiceMetricName"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetContainerServiceMetricDataOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetContainerServiceMetricDataOutput) GoString() string {
+	return s.String()
+}
+
+// SetMetricData sets the MetricData field's value.
+func (s *GetContainerServiceMetricDataOutput) SetMetricData(v []*MetricDatapoint) *GetContainerServiceMetricDataOutput {
+	s.MetricData = v
+	return s
+}
+
+// SetMetricName sets the MetricName field's value.
+func (s *GetContainerServiceMetricDataOutput) SetMetricName(v string) *GetContainerServiceMetricDataOutput {
+	s.MetricName = &v
+	return s
+}
+
+type GetContainerServicePowersInput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetContainerServicePowersInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetContainerServicePowersInput) GoString() string {
+	return s.String()
+}
+
+type GetContainerServicePowersOutput struct {
+	_ struct{} `type:"structure"`
+
+	// An array of objects that describe the powers that can be specified for a
+	// container service.
+	Powers []*ContainerServicePower `locationName:"powers" type:"list"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetContainerServicePowersOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetContainerServicePowersOutput) GoString() string {
+	return s.String()
+}
+
+// SetPowers sets the Powers field's value.
+func (s *GetContainerServicePowersOutput) SetPowers(v []*ContainerServicePower) *GetContainerServicePowersOutput {
+	s.Powers = v
+	return s
+}
+
+type GetContainerServicesInput struct {
+	_ struct{} `type:"structure"`
+
+	// The name of the container service for which to return information.
+	//
+	// When omitted, the response includes all of your container services in the
+	// AWS Region where the request is made.
+	ServiceName *string `locationName:"serviceName" min:"1" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetContainerServicesInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetContainerServicesInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *GetContainerServicesInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "GetContainerServicesInput"}
+	if s.ServiceName != nil && len(*s.ServiceName) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ServiceName", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetServiceName sets the ServiceName field's value.
+func (s *GetContainerServicesInput) SetServiceName(v string) *GetContainerServicesInput {
+	s.ServiceName = &v
+	return s
+}
+
+type GetContainerServicesOutput struct {
+	_ struct{} `type:"structure"`
+
+	// An array of objects that describe one or more container services.
+	ContainerServices []*ContainerService `locationName:"containerServices" type:"list"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetContainerServicesOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetContainerServicesOutput) GoString() string {
+	return s.String()
+}
+
+// SetContainerServices sets the ContainerServices field's value.
+func (s *GetContainerServicesOutput) SetContainerServices(v []*ContainerService) *GetContainerServicesOutput {
+	s.ContainerServices = v
 	return s
 }
 
@@ -21789,12 +29485,20 @@ type GetDiskInput struct {
 	DiskName *string `locationName:"diskName" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetDiskInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetDiskInput) GoString() string {
 	return s.String()
 }
@@ -21825,12 +29529,20 @@ type GetDiskOutput struct {
 	Disk *Disk `locationName:"disk" type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetDiskOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetDiskOutput) GoString() string {
 	return s.String()
 }
@@ -21850,12 +29562,20 @@ type GetDiskSnapshotInput struct {
 	DiskSnapshotName *string `locationName:"diskSnapshotName" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetDiskSnapshotInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetDiskSnapshotInput) GoString() string {
 	return s.String()
 }
@@ -21886,12 +29606,20 @@ type GetDiskSnapshotOutput struct {
 	DiskSnapshot *DiskSnapshot `locationName:"diskSnapshot" type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetDiskSnapshotOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetDiskSnapshotOutput) GoString() string {
 	return s.String()
 }
@@ -21913,12 +29641,20 @@ type GetDiskSnapshotsInput struct {
 	PageToken *string `locationName:"pageToken" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetDiskSnapshotsInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetDiskSnapshotsInput) GoString() string {
 	return s.String()
 }
@@ -21935,7 +29671,7 @@ type GetDiskSnapshotsOutput struct {
 	// An array of objects containing information about all block storage disk snapshots.
 	DiskSnapshots []*DiskSnapshot `locationName:"diskSnapshots" type:"list"`
 
-	// The token to advance to the next page of resutls from your request.
+	// The token to advance to the next page of results from your request.
 	//
 	// A next page token is not returned if there are no more results to display.
 	//
@@ -21944,12 +29680,20 @@ type GetDiskSnapshotsOutput struct {
 	NextPageToken *string `locationName:"nextPageToken" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetDiskSnapshotsOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetDiskSnapshotsOutput) GoString() string {
 	return s.String()
 }
@@ -21977,12 +29721,20 @@ type GetDisksInput struct {
 	PageToken *string `locationName:"pageToken" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetDisksInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetDisksInput) GoString() string {
 	return s.String()
 }
@@ -21999,7 +29751,7 @@ type GetDisksOutput struct {
 	// An array of objects containing information about all block storage disks.
 	Disks []*Disk `locationName:"disks" type:"list"`
 
-	// The token to advance to the next page of resutls from your request.
+	// The token to advance to the next page of results from your request.
 	//
 	// A next page token is not returned if there are no more results to display.
 	//
@@ -22008,12 +29760,20 @@ type GetDisksOutput struct {
 	NextPageToken *string `locationName:"nextPageToken" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetDisksOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetDisksOutput) GoString() string {
 	return s.String()
 }
@@ -22034,12 +29794,20 @@ type GetDistributionBundlesInput struct {
 	_ struct{} `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetDistributionBundlesInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetDistributionBundlesInput) GoString() string {
 	return s.String()
 }
@@ -22051,12 +29819,20 @@ type GetDistributionBundlesOutput struct {
 	Bundles []*DistributionBundle `locationName:"bundles" type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetDistributionBundlesOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetDistributionBundlesOutput) GoString() string {
 	return s.String()
 }
@@ -22081,12 +29857,20 @@ type GetDistributionLatestCacheResetInput struct {
 	DistributionName *string `locationName:"distributionName" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetDistributionLatestCacheResetInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetDistributionLatestCacheResetInput) GoString() string {
 	return s.String()
 }
@@ -22108,12 +29892,20 @@ type GetDistributionLatestCacheResetOutput struct {
 	Status *string `locationName:"status" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetDistributionLatestCacheResetOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetDistributionLatestCacheResetOutput) GoString() string {
 	return s.String()
 }
@@ -22249,12 +30041,20 @@ type GetDistributionMetricDataInput struct {
 	Unit *string `locationName:"unit" type:"string" required:"true" enum:"MetricUnit"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetDistributionMetricDataInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetDistributionMetricDataInput) GoString() string {
 	return s.String()
 }
@@ -22345,12 +30145,20 @@ type GetDistributionMetricDataOutput struct {
 	MetricName *string `locationName:"metricName" type:"string" enum:"DistributionMetricName"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetDistributionMetricDataOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetDistributionMetricDataOutput) GoString() string {
 	return s.String()
 }
@@ -22372,9 +30180,6 @@ type GetDistributionsInput struct {
 
 	// The name of the distribution for which to return information.
 	//
-	// Use the GetDistributions action to get a list of distribution names that
-	// you can specify.
-	//
 	// When omitted, the response includes all of your distributions in the AWS
 	// Region where the request is made.
 	DistributionName *string `locationName:"distributionName" type:"string"`
@@ -22387,12 +30192,20 @@ type GetDistributionsInput struct {
 	PageToken *string `locationName:"pageToken" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetDistributionsInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetDistributionsInput) GoString() string {
 	return s.String()
 }
@@ -22424,12 +30237,20 @@ type GetDistributionsOutput struct {
 	NextPageToken *string `locationName:"nextPageToken" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetDistributionsOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetDistributionsOutput) GoString() string {
 	return s.String()
 }
@@ -22455,12 +30276,20 @@ type GetDomainInput struct {
 	DomainName *string `locationName:"domainName" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetDomainInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetDomainInput) GoString() string {
 	return s.String()
 }
@@ -22492,12 +30321,20 @@ type GetDomainOutput struct {
 	Domain *Domain `locationName:"domain" type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetDomainOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetDomainOutput) GoString() string {
 	return s.String()
 }
@@ -22519,12 +30356,20 @@ type GetDomainsInput struct {
 	PageToken *string `locationName:"pageToken" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetDomainsInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetDomainsInput) GoString() string {
 	return s.String()
 }
@@ -22542,7 +30387,7 @@ type GetDomainsOutput struct {
 	// entries in the user's account.
 	Domains []*Domain `locationName:"domains" type:"list"`
 
-	// The token to advance to the next page of resutls from your request.
+	// The token to advance to the next page of results from your request.
 	//
 	// A next page token is not returned if there are no more results to display.
 	//
@@ -22551,12 +30396,20 @@ type GetDomainsOutput struct {
 	NextPageToken *string `locationName:"nextPageToken" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetDomainsOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetDomainsOutput) GoString() string {
 	return s.String()
 }
@@ -22584,12 +30437,20 @@ type GetExportSnapshotRecordsInput struct {
 	PageToken *string `locationName:"pageToken" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetExportSnapshotRecordsInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetExportSnapshotRecordsInput) GoString() string {
 	return s.String()
 }
@@ -22606,7 +30467,7 @@ type GetExportSnapshotRecordsOutput struct {
 	// A list of objects describing the export snapshot records.
 	ExportSnapshotRecords []*ExportSnapshotRecord `locationName:"exportSnapshotRecords" type:"list"`
 
-	// The token to advance to the next page of resutls from your request.
+	// The token to advance to the next page of results from your request.
 	//
 	// A next page token is not returned if there are no more results to display.
 	//
@@ -22615,12 +30476,20 @@ type GetExportSnapshotRecordsOutput struct {
 	NextPageToken *string `locationName:"nextPageToken" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetExportSnapshotRecordsOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetExportSnapshotRecordsOutput) GoString() string {
 	return s.String()
 }
@@ -22649,12 +30518,20 @@ type GetInstanceAccessDetailsInput struct {
 	Protocol *string `locationName:"protocol" type:"string" enum:"InstanceAccessProtocol"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetInstanceAccessDetailsInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetInstanceAccessDetailsInput) GoString() string {
 	return s.String()
 }
@@ -22692,12 +30569,20 @@ type GetInstanceAccessDetailsOutput struct {
 	AccessDetails *InstanceAccessDetails `locationName:"accessDetails" type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetInstanceAccessDetailsOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetInstanceAccessDetailsOutput) GoString() string {
 	return s.String()
 }
@@ -22717,12 +30602,20 @@ type GetInstanceInput struct {
 	InstanceName *string `locationName:"instanceName" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetInstanceInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetInstanceInput) GoString() string {
 	return s.String()
 }
@@ -22874,12 +30767,20 @@ type GetInstanceMetricDataInput struct {
 	Unit *string `locationName:"unit" type:"string" required:"true" enum:"MetricUnit"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetInstanceMetricDataInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetInstanceMetricDataInput) GoString() string {
 	return s.String()
 }
@@ -22970,12 +30871,20 @@ type GetInstanceMetricDataOutput struct {
 	MetricName *string `locationName:"metricName" type:"string" enum:"InstanceMetricName"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetInstanceMetricDataOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetInstanceMetricDataOutput) GoString() string {
 	return s.String()
 }
@@ -22999,12 +30908,20 @@ type GetInstanceOutput struct {
 	Instance *Instance `locationName:"instance" type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetInstanceOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetInstanceOutput) GoString() string {
 	return s.String()
 }
@@ -23024,12 +30941,20 @@ type GetInstancePortStatesInput struct {
 	InstanceName *string `locationName:"instanceName" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetInstancePortStatesInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetInstancePortStatesInput) GoString() string {
 	return s.String()
 }
@@ -23061,12 +30986,20 @@ type GetInstancePortStatesOutput struct {
 	PortStates []*InstancePortState `locationName:"portStates" type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetInstancePortStatesOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetInstancePortStatesOutput) GoString() string {
 	return s.String()
 }
@@ -23086,12 +31019,20 @@ type GetInstanceSnapshotInput struct {
 	InstanceSnapshotName *string `locationName:"instanceSnapshotName" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetInstanceSnapshotInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetInstanceSnapshotInput) GoString() string {
 	return s.String()
 }
@@ -23123,12 +31064,20 @@ type GetInstanceSnapshotOutput struct {
 	InstanceSnapshot *InstanceSnapshot `locationName:"instanceSnapshot" type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetInstanceSnapshotOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetInstanceSnapshotOutput) GoString() string {
 	return s.String()
 }
@@ -23150,12 +31099,20 @@ type GetInstanceSnapshotsInput struct {
 	PageToken *string `locationName:"pageToken" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetInstanceSnapshotsInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetInstanceSnapshotsInput) GoString() string {
 	return s.String()
 }
@@ -23173,7 +31130,7 @@ type GetInstanceSnapshotsOutput struct {
 	// get instance snapshots request.
 	InstanceSnapshots []*InstanceSnapshot `locationName:"instanceSnapshots" type:"list"`
 
-	// The token to advance to the next page of resutls from your request.
+	// The token to advance to the next page of results from your request.
 	//
 	// A next page token is not returned if there are no more results to display.
 	//
@@ -23182,12 +31139,20 @@ type GetInstanceSnapshotsOutput struct {
 	NextPageToken *string `locationName:"nextPageToken" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetInstanceSnapshotsOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetInstanceSnapshotsOutput) GoString() string {
 	return s.String()
 }
@@ -23213,12 +31178,20 @@ type GetInstanceStateInput struct {
 	InstanceName *string `locationName:"instanceName" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetInstanceStateInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetInstanceStateInput) GoString() string {
 	return s.String()
 }
@@ -23249,12 +31222,20 @@ type GetInstanceStateOutput struct {
 	State *InstanceState `locationName:"state" type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetInstanceStateOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetInstanceStateOutput) GoString() string {
 	return s.String()
 }
@@ -23276,12 +31257,20 @@ type GetInstancesInput struct {
 	PageToken *string `locationName:"pageToken" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetInstancesInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetInstancesInput) GoString() string {
 	return s.String()
 }
@@ -23298,7 +31287,7 @@ type GetInstancesOutput struct {
 	// An array of key-value pairs containing information about your instances.
 	Instances []*Instance `locationName:"instances" type:"list"`
 
-	// The token to advance to the next page of resutls from your request.
+	// The token to advance to the next page of results from your request.
 	//
 	// A next page token is not returned if there are no more results to display.
 	//
@@ -23307,12 +31296,20 @@ type GetInstancesOutput struct {
 	NextPageToken *string `locationName:"nextPageToken" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetInstancesOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetInstancesOutput) GoString() string {
 	return s.String()
 }
@@ -23338,12 +31335,20 @@ type GetKeyPairInput struct {
 	KeyPairName *string `locationName:"keyPairName" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetKeyPairInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetKeyPairInput) GoString() string {
 	return s.String()
 }
@@ -23374,12 +31379,20 @@ type GetKeyPairOutput struct {
 	KeyPair *KeyPair `locationName:"keyPair" type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetKeyPairOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetKeyPairOutput) GoString() string {
 	return s.String()
 }
@@ -23401,12 +31414,20 @@ type GetKeyPairsInput struct {
 	PageToken *string `locationName:"pageToken" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetKeyPairsInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetKeyPairsInput) GoString() string {
 	return s.String()
 }
@@ -23423,7 +31444,7 @@ type GetKeyPairsOutput struct {
 	// An array of key-value pairs containing information about the key pairs.
 	KeyPairs []*KeyPair `locationName:"keyPairs" type:"list"`
 
-	// The token to advance to the next page of resutls from your request.
+	// The token to advance to the next page of results from your request.
 	//
 	// A next page token is not returned if there are no more results to display.
 	//
@@ -23432,12 +31453,20 @@ type GetKeyPairsOutput struct {
 	NextPageToken *string `locationName:"nextPageToken" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetKeyPairsOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetKeyPairsOutput) GoString() string {
 	return s.String()
 }
@@ -23463,12 +31492,20 @@ type GetLoadBalancerInput struct {
 	LoadBalancerName *string `locationName:"loadBalancerName" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetLoadBalancerInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetLoadBalancerInput) GoString() string {
 	return s.String()
 }
@@ -23626,12 +31663,20 @@ type GetLoadBalancerMetricDataInput struct {
 	Unit *string `locationName:"unit" type:"string" required:"true" enum:"MetricUnit"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetLoadBalancerMetricDataInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetLoadBalancerMetricDataInput) GoString() string {
 	return s.String()
 }
@@ -23722,12 +31767,20 @@ type GetLoadBalancerMetricDataOutput struct {
 	MetricName *string `locationName:"metricName" type:"string" enum:"LoadBalancerMetricName"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetLoadBalancerMetricDataOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetLoadBalancerMetricDataOutput) GoString() string {
 	return s.String()
 }
@@ -23751,12 +31804,20 @@ type GetLoadBalancerOutput struct {
 	LoadBalancer *LoadBalancer `locationName:"loadBalancer" type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetLoadBalancerOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetLoadBalancerOutput) GoString() string {
 	return s.String()
 }
@@ -23776,12 +31837,20 @@ type GetLoadBalancerTlsCertificatesInput struct {
 	LoadBalancerName *string `locationName:"loadBalancerName" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetLoadBalancerTlsCertificatesInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetLoadBalancerTlsCertificatesInput) GoString() string {
 	return s.String()
 }
@@ -23812,12 +31881,20 @@ type GetLoadBalancerTlsCertificatesOutput struct {
 	TlsCertificates []*LoadBalancerTlsCertificate `locationName:"tlsCertificates" type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetLoadBalancerTlsCertificatesOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetLoadBalancerTlsCertificatesOutput) GoString() string {
 	return s.String()
 }
@@ -23839,12 +31916,20 @@ type GetLoadBalancersInput struct {
 	PageToken *string `locationName:"pageToken" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetLoadBalancersInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetLoadBalancersInput) GoString() string {
 	return s.String()
 }
@@ -23861,7 +31946,7 @@ type GetLoadBalancersOutput struct {
 	// An array of LoadBalancer objects describing your load balancers.
 	LoadBalancers []*LoadBalancer `locationName:"loadBalancers" type:"list"`
 
-	// The token to advance to the next page of resutls from your request.
+	// The token to advance to the next page of results from your request.
 	//
 	// A next page token is not returned if there are no more results to display.
 	//
@@ -23870,12 +31955,20 @@ type GetLoadBalancersOutput struct {
 	NextPageToken *string `locationName:"nextPageToken" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetLoadBalancersOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetLoadBalancersOutput) GoString() string {
 	return s.String()
 }
@@ -23901,12 +31994,20 @@ type GetOperationInput struct {
 	OperationId *string `locationName:"operationId" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetOperationInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetOperationInput) GoString() string {
 	return s.String()
 }
@@ -23939,12 +32040,20 @@ type GetOperationOutput struct {
 	Operation *Operation `locationName:"operation" type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetOperationOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetOperationOutput) GoString() string {
 	return s.String()
 }
@@ -23971,12 +32080,20 @@ type GetOperationsForResourceInput struct {
 	ResourceName *string `locationName:"resourceName" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetOperationsForResourceInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetOperationsForResourceInput) GoString() string {
 	return s.String()
 }
@@ -24017,7 +32134,7 @@ type GetOperationsForResourceOutput struct {
 	// Deprecated: NextPageCount has been deprecated
 	NextPageCount *string `locationName:"nextPageCount" deprecated:"true" type:"string"`
 
-	// The token to advance to the next page of resutls from your request.
+	// The token to advance to the next page of results from your request.
 	//
 	// A next page token is not returned if there are no more results to display.
 	//
@@ -24031,12 +32148,20 @@ type GetOperationsForResourceOutput struct {
 	Operations []*Operation `locationName:"operations" type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetOperationsForResourceOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetOperationsForResourceOutput) GoString() string {
 	return s.String()
 }
@@ -24070,12 +32195,20 @@ type GetOperationsInput struct {
 	PageToken *string `locationName:"pageToken" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetOperationsInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetOperationsInput) GoString() string {
 	return s.String()
 }
@@ -24089,7 +32222,7 @@ func (s *GetOperationsInput) SetPageToken(v string) *GetOperationsInput {
 type GetOperationsOutput struct {
 	_ struct{} `type:"structure"`
 
-	// The token to advance to the next page of resutls from your request.
+	// The token to advance to the next page of results from your request.
 	//
 	// A next page token is not returned if there are no more results to display.
 	//
@@ -24103,12 +32236,20 @@ type GetOperationsOutput struct {
 	Operations []*Operation `locationName:"operations" type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetOperationsOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetOperationsOutput) GoString() string {
 	return s.String()
 }
@@ -24133,18 +32274,26 @@ type GetRegionsInput struct {
 	// e.g., us-east-2a.
 	IncludeAvailabilityZones *bool `locationName:"includeAvailabilityZones" type:"boolean"`
 
-	// >A Boolean value indicating whether to also include Availability Zones for
+	// A Boolean value indicating whether to also include Availability Zones for
 	// databases in your get regions request. Availability Zones are indicated with
 	// a letter (e.g., us-east-2a).
 	IncludeRelationalDatabaseAvailabilityZones *bool `locationName:"includeRelationalDatabaseAvailabilityZones" type:"boolean"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetRegionsInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetRegionsInput) GoString() string {
 	return s.String()
 }
@@ -24169,12 +32318,20 @@ type GetRegionsOutput struct {
 	Regions []*Region `locationName:"regions" type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetRegionsOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetRegionsOutput) GoString() string {
 	return s.String()
 }
@@ -24196,12 +32353,20 @@ type GetRelationalDatabaseBlueprintsInput struct {
 	PageToken *string `locationName:"pageToken" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetRelationalDatabaseBlueprintsInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetRelationalDatabaseBlueprintsInput) GoString() string {
 	return s.String()
 }
@@ -24219,7 +32384,7 @@ type GetRelationalDatabaseBlueprintsOutput struct {
 	// request.
 	Blueprints []*RelationalDatabaseBlueprint `locationName:"blueprints" type:"list"`
 
-	// The token to advance to the next page of resutls from your request.
+	// The token to advance to the next page of results from your request.
 	//
 	// A next page token is not returned if there are no more results to display.
 	//
@@ -24228,12 +32393,20 @@ type GetRelationalDatabaseBlueprintsOutput struct {
 	NextPageToken *string `locationName:"nextPageToken" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetRelationalDatabaseBlueprintsOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetRelationalDatabaseBlueprintsOutput) GoString() string {
 	return s.String()
 }
@@ -24261,12 +32434,20 @@ type GetRelationalDatabaseBundlesInput struct {
 	PageToken *string `locationName:"pageToken" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetRelationalDatabaseBundlesInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetRelationalDatabaseBundlesInput) GoString() string {
 	return s.String()
 }
@@ -24283,7 +32464,7 @@ type GetRelationalDatabaseBundlesOutput struct {
 	// An object describing the result of your get relational database bundles request.
 	Bundles []*RelationalDatabaseBundle `locationName:"bundles" type:"list"`
 
-	// The token to advance to the next page of resutls from your request.
+	// The token to advance to the next page of results from your request.
 	//
 	// A next page token is not returned if there are no more results to display.
 	//
@@ -24292,12 +32473,20 @@ type GetRelationalDatabaseBundlesOutput struct {
 	NextPageToken *string `locationName:"nextPageToken" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetRelationalDatabaseBundlesOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetRelationalDatabaseBundlesOutput) GoString() string {
 	return s.String()
 }
@@ -24338,12 +32527,20 @@ type GetRelationalDatabaseEventsInput struct {
 	RelationalDatabaseName *string `locationName:"relationalDatabaseName" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetRelationalDatabaseEventsInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetRelationalDatabaseEventsInput) GoString() string {
 	return s.String()
 }
@@ -24382,7 +32579,7 @@ func (s *GetRelationalDatabaseEventsInput) SetRelationalDatabaseName(v string) *
 type GetRelationalDatabaseEventsOutput struct {
 	_ struct{} `type:"structure"`
 
-	// The token to advance to the next page of resutls from your request.
+	// The token to advance to the next page of results from your request.
 	//
 	// A next page token is not returned if there are no more results to display.
 	//
@@ -24394,12 +32591,20 @@ type GetRelationalDatabaseEventsOutput struct {
 	RelationalDatabaseEvents []*RelationalDatabaseEvent `locationName:"relationalDatabaseEvents" type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetRelationalDatabaseEventsOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetRelationalDatabaseEventsOutput) GoString() string {
 	return s.String()
 }
@@ -24425,12 +32630,20 @@ type GetRelationalDatabaseInput struct {
 	RelationalDatabaseName *string `locationName:"relationalDatabaseName" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetRelationalDatabaseInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetRelationalDatabaseInput) GoString() string {
 	return s.String()
 }
@@ -24508,12 +32721,20 @@ type GetRelationalDatabaseLogEventsInput struct {
 	StartTime *time.Time `locationName:"startTime" type:"timestamp"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetRelationalDatabaseLogEventsInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetRelationalDatabaseLogEventsInput) GoString() string {
 	return s.String()
 }
@@ -24586,12 +32807,20 @@ type GetRelationalDatabaseLogEventsOutput struct {
 	ResourceLogEvents []*LogEvent `locationName:"resourceLogEvents" type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetRelationalDatabaseLogEventsOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetRelationalDatabaseLogEventsOutput) GoString() string {
 	return s.String()
 }
@@ -24623,12 +32852,20 @@ type GetRelationalDatabaseLogStreamsInput struct {
 	RelationalDatabaseName *string `locationName:"relationalDatabaseName" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetRelationalDatabaseLogStreamsInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetRelationalDatabaseLogStreamsInput) GoString() string {
 	return s.String()
 }
@@ -24660,12 +32897,20 @@ type GetRelationalDatabaseLogStreamsOutput struct {
 	LogStreams []*string `locationName:"logStreams" type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetRelationalDatabaseLogStreamsOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetRelationalDatabaseLogStreamsOutput) GoString() string {
 	return s.String()
 }
@@ -24695,12 +32940,20 @@ type GetRelationalDatabaseMasterUserPasswordInput struct {
 	RelationalDatabaseName *string `locationName:"relationalDatabaseName" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetRelationalDatabaseMasterUserPasswordInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetRelationalDatabaseMasterUserPasswordInput) GoString() string {
 	return s.String()
 }
@@ -24738,15 +32991,27 @@ type GetRelationalDatabaseMasterUserPasswordOutput struct {
 	CreatedAt *time.Time `locationName:"createdAt" type:"timestamp"`
 
 	// The master user password for the password version specified.
+	//
+	// MasterUserPassword is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by GetRelationalDatabaseMasterUserPasswordOutput's
+	// String and GoString methods.
 	MasterUserPassword *string `locationName:"masterUserPassword" type:"string" sensitive:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetRelationalDatabaseMasterUserPasswordOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetRelationalDatabaseMasterUserPasswordOutput) GoString() string {
 	return s.String()
 }
@@ -24873,12 +33138,20 @@ type GetRelationalDatabaseMetricDataInput struct {
 	Unit *string `locationName:"unit" type:"string" required:"true" enum:"MetricUnit"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetRelationalDatabaseMetricDataInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetRelationalDatabaseMetricDataInput) GoString() string {
 	return s.String()
 }
@@ -24969,12 +33242,20 @@ type GetRelationalDatabaseMetricDataOutput struct {
 	MetricName *string `locationName:"metricName" type:"string" enum:"RelationalDatabaseMetricName"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetRelationalDatabaseMetricDataOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetRelationalDatabaseMetricDataOutput) GoString() string {
 	return s.String()
 }
@@ -24998,12 +33279,20 @@ type GetRelationalDatabaseOutput struct {
 	RelationalDatabase *RelationalDatabase `locationName:"relationalDatabase" type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetRelationalDatabaseOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetRelationalDatabaseOutput) GoString() string {
 	return s.String()
 }
@@ -25030,12 +33319,20 @@ type GetRelationalDatabaseParametersInput struct {
 	RelationalDatabaseName *string `locationName:"relationalDatabaseName" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetRelationalDatabaseParametersInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetRelationalDatabaseParametersInput) GoString() string {
 	return s.String()
 }
@@ -25068,7 +33365,7 @@ func (s *GetRelationalDatabaseParametersInput) SetRelationalDatabaseName(v strin
 type GetRelationalDatabaseParametersOutput struct {
 	_ struct{} `type:"structure"`
 
-	// The token to advance to the next page of resutls from your request.
+	// The token to advance to the next page of results from your request.
 	//
 	// A next page token is not returned if there are no more results to display.
 	//
@@ -25081,12 +33378,20 @@ type GetRelationalDatabaseParametersOutput struct {
 	Parameters []*RelationalDatabaseParameter `locationName:"parameters" type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetRelationalDatabaseParametersOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetRelationalDatabaseParametersOutput) GoString() string {
 	return s.String()
 }
@@ -25112,12 +33417,20 @@ type GetRelationalDatabaseSnapshotInput struct {
 	RelationalDatabaseSnapshotName *string `locationName:"relationalDatabaseSnapshotName" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetRelationalDatabaseSnapshotInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetRelationalDatabaseSnapshotInput) GoString() string {
 	return s.String()
 }
@@ -25148,12 +33461,20 @@ type GetRelationalDatabaseSnapshotOutput struct {
 	RelationalDatabaseSnapshot *RelationalDatabaseSnapshot `locationName:"relationalDatabaseSnapshot" type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetRelationalDatabaseSnapshotOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetRelationalDatabaseSnapshotOutput) GoString() string {
 	return s.String()
 }
@@ -25175,12 +33496,20 @@ type GetRelationalDatabaseSnapshotsInput struct {
 	PageToken *string `locationName:"pageToken" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetRelationalDatabaseSnapshotsInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetRelationalDatabaseSnapshotsInput) GoString() string {
 	return s.String()
 }
@@ -25194,7 +33523,7 @@ func (s *GetRelationalDatabaseSnapshotsInput) SetPageToken(v string) *GetRelatio
 type GetRelationalDatabaseSnapshotsOutput struct {
 	_ struct{} `type:"structure"`
 
-	// The token to advance to the next page of resutls from your request.
+	// The token to advance to the next page of results from your request.
 	//
 	// A next page token is not returned if there are no more results to display.
 	//
@@ -25207,12 +33536,20 @@ type GetRelationalDatabaseSnapshotsOutput struct {
 	RelationalDatabaseSnapshots []*RelationalDatabaseSnapshot `locationName:"relationalDatabaseSnapshots" type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetRelationalDatabaseSnapshotsOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetRelationalDatabaseSnapshotsOutput) GoString() string {
 	return s.String()
 }
@@ -25240,12 +33577,20 @@ type GetRelationalDatabasesInput struct {
 	PageToken *string `locationName:"pageToken" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetRelationalDatabasesInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetRelationalDatabasesInput) GoString() string {
 	return s.String()
 }
@@ -25259,7 +33604,7 @@ func (s *GetRelationalDatabasesInput) SetPageToken(v string) *GetRelationalDatab
 type GetRelationalDatabasesOutput struct {
 	_ struct{} `type:"structure"`
 
-	// The token to advance to the next page of resutls from your request.
+	// The token to advance to the next page of results from your request.
 	//
 	// A next page token is not returned if there are no more results to display.
 	//
@@ -25271,12 +33616,20 @@ type GetRelationalDatabasesOutput struct {
 	RelationalDatabases []*RelationalDatabase `locationName:"relationalDatabases" type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetRelationalDatabasesOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetRelationalDatabasesOutput) GoString() string {
 	return s.String()
 }
@@ -25302,12 +33655,20 @@ type GetStaticIpInput struct {
 	StaticIpName *string `locationName:"staticIpName" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetStaticIpInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetStaticIpInput) GoString() string {
 	return s.String()
 }
@@ -25339,12 +33700,20 @@ type GetStaticIpOutput struct {
 	StaticIp *StaticIp `locationName:"staticIp" type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetStaticIpOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetStaticIpOutput) GoString() string {
 	return s.String()
 }
@@ -25366,12 +33735,20 @@ type GetStaticIpsInput struct {
 	PageToken *string `locationName:"pageToken" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetStaticIpsInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetStaticIpsInput) GoString() string {
 	return s.String()
 }
@@ -25385,7 +33762,7 @@ func (s *GetStaticIpsInput) SetPageToken(v string) *GetStaticIpsInput {
 type GetStaticIpsOutput struct {
 	_ struct{} `type:"structure"`
 
-	// The token to advance to the next page of resutls from your request.
+	// The token to advance to the next page of results from your request.
 	//
 	// A next page token is not returned if there are no more results to display.
 	//
@@ -25398,12 +33775,20 @@ type GetStaticIpsOutput struct {
 	StaticIps []*StaticIp `locationName:"staticIps" type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetStaticIpsOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetStaticIpsOutput) GoString() string {
 	return s.String()
 }
@@ -25450,12 +33835,20 @@ type HeaderObject struct {
 	Option *string `locationName:"option" type:"string" enum:"ForwardValues"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s HeaderObject) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s HeaderObject) GoString() string {
 	return s.String()
 }
@@ -25513,12 +33906,20 @@ type HostKeyAttributes struct {
 	WitnessedAt *time.Time `locationName:"witnessedAt" type:"timestamp"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s HostKeyAttributes) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s HostKeyAttributes) GoString() string {
 	return s.String()
 }
@@ -25579,12 +33980,20 @@ type ImportKeyPairInput struct {
 	PublicKeyBase64 *string `locationName:"publicKeyBase64" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ImportKeyPairInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ImportKeyPairInput) GoString() string {
 	return s.String()
 }
@@ -25626,12 +34035,20 @@ type ImportKeyPairOutput struct {
 	Operation *Operation `locationName:"operation" type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ImportKeyPairOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ImportKeyPairOutput) GoString() string {
 	return s.String()
 }
@@ -25662,12 +34079,20 @@ type InputOrigin struct {
 	RegionName *string `locationName:"regionName" type:"string" enum:"RegionName"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s InputOrigin) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s InputOrigin) GoString() string {
 	return s.String()
 }
@@ -25716,8 +34141,13 @@ type Instance struct {
 	// The size of the vCPU and the amount of RAM for the instance.
 	Hardware *InstanceHardware `locationName:"hardware" type:"structure"`
 
-	// The IPv6 address of the instance.
-	Ipv6Address *string `locationName:"ipv6Address" type:"string"`
+	// The IP address type of the instance.
+	//
+	// The possible values are ipv4 for IPv4 only, and dualstack for IPv4 and IPv6.
+	IpAddressType *string `locationName:"ipAddressType" type:"string" enum:"IpAddressType"`
+
+	// The IPv6 addresses of the instance.
+	Ipv6Addresses []*string `locationName:"ipv6Addresses" type:"list"`
 
 	// A Boolean value indicating whether this instance has a static IP assigned
 	// to it.
@@ -25754,19 +34184,27 @@ type Instance struct {
 	SupportCode *string `locationName:"supportCode" type:"string"`
 
 	// The tag keys and optional values for the resource. For more information about
-	// tags in Lightsail, see the Lightsail Dev Guide (https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-tags).
+	// tags in Lightsail, see the Amazon Lightsail Developer Guide (https://lightsail.aws.amazon.com/ls/docs/en_us/articles/amazon-lightsail-tags).
 	Tags []*Tag `locationName:"tags" type:"list"`
 
 	// The user name for connecting to the instance (e.g., ec2-user).
 	Username *string `locationName:"username" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s Instance) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s Instance) GoString() string {
 	return s.String()
 }
@@ -25813,9 +34251,15 @@ func (s *Instance) SetHardware(v *InstanceHardware) *Instance {
 	return s
 }
 
-// SetIpv6Address sets the Ipv6Address field's value.
-func (s *Instance) SetIpv6Address(v string) *Instance {
-	s.Ipv6Address = &v
+// SetIpAddressType sets the IpAddressType field's value.
+func (s *Instance) SetIpAddressType(v string) *Instance {
+	s.IpAddressType = &v
+	return s
+}
+
+// SetIpv6Addresses sets the Ipv6Addresses field's value.
+func (s *Instance) SetIpv6Addresses(v []*string) *Instance {
+	s.Ipv6Addresses = v
 	return s
 }
 
@@ -25943,12 +34387,20 @@ type InstanceAccessDetails struct {
 	Username *string `locationName:"username" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s InstanceAccessDetails) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s InstanceAccessDetails) GoString() string {
 	return s.String()
 }
@@ -26033,14 +34485,24 @@ type InstanceEntry struct {
 	// The following configuration options are available:
 	//
 	//    * DEFAULT - Use the default firewall settings from the Lightsail instance
-	//    blueprint.
+	//    blueprint. If this is specified, then IPv4 and IPv6 will be configured
+	//    for the new instance that is created in Amazon EC2.
 	//
 	//    * INSTANCE - Use the configured firewall settings from the source Lightsail
-	//    instance.
+	//    instance. If this is specified, the new instance that is created in Amazon
+	//    EC2 will be configured to match the configuration of the source Lightsail
+	//    instance. For example, if the source instance is configured for dual-stack
+	//    (IPv4 and IPv6), then IPv4 and IPv6 will be configured for the new instance
+	//    that is created in Amazon EC2. If the source instance is configured for
+	//    IPv4 only, then only IPv4 will be configured for the new instance that
+	//    is created in Amazon EC2.
 	//
-	//    * NONE - Use the default Amazon EC2 security group.
+	//    * NONE - Use the default Amazon EC2 security group. If this is specified,
+	//    then only IPv4 will be configured for the new instance that is created
+	//    in Amazon EC2.
 	//
-	//    * CLOSED - All ports closed.
+	//    * CLOSED - All ports closed. If this is specified, then only IPv4 will
+	//    be configured for the new instance that is created in Amazon EC2.
 	//
 	// If you configured lightsail-connect as a cidrListAliases on your instance,
 	// or if you chose to allow the Lightsail browser-based SSH or RDP clients to
@@ -26068,12 +34530,20 @@ type InstanceEntry struct {
 	UserData *string `locationName:"userData" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s InstanceEntry) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s InstanceEntry) GoString() string {
 	return s.String()
 }
@@ -26144,12 +34614,20 @@ type InstanceHardware struct {
 	RamSizeInGb *float64 `locationName:"ramSizeInGb" type:"float"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s InstanceHardware) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s InstanceHardware) GoString() string {
 	return s.String()
 }
@@ -26233,12 +34711,20 @@ type InstanceHealthSummary struct {
 	InstanceName *string `locationName:"instanceName" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s InstanceHealthSummary) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s InstanceHealthSummary) GoString() string {
 	return s.String()
 }
@@ -26273,12 +34759,20 @@ type InstanceNetworking struct {
 	Ports []*InstancePortInfo `locationName:"ports" type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s InstanceNetworking) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s InstanceNetworking) GoString() string {
 	return s.String()
 }
@@ -26318,9 +34812,11 @@ type InstancePortInfo struct {
 	// connect to your instance.
 	CidrListAliases []*string `locationName:"cidrListAliases" type:"list"`
 
-	// The IP address, or range of IP addresses in CIDR notation, that are allowed
-	// to connect to an instance through the ports, and the protocol. Lightsail
-	// supports IPv4 addresses.
+	// The IPv4 address, or range of IPv4 addresses (in CIDR notation) that are
+	// allowed to connect to an instance through the ports, and the protocol.
+	//
+	// The ipv6Cidrs parameter lists the IPv6 addresses that are allowed to connect
+	// to an instance.
 	//
 	// For more information about CIDR block notation, see Classless Inter-Domain
 	// Routing (https://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing#CIDR_notation)
@@ -26336,11 +34832,28 @@ type InstancePortInfo struct {
 	//
 	//    * TCP and UDP - 0 to 65535
 	//
-	//    * ICMP - The ICMP type. For example, specify 8 as the fromPort (ICMP type),
-	//    and -1 as the toPort (ICMP code), to enable ICMP Ping. For more information,
-	//    see Control Messages (https://en.wikipedia.org/wiki/Internet_Control_Message_Protocol#Control_messages)
+	//    * ICMP - The ICMP type for IPv4 addresses. For example, specify 8 as the
+	//    fromPort (ICMP type), and -1 as the toPort (ICMP code), to enable ICMP
+	//    Ping. For more information, see Control Messages (https://en.wikipedia.org/wiki/Internet_Control_Message_Protocol#Control_messages)
 	//    on Wikipedia.
+	//
+	//    * ICMPv6 - The ICMP type for IPv6 addresses. For example, specify 128
+	//    as the fromPort (ICMPv6 type), and 0 as toPort (ICMPv6 code). For more
+	//    information, see Internet Control Message Protocol for IPv6 (https://en.wikipedia.org/wiki/Internet_Control_Message_Protocol_for_IPv6).
 	FromPort *int64 `locationName:"fromPort" type:"integer"`
+
+	// The IPv6 address, or range of IPv6 addresses (in CIDR notation) that are
+	// allowed to connect to an instance through the ports, and the protocol. Only
+	// devices with an IPv6 address can connect to an instance through IPv6; otherwise,
+	// IPv4 should be used.
+	//
+	// The cidrs parameter lists the IPv4 addresses that are allowed to connect
+	// to an instance.
+	//
+	// For more information about CIDR block notation, see Classless Inter-Domain
+	// Routing (https://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing#CIDR_notation)
+	// on Wikipedia.
+	Ipv6Cidrs []*string `locationName:"ipv6Cidrs" type:"list"`
 
 	// The IP protocol name.
 	//
@@ -26377,19 +34890,31 @@ type InstancePortInfo struct {
 	//
 	//    * TCP and UDP - 0 to 65535
 	//
-	//    * ICMP - The ICMP code. For example, specify 8 as the fromPort (ICMP type),
-	//    and -1 as the toPort (ICMP code), to enable ICMP Ping. For more information,
-	//    see Control Messages (https://en.wikipedia.org/wiki/Internet_Control_Message_Protocol#Control_messages)
+	//    * ICMP - The ICMP code for IPv4 addresses. For example, specify 8 as the
+	//    fromPort (ICMP type), and -1 as the toPort (ICMP code), to enable ICMP
+	//    Ping. For more information, see Control Messages (https://en.wikipedia.org/wiki/Internet_Control_Message_Protocol#Control_messages)
 	//    on Wikipedia.
+	//
+	//    * ICMPv6 - The ICMP code for IPv6 addresses. For example, specify 128
+	//    as the fromPort (ICMPv6 type), and 0 as toPort (ICMPv6 code). For more
+	//    information, see Internet Control Message Protocol for IPv6 (https://en.wikipedia.org/wiki/Internet_Control_Message_Protocol_for_IPv6).
 	ToPort *int64 `locationName:"toPort" type:"integer"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s InstancePortInfo) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s InstancePortInfo) GoString() string {
 	return s.String()
 }
@@ -26436,6 +34961,12 @@ func (s *InstancePortInfo) SetFromPort(v int64) *InstancePortInfo {
 	return s
 }
 
+// SetIpv6Cidrs sets the Ipv6Cidrs field's value.
+func (s *InstancePortInfo) SetIpv6Cidrs(v []*string) *InstancePortInfo {
+	s.Ipv6Cidrs = v
+	return s
+}
+
 // SetProtocol sets the Protocol field's value.
 func (s *InstancePortInfo) SetProtocol(v string) *InstancePortInfo {
 	s.Protocol = &v
@@ -26460,9 +34991,11 @@ type InstancePortState struct {
 	// connect to your instance.
 	CidrListAliases []*string `locationName:"cidrListAliases" type:"list"`
 
-	// The IP address, or range of IP addresses in CIDR notation, that are allowed
-	// to connect to an instance through the ports, and the protocol. Lightsail
-	// supports IPv4 addresses.
+	// The IPv4 address, or range of IPv4 addresses (in CIDR notation) that are
+	// allowed to connect to an instance through the ports, and the protocol.
+	//
+	// The ipv6Cidrs parameter lists the IPv6 addresses that are allowed to connect
+	// to an instance.
 	//
 	// For more information about CIDR block notation, see Classless Inter-Domain
 	// Routing (https://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing#CIDR_notation)
@@ -26475,11 +35008,28 @@ type InstancePortState struct {
 	//
 	//    * TCP and UDP - 0 to 65535
 	//
-	//    * ICMP - The ICMP type. For example, specify 8 as the fromPort (ICMP type),
-	//    and -1 as the toPort (ICMP code), to enable ICMP Ping. For more information,
-	//    see Control Messages (https://en.wikipedia.org/wiki/Internet_Control_Message_Protocol#Control_messages)
+	//    * ICMP - The ICMP type for IPv4 addresses. For example, specify 8 as the
+	//    fromPort (ICMP type), and -1 as the toPort (ICMP code), to enable ICMP
+	//    Ping. For more information, see Control Messages (https://en.wikipedia.org/wiki/Internet_Control_Message_Protocol#Control_messages)
 	//    on Wikipedia.
+	//
+	//    * ICMPv6 - The ICMP type for IPv6 addresses. For example, specify 128
+	//    as the fromPort (ICMPv6 type), and 0 as toPort (ICMPv6 code). For more
+	//    information, see Internet Control Message Protocol for IPv6 (https://en.wikipedia.org/wiki/Internet_Control_Message_Protocol_for_IPv6).
 	FromPort *int64 `locationName:"fromPort" type:"integer"`
+
+	// The IPv6 address, or range of IPv6 addresses (in CIDR notation) that are
+	// allowed to connect to an instance through the ports, and the protocol. Only
+	// devices with an IPv6 address can connect to an instance through IPv6; otherwise,
+	// IPv4 should be used.
+	//
+	// The cidrs parameter lists the IPv4 addresses that are allowed to connect
+	// to an instance.
+	//
+	// For more information about CIDR block notation, see Classless Inter-Domain
+	// Routing (https://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing#CIDR_notation)
+	// on Wikipedia.
+	Ipv6Cidrs []*string `locationName:"ipv6Cidrs" type:"list"`
 
 	// The IP protocol name.
 	//
@@ -26521,19 +35071,31 @@ type InstancePortState struct {
 	//
 	//    * TCP and UDP - 0 to 65535
 	//
-	//    * ICMP - The ICMP code. For example, specify 8 as the fromPort (ICMP type),
-	//    and -1 as the toPort (ICMP code), to enable ICMP Ping. For more information,
-	//    see Control Messages (https://en.wikipedia.org/wiki/Internet_Control_Message_Protocol#Control_messages)
+	//    * ICMP - The ICMP code for IPv4 addresses. For example, specify 8 as the
+	//    fromPort (ICMP type), and -1 as the toPort (ICMP code), to enable ICMP
+	//    Ping. For more information, see Control Messages (https://en.wikipedia.org/wiki/Internet_Control_Message_Protocol#Control_messages)
 	//    on Wikipedia.
+	//
+	//    * ICMPv6 - The ICMP code for IPv6 addresses. For example, specify 128
+	//    as the fromPort (ICMPv6 type), and 0 as toPort (ICMPv6 code). For more
+	//    information, see Internet Control Message Protocol for IPv6 (https://en.wikipedia.org/wiki/Internet_Control_Message_Protocol_for_IPv6).
 	ToPort *int64 `locationName:"toPort" type:"integer"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s InstancePortState) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s InstancePortState) GoString() string {
 	return s.String()
 }
@@ -26553,6 +35115,12 @@ func (s *InstancePortState) SetCidrs(v []*string) *InstancePortState {
 // SetFromPort sets the FromPort field's value.
 func (s *InstancePortState) SetFromPort(v int64) *InstancePortState {
 	s.FromPort = &v
+	return s
+}
+
+// SetIpv6Cidrs sets the Ipv6Cidrs field's value.
+func (s *InstancePortState) SetIpv6Cidrs(v []*string) *InstancePortState {
+	s.Ipv6Cidrs = v
 	return s
 }
 
@@ -26613,6 +35181,8 @@ type InstanceSnapshot struct {
 	Name *string `locationName:"name" type:"string"`
 
 	// The progress of the snapshot.
+	//
+	// This is populated only for disk snapshots, and is null for instance snapshots.
 	Progress *string `locationName:"progress" type:"string"`
 
 	// The type of resource (usually InstanceSnapshot).
@@ -26630,16 +35200,24 @@ type InstanceSnapshot struct {
 	SupportCode *string `locationName:"supportCode" type:"string"`
 
 	// The tag keys and optional values for the resource. For more information about
-	// tags in Lightsail, see the Lightsail Dev Guide (https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-tags).
+	// tags in Lightsail, see the Amazon Lightsail Developer Guide (https://lightsail.aws.amazon.com/ls/docs/en_us/articles/amazon-lightsail-tags).
 	Tags []*Tag `locationName:"tags" type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s InstanceSnapshot) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s InstanceSnapshot) GoString() string {
 	return s.String()
 }
@@ -26754,12 +35332,20 @@ type InstanceSnapshotInfo struct {
 	FromDiskInfo []*DiskInfo `locationName:"fromDiskInfo" type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s InstanceSnapshotInfo) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s InstanceSnapshotInfo) GoString() string {
 	return s.String()
 }
@@ -26793,12 +35379,20 @@ type InstanceState struct {
 	Name *string `locationName:"name" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s InstanceState) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s InstanceState) GoString() string {
 	return s.String()
 }
@@ -26818,9 +35412,9 @@ func (s *InstanceState) SetName(v string) *InstanceState {
 // Lightsail throws this exception when user input does not conform to the validation
 // rules of an input field.
 //
-// Domain-related APIs are only available in the N. Virginia (us-east-1) Region.
-// Please set your AWS Region configuration to us-east-1 to create, view, or
-// edit these resources.
+// Domain and distribution APIs are only available in the N. Virginia (us-east-1)
+// AWS Region. Please set your AWS Region configuration to us-east-1 to create,
+// view, or edit these resources.
 type InvalidInputException struct {
 	_            struct{}                  `type:"structure"`
 	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
@@ -26834,12 +35428,20 @@ type InvalidInputException struct {
 	Tip *string `locationName:"tip" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s InvalidInputException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s InvalidInputException) GoString() string {
 	return s.String()
 }
@@ -26886,12 +35488,20 @@ type IsVpcPeeredInput struct {
 	_ struct{} `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s IsVpcPeeredInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s IsVpcPeeredInput) GoString() string {
 	return s.String()
 }
@@ -26903,12 +35513,20 @@ type IsVpcPeeredOutput struct {
 	IsPeered *bool `locationName:"isPeered" type:"boolean"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s IsVpcPeeredOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s IsVpcPeeredOutput) GoString() string {
 	return s.String()
 }
@@ -26919,7 +35537,7 @@ func (s *IsVpcPeeredOutput) SetIsPeered(v bool) *IsVpcPeeredOutput {
 	return s
 }
 
-// Describes the SSH key pair.
+// Describes an SSH key pair.
 type KeyPair struct {
 	_ struct{} `type:"structure"`
 
@@ -26947,16 +35565,24 @@ type KeyPair struct {
 	SupportCode *string `locationName:"supportCode" type:"string"`
 
 	// The tag keys and optional values for the resource. For more information about
-	// tags in Lightsail, see the Lightsail Dev Guide (https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-tags).
+	// tags in Lightsail, see the Amazon Lightsail Developer Guide (https://lightsail.aws.amazon.com/ls/docs/en_us/articles/amazon-lightsail-tags).
 	Tags []*Tag `locationName:"tags" type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s KeyPair) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s KeyPair) GoString() string {
 	return s.String()
 }
@@ -27047,6 +35673,11 @@ type LightsailDistribution struct {
 	// The domain name of the distribution.
 	DomainName *string `locationName:"domainName" type:"string"`
 
+	// The IP address type of the distribution.
+	//
+	// The possible values are ipv4 for IPv4 only, and dualstack for IPv4 and IPv6.
+	IpAddressType *string `locationName:"ipAddressType" type:"string" enum:"IpAddressType"`
+
 	// Indicates whether the distribution is enabled.
 	IsEnabled *bool `locationName:"isEnabled" type:"boolean"`
 
@@ -27082,16 +35713,24 @@ type LightsailDistribution struct {
 	SupportCode *string `locationName:"supportCode" type:"string"`
 
 	// The tag keys and optional values for the resource. For more information about
-	// tags in Lightsail, see the Lightsail Dev Guide (https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-tags).
+	// tags in Lightsail, see the Amazon Lightsail Developer Guide (https://lightsail.aws.amazon.com/ls/docs/en_us/articles/amazon-lightsail-tags).
 	Tags []*Tag `locationName:"tags" type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s LightsailDistribution) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s LightsailDistribution) GoString() string {
 	return s.String()
 }
@@ -27156,6 +35795,12 @@ func (s *LightsailDistribution) SetDomainName(v string) *LightsailDistribution {
 	return s
 }
 
+// SetIpAddressType sets the IpAddressType field's value.
+func (s *LightsailDistribution) SetIpAddressType(v string) *LightsailDistribution {
+	s.IpAddressType = &v
+	return s
+}
+
 // SetIsEnabled sets the IsEnabled field's value.
 func (s *LightsailDistribution) SetIsEnabled(v bool) *LightsailDistribution {
 	s.IsEnabled = &v
@@ -27210,7 +35855,7 @@ func (s *LightsailDistribution) SetTags(v []*Tag) *LightsailDistribution {
 	return s
 }
 
-// Describes the Lightsail load balancer.
+// Describes a load balancer.
 type LoadBalancer struct {
 	_ struct{} `type:"structure"`
 
@@ -27238,6 +35883,11 @@ type LoadBalancer struct {
 	// The port where the load balancer will direct traffic to your Lightsail instances.
 	// For HTTP traffic, it's port 80. For HTTPS traffic, it's port 443.
 	InstancePort *int64 `locationName:"instancePort" type:"integer"`
+
+	// The IP address type of the load balancer.
+	//
+	// The possible values are ipv4 for IPv4 only, and dualstack for IPv4 and IPv6.
+	IpAddressType *string `locationName:"ipAddressType" type:"string" enum:"IpAddressType"`
 
 	// The AWS Region where your load balancer was created (e.g., us-east-2a). Lightsail
 	// automatically creates your load balancer across Availability Zones.
@@ -27267,7 +35917,7 @@ type LoadBalancer struct {
 	SupportCode *string `locationName:"supportCode" type:"string"`
 
 	// The tag keys and optional values for the resource. For more information about
-	// tags in Lightsail, see the Lightsail Dev Guide (https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-tags).
+	// tags in Lightsail, see the Amazon Lightsail Developer Guide (https://lightsail.aws.amazon.com/ls/docs/en_us/articles/amazon-lightsail-tags).
 	Tags []*Tag `locationName:"tags" type:"list"`
 
 	// An array of LoadBalancerTlsCertificateSummary objects that provide additional
@@ -27276,12 +35926,20 @@ type LoadBalancer struct {
 	TlsCertificateSummaries []*LoadBalancerTlsCertificateSummary `locationName:"tlsCertificateSummaries" type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s LoadBalancer) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s LoadBalancer) GoString() string {
 	return s.String()
 }
@@ -27325,6 +35983,12 @@ func (s *LoadBalancer) SetInstanceHealthSummary(v []*InstanceHealthSummary) *Loa
 // SetInstancePort sets the InstancePort field's value.
 func (s *LoadBalancer) SetInstancePort(v int64) *LoadBalancer {
 	s.InstancePort = &v
+	return s
+}
+
+// SetIpAddressType sets the IpAddressType field's value.
+func (s *LoadBalancer) SetIpAddressType(v string) *LoadBalancer {
+	s.IpAddressType = &v
 	return s
 }
 
@@ -27420,7 +36084,7 @@ type LoadBalancerTlsCertificate struct {
 	//    request was reported as an unsafe domain by VirusTotal (https://www.virustotal.com/gui/home/url).
 	//    To correct the problem, search for your domain name on the VirusTotal
 	//    (https://www.virustotal.com/gui/home/url) website. If your domain is reported
-	//    as suspicious, see Google Help for Hacked Websites (https://www.google.com/webmasters/hacked/?hl=en)
+	//    as suspicious, see Google Help for Hacked Websites (https://developers.google.com/web/fundamentals/security/hacked)
 	//    to learn what you can do. If you believe that the result is a false positive,
 	//    notify the organization that is reporting the domain. VirusTotal is an
 	//    aggregate of several antivirus and URL scanners and cannot remove your
@@ -27531,16 +36195,24 @@ type LoadBalancerTlsCertificate struct {
 	SupportCode *string `locationName:"supportCode" type:"string"`
 
 	// The tag keys and optional values for the resource. For more information about
-	// tags in Lightsail, see the Lightsail Dev Guide (https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-tags).
+	// tags in Lightsail, see the Amazon Lightsail Developer Guide (https://lightsail.aws.amazon.com/ls/docs/en_us/articles/amazon-lightsail-tags).
 	Tags []*Tag `locationName:"tags" type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s LoadBalancerTlsCertificate) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s LoadBalancerTlsCertificate) GoString() string {
 	return s.String()
 }
@@ -27707,12 +36379,20 @@ type LoadBalancerTlsCertificateDomainValidationOption struct {
 	ValidationStatus *string `locationName:"validationStatus" type:"string" enum:"LoadBalancerTlsCertificateDomainStatus"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s LoadBalancerTlsCertificateDomainValidationOption) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s LoadBalancerTlsCertificateDomainValidationOption) GoString() string {
 	return s.String()
 }
@@ -27749,12 +36429,20 @@ type LoadBalancerTlsCertificateDomainValidationRecord struct {
 	Value *string `locationName:"value" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s LoadBalancerTlsCertificateDomainValidationRecord) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s LoadBalancerTlsCertificateDomainValidationRecord) GoString() string {
 	return s.String()
 }
@@ -27841,12 +36529,20 @@ type LoadBalancerTlsCertificateRenewalSummary struct {
 	RenewalStatus *string `locationName:"renewalStatus" type:"string" enum:"LoadBalancerTlsCertificateRenewalStatus"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s LoadBalancerTlsCertificateRenewalSummary) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s LoadBalancerTlsCertificateRenewalSummary) GoString() string {
 	return s.String()
 }
@@ -27874,12 +36570,20 @@ type LoadBalancerTlsCertificateSummary struct {
 	Name *string `locationName:"name" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s LoadBalancerTlsCertificateSummary) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s LoadBalancerTlsCertificateSummary) GoString() string {
 	return s.String()
 }
@@ -27907,12 +36611,20 @@ type LogEvent struct {
 	Message *string `locationName:"message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s LogEvent) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s LogEvent) GoString() string {
 	return s.String()
 }
@@ -27955,12 +36667,20 @@ type MetricDatapoint struct {
 	Unit *string `locationName:"unit" type:"string" enum:"MetricUnit"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s MetricDatapoint) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s MetricDatapoint) GoString() string {
 	return s.String()
 }
@@ -28027,12 +36747,20 @@ type MonitoredResourceInfo struct {
 	ResourceType *string `locationName:"resourceType" type:"string" enum:"ResourceType"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s MonitoredResourceInfo) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s MonitoredResourceInfo) GoString() string {
 	return s.String()
 }
@@ -28064,12 +36792,20 @@ type MonthlyTransfer struct {
 	GbPerMonthAllocated *int64 `locationName:"gbPerMonthAllocated" type:"integer"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s MonthlyTransfer) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s MonthlyTransfer) GoString() string {
 	return s.String()
 }
@@ -28094,12 +36830,20 @@ type NotFoundException struct {
 	Tip *string `locationName:"tip" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s NotFoundException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s NotFoundException) GoString() string {
 	return s.String()
 }
@@ -28156,12 +36900,20 @@ type OpenInstancePublicPortsInput struct {
 	PortInfo *PortInfo `locationName:"portInfo" type:"structure" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s OpenInstancePublicPortsInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s OpenInstancePublicPortsInput) GoString() string {
 	return s.String()
 }
@@ -28208,12 +36960,20 @@ type OpenInstancePublicPortsOutput struct {
 	Operation *Operation `locationName:"operation" type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s OpenInstancePublicPortsOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s OpenInstancePublicPortsOutput) GoString() string {
 	return s.String()
 }
@@ -28265,12 +37025,20 @@ type Operation struct {
 	StatusChangedAt *time.Time `locationName:"statusChangedAt" type:"timestamp"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s Operation) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s Operation) GoString() string {
 	return s.String()
 }
@@ -28361,12 +37129,20 @@ type OperationFailureException struct {
 	Tip *string `locationName:"tip" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s OperationFailureException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s OperationFailureException) GoString() string {
 	return s.String()
 }
@@ -28432,12 +37208,20 @@ type Origin struct {
 	ResourceType *string `locationName:"resourceType" type:"string" enum:"ResourceType"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s Origin) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s Origin) GoString() string {
 	return s.String()
 }
@@ -28496,12 +37280,20 @@ type PasswordData struct {
 	KeyPairName *string `locationName:"keyPairName" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s PasswordData) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s PasswordData) GoString() string {
 	return s.String()
 }
@@ -28522,12 +37314,20 @@ type PeerVpcInput struct {
 	_ struct{} `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s PeerVpcInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s PeerVpcInput) GoString() string {
 	return s.String()
 }
@@ -28541,12 +37341,20 @@ type PeerVpcOutput struct {
 	Operation *Operation `locationName:"operation" type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s PeerVpcOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s PeerVpcOutput) GoString() string {
 	return s.String()
 }
@@ -28571,12 +37379,20 @@ type PendingMaintenanceAction struct {
 	Description *string `locationName:"description" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s PendingMaintenanceAction) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s PendingMaintenanceAction) GoString() string {
 	return s.String()
 }
@@ -28613,12 +37429,20 @@ type PendingModifiedRelationalDatabaseValues struct {
 	MasterUserPassword *string `locationName:"masterUserPassword" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s PendingModifiedRelationalDatabaseValues) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s PendingModifiedRelationalDatabaseValues) GoString() string {
 	return s.String()
 }
@@ -28653,9 +37477,11 @@ type PortInfo struct {
 	// connect to your instance.
 	CidrListAliases []*string `locationName:"cidrListAliases" type:"list"`
 
-	// The IP address, or range of IP addresses in CIDR notation, that are allowed
-	// to connect to an instance through the ports, and the protocol. Lightsail
-	// supports IPv4 addresses.
+	// The IPv4 address, or range of IPv4 addresses (in CIDR notation) that are
+	// allowed to connect to an instance through the ports, and the protocol.
+	//
+	// The ipv6Cidrs parameter lists the IPv6 addresses that are allowed to connect
+	// to an instance.
 	//
 	// Examples:
 	//
@@ -28674,11 +37500,28 @@ type PortInfo struct {
 	//
 	//    * TCP and UDP - 0 to 65535
 	//
-	//    * ICMP - The ICMP type. For example, specify 8 as the fromPort (ICMP type),
-	//    and -1 as the toPort (ICMP code), to enable ICMP Ping. For more information,
-	//    see Control Messages (https://en.wikipedia.org/wiki/Internet_Control_Message_Protocol#Control_messages)
+	//    * ICMP - The ICMP type for IPv4 addresses. For example, specify 8 as the
+	//    fromPort (ICMP type), and -1 as the toPort (ICMP code), to enable ICMP
+	//    Ping. For more information, see Control Messages (https://en.wikipedia.org/wiki/Internet_Control_Message_Protocol#Control_messages)
 	//    on Wikipedia.
+	//
+	//    * ICMPv6 - The ICMP type for IPv6 addresses. For example, specify 128
+	//    as the fromPort (ICMPv6 type), and 0 as toPort (ICMPv6 code). For more
+	//    information, see Internet Control Message Protocol for IPv6 (https://en.wikipedia.org/wiki/Internet_Control_Message_Protocol_for_IPv6).
 	FromPort *int64 `locationName:"fromPort" type:"integer"`
+
+	// The IPv6 address, or range of IPv6 addresses (in CIDR notation) that are
+	// allowed to connect to an instance through the ports, and the protocol. Only
+	// devices with an IPv6 address can connect to an instance through IPv6; otherwise,
+	// IPv4 should be used.
+	//
+	// The cidrs parameter lists the IPv4 addresses that are allowed to connect
+	// to an instance.
+	//
+	// For more information about CIDR block notation, see Classless Inter-Domain
+	// Routing (https://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing#CIDR_notation)
+	// on Wikipedia.
+	Ipv6Cidrs []*string `locationName:"ipv6Cidrs" type:"list"`
 
 	// The IP protocol name.
 	//
@@ -28715,19 +37558,31 @@ type PortInfo struct {
 	//
 	//    * TCP and UDP - 0 to 65535
 	//
-	//    * ICMP - The ICMP code. For example, specify 8 as the fromPort (ICMP type),
-	//    and -1 as the toPort (ICMP code), to enable ICMP Ping. For more information,
-	//    see Control Messages (https://en.wikipedia.org/wiki/Internet_Control_Message_Protocol#Control_messages)
+	//    * ICMP - The ICMP code for IPv4 addresses. For example, specify 8 as the
+	//    fromPort (ICMP type), and -1 as the toPort (ICMP code), to enable ICMP
+	//    Ping. For more information, see Control Messages (https://en.wikipedia.org/wiki/Internet_Control_Message_Protocol#Control_messages)
 	//    on Wikipedia.
+	//
+	//    * ICMPv6 - The ICMP code for IPv6 addresses. For example, specify 128
+	//    as the fromPort (ICMPv6 type), and 0 as toPort (ICMPv6 code). For more
+	//    information, see Internet Control Message Protocol for IPv6 (https://en.wikipedia.org/wiki/Internet_Control_Message_Protocol_for_IPv6).
 	ToPort *int64 `locationName:"toPort" type:"integer"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s PortInfo) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s PortInfo) GoString() string {
 	return s.String()
 }
@@ -28763,6 +37618,12 @@ func (s *PortInfo) SetCidrs(v []*string) *PortInfo {
 // SetFromPort sets the FromPort field's value.
 func (s *PortInfo) SetFromPort(v int64) *PortInfo {
 	s.FromPort = &v
+	return s
+}
+
+// SetIpv6Cidrs sets the Ipv6Cidrs field's value.
+func (s *PortInfo) SetIpv6Cidrs(v []*string) *PortInfo {
+	s.Ipv6Cidrs = v
 	return s
 }
 
@@ -28918,12 +37779,20 @@ type PutAlarmInput struct {
 	TreatMissingData *string `locationName:"treatMissingData" type:"string" enum:"TreatMissingData"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s PutAlarmInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s PutAlarmInput) GoString() string {
 	return s.String()
 }
@@ -29031,12 +37900,20 @@ type PutAlarmOutput struct {
 	Operations []*Operation `locationName:"operations" type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s PutAlarmOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s PutAlarmOutput) GoString() string {
 	return s.String()
 }
@@ -29061,12 +37938,20 @@ type PutInstancePublicPortsInput struct {
 	PortInfos []*PortInfo `locationName:"portInfos" type:"list" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s PutInstancePublicPortsInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s PutInstancePublicPortsInput) GoString() string {
 	return s.String()
 }
@@ -29118,12 +38003,20 @@ type PutInstancePublicPortsOutput struct {
 	Operation *Operation `locationName:"operation" type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s PutInstancePublicPortsOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s PutInstancePublicPortsOutput) GoString() string {
 	return s.String()
 }
@@ -29155,12 +38048,20 @@ type QueryStringObject struct {
 	QueryStringsAllowList []*string `locationName:"queryStringsAllowList" type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s QueryStringObject) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s QueryStringObject) GoString() string {
 	return s.String()
 }
@@ -29186,12 +38087,20 @@ type RebootInstanceInput struct {
 	InstanceName *string `locationName:"instanceName" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s RebootInstanceInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s RebootInstanceInput) GoString() string {
 	return s.String()
 }
@@ -29224,12 +38133,20 @@ type RebootInstanceOutput struct {
 	Operations []*Operation `locationName:"operations" type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s RebootInstanceOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s RebootInstanceOutput) GoString() string {
 	return s.String()
 }
@@ -29249,12 +38166,20 @@ type RebootRelationalDatabaseInput struct {
 	RelationalDatabaseName *string `locationName:"relationalDatabaseName" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s RebootRelationalDatabaseInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s RebootRelationalDatabaseInput) GoString() string {
 	return s.String()
 }
@@ -29287,12 +38212,20 @@ type RebootRelationalDatabaseOutput struct {
 	Operations []*Operation `locationName:"operations" type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s RebootRelationalDatabaseOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s RebootRelationalDatabaseOutput) GoString() string {
 	return s.String()
 }
@@ -29327,12 +38260,20 @@ type Region struct {
 	RelationalDatabaseAvailabilityZones []*AvailabilityZone `locationName:"relationalDatabaseAvailabilityZones" type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s Region) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s Region) GoString() string {
 	return s.String()
 }
@@ -29370,6 +38311,138 @@ func (s *Region) SetName(v string) *Region {
 // SetRelationalDatabaseAvailabilityZones sets the RelationalDatabaseAvailabilityZones field's value.
 func (s *Region) SetRelationalDatabaseAvailabilityZones(v []*AvailabilityZone) *Region {
 	s.RelationalDatabaseAvailabilityZones = v
+	return s
+}
+
+type RegisterContainerImageInput struct {
+	_ struct{} `type:"structure"`
+
+	// The digest of the container image to be registered.
+	//
+	// Digest is a required field
+	Digest *string `locationName:"digest" type:"string" required:"true"`
+
+	// The label for the container image when it's registered to the container service.
+	//
+	// Use a descriptive label that you can use to track the different versions
+	// of your registered container images.
+	//
+	// Use the GetContainerImages action to return the container images registered
+	// to a Lightsail container service. The label is the <imagelabel> portion of
+	// the following image name example:
+	//
+	//    * :container-service-1.<imagelabel>.1
+	//
+	// If the name of your container service is mycontainerservice, and the label
+	// that you specify is mystaticwebsite, then the name of the registered container
+	// image will be :mycontainerservice.mystaticwebsite.1.
+	//
+	// The number at the end of these image name examples represents the version
+	// of the registered container image. If you push and register another container
+	// image to the same Lightsail container service, with the same label, then
+	// the version number for the new registered container image will be 2. If you
+	// push and register another container image, the version number will be 3,
+	// and so on.
+	//
+	// Label is a required field
+	Label *string `locationName:"label" min:"1" type:"string" required:"true"`
+
+	// The name of the container service for which to register a container image.
+	//
+	// ServiceName is a required field
+	ServiceName *string `locationName:"serviceName" min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s RegisterContainerImageInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s RegisterContainerImageInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *RegisterContainerImageInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "RegisterContainerImageInput"}
+	if s.Digest == nil {
+		invalidParams.Add(request.NewErrParamRequired("Digest"))
+	}
+	if s.Label == nil {
+		invalidParams.Add(request.NewErrParamRequired("Label"))
+	}
+	if s.Label != nil && len(*s.Label) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Label", 1))
+	}
+	if s.ServiceName == nil {
+		invalidParams.Add(request.NewErrParamRequired("ServiceName"))
+	}
+	if s.ServiceName != nil && len(*s.ServiceName) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ServiceName", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetDigest sets the Digest field's value.
+func (s *RegisterContainerImageInput) SetDigest(v string) *RegisterContainerImageInput {
+	s.Digest = &v
+	return s
+}
+
+// SetLabel sets the Label field's value.
+func (s *RegisterContainerImageInput) SetLabel(v string) *RegisterContainerImageInput {
+	s.Label = &v
+	return s
+}
+
+// SetServiceName sets the ServiceName field's value.
+func (s *RegisterContainerImageInput) SetServiceName(v string) *RegisterContainerImageInput {
+	s.ServiceName = &v
+	return s
+}
+
+type RegisterContainerImageOutput struct {
+	_ struct{} `type:"structure"`
+
+	// Describes a container image that is registered to an Amazon Lightsail container
+	// service.
+	ContainerImage *ContainerImage `locationName:"containerImage" type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s RegisterContainerImageOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s RegisterContainerImageOutput) GoString() string {
+	return s.String()
+}
+
+// SetContainerImage sets the ContainerImage field's value.
+func (s *RegisterContainerImageOutput) SetContainerImage(v *ContainerImage) *RegisterContainerImageOutput {
+	s.ContainerImage = v
 	return s
 }
 
@@ -29466,16 +38539,24 @@ type RelationalDatabase struct {
 	SupportCode *string `locationName:"supportCode" type:"string"`
 
 	// The tag keys and optional values for the resource. For more information about
-	// tags in Lightsail, see the Lightsail Dev Guide (https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-tags).
+	// tags in Lightsail, see the Amazon Lightsail Developer Guide (https://lightsail.aws.amazon.com/ls/docs/en_us/articles/amazon-lightsail-tags).
 	Tags []*Tag `locationName:"tags" type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s RelationalDatabase) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s RelationalDatabase) GoString() string {
 	return s.String()
 }
@@ -29661,12 +38742,20 @@ type RelationalDatabaseBlueprint struct {
 	IsEngineDefault *bool `locationName:"isEngineDefault" type:"boolean"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s RelationalDatabaseBlueprint) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s RelationalDatabaseBlueprint) GoString() string {
 	return s.String()
 }
@@ -29740,12 +38829,20 @@ type RelationalDatabaseBundle struct {
 	TransferPerMonthInGb *int64 `locationName:"transferPerMonthInGb" type:"integer"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s RelationalDatabaseBundle) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s RelationalDatabaseBundle) GoString() string {
 	return s.String()
 }
@@ -29815,12 +38912,20 @@ type RelationalDatabaseEndpoint struct {
 	Port *int64 `locationName:"port" type:"integer"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s RelationalDatabaseEndpoint) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s RelationalDatabaseEndpoint) GoString() string {
 	return s.String()
 }
@@ -29854,12 +38959,20 @@ type RelationalDatabaseEvent struct {
 	Resource *string `locationName:"resource" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s RelationalDatabaseEvent) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s RelationalDatabaseEvent) GoString() string {
 	return s.String()
 }
@@ -29902,12 +39015,20 @@ type RelationalDatabaseHardware struct {
 	RamSizeInGb *float64 `locationName:"ramSizeInGb" type:"float"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s RelationalDatabaseHardware) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s RelationalDatabaseHardware) GoString() string {
 	return s.String()
 }
@@ -29961,12 +39082,20 @@ type RelationalDatabaseParameter struct {
 	ParameterValue *string `locationName:"parameterValue" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s RelationalDatabaseParameter) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s RelationalDatabaseParameter) GoString() string {
 	return s.String()
 }
@@ -30071,16 +39200,24 @@ type RelationalDatabaseSnapshot struct {
 	SupportCode *string `locationName:"supportCode" type:"string"`
 
 	// The tag keys and optional values for the resource. For more information about
-	// tags in Lightsail, see the Lightsail Dev Guide (https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-tags).
+	// tags in Lightsail, see the Amazon Lightsail Developer Guide (https://lightsail.aws.amazon.com/ls/docs/en_us/articles/amazon-lightsail-tags).
 	Tags []*Tag `locationName:"tags" type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s RelationalDatabaseSnapshot) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s RelationalDatabaseSnapshot) GoString() string {
 	return s.String()
 }
@@ -30184,12 +39321,20 @@ type ReleaseStaticIpInput struct {
 	StaticIpName *string `locationName:"staticIpName" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ReleaseStaticIpInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ReleaseStaticIpInput) GoString() string {
 	return s.String()
 }
@@ -30222,12 +39367,20 @@ type ReleaseStaticIpOutput struct {
 	Operations []*Operation `locationName:"operations" type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ReleaseStaticIpOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ReleaseStaticIpOutput) GoString() string {
 	return s.String()
 }
@@ -30273,12 +39426,20 @@ type RenewalSummary struct {
 	UpdatedAt *time.Time `locationName:"updatedAt" type:"timestamp"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s RenewalSummary) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s RenewalSummary) GoString() string {
 	return s.String()
 }
@@ -30317,12 +39478,20 @@ type ResetDistributionCacheInput struct {
 	DistributionName *string `locationName:"distributionName" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ResetDistributionCacheInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ResetDistributionCacheInput) GoString() string {
 	return s.String()
 }
@@ -30349,12 +39518,20 @@ type ResetDistributionCacheOutput struct {
 	Status *string `locationName:"status" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ResetDistributionCacheOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ResetDistributionCacheOutput) GoString() string {
 	return s.String()
 }
@@ -30388,12 +39565,20 @@ type ResourceLocation struct {
 	RegionName *string `locationName:"regionName" type:"string" enum:"RegionName"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ResourceLocation) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ResourceLocation) GoString() string {
 	return s.String()
 }
@@ -30407,6 +39592,47 @@ func (s *ResourceLocation) SetAvailabilityZone(v string) *ResourceLocation {
 // SetRegionName sets the RegionName field's value.
 func (s *ResourceLocation) SetRegionName(v string) *ResourceLocation {
 	s.RegionName = &v
+	return s
+}
+
+// Describes an Amazon Lightsail instance that has access to a Lightsail bucket.
+type ResourceReceivingAccess struct {
+	_ struct{} `type:"structure"`
+
+	// The name of the Lightsail instance.
+	Name *string `locationName:"name" type:"string"`
+
+	// The Lightsail resource type (for example, Instance).
+	ResourceType *string `locationName:"resourceType" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ResourceReceivingAccess) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ResourceReceivingAccess) GoString() string {
+	return s.String()
+}
+
+// SetName sets the Name field's value.
+func (s *ResourceReceivingAccess) SetName(v string) *ResourceReceivingAccess {
+	s.Name = &v
+	return s
+}
+
+// SetResourceType sets the ResourceType field's value.
+func (s *ResourceReceivingAccess) SetResourceType(v string) *ResourceReceivingAccess {
+	s.ResourceType = &v
 	return s
 }
 
@@ -30425,12 +39651,20 @@ type ResourceRecord struct {
 	Value *string `locationName:"value" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ResourceRecord) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ResourceRecord) GoString() string {
 	return s.String()
 }
@@ -30462,12 +39696,20 @@ type SendContactMethodVerificationInput struct {
 	Protocol *string `locationName:"protocol" type:"string" required:"true" enum:"ContactMethodVerificationProtocol"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s SendContactMethodVerificationInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s SendContactMethodVerificationInput) GoString() string {
 	return s.String()
 }
@@ -30500,12 +39742,20 @@ type SendContactMethodVerificationOutput struct {
 	Operations []*Operation `locationName:"operations" type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s SendContactMethodVerificationOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s SendContactMethodVerificationOutput) GoString() string {
 	return s.String()
 }
@@ -30530,12 +39780,20 @@ type ServiceException struct {
 	Tip *string `locationName:"tip" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ServiceException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ServiceException) GoString() string {
 	return s.String()
 }
@@ -30578,6 +39836,239 @@ func (s *ServiceException) RequestID() string {
 	return s.RespMetadata.RequestID
 }
 
+type SetIpAddressTypeInput struct {
+	_ struct{} `type:"structure"`
+
+	// The IP address type to set for the specified resource.
+	//
+	// The possible values are ipv4 for IPv4 only, and dualstack for IPv4 and IPv6.
+	//
+	// IpAddressType is a required field
+	IpAddressType *string `locationName:"ipAddressType" type:"string" required:"true" enum:"IpAddressType"`
+
+	// The name of the resource for which to set the IP address type.
+	//
+	// ResourceName is a required field
+	ResourceName *string `locationName:"resourceName" type:"string" required:"true"`
+
+	// The resource type.
+	//
+	// The possible values are Distribution, Instance, and LoadBalancer.
+	//
+	// Distribution-related APIs are available only in the N. Virginia (us-east-1)
+	// AWS Region. Set your AWS Region configuration to us-east-1 to create, view,
+	// or edit distributions.
+	//
+	// ResourceType is a required field
+	ResourceType *string `locationName:"resourceType" type:"string" required:"true" enum:"ResourceType"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s SetIpAddressTypeInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s SetIpAddressTypeInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *SetIpAddressTypeInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "SetIpAddressTypeInput"}
+	if s.IpAddressType == nil {
+		invalidParams.Add(request.NewErrParamRequired("IpAddressType"))
+	}
+	if s.ResourceName == nil {
+		invalidParams.Add(request.NewErrParamRequired("ResourceName"))
+	}
+	if s.ResourceType == nil {
+		invalidParams.Add(request.NewErrParamRequired("ResourceType"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetIpAddressType sets the IpAddressType field's value.
+func (s *SetIpAddressTypeInput) SetIpAddressType(v string) *SetIpAddressTypeInput {
+	s.IpAddressType = &v
+	return s
+}
+
+// SetResourceName sets the ResourceName field's value.
+func (s *SetIpAddressTypeInput) SetResourceName(v string) *SetIpAddressTypeInput {
+	s.ResourceName = &v
+	return s
+}
+
+// SetResourceType sets the ResourceType field's value.
+func (s *SetIpAddressTypeInput) SetResourceType(v string) *SetIpAddressTypeInput {
+	s.ResourceType = &v
+	return s
+}
+
+type SetIpAddressTypeOutput struct {
+	_ struct{} `type:"structure"`
+
+	// An array of objects that describe the result of the action, such as the status
+	// of the request, the timestamp of the request, and the resources affected
+	// by the request.
+	Operations []*Operation `locationName:"operations" type:"list"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s SetIpAddressTypeOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s SetIpAddressTypeOutput) GoString() string {
+	return s.String()
+}
+
+// SetOperations sets the Operations field's value.
+func (s *SetIpAddressTypeOutput) SetOperations(v []*Operation) *SetIpAddressTypeOutput {
+	s.Operations = v
+	return s
+}
+
+type SetResourceAccessForBucketInput struct {
+	_ struct{} `type:"structure"`
+
+	// The access setting.
+	//
+	// The following access settings are available:
+	//
+	//    * allow - Allows access to the bucket and its objects.
+	//
+	//    * deny - Denies access to the bucket and its objects. Use this setting
+	//    to remove access for a resource previously set to allow.
+	//
+	// Access is a required field
+	Access *string `locationName:"access" type:"string" required:"true" enum:"ResourceBucketAccess"`
+
+	// The name of the bucket for which to set access to another Lightsail resource.
+	//
+	// BucketName is a required field
+	BucketName *string `locationName:"bucketName" min:"3" type:"string" required:"true"`
+
+	// The name of the Lightsail instance for which to set bucket access. The instance
+	// must be in a running or stopped state.
+	//
+	// ResourceName is a required field
+	ResourceName *string `locationName:"resourceName" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s SetResourceAccessForBucketInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s SetResourceAccessForBucketInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *SetResourceAccessForBucketInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "SetResourceAccessForBucketInput"}
+	if s.Access == nil {
+		invalidParams.Add(request.NewErrParamRequired("Access"))
+	}
+	if s.BucketName == nil {
+		invalidParams.Add(request.NewErrParamRequired("BucketName"))
+	}
+	if s.BucketName != nil && len(*s.BucketName) < 3 {
+		invalidParams.Add(request.NewErrParamMinLen("BucketName", 3))
+	}
+	if s.ResourceName == nil {
+		invalidParams.Add(request.NewErrParamRequired("ResourceName"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetAccess sets the Access field's value.
+func (s *SetResourceAccessForBucketInput) SetAccess(v string) *SetResourceAccessForBucketInput {
+	s.Access = &v
+	return s
+}
+
+// SetBucketName sets the BucketName field's value.
+func (s *SetResourceAccessForBucketInput) SetBucketName(v string) *SetResourceAccessForBucketInput {
+	s.BucketName = &v
+	return s
+}
+
+// SetResourceName sets the ResourceName field's value.
+func (s *SetResourceAccessForBucketInput) SetResourceName(v string) *SetResourceAccessForBucketInput {
+	s.ResourceName = &v
+	return s
+}
+
+type SetResourceAccessForBucketOutput struct {
+	_ struct{} `type:"structure"`
+
+	// An array of objects that describe the result of the action, such as the status
+	// of the request, the timestamp of the request, and the resources affected
+	// by the request.
+	Operations []*Operation `locationName:"operations" type:"list"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s SetResourceAccessForBucketOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s SetResourceAccessForBucketOutput) GoString() string {
+	return s.String()
+}
+
+// SetOperations sets the Operations field's value.
+func (s *SetResourceAccessForBucketOutput) SetOperations(v []*Operation) *SetResourceAccessForBucketOutput {
+	s.Operations = v
+	return s
+}
+
 type StartInstanceInput struct {
 	_ struct{} `type:"structure"`
 
@@ -30587,12 +40078,20 @@ type StartInstanceInput struct {
 	InstanceName *string `locationName:"instanceName" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s StartInstanceInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s StartInstanceInput) GoString() string {
 	return s.String()
 }
@@ -30625,12 +40124,20 @@ type StartInstanceOutput struct {
 	Operations []*Operation `locationName:"operations" type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s StartInstanceOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s StartInstanceOutput) GoString() string {
 	return s.String()
 }
@@ -30650,12 +40157,20 @@ type StartRelationalDatabaseInput struct {
 	RelationalDatabaseName *string `locationName:"relationalDatabaseName" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s StartRelationalDatabaseInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s StartRelationalDatabaseInput) GoString() string {
 	return s.String()
 }
@@ -30688,12 +40203,20 @@ type StartRelationalDatabaseOutput struct {
 	Operations []*Operation `locationName:"operations" type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s StartRelationalDatabaseOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s StartRelationalDatabaseOutput) GoString() string {
 	return s.String()
 }
@@ -30704,7 +40227,7 @@ func (s *StartRelationalDatabaseOutput) SetOperations(v []*Operation) *StartRela
 	return s
 }
 
-// Describes the static IP.
+// Describes a static IP.
 type StaticIp struct {
 	_ struct{} `type:"structure"`
 
@@ -30738,12 +40261,20 @@ type StaticIp struct {
 	SupportCode *string `locationName:"supportCode" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s StaticIp) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s StaticIp) GoString() string {
 	return s.String()
 }
@@ -30819,12 +40350,20 @@ type StopInstanceInput struct {
 	InstanceName *string `locationName:"instanceName" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s StopInstanceInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s StopInstanceInput) GoString() string {
 	return s.String()
 }
@@ -30863,12 +40402,20 @@ type StopInstanceOutput struct {
 	Operations []*Operation `locationName:"operations" type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s StopInstanceOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s StopInstanceOutput) GoString() string {
 	return s.String()
 }
@@ -30892,12 +40439,20 @@ type StopRelationalDatabaseInput struct {
 	RelationalDatabaseSnapshotName *string `locationName:"relationalDatabaseSnapshotName" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s StopRelationalDatabaseInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s StopRelationalDatabaseInput) GoString() string {
 	return s.String()
 }
@@ -30936,12 +40491,20 @@ type StopRelationalDatabaseOutput struct {
 	Operations []*Operation `locationName:"operations" type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s StopRelationalDatabaseOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s StopRelationalDatabaseOutput) GoString() string {
 	return s.String()
 }
@@ -30954,8 +40517,8 @@ func (s *StopRelationalDatabaseOutput) SetOperations(v []*Operation) *StopRelati
 
 // Describes a tag key and optional value assigned to an Amazon Lightsail resource.
 //
-// For more information about tags in Lightsail, see the Lightsail Dev Guide
-// (https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-tags).
+// For more information about tags in Lightsail, see the Amazon Lightsail Developer
+// Guide (https://lightsail.aws.amazon.com/ls/docs/en_us/articles/amazon-lightsail-tags).
 type Tag struct {
 	_ struct{} `type:"structure"`
 
@@ -30972,12 +40535,20 @@ type Tag struct {
 	Value *string `locationName:"value" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s Tag) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s Tag) GoString() string {
 	return s.String()
 }
@@ -31012,12 +40583,20 @@ type TagResourceInput struct {
 	Tags []*Tag `locationName:"tags" type:"list" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s TagResourceInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s TagResourceInput) GoString() string {
 	return s.String()
 }
@@ -31065,12 +40644,20 @@ type TagResourceOutput struct {
 	Operations []*Operation `locationName:"operations" type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s TagResourceOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s TagResourceOutput) GoString() string {
 	return s.String()
 }
@@ -31105,12 +40692,20 @@ type TestAlarmInput struct {
 	State *string `locationName:"state" type:"string" required:"true" enum:"AlarmState"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s TestAlarmInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s TestAlarmInput) GoString() string {
 	return s.String()
 }
@@ -31152,12 +40747,20 @@ type TestAlarmOutput struct {
 	Operations []*Operation `locationName:"operations" type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s TestAlarmOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s TestAlarmOutput) GoString() string {
 	return s.String()
 }
@@ -31182,12 +40785,20 @@ type UnauthenticatedException struct {
 	Tip *string `locationName:"tip" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UnauthenticatedException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UnauthenticatedException) GoString() string {
 	return s.String()
 }
@@ -31234,12 +40845,20 @@ type UnpeerVpcInput struct {
 	_ struct{} `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UnpeerVpcInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UnpeerVpcInput) GoString() string {
 	return s.String()
 }
@@ -31253,12 +40872,20 @@ type UnpeerVpcOutput struct {
 	Operation *Operation `locationName:"operation" type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UnpeerVpcOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UnpeerVpcOutput) GoString() string {
 	return s.String()
 }
@@ -31287,12 +40914,20 @@ type UntagResourceInput struct {
 	TagKeys []*string `locationName:"tagKeys" type:"list" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UntagResourceInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UntagResourceInput) GoString() string {
 	return s.String()
 }
@@ -31340,12 +40975,20 @@ type UntagResourceOutput struct {
 	Operations []*Operation `locationName:"operations" type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UntagResourceOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UntagResourceOutput) GoString() string {
 	return s.String()
 }
@@ -31353,6 +40996,382 @@ func (s UntagResourceOutput) GoString() string {
 // SetOperations sets the Operations field's value.
 func (s *UntagResourceOutput) SetOperations(v []*Operation) *UntagResourceOutput {
 	s.Operations = v
+	return s
+}
+
+type UpdateBucketBundleInput struct {
+	_ struct{} `type:"structure"`
+
+	// The name of the bucket for which to update the bundle.
+	//
+	// BucketName is a required field
+	BucketName *string `locationName:"bucketName" min:"3" type:"string" required:"true"`
+
+	// The ID of the new bundle to apply to the bucket.
+	//
+	// Use the GetBucketBundles action to get a list of bundle IDs that you can
+	// specify.
+	//
+	// BundleId is a required field
+	BundleId *string `locationName:"bundleId" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdateBucketBundleInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdateBucketBundleInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *UpdateBucketBundleInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "UpdateBucketBundleInput"}
+	if s.BucketName == nil {
+		invalidParams.Add(request.NewErrParamRequired("BucketName"))
+	}
+	if s.BucketName != nil && len(*s.BucketName) < 3 {
+		invalidParams.Add(request.NewErrParamMinLen("BucketName", 3))
+	}
+	if s.BundleId == nil {
+		invalidParams.Add(request.NewErrParamRequired("BundleId"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetBucketName sets the BucketName field's value.
+func (s *UpdateBucketBundleInput) SetBucketName(v string) *UpdateBucketBundleInput {
+	s.BucketName = &v
+	return s
+}
+
+// SetBundleId sets the BundleId field's value.
+func (s *UpdateBucketBundleInput) SetBundleId(v string) *UpdateBucketBundleInput {
+	s.BundleId = &v
+	return s
+}
+
+type UpdateBucketBundleOutput struct {
+	_ struct{} `type:"structure"`
+
+	// An array of objects that describe the result of the action, such as the status
+	// of the request, the timestamp of the request, and the resources affected
+	// by the request.
+	Operations []*Operation `locationName:"operations" type:"list"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdateBucketBundleOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdateBucketBundleOutput) GoString() string {
+	return s.String()
+}
+
+// SetOperations sets the Operations field's value.
+func (s *UpdateBucketBundleOutput) SetOperations(v []*Operation) *UpdateBucketBundleOutput {
+	s.Operations = v
+	return s
+}
+
+type UpdateBucketInput struct {
+	_ struct{} `type:"structure"`
+
+	// An object that sets the public accessibility of objects in the specified
+	// bucket.
+	AccessRules *AccessRules `locationName:"accessRules" type:"structure"`
+
+	// The name of the bucket to update.
+	//
+	// BucketName is a required field
+	BucketName *string `locationName:"bucketName" min:"3" type:"string" required:"true"`
+
+	// An array of strings to specify the AWS account IDs that can access the bucket.
+	//
+	// You can give a maximum of 10 AWS accounts access to a bucket.
+	ReadonlyAccessAccounts []*string `locationName:"readonlyAccessAccounts" type:"list"`
+
+	// Specifies whether to enable or suspend versioning of objects in the bucket.
+	//
+	// The following options can be specified:
+	//
+	//    * Enabled - Enables versioning of objects in the specified bucket.
+	//
+	//    * Suspended - Suspends versioning of objects in the specified bucket.
+	//    Existing object versions are retained.
+	Versioning *string `locationName:"versioning" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdateBucketInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdateBucketInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *UpdateBucketInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "UpdateBucketInput"}
+	if s.BucketName == nil {
+		invalidParams.Add(request.NewErrParamRequired("BucketName"))
+	}
+	if s.BucketName != nil && len(*s.BucketName) < 3 {
+		invalidParams.Add(request.NewErrParamMinLen("BucketName", 3))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetAccessRules sets the AccessRules field's value.
+func (s *UpdateBucketInput) SetAccessRules(v *AccessRules) *UpdateBucketInput {
+	s.AccessRules = v
+	return s
+}
+
+// SetBucketName sets the BucketName field's value.
+func (s *UpdateBucketInput) SetBucketName(v string) *UpdateBucketInput {
+	s.BucketName = &v
+	return s
+}
+
+// SetReadonlyAccessAccounts sets the ReadonlyAccessAccounts field's value.
+func (s *UpdateBucketInput) SetReadonlyAccessAccounts(v []*string) *UpdateBucketInput {
+	s.ReadonlyAccessAccounts = v
+	return s
+}
+
+// SetVersioning sets the Versioning field's value.
+func (s *UpdateBucketInput) SetVersioning(v string) *UpdateBucketInput {
+	s.Versioning = &v
+	return s
+}
+
+type UpdateBucketOutput struct {
+	_ struct{} `type:"structure"`
+
+	// An object that describes the bucket that is updated.
+	Bucket *Bucket `locationName:"bucket" type:"structure"`
+
+	// An array of objects that describe the result of the action, such as the status
+	// of the request, the timestamp of the request, and the resources affected
+	// by the request.
+	Operations []*Operation `locationName:"operations" type:"list"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdateBucketOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdateBucketOutput) GoString() string {
+	return s.String()
+}
+
+// SetBucket sets the Bucket field's value.
+func (s *UpdateBucketOutput) SetBucket(v *Bucket) *UpdateBucketOutput {
+	s.Bucket = v
+	return s
+}
+
+// SetOperations sets the Operations field's value.
+func (s *UpdateBucketOutput) SetOperations(v []*Operation) *UpdateBucketOutput {
+	s.Operations = v
+	return s
+}
+
+type UpdateContainerServiceInput struct {
+	_ struct{} `type:"structure"`
+
+	// A Boolean value to indicate whether the container service is disabled.
+	IsDisabled *bool `locationName:"isDisabled" type:"boolean"`
+
+	// The power for the container service.
+	//
+	// The power specifies the amount of memory, vCPUs, and base monthly cost of
+	// each node of the container service. The power and scale of a container service
+	// makes up its configured capacity. To determine the monthly price of your
+	// container service, multiply the base price of the power with the scale (the
+	// number of nodes) of the service.
+	//
+	// Use the GetContainerServicePowers action to view the specifications of each
+	// power option.
+	Power *string `locationName:"power" type:"string" enum:"ContainerServicePowerName"`
+
+	// The public domain names to use with the container service, such as example.com
+	// and www.example.com.
+	//
+	// You can specify up to four public domain names for a container service. The
+	// domain names that you specify are used when you create a deployment with
+	// a container configured as the public endpoint of your container service.
+	//
+	// If you don't specify public domain names, then you can use the default domain
+	// of the container service.
+	//
+	// You must create and validate an SSL/TLS certificate before you can use public
+	// domain names with your container service. Use the CreateCertificate action
+	// to create a certificate for the public domain names you want to use with
+	// your container service.
+	//
+	// You can specify public domain names using a string to array map as shown
+	// in the example later on this page.
+	PublicDomainNames map[string][]*string `locationName:"publicDomainNames" type:"map"`
+
+	// The scale for the container service.
+	//
+	// The scale specifies the allocated compute nodes of the container service.
+	// The power and scale of a container service makes up its configured capacity.
+	// To determine the monthly price of your container service, multiply the base
+	// price of the power with the scale (the number of nodes) of the service.
+	Scale *int64 `locationName:"scale" min:"1" type:"integer"`
+
+	// The name of the container service to update.
+	//
+	// ServiceName is a required field
+	ServiceName *string `locationName:"serviceName" min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdateContainerServiceInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdateContainerServiceInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *UpdateContainerServiceInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "UpdateContainerServiceInput"}
+	if s.Scale != nil && *s.Scale < 1 {
+		invalidParams.Add(request.NewErrParamMinValue("Scale", 1))
+	}
+	if s.ServiceName == nil {
+		invalidParams.Add(request.NewErrParamRequired("ServiceName"))
+	}
+	if s.ServiceName != nil && len(*s.ServiceName) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ServiceName", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetIsDisabled sets the IsDisabled field's value.
+func (s *UpdateContainerServiceInput) SetIsDisabled(v bool) *UpdateContainerServiceInput {
+	s.IsDisabled = &v
+	return s
+}
+
+// SetPower sets the Power field's value.
+func (s *UpdateContainerServiceInput) SetPower(v string) *UpdateContainerServiceInput {
+	s.Power = &v
+	return s
+}
+
+// SetPublicDomainNames sets the PublicDomainNames field's value.
+func (s *UpdateContainerServiceInput) SetPublicDomainNames(v map[string][]*string) *UpdateContainerServiceInput {
+	s.PublicDomainNames = v
+	return s
+}
+
+// SetScale sets the Scale field's value.
+func (s *UpdateContainerServiceInput) SetScale(v int64) *UpdateContainerServiceInput {
+	s.Scale = &v
+	return s
+}
+
+// SetServiceName sets the ServiceName field's value.
+func (s *UpdateContainerServiceInput) SetServiceName(v string) *UpdateContainerServiceInput {
+	s.ServiceName = &v
+	return s
+}
+
+type UpdateContainerServiceOutput struct {
+	_ struct{} `type:"structure"`
+
+	// An object that describes a container service.
+	ContainerService *ContainerService `locationName:"containerService" type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdateContainerServiceOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdateContainerServiceOutput) GoString() string {
+	return s.String()
+}
+
+// SetContainerService sets the ContainerService field's value.
+func (s *UpdateContainerServiceOutput) SetContainerService(v *ContainerService) *UpdateContainerServiceOutput {
+	s.ContainerService = v
 	return s
 }
 
@@ -31372,12 +41391,20 @@ type UpdateDistributionBundleInput struct {
 	DistributionName *string `locationName:"distributionName" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpdateDistributionBundleInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpdateDistributionBundleInput) GoString() string {
 	return s.String()
 }
@@ -31401,12 +41428,20 @@ type UpdateDistributionBundleOutput struct {
 	Operation *Operation `locationName:"operation" type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpdateDistributionBundleOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpdateDistributionBundleOutput) GoString() string {
 	return s.String()
 }
@@ -31450,12 +41485,20 @@ type UpdateDistributionInput struct {
 	Origin *InputOrigin `locationName:"origin" type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpdateDistributionInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpdateDistributionInput) GoString() string {
 	return s.String()
 }
@@ -31518,12 +41561,20 @@ type UpdateDistributionOutput struct {
 	Operation *Operation `locationName:"operation" type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpdateDistributionOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpdateDistributionOutput) GoString() string {
 	return s.String()
 }
@@ -31548,12 +41599,20 @@ type UpdateDomainEntryInput struct {
 	DomainName *string `locationName:"domainName" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpdateDomainEntryInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpdateDomainEntryInput) GoString() string {
 	return s.String()
 }
@@ -31595,12 +41654,20 @@ type UpdateDomainEntryOutput struct {
 	Operations []*Operation `locationName:"operations" type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpdateDomainEntryOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpdateDomainEntryOutput) GoString() string {
 	return s.String()
 }
@@ -31630,12 +41697,20 @@ type UpdateLoadBalancerAttributeInput struct {
 	LoadBalancerName *string `locationName:"loadBalancerName" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpdateLoadBalancerAttributeInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpdateLoadBalancerAttributeInput) GoString() string {
 	return s.String()
 }
@@ -31689,12 +41764,20 @@ type UpdateLoadBalancerAttributeOutput struct {
 	Operations []*Operation `locationName:"operations" type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpdateLoadBalancerAttributeOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpdateLoadBalancerAttributeOutput) GoString() string {
 	return s.String()
 }
@@ -31733,10 +41816,20 @@ type UpdateRelationalDatabaseInput struct {
 	// in an outage.
 	EnableBackupRetention *bool `locationName:"enableBackupRetention" type:"boolean"`
 
-	// The password for the master user of your database. The password can include
-	// any printable ASCII character except "/", """, or "@".
+	// The password for the master user. The password can include any printable
+	// ASCII character except "/", """, or "@".
 	//
-	// Constraints: Must contain 8 to 41 characters.
+	// MySQL
+	//
+	// Constraints: Must contain from 8 to 41 characters.
+	//
+	// PostgreSQL
+	//
+	// Constraints: Must contain from 8 to 128 characters.
+	//
+	// MasterUserPassword is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by UpdateRelationalDatabaseInput's
+	// String and GoString methods.
 	MasterUserPassword *string `locationName:"masterUserPassword" type:"string" sensitive:"true"`
 
 	// The daily time range during which automated backups are created for your
@@ -31777,7 +41870,7 @@ type UpdateRelationalDatabaseInput struct {
 	// resources in the same region as your database.
 	PubliclyAccessible *bool `locationName:"publiclyAccessible" type:"boolean"`
 
-	// The name of your database to update.
+	// The name of your Lightsail database resource to update.
 	//
 	// RelationalDatabaseName is a required field
 	RelationalDatabaseName *string `locationName:"relationalDatabaseName" type:"string" required:"true"`
@@ -31790,12 +41883,20 @@ type UpdateRelationalDatabaseInput struct {
 	RotateMasterUserPassword *bool `locationName:"rotateMasterUserPassword" type:"boolean"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpdateRelationalDatabaseInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpdateRelationalDatabaseInput) GoString() string {
 	return s.String()
 }
@@ -31882,12 +41983,20 @@ type UpdateRelationalDatabaseOutput struct {
 	Operations []*Operation `locationName:"operations" type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpdateRelationalDatabaseOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpdateRelationalDatabaseOutput) GoString() string {
 	return s.String()
 }
@@ -31912,12 +42021,20 @@ type UpdateRelationalDatabaseParametersInput struct {
 	RelationalDatabaseName *string `locationName:"relationalDatabaseName" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpdateRelationalDatabaseParametersInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpdateRelationalDatabaseParametersInput) GoString() string {
 	return s.String()
 }
@@ -31959,12 +42076,20 @@ type UpdateRelationalDatabaseParametersOutput struct {
 	Operations []*Operation `locationName:"operations" type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpdateRelationalDatabaseParametersOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpdateRelationalDatabaseParametersOutput) GoString() string {
 	return s.String()
 }
@@ -31988,6 +42113,22 @@ func AccessDirection_Values() []string {
 	return []string{
 		AccessDirectionInbound,
 		AccessDirectionOutbound,
+	}
+}
+
+const (
+	// AccessTypePublic is a AccessType enum value
+	AccessTypePublic = "public"
+
+	// AccessTypePrivate is a AccessType enum value
+	AccessTypePrivate = "private"
+)
+
+// AccessType_Values returns all elements of the AccessType enum
+func AccessType_Values() []string {
+	return []string{
+		AccessTypePublic,
+		AccessTypePrivate,
 	}
 }
 
@@ -32076,6 +42217,22 @@ func BlueprintType_Values() []string {
 	return []string{
 		BlueprintTypeOs,
 		BlueprintTypeApp,
+	}
+}
+
+const (
+	// BucketMetricNameBucketSizeBytes is a BucketMetricName enum value
+	BucketMetricNameBucketSizeBytes = "BucketSizeBytes"
+
+	// BucketMetricNameNumberOfObjects is a BucketMetricName enum value
+	BucketMetricNameNumberOfObjects = "NumberOfObjects"
+)
+
+// BucketMetricName_Values returns all elements of the BucketMetricName enum
+func BucketMetricName_Values() []string {
+	return []string{
+		BucketMetricNameBucketSizeBytes,
+		BucketMetricNameNumberOfObjects,
 	}
 }
 
@@ -32196,6 +42353,182 @@ func ContactProtocol_Values() []string {
 	return []string{
 		ContactProtocolEmail,
 		ContactProtocolSms,
+	}
+}
+
+const (
+	// ContainerServiceDeploymentStateActivating is a ContainerServiceDeploymentState enum value
+	ContainerServiceDeploymentStateActivating = "ACTIVATING"
+
+	// ContainerServiceDeploymentStateActive is a ContainerServiceDeploymentState enum value
+	ContainerServiceDeploymentStateActive = "ACTIVE"
+
+	// ContainerServiceDeploymentStateInactive is a ContainerServiceDeploymentState enum value
+	ContainerServiceDeploymentStateInactive = "INACTIVE"
+
+	// ContainerServiceDeploymentStateFailed is a ContainerServiceDeploymentState enum value
+	ContainerServiceDeploymentStateFailed = "FAILED"
+)
+
+// ContainerServiceDeploymentState_Values returns all elements of the ContainerServiceDeploymentState enum
+func ContainerServiceDeploymentState_Values() []string {
+	return []string{
+		ContainerServiceDeploymentStateActivating,
+		ContainerServiceDeploymentStateActive,
+		ContainerServiceDeploymentStateInactive,
+		ContainerServiceDeploymentStateFailed,
+	}
+}
+
+const (
+	// ContainerServiceMetricNameCpuutilization is a ContainerServiceMetricName enum value
+	ContainerServiceMetricNameCpuutilization = "CPUUtilization"
+
+	// ContainerServiceMetricNameMemoryUtilization is a ContainerServiceMetricName enum value
+	ContainerServiceMetricNameMemoryUtilization = "MemoryUtilization"
+)
+
+// ContainerServiceMetricName_Values returns all elements of the ContainerServiceMetricName enum
+func ContainerServiceMetricName_Values() []string {
+	return []string{
+		ContainerServiceMetricNameCpuutilization,
+		ContainerServiceMetricNameMemoryUtilization,
+	}
+}
+
+const (
+	// ContainerServicePowerNameNano is a ContainerServicePowerName enum value
+	ContainerServicePowerNameNano = "nano"
+
+	// ContainerServicePowerNameMicro is a ContainerServicePowerName enum value
+	ContainerServicePowerNameMicro = "micro"
+
+	// ContainerServicePowerNameSmall is a ContainerServicePowerName enum value
+	ContainerServicePowerNameSmall = "small"
+
+	// ContainerServicePowerNameMedium is a ContainerServicePowerName enum value
+	ContainerServicePowerNameMedium = "medium"
+
+	// ContainerServicePowerNameLarge is a ContainerServicePowerName enum value
+	ContainerServicePowerNameLarge = "large"
+
+	// ContainerServicePowerNameXlarge is a ContainerServicePowerName enum value
+	ContainerServicePowerNameXlarge = "xlarge"
+)
+
+// ContainerServicePowerName_Values returns all elements of the ContainerServicePowerName enum
+func ContainerServicePowerName_Values() []string {
+	return []string{
+		ContainerServicePowerNameNano,
+		ContainerServicePowerNameMicro,
+		ContainerServicePowerNameSmall,
+		ContainerServicePowerNameMedium,
+		ContainerServicePowerNameLarge,
+		ContainerServicePowerNameXlarge,
+	}
+}
+
+const (
+	// ContainerServiceProtocolHttp is a ContainerServiceProtocol enum value
+	ContainerServiceProtocolHttp = "HTTP"
+
+	// ContainerServiceProtocolHttps is a ContainerServiceProtocol enum value
+	ContainerServiceProtocolHttps = "HTTPS"
+
+	// ContainerServiceProtocolTcp is a ContainerServiceProtocol enum value
+	ContainerServiceProtocolTcp = "TCP"
+
+	// ContainerServiceProtocolUdp is a ContainerServiceProtocol enum value
+	ContainerServiceProtocolUdp = "UDP"
+)
+
+// ContainerServiceProtocol_Values returns all elements of the ContainerServiceProtocol enum
+func ContainerServiceProtocol_Values() []string {
+	return []string{
+		ContainerServiceProtocolHttp,
+		ContainerServiceProtocolHttps,
+		ContainerServiceProtocolTcp,
+		ContainerServiceProtocolUdp,
+	}
+}
+
+const (
+	// ContainerServiceStatePending is a ContainerServiceState enum value
+	ContainerServiceStatePending = "PENDING"
+
+	// ContainerServiceStateReady is a ContainerServiceState enum value
+	ContainerServiceStateReady = "READY"
+
+	// ContainerServiceStateRunning is a ContainerServiceState enum value
+	ContainerServiceStateRunning = "RUNNING"
+
+	// ContainerServiceStateUpdating is a ContainerServiceState enum value
+	ContainerServiceStateUpdating = "UPDATING"
+
+	// ContainerServiceStateDeleting is a ContainerServiceState enum value
+	ContainerServiceStateDeleting = "DELETING"
+
+	// ContainerServiceStateDisabled is a ContainerServiceState enum value
+	ContainerServiceStateDisabled = "DISABLED"
+
+	// ContainerServiceStateDeploying is a ContainerServiceState enum value
+	ContainerServiceStateDeploying = "DEPLOYING"
+)
+
+// ContainerServiceState_Values returns all elements of the ContainerServiceState enum
+func ContainerServiceState_Values() []string {
+	return []string{
+		ContainerServiceStatePending,
+		ContainerServiceStateReady,
+		ContainerServiceStateRunning,
+		ContainerServiceStateUpdating,
+		ContainerServiceStateDeleting,
+		ContainerServiceStateDisabled,
+		ContainerServiceStateDeploying,
+	}
+}
+
+const (
+	// ContainerServiceStateDetailCodeCreatingSystemResources is a ContainerServiceStateDetailCode enum value
+	ContainerServiceStateDetailCodeCreatingSystemResources = "CREATING_SYSTEM_RESOURCES"
+
+	// ContainerServiceStateDetailCodeCreatingNetworkInfrastructure is a ContainerServiceStateDetailCode enum value
+	ContainerServiceStateDetailCodeCreatingNetworkInfrastructure = "CREATING_NETWORK_INFRASTRUCTURE"
+
+	// ContainerServiceStateDetailCodeProvisioningCertificate is a ContainerServiceStateDetailCode enum value
+	ContainerServiceStateDetailCodeProvisioningCertificate = "PROVISIONING_CERTIFICATE"
+
+	// ContainerServiceStateDetailCodeProvisioningService is a ContainerServiceStateDetailCode enum value
+	ContainerServiceStateDetailCodeProvisioningService = "PROVISIONING_SERVICE"
+
+	// ContainerServiceStateDetailCodeCreatingDeployment is a ContainerServiceStateDetailCode enum value
+	ContainerServiceStateDetailCodeCreatingDeployment = "CREATING_DEPLOYMENT"
+
+	// ContainerServiceStateDetailCodeEvaluatingHealthCheck is a ContainerServiceStateDetailCode enum value
+	ContainerServiceStateDetailCodeEvaluatingHealthCheck = "EVALUATING_HEALTH_CHECK"
+
+	// ContainerServiceStateDetailCodeActivatingDeployment is a ContainerServiceStateDetailCode enum value
+	ContainerServiceStateDetailCodeActivatingDeployment = "ACTIVATING_DEPLOYMENT"
+
+	// ContainerServiceStateDetailCodeCertificateLimitExceeded is a ContainerServiceStateDetailCode enum value
+	ContainerServiceStateDetailCodeCertificateLimitExceeded = "CERTIFICATE_LIMIT_EXCEEDED"
+
+	// ContainerServiceStateDetailCodeUnknownError is a ContainerServiceStateDetailCode enum value
+	ContainerServiceStateDetailCodeUnknownError = "UNKNOWN_ERROR"
+)
+
+// ContainerServiceStateDetailCode_Values returns all elements of the ContainerServiceStateDetailCode enum
+func ContainerServiceStateDetailCode_Values() []string {
+	return []string{
+		ContainerServiceStateDetailCodeCreatingSystemResources,
+		ContainerServiceStateDetailCodeCreatingNetworkInfrastructure,
+		ContainerServiceStateDetailCodeProvisioningCertificate,
+		ContainerServiceStateDetailCodeProvisioningService,
+		ContainerServiceStateDetailCodeCreatingDeployment,
+		ContainerServiceStateDetailCodeEvaluatingHealthCheck,
+		ContainerServiceStateDetailCodeActivatingDeployment,
+		ContainerServiceStateDetailCodeCertificateLimitExceeded,
+		ContainerServiceStateDetailCodeUnknownError,
 	}
 }
 
@@ -32560,6 +42893,22 @@ func InstanceSnapshotState_Values() []string {
 		InstanceSnapshotStatePending,
 		InstanceSnapshotStateError,
 		InstanceSnapshotStateAvailable,
+	}
+}
+
+const (
+	// IpAddressTypeDualstack is a IpAddressType enum value
+	IpAddressTypeDualstack = "dualstack"
+
+	// IpAddressTypeIpv4 is a IpAddressType enum value
+	IpAddressTypeIpv4 = "ipv4"
+)
+
+// IpAddressType_Values returns all elements of the IpAddressType enum
+func IpAddressType_Values() []string {
+	return []string{
+		IpAddressTypeDualstack,
+		IpAddressTypeIpv4,
 	}
 }
 
@@ -33334,11 +43683,56 @@ const (
 	// OperationTypeUpdateDistributionBundle is a OperationType enum value
 	OperationTypeUpdateDistributionBundle = "UpdateDistributionBundle"
 
+	// OperationTypeSetIpAddressType is a OperationType enum value
+	OperationTypeSetIpAddressType = "SetIpAddressType"
+
 	// OperationTypeCreateCertificate is a OperationType enum value
 	OperationTypeCreateCertificate = "CreateCertificate"
 
 	// OperationTypeDeleteCertificate is a OperationType enum value
 	OperationTypeDeleteCertificate = "DeleteCertificate"
+
+	// OperationTypeCreateContainerService is a OperationType enum value
+	OperationTypeCreateContainerService = "CreateContainerService"
+
+	// OperationTypeUpdateContainerService is a OperationType enum value
+	OperationTypeUpdateContainerService = "UpdateContainerService"
+
+	// OperationTypeDeleteContainerService is a OperationType enum value
+	OperationTypeDeleteContainerService = "DeleteContainerService"
+
+	// OperationTypeCreateContainerServiceDeployment is a OperationType enum value
+	OperationTypeCreateContainerServiceDeployment = "CreateContainerServiceDeployment"
+
+	// OperationTypeCreateContainerServiceRegistryLogin is a OperationType enum value
+	OperationTypeCreateContainerServiceRegistryLogin = "CreateContainerServiceRegistryLogin"
+
+	// OperationTypeRegisterContainerImage is a OperationType enum value
+	OperationTypeRegisterContainerImage = "RegisterContainerImage"
+
+	// OperationTypeDeleteContainerImage is a OperationType enum value
+	OperationTypeDeleteContainerImage = "DeleteContainerImage"
+
+	// OperationTypeCreateBucket is a OperationType enum value
+	OperationTypeCreateBucket = "CreateBucket"
+
+	// OperationTypeDeleteBucket is a OperationType enum value
+	OperationTypeDeleteBucket = "DeleteBucket"
+
+	// OperationTypeCreateBucketAccessKey is a OperationType enum value
+	OperationTypeCreateBucketAccessKey = "CreateBucketAccessKey"
+
+	// OperationTypeDeleteBucketAccessKey is a OperationType enum value
+	OperationTypeDeleteBucketAccessKey = "DeleteBucketAccessKey"
+
+	// OperationTypeUpdateBucketBundle is a OperationType enum value
+	OperationTypeUpdateBucketBundle = "UpdateBucketBundle"
+
+	// OperationTypeUpdateBucket is a OperationType enum value
+	OperationTypeUpdateBucket = "UpdateBucket"
+
+	// OperationTypeSetResourceAccessForBucket is a OperationType enum value
+	OperationTypeSetResourceAccessForBucket = "SetResourceAccessForBucket"
 )
 
 // OperationType_Values returns all elements of the OperationType enum
@@ -33406,8 +43800,23 @@ func OperationType_Values() []string {
 		OperationTypeAttachCertificateToDistribution,
 		OperationTypeDetachCertificateFromDistribution,
 		OperationTypeUpdateDistributionBundle,
+		OperationTypeSetIpAddressType,
 		OperationTypeCreateCertificate,
 		OperationTypeDeleteCertificate,
+		OperationTypeCreateContainerService,
+		OperationTypeUpdateContainerService,
+		OperationTypeDeleteContainerService,
+		OperationTypeCreateContainerServiceDeployment,
+		OperationTypeCreateContainerServiceRegistryLogin,
+		OperationTypeRegisterContainerImage,
+		OperationTypeDeleteContainerImage,
+		OperationTypeCreateBucket,
+		OperationTypeDeleteBucket,
+		OperationTypeCreateBucketAccessKey,
+		OperationTypeDeleteBucketAccessKey,
+		OperationTypeUpdateBucketBundle,
+		OperationTypeUpdateBucket,
+		OperationTypeSetResourceAccessForBucket,
 	}
 }
 
@@ -33545,6 +43954,9 @@ const (
 
 	// RegionNameApNortheast2 is a RegionName enum value
 	RegionNameApNortheast2 = "ap-northeast-2"
+
+	// RegionNameEuNorth1 is a RegionName enum value
+	RegionNameEuNorth1 = "eu-north-1"
 )
 
 // RegionName_Values returns all elements of the RegionName enum
@@ -33564,6 +43976,7 @@ func RegionName_Values() []string {
 		RegionNameApSoutheast2,
 		RegionNameApNortheast1,
 		RegionNameApNortheast2,
+		RegionNameEuNorth1,
 	}
 }
 
@@ -33656,6 +44069,25 @@ func RenewalStatus_Values() []string {
 }
 
 const (
+	// ResourceBucketAccessAllow is a ResourceBucketAccess enum value
+	ResourceBucketAccessAllow = "allow"
+
+	// ResourceBucketAccessDeny is a ResourceBucketAccess enum value
+	ResourceBucketAccessDeny = "deny"
+)
+
+// ResourceBucketAccess_Values returns all elements of the ResourceBucketAccess enum
+func ResourceBucketAccess_Values() []string {
+	return []string{
+		ResourceBucketAccessAllow,
+		ResourceBucketAccessDeny,
+	}
+}
+
+const (
+	// ResourceTypeContainerService is a ResourceType enum value
+	ResourceTypeContainerService = "ContainerService"
+
 	// ResourceTypeInstance is a ResourceType enum value
 	ResourceTypeInstance = "Instance"
 
@@ -33709,11 +44141,15 @@ const (
 
 	// ResourceTypeCertificate is a ResourceType enum value
 	ResourceTypeCertificate = "Certificate"
+
+	// ResourceTypeBucket is a ResourceType enum value
+	ResourceTypeBucket = "Bucket"
 )
 
 // ResourceType_Values returns all elements of the ResourceType enum
 func ResourceType_Values() []string {
 	return []string{
+		ResourceTypeContainerService,
 		ResourceTypeInstance,
 		ResourceTypeStaticIp,
 		ResourceTypeKeyPair,
@@ -33732,6 +44168,23 @@ func ResourceType_Values() []string {
 		ResourceTypeContactMethod,
 		ResourceTypeDistribution,
 		ResourceTypeCertificate,
+		ResourceTypeBucket,
+	}
+}
+
+const (
+	// StatusTypeActive is a StatusType enum value
+	StatusTypeActive = "Active"
+
+	// StatusTypeInactive is a StatusType enum value
+	StatusTypeInactive = "Inactive"
+)
+
+// StatusType_Values returns all elements of the StatusType enum
+func StatusType_Values() []string {
+	return []string{
+		StatusTypeActive,
+		StatusTypeInactive,
 	}
 }
 

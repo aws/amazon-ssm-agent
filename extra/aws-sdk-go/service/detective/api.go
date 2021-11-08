@@ -152,8 +152,8 @@ func (c *Detective) CreateGraphRequest(input *CreateGraphInput) (req *request.Re
 // CreateGraph API operation for Amazon Detective.
 //
 // Creates a new behavior graph for the calling account, and sets that account
-// as the master account. This operation is called by the account that is enabling
-// Detective.
+// as the administrator account. This operation is called by the account that
+// is enabling Detective.
 //
 // Before you try to enable Detective, make sure that your account has been
 // enrolled in Amazon GuardDuty for at least 48 hours. If you do not meet this
@@ -168,10 +168,10 @@ func (c *Detective) CreateGraphRequest(input *CreateGraphInput) (req *request.Re
 // CreateGraph triggers a process to create the corresponding data tables for
 // the new behavior graph.
 //
-// An account can only be the master account for one behavior graph within a
-// Region. If the same account calls CreateGraph with the same master account,
-// it always returns the same behavior graph ARN. It does not create a new behavior
-// graph.
+// An account can only be the administrator account for one behavior graph within
+// a Region. If the same account calls CreateGraph with the same administrator
+// account, it always returns the same behavior graph ARN. It does not create
+// a new behavior graph.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -267,11 +267,13 @@ func (c *Detective) CreateMembersRequest(input *CreateMembersInput) (req *reques
 // CreateMembers API operation for Amazon Detective.
 //
 // Sends a request to invite the specified AWS accounts to be member accounts
-// in the behavior graph. This operation can only be called by the master account
-// for a behavior graph.
+// in the behavior graph. This operation can only be called by the administrator
+// account for a behavior graph.
 //
-// CreateMembers verifies the accounts and then sends invitations to the verified
-// accounts.
+// CreateMembers verifies the accounts and then invites the verified accounts.
+// The administrator can optionally specify to not send invitation emails to
+// the member accounts. This would be used when the administrator manages their
+// member accounts centrally.
 //
 // The request provides the behavior graph ARN and the list of accounts to invite.
 //
@@ -279,8 +281,7 @@ func (c *Detective) CreateMembersRequest(input *CreateMembersInput) (req *reques
 //
 //    * The accounts that CreateMembers was able to start the verification for.
 //    This list includes member accounts that are being verified, that have
-//    passed verification and are being sent an invitation, and that have failed
-//    verification.
+//    passed verification and are to be invited, and that have failed verification.
 //
 //    * The accounts that CreateMembers was unable to process. This list includes
 //    accounts that were already invited to be member accounts in the behavior
@@ -386,7 +387,8 @@ func (c *Detective) DeleteGraphRequest(input *DeleteGraphInput) (req *request.Re
 // Disables the specified behavior graph and queues it to be deleted. This operation
 // removes the graph from each member account's list of behavior graphs.
 //
-// DeleteGraph can only be called by the master account for a behavior graph.
+// DeleteGraph can only be called by the administrator account for a behavior
+// graph.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -471,11 +473,11 @@ func (c *Detective) DeleteMembersRequest(input *DeleteMembersInput) (req *reques
 
 // DeleteMembers API operation for Amazon Detective.
 //
-// Deletes one or more member accounts from the master account behavior graph.
-// This operation can only be called by a Detective master account. That account
-// cannot use DeleteMembers to delete their own account from the behavior graph.
-// To disable a behavior graph, the master account uses the DeleteGraph API
-// method.
+// Deletes one or more member accounts from the administrator account's behavior
+// graph. This operation can only be called by a Detective administrator account.
+// That account cannot use DeleteMembers to delete their own account from the
+// behavior graph. To disable a behavior graph, the administrator account uses
+// the DeleteGraph API method.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -745,11 +747,11 @@ func (c *Detective) ListGraphsRequest(input *ListGraphsInput) (req *request.Requ
 
 // ListGraphs API operation for Amazon Detective.
 //
-// Returns the list of behavior graphs that the calling account is a master
-// of. This operation can only be called by a master account.
+// Returns the list of behavior graphs that the calling account is an administrator
+// account of. This operation can only be called by an administrator account.
 //
-// Because an account can currently only be the master of one behavior graph
-// within a Region, the results always contain a single graph.
+// Because an account can currently only be the administrator of one behavior
+// graph within a Region, the results always contain a single behavior graph.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -1131,6 +1133,91 @@ func (c *Detective) ListMembersPagesWithContext(ctx aws.Context, input *ListMemb
 	return p.Err()
 }
 
+const opListTagsForResource = "ListTagsForResource"
+
+// ListTagsForResourceRequest generates a "aws/request.Request" representing the
+// client's request for the ListTagsForResource operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See ListTagsForResource for more information on using the ListTagsForResource
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the ListTagsForResourceRequest method.
+//    req, resp := client.ListTagsForResourceRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/detective-2018-10-26/ListTagsForResource
+func (c *Detective) ListTagsForResourceRequest(input *ListTagsForResourceInput) (req *request.Request, output *ListTagsForResourceOutput) {
+	op := &request.Operation{
+		Name:       opListTagsForResource,
+		HTTPMethod: "GET",
+		HTTPPath:   "/tags/{ResourceArn}",
+	}
+
+	if input == nil {
+		input = &ListTagsForResourceInput{}
+	}
+
+	output = &ListTagsForResourceOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// ListTagsForResource API operation for Amazon Detective.
+//
+// Returns the tag values that are assigned to a behavior graph.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Detective's
+// API operation ListTagsForResource for usage and error information.
+//
+// Returned Error Types:
+//   * InternalServerException
+//   The request was valid but failed because of a problem with the service.
+//
+//   * ValidationException
+//   The request parameters are invalid.
+//
+//   * ResourceNotFoundException
+//   The request refers to a nonexistent resource.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/detective-2018-10-26/ListTagsForResource
+func (c *Detective) ListTagsForResource(input *ListTagsForResourceInput) (*ListTagsForResourceOutput, error) {
+	req, out := c.ListTagsForResourceRequest(input)
+	return out, req.Send()
+}
+
+// ListTagsForResourceWithContext is the same as ListTagsForResource with the addition of
+// the ability to pass a context and additional request options.
+//
+// See ListTagsForResource for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Detective) ListTagsForResourceWithContext(ctx aws.Context, input *ListTagsForResourceInput, opts ...request.Option) (*ListTagsForResourceOutput, error) {
+	req, out := c.ListTagsForResourceRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opRejectInvitation = "RejectInvitation"
 
 // RejectInvitationRequest generates a "aws/request.Request" representing the
@@ -1330,6 +1417,178 @@ func (c *Detective) StartMonitoringMemberWithContext(ctx aws.Context, input *Sta
 	return out, req.Send()
 }
 
+const opTagResource = "TagResource"
+
+// TagResourceRequest generates a "aws/request.Request" representing the
+// client's request for the TagResource operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See TagResource for more information on using the TagResource
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the TagResourceRequest method.
+//    req, resp := client.TagResourceRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/detective-2018-10-26/TagResource
+func (c *Detective) TagResourceRequest(input *TagResourceInput) (req *request.Request, output *TagResourceOutput) {
+	op := &request.Operation{
+		Name:       opTagResource,
+		HTTPMethod: "POST",
+		HTTPPath:   "/tags/{ResourceArn}",
+	}
+
+	if input == nil {
+		input = &TagResourceInput{}
+	}
+
+	output = &TagResourceOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(restjson.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
+	return
+}
+
+// TagResource API operation for Amazon Detective.
+//
+// Applies tag values to a behavior graph.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Detective's
+// API operation TagResource for usage and error information.
+//
+// Returned Error Types:
+//   * InternalServerException
+//   The request was valid but failed because of a problem with the service.
+//
+//   * ValidationException
+//   The request parameters are invalid.
+//
+//   * ResourceNotFoundException
+//   The request refers to a nonexistent resource.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/detective-2018-10-26/TagResource
+func (c *Detective) TagResource(input *TagResourceInput) (*TagResourceOutput, error) {
+	req, out := c.TagResourceRequest(input)
+	return out, req.Send()
+}
+
+// TagResourceWithContext is the same as TagResource with the addition of
+// the ability to pass a context and additional request options.
+//
+// See TagResource for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Detective) TagResourceWithContext(ctx aws.Context, input *TagResourceInput, opts ...request.Option) (*TagResourceOutput, error) {
+	req, out := c.TagResourceRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opUntagResource = "UntagResource"
+
+// UntagResourceRequest generates a "aws/request.Request" representing the
+// client's request for the UntagResource operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See UntagResource for more information on using the UntagResource
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the UntagResourceRequest method.
+//    req, resp := client.UntagResourceRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/detective-2018-10-26/UntagResource
+func (c *Detective) UntagResourceRequest(input *UntagResourceInput) (req *request.Request, output *UntagResourceOutput) {
+	op := &request.Operation{
+		Name:       opUntagResource,
+		HTTPMethod: "DELETE",
+		HTTPPath:   "/tags/{ResourceArn}",
+	}
+
+	if input == nil {
+		input = &UntagResourceInput{}
+	}
+
+	output = &UntagResourceOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(restjson.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
+	return
+}
+
+// UntagResource API operation for Amazon Detective.
+//
+// Removes tags from a behavior graph.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Detective's
+// API operation UntagResource for usage and error information.
+//
+// Returned Error Types:
+//   * InternalServerException
+//   The request was valid but failed because of a problem with the service.
+//
+//   * ValidationException
+//   The request parameters are invalid.
+//
+//   * ResourceNotFoundException
+//   The request refers to a nonexistent resource.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/detective-2018-10-26/UntagResource
+func (c *Detective) UntagResource(input *UntagResourceInput) (*UntagResourceOutput, error) {
+	req, out := c.UntagResourceRequest(input)
+	return out, req.Send()
+}
+
+// UntagResourceWithContext is the same as UntagResource with the addition of
+// the ability to pass a context and additional request options.
+//
+// See UntagResource for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Detective) UntagResourceWithContext(ctx aws.Context, input *UntagResourceInput, opts ...request.Option) (*UntagResourceOutput, error) {
+	req, out := c.UntagResourceRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 type AcceptInvitationInput struct {
 	_ struct{} `type:"structure"`
 
@@ -1342,12 +1601,20 @@ type AcceptInvitationInput struct {
 	GraphArn *string `type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AcceptInvitationInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AcceptInvitationInput) GoString() string {
 	return s.String()
 }
@@ -1372,20 +1639,29 @@ func (s *AcceptInvitationInput) SetGraphArn(v string) *AcceptInvitationInput {
 }
 
 type AcceptInvitationOutput struct {
-	_ struct{} `type:"structure"`
+	_ struct{} `type:"structure" nopayload:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AcceptInvitationOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AcceptInvitationOutput) GoString() string {
 	return s.String()
 }
 
-// An AWS account that is the master of or a member of a behavior graph.
+// An AWS account that is the administrator account of or a member of a behavior
+// graph.
 type Account struct {
 	_ struct{} `type:"structure"`
 
@@ -1400,12 +1676,20 @@ type Account struct {
 	EmailAddress *string `min:"1" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s Account) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s Account) GoString() string {
 	return s.String()
 }
@@ -1452,12 +1736,20 @@ type ConflictException struct {
 	Message_ *string `locationName:"Message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ConflictException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ConflictException) GoString() string {
 	return s.String()
 }
@@ -1502,16 +1794,48 @@ func (s *ConflictException) RequestID() string {
 
 type CreateGraphInput struct {
 	_ struct{} `type:"structure"`
+
+	// The tags to assign to the new behavior graph. You can add up to 50 tags.
+	// For each tag, you provide the tag key and the tag value. Each tag key can
+	// contain up to 128 characters. Each tag value can contain up to 256 characters.
+	Tags map[string]*string `min:"1" type:"map"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateGraphInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateGraphInput) GoString() string {
 	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *CreateGraphInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "CreateGraphInput"}
+	if s.Tags != nil && len(s.Tags) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Tags", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetTags sets the Tags field's value.
+func (s *CreateGraphInput) SetTags(v map[string]*string) *CreateGraphInput {
+	s.Tags = v
+	return s
 }
 
 type CreateGraphOutput struct {
@@ -1521,12 +1845,20 @@ type CreateGraphOutput struct {
 	GraphArn *string `type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateGraphOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateGraphOutput) GoString() string {
 	return s.String()
 }
@@ -1541,11 +1873,16 @@ type CreateMembersInput struct {
 	_ struct{} `type:"structure"`
 
 	// The list of AWS accounts to invite to become member accounts in the behavior
-	// graph. For each invited account, the account list contains the account identifier
-	// and the AWS account root user email address.
+	// graph. You can invite up to 50 accounts at a time. For each invited account,
+	// the account list contains the account identifier and the AWS account root
+	// user email address.
 	//
 	// Accounts is a required field
 	Accounts []*Account `min:"1" type:"list" required:"true"`
+
+	// if set to true, then the member accounts do not receive email notifications.
+	// By default, this is set to false, and the member accounts receive email notifications.
+	DisableEmailNotification *bool `type:"boolean"`
 
 	// The ARN of the behavior graph to invite the member accounts to contribute
 	// their data to.
@@ -1558,12 +1895,20 @@ type CreateMembersInput struct {
 	Message *string `min:"1" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateMembersInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateMembersInput) GoString() string {
 	return s.String()
 }
@@ -1606,6 +1951,12 @@ func (s *CreateMembersInput) SetAccounts(v []*Account) *CreateMembersInput {
 	return s
 }
 
+// SetDisableEmailNotification sets the DisableEmailNotification field's value.
+func (s *CreateMembersInput) SetDisableEmailNotification(v bool) *CreateMembersInput {
+	s.DisableEmailNotification = &v
+	return s
+}
+
 // SetGraphArn sets the GraphArn field's value.
 func (s *CreateMembersInput) SetGraphArn(v string) *CreateMembersInput {
 	s.GraphArn = &v
@@ -1633,12 +1984,20 @@ type CreateMembersOutput struct {
 	UnprocessedAccounts []*UnprocessedAccount `type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateMembersOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateMembersOutput) GoString() string {
 	return s.String()
 }
@@ -1664,12 +2023,20 @@ type DeleteGraphInput struct {
 	GraphArn *string `type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteGraphInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteGraphInput) GoString() string {
 	return s.String()
 }
@@ -1694,15 +2061,23 @@ func (s *DeleteGraphInput) SetGraphArn(v string) *DeleteGraphInput {
 }
 
 type DeleteGraphOutput struct {
-	_ struct{} `type:"structure"`
+	_ struct{} `type:"structure" nopayload:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteGraphOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteGraphOutput) GoString() string {
 	return s.String()
 }
@@ -1711,7 +2086,7 @@ type DeleteMembersInput struct {
 	_ struct{} `type:"structure"`
 
 	// The list of AWS account identifiers for the member accounts to delete from
-	// the behavior graph.
+	// the behavior graph. You can delete up to 50 member accounts at a time.
 	//
 	// AccountIds is a required field
 	AccountIds []*string `min:"1" type:"list" required:"true"`
@@ -1722,12 +2097,20 @@ type DeleteMembersInput struct {
 	GraphArn *string `type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteMembersInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteMembersInput) GoString() string {
 	return s.String()
 }
@@ -1776,12 +2159,20 @@ type DeleteMembersOutput struct {
 	UnprocessedAccounts []*UnprocessedAccount `type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteMembersOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteMembersOutput) GoString() string {
 	return s.String()
 }
@@ -1809,12 +2200,20 @@ type DisassociateMembershipInput struct {
 	GraphArn *string `type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DisassociateMembershipInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DisassociateMembershipInput) GoString() string {
 	return s.String()
 }
@@ -1839,15 +2238,23 @@ func (s *DisassociateMembershipInput) SetGraphArn(v string) *DisassociateMembers
 }
 
 type DisassociateMembershipOutput struct {
-	_ struct{} `type:"structure"`
+	_ struct{} `type:"structure" nopayload:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DisassociateMembershipOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DisassociateMembershipOutput) GoString() string {
 	return s.String()
 }
@@ -1856,7 +2263,8 @@ type GetMembersInput struct {
 	_ struct{} `type:"structure"`
 
 	// The list of AWS account identifiers for the member account for which to return
-	// member details.
+	// member details. You can request details for up to 50 member accounts at a
+	// time.
 	//
 	// You cannot use GetMembers to retrieve information about member accounts that
 	// were removed from the behavior graph.
@@ -1870,12 +2278,20 @@ type GetMembersInput struct {
 	GraphArn *string `type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetMembersInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetMembersInput) GoString() string {
 	return s.String()
 }
@@ -1925,12 +2341,20 @@ type GetMembersOutput struct {
 	UnprocessedAccounts []*UnprocessedAccount `type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetMembersOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetMembersOutput) GoString() string {
 	return s.String()
 }
@@ -1956,15 +2380,23 @@ type Graph struct {
 
 	// The date and time that the behavior graph was created. The value is in milliseconds
 	// since the epoch.
-	CreatedTime *time.Time `type:"timestamp"`
+	CreatedTime *time.Time `type:"timestamp" timestampFormat:"iso8601"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s Graph) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s Graph) GoString() string {
 	return s.String()
 }
@@ -1989,12 +2421,20 @@ type InternalServerException struct {
 	Message_ *string `locationName:"Message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s InternalServerException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s InternalServerException) GoString() string {
 	return s.String()
 }
@@ -2051,12 +2491,20 @@ type ListGraphsInput struct {
 	NextToken *string `min:"1" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListGraphsInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListGraphsInput) GoString() string {
 	return s.String()
 }
@@ -2092,7 +2540,7 @@ func (s *ListGraphsInput) SetNextToken(v string) *ListGraphsInput {
 type ListGraphsOutput struct {
 	_ struct{} `type:"structure"`
 
-	// A list of behavior graphs that the account is a master for.
+	// A list of behavior graphs that the account is an administrator account for.
 	GraphList []*Graph `type:"list"`
 
 	// If there are more behavior graphs remaining in the results, then this is
@@ -2100,12 +2548,20 @@ type ListGraphsOutput struct {
 	NextToken *string `min:"1" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListGraphsOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListGraphsOutput) GoString() string {
 	return s.String()
 }
@@ -2136,12 +2592,20 @@ type ListInvitationsInput struct {
 	NextToken *string `min:"1" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListInvitationsInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListInvitationsInput) GoString() string {
 	return s.String()
 }
@@ -2186,12 +2650,20 @@ type ListInvitationsOutput struct {
 	NextToken *string `min:"1" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListInvitationsOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListInvitationsOutput) GoString() string {
 	return s.String()
 }
@@ -2227,12 +2699,20 @@ type ListMembersInput struct {
 	NextToken *string `min:"1" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListMembersInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListMembersInput) GoString() string {
 	return s.String()
 }
@@ -2290,12 +2770,20 @@ type ListMembersOutput struct {
 	NextToken *string `min:"1" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListMembersOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListMembersOutput) GoString() string {
 	return s.String()
 }
@@ -2312,6 +2800,87 @@ func (s *ListMembersOutput) SetNextToken(v string) *ListMembersOutput {
 	return s
 }
 
+type ListTagsForResourceInput struct {
+	_ struct{} `type:"structure" nopayload:"true"`
+
+	// The ARN of the behavior graph for which to retrieve the tag values.
+	//
+	// ResourceArn is a required field
+	ResourceArn *string `location:"uri" locationName:"ResourceArn" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListTagsForResourceInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListTagsForResourceInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ListTagsForResourceInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ListTagsForResourceInput"}
+	if s.ResourceArn == nil {
+		invalidParams.Add(request.NewErrParamRequired("ResourceArn"))
+	}
+	if s.ResourceArn != nil && len(*s.ResourceArn) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ResourceArn", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetResourceArn sets the ResourceArn field's value.
+func (s *ListTagsForResourceInput) SetResourceArn(v string) *ListTagsForResourceInput {
+	s.ResourceArn = &v
+	return s
+}
+
+type ListTagsForResourceOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The tag values that are assigned to the behavior graph. The request returns
+	// up to 50 tag values.
+	Tags map[string]*string `min:"1" type:"map"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListTagsForResourceOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListTagsForResourceOutput) GoString() string {
+	return s.String()
+}
+
+// SetTags sets the Tags field's value.
+func (s *ListTagsForResourceOutput) SetTags(v map[string]*string) *ListTagsForResourceOutput {
+	s.Tags = v
+	return s
+}
+
 // Details about a member account that was invited to contribute to a behavior
 // graph.
 type MemberDetail struct {
@@ -2319,6 +2888,10 @@ type MemberDetail struct {
 
 	// The AWS account identifier for the member account.
 	AccountId *string `min:"12" type:"string"`
+
+	// The AWS account identifier of the administrator account for the behavior
+	// graph.
+	AdministratorId *string `min:"12" type:"string"`
 
 	// For member accounts with a status of ACCEPTED_BUT_DISABLED, the reason that
 	// the member account is not enabled.
@@ -2341,10 +2914,13 @@ type MemberDetail struct {
 
 	// The date and time that Detective sent the invitation to the member account.
 	// The value is in milliseconds since the epoch.
-	InvitedTime *time.Time `type:"timestamp"`
+	InvitedTime *time.Time `type:"timestamp" timestampFormat:"iso8601"`
 
-	// The AWS account identifier of the master account for the behavior graph.
-	MasterId *string `min:"12" type:"string"`
+	// The AWS account identifier of the administrator account for the behavior
+	// graph.
+	//
+	// Deprecated: This property is deprecated. Use AdministratorId instead.
+	MasterId *string `min:"12" deprecated:"true" type:"string"`
 
 	// The member account data volume as a percentage of the maximum allowed data
 	// volume. 0 indicates 0 percent, and 100 indicates 100 percent.
@@ -2355,10 +2931,14 @@ type MemberDetail struct {
 	// maximum data volume is 160 GB per day. If the data volume for the member
 	// account is 40 GB per day, then PercentOfGraphUtilization is 25. It represents
 	// 25% of the maximum allowed data volume.
-	PercentOfGraphUtilization *float64 `type:"double"`
+	//
+	// Deprecated: This property is deprecated. Use VolumeUsageInBytes instead.
+	PercentOfGraphUtilization *float64 `deprecated:"true" type:"double"`
 
 	// The date and time when the graph utilization percentage was last updated.
-	PercentOfGraphUtilizationUpdatedTime *time.Time `type:"timestamp"`
+	//
+	// Deprecated: This property is deprecated. Use VolumeUsageUpdatedTime instead.
+	PercentOfGraphUtilizationUpdatedTime *time.Time `deprecated:"true" type:"timestamp" timestampFormat:"iso8601"`
 
 	// The current membership status of the member account. The status can have
 	// one of the following values:
@@ -2389,15 +2969,29 @@ type MemberDetail struct {
 
 	// The date and time that the member account was last updated. The value is
 	// in milliseconds since the epoch.
-	UpdatedTime *time.Time `type:"timestamp"`
+	UpdatedTime *time.Time `type:"timestamp" timestampFormat:"iso8601"`
+
+	// The data volume in bytes per day for the member account.
+	VolumeUsageInBytes *int64 `type:"long"`
+
+	// The data and time when the member account data volume was last updated.
+	VolumeUsageUpdatedTime *time.Time `type:"timestamp" timestampFormat:"iso8601"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s MemberDetail) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s MemberDetail) GoString() string {
 	return s.String()
 }
@@ -2405,6 +2999,12 @@ func (s MemberDetail) GoString() string {
 // SetAccountId sets the AccountId field's value.
 func (s *MemberDetail) SetAccountId(v string) *MemberDetail {
 	s.AccountId = &v
+	return s
+}
+
+// SetAdministratorId sets the AdministratorId field's value.
+func (s *MemberDetail) SetAdministratorId(v string) *MemberDetail {
+	s.AdministratorId = &v
 	return s
 }
 
@@ -2462,6 +3062,18 @@ func (s *MemberDetail) SetUpdatedTime(v time.Time) *MemberDetail {
 	return s
 }
 
+// SetVolumeUsageInBytes sets the VolumeUsageInBytes field's value.
+func (s *MemberDetail) SetVolumeUsageInBytes(v int64) *MemberDetail {
+	s.VolumeUsageInBytes = &v
+	return s
+}
+
+// SetVolumeUsageUpdatedTime sets the VolumeUsageUpdatedTime field's value.
+func (s *MemberDetail) SetVolumeUsageUpdatedTime(v time.Time) *MemberDetail {
+	s.VolumeUsageUpdatedTime = &v
+	return s
+}
+
 type RejectInvitationInput struct {
 	_ struct{} `type:"structure"`
 
@@ -2474,12 +3086,20 @@ type RejectInvitationInput struct {
 	GraphArn *string `type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s RejectInvitationInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s RejectInvitationInput) GoString() string {
 	return s.String()
 }
@@ -2504,15 +3124,23 @@ func (s *RejectInvitationInput) SetGraphArn(v string) *RejectInvitationInput {
 }
 
 type RejectInvitationOutput struct {
-	_ struct{} `type:"structure"`
+	_ struct{} `type:"structure" nopayload:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s RejectInvitationOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s RejectInvitationOutput) GoString() string {
 	return s.String()
 }
@@ -2525,12 +3153,20 @@ type ResourceNotFoundException struct {
 	Message_ *string `locationName:"Message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ResourceNotFoundException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ResourceNotFoundException) GoString() string {
 	return s.String()
 }
@@ -2591,12 +3227,20 @@ type ServiceQuotaExceededException struct {
 	Message_ *string `locationName:"Message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ServiceQuotaExceededException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ServiceQuotaExceededException) GoString() string {
 	return s.String()
 }
@@ -2655,12 +3299,20 @@ type StartMonitoringMemberInput struct {
 	GraphArn *string `type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s StartMonitoringMemberInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s StartMonitoringMemberInput) GoString() string {
 	return s.String()
 }
@@ -2697,16 +3349,114 @@ func (s *StartMonitoringMemberInput) SetGraphArn(v string) *StartMonitoringMembe
 }
 
 type StartMonitoringMemberOutput struct {
-	_ struct{} `type:"structure"`
+	_ struct{} `type:"structure" nopayload:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s StartMonitoringMemberOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s StartMonitoringMemberOutput) GoString() string {
+	return s.String()
+}
+
+type TagResourceInput struct {
+	_ struct{} `type:"structure"`
+
+	// The ARN of the behavior graph to assign the tags to.
+	//
+	// ResourceArn is a required field
+	ResourceArn *string `location:"uri" locationName:"ResourceArn" type:"string" required:"true"`
+
+	// The tags to assign to the behavior graph. You can add up to 50 tags. For
+	// each tag, you provide the tag key and the tag value. Each tag key can contain
+	// up to 128 characters. Each tag value can contain up to 256 characters.
+	//
+	// Tags is a required field
+	Tags map[string]*string `min:"1" type:"map" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s TagResourceInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s TagResourceInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *TagResourceInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "TagResourceInput"}
+	if s.ResourceArn == nil {
+		invalidParams.Add(request.NewErrParamRequired("ResourceArn"))
+	}
+	if s.ResourceArn != nil && len(*s.ResourceArn) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ResourceArn", 1))
+	}
+	if s.Tags == nil {
+		invalidParams.Add(request.NewErrParamRequired("Tags"))
+	}
+	if s.Tags != nil && len(s.Tags) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Tags", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetResourceArn sets the ResourceArn field's value.
+func (s *TagResourceInput) SetResourceArn(v string) *TagResourceInput {
+	s.ResourceArn = &v
+	return s
+}
+
+// SetTags sets the Tags field's value.
+func (s *TagResourceInput) SetTags(v map[string]*string) *TagResourceInput {
+	s.Tags = v
+	return s
+}
+
+type TagResourceOutput struct {
+	_ struct{} `type:"structure" nopayload:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s TagResourceOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s TagResourceOutput) GoString() string {
 	return s.String()
 }
 
@@ -2722,12 +3472,20 @@ type UnprocessedAccount struct {
 	Reason *string `type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UnprocessedAccount) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UnprocessedAccount) GoString() string {
 	return s.String()
 }
@@ -2744,6 +3502,95 @@ func (s *UnprocessedAccount) SetReason(v string) *UnprocessedAccount {
 	return s
 }
 
+type UntagResourceInput struct {
+	_ struct{} `type:"structure" nopayload:"true"`
+
+	// The ARN of the behavior graph to remove the tags from.
+	//
+	// ResourceArn is a required field
+	ResourceArn *string `location:"uri" locationName:"ResourceArn" type:"string" required:"true"`
+
+	// The tag keys of the tags to remove from the behavior graph. You can remove
+	// up to 50 tags at a time.
+	//
+	// TagKeys is a required field
+	TagKeys []*string `location:"querystring" locationName:"tagKeys" min:"1" type:"list" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UntagResourceInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UntagResourceInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *UntagResourceInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "UntagResourceInput"}
+	if s.ResourceArn == nil {
+		invalidParams.Add(request.NewErrParamRequired("ResourceArn"))
+	}
+	if s.ResourceArn != nil && len(*s.ResourceArn) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ResourceArn", 1))
+	}
+	if s.TagKeys == nil {
+		invalidParams.Add(request.NewErrParamRequired("TagKeys"))
+	}
+	if s.TagKeys != nil && len(s.TagKeys) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("TagKeys", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetResourceArn sets the ResourceArn field's value.
+func (s *UntagResourceInput) SetResourceArn(v string) *UntagResourceInput {
+	s.ResourceArn = &v
+	return s
+}
+
+// SetTagKeys sets the TagKeys field's value.
+func (s *UntagResourceInput) SetTagKeys(v []*string) *UntagResourceInput {
+	s.TagKeys = v
+	return s
+}
+
+type UntagResourceOutput struct {
+	_ struct{} `type:"structure" nopayload:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UntagResourceOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UntagResourceOutput) GoString() string {
+	return s.String()
+}
+
 // The request parameters are invalid.
 type ValidationException struct {
 	_            struct{}                  `type:"structure"`
@@ -2752,12 +3599,20 @@ type ValidationException struct {
 	Message_ *string `locationName:"Message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ValidationException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ValidationException) GoString() string {
 	return s.String()
 }

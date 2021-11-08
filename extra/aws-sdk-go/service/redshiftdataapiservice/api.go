@@ -12,6 +12,101 @@ import (
 	"github.com/aws/aws-sdk-go/private/protocol"
 )
 
+const opBatchExecuteStatement = "BatchExecuteStatement"
+
+// BatchExecuteStatementRequest generates a "aws/request.Request" representing the
+// client's request for the BatchExecuteStatement operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See BatchExecuteStatement for more information on using the BatchExecuteStatement
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the BatchExecuteStatementRequest method.
+//    req, resp := client.BatchExecuteStatementRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/redshift-data-2019-12-20/BatchExecuteStatement
+func (c *RedshiftDataAPIService) BatchExecuteStatementRequest(input *BatchExecuteStatementInput) (req *request.Request, output *BatchExecuteStatementOutput) {
+	op := &request.Operation{
+		Name:       opBatchExecuteStatement,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &BatchExecuteStatementInput{}
+	}
+
+	output = &BatchExecuteStatementOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// BatchExecuteStatement API operation for Redshift Data API Service.
+//
+// Runs one or more SQL statements, which can be data manipulation language
+// (DML) or data definition language (DDL). Depending on the authorization method,
+// use one of the following combinations of request parameters:
+//
+//    * Secrets Manager - specify the Amazon Resource Name (ARN) of the secret,
+//    the database name, and the cluster identifier that matches the cluster
+//    in the secret.
+//
+//    * Temporary credentials - specify the cluster identifier, the database
+//    name, and the database user name. Permission to call the redshift:GetClusterCredentials
+//    operation is required to use this method.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Redshift Data API Service's
+// API operation BatchExecuteStatement for usage and error information.
+//
+// Returned Error Types:
+//   * ValidationException
+//   The Amazon Redshift Data API operation failed due to invalid input.
+//
+//   * ActiveStatementsExceededException
+//   The number of active statements exceeds the limit.
+//
+//   * BatchExecuteStatementException
+//   An SQL statement encountered an environmental error while running.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/redshift-data-2019-12-20/BatchExecuteStatement
+func (c *RedshiftDataAPIService) BatchExecuteStatement(input *BatchExecuteStatementInput) (*BatchExecuteStatementOutput, error) {
+	req, out := c.BatchExecuteStatementRequest(input)
+	return out, req.Send()
+}
+
+// BatchExecuteStatementWithContext is the same as BatchExecuteStatement with the addition of
+// the ability to pass a context and additional request options.
+//
+// See BatchExecuteStatement for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *RedshiftDataAPIService) BatchExecuteStatementWithContext(ctx aws.Context, input *BatchExecuteStatementInput, opts ...request.Option) (*BatchExecuteStatementOutput, error) {
+	req, out := c.BatchExecuteStatementRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opCancelStatement = "CancelStatement"
 
 // CancelStatementRequest generates a "aws/request.Request" representing the
@@ -66,6 +161,9 @@ func (c *RedshiftDataAPIService) CancelStatementRequest(input *CancelStatementIn
 // API operation CancelStatement for usage and error information.
 //
 // Returned Error Types:
+//   * ValidationException
+//   The Amazon Redshift Data API operation failed due to invalid input.
+//
 //   * ResourceNotFoundException
 //   The Amazon Redshift Data API operation failed due to a missing resource.
 //
@@ -237,8 +335,9 @@ func (c *RedshiftDataAPIService) DescribeTableRequest(input *DescribeTableInput)
 // the column list. Depending on the authorization method, use one of the following
 // combinations of request parameters:
 //
-//    * AWS Secrets Manager - specify the Amazon Resource Name (ARN) of the
-//    secret and the cluster identifier that matches the cluster in the secret.
+//    * Secrets Manager - specify the Amazon Resource Name (ARN) of the secret,
+//    the database name, and the cluster identifier that matches the cluster
+//    in the secret.
 //
 //    * Temporary credentials - specify the cluster identifier, the database
 //    name, and the database user name. Permission to call the redshift:GetClusterCredentials
@@ -381,8 +480,9 @@ func (c *RedshiftDataAPIService) ExecuteStatementRequest(input *ExecuteStatement
 // Depending on the authorization method, use one of the following combinations
 // of request parameters:
 //
-//    * AWS Secrets Manager - specify the Amazon Resource Name (ARN) of the
-//    secret and the cluster identifier that matches the cluster in the secret.
+//    * Secrets Manager - specify the Amazon Resource Name (ARN) of the secret,
+//    the database name, and the cluster identifier that matches the cluster
+//    in the secret.
 //
 //    * Temporary credentials - specify the cluster identifier, the database
 //    name, and the database user name. Permission to call the redshift:GetClusterCredentials
@@ -401,6 +501,9 @@ func (c *RedshiftDataAPIService) ExecuteStatementRequest(input *ExecuteStatement
 //
 //   * ExecuteStatementException
 //   The SQL statement encountered an environmental error while running.
+//
+//   * ActiveStatementsExceededException
+//   The number of active statements exceeds the limit.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/redshift-data-2019-12-20/ExecuteStatement
 func (c *RedshiftDataAPIService) ExecuteStatement(input *ExecuteStatementInput) (*ExecuteStatementOutput, error) {
@@ -622,8 +725,9 @@ func (c *RedshiftDataAPIService) ListDatabasesRequest(input *ListDatabasesInput)
 // database list. Depending on the authorization method, use one of the following
 // combinations of request parameters:
 //
-//    * AWS Secrets Manager - specify the Amazon Resource Name (ARN) of the
-//    secret and the cluster identifier that matches the cluster in the secret.
+//    * Secrets Manager - specify the Amazon Resource Name (ARN) of the secret,
+//    the database name, and the cluster identifier that matches the cluster
+//    in the secret.
 //
 //    * Temporary credentials - specify the cluster identifier, the database
 //    name, and the database user name. Permission to call the redshift:GetClusterCredentials
@@ -771,8 +875,9 @@ func (c *RedshiftDataAPIService) ListSchemasRequest(input *ListSchemasInput) (re
 // schema list. Depending on the authorization method, use one of the following
 // combinations of request parameters:
 //
-//    * AWS Secrets Manager - specify the Amazon Resource Name (ARN) of the
-//    secret and the cluster identifier that matches the cluster in the secret.
+//    * Secrets Manager - specify the Amazon Resource Name (ARN) of the secret,
+//    the database name, and the cluster identifier that matches the cluster
+//    in the secret.
 //
 //    * Temporary credentials - specify the cluster identifier, the database
 //    name, and the database user name. Permission to call the redshift:GetClusterCredentials
@@ -1062,8 +1167,9 @@ func (c *RedshiftDataAPIService) ListTablesRequest(input *ListTablesInput) (req 
 // to page through the table list. Depending on the authorization method, use
 // one of the following combinations of request parameters:
 //
-//    * AWS Secrets Manager - specify the Amazon Resource Name (ARN) of the
-//    secret and the cluster identifier that matches the cluster in the secret.
+//    * Secrets Manager - specify the Amazon Resource Name (ARN) of the secret,
+//    the database name, and the cluster identifier that matches the cluster
+//    in the secret.
 //
 //    * Temporary credentials - specify the cluster identifier, the database
 //    name, and the database user name. Permission to call the redshift:GetClusterCredentials
@@ -1157,23 +1263,361 @@ func (c *RedshiftDataAPIService) ListTablesPagesWithContext(ctx aws.Context, inp
 	return p.Err()
 }
 
+// The number of active statements exceeds the limit.
+type ActiveStatementsExceededException struct {
+	_            struct{}                  `type:"structure"`
+	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
+
+	Message_ *string `locationName:"Message" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ActiveStatementsExceededException) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ActiveStatementsExceededException) GoString() string {
+	return s.String()
+}
+
+func newErrorActiveStatementsExceededException(v protocol.ResponseMetadata) error {
+	return &ActiveStatementsExceededException{
+		RespMetadata: v,
+	}
+}
+
+// Code returns the exception type name.
+func (s *ActiveStatementsExceededException) Code() string {
+	return "ActiveStatementsExceededException"
+}
+
+// Message returns the exception's message.
+func (s *ActiveStatementsExceededException) Message() string {
+	if s.Message_ != nil {
+		return *s.Message_
+	}
+	return ""
+}
+
+// OrigErr always returns nil, satisfies awserr.Error interface.
+func (s *ActiveStatementsExceededException) OrigErr() error {
+	return nil
+}
+
+func (s *ActiveStatementsExceededException) Error() string {
+	return fmt.Sprintf("%s: %s", s.Code(), s.Message())
+}
+
+// Status code returns the HTTP status code for the request's response error.
+func (s *ActiveStatementsExceededException) StatusCode() int {
+	return s.RespMetadata.StatusCode
+}
+
+// RequestID returns the service's response RequestID for request.
+func (s *ActiveStatementsExceededException) RequestID() string {
+	return s.RespMetadata.RequestID
+}
+
+// An SQL statement encountered an environmental error while running.
+type BatchExecuteStatementException struct {
+	_            struct{}                  `type:"structure"`
+	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
+
+	Message_ *string `locationName:"Message" type:"string"`
+
+	// Statement identifier of the exception.
+	//
+	// StatementId is a required field
+	StatementId *string `type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s BatchExecuteStatementException) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s BatchExecuteStatementException) GoString() string {
+	return s.String()
+}
+
+func newErrorBatchExecuteStatementException(v protocol.ResponseMetadata) error {
+	return &BatchExecuteStatementException{
+		RespMetadata: v,
+	}
+}
+
+// Code returns the exception type name.
+func (s *BatchExecuteStatementException) Code() string {
+	return "BatchExecuteStatementException"
+}
+
+// Message returns the exception's message.
+func (s *BatchExecuteStatementException) Message() string {
+	if s.Message_ != nil {
+		return *s.Message_
+	}
+	return ""
+}
+
+// OrigErr always returns nil, satisfies awserr.Error interface.
+func (s *BatchExecuteStatementException) OrigErr() error {
+	return nil
+}
+
+func (s *BatchExecuteStatementException) Error() string {
+	return fmt.Sprintf("%s: %s\n%s", s.Code(), s.Message(), s.String())
+}
+
+// Status code returns the HTTP status code for the request's response error.
+func (s *BatchExecuteStatementException) StatusCode() int {
+	return s.RespMetadata.StatusCode
+}
+
+// RequestID returns the service's response RequestID for request.
+func (s *BatchExecuteStatementException) RequestID() string {
+	return s.RespMetadata.RequestID
+}
+
+type BatchExecuteStatementInput struct {
+	_ struct{} `type:"structure"`
+
+	// The cluster identifier. This parameter is required when authenticating using
+	// either Secrets Manager or temporary credentials.
+	//
+	// ClusterIdentifier is a required field
+	ClusterIdentifier *string `type:"string" required:"true"`
+
+	// The name of the database. This parameter is required when authenticating
+	// using either Secrets Manager or temporary credentials.
+	//
+	// Database is a required field
+	Database *string `type:"string" required:"true"`
+
+	// The database user name. This parameter is required when authenticating using
+	// temporary credentials.
+	DbUser *string `type:"string"`
+
+	// The name or ARN of the secret that enables access to the database. This parameter
+	// is required when authenticating using Secrets Manager.
+	SecretArn *string `type:"string"`
+
+	// One or more SQL statements to run.
+	//
+	// Sqls is a required field
+	Sqls []*string `min:"1" type:"list" required:"true"`
+
+	// The name of the SQL statements. You can name the SQL statements when you
+	// create them to identify the query.
+	StatementName *string `type:"string"`
+
+	// A value that indicates whether to send an event to the Amazon EventBridge
+	// event bus after the SQL statements run.
+	WithEvent *bool `type:"boolean"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s BatchExecuteStatementInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s BatchExecuteStatementInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *BatchExecuteStatementInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "BatchExecuteStatementInput"}
+	if s.ClusterIdentifier == nil {
+		invalidParams.Add(request.NewErrParamRequired("ClusterIdentifier"))
+	}
+	if s.Database == nil {
+		invalidParams.Add(request.NewErrParamRequired("Database"))
+	}
+	if s.Sqls == nil {
+		invalidParams.Add(request.NewErrParamRequired("Sqls"))
+	}
+	if s.Sqls != nil && len(s.Sqls) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Sqls", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetClusterIdentifier sets the ClusterIdentifier field's value.
+func (s *BatchExecuteStatementInput) SetClusterIdentifier(v string) *BatchExecuteStatementInput {
+	s.ClusterIdentifier = &v
+	return s
+}
+
+// SetDatabase sets the Database field's value.
+func (s *BatchExecuteStatementInput) SetDatabase(v string) *BatchExecuteStatementInput {
+	s.Database = &v
+	return s
+}
+
+// SetDbUser sets the DbUser field's value.
+func (s *BatchExecuteStatementInput) SetDbUser(v string) *BatchExecuteStatementInput {
+	s.DbUser = &v
+	return s
+}
+
+// SetSecretArn sets the SecretArn field's value.
+func (s *BatchExecuteStatementInput) SetSecretArn(v string) *BatchExecuteStatementInput {
+	s.SecretArn = &v
+	return s
+}
+
+// SetSqls sets the Sqls field's value.
+func (s *BatchExecuteStatementInput) SetSqls(v []*string) *BatchExecuteStatementInput {
+	s.Sqls = v
+	return s
+}
+
+// SetStatementName sets the StatementName field's value.
+func (s *BatchExecuteStatementInput) SetStatementName(v string) *BatchExecuteStatementInput {
+	s.StatementName = &v
+	return s
+}
+
+// SetWithEvent sets the WithEvent field's value.
+func (s *BatchExecuteStatementInput) SetWithEvent(v bool) *BatchExecuteStatementInput {
+	s.WithEvent = &v
+	return s
+}
+
+type BatchExecuteStatementOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The cluster identifier.
+	ClusterIdentifier *string `type:"string"`
+
+	// The date and time (UTC) the statement was created.
+	CreatedAt *time.Time `type:"timestamp"`
+
+	// The name of the database.
+	Database *string `type:"string"`
+
+	// The database user name.
+	DbUser *string `type:"string"`
+
+	// The identifier of the SQL statement whose results are to be fetched. This
+	// value is a universally unique identifier (UUID) generated by Amazon Redshift
+	// Data API. This identifier is returned by BatchExecuteStatment.
+	Id *string `type:"string"`
+
+	// The name or ARN of the secret that enables access to the database.
+	SecretArn *string `type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s BatchExecuteStatementOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s BatchExecuteStatementOutput) GoString() string {
+	return s.String()
+}
+
+// SetClusterIdentifier sets the ClusterIdentifier field's value.
+func (s *BatchExecuteStatementOutput) SetClusterIdentifier(v string) *BatchExecuteStatementOutput {
+	s.ClusterIdentifier = &v
+	return s
+}
+
+// SetCreatedAt sets the CreatedAt field's value.
+func (s *BatchExecuteStatementOutput) SetCreatedAt(v time.Time) *BatchExecuteStatementOutput {
+	s.CreatedAt = &v
+	return s
+}
+
+// SetDatabase sets the Database field's value.
+func (s *BatchExecuteStatementOutput) SetDatabase(v string) *BatchExecuteStatementOutput {
+	s.Database = &v
+	return s
+}
+
+// SetDbUser sets the DbUser field's value.
+func (s *BatchExecuteStatementOutput) SetDbUser(v string) *BatchExecuteStatementOutput {
+	s.DbUser = &v
+	return s
+}
+
+// SetId sets the Id field's value.
+func (s *BatchExecuteStatementOutput) SetId(v string) *BatchExecuteStatementOutput {
+	s.Id = &v
+	return s
+}
+
+// SetSecretArn sets the SecretArn field's value.
+func (s *BatchExecuteStatementOutput) SetSecretArn(v string) *BatchExecuteStatementOutput {
+	s.SecretArn = &v
+	return s
+}
+
 type CancelStatementInput struct {
 	_ struct{} `type:"structure"`
 
 	// The identifier of the SQL statement to cancel. This value is a universally
 	// unique identifier (UUID) generated by Amazon Redshift Data API. This identifier
-	// is returned by ExecuteStatment and ListStatements.
+	// is returned by BatchExecuteStatment, ExecuteStatment, and ListStatements.
 	//
 	// Id is a required field
 	Id *string `type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CancelStatementInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CancelStatementInput) GoString() string {
 	return s.String()
 }
@@ -1204,12 +1648,20 @@ type CancelStatementOutput struct {
 	Status *bool `type:"boolean"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CancelStatementOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CancelStatementOutput) GoString() string {
 	return s.String()
 }
@@ -1264,12 +1716,20 @@ type ColumnMetadata struct {
 	TypeName *string `locationName:"typeName" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ColumnMetadata) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ColumnMetadata) GoString() string {
 	return s.String()
 }
@@ -1356,19 +1816,30 @@ type DescribeStatementInput struct {
 	_ struct{} `type:"structure"`
 
 	// The identifier of the SQL statement to describe. This value is a universally
-	// unique identifier (UUID) generated by Amazon Redshift Data API. This identifier
-	// is returned by ExecuteStatment and ListStatements.
+	// unique identifier (UUID) generated by Amazon Redshift Data API. A suffix
+	// indicates the number of the SQL statement. For example, d9b6c0c9-0747-4bf4-b142-e8883122f766:2
+	// has a suffix of :2 that indicates the second SQL statement of a batch query.
+	// This identifier is returned by BatchExecuteStatment, ExecuteStatement, and
+	// ListStatements.
 	//
 	// Id is a required field
 	Id *string `type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeStatementInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeStatementInput) GoString() string {
 	return s.String()
 }
@@ -1414,11 +1885,18 @@ type DescribeStatementOutput struct {
 	// while running.
 	Error *string `type:"string"`
 
+	// A value that indicates whether the statement has a result set. The result
+	// set can be empty.
+	HasResultSet *bool `type:"boolean"`
+
 	// The identifier of the SQL statement described. This value is a universally
 	// unique identifier (UUID) generated by Amazon Redshift Data API.
 	//
 	// Id is a required field
 	Id *string `type:"string" required:"true"`
+
+	// The parameters for the SQL statement.
+	QueryParameters []*SqlParameter `min:"1" type:"list"`
 
 	// The SQL statement text.
 	QueryString *string `type:"string"`
@@ -1433,10 +1911,10 @@ type DescribeStatementOutput struct {
 	// Either the number of rows returned from the SQL statement or the number of
 	// rows affected. If result size is greater than zero, the result rows can be
 	// the number of rows affected by SQL statements such as INSERT, UPDATE, DELETE,
-	// COPY, and others.
+	// COPY, and others. A -1 indicates the value is null.
 	ResultRows *int64 `type:"long"`
 
-	// The size in bytes of the returned results.
+	// The size in bytes of the returned results. A -1 indicates the value is null.
 	ResultSize *int64 `type:"long"`
 
 	// The name or Amazon Resource Name (ARN) of the secret that enables access
@@ -1462,17 +1940,28 @@ type DescribeStatementOutput struct {
 	//    * SUBMITTED - The query was submitted, but not yet processed.
 	Status *string `type:"string" enum:"StatusString"`
 
+	// The SQL statements from a multiple statement run.
+	SubStatements []*SubStatementData `type:"list"`
+
 	// The date and time (UTC) that the metadata for the SQL statement was last
 	// updated. An example is the time the status last changed.
 	UpdatedAt *time.Time `type:"timestamp"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeStatementOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeStatementOutput) GoString() string {
 	return s.String()
 }
@@ -1513,9 +2002,21 @@ func (s *DescribeStatementOutput) SetError(v string) *DescribeStatementOutput {
 	return s
 }
 
+// SetHasResultSet sets the HasResultSet field's value.
+func (s *DescribeStatementOutput) SetHasResultSet(v bool) *DescribeStatementOutput {
+	s.HasResultSet = &v
+	return s
+}
+
 // SetId sets the Id field's value.
 func (s *DescribeStatementOutput) SetId(v string) *DescribeStatementOutput {
 	s.Id = &v
+	return s
+}
+
+// SetQueryParameters sets the QueryParameters field's value.
+func (s *DescribeStatementOutput) SetQueryParameters(v []*SqlParameter) *DescribeStatementOutput {
+	s.QueryParameters = v
 	return s
 }
 
@@ -1561,6 +2062,12 @@ func (s *DescribeStatementOutput) SetStatus(v string) *DescribeStatementOutput {
 	return s
 }
 
+// SetSubStatements sets the SubStatements field's value.
+func (s *DescribeStatementOutput) SetSubStatements(v []*SubStatementData) *DescribeStatementOutput {
+	s.SubStatements = v
+	return s
+}
+
 // SetUpdatedAt sets the UpdatedAt field's value.
 func (s *DescribeStatementOutput) SetUpdatedAt(v time.Time) *DescribeStatementOutput {
 	s.UpdatedAt = &v
@@ -1571,14 +2078,21 @@ type DescribeTableInput struct {
 	_ struct{} `type:"structure"`
 
 	// The cluster identifier. This parameter is required when authenticating using
-	// either AWS Secrets Manager or temporary credentials.
+	// either Secrets Manager or temporary credentials.
 	//
 	// ClusterIdentifier is a required field
 	ClusterIdentifier *string `type:"string" required:"true"`
 
-	// The name of the database. This parameter is required when authenticating
-	// using temporary credentials.
-	Database *string `type:"string"`
+	// A database name. The connected database is specified when you connect with
+	// your authentication credentials.
+	ConnectedDatabase *string `type:"string"`
+
+	// The name of the database that contains the tables to be described. If ConnectedDatabase
+	// is not specified, this is also the database to connect to with your authentication
+	// credentials.
+	//
+	// Database is a required field
+	Database *string `type:"string" required:"true"`
 
 	// The database user name. This parameter is required when authenticating using
 	// temporary credentials.
@@ -1601,7 +2115,7 @@ type DescribeTableInput struct {
 	Schema *string `type:"string"`
 
 	// The name or ARN of the secret that enables access to the database. This parameter
-	// is required when authenticating using AWS Secrets Manager.
+	// is required when authenticating using Secrets Manager.
 	SecretArn *string `type:"string"`
 
 	// The table name. If no table is specified, then all tables for all matching
@@ -1610,12 +2124,20 @@ type DescribeTableInput struct {
 	Table *string `type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeTableInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeTableInput) GoString() string {
 	return s.String()
 }
@@ -1625,6 +2147,9 @@ func (s *DescribeTableInput) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "DescribeTableInput"}
 	if s.ClusterIdentifier == nil {
 		invalidParams.Add(request.NewErrParamRequired("ClusterIdentifier"))
+	}
+	if s.Database == nil {
+		invalidParams.Add(request.NewErrParamRequired("Database"))
 	}
 
 	if invalidParams.Len() > 0 {
@@ -1636,6 +2161,12 @@ func (s *DescribeTableInput) Validate() error {
 // SetClusterIdentifier sets the ClusterIdentifier field's value.
 func (s *DescribeTableInput) SetClusterIdentifier(v string) *DescribeTableInput {
 	s.ClusterIdentifier = &v
+	return s
+}
+
+// SetConnectedDatabase sets the ConnectedDatabase field's value.
+func (s *DescribeTableInput) SetConnectedDatabase(v string) *DescribeTableInput {
+	s.ConnectedDatabase = &v
 	return s
 }
 
@@ -1698,12 +2229,20 @@ type DescribeTableOutput struct {
 	TableName *string `type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeTableOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeTableOutput) GoString() string {
 	return s.String()
 }
@@ -1740,12 +2279,20 @@ type ExecuteStatementException struct {
 	StatementId *string `type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ExecuteStatementException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ExecuteStatementException) GoString() string {
 	return s.String()
 }
@@ -1792,21 +2339,26 @@ type ExecuteStatementInput struct {
 	_ struct{} `type:"structure"`
 
 	// The cluster identifier. This parameter is required when authenticating using
-	// either AWS Secrets Manager or temporary credentials.
+	// either Secrets Manager or temporary credentials.
 	//
 	// ClusterIdentifier is a required field
 	ClusterIdentifier *string `type:"string" required:"true"`
 
 	// The name of the database. This parameter is required when authenticating
-	// using temporary credentials.
-	Database *string `type:"string"`
+	// using either Secrets Manager or temporary credentials.
+	//
+	// Database is a required field
+	Database *string `type:"string" required:"true"`
 
 	// The database user name. This parameter is required when authenticating using
 	// temporary credentials.
 	DbUser *string `type:"string"`
 
+	// The parameters for the SQL statement.
+	Parameters []*SqlParameter `min:"1" type:"list"`
+
 	// The name or ARN of the secret that enables access to the database. This parameter
-	// is required when authenticating using AWS Secrets Manager.
+	// is required when authenticating using Secrets Manager.
 	SecretArn *string `type:"string"`
 
 	// The SQL statement text to run.
@@ -1823,12 +2375,20 @@ type ExecuteStatementInput struct {
 	WithEvent *bool `type:"boolean"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ExecuteStatementInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ExecuteStatementInput) GoString() string {
 	return s.String()
 }
@@ -1839,8 +2399,24 @@ func (s *ExecuteStatementInput) Validate() error {
 	if s.ClusterIdentifier == nil {
 		invalidParams.Add(request.NewErrParamRequired("ClusterIdentifier"))
 	}
+	if s.Database == nil {
+		invalidParams.Add(request.NewErrParamRequired("Database"))
+	}
+	if s.Parameters != nil && len(s.Parameters) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Parameters", 1))
+	}
 	if s.Sql == nil {
 		invalidParams.Add(request.NewErrParamRequired("Sql"))
+	}
+	if s.Parameters != nil {
+		for i, v := range s.Parameters {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "Parameters", i), err.(request.ErrInvalidParams))
+			}
+		}
 	}
 
 	if invalidParams.Len() > 0 {
@@ -1864,6 +2440,12 @@ func (s *ExecuteStatementInput) SetDatabase(v string) *ExecuteStatementInput {
 // SetDbUser sets the DbUser field's value.
 func (s *ExecuteStatementInput) SetDbUser(v string) *ExecuteStatementInput {
 	s.DbUser = &v
+	return s
+}
+
+// SetParameters sets the Parameters field's value.
+func (s *ExecuteStatementInput) SetParameters(v []*SqlParameter) *ExecuteStatementInput {
+	s.Parameters = v
 	return s
 }
 
@@ -1906,20 +2488,29 @@ type ExecuteStatementOutput struct {
 	// The database user name.
 	DbUser *string `type:"string"`
 
-	// The identifier of the statement to be run. This value is a universally unique
-	// identifier (UUID) generated by Amazon Redshift Data API.
+	// The identifier of the SQL statement whose results are to be fetched. This
+	// value is a universally unique identifier (UUID) generated by Amazon Redshift
+	// Data API.
 	Id *string `type:"string"`
 
 	// The name or ARN of the secret that enables access to the database.
 	SecretArn *string `type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ExecuteStatementOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ExecuteStatementOutput) GoString() string {
 	return s.String()
 }
@@ -1965,7 +2556,6 @@ type Field struct {
 	_ struct{} `type:"structure"`
 
 	// A value of the BLOB data type.
-	//
 	// BlobValue is automatically base64 encoded/decoded by the SDK.
 	BlobValue []byte `locationName:"blobValue" type:"blob"`
 
@@ -1985,12 +2575,20 @@ type Field struct {
 	StringValue *string `locationName:"stringValue" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s Field) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s Field) GoString() string {
 	return s.String()
 }
@@ -2036,7 +2634,10 @@ type GetStatementResultInput struct {
 
 	// The identifier of the SQL statement whose results are to be fetched. This
 	// value is a universally unique identifier (UUID) generated by Amazon Redshift
-	// Data API. This identifier is returned by ExecuteStatment and ListStatements.
+	// Data API. A suffix indicates then number of the SQL statement. For example,
+	// d9b6c0c9-0747-4bf4-b142-e8883122f766:2 has a suffix of :2 that indicates
+	// the second SQL statement of a batch query. This identifier is returned by
+	// BatchExecuteStatment, ExecuteStatment, and ListStatements.
 	//
 	// Id is a required field
 	Id *string `type:"string" required:"true"`
@@ -2049,12 +2650,20 @@ type GetStatementResultInput struct {
 	NextToken *string `type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetStatementResultInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetStatementResultInput) GoString() string {
 	return s.String()
 }
@@ -2108,12 +2717,20 @@ type GetStatementResultOutput struct {
 	TotalNumRows *int64 `type:"long"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetStatementResultOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetStatementResultOutput) GoString() string {
 	return s.String()
 }
@@ -2151,12 +2768,20 @@ type InternalServerException struct {
 	Message_ *string `locationName:"Message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s InternalServerException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s InternalServerException) GoString() string {
 	return s.String()
 }
@@ -2203,14 +2828,16 @@ type ListDatabasesInput struct {
 	_ struct{} `type:"structure"`
 
 	// The cluster identifier. This parameter is required when authenticating using
-	// either AWS Secrets Manager or temporary credentials.
+	// either Secrets Manager or temporary credentials.
 	//
 	// ClusterIdentifier is a required field
 	ClusterIdentifier *string `type:"string" required:"true"`
 
 	// The name of the database. This parameter is required when authenticating
-	// using temporary credentials.
-	Database *string `type:"string"`
+	// using either Secrets Manager or temporary credentials.
+	//
+	// Database is a required field
+	Database *string `type:"string" required:"true"`
 
 	// The database user name. This parameter is required when authenticating using
 	// temporary credentials.
@@ -2229,16 +2856,24 @@ type ListDatabasesInput struct {
 	NextToken *string `type:"string"`
 
 	// The name or ARN of the secret that enables access to the database. This parameter
-	// is required when authenticating using AWS Secrets Manager.
+	// is required when authenticating using Secrets Manager.
 	SecretArn *string `type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListDatabasesInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListDatabasesInput) GoString() string {
 	return s.String()
 }
@@ -2248,6 +2883,9 @@ func (s *ListDatabasesInput) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "ListDatabasesInput"}
 	if s.ClusterIdentifier == nil {
 		invalidParams.Add(request.NewErrParamRequired("ClusterIdentifier"))
+	}
+	if s.Database == nil {
+		invalidParams.Add(request.NewErrParamRequired("Database"))
 	}
 
 	if invalidParams.Len() > 0 {
@@ -2306,12 +2944,20 @@ type ListDatabasesOutput struct {
 	NextToken *string `type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListDatabasesOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListDatabasesOutput) GoString() string {
 	return s.String()
 }
@@ -2332,13 +2978,18 @@ type ListSchemasInput struct {
 	_ struct{} `type:"structure"`
 
 	// The cluster identifier. This parameter is required when authenticating using
-	// either AWS Secrets Manager or temporary credentials.
+	// either Secrets Manager or temporary credentials.
 	//
 	// ClusterIdentifier is a required field
 	ClusterIdentifier *string `type:"string" required:"true"`
 
-	// The name of the database. This parameter is required when authenticating
-	// using temporary credentials.
+	// A database name. The connected database is specified when you connect with
+	// your authentication credentials.
+	ConnectedDatabase *string `type:"string"`
+
+	// The name of the database that contains the schemas to list. If ConnectedDatabase
+	// is not specified, this is also the database to connect to with your authentication
+	// credentials.
 	//
 	// Database is a required field
 	Database *string `type:"string" required:"true"`
@@ -2365,16 +3016,24 @@ type ListSchemasInput struct {
 	SchemaPattern *string `type:"string"`
 
 	// The name or ARN of the secret that enables access to the database. This parameter
-	// is required when authenticating using AWS Secrets Manager.
+	// is required when authenticating using Secrets Manager.
 	SecretArn *string `type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListSchemasInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListSchemasInput) GoString() string {
 	return s.String()
 }
@@ -2398,6 +3057,12 @@ func (s *ListSchemasInput) Validate() error {
 // SetClusterIdentifier sets the ClusterIdentifier field's value.
 func (s *ListSchemasInput) SetClusterIdentifier(v string) *ListSchemasInput {
 	s.ClusterIdentifier = &v
+	return s
+}
+
+// SetConnectedDatabase sets the ConnectedDatabase field's value.
+func (s *ListSchemasInput) SetConnectedDatabase(v string) *ListSchemasInput {
+	s.ConnectedDatabase = &v
 	return s
 }
 
@@ -2451,12 +3116,20 @@ type ListSchemasOutput struct {
 	Schemas []*string `type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListSchemasOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListSchemasOutput) GoString() string {
 	return s.String()
 }
@@ -2488,12 +3161,18 @@ type ListStatementsInput struct {
 	// is empty, all response records have been retrieved for the request.
 	NextToken *string `type:"string"`
 
-	// The name of the SQL statement specified as input to ExecuteStatement to identify
-	// the query. You can list multiple statements by providing a prefix that matches
-	// the beginning of the statement name. For example, to list myStatement1, myStatement2,
-	// myStatement3, and so on, then provide the a value of myStatement. Data API
-	// does a case-sensitive match of SQL statement names to the prefix value you
-	// provide.
+	// A value that filters which statements to return in the response. If true,
+	// all statements run by the caller's IAM role are returned. If false, only
+	// statements run by the caller's IAM role in the current IAM session are returned.
+	// The default is true.
+	RoleLevel *bool `type:"boolean"`
+
+	// The name of the SQL statement specified as input to BatchExecuteStatement
+	// or ExecuteStatement to identify the query. You can list multiple statements
+	// by providing a prefix that matches the beginning of the statement name. For
+	// example, to list myStatement1, myStatement2, myStatement3, and so on, then
+	// provide the a value of myStatement. Data API does a case-sensitive match
+	// of SQL statement names to the prefix value you provide.
 	StatementName *string `type:"string"`
 
 	// The status of the SQL statement to list. Status values are defined as follows:
@@ -2515,12 +3194,20 @@ type ListStatementsInput struct {
 	Status *string `type:"string" enum:"StatusString"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListStatementsInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListStatementsInput) GoString() string {
 	return s.String()
 }
@@ -2534,6 +3221,12 @@ func (s *ListStatementsInput) SetMaxResults(v int64) *ListStatementsInput {
 // SetNextToken sets the NextToken field's value.
 func (s *ListStatementsInput) SetNextToken(v string) *ListStatementsInput {
 	s.NextToken = &v
+	return s
+}
+
+// SetRoleLevel sets the RoleLevel field's value.
+func (s *ListStatementsInput) SetRoleLevel(v bool) *ListStatementsInput {
+	s.RoleLevel = &v
 	return s
 }
 
@@ -2565,12 +3258,20 @@ type ListStatementsOutput struct {
 	Statements []*StatementData `type:"list" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListStatementsOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListStatementsOutput) GoString() string {
 	return s.String()
 }
@@ -2591,13 +3292,18 @@ type ListTablesInput struct {
 	_ struct{} `type:"structure"`
 
 	// The cluster identifier. This parameter is required when authenticating using
-	// either AWS Secrets Manager or temporary credentials.
+	// either Secrets Manager or temporary credentials.
 	//
 	// ClusterIdentifier is a required field
 	ClusterIdentifier *string `type:"string" required:"true"`
 
-	// The name of the database. This parameter is required when authenticating
-	// using temporary credentials.
+	// A database name. The connected database is specified when you connect with
+	// your authentication credentials.
+	ConnectedDatabase *string `type:"string"`
+
+	// The name of the database that contains the tables to list. If ConnectedDatabase
+	// is not specified, this is also the database to connect to with your authentication
+	// credentials.
 	//
 	// Database is a required field
 	Database *string `type:"string" required:"true"`
@@ -2627,7 +3333,7 @@ type ListTablesInput struct {
 	SchemaPattern *string `type:"string"`
 
 	// The name or ARN of the secret that enables access to the database. This parameter
-	// is required when authenticating using AWS Secrets Manager.
+	// is required when authenticating using Secrets Manager.
 	SecretArn *string `type:"string"`
 
 	// A pattern to filter results by table name. Within a table pattern, "%" means
@@ -2639,12 +3345,20 @@ type ListTablesInput struct {
 	TablePattern *string `type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListTablesInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListTablesInput) GoString() string {
 	return s.String()
 }
@@ -2668,6 +3382,12 @@ func (s *ListTablesInput) Validate() error {
 // SetClusterIdentifier sets the ClusterIdentifier field's value.
 func (s *ListTablesInput) SetClusterIdentifier(v string) *ListTablesInput {
 	s.ClusterIdentifier = &v
+	return s
+}
+
+// SetConnectedDatabase sets the ConnectedDatabase field's value.
+func (s *ListTablesInput) SetConnectedDatabase(v string) *ListTablesInput {
+	s.ConnectedDatabase = &v
 	return s
 }
 
@@ -2727,12 +3447,20 @@ type ListTablesOutput struct {
 	Tables []*TableMember `type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListTablesOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListTablesOutput) GoString() string {
 	return s.String()
 }
@@ -2763,12 +3491,20 @@ type ResourceNotFoundException struct {
 	ResourceId *string `type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ResourceNotFoundException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ResourceNotFoundException) GoString() string {
 	return s.String()
 }
@@ -2811,6 +3547,72 @@ func (s *ResourceNotFoundException) RequestID() string {
 	return s.RespMetadata.RequestID
 }
 
+// A parameter used in a SQL statement.
+type SqlParameter struct {
+	_ struct{} `type:"structure"`
+
+	// The name of the parameter.
+	//
+	// Name is a required field
+	Name *string `locationName:"name" type:"string" required:"true"`
+
+	// The value of the parameter. Amazon Redshift implicitly converts to the proper
+	// data type. For more inforation, see Data types (https://docs.aws.amazon.com/redshift/latest/dg/c_Supported_data_types.html)
+	// in the Amazon Redshift Database Developer Guide.
+	//
+	// Value is a required field
+	Value *string `locationName:"value" min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s SqlParameter) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s SqlParameter) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *SqlParameter) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "SqlParameter"}
+	if s.Name == nil {
+		invalidParams.Add(request.NewErrParamRequired("Name"))
+	}
+	if s.Value == nil {
+		invalidParams.Add(request.NewErrParamRequired("Value"))
+	}
+	if s.Value != nil && len(*s.Value) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Value", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetName sets the Name field's value.
+func (s *SqlParameter) SetName(v string) *SqlParameter {
+	s.Name = &v
+	return s
+}
+
+// SetValue sets the Value field's value.
+func (s *SqlParameter) SetValue(v string) *SqlParameter {
+	s.Value = &v
+	return s
+}
+
 // The SQL statement to run.
 type StatementData struct {
 	_ struct{} `type:"structure"`
@@ -2824,8 +3626,18 @@ type StatementData struct {
 	// Id is a required field
 	Id *string `type:"string" required:"true"`
 
+	// A value that indicates whether the statement is a batch query request.
+	IsBatchStatement *bool `type:"boolean"`
+
+	// The parameters used in a SQL statement.
+	QueryParameters []*SqlParameter `min:"1" type:"list"`
+
 	// The SQL statement.
 	QueryString *string `type:"string"`
+
+	// One or more SQL statements. Each query string in the array corresponds to
+	// one of the queries in a batch query request.
+	QueryStrings []*string `type:"list"`
 
 	// The name or Amazon Resource Name (ARN) of the secret that enables access
 	// to the database.
@@ -2842,12 +3654,20 @@ type StatementData struct {
 	UpdatedAt *time.Time `type:"timestamp"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s StatementData) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s StatementData) GoString() string {
 	return s.String()
 }
@@ -2864,9 +3684,27 @@ func (s *StatementData) SetId(v string) *StatementData {
 	return s
 }
 
+// SetIsBatchStatement sets the IsBatchStatement field's value.
+func (s *StatementData) SetIsBatchStatement(v bool) *StatementData {
+	s.IsBatchStatement = &v
+	return s
+}
+
+// SetQueryParameters sets the QueryParameters field's value.
+func (s *StatementData) SetQueryParameters(v []*SqlParameter) *StatementData {
+	s.QueryParameters = v
+	return s
+}
+
 // SetQueryString sets the QueryString field's value.
 func (s *StatementData) SetQueryString(v string) *StatementData {
 	s.QueryString = &v
+	return s
+}
+
+// SetQueryStrings sets the QueryStrings field's value.
+func (s *StatementData) SetQueryStrings(v []*string) *StatementData {
+	s.QueryStrings = v
 	return s
 }
 
@@ -2894,6 +3732,140 @@ func (s *StatementData) SetUpdatedAt(v time.Time) *StatementData {
 	return s
 }
 
+// Information about an SQL statement.
+type SubStatementData struct {
+	_ struct{} `type:"structure"`
+
+	// The date and time (UTC) the statement was created.
+	CreatedAt *time.Time `type:"timestamp"`
+
+	// The amount of time in nanoseconds that the statement ran.
+	Duration *int64 `type:"long"`
+
+	// The error message from the cluster if the SQL statement encountered an error
+	// while running.
+	Error *string `type:"string"`
+
+	// A value that indicates whether the statement has a result set. The result
+	// set can be empty.
+	HasResultSet *bool `type:"boolean"`
+
+	// The identifier of the SQL statement. This value is a universally unique identifier
+	// (UUID) generated by Amazon Redshift Data API. A suffix indicates the number
+	// of the SQL statement. For example, d9b6c0c9-0747-4bf4-b142-e8883122f766:2
+	// has a suffix of :2 that indicates the second SQL statement of a batch query.
+	//
+	// Id is a required field
+	Id *string `type:"string" required:"true"`
+
+	// The SQL statement text.
+	QueryString *string `type:"string"`
+
+	// The SQL statement identifier. This value is a universally unique identifier
+	// (UUID) generated by Amazon Redshift Data API.
+	RedshiftQueryId *int64 `type:"long"`
+
+	// Either the number of rows returned from the SQL statement or the number of
+	// rows affected. If result size is greater than zero, the result rows can be
+	// the number of rows affected by SQL statements such as INSERT, UPDATE, DELETE,
+	// COPY, and others. A -1 indicates the value is null.
+	ResultRows *int64 `type:"long"`
+
+	// The size in bytes of the returned results. A -1 indicates the value is null.
+	ResultSize *int64 `type:"long"`
+
+	// The status of the SQL statement. An example is the that the SQL statement
+	// finished.
+	Status *string `type:"string" enum:"StatementStatusString"`
+
+	// The date and time (UTC) that the statement metadata was last updated.
+	UpdatedAt *time.Time `type:"timestamp"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s SubStatementData) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s SubStatementData) GoString() string {
+	return s.String()
+}
+
+// SetCreatedAt sets the CreatedAt field's value.
+func (s *SubStatementData) SetCreatedAt(v time.Time) *SubStatementData {
+	s.CreatedAt = &v
+	return s
+}
+
+// SetDuration sets the Duration field's value.
+func (s *SubStatementData) SetDuration(v int64) *SubStatementData {
+	s.Duration = &v
+	return s
+}
+
+// SetError sets the Error field's value.
+func (s *SubStatementData) SetError(v string) *SubStatementData {
+	s.Error = &v
+	return s
+}
+
+// SetHasResultSet sets the HasResultSet field's value.
+func (s *SubStatementData) SetHasResultSet(v bool) *SubStatementData {
+	s.HasResultSet = &v
+	return s
+}
+
+// SetId sets the Id field's value.
+func (s *SubStatementData) SetId(v string) *SubStatementData {
+	s.Id = &v
+	return s
+}
+
+// SetQueryString sets the QueryString field's value.
+func (s *SubStatementData) SetQueryString(v string) *SubStatementData {
+	s.QueryString = &v
+	return s
+}
+
+// SetRedshiftQueryId sets the RedshiftQueryId field's value.
+func (s *SubStatementData) SetRedshiftQueryId(v int64) *SubStatementData {
+	s.RedshiftQueryId = &v
+	return s
+}
+
+// SetResultRows sets the ResultRows field's value.
+func (s *SubStatementData) SetResultRows(v int64) *SubStatementData {
+	s.ResultRows = &v
+	return s
+}
+
+// SetResultSize sets the ResultSize field's value.
+func (s *SubStatementData) SetResultSize(v int64) *SubStatementData {
+	s.ResultSize = &v
+	return s
+}
+
+// SetStatus sets the Status field's value.
+func (s *SubStatementData) SetStatus(v string) *SubStatementData {
+	s.Status = &v
+	return s
+}
+
+// SetUpdatedAt sets the UpdatedAt field's value.
+func (s *SubStatementData) SetUpdatedAt(v time.Time) *SubStatementData {
+	s.UpdatedAt = &v
+	return s
+}
+
 // The properties of a table.
 type TableMember struct {
 	_ struct{} `type:"structure"`
@@ -2909,12 +3881,20 @@ type TableMember struct {
 	Type *string `locationName:"type" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s TableMember) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s TableMember) GoString() string {
 	return s.String()
 }
@@ -2946,12 +3926,20 @@ type ValidationException struct {
 	Message_ *string `locationName:"Message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ValidationException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ValidationException) GoString() string {
 	return s.String()
 }
@@ -2995,17 +3983,40 @@ func (s *ValidationException) RequestID() string {
 }
 
 const (
-	// StatusStringAborted is a StatusString enum value
-	StatusStringAborted = "ABORTED"
+	// StatementStatusStringSubmitted is a StatementStatusString enum value
+	StatementStatusStringSubmitted = "SUBMITTED"
 
-	// StatusStringAll is a StatusString enum value
-	StatusStringAll = "ALL"
+	// StatementStatusStringPicked is a StatementStatusString enum value
+	StatementStatusStringPicked = "PICKED"
 
-	// StatusStringFailed is a StatusString enum value
-	StatusStringFailed = "FAILED"
+	// StatementStatusStringStarted is a StatementStatusString enum value
+	StatementStatusStringStarted = "STARTED"
 
-	// StatusStringFinished is a StatusString enum value
-	StatusStringFinished = "FINISHED"
+	// StatementStatusStringFinished is a StatementStatusString enum value
+	StatementStatusStringFinished = "FINISHED"
+
+	// StatementStatusStringAborted is a StatementStatusString enum value
+	StatementStatusStringAborted = "ABORTED"
+
+	// StatementStatusStringFailed is a StatementStatusString enum value
+	StatementStatusStringFailed = "FAILED"
+)
+
+// StatementStatusString_Values returns all elements of the StatementStatusString enum
+func StatementStatusString_Values() []string {
+	return []string{
+		StatementStatusStringSubmitted,
+		StatementStatusStringPicked,
+		StatementStatusStringStarted,
+		StatementStatusStringFinished,
+		StatementStatusStringAborted,
+		StatementStatusStringFailed,
+	}
+}
+
+const (
+	// StatusStringSubmitted is a StatusString enum value
+	StatusStringSubmitted = "SUBMITTED"
 
 	// StatusStringPicked is a StatusString enum value
 	StatusStringPicked = "PICKED"
@@ -3013,19 +4024,28 @@ const (
 	// StatusStringStarted is a StatusString enum value
 	StatusStringStarted = "STARTED"
 
-	// StatusStringSubmitted is a StatusString enum value
-	StatusStringSubmitted = "SUBMITTED"
+	// StatusStringFinished is a StatusString enum value
+	StatusStringFinished = "FINISHED"
+
+	// StatusStringAborted is a StatusString enum value
+	StatusStringAborted = "ABORTED"
+
+	// StatusStringFailed is a StatusString enum value
+	StatusStringFailed = "FAILED"
+
+	// StatusStringAll is a StatusString enum value
+	StatusStringAll = "ALL"
 )
 
 // StatusString_Values returns all elements of the StatusString enum
 func StatusString_Values() []string {
 	return []string{
-		StatusStringAborted,
-		StatusStringAll,
-		StatusStringFailed,
-		StatusStringFinished,
+		StatusStringSubmitted,
 		StatusStringPicked,
 		StatusStringStarted,
-		StatusStringSubmitted,
+		StatusStringFinished,
+		StatusStringAborted,
+		StatusStringFailed,
+		StatusStringAll,
 	}
 }

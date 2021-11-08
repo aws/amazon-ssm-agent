@@ -152,6 +152,10 @@ type IoTSiteWiseAPI interface {
 	DescribeDashboardWithContext(aws.Context, *iotsitewise.DescribeDashboardInput, ...request.Option) (*iotsitewise.DescribeDashboardOutput, error)
 	DescribeDashboardRequest(*iotsitewise.DescribeDashboardInput) (*request.Request, *iotsitewise.DescribeDashboardOutput)
 
+	DescribeDefaultEncryptionConfiguration(*iotsitewise.DescribeDefaultEncryptionConfigurationInput) (*iotsitewise.DescribeDefaultEncryptionConfigurationOutput, error)
+	DescribeDefaultEncryptionConfigurationWithContext(aws.Context, *iotsitewise.DescribeDefaultEncryptionConfigurationInput, ...request.Option) (*iotsitewise.DescribeDefaultEncryptionConfigurationOutput, error)
+	DescribeDefaultEncryptionConfigurationRequest(*iotsitewise.DescribeDefaultEncryptionConfigurationInput) (*request.Request, *iotsitewise.DescribeDefaultEncryptionConfigurationOutput)
+
 	DescribeGateway(*iotsitewise.DescribeGatewayInput) (*iotsitewise.DescribeGatewayOutput, error)
 	DescribeGatewayWithContext(aws.Context, *iotsitewise.DescribeGatewayInput, ...request.Option) (*iotsitewise.DescribeGatewayOutput, error)
 	DescribeGatewayRequest(*iotsitewise.DescribeGatewayInput) (*request.Request, *iotsitewise.DescribeGatewayOutput)
@@ -171,6 +175,10 @@ type IoTSiteWiseAPI interface {
 	DescribeProject(*iotsitewise.DescribeProjectInput) (*iotsitewise.DescribeProjectOutput, error)
 	DescribeProjectWithContext(aws.Context, *iotsitewise.DescribeProjectInput, ...request.Option) (*iotsitewise.DescribeProjectOutput, error)
 	DescribeProjectRequest(*iotsitewise.DescribeProjectInput) (*request.Request, *iotsitewise.DescribeProjectOutput)
+
+	DescribeStorageConfiguration(*iotsitewise.DescribeStorageConfigurationInput) (*iotsitewise.DescribeStorageConfigurationOutput, error)
+	DescribeStorageConfigurationWithContext(aws.Context, *iotsitewise.DescribeStorageConfigurationInput, ...request.Option) (*iotsitewise.DescribeStorageConfigurationOutput, error)
+	DescribeStorageConfigurationRequest(*iotsitewise.DescribeStorageConfigurationInput) (*request.Request, *iotsitewise.DescribeStorageConfigurationOutput)
 
 	DisassociateAssets(*iotsitewise.DisassociateAssetsInput) (*iotsitewise.DisassociateAssetsOutput, error)
 	DisassociateAssetsWithContext(aws.Context, *iotsitewise.DisassociateAssetsInput, ...request.Option) (*iotsitewise.DisassociateAssetsOutput, error)
@@ -194,6 +202,13 @@ type IoTSiteWiseAPI interface {
 	GetAssetPropertyValueHistoryPages(*iotsitewise.GetAssetPropertyValueHistoryInput, func(*iotsitewise.GetAssetPropertyValueHistoryOutput, bool) bool) error
 	GetAssetPropertyValueHistoryPagesWithContext(aws.Context, *iotsitewise.GetAssetPropertyValueHistoryInput, func(*iotsitewise.GetAssetPropertyValueHistoryOutput, bool) bool, ...request.Option) error
 
+	GetInterpolatedAssetPropertyValues(*iotsitewise.GetInterpolatedAssetPropertyValuesInput) (*iotsitewise.GetInterpolatedAssetPropertyValuesOutput, error)
+	GetInterpolatedAssetPropertyValuesWithContext(aws.Context, *iotsitewise.GetInterpolatedAssetPropertyValuesInput, ...request.Option) (*iotsitewise.GetInterpolatedAssetPropertyValuesOutput, error)
+	GetInterpolatedAssetPropertyValuesRequest(*iotsitewise.GetInterpolatedAssetPropertyValuesInput) (*request.Request, *iotsitewise.GetInterpolatedAssetPropertyValuesOutput)
+
+	GetInterpolatedAssetPropertyValuesPages(*iotsitewise.GetInterpolatedAssetPropertyValuesInput, func(*iotsitewise.GetInterpolatedAssetPropertyValuesOutput, bool) bool) error
+	GetInterpolatedAssetPropertyValuesPagesWithContext(aws.Context, *iotsitewise.GetInterpolatedAssetPropertyValuesInput, func(*iotsitewise.GetInterpolatedAssetPropertyValuesOutput, bool) bool, ...request.Option) error
+
 	ListAccessPolicies(*iotsitewise.ListAccessPoliciesInput) (*iotsitewise.ListAccessPoliciesOutput, error)
 	ListAccessPoliciesWithContext(aws.Context, *iotsitewise.ListAccessPoliciesInput, ...request.Option) (*iotsitewise.ListAccessPoliciesOutput, error)
 	ListAccessPoliciesRequest(*iotsitewise.ListAccessPoliciesInput) (*request.Request, *iotsitewise.ListAccessPoliciesOutput)
@@ -207,6 +222,13 @@ type IoTSiteWiseAPI interface {
 
 	ListAssetModelsPages(*iotsitewise.ListAssetModelsInput, func(*iotsitewise.ListAssetModelsOutput, bool) bool) error
 	ListAssetModelsPagesWithContext(aws.Context, *iotsitewise.ListAssetModelsInput, func(*iotsitewise.ListAssetModelsOutput, bool) bool, ...request.Option) error
+
+	ListAssetRelationships(*iotsitewise.ListAssetRelationshipsInput) (*iotsitewise.ListAssetRelationshipsOutput, error)
+	ListAssetRelationshipsWithContext(aws.Context, *iotsitewise.ListAssetRelationshipsInput, ...request.Option) (*iotsitewise.ListAssetRelationshipsOutput, error)
+	ListAssetRelationshipsRequest(*iotsitewise.ListAssetRelationshipsInput) (*request.Request, *iotsitewise.ListAssetRelationshipsOutput)
+
+	ListAssetRelationshipsPages(*iotsitewise.ListAssetRelationshipsInput, func(*iotsitewise.ListAssetRelationshipsOutput, bool) bool) error
+	ListAssetRelationshipsPagesWithContext(aws.Context, *iotsitewise.ListAssetRelationshipsInput, func(*iotsitewise.ListAssetRelationshipsOutput, bool) bool, ...request.Option) error
 
 	ListAssets(*iotsitewise.ListAssetsInput) (*iotsitewise.ListAssetsOutput, error)
 	ListAssetsWithContext(aws.Context, *iotsitewise.ListAssetsInput, ...request.Option) (*iotsitewise.ListAssetsOutput, error)
@@ -261,9 +283,17 @@ type IoTSiteWiseAPI interface {
 	ListTagsForResourceWithContext(aws.Context, *iotsitewise.ListTagsForResourceInput, ...request.Option) (*iotsitewise.ListTagsForResourceOutput, error)
 	ListTagsForResourceRequest(*iotsitewise.ListTagsForResourceInput) (*request.Request, *iotsitewise.ListTagsForResourceOutput)
 
+	PutDefaultEncryptionConfiguration(*iotsitewise.PutDefaultEncryptionConfigurationInput) (*iotsitewise.PutDefaultEncryptionConfigurationOutput, error)
+	PutDefaultEncryptionConfigurationWithContext(aws.Context, *iotsitewise.PutDefaultEncryptionConfigurationInput, ...request.Option) (*iotsitewise.PutDefaultEncryptionConfigurationOutput, error)
+	PutDefaultEncryptionConfigurationRequest(*iotsitewise.PutDefaultEncryptionConfigurationInput) (*request.Request, *iotsitewise.PutDefaultEncryptionConfigurationOutput)
+
 	PutLoggingOptions(*iotsitewise.PutLoggingOptionsInput) (*iotsitewise.PutLoggingOptionsOutput, error)
 	PutLoggingOptionsWithContext(aws.Context, *iotsitewise.PutLoggingOptionsInput, ...request.Option) (*iotsitewise.PutLoggingOptionsOutput, error)
 	PutLoggingOptionsRequest(*iotsitewise.PutLoggingOptionsInput) (*request.Request, *iotsitewise.PutLoggingOptionsOutput)
+
+	PutStorageConfiguration(*iotsitewise.PutStorageConfigurationInput) (*iotsitewise.PutStorageConfigurationOutput, error)
+	PutStorageConfigurationWithContext(aws.Context, *iotsitewise.PutStorageConfigurationInput, ...request.Option) (*iotsitewise.PutStorageConfigurationOutput, error)
+	PutStorageConfigurationRequest(*iotsitewise.PutStorageConfigurationInput) (*request.Request, *iotsitewise.PutStorageConfigurationOutput)
 
 	TagResource(*iotsitewise.TagResourceInput) (*iotsitewise.TagResourceOutput, error)
 	TagResourceWithContext(aws.Context, *iotsitewise.TagResourceInput, ...request.Option) (*iotsitewise.TagResourceOutput, error)

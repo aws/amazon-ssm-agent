@@ -20,6 +20,11 @@ const (
 	outpostPrefixLabel = "outpost"
 )
 
+// hasCustomEndpoint returns true if endpoint is a custom endpoint
+func hasCustomEndpoint(r *request.Request) bool {
+	return len(aws.StringValue(r.Config.Endpoint)) > 0
+}
+
 // outpostAccessPointEndpointBuilder represents the endpoint builder for outpost access point arn.
 type outpostAccessPointEndpointBuilder arn.OutpostAccessPointARN
 
@@ -34,11 +39,6 @@ type outpostAccessPointEndpointBuilder arn.OutpostAccessPointARN
 func (o outpostAccessPointEndpointBuilder) build(req *request.Request) error {
 	resolveRegion := o.Region
 	resolveService := o.Service
-	cfgRegion := aws.StringValue(req.Config.Region)
-
-	if s3shared.IsFIPS(cfgRegion) && !aws.BoolValue(req.Config.S3UseARNRegion) {
-		return s3shared.NewInvalidARNWithFIPSError(o, nil)
-	}
 
 	endpointsID := resolveService
 	if resolveService == "s3-outposts" {
@@ -51,14 +51,17 @@ func (o outpostAccessPointEndpointBuilder) build(req *request.Request) error {
 			req.ClientInfo.PartitionID, resolveRegion, err)
 	}
 
-	if err = updateRequestEndpoint(req, endpoint.URL); err != nil {
-		return err
-	}
+	endpoint.URL = endpoints.AddScheme(endpoint.URL, aws.BoolValue(req.Config.DisableSSL))
 
-	// add url host as s3-outposts
-	cfgHost := req.HTTPRequest.URL.Host
-	if strings.HasPrefix(cfgHost, endpointsID) {
-		req.HTTPRequest.URL.Host = resolveService + cfgHost[len(endpointsID):]
+	if !hasCustomEndpoint(req) {
+		if err = updateRequestEndpoint(req, endpoint.URL); err != nil {
+			return err
+		}
+		// add url host as s3-outposts
+		cfgHost := req.HTTPRequest.URL.Host
+		if strings.HasPrefix(cfgHost, endpointsID) {
+			req.HTTPRequest.URL.Host = resolveService + cfgHost[len(endpointsID):]
+		}
 	}
 
 	// set the signing region, name to resolved names from ARN
@@ -105,14 +108,18 @@ func (o outpostBucketResourceEndpointBuilder) build(req *request.Request) error 
 			req.ClientInfo.PartitionID, cfgRegion, err)
 	}
 
-	if err = updateRequestEndpoint(req, endpoint.URL); err != nil {
-		return err
-	}
+	endpoint.URL = endpoints.AddScheme(endpoint.URL, aws.BoolValue(req.Config.DisableSSL))
 
-	// add url host as s3-outposts
-	cfgHost := req.HTTPRequest.URL.Host
-	if strings.HasPrefix(cfgHost, endpointsID) {
-		req.HTTPRequest.URL.Host = resolveService + cfgHost[len(endpointsID):]
+	if !hasCustomEndpoint(req) {
+		if err = updateRequestEndpoint(req, endpoint.URL); err != nil {
+			return err
+		}
+
+		// add url host as s3-outposts
+		cfgHost := req.HTTPRequest.URL.Host
+		if strings.HasPrefix(cfgHost, endpointsID) {
+			req.HTTPRequest.URL.Host = resolveService + cfgHost[len(endpointsID):]
+		}
 	}
 
 	// signer redirection
@@ -134,8 +141,6 @@ func resolveRegionalEndpoint(r *request.Request, region string, endpointsID stri
 }
 
 func updateRequestEndpoint(r *request.Request, endpoint string) (err error) {
-	endpoint = endpoints.AddScheme(endpoint, aws.BoolValue(r.Config.DisableSSL))
-
 	r.HTTPRequest.URL, err = url.Parse(endpoint + r.Operation.HTTPPath)
 	if err != nil {
 		return awserr.New(request.ErrCodeSerialization,

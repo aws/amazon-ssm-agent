@@ -108,6 +108,13 @@ type ElasticsearchServiceAPI interface {
 	DeletePackageWithContext(aws.Context, *elasticsearchservice.DeletePackageInput, ...request.Option) (*elasticsearchservice.DeletePackageOutput, error)
 	DeletePackageRequest(*elasticsearchservice.DeletePackageInput) (*request.Request, *elasticsearchservice.DeletePackageOutput)
 
+	DescribeDomainAutoTunes(*elasticsearchservice.DescribeDomainAutoTunesInput) (*elasticsearchservice.DescribeDomainAutoTunesOutput, error)
+	DescribeDomainAutoTunesWithContext(aws.Context, *elasticsearchservice.DescribeDomainAutoTunesInput, ...request.Option) (*elasticsearchservice.DescribeDomainAutoTunesOutput, error)
+	DescribeDomainAutoTunesRequest(*elasticsearchservice.DescribeDomainAutoTunesInput) (*request.Request, *elasticsearchservice.DescribeDomainAutoTunesOutput)
+
+	DescribeDomainAutoTunesPages(*elasticsearchservice.DescribeDomainAutoTunesInput, func(*elasticsearchservice.DescribeDomainAutoTunesOutput, bool) bool) error
+	DescribeDomainAutoTunesPagesWithContext(aws.Context, *elasticsearchservice.DescribeDomainAutoTunesInput, func(*elasticsearchservice.DescribeDomainAutoTunesOutput, bool) bool, ...request.Option) error
+
 	DescribeElasticsearchDomain(*elasticsearchservice.DescribeElasticsearchDomainInput) (*elasticsearchservice.DescribeElasticsearchDomainOutput, error)
 	DescribeElasticsearchDomainWithContext(aws.Context, *elasticsearchservice.DescribeElasticsearchDomainInput, ...request.Option) (*elasticsearchservice.DescribeElasticsearchDomainOutput, error)
 	DescribeElasticsearchDomainRequest(*elasticsearchservice.DescribeElasticsearchDomainInput) (*request.Request, *elasticsearchservice.DescribeElasticsearchDomainOutput)
@@ -166,6 +173,13 @@ type ElasticsearchServiceAPI interface {
 	GetCompatibleElasticsearchVersions(*elasticsearchservice.GetCompatibleElasticsearchVersionsInput) (*elasticsearchservice.GetCompatibleElasticsearchVersionsOutput, error)
 	GetCompatibleElasticsearchVersionsWithContext(aws.Context, *elasticsearchservice.GetCompatibleElasticsearchVersionsInput, ...request.Option) (*elasticsearchservice.GetCompatibleElasticsearchVersionsOutput, error)
 	GetCompatibleElasticsearchVersionsRequest(*elasticsearchservice.GetCompatibleElasticsearchVersionsInput) (*request.Request, *elasticsearchservice.GetCompatibleElasticsearchVersionsOutput)
+
+	GetPackageVersionHistory(*elasticsearchservice.GetPackageVersionHistoryInput) (*elasticsearchservice.GetPackageVersionHistoryOutput, error)
+	GetPackageVersionHistoryWithContext(aws.Context, *elasticsearchservice.GetPackageVersionHistoryInput, ...request.Option) (*elasticsearchservice.GetPackageVersionHistoryOutput, error)
+	GetPackageVersionHistoryRequest(*elasticsearchservice.GetPackageVersionHistoryInput) (*request.Request, *elasticsearchservice.GetPackageVersionHistoryOutput)
+
+	GetPackageVersionHistoryPages(*elasticsearchservice.GetPackageVersionHistoryInput, func(*elasticsearchservice.GetPackageVersionHistoryOutput, bool) bool) error
+	GetPackageVersionHistoryPagesWithContext(aws.Context, *elasticsearchservice.GetPackageVersionHistoryInput, func(*elasticsearchservice.GetPackageVersionHistoryOutput, bool) bool, ...request.Option) error
 
 	GetUpgradeHistory(*elasticsearchservice.GetUpgradeHistoryInput) (*elasticsearchservice.GetUpgradeHistoryOutput, error)
 	GetUpgradeHistoryWithContext(aws.Context, *elasticsearchservice.GetUpgradeHistoryInput, ...request.Option) (*elasticsearchservice.GetUpgradeHistoryOutput, error)
@@ -233,6 +247,10 @@ type ElasticsearchServiceAPI interface {
 	UpdateElasticsearchDomainConfig(*elasticsearchservice.UpdateElasticsearchDomainConfigInput) (*elasticsearchservice.UpdateElasticsearchDomainConfigOutput, error)
 	UpdateElasticsearchDomainConfigWithContext(aws.Context, *elasticsearchservice.UpdateElasticsearchDomainConfigInput, ...request.Option) (*elasticsearchservice.UpdateElasticsearchDomainConfigOutput, error)
 	UpdateElasticsearchDomainConfigRequest(*elasticsearchservice.UpdateElasticsearchDomainConfigInput) (*request.Request, *elasticsearchservice.UpdateElasticsearchDomainConfigOutput)
+
+	UpdatePackage(*elasticsearchservice.UpdatePackageInput) (*elasticsearchservice.UpdatePackageOutput, error)
+	UpdatePackageWithContext(aws.Context, *elasticsearchservice.UpdatePackageInput, ...request.Option) (*elasticsearchservice.UpdatePackageOutput, error)
+	UpdatePackageRequest(*elasticsearchservice.UpdatePackageInput) (*request.Request, *elasticsearchservice.UpdatePackageOutput)
 
 	UpgradeElasticsearchDomain(*elasticsearchservice.UpgradeElasticsearchDomainInput) (*elasticsearchservice.UpgradeElasticsearchDomainOutput, error)
 	UpgradeElasticsearchDomainWithContext(aws.Context, *elasticsearchservice.UpgradeElasticsearchDomainInput, ...request.Option) (*elasticsearchservice.UpgradeElasticsearchDomainOutput, error)

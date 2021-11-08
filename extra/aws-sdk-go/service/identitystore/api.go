@@ -518,12 +518,20 @@ type AccessDeniedException struct {
 	RequestId *string `type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AccessDeniedException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AccessDeniedException) GoString() string {
 	return s.String()
 }
@@ -576,19 +584,27 @@ type DescribeGroupInput struct {
 
 	// The globally unique identifier for the identity store, such as d-1234567890.
 	// In this example, d- is a fixed prefix, and 1234567890 is a randomly generated
-	// string which contains number and lower case letters. This value is generated
+	// string that contains number and lower case letters. This value is generated
 	// at the time that a new identity store is created.
 	//
 	// IdentityStoreId is a required field
 	IdentityStoreId *string `min:"1" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeGroupInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeGroupInput) GoString() string {
 	return s.String()
 }
@@ -630,12 +646,12 @@ func (s *DescribeGroupInput) SetIdentityStoreId(v string) *DescribeGroupInput {
 type DescribeGroupOutput struct {
 	_ struct{} `type:"structure"`
 
-	// Contains the group’s display name value. The length limit is 1024 characters.
+	// Contains the group’s display name value. The length limit is 1,024 characters.
 	// This value can consist of letters, accented characters, symbols, numbers,
-	// punctuation, tab, new line, carriage return, space and non breaking space
-	// in this attribute. The characters “<>;:%” are excluded. This value is
-	// specified at the time the group is created and stored as an attribute of
-	// the group object in the identity store.
+	// punctuation, tab, new line, carriage return, space, and nonbreaking space
+	// in this attribute. The characters <>;:% are excluded. This value is specified
+	// at the time that the group is created and stored as an attribute of the group
+	// object in the identity store.
 	//
 	// DisplayName is a required field
 	DisplayName *string `min:"1" type:"string" required:"true"`
@@ -646,12 +662,20 @@ type DescribeGroupOutput struct {
 	GroupId *string `min:"1" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeGroupOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeGroupOutput) GoString() string {
 	return s.String()
 }
@@ -673,7 +697,7 @@ type DescribeUserInput struct {
 
 	// The globally unique identifier for the identity store, such as d-1234567890.
 	// In this example, d- is a fixed prefix, and 1234567890 is a randomly generated
-	// string which contains number and lower case letters. This value is generated
+	// string that contains number and lower case letters. This value is generated
 	// at the time that a new identity store is created.
 	//
 	// IdentityStoreId is a required field
@@ -685,12 +709,20 @@ type DescribeUserInput struct {
 	UserId *string `min:"1" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeUserInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeUserInput) GoString() string {
 	return s.String()
 }
@@ -737,22 +769,34 @@ type DescribeUserOutput struct {
 	// UserId is a required field
 	UserId *string `min:"1" type:"string" required:"true"`
 
-	// Contains the user’s username value. The length limit is 128 characters.
-	// This value can consist of letters, accented characters, symbols, numbers
-	// and punctuation. The characters “<>;:%” are excluded. This value is specified
+	// Contains the user’s user name value. The length limit is 128 characters.
+	// This value can consist of letters, accented characters, symbols, numbers,
+	// and punctuation. The characters <>;:% are excluded. This value is specified
 	// at the time the user is created and stored as an attribute of the user object
 	// in the identity store.
+	//
+	// UserName is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by DescribeUserOutput's
+	// String and GoString methods.
 	//
 	// UserName is a required field
 	UserName *string `min:"1" type:"string" required:"true" sensitive:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeUserOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeUserOutput) GoString() string {
 	return s.String()
 }
@@ -774,10 +818,10 @@ func (s *DescribeUserOutput) SetUserName(v string) *DescribeUserOutput {
 type Filter struct {
 	_ struct{} `type:"structure"`
 
-	// The attribute path used to specify which attribute name to search. Length
-	// limit is 255 characters. For example, UserName is a valid attribute path
-	// for the ListUsers API, and DisplayName is a valid attribute path for the
-	// ListGroups API.
+	// The attribute path that is used to specify which attribute name to search.
+	// Length limit is 255 characters. For example, UserName is a valid attribute
+	// path for the ListUsers API, and DisplayName is a valid attribute path for
+	// the ListGroups API.
 	//
 	// AttributePath is a required field
 	AttributePath *string `min:"1" type:"string" required:"true"`
@@ -785,16 +829,28 @@ type Filter struct {
 	// Represents the data for an attribute. Each attribute value is described as
 	// a name-value pair.
 	//
+	// AttributeValue is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by Filter's
+	// String and GoString methods.
+	//
 	// AttributeValue is a required field
 	AttributeValue *string `min:"1" type:"string" required:"true" sensitive:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s Filter) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s Filter) GoString() string {
 	return s.String()
 }
@@ -837,12 +893,12 @@ func (s *Filter) SetAttributeValue(v string) *Filter {
 type Group struct {
 	_ struct{} `type:"structure"`
 
-	// Contains the group’s display name value. The length limit is 1024 characters.
+	// Contains the group’s display name value. The length limit is 1,024 characters.
 	// This value can consist of letters, accented characters, symbols, numbers,
-	// punctuation, tab, new line, carriage return, space and non breaking space
-	// in this attribute. The characters “<>;:%” are excluded. This value is
-	// specified at the time the group is created and stored as an attribute of
-	// the group object in the identity store.
+	// punctuation, tab, new line, carriage return, space, and nonbreaking space
+	// in this attribute. The characters <>;:% are excluded. This value is specified
+	// at the time the group is created and stored as an attribute of the group
+	// object in the identity store.
 	//
 	// DisplayName is a required field
 	DisplayName *string `min:"1" type:"string" required:"true"`
@@ -853,12 +909,20 @@ type Group struct {
 	GroupId *string `min:"1" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s Group) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s Group) GoString() string {
 	return s.String()
 }
@@ -889,12 +953,20 @@ type InternalServerException struct {
 	RequestId *string `type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s InternalServerException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s InternalServerException) GoString() string {
 	return s.String()
 }
@@ -945,30 +1017,39 @@ type ListGroupsInput struct {
 
 	// The globally unique identifier for the identity store, such as d-1234567890.
 	// In this example, d- is a fixed prefix, and 1234567890 is a randomly generated
-	// string which contains number and lower case letters. This value is generated
+	// string that contains number and lower case letters. This value is generated
 	// at the time that a new identity store is created.
 	//
 	// IdentityStoreId is a required field
 	IdentityStoreId *string `min:"1" type:"string" required:"true"`
 
-	// The maximum number of results to be returned per request, which is used in
-	// the ListUsers and ListGroups request to specify how many results to return
-	// in one page. The length limit is 50 characters.
+	// The maximum number of results to be returned per request. This parameter
+	// is used in the ListUsers and ListGroups request to specify how many results
+	// to return in one page. The length limit is 50 characters.
 	MaxResults *int64 `min:"1" type:"integer"`
 
-	// The pagination token used for the ListUsers and ListGroups APIs. This value
-	// is generated by the identity store service and is returned in the API response
-	// if the total results are more than the size of one page, and when this token
-	// is used in the API request to search for the next page.
+	// The pagination token used for the ListUsers and ListGroups API operations.
+	// This value is generated by the identity store service. It is returned in
+	// the API response if the total results are more than the size of one page.
+	// This token is also returned when it is used in the API request to search
+	// for the next page.
 	NextToken *string `min:"1" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListGroupsInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListGroupsInput) GoString() string {
 	return s.String()
 }
@@ -1037,19 +1118,28 @@ type ListGroupsOutput struct {
 	// Groups is a required field
 	Groups []*Group `type:"list" required:"true"`
 
-	// The pagination token used for the ListUsers and ListGroups APIs. This value
-	// is generated by the identity store service and is returned in the API response
-	// if the total results are more than the size of one page, and when this token
-	// is used in the API request to search for the next page.
+	// The pagination token used for the ListUsers and ListGroups API operations.
+	// This value is generated by the identity store service. It is returned in
+	// the API response if the total results are more than the size of one page.
+	// This token is also returned when it1 is used in the API request to search
+	// for the next page.
 	NextToken *string `min:"1" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListGroupsOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListGroupsOutput) GoString() string {
 	return s.String()
 }
@@ -1074,30 +1164,39 @@ type ListUsersInput struct {
 
 	// The globally unique identifier for the identity store, such as d-1234567890.
 	// In this example, d- is a fixed prefix, and 1234567890 is a randomly generated
-	// string which contains number and lower case letters. This value is generated
+	// string that contains number and lower case letters. This value is generated
 	// at the time that a new identity store is created.
 	//
 	// IdentityStoreId is a required field
 	IdentityStoreId *string `min:"1" type:"string" required:"true"`
 
-	// The maximum number of results to be returned per request, which is used in
-	// the ListUsers and ListGroups request to specify how many results to return
-	// in one page. The length limit is 50 characters.
+	// The maximum number of results to be returned per request. This parameter
+	// is used in the ListUsers and ListGroups request to specify how many results
+	// to return in one page. The length limit is 50 characters.
 	MaxResults *int64 `min:"1" type:"integer"`
 
-	// The pagination token used for the ListUsers and ListGroups APIs. This value
-	// is generated by the identity store service and is returned in the API response
-	// if the total results are more than the size of one page, and when this token
-	// is used in the API request to search for the next page.
+	// The pagination token used for the ListUsers and ListGroups API operations.
+	// This value is generated by the identity store service. It is returned in
+	// the API response if the total results are more than the size of one page.
+	// This token is also returned when it is used in the API request to search
+	// for the next page.
 	NextToken *string `min:"1" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListUsersInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListUsersInput) GoString() string {
 	return s.String()
 }
@@ -1161,10 +1260,11 @@ func (s *ListUsersInput) SetNextToken(v string) *ListUsersInput {
 type ListUsersOutput struct {
 	_ struct{} `type:"structure"`
 
-	// The pagination token used for the ListUsers and ListGroups APIs. This value
-	// is generated by the identity store service and is returned in the API response
-	// if the total results are more than the size of one page, and when this token
-	// is used in the API request to search for the next page.
+	// The pagination token used for the ListUsers and ListGroups API operations.
+	// This value is generated by the identity store service. It is returned in
+	// the API response if the total results are more than the size of one page.
+	// This token is also returned when it is used in the API request to search
+	// for the next page.
 	NextToken *string `min:"1" type:"string"`
 
 	// A list of User objects in the identity store.
@@ -1173,12 +1273,20 @@ type ListUsersOutput struct {
 	Users []*User `type:"list" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListUsersOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListUsersOutput) GoString() string {
 	return s.String()
 }
@@ -1221,12 +1329,20 @@ type ResourceNotFoundException struct {
 	ResourceType *string `type:"string" enum:"ResourceType"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ResourceNotFoundException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ResourceNotFoundException) GoString() string {
 	return s.String()
 }
@@ -1283,12 +1399,20 @@ type ThrottlingException struct {
 	RequestId *string `type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ThrottlingException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ThrottlingException) GoString() string {
 	return s.String()
 }
@@ -1340,22 +1464,34 @@ type User struct {
 	// UserId is a required field
 	UserId *string `min:"1" type:"string" required:"true"`
 
-	// Contains the user’s username value. The length limit is 128 characters.
-	// This value can consist of letters, accented characters, symbols, numbers
-	// and punctuation. The characters “<>;:%” are excluded. This value is specified
+	// Contains the user’s user name value. The length limit is 128 characters.
+	// This value can consist of letters, accented characters, symbols, numbers,
+	// and punctuation. The characters <>;:% are excluded. This value is specified
 	// at the time the user is created and stored as an attribute of the user object
 	// in the identity store.
+	//
+	// UserName is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by User's
+	// String and GoString methods.
 	//
 	// UserName is a required field
 	UserName *string `min:"1" type:"string" required:"true" sensitive:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s User) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s User) GoString() string {
 	return s.String()
 }
@@ -1385,12 +1521,20 @@ type ValidationException struct {
 	RequestId *string `type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ValidationException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ValidationException) GoString() string {
 	return s.String()
 }

@@ -1,3 +1,4 @@
+//go:build go1.7
 // +build go1.7
 
 package xmlutil
@@ -152,6 +153,12 @@ func TestBuildXML(t *testing.T) {
 		"named empty payload": {
 			Input:  &namedEmptyPayload{},
 			Expect: "<namedEmptyPayload></namedEmptyPayload>",
+		},
+		"escape line feed and carriage return": {
+			Input: &implicitPayload{
+				StrVal: aws.String("this\nstring\rhas\r\nescapable\n\rcharacters"),
+			},
+			Expect: "<StrVal>this&#xA;string&#xD;has&#xD;&#xA;escapable&#xA;&#xD;characters</StrVal>",
 		},
 	}
 

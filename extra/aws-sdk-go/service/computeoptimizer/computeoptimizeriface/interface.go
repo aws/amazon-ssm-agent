@@ -68,13 +68,25 @@ type ComputeOptimizerAPI interface {
 	ExportAutoScalingGroupRecommendationsWithContext(aws.Context, *computeoptimizer.ExportAutoScalingGroupRecommendationsInput, ...request.Option) (*computeoptimizer.ExportAutoScalingGroupRecommendationsOutput, error)
 	ExportAutoScalingGroupRecommendationsRequest(*computeoptimizer.ExportAutoScalingGroupRecommendationsInput) (*request.Request, *computeoptimizer.ExportAutoScalingGroupRecommendationsOutput)
 
+	ExportEBSVolumeRecommendations(*computeoptimizer.ExportEBSVolumeRecommendationsInput) (*computeoptimizer.ExportEBSVolumeRecommendationsOutput, error)
+	ExportEBSVolumeRecommendationsWithContext(aws.Context, *computeoptimizer.ExportEBSVolumeRecommendationsInput, ...request.Option) (*computeoptimizer.ExportEBSVolumeRecommendationsOutput, error)
+	ExportEBSVolumeRecommendationsRequest(*computeoptimizer.ExportEBSVolumeRecommendationsInput) (*request.Request, *computeoptimizer.ExportEBSVolumeRecommendationsOutput)
+
 	ExportEC2InstanceRecommendations(*computeoptimizer.ExportEC2InstanceRecommendationsInput) (*computeoptimizer.ExportEC2InstanceRecommendationsOutput, error)
 	ExportEC2InstanceRecommendationsWithContext(aws.Context, *computeoptimizer.ExportEC2InstanceRecommendationsInput, ...request.Option) (*computeoptimizer.ExportEC2InstanceRecommendationsOutput, error)
 	ExportEC2InstanceRecommendationsRequest(*computeoptimizer.ExportEC2InstanceRecommendationsInput) (*request.Request, *computeoptimizer.ExportEC2InstanceRecommendationsOutput)
 
+	ExportLambdaFunctionRecommendations(*computeoptimizer.ExportLambdaFunctionRecommendationsInput) (*computeoptimizer.ExportLambdaFunctionRecommendationsOutput, error)
+	ExportLambdaFunctionRecommendationsWithContext(aws.Context, *computeoptimizer.ExportLambdaFunctionRecommendationsInput, ...request.Option) (*computeoptimizer.ExportLambdaFunctionRecommendationsOutput, error)
+	ExportLambdaFunctionRecommendationsRequest(*computeoptimizer.ExportLambdaFunctionRecommendationsInput) (*request.Request, *computeoptimizer.ExportLambdaFunctionRecommendationsOutput)
+
 	GetAutoScalingGroupRecommendations(*computeoptimizer.GetAutoScalingGroupRecommendationsInput) (*computeoptimizer.GetAutoScalingGroupRecommendationsOutput, error)
 	GetAutoScalingGroupRecommendationsWithContext(aws.Context, *computeoptimizer.GetAutoScalingGroupRecommendationsInput, ...request.Option) (*computeoptimizer.GetAutoScalingGroupRecommendationsOutput, error)
 	GetAutoScalingGroupRecommendationsRequest(*computeoptimizer.GetAutoScalingGroupRecommendationsInput) (*request.Request, *computeoptimizer.GetAutoScalingGroupRecommendationsOutput)
+
+	GetEBSVolumeRecommendations(*computeoptimizer.GetEBSVolumeRecommendationsInput) (*computeoptimizer.GetEBSVolumeRecommendationsOutput, error)
+	GetEBSVolumeRecommendationsWithContext(aws.Context, *computeoptimizer.GetEBSVolumeRecommendationsInput, ...request.Option) (*computeoptimizer.GetEBSVolumeRecommendationsOutput, error)
+	GetEBSVolumeRecommendationsRequest(*computeoptimizer.GetEBSVolumeRecommendationsInput) (*request.Request, *computeoptimizer.GetEBSVolumeRecommendationsOutput)
 
 	GetEC2InstanceRecommendations(*computeoptimizer.GetEC2InstanceRecommendationsInput) (*computeoptimizer.GetEC2InstanceRecommendationsOutput, error)
 	GetEC2InstanceRecommendationsWithContext(aws.Context, *computeoptimizer.GetEC2InstanceRecommendationsInput, ...request.Option) (*computeoptimizer.GetEC2InstanceRecommendationsOutput, error)
@@ -87,6 +99,14 @@ type ComputeOptimizerAPI interface {
 	GetEnrollmentStatus(*computeoptimizer.GetEnrollmentStatusInput) (*computeoptimizer.GetEnrollmentStatusOutput, error)
 	GetEnrollmentStatusWithContext(aws.Context, *computeoptimizer.GetEnrollmentStatusInput, ...request.Option) (*computeoptimizer.GetEnrollmentStatusOutput, error)
 	GetEnrollmentStatusRequest(*computeoptimizer.GetEnrollmentStatusInput) (*request.Request, *computeoptimizer.GetEnrollmentStatusOutput)
+
+	GetEnrollmentStatusesForOrganization(*computeoptimizer.GetEnrollmentStatusesForOrganizationInput) (*computeoptimizer.GetEnrollmentStatusesForOrganizationOutput, error)
+	GetEnrollmentStatusesForOrganizationWithContext(aws.Context, *computeoptimizer.GetEnrollmentStatusesForOrganizationInput, ...request.Option) (*computeoptimizer.GetEnrollmentStatusesForOrganizationOutput, error)
+	GetEnrollmentStatusesForOrganizationRequest(*computeoptimizer.GetEnrollmentStatusesForOrganizationInput) (*request.Request, *computeoptimizer.GetEnrollmentStatusesForOrganizationOutput)
+
+	GetLambdaFunctionRecommendations(*computeoptimizer.GetLambdaFunctionRecommendationsInput) (*computeoptimizer.GetLambdaFunctionRecommendationsOutput, error)
+	GetLambdaFunctionRecommendationsWithContext(aws.Context, *computeoptimizer.GetLambdaFunctionRecommendationsInput, ...request.Option) (*computeoptimizer.GetLambdaFunctionRecommendationsOutput, error)
+	GetLambdaFunctionRecommendationsRequest(*computeoptimizer.GetLambdaFunctionRecommendationsInput) (*request.Request, *computeoptimizer.GetLambdaFunctionRecommendationsOutput)
 
 	GetRecommendationSummaries(*computeoptimizer.GetRecommendationSummariesInput) (*computeoptimizer.GetRecommendationSummariesOutput, error)
 	GetRecommendationSummariesWithContext(aws.Context, *computeoptimizer.GetRecommendationSummariesInput, ...request.Option) (*computeoptimizer.GetRecommendationSummariesOutput, error)

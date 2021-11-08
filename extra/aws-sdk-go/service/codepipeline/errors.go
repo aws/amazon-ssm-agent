@@ -32,6 +32,13 @@ const (
 	// Unable to modify the tag due to a simultaneous update request.
 	ErrCodeConcurrentModificationException = "ConcurrentModificationException"
 
+	// ErrCodeConflictException for service response error code
+	// "ConflictException".
+	//
+	// Your request cannot be handled because the pipeline is busy handling ongoing
+	// activities. Try again later.
+	ErrCodeConflictException = "ConflictException"
+
 	// ErrCodeDuplicatedStopRequestException for service response error code
 	// "DuplicatedStopRequestException".
 	//
@@ -185,6 +192,12 @@ const (
 	// The pipeline version was specified in an invalid format or cannot be found.
 	ErrCodePipelineVersionNotFoundException = "PipelineVersionNotFoundException"
 
+	// ErrCodeRequestFailedException for service response error code
+	// "RequestFailedException".
+	//
+	// The request failed because of an unknown error, exception, or failure.
+	ErrCodeRequestFailedException = "RequestFailedException"
+
 	// ErrCodeResourceNotFoundException for service response error code
 	// "ResourceNotFoundException".
 	//
@@ -228,6 +241,7 @@ var exceptionFromCode = map[string]func(protocol.ResponseMetadata) error{
 	"ActionTypeNotFoundException":                     newErrorActionTypeNotFoundException,
 	"ApprovalAlreadyCompletedException":               newErrorApprovalAlreadyCompletedException,
 	"ConcurrentModificationException":                 newErrorConcurrentModificationException,
+	"ConflictException":                               newErrorConflictException,
 	"DuplicatedStopRequestException":                  newErrorDuplicatedStopRequestException,
 	"InvalidActionDeclarationException":               newErrorInvalidActionDeclarationException,
 	"InvalidApprovalTokenException":                   newErrorInvalidApprovalTokenException,
@@ -252,6 +266,7 @@ var exceptionFromCode = map[string]func(protocol.ResponseMetadata) error{
 	"PipelineNameInUseException":                      newErrorPipelineNameInUseException,
 	"PipelineNotFoundException":                       newErrorPipelineNotFoundException,
 	"PipelineVersionNotFoundException":                newErrorPipelineVersionNotFoundException,
+	"RequestFailedException":                          newErrorRequestFailedException,
 	"ResourceNotFoundException":                       newErrorResourceNotFoundException,
 	"StageNotFoundException":                          newErrorStageNotFoundException,
 	"StageNotRetryableException":                      newErrorStageNotRetryableException,

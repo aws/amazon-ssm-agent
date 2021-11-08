@@ -11,8 +11,8 @@ const (
 	// ErrCodeCustomHealthNotFound for service response error code
 	// "CustomHealthNotFound".
 	//
-	// The health check for the instance that is specified by ServiceId and InstanceId
-	// is not a custom health check.
+	// The health check for the instance that's specified by ServiceId and InstanceId
+	// isn't a custom health check.
 	ErrCodeCustomHealthNotFound = "CustomHealthNotFound"
 
 	// ErrCodeDuplicateRequest for service response error code
@@ -58,9 +58,9 @@ const (
 	// "RequestLimitExceeded".
 	//
 	// The operation can't be completed because you've reached the quota for the
-	// number of requests. For more information, see AWS Cloud Map API request throttling
+	// number of requests. For more information, see Cloud Map API request throttling
 	// quota (https://docs.aws.amazon.com/cloud-map/latest/dg/throttling.html) in
-	// the AWS Cloud Map Developer Guide.
+	// the Cloud Map Developer Guide.
 	ErrCodeRequestLimitExceeded = "RequestLimitExceeded"
 
 	// ErrCodeResourceInUse for service response error code

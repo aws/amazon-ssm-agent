@@ -18,10 +18,11 @@ const (
 	// ErrCodeAccessDeniedForDependencyException for service response error code
 	// "AccessDeniedForDependencyException".
 	//
-	// In order to grant the necessary access to the DDoS Response Team (DRT), the
-	// user submitting the request must have the iam:PassRole permission. This error
-	// indicates the user did not have the appropriate permissions. For more information,
-	// see Granting a User Permissions to Pass a Role to an AWS Service (https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_use_passrole.html).
+	// In order to grant the necessary access to the Shield Response Team (SRT)
+	// the user submitting the request must have the iam:PassRole permission. This
+	// error indicates the user did not have the appropriate permissions. For more
+	// information, see Granting a User Permissions to Pass a Role to an Amazon
+	// Web Services Service (https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_use_passrole.html).
 	ErrCodeAccessDeniedForDependencyException = "AccessDeniedForDependencyException"
 
 	// ErrCodeInternalErrorException for service response error code
@@ -49,6 +50,7 @@ const (
 	// "InvalidParameterException".
 	//
 	// Exception that indicates that the parameters passed to the API are invalid.
+	// If available, this exception includes details in additional properties.
 	ErrCodeInvalidParameterException = "InvalidParameterException"
 
 	// ErrCodeInvalidResourceException for service response error code
@@ -62,10 +64,6 @@ const (
 	// "LimitsExceededException".
 	//
 	// Exception that indicates that the operation would exceed a limit.
-	//
-	// Type is the type of limit that would be exceeded.
-	//
-	// Limit is the threshold that would be exceeded.
 	ErrCodeLimitsExceededException = "LimitsExceededException"
 
 	// ErrCodeLockedSubscriptionException for service response error code
@@ -93,13 +91,15 @@ const (
 	// ErrCodeResourceAlreadyExistsException for service response error code
 	// "ResourceAlreadyExistsException".
 	//
-	// Exception indicating the specified resource already exists.
+	// Exception indicating the specified resource already exists. If available,
+	// this exception includes details in additional properties.
 	ErrCodeResourceAlreadyExistsException = "ResourceAlreadyExistsException"
 
 	// ErrCodeResourceNotFoundException for service response error code
 	// "ResourceNotFoundException".
 	//
-	// Exception indicating the specified resource does not exist.
+	// Exception indicating the specified resource does not exist. If available,
+	// this exception includes details in additional properties.
 	ErrCodeResourceNotFoundException = "ResourceNotFoundException"
 )
 

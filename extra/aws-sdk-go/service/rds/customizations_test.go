@@ -1,3 +1,4 @@
+//go:build go1.9
 // +build go1.9
 
 package rds
@@ -91,6 +92,18 @@ func TestPresignCrossRegionRequest(t *testing.T) {
 			Assert: assertAsRegexMatch(fmt.Sprintf(regexPattern,
 				opCreateDBCluster, targetRegion)),
 		},
+		opStartDBInstanceAutomatedBackupsReplication: {
+			Req: func() *request.Request {
+				req, _ := svc.StartDBInstanceAutomatedBackupsReplicationRequest(
+					&StartDBInstanceAutomatedBackupsReplicationInput{
+						SourceRegion:        aws.String("us-west-1"),
+						SourceDBInstanceArn: aws.String("bar"),
+					})
+				return req
+			}(),
+			Assert: assertAsRegexMatch(fmt.Sprintf(regexPattern,
+				opStartDBInstanceAutomatedBackupsReplication, targetRegion)),
+		},
 		opCopyDBSnapshot + " same region": {
 			Req: func() *request.Request {
 				req, _ := svc.CopyDBSnapshotRequest(&CopyDBSnapshotInput{
@@ -132,6 +145,17 @@ func TestPresignCrossRegionRequest(t *testing.T) {
 						SourceRegion:        aws.String("us-west-2"),
 						DBClusterIdentifier: aws.String("foo"),
 						Engine:              aws.String("bar"),
+					})
+				return req
+			}(),
+			Assert: assertAsEmpty(),
+		},
+		opStartDBInstanceAutomatedBackupsReplication + " same region": {
+			Req: func() *request.Request {
+				req, _ := svc.StartDBInstanceAutomatedBackupsReplicationRequest(
+					&StartDBInstanceAutomatedBackupsReplicationInput{
+						SourceRegion:        aws.String("us-west-2"),
+						SourceDBInstanceArn: aws.String("bar"),
 					})
 				return req
 			}(),
@@ -181,6 +205,19 @@ func TestPresignCrossRegionRequest(t *testing.T) {
 						SourceRegion:        aws.String("us-west-1"),
 						DBClusterIdentifier: aws.String("foo"),
 						Engine:              aws.String("bar"),
+						PreSignedUrl:        aws.String("mockPresignedURL"),
+					})
+				return req
+			}(),
+			Assert: assertAsEqual("mockPresignedURL"),
+		},
+		opStartDBInstanceAutomatedBackupsReplication + " presignURL set": {
+			Req: func() *request.Request {
+				req, _ := svc.StartDBInstanceAutomatedBackupsReplicationRequest(
+					&StartDBInstanceAutomatedBackupsReplicationInput{
+						SourceRegion:        aws.String("us-west-1"),
+						KmsKeyId:            aws.String("foo"),
+						SourceDBInstanceArn: aws.String("bar"),
 						PreSignedUrl:        aws.String("mockPresignedURL"),
 					})
 				return req

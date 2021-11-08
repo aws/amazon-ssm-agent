@@ -192,6 +192,382 @@ func (c *FraudDetector) BatchGetVariableWithContext(ctx aws.Context, input *Batc
 	return out, req.Send()
 }
 
+const opCancelBatchImportJob = "CancelBatchImportJob"
+
+// CancelBatchImportJobRequest generates a "aws/request.Request" representing the
+// client's request for the CancelBatchImportJob operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See CancelBatchImportJob for more information on using the CancelBatchImportJob
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the CancelBatchImportJobRequest method.
+//    req, resp := client.CancelBatchImportJobRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/frauddetector-2019-11-15/CancelBatchImportJob
+func (c *FraudDetector) CancelBatchImportJobRequest(input *CancelBatchImportJobInput) (req *request.Request, output *CancelBatchImportJobOutput) {
+	op := &request.Operation{
+		Name:       opCancelBatchImportJob,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &CancelBatchImportJobInput{}
+	}
+
+	output = &CancelBatchImportJobOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
+	return
+}
+
+// CancelBatchImportJob API operation for Amazon Fraud Detector.
+//
+// Cancels an in-progress batch import job.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Fraud Detector's
+// API operation CancelBatchImportJob for usage and error information.
+//
+// Returned Error Types:
+//   * ValidationException
+//   An exception indicating a specified value is not allowed.
+//
+//   * ResourceNotFoundException
+//   An exception indicating the specified resource was not found.
+//
+//   * InternalServerException
+//   An exception indicating an internal server error.
+//
+//   * ThrottlingException
+//   An exception indicating a throttling error.
+//
+//   * AccessDeniedException
+//   An exception indicating Amazon Fraud Detector does not have the needed permissions.
+//   This can occur if you submit a request, such as PutExternalModel, that specifies
+//   a role that is not in your account.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/frauddetector-2019-11-15/CancelBatchImportJob
+func (c *FraudDetector) CancelBatchImportJob(input *CancelBatchImportJobInput) (*CancelBatchImportJobOutput, error) {
+	req, out := c.CancelBatchImportJobRequest(input)
+	return out, req.Send()
+}
+
+// CancelBatchImportJobWithContext is the same as CancelBatchImportJob with the addition of
+// the ability to pass a context and additional request options.
+//
+// See CancelBatchImportJob for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *FraudDetector) CancelBatchImportJobWithContext(ctx aws.Context, input *CancelBatchImportJobInput, opts ...request.Option) (*CancelBatchImportJobOutput, error) {
+	req, out := c.CancelBatchImportJobRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opCancelBatchPredictionJob = "CancelBatchPredictionJob"
+
+// CancelBatchPredictionJobRequest generates a "aws/request.Request" representing the
+// client's request for the CancelBatchPredictionJob operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See CancelBatchPredictionJob for more information on using the CancelBatchPredictionJob
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the CancelBatchPredictionJobRequest method.
+//    req, resp := client.CancelBatchPredictionJobRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/frauddetector-2019-11-15/CancelBatchPredictionJob
+func (c *FraudDetector) CancelBatchPredictionJobRequest(input *CancelBatchPredictionJobInput) (req *request.Request, output *CancelBatchPredictionJobOutput) {
+	op := &request.Operation{
+		Name:       opCancelBatchPredictionJob,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &CancelBatchPredictionJobInput{}
+	}
+
+	output = &CancelBatchPredictionJobOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
+	return
+}
+
+// CancelBatchPredictionJob API operation for Amazon Fraud Detector.
+//
+// Cancels the specified batch prediction job.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Fraud Detector's
+// API operation CancelBatchPredictionJob for usage and error information.
+//
+// Returned Error Types:
+//   * ValidationException
+//   An exception indicating a specified value is not allowed.
+//
+//   * ResourceNotFoundException
+//   An exception indicating the specified resource was not found.
+//
+//   * InternalServerException
+//   An exception indicating an internal server error.
+//
+//   * ThrottlingException
+//   An exception indicating a throttling error.
+//
+//   * AccessDeniedException
+//   An exception indicating Amazon Fraud Detector does not have the needed permissions.
+//   This can occur if you submit a request, such as PutExternalModel, that specifies
+//   a role that is not in your account.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/frauddetector-2019-11-15/CancelBatchPredictionJob
+func (c *FraudDetector) CancelBatchPredictionJob(input *CancelBatchPredictionJobInput) (*CancelBatchPredictionJobOutput, error) {
+	req, out := c.CancelBatchPredictionJobRequest(input)
+	return out, req.Send()
+}
+
+// CancelBatchPredictionJobWithContext is the same as CancelBatchPredictionJob with the addition of
+// the ability to pass a context and additional request options.
+//
+// See CancelBatchPredictionJob for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *FraudDetector) CancelBatchPredictionJobWithContext(ctx aws.Context, input *CancelBatchPredictionJobInput, opts ...request.Option) (*CancelBatchPredictionJobOutput, error) {
+	req, out := c.CancelBatchPredictionJobRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opCreateBatchImportJob = "CreateBatchImportJob"
+
+// CreateBatchImportJobRequest generates a "aws/request.Request" representing the
+// client's request for the CreateBatchImportJob operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See CreateBatchImportJob for more information on using the CreateBatchImportJob
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the CreateBatchImportJobRequest method.
+//    req, resp := client.CreateBatchImportJobRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/frauddetector-2019-11-15/CreateBatchImportJob
+func (c *FraudDetector) CreateBatchImportJobRequest(input *CreateBatchImportJobInput) (req *request.Request, output *CreateBatchImportJobOutput) {
+	op := &request.Operation{
+		Name:       opCreateBatchImportJob,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &CreateBatchImportJobInput{}
+	}
+
+	output = &CreateBatchImportJobOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
+	return
+}
+
+// CreateBatchImportJob API operation for Amazon Fraud Detector.
+//
+// Creates a batch import job.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Fraud Detector's
+// API operation CreateBatchImportJob for usage and error information.
+//
+// Returned Error Types:
+//   * ValidationException
+//   An exception indicating a specified value is not allowed.
+//
+//   * ResourceNotFoundException
+//   An exception indicating the specified resource was not found.
+//
+//   * InternalServerException
+//   An exception indicating an internal server error.
+//
+//   * ThrottlingException
+//   An exception indicating a throttling error.
+//
+//   * AccessDeniedException
+//   An exception indicating Amazon Fraud Detector does not have the needed permissions.
+//   This can occur if you submit a request, such as PutExternalModel, that specifies
+//   a role that is not in your account.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/frauddetector-2019-11-15/CreateBatchImportJob
+func (c *FraudDetector) CreateBatchImportJob(input *CreateBatchImportJobInput) (*CreateBatchImportJobOutput, error) {
+	req, out := c.CreateBatchImportJobRequest(input)
+	return out, req.Send()
+}
+
+// CreateBatchImportJobWithContext is the same as CreateBatchImportJob with the addition of
+// the ability to pass a context and additional request options.
+//
+// See CreateBatchImportJob for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *FraudDetector) CreateBatchImportJobWithContext(ctx aws.Context, input *CreateBatchImportJobInput, opts ...request.Option) (*CreateBatchImportJobOutput, error) {
+	req, out := c.CreateBatchImportJobRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opCreateBatchPredictionJob = "CreateBatchPredictionJob"
+
+// CreateBatchPredictionJobRequest generates a "aws/request.Request" representing the
+// client's request for the CreateBatchPredictionJob operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See CreateBatchPredictionJob for more information on using the CreateBatchPredictionJob
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the CreateBatchPredictionJobRequest method.
+//    req, resp := client.CreateBatchPredictionJobRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/frauddetector-2019-11-15/CreateBatchPredictionJob
+func (c *FraudDetector) CreateBatchPredictionJobRequest(input *CreateBatchPredictionJobInput) (req *request.Request, output *CreateBatchPredictionJobOutput) {
+	op := &request.Operation{
+		Name:       opCreateBatchPredictionJob,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &CreateBatchPredictionJobInput{}
+	}
+
+	output = &CreateBatchPredictionJobOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
+	return
+}
+
+// CreateBatchPredictionJob API operation for Amazon Fraud Detector.
+//
+// Creates a batch prediction job.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Fraud Detector's
+// API operation CreateBatchPredictionJob for usage and error information.
+//
+// Returned Error Types:
+//   * ValidationException
+//   An exception indicating a specified value is not allowed.
+//
+//   * InternalServerException
+//   An exception indicating an internal server error.
+//
+//   * ThrottlingException
+//   An exception indicating a throttling error.
+//
+//   * AccessDeniedException
+//   An exception indicating Amazon Fraud Detector does not have the needed permissions.
+//   This can occur if you submit a request, such as PutExternalModel, that specifies
+//   a role that is not in your account.
+//
+//   * ResourceNotFoundException
+//   An exception indicating the specified resource was not found.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/frauddetector-2019-11-15/CreateBatchPredictionJob
+func (c *FraudDetector) CreateBatchPredictionJob(input *CreateBatchPredictionJobInput) (*CreateBatchPredictionJobOutput, error) {
+	req, out := c.CreateBatchPredictionJobRequest(input)
+	return out, req.Send()
+}
+
+// CreateBatchPredictionJobWithContext is the same as CreateBatchPredictionJob with the addition of
+// the ability to pass a context and additional request options.
+//
+// See CreateBatchPredictionJob for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *FraudDetector) CreateBatchPredictionJobWithContext(ctx aws.Context, input *CreateBatchPredictionJobInput, opts ...request.Option) (*CreateBatchPredictionJobOutput, error) {
+	req, out := c.CreateBatchPredictionJobRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opCreateDetectorVersion = "CreateDetectorVersion"
 
 // CreateDetectorVersionRequest generates a "aws/request.Request" representing the
@@ -346,6 +722,9 @@ func (c *FraudDetector) CreateModelRequest(input *CreateModelInput) (req *reques
 //   * InternalServerException
 //   An exception indicating an internal server error.
 //
+//   * ThrottlingException
+//   An exception indicating a throttling error.
+//
 //   * AccessDeniedException
 //   An exception indicating Amazon Fraud Detector does not have the needed permissions.
 //   This can occur if you submit a request, such as PutExternalModel, that specifies
@@ -437,6 +816,9 @@ func (c *FraudDetector) CreateModelVersionRequest(input *CreateModelVersionInput
 //   An exception indicating Amazon Fraud Detector does not have the needed permissions.
 //   This can occur if you submit a request, such as PutExternalModel, that specifies
 //   a role that is not in your account.
+//
+//   * ThrottlingException
+//   An exception indicating a throttling error.
 //
 //   * InternalServerException
 //   An exception indicating an internal server error.
@@ -644,6 +1026,188 @@ func (c *FraudDetector) CreateVariableWithContext(ctx aws.Context, input *Create
 	return out, req.Send()
 }
 
+const opDeleteBatchImportJob = "DeleteBatchImportJob"
+
+// DeleteBatchImportJobRequest generates a "aws/request.Request" representing the
+// client's request for the DeleteBatchImportJob operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See DeleteBatchImportJob for more information on using the DeleteBatchImportJob
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the DeleteBatchImportJobRequest method.
+//    req, resp := client.DeleteBatchImportJobRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/frauddetector-2019-11-15/DeleteBatchImportJob
+func (c *FraudDetector) DeleteBatchImportJobRequest(input *DeleteBatchImportJobInput) (req *request.Request, output *DeleteBatchImportJobOutput) {
+	op := &request.Operation{
+		Name:       opDeleteBatchImportJob,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &DeleteBatchImportJobInput{}
+	}
+
+	output = &DeleteBatchImportJobOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
+	return
+}
+
+// DeleteBatchImportJob API operation for Amazon Fraud Detector.
+//
+// Deletes data that was batch imported to Amazon Fraud Detector.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Fraud Detector's
+// API operation DeleteBatchImportJob for usage and error information.
+//
+// Returned Error Types:
+//   * ValidationException
+//   An exception indicating a specified value is not allowed.
+//
+//   * InternalServerException
+//   An exception indicating an internal server error.
+//
+//   * ThrottlingException
+//   An exception indicating a throttling error.
+//
+//   * AccessDeniedException
+//   An exception indicating Amazon Fraud Detector does not have the needed permissions.
+//   This can occur if you submit a request, such as PutExternalModel, that specifies
+//   a role that is not in your account.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/frauddetector-2019-11-15/DeleteBatchImportJob
+func (c *FraudDetector) DeleteBatchImportJob(input *DeleteBatchImportJobInput) (*DeleteBatchImportJobOutput, error) {
+	req, out := c.DeleteBatchImportJobRequest(input)
+	return out, req.Send()
+}
+
+// DeleteBatchImportJobWithContext is the same as DeleteBatchImportJob with the addition of
+// the ability to pass a context and additional request options.
+//
+// See DeleteBatchImportJob for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *FraudDetector) DeleteBatchImportJobWithContext(ctx aws.Context, input *DeleteBatchImportJobInput, opts ...request.Option) (*DeleteBatchImportJobOutput, error) {
+	req, out := c.DeleteBatchImportJobRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opDeleteBatchPredictionJob = "DeleteBatchPredictionJob"
+
+// DeleteBatchPredictionJobRequest generates a "aws/request.Request" representing the
+// client's request for the DeleteBatchPredictionJob operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See DeleteBatchPredictionJob for more information on using the DeleteBatchPredictionJob
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the DeleteBatchPredictionJobRequest method.
+//    req, resp := client.DeleteBatchPredictionJobRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/frauddetector-2019-11-15/DeleteBatchPredictionJob
+func (c *FraudDetector) DeleteBatchPredictionJobRequest(input *DeleteBatchPredictionJobInput) (req *request.Request, output *DeleteBatchPredictionJobOutput) {
+	op := &request.Operation{
+		Name:       opDeleteBatchPredictionJob,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &DeleteBatchPredictionJobInput{}
+	}
+
+	output = &DeleteBatchPredictionJobOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
+	return
+}
+
+// DeleteBatchPredictionJob API operation for Amazon Fraud Detector.
+//
+// Deletes a batch prediction job.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Fraud Detector's
+// API operation DeleteBatchPredictionJob for usage and error information.
+//
+// Returned Error Types:
+//   * ValidationException
+//   An exception indicating a specified value is not allowed.
+//
+//   * InternalServerException
+//   An exception indicating an internal server error.
+//
+//   * ThrottlingException
+//   An exception indicating a throttling error.
+//
+//   * AccessDeniedException
+//   An exception indicating Amazon Fraud Detector does not have the needed permissions.
+//   This can occur if you submit a request, such as PutExternalModel, that specifies
+//   a role that is not in your account.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/frauddetector-2019-11-15/DeleteBatchPredictionJob
+func (c *FraudDetector) DeleteBatchPredictionJob(input *DeleteBatchPredictionJobInput) (*DeleteBatchPredictionJobOutput, error) {
+	req, out := c.DeleteBatchPredictionJobRequest(input)
+	return out, req.Send()
+}
+
+// DeleteBatchPredictionJobWithContext is the same as DeleteBatchPredictionJob with the addition of
+// the ability to pass a context and additional request options.
+//
+// See DeleteBatchPredictionJob for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *FraudDetector) DeleteBatchPredictionJobWithContext(ctx aws.Context, input *DeleteBatchPredictionJobInput, opts ...request.Option) (*DeleteBatchPredictionJobOutput, error) {
+	req, out := c.DeleteBatchPredictionJobRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opDeleteDetector = "DeleteDetector"
 
 // DeleteDetectorRequest generates a "aws/request.Request" representing the
@@ -704,18 +1268,7 @@ func (c *FraudDetector) DeleteDetectorRequest(input *DeleteDetectorInput) (req *
 //
 // Returned Error Types:
 //   * ConflictException
-//   An exception indicating there was a conflict during a delete operation. The
-//   following delete operations can cause a conflict exception:
-//
-//      * DeleteDetector: A conflict exception will occur if the detector has
-//      associated Rules or DetectorVersions. You can only delete a detector if
-//      it has no Rules or DetectorVersions.
-//
-//      * DeleteDetectorVersion: A conflict exception will occur if the DetectorVersion
-//      status is ACTIVE.
-//
-//      * DeleteRule: A conflict exception will occur if the RuleVersion is in
-//      use by an associated ACTIVE or INACTIVE DetectorVersion.
+//   An exception indicating there was a conflict during a delete operation.
 //
 //   * ValidationException
 //   An exception indicating a specified value is not allowed.
@@ -825,18 +1378,7 @@ func (c *FraudDetector) DeleteDetectorVersionRequest(input *DeleteDetectorVersio
 //   An exception indicating a throttling error.
 //
 //   * ConflictException
-//   An exception indicating there was a conflict during a delete operation. The
-//   following delete operations can cause a conflict exception:
-//
-//      * DeleteDetector: A conflict exception will occur if the detector has
-//      associated Rules or DetectorVersions. You can only delete a detector if
-//      it has no Rules or DetectorVersions.
-//
-//      * DeleteDetectorVersion: A conflict exception will occur if the DetectorVersion
-//      status is ACTIVE.
-//
-//      * DeleteRule: A conflict exception will occur if the RuleVersion is in
-//      use by an associated ACTIVE or INACTIVE DetectorVersion.
+//   An exception indicating there was a conflict during a delete operation.
 //
 //   * AccessDeniedException
 //   An exception indicating Amazon Fraud Detector does not have the needed permissions.
@@ -915,8 +1457,7 @@ func (c *FraudDetector) DeleteEntityTypeRequest(input *DeleteEntityTypeInput) (r
 // You cannot delete an entity type that is included in an event type.
 //
 // When you delete an entity type, Amazon Fraud Detector permanently deletes
-// that entity type from the evaluation history, and the data is no longer stored
-// in Amazon Fraud Detector.
+// that entity type and the data is no longer stored in Amazon Fraud Detector.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -930,21 +1471,13 @@ func (c *FraudDetector) DeleteEntityTypeRequest(input *DeleteEntityTypeInput) (r
 //   An exception indicating a specified value is not allowed.
 //
 //   * ConflictException
-//   An exception indicating there was a conflict during a delete operation. The
-//   following delete operations can cause a conflict exception:
-//
-//      * DeleteDetector: A conflict exception will occur if the detector has
-//      associated Rules or DetectorVersions. You can only delete a detector if
-//      it has no Rules or DetectorVersions.
-//
-//      * DeleteDetectorVersion: A conflict exception will occur if the DetectorVersion
-//      status is ACTIVE.
-//
-//      * DeleteRule: A conflict exception will occur if the RuleVersion is in
-//      use by an associated ACTIVE or INACTIVE DetectorVersion.
+//   An exception indicating there was a conflict during a delete operation.
 //
 //   * InternalServerException
 //   An exception indicating an internal server error.
+//
+//   * ThrottlingException
+//   An exception indicating a throttling error.
 //
 //   * AccessDeniedException
 //   An exception indicating Amazon Fraud Detector does not have the needed permissions.
@@ -1021,8 +1554,7 @@ func (c *FraudDetector) DeleteEventRequest(input *DeleteEventInput) (req *reques
 // Deletes the specified event.
 //
 // When you delete an event, Amazon Fraud Detector permanently deletes that
-// event from the evaluation history, and the event data is no longer stored
-// in Amazon Fraud Detector.
+// event and the event data is no longer stored in Amazon Fraud Detector.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -1117,9 +1649,8 @@ func (c *FraudDetector) DeleteEventTypeRequest(input *DeleteEventTypeInput) (req
 //
 // You cannot delete an event type that is used in a detector or a model.
 //
-// When you delete an entity type, Amazon Fraud Detector permanently deletes
-// that entity type from the evaluation history, and the data is no longer stored
-// in Amazon Fraud Detector.
+// When you delete an event type, Amazon Fraud Detector permanently deletes
+// that event type and the data is no longer stored in Amazon Fraud Detector.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -1130,24 +1661,16 @@ func (c *FraudDetector) DeleteEventTypeRequest(input *DeleteEventTypeInput) (req
 //
 // Returned Error Types:
 //   * ConflictException
-//   An exception indicating there was a conflict during a delete operation. The
-//   following delete operations can cause a conflict exception:
-//
-//      * DeleteDetector: A conflict exception will occur if the detector has
-//      associated Rules or DetectorVersions. You can only delete a detector if
-//      it has no Rules or DetectorVersions.
-//
-//      * DeleteDetectorVersion: A conflict exception will occur if the DetectorVersion
-//      status is ACTIVE.
-//
-//      * DeleteRule: A conflict exception will occur if the RuleVersion is in
-//      use by an associated ACTIVE or INACTIVE DetectorVersion.
+//   An exception indicating there was a conflict during a delete operation.
 //
 //   * ValidationException
 //   An exception indicating a specified value is not allowed.
 //
 //   * InternalServerException
 //   An exception indicating an internal server error.
+//
+//   * ThrottlingException
+//   An exception indicating a throttling error.
 //
 //   * AccessDeniedException
 //   An exception indicating Amazon Fraud Detector does not have the needed permissions.
@@ -1171,6 +1694,102 @@ func (c *FraudDetector) DeleteEventType(input *DeleteEventTypeInput) (*DeleteEve
 // for more information on using Contexts.
 func (c *FraudDetector) DeleteEventTypeWithContext(ctx aws.Context, input *DeleteEventTypeInput, opts ...request.Option) (*DeleteEventTypeOutput, error) {
 	req, out := c.DeleteEventTypeRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opDeleteEventsByEventType = "DeleteEventsByEventType"
+
+// DeleteEventsByEventTypeRequest generates a "aws/request.Request" representing the
+// client's request for the DeleteEventsByEventType operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See DeleteEventsByEventType for more information on using the DeleteEventsByEventType
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the DeleteEventsByEventTypeRequest method.
+//    req, resp := client.DeleteEventsByEventTypeRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/frauddetector-2019-11-15/DeleteEventsByEventType
+func (c *FraudDetector) DeleteEventsByEventTypeRequest(input *DeleteEventsByEventTypeInput) (req *request.Request, output *DeleteEventsByEventTypeOutput) {
+	op := &request.Operation{
+		Name:       opDeleteEventsByEventType,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &DeleteEventsByEventTypeInput{}
+	}
+
+	output = &DeleteEventsByEventTypeOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// DeleteEventsByEventType API operation for Amazon Fraud Detector.
+//
+// Deletes all events of a particular event type.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Fraud Detector's
+// API operation DeleteEventsByEventType for usage and error information.
+//
+// Returned Error Types:
+//   * ConflictException
+//   An exception indicating there was a conflict during a delete operation.
+//
+//   * ValidationException
+//   An exception indicating a specified value is not allowed.
+//
+//   * ResourceNotFoundException
+//   An exception indicating the specified resource was not found.
+//
+//   * InternalServerException
+//   An exception indicating an internal server error.
+//
+//   * ThrottlingException
+//   An exception indicating a throttling error.
+//
+//   * AccessDeniedException
+//   An exception indicating Amazon Fraud Detector does not have the needed permissions.
+//   This can occur if you submit a request, such as PutExternalModel, that specifies
+//   a role that is not in your account.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/frauddetector-2019-11-15/DeleteEventsByEventType
+func (c *FraudDetector) DeleteEventsByEventType(input *DeleteEventsByEventTypeInput) (*DeleteEventsByEventTypeOutput, error) {
+	req, out := c.DeleteEventsByEventTypeRequest(input)
+	return out, req.Send()
+}
+
+// DeleteEventsByEventTypeWithContext is the same as DeleteEventsByEventType with the addition of
+// the ability to pass a context and additional request options.
+//
+// See DeleteEventsByEventType for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *FraudDetector) DeleteEventsByEventTypeWithContext(ctx aws.Context, input *DeleteEventsByEventTypeInput, opts ...request.Option) (*DeleteEventsByEventTypeOutput, error) {
+	req, out := c.DeleteEventsByEventTypeRequest(input)
 	req.SetContext(ctx)
 	req.ApplyOptions(opts...)
 	return out, req.Send()
@@ -1239,18 +1858,7 @@ func (c *FraudDetector) DeleteExternalModelRequest(input *DeleteExternalModelInp
 //   An exception indicating a specified value is not allowed.
 //
 //   * ConflictException
-//   An exception indicating there was a conflict during a delete operation. The
-//   following delete operations can cause a conflict exception:
-//
-//      * DeleteDetector: A conflict exception will occur if the detector has
-//      associated Rules or DetectorVersions. You can only delete a detector if
-//      it has no Rules or DetectorVersions.
-//
-//      * DeleteDetectorVersion: A conflict exception will occur if the DetectorVersion
-//      status is ACTIVE.
-//
-//      * DeleteRule: A conflict exception will occur if the RuleVersion is in
-//      use by an associated ACTIVE or INACTIVE DetectorVersion.
+//   An exception indicating there was a conflict during a delete operation.
 //
 //   * InternalServerException
 //   An exception indicating an internal server error.
@@ -1339,8 +1947,7 @@ func (c *FraudDetector) DeleteLabelRequest(input *DeleteLabelInput) (req *reques
 // the relevant event ID.
 //
 // When you delete a label, Amazon Fraud Detector permanently deletes that label
-// from the evaluation history, and the data is no longer stored in Amazon Fraud
-// Detector.
+// and the data is no longer stored in Amazon Fraud Detector.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -1354,18 +1961,10 @@ func (c *FraudDetector) DeleteLabelRequest(input *DeleteLabelInput) (req *reques
 //   An exception indicating a specified value is not allowed.
 //
 //   * ConflictException
-//   An exception indicating there was a conflict during a delete operation. The
-//   following delete operations can cause a conflict exception:
+//   An exception indicating there was a conflict during a delete operation.
 //
-//      * DeleteDetector: A conflict exception will occur if the detector has
-//      associated Rules or DetectorVersions. You can only delete a detector if
-//      it has no Rules or DetectorVersions.
-//
-//      * DeleteDetectorVersion: A conflict exception will occur if the DetectorVersion
-//      status is ACTIVE.
-//
-//      * DeleteRule: A conflict exception will occur if the RuleVersion is in
-//      use by an associated ACTIVE or INACTIVE DetectorVersion.
+//   * ThrottlingException
+//   An exception indicating a throttling error.
 //
 //   * InternalServerException
 //   An exception indicating an internal server error.
@@ -1443,8 +2042,7 @@ func (c *FraudDetector) DeleteModelRequest(input *DeleteModelInput) (req *reques
 // that they are not associated with a detector version.
 //
 // When you delete a model, Amazon Fraud Detector permanently deletes that model
-// from the evaluation history, and the data is no longer stored in Amazon Fraud
-// Detector.
+// and the data is no longer stored in Amazon Fraud Detector.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -1455,24 +2053,16 @@ func (c *FraudDetector) DeleteModelRequest(input *DeleteModelInput) (req *reques
 //
 // Returned Error Types:
 //   * ConflictException
-//   An exception indicating there was a conflict during a delete operation. The
-//   following delete operations can cause a conflict exception:
-//
-//      * DeleteDetector: A conflict exception will occur if the detector has
-//      associated Rules or DetectorVersions. You can only delete a detector if
-//      it has no Rules or DetectorVersions.
-//
-//      * DeleteDetectorVersion: A conflict exception will occur if the DetectorVersion
-//      status is ACTIVE.
-//
-//      * DeleteRule: A conflict exception will occur if the RuleVersion is in
-//      use by an associated ACTIVE or INACTIVE DetectorVersion.
+//   An exception indicating there was a conflict during a delete operation.
 //
 //   * ValidationException
 //   An exception indicating a specified value is not allowed.
 //
 //   * InternalServerException
 //   An exception indicating an internal server error.
+//
+//   * ThrottlingException
+//   An exception indicating a throttling error.
 //
 //   * AccessDeniedException
 //   An exception indicating Amazon Fraud Detector does not have the needed permissions.
@@ -1552,8 +2142,7 @@ func (c *FraudDetector) DeleteModelVersionRequest(input *DeleteModelVersionInput
 // that they are not associated with a detector version.
 //
 // When you delete a model version, Amazon Fraud Detector permanently deletes
-// that model version from the evaluation history, and the data is no longer
-// stored in Amazon Fraud Detector.
+// that model version and the data is no longer stored in Amazon Fraud Detector.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -1574,19 +2163,11 @@ func (c *FraudDetector) DeleteModelVersionRequest(input *DeleteModelVersionInput
 //   This can occur if you submit a request, such as PutExternalModel, that specifies
 //   a role that is not in your account.
 //
+//   * ThrottlingException
+//   An exception indicating a throttling error.
+//
 //   * ConflictException
-//   An exception indicating there was a conflict during a delete operation. The
-//   following delete operations can cause a conflict exception:
-//
-//      * DeleteDetector: A conflict exception will occur if the detector has
-//      associated Rules or DetectorVersions. You can only delete a detector if
-//      it has no Rules or DetectorVersions.
-//
-//      * DeleteDetectorVersion: A conflict exception will occur if the DetectorVersion
-//      status is ACTIVE.
-//
-//      * DeleteRule: A conflict exception will occur if the RuleVersion is in
-//      use by an associated ACTIVE or INACTIVE DetectorVersion.
+//   An exception indicating there was a conflict during a delete operation.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/frauddetector-2019-11-15/DeleteModelVersion
 func (c *FraudDetector) DeleteModelVersion(input *DeleteModelVersionInput) (*DeleteModelVersionOutput, error) {
@@ -1660,8 +2241,7 @@ func (c *FraudDetector) DeleteOutcomeRequest(input *DeleteOutcomeInput) (req *re
 // You cannot delete an outcome that is used in a rule version.
 //
 // When you delete an outcome, Amazon Fraud Detector permanently deletes that
-// outcome from the evaluation history, and the data is no longer stored in
-// Amazon Fraud Detector.
+// outcome and the data is no longer stored in Amazon Fraud Detector.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -1681,18 +2261,7 @@ func (c *FraudDetector) DeleteOutcomeRequest(input *DeleteOutcomeInput) (req *re
 //   An exception indicating a throttling error.
 //
 //   * ConflictException
-//   An exception indicating there was a conflict during a delete operation. The
-//   following delete operations can cause a conflict exception:
-//
-//      * DeleteDetector: A conflict exception will occur if the detector has
-//      associated Rules or DetectorVersions. You can only delete a detector if
-//      it has no Rules or DetectorVersions.
-//
-//      * DeleteDetectorVersion: A conflict exception will occur if the DetectorVersion
-//      status is ACTIVE.
-//
-//      * DeleteRule: A conflict exception will occur if the RuleVersion is in
-//      use by an associated ACTIVE or INACTIVE DetectorVersion.
+//   An exception indicating there was a conflict during a delete operation.
 //
 //   * AccessDeniedException
 //   An exception indicating Amazon Fraud Detector does not have the needed permissions.
@@ -1770,8 +2339,7 @@ func (c *FraudDetector) DeleteRuleRequest(input *DeleteRuleInput) (req *request.
 // INACTIVE detector version.
 //
 // When you delete a rule, Amazon Fraud Detector permanently deletes that rule
-// from the evaluation history, and the data is no longer stored in Amazon Fraud
-// Detector.
+// and the data is no longer stored in Amazon Fraud Detector.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -1782,18 +2350,7 @@ func (c *FraudDetector) DeleteRuleRequest(input *DeleteRuleInput) (req *request.
 //
 // Returned Error Types:
 //   * ConflictException
-//   An exception indicating there was a conflict during a delete operation. The
-//   following delete operations can cause a conflict exception:
-//
-//      * DeleteDetector: A conflict exception will occur if the detector has
-//      associated Rules or DetectorVersions. You can only delete a detector if
-//      it has no Rules or DetectorVersions.
-//
-//      * DeleteDetectorVersion: A conflict exception will occur if the DetectorVersion
-//      status is ACTIVE.
-//
-//      * DeleteRule: A conflict exception will occur if the RuleVersion is in
-//      use by an associated ACTIVE or INACTIVE DetectorVersion.
+//   An exception indicating there was a conflict during a delete operation.
 //
 //   * ValidationException
 //   An exception indicating a specified value is not allowed.
@@ -1886,8 +2443,7 @@ func (c *FraudDetector) DeleteVariableRequest(input *DeleteVariableInput) (req *
 // variables manually.
 //
 // When you delete a variable, Amazon Fraud Detector permanently deletes that
-// variable from the evaluation history, and the data is no longer stored in
-// Amazon Fraud Detector.
+// variable and the data is no longer stored in Amazon Fraud Detector.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -1901,18 +2457,7 @@ func (c *FraudDetector) DeleteVariableRequest(input *DeleteVariableInput) (req *
 //   An exception indicating a specified value is not allowed.
 //
 //   * ConflictException
-//   An exception indicating there was a conflict during a delete operation. The
-//   following delete operations can cause a conflict exception:
-//
-//      * DeleteDetector: A conflict exception will occur if the detector has
-//      associated Rules or DetectorVersions. You can only delete a detector if
-//      it has no Rules or DetectorVersions.
-//
-//      * DeleteDetectorVersion: A conflict exception will occur if the DetectorVersion
-//      status is ACTIVE.
-//
-//      * DeleteRule: A conflict exception will occur if the RuleVersion is in
-//      use by an associated ACTIVE or INACTIVE DetectorVersion.
+//   An exception indicating there was a conflict during a delete operation.
 //
 //   * InternalServerException
 //   An exception indicating an internal server error.
@@ -2111,6 +2656,9 @@ func (c *FraudDetector) DescribeModelVersionsRequest(input *DescribeModelVersion
 //   * InternalServerException
 //   An exception indicating an internal server error.
 //
+//   * ThrottlingException
+//   An exception indicating a throttling error.
+//
 //   * AccessDeniedException
 //   An exception indicating Amazon Fraud Detector does not have the needed permissions.
 //   This can occur if you submit a request, such as PutExternalModel, that specifies
@@ -2188,6 +2736,411 @@ func (c *FraudDetector) DescribeModelVersionsPagesWithContext(ctx aws.Context, i
 	}
 
 	return p.Err()
+}
+
+const opGetBatchImportJobs = "GetBatchImportJobs"
+
+// GetBatchImportJobsRequest generates a "aws/request.Request" representing the
+// client's request for the GetBatchImportJobs operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See GetBatchImportJobs for more information on using the GetBatchImportJobs
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the GetBatchImportJobsRequest method.
+//    req, resp := client.GetBatchImportJobsRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/frauddetector-2019-11-15/GetBatchImportJobs
+func (c *FraudDetector) GetBatchImportJobsRequest(input *GetBatchImportJobsInput) (req *request.Request, output *GetBatchImportJobsOutput) {
+	op := &request.Operation{
+		Name:       opGetBatchImportJobs,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+		Paginator: &request.Paginator{
+			InputTokens:     []string{"nextToken"},
+			OutputTokens:    []string{"nextToken"},
+			LimitToken:      "maxResults",
+			TruncationToken: "",
+		},
+	}
+
+	if input == nil {
+		input = &GetBatchImportJobsInput{}
+	}
+
+	output = &GetBatchImportJobsOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// GetBatchImportJobs API operation for Amazon Fraud Detector.
+//
+// Gets all batch import jobs or a specific job of the specified ID. This is
+// a paginated API. If you provide a null maxResults, this action retrieves
+// a maximum of 50 records per page. If you provide a maxResults, the value
+// must be between 1 and 50. To get the next page results, provide the pagination
+// token from the GetBatchImportJobsResponse as part of your request. A null
+// pagination token fetches the records from the beginning.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Fraud Detector's
+// API operation GetBatchImportJobs for usage and error information.
+//
+// Returned Error Types:
+//   * ValidationException
+//   An exception indicating a specified value is not allowed.
+//
+//   * ResourceNotFoundException
+//   An exception indicating the specified resource was not found.
+//
+//   * InternalServerException
+//   An exception indicating an internal server error.
+//
+//   * ThrottlingException
+//   An exception indicating a throttling error.
+//
+//   * AccessDeniedException
+//   An exception indicating Amazon Fraud Detector does not have the needed permissions.
+//   This can occur if you submit a request, such as PutExternalModel, that specifies
+//   a role that is not in your account.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/frauddetector-2019-11-15/GetBatchImportJobs
+func (c *FraudDetector) GetBatchImportJobs(input *GetBatchImportJobsInput) (*GetBatchImportJobsOutput, error) {
+	req, out := c.GetBatchImportJobsRequest(input)
+	return out, req.Send()
+}
+
+// GetBatchImportJobsWithContext is the same as GetBatchImportJobs with the addition of
+// the ability to pass a context and additional request options.
+//
+// See GetBatchImportJobs for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *FraudDetector) GetBatchImportJobsWithContext(ctx aws.Context, input *GetBatchImportJobsInput, opts ...request.Option) (*GetBatchImportJobsOutput, error) {
+	req, out := c.GetBatchImportJobsRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+// GetBatchImportJobsPages iterates over the pages of a GetBatchImportJobs operation,
+// calling the "fn" function with the response data for each page. To stop
+// iterating, return false from the fn function.
+//
+// See GetBatchImportJobs method for more information on how to use this operation.
+//
+// Note: This operation can generate multiple requests to a service.
+//
+//    // Example iterating over at most 3 pages of a GetBatchImportJobs operation.
+//    pageNum := 0
+//    err := client.GetBatchImportJobsPages(params,
+//        func(page *frauddetector.GetBatchImportJobsOutput, lastPage bool) bool {
+//            pageNum++
+//            fmt.Println(page)
+//            return pageNum <= 3
+//        })
+//
+func (c *FraudDetector) GetBatchImportJobsPages(input *GetBatchImportJobsInput, fn func(*GetBatchImportJobsOutput, bool) bool) error {
+	return c.GetBatchImportJobsPagesWithContext(aws.BackgroundContext(), input, fn)
+}
+
+// GetBatchImportJobsPagesWithContext same as GetBatchImportJobsPages except
+// it takes a Context and allows setting request options on the pages.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *FraudDetector) GetBatchImportJobsPagesWithContext(ctx aws.Context, input *GetBatchImportJobsInput, fn func(*GetBatchImportJobsOutput, bool) bool, opts ...request.Option) error {
+	p := request.Pagination{
+		NewRequest: func() (*request.Request, error) {
+			var inCpy *GetBatchImportJobsInput
+			if input != nil {
+				tmp := *input
+				inCpy = &tmp
+			}
+			req, _ := c.GetBatchImportJobsRequest(inCpy)
+			req.SetContext(ctx)
+			req.ApplyOptions(opts...)
+			return req, nil
+		},
+	}
+
+	for p.Next() {
+		if !fn(p.Page().(*GetBatchImportJobsOutput), !p.HasNextPage()) {
+			break
+		}
+	}
+
+	return p.Err()
+}
+
+const opGetBatchPredictionJobs = "GetBatchPredictionJobs"
+
+// GetBatchPredictionJobsRequest generates a "aws/request.Request" representing the
+// client's request for the GetBatchPredictionJobs operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See GetBatchPredictionJobs for more information on using the GetBatchPredictionJobs
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the GetBatchPredictionJobsRequest method.
+//    req, resp := client.GetBatchPredictionJobsRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/frauddetector-2019-11-15/GetBatchPredictionJobs
+func (c *FraudDetector) GetBatchPredictionJobsRequest(input *GetBatchPredictionJobsInput) (req *request.Request, output *GetBatchPredictionJobsOutput) {
+	op := &request.Operation{
+		Name:       opGetBatchPredictionJobs,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+		Paginator: &request.Paginator{
+			InputTokens:     []string{"nextToken"},
+			OutputTokens:    []string{"nextToken"},
+			LimitToken:      "maxResults",
+			TruncationToken: "",
+		},
+	}
+
+	if input == nil {
+		input = &GetBatchPredictionJobsInput{}
+	}
+
+	output = &GetBatchPredictionJobsOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// GetBatchPredictionJobs API operation for Amazon Fraud Detector.
+//
+// Gets all batch prediction jobs or a specific job if you specify a job ID.
+// This is a paginated API. If you provide a null maxResults, this action retrieves
+// a maximum of 50 records per page. If you provide a maxResults, the value
+// must be between 1 and 50. To get the next page results, provide the pagination
+// token from the GetBatchPredictionJobsResponse as part of your request. A
+// null pagination token fetches the records from the beginning.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Fraud Detector's
+// API operation GetBatchPredictionJobs for usage and error information.
+//
+// Returned Error Types:
+//   * ValidationException
+//   An exception indicating a specified value is not allowed.
+//
+//   * ResourceNotFoundException
+//   An exception indicating the specified resource was not found.
+//
+//   * InternalServerException
+//   An exception indicating an internal server error.
+//
+//   * ThrottlingException
+//   An exception indicating a throttling error.
+//
+//   * AccessDeniedException
+//   An exception indicating Amazon Fraud Detector does not have the needed permissions.
+//   This can occur if you submit a request, such as PutExternalModel, that specifies
+//   a role that is not in your account.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/frauddetector-2019-11-15/GetBatchPredictionJobs
+func (c *FraudDetector) GetBatchPredictionJobs(input *GetBatchPredictionJobsInput) (*GetBatchPredictionJobsOutput, error) {
+	req, out := c.GetBatchPredictionJobsRequest(input)
+	return out, req.Send()
+}
+
+// GetBatchPredictionJobsWithContext is the same as GetBatchPredictionJobs with the addition of
+// the ability to pass a context and additional request options.
+//
+// See GetBatchPredictionJobs for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *FraudDetector) GetBatchPredictionJobsWithContext(ctx aws.Context, input *GetBatchPredictionJobsInput, opts ...request.Option) (*GetBatchPredictionJobsOutput, error) {
+	req, out := c.GetBatchPredictionJobsRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+// GetBatchPredictionJobsPages iterates over the pages of a GetBatchPredictionJobs operation,
+// calling the "fn" function with the response data for each page. To stop
+// iterating, return false from the fn function.
+//
+// See GetBatchPredictionJobs method for more information on how to use this operation.
+//
+// Note: This operation can generate multiple requests to a service.
+//
+//    // Example iterating over at most 3 pages of a GetBatchPredictionJobs operation.
+//    pageNum := 0
+//    err := client.GetBatchPredictionJobsPages(params,
+//        func(page *frauddetector.GetBatchPredictionJobsOutput, lastPage bool) bool {
+//            pageNum++
+//            fmt.Println(page)
+//            return pageNum <= 3
+//        })
+//
+func (c *FraudDetector) GetBatchPredictionJobsPages(input *GetBatchPredictionJobsInput, fn func(*GetBatchPredictionJobsOutput, bool) bool) error {
+	return c.GetBatchPredictionJobsPagesWithContext(aws.BackgroundContext(), input, fn)
+}
+
+// GetBatchPredictionJobsPagesWithContext same as GetBatchPredictionJobsPages except
+// it takes a Context and allows setting request options on the pages.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *FraudDetector) GetBatchPredictionJobsPagesWithContext(ctx aws.Context, input *GetBatchPredictionJobsInput, fn func(*GetBatchPredictionJobsOutput, bool) bool, opts ...request.Option) error {
+	p := request.Pagination{
+		NewRequest: func() (*request.Request, error) {
+			var inCpy *GetBatchPredictionJobsInput
+			if input != nil {
+				tmp := *input
+				inCpy = &tmp
+			}
+			req, _ := c.GetBatchPredictionJobsRequest(inCpy)
+			req.SetContext(ctx)
+			req.ApplyOptions(opts...)
+			return req, nil
+		},
+	}
+
+	for p.Next() {
+		if !fn(p.Page().(*GetBatchPredictionJobsOutput), !p.HasNextPage()) {
+			break
+		}
+	}
+
+	return p.Err()
+}
+
+const opGetDeleteEventsByEventTypeStatus = "GetDeleteEventsByEventTypeStatus"
+
+// GetDeleteEventsByEventTypeStatusRequest generates a "aws/request.Request" representing the
+// client's request for the GetDeleteEventsByEventTypeStatus operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See GetDeleteEventsByEventTypeStatus for more information on using the GetDeleteEventsByEventTypeStatus
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the GetDeleteEventsByEventTypeStatusRequest method.
+//    req, resp := client.GetDeleteEventsByEventTypeStatusRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/frauddetector-2019-11-15/GetDeleteEventsByEventTypeStatus
+func (c *FraudDetector) GetDeleteEventsByEventTypeStatusRequest(input *GetDeleteEventsByEventTypeStatusInput) (req *request.Request, output *GetDeleteEventsByEventTypeStatusOutput) {
+	op := &request.Operation{
+		Name:       opGetDeleteEventsByEventTypeStatus,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &GetDeleteEventsByEventTypeStatusInput{}
+	}
+
+	output = &GetDeleteEventsByEventTypeStatusOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// GetDeleteEventsByEventTypeStatus API operation for Amazon Fraud Detector.
+//
+// Retrieves the status of a DeleteEventsByEventType action.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Fraud Detector's
+// API operation GetDeleteEventsByEventTypeStatus for usage and error information.
+//
+// Returned Error Types:
+//   * ValidationException
+//   An exception indicating a specified value is not allowed.
+//
+//   * ResourceNotFoundException
+//   An exception indicating the specified resource was not found.
+//
+//   * InternalServerException
+//   An exception indicating an internal server error.
+//
+//   * ThrottlingException
+//   An exception indicating a throttling error.
+//
+//   * AccessDeniedException
+//   An exception indicating Amazon Fraud Detector does not have the needed permissions.
+//   This can occur if you submit a request, such as PutExternalModel, that specifies
+//   a role that is not in your account.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/frauddetector-2019-11-15/GetDeleteEventsByEventTypeStatus
+func (c *FraudDetector) GetDeleteEventsByEventTypeStatus(input *GetDeleteEventsByEventTypeStatusInput) (*GetDeleteEventsByEventTypeStatusOutput, error) {
+	req, out := c.GetDeleteEventsByEventTypeStatusRequest(input)
+	return out, req.Send()
+}
+
+// GetDeleteEventsByEventTypeStatusWithContext is the same as GetDeleteEventsByEventTypeStatus with the addition of
+// the ability to pass a context and additional request options.
+//
+// See GetDeleteEventsByEventTypeStatus for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *FraudDetector) GetDeleteEventsByEventTypeStatusWithContext(ctx aws.Context, input *GetDeleteEventsByEventTypeStatusInput, opts ...request.Option) (*GetDeleteEventsByEventTypeStatusOutput, error) {
+	req, out := c.GetDeleteEventsByEventTypeStatusRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
 }
 
 const opGetDetectorVersion = "GetDetectorVersion"
@@ -2513,6 +3466,9 @@ func (c *FraudDetector) GetEntityTypesRequest(input *GetEntityTypesInput) (req *
 //   * InternalServerException
 //   An exception indicating an internal server error.
 //
+//   * ThrottlingException
+//   An exception indicating a throttling error.
+//
 //   * AccessDeniedException
 //   An exception indicating Amazon Fraud Detector does not have the needed permissions.
 //   This can occur if you submit a request, such as PutExternalModel, that specifies
@@ -2592,6 +3548,100 @@ func (c *FraudDetector) GetEntityTypesPagesWithContext(ctx aws.Context, input *G
 	return p.Err()
 }
 
+const opGetEvent = "GetEvent"
+
+// GetEventRequest generates a "aws/request.Request" representing the
+// client's request for the GetEvent operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See GetEvent for more information on using the GetEvent
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the GetEventRequest method.
+//    req, resp := client.GetEventRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/frauddetector-2019-11-15/GetEvent
+func (c *FraudDetector) GetEventRequest(input *GetEventInput) (req *request.Request, output *GetEventOutput) {
+	op := &request.Operation{
+		Name:       opGetEvent,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &GetEventInput{}
+	}
+
+	output = &GetEventOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// GetEvent API operation for Amazon Fraud Detector.
+//
+// Retrieves details of events stored with Amazon Fraud Detector. This action
+// does not retrieve prediction results.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Fraud Detector's
+// API operation GetEvent for usage and error information.
+//
+// Returned Error Types:
+//   * ValidationException
+//   An exception indicating a specified value is not allowed.
+//
+//   * ResourceNotFoundException
+//   An exception indicating the specified resource was not found.
+//
+//   * InternalServerException
+//   An exception indicating an internal server error.
+//
+//   * ThrottlingException
+//   An exception indicating a throttling error.
+//
+//   * AccessDeniedException
+//   An exception indicating Amazon Fraud Detector does not have the needed permissions.
+//   This can occur if you submit a request, such as PutExternalModel, that specifies
+//   a role that is not in your account.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/frauddetector-2019-11-15/GetEvent
+func (c *FraudDetector) GetEvent(input *GetEventInput) (*GetEventOutput, error) {
+	req, out := c.GetEventRequest(input)
+	return out, req.Send()
+}
+
+// GetEventWithContext is the same as GetEvent with the addition of
+// the ability to pass a context and additional request options.
+//
+// See GetEvent for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *FraudDetector) GetEventWithContext(ctx aws.Context, input *GetEventInput, opts ...request.Option) (*GetEventOutput, error) {
+	req, out := c.GetEventRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opGetEventPrediction = "GetEventPrediction"
 
 // GetEventPredictionRequest generates a "aws/request.Request" representing the
@@ -2665,18 +3715,11 @@ func (c *FraudDetector) GetEventPredictionRequest(input *GetEventPredictionInput
 //   a role that is not in your account.
 //
 //   * ConflictException
-//   An exception indicating there was a conflict during a delete operation. The
-//   following delete operations can cause a conflict exception:
+//   An exception indicating there was a conflict during a delete operation.
 //
-//      * DeleteDetector: A conflict exception will occur if the detector has
-//      associated Rules or DetectorVersions. You can only delete a detector if
-//      it has no Rules or DetectorVersions.
-//
-//      * DeleteDetectorVersion: A conflict exception will occur if the DetectorVersion
-//      status is ACTIVE.
-//
-//      * DeleteRule: A conflict exception will occur if the RuleVersion is in
-//      use by an associated ACTIVE or INACTIVE DetectorVersion.
+//   * ResourceUnavailableException
+//   An exception indicating that the attached customer-owned (external) model
+//   threw an exception when Amazon Fraud Detector invoked the model.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/frauddetector-2019-11-15/GetEventPrediction
 func (c *FraudDetector) GetEventPrediction(input *GetEventPredictionInput) (*GetEventPredictionOutput, error) {
@@ -2773,6 +3816,9 @@ func (c *FraudDetector) GetEventTypesRequest(input *GetEventTypesInput) (req *re
 //
 //   * InternalServerException
 //   An exception indicating an internal server error.
+//
+//   * ThrottlingException
+//   An exception indicating a throttling error.
 //
 //   * AccessDeniedException
 //   An exception indicating Amazon Fraud Detector does not have the needed permissions.
@@ -3053,9 +4099,8 @@ func (c *FraudDetector) GetKMSEncryptionKeyRequest(input *GetKMSEncryptionKeyInp
 
 // GetKMSEncryptionKey API operation for Amazon Fraud Detector.
 //
-// Gets the encryption key if a Key Management Service (KMS) customer master
-// key (CMK) has been specified to be used to encrypt content in Amazon Fraud
-// Detector.
+// Gets the encryption key if a KMS key has been specified to be used to encrypt
+// content in Amazon Fraud Detector.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -3070,6 +4115,9 @@ func (c *FraudDetector) GetKMSEncryptionKeyRequest(input *GetKMSEncryptionKeyInp
 //
 //   * InternalServerException
 //   An exception indicating an internal server error.
+//
+//   * ThrottlingException
+//   An exception indicating a throttling error.
 //
 //   * AccessDeniedException
 //   An exception indicating Amazon Fraud Detector does not have the needed permissions.
@@ -3171,6 +4219,9 @@ func (c *FraudDetector) GetLabelsRequest(input *GetLabelsInput) (req *request.Re
 //
 //   * InternalServerException
 //   An exception indicating an internal server error.
+//
+//   * ThrottlingException
+//   An exception indicating a throttling error.
 //
 //   * AccessDeniedException
 //   An exception indicating Amazon Fraud Detector does not have the needed permissions.
@@ -3314,6 +4365,9 @@ func (c *FraudDetector) GetModelVersionRequest(input *GetModelVersionInput) (req
 //   * InternalServerException
 //   An exception indicating an internal server error.
 //
+//   * ThrottlingException
+//   An exception indicating a throttling error.
+//
 //   * AccessDeniedException
 //   An exception indicating Amazon Fraud Detector does not have the needed permissions.
 //   This can occur if you submit a request, such as PutExternalModel, that specifies
@@ -3391,10 +4445,11 @@ func (c *FraudDetector) GetModelsRequest(input *GetModelsInput) (req *request.Re
 
 // GetModels API operation for Amazon Fraud Detector.
 //
-// Gets one or more models. Gets all models for the AWS account if no model
-// type and no model id provided. Gets all models for the AWS account and model
-// type, if the model type is specified but model id is not provided. Gets a
-// specific model if (model type, model id) tuple is specified.
+// Gets one or more models. Gets all models for the Amazon Web Services account
+// if no model type and no model id provided. Gets all models for the Amazon
+// Web Services account and model type, if the model type is specified but model
+// id is not provided. Gets a specific model if (model type, model id) tuple
+// is specified.
 //
 // This is a paginated API. If you provide a null maxResults, this action retrieves
 // a maximum of 10 records per page. If you provide a maxResults, the value
@@ -3418,6 +4473,9 @@ func (c *FraudDetector) GetModelsRequest(input *GetModelsInput) (req *request.Re
 //
 //   * InternalServerException
 //   An exception indicating an internal server error.
+//
+//   * ThrottlingException
+//   An exception indicating a throttling error.
 //
 //   * AccessDeniedException
 //   An exception indicating Amazon Fraud Detector does not have the needed permissions.
@@ -4038,6 +5096,9 @@ func (c *FraudDetector) ListTagsForResourceRequest(input *ListTagsForResourceInp
 //   * ResourceNotFoundException
 //   An exception indicating the specified resource was not found.
 //
+//   * ThrottlingException
+//   An exception indicating a throttling error.
+//
 //   * AccessDeniedException
 //   An exception indicating Amazon Fraud Detector does not have the needed permissions.
 //   This can occur if you submit a request, such as PutExternalModel, that specifies
@@ -4186,6 +5247,9 @@ func (c *FraudDetector) PutDetectorRequest(input *PutDetectorInput) (req *reques
 //   This can occur if you submit a request, such as PutExternalModel, that specifies
 //   a role that is not in your account.
 //
+//   * ConflictException
+//   An exception indicating there was a conflict during a delete operation.
+//
 // See also, https://docs.aws.amazon.com/goto/WebAPI/frauddetector-2019-11-15/PutDetector
 func (c *FraudDetector) PutDetector(input *PutDetectorInput) (*PutDetectorOutput, error) {
 	req, out := c.PutDetectorRequest(input)
@@ -4272,10 +5336,16 @@ func (c *FraudDetector) PutEntityTypeRequest(input *PutEntityTypeInput) (req *re
 //   * InternalServerException
 //   An exception indicating an internal server error.
 //
+//   * ThrottlingException
+//   An exception indicating a throttling error.
+//
 //   * AccessDeniedException
 //   An exception indicating Amazon Fraud Detector does not have the needed permissions.
 //   This can occur if you submit a request, such as PutExternalModel, that specifies
 //   a role that is not in your account.
+//
+//   * ConflictException
+//   An exception indicating there was a conflict during a delete operation.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/frauddetector-2019-11-15/PutEntityType
 func (c *FraudDetector) PutEntityType(input *PutEntityTypeInput) (*PutEntityTypeOutput, error) {
@@ -4366,10 +5436,16 @@ func (c *FraudDetector) PutEventTypeRequest(input *PutEventTypeInput) (req *requ
 //   * InternalServerException
 //   An exception indicating an internal server error.
 //
+//   * ThrottlingException
+//   An exception indicating a throttling error.
+//
 //   * AccessDeniedException
 //   An exception indicating Amazon Fraud Detector does not have the needed permissions.
 //   This can occur if you submit a request, such as PutExternalModel, that specifies
 //   a role that is not in your account.
+//
+//   * ConflictException
+//   An exception indicating there was a conflict during a delete operation.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/frauddetector-2019-11-15/PutEventType
 func (c *FraudDetector) PutEventType(input *PutEventTypeInput) (*PutEventTypeOutput, error) {
@@ -4464,6 +5540,9 @@ func (c *FraudDetector) PutExternalModelRequest(input *PutExternalModelInput) (r
 //   This can occur if you submit a request, such as PutExternalModel, that specifies
 //   a role that is not in your account.
 //
+//   * ConflictException
+//   An exception indicating there was a conflict during a delete operation.
+//
 // See also, https://docs.aws.amazon.com/goto/WebAPI/frauddetector-2019-11-15/PutExternalModel
 func (c *FraudDetector) PutExternalModel(input *PutExternalModelInput) (*PutExternalModelOutput, error) {
 	req, out := c.PutExternalModelRequest(input)
@@ -4531,8 +5610,7 @@ func (c *FraudDetector) PutKMSEncryptionKeyRequest(input *PutKMSEncryptionKeyInp
 
 // PutKMSEncryptionKey API operation for Amazon Fraud Detector.
 //
-// Specifies the Key Management Service (KMS) customer master key (CMK) to be
-// used to encrypt content in Amazon Fraud Detector.
+// Specifies the KMS key to be used to encrypt content in Amazon Fraud Detector.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -4551,10 +5629,16 @@ func (c *FraudDetector) PutKMSEncryptionKeyRequest(input *PutKMSEncryptionKeyInp
 //   * InternalServerException
 //   An exception indicating an internal server error.
 //
+//   * ThrottlingException
+//   An exception indicating a throttling error.
+//
 //   * AccessDeniedException
 //   An exception indicating Amazon Fraud Detector does not have the needed permissions.
 //   This can occur if you submit a request, such as PutExternalModel, that specifies
 //   a role that is not in your account.
+//
+//   * ConflictException
+//   An exception indicating there was a conflict during a delete operation.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/frauddetector-2019-11-15/PutKMSEncryptionKey
 func (c *FraudDetector) PutKMSEncryptionKey(input *PutKMSEncryptionKeyInput) (*PutKMSEncryptionKeyOutput, error) {
@@ -4641,10 +5725,16 @@ func (c *FraudDetector) PutLabelRequest(input *PutLabelInput) (req *request.Requ
 //   * InternalServerException
 //   An exception indicating an internal server error.
 //
+//   * ThrottlingException
+//   An exception indicating a throttling error.
+//
 //   * AccessDeniedException
 //   An exception indicating Amazon Fraud Detector does not have the needed permissions.
 //   This can occur if you submit a request, such as PutExternalModel, that specifies
 //   a role that is not in your account.
+//
+//   * ConflictException
+//   An exception indicating there was a conflict during a delete operation.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/frauddetector-2019-11-15/PutLabel
 func (c *FraudDetector) PutLabel(input *PutLabelInput) (*PutLabelOutput, error) {
@@ -4737,6 +5827,9 @@ func (c *FraudDetector) PutOutcomeRequest(input *PutOutcomeInput) (req *request.
 //   This can occur if you submit a request, such as PutExternalModel, that specifies
 //   a role that is not in your account.
 //
+//   * ConflictException
+//   An exception indicating there was a conflict during a delete operation.
+//
 // See also, https://docs.aws.amazon.com/goto/WebAPI/frauddetector-2019-11-15/PutOutcome
 func (c *FraudDetector) PutOutcome(input *PutOutcomeInput) (*PutOutcomeOutput, error) {
 	req, out := c.PutOutcomeRequest(input)
@@ -4754,6 +5847,105 @@ func (c *FraudDetector) PutOutcome(input *PutOutcomeInput) (*PutOutcomeOutput, e
 // for more information on using Contexts.
 func (c *FraudDetector) PutOutcomeWithContext(ctx aws.Context, input *PutOutcomeInput, opts ...request.Option) (*PutOutcomeOutput, error) {
 	req, out := c.PutOutcomeRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opSendEvent = "SendEvent"
+
+// SendEventRequest generates a "aws/request.Request" representing the
+// client's request for the SendEvent operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See SendEvent for more information on using the SendEvent
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the SendEventRequest method.
+//    req, resp := client.SendEventRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/frauddetector-2019-11-15/SendEvent
+func (c *FraudDetector) SendEventRequest(input *SendEventInput) (req *request.Request, output *SendEventOutput) {
+	op := &request.Operation{
+		Name:       opSendEvent,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &SendEventInput{}
+	}
+
+	output = &SendEventOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
+	return
+}
+
+// SendEvent API operation for Amazon Fraud Detector.
+//
+// Stores events in Amazon Fraud Detector without generating fraud predictions
+// for those events. For example, you can use SendEvent to upload a historical
+// dataset, which you can then later use to train a model.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Fraud Detector's
+// API operation SendEvent for usage and error information.
+//
+// Returned Error Types:
+//   * ValidationException
+//   An exception indicating a specified value is not allowed.
+//
+//   * ConflictException
+//   An exception indicating there was a conflict during a delete operation.
+//
+//   * ResourceNotFoundException
+//   An exception indicating the specified resource was not found.
+//
+//   * InternalServerException
+//   An exception indicating an internal server error.
+//
+//   * ThrottlingException
+//   An exception indicating a throttling error.
+//
+//   * AccessDeniedException
+//   An exception indicating Amazon Fraud Detector does not have the needed permissions.
+//   This can occur if you submit a request, such as PutExternalModel, that specifies
+//   a role that is not in your account.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/frauddetector-2019-11-15/SendEvent
+func (c *FraudDetector) SendEvent(input *SendEventInput) (*SendEventOutput, error) {
+	req, out := c.SendEventRequest(input)
+	return out, req.Send()
+}
+
+// SendEventWithContext is the same as SendEvent with the addition of
+// the ability to pass a context and additional request options.
+//
+// See SendEvent for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *FraudDetector) SendEventWithContext(ctx aws.Context, input *SendEventInput, opts ...request.Option) (*SendEventOutput, error) {
+	req, out := c.SendEventRequest(input)
 	req.SetContext(ctx)
 	req.ApplyOptions(opts...)
 	return out, req.Send()
@@ -4819,6 +6011,9 @@ func (c *FraudDetector) TagResourceRequest(input *TagResourceInput) (req *reques
 //
 //   * ResourceNotFoundException
 //   An exception indicating the specified resource was not found.
+//
+//   * ThrottlingException
+//   An exception indicating a throttling error.
 //
 //   * AccessDeniedException
 //   An exception indicating Amazon Fraud Detector does not have the needed permissions.
@@ -4907,6 +6102,9 @@ func (c *FraudDetector) UntagResourceRequest(input *UntagResourceInput) (req *re
 //
 //   * ResourceNotFoundException
 //   An exception indicating the specified resource was not found.
+//
+//   * ThrottlingException
+//   An exception indicating a throttling error.
 //
 //   * AccessDeniedException
 //   An exception indicating Amazon Fraud Detector does not have the needed permissions.
@@ -5009,6 +6207,9 @@ func (c *FraudDetector) UpdateDetectorVersionRequest(input *UpdateDetectorVersio
 //   This can occur if you submit a request, such as PutExternalModel, that specifies
 //   a role that is not in your account.
 //
+//   * ConflictException
+//   An exception indicating there was a conflict during a delete operation.
+//
 // See also, https://docs.aws.amazon.com/goto/WebAPI/frauddetector-2019-11-15/UpdateDetectorVersion
 func (c *FraudDetector) UpdateDetectorVersion(input *UpdateDetectorVersionInput) (*UpdateDetectorVersionOutput, error) {
 	req, out := c.UpdateDetectorVersionRequest(input)
@@ -5100,6 +6301,9 @@ func (c *FraudDetector) UpdateDetectorVersionMetadataRequest(input *UpdateDetect
 //   An exception indicating Amazon Fraud Detector does not have the needed permissions.
 //   This can occur if you submit a request, such as PutExternalModel, that specifies
 //   a role that is not in your account.
+//
+//   * ConflictException
+//   An exception indicating there was a conflict during a delete operation.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/frauddetector-2019-11-15/UpdateDetectorVersionMetadata
 func (c *FraudDetector) UpdateDetectorVersionMetadata(input *UpdateDetectorVersionMetadataInput) (*UpdateDetectorVersionMetadataOutput, error) {
@@ -5197,6 +6401,9 @@ func (c *FraudDetector) UpdateDetectorVersionStatusRequest(input *UpdateDetector
 //   This can occur if you submit a request, such as PutExternalModel, that specifies
 //   a role that is not in your account.
 //
+//   * ConflictException
+//   An exception indicating there was a conflict during a delete operation.
+//
 // See also, https://docs.aws.amazon.com/goto/WebAPI/frauddetector-2019-11-15/UpdateDetectorVersionStatus
 func (c *FraudDetector) UpdateDetectorVersionStatus(input *UpdateDetectorVersionStatusInput) (*UpdateDetectorVersionStatusOutput, error) {
 	req, out := c.UpdateDetectorVersionStatusRequest(input)
@@ -5214,6 +6421,103 @@ func (c *FraudDetector) UpdateDetectorVersionStatus(input *UpdateDetectorVersion
 // for more information on using Contexts.
 func (c *FraudDetector) UpdateDetectorVersionStatusWithContext(ctx aws.Context, input *UpdateDetectorVersionStatusInput, opts ...request.Option) (*UpdateDetectorVersionStatusOutput, error) {
 	req, out := c.UpdateDetectorVersionStatusRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opUpdateEventLabel = "UpdateEventLabel"
+
+// UpdateEventLabelRequest generates a "aws/request.Request" representing the
+// client's request for the UpdateEventLabel operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See UpdateEventLabel for more information on using the UpdateEventLabel
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the UpdateEventLabelRequest method.
+//    req, resp := client.UpdateEventLabelRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/frauddetector-2019-11-15/UpdateEventLabel
+func (c *FraudDetector) UpdateEventLabelRequest(input *UpdateEventLabelInput) (req *request.Request, output *UpdateEventLabelOutput) {
+	op := &request.Operation{
+		Name:       opUpdateEventLabel,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &UpdateEventLabelInput{}
+	}
+
+	output = &UpdateEventLabelOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
+	return
+}
+
+// UpdateEventLabel API operation for Amazon Fraud Detector.
+//
+// Updates the specified event with a new label.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Fraud Detector's
+// API operation UpdateEventLabel for usage and error information.
+//
+// Returned Error Types:
+//   * ValidationException
+//   An exception indicating a specified value is not allowed.
+//
+//   * ResourceNotFoundException
+//   An exception indicating the specified resource was not found.
+//
+//   * InternalServerException
+//   An exception indicating an internal server error.
+//
+//   * ThrottlingException
+//   An exception indicating a throttling error.
+//
+//   * AccessDeniedException
+//   An exception indicating Amazon Fraud Detector does not have the needed permissions.
+//   This can occur if you submit a request, such as PutExternalModel, that specifies
+//   a role that is not in your account.
+//
+//   * ConflictException
+//   An exception indicating there was a conflict during a delete operation.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/frauddetector-2019-11-15/UpdateEventLabel
+func (c *FraudDetector) UpdateEventLabel(input *UpdateEventLabelInput) (*UpdateEventLabelOutput, error) {
+	req, out := c.UpdateEventLabelRequest(input)
+	return out, req.Send()
+}
+
+// UpdateEventLabelWithContext is the same as UpdateEventLabel with the addition of
+// the ability to pass a context and additional request options.
+//
+// See UpdateEventLabel for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *FraudDetector) UpdateEventLabelWithContext(ctx aws.Context, input *UpdateEventLabelInput, opts ...request.Option) (*UpdateEventLabelOutput, error) {
+	req, out := c.UpdateEventLabelRequest(input)
 	req.SetContext(ctx)
 	req.ApplyOptions(opts...)
 	return out, req.Send()
@@ -5264,7 +6568,7 @@ func (c *FraudDetector) UpdateModelRequest(input *UpdateModelInput) (req *reques
 
 // UpdateModel API operation for Amazon Fraud Detector.
 //
-// Updates a model. You can update the description attribute using this action.
+// Updates model description.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -5283,10 +6587,16 @@ func (c *FraudDetector) UpdateModelRequest(input *UpdateModelInput) (req *reques
 //   * InternalServerException
 //   An exception indicating an internal server error.
 //
+//   * ThrottlingException
+//   An exception indicating a throttling error.
+//
 //   * AccessDeniedException
 //   An exception indicating Amazon Fraud Detector does not have the needed permissions.
 //   This can occur if you submit a request, such as PutExternalModel, that specifies
 //   a role that is not in your account.
+//
+//   * ConflictException
+//   An exception indicating there was a conflict during a delete operation.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/frauddetector-2019-11-15/UpdateModel
 func (c *FraudDetector) UpdateModel(input *UpdateModelInput) (*UpdateModelOutput, error) {
@@ -5379,8 +6689,14 @@ func (c *FraudDetector) UpdateModelVersionRequest(input *UpdateModelVersionInput
 //   This can occur if you submit a request, such as PutExternalModel, that specifies
 //   a role that is not in your account.
 //
+//   * ThrottlingException
+//   An exception indicating a throttling error.
+//
 //   * InternalServerException
 //   An exception indicating an internal server error.
+//
+//   * ConflictException
+//   An exception indicating there was a conflict during a delete operation.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/frauddetector-2019-11-15/UpdateModelVersion
 func (c *FraudDetector) UpdateModelVersion(input *UpdateModelVersionInput) (*UpdateModelVersionOutput, error) {
@@ -5455,7 +6771,7 @@ func (c *FraudDetector) UpdateModelVersionStatusRequest(input *UpdateModelVersio
 //
 // Change the TRAINING_COMPLETE status to ACTIVE.
 //
-// Change ACTIVEto INACTIVE.
+// Change ACTIVE to INACTIVE.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -5474,10 +6790,16 @@ func (c *FraudDetector) UpdateModelVersionStatusRequest(input *UpdateModelVersio
 //   * InternalServerException
 //   An exception indicating an internal server error.
 //
+//   * ThrottlingException
+//   An exception indicating a throttling error.
+//
 //   * AccessDeniedException
 //   An exception indicating Amazon Fraud Detector does not have the needed permissions.
 //   This can occur if you submit a request, such as PutExternalModel, that specifies
 //   a role that is not in your account.
+//
+//   * ConflictException
+//   An exception indicating there was a conflict during a delete operation.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/frauddetector-2019-11-15/UpdateModelVersionStatus
 func (c *FraudDetector) UpdateModelVersionStatus(input *UpdateModelVersionStatusInput) (*UpdateModelVersionStatusOutput, error) {
@@ -5573,6 +6895,9 @@ func (c *FraudDetector) UpdateRuleMetadataRequest(input *UpdateRuleMetadataInput
 //   This can occur if you submit a request, such as PutExternalModel, that specifies
 //   a role that is not in your account.
 //
+//   * ConflictException
+//   An exception indicating there was a conflict during a delete operation.
+//
 // See also, https://docs.aws.amazon.com/goto/WebAPI/frauddetector-2019-11-15/UpdateRuleMetadata
 func (c *FraudDetector) UpdateRuleMetadata(input *UpdateRuleMetadataInput) (*UpdateRuleMetadataOutput, error) {
 	req, out := c.UpdateRuleMetadataRequest(input)
@@ -5666,6 +6991,9 @@ func (c *FraudDetector) UpdateRuleVersionRequest(input *UpdateRuleVersionInput) 
 //   An exception indicating Amazon Fraud Detector does not have the needed permissions.
 //   This can occur if you submit a request, such as PutExternalModel, that specifies
 //   a role that is not in your account.
+//
+//   * ConflictException
+//   An exception indicating there was a conflict during a delete operation.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/frauddetector-2019-11-15/UpdateRuleVersion
 func (c *FraudDetector) UpdateRuleVersion(input *UpdateRuleVersionInput) (*UpdateRuleVersionOutput, error) {
@@ -5761,6 +7089,9 @@ func (c *FraudDetector) UpdateVariableRequest(input *UpdateVariableInput) (req *
 //   This can occur if you submit a request, such as PutExternalModel, that specifies
 //   a role that is not in your account.
 //
+//   * ConflictException
+//   An exception indicating there was a conflict during a delete operation.
+//
 // See also, https://docs.aws.amazon.com/goto/WebAPI/frauddetector-2019-11-15/UpdateVariable
 func (c *FraudDetector) UpdateVariable(input *UpdateVariableInput) (*UpdateVariableOutput, error) {
 	req, out := c.UpdateVariableRequest(input)
@@ -5793,12 +7124,20 @@ type AccessDeniedException struct {
 	Message_ *string `locationName:"message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AccessDeniedException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AccessDeniedException) GoString() string {
 	return s.String()
 }
@@ -5855,12 +7194,20 @@ type BatchCreateVariableError struct {
 	Name *string `locationName:"name" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s BatchCreateVariableError) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s BatchCreateVariableError) GoString() string {
 	return s.String()
 }
@@ -5895,12 +7242,20 @@ type BatchCreateVariableInput struct {
 	VariableEntries []*VariableEntry `locationName:"variableEntries" min:"1" type:"list" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s BatchCreateVariableInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s BatchCreateVariableInput) GoString() string {
 	return s.String()
 }
@@ -5950,12 +7305,20 @@ type BatchCreateVariableOutput struct {
 	Errors []*BatchCreateVariableError `locationName:"errors" type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s BatchCreateVariableOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s BatchCreateVariableOutput) GoString() string {
 	return s.String()
 }
@@ -5980,12 +7343,20 @@ type BatchGetVariableError struct {
 	Name *string `locationName:"name" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s BatchGetVariableError) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s BatchGetVariableError) GoString() string {
 	return s.String()
 }
@@ -6017,12 +7388,20 @@ type BatchGetVariableInput struct {
 	Names []*string `locationName:"names" min:"1" type:"list" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s BatchGetVariableInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s BatchGetVariableInput) GoString() string {
 	return s.String()
 }
@@ -6059,12 +7438,20 @@ type BatchGetVariableOutput struct {
 	Variables []*Variable `locationName:"variables" type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s BatchGetVariableOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s BatchGetVariableOutput) GoString() string {
 	return s.String()
 }
@@ -6081,18 +7468,451 @@ func (s *BatchGetVariableOutput) SetVariables(v []*Variable) *BatchGetVariableOu
 	return s
 }
 
-// An exception indicating there was a conflict during a delete operation. The
-// following delete operations can cause a conflict exception:
+// The batch import job details.
+type BatchImport struct {
+	_ struct{} `type:"structure"`
+
+	// The ARN of the batch import job.
+	Arn *string `locationName:"arn" min:"1" type:"string"`
+
+	// Timestamp of when batch import job completed.
+	CompletionTime *string `locationName:"completionTime" min:"11" type:"string"`
+
+	// The name of the event type.
+	EventTypeName *string `locationName:"eventTypeName" min:"1" type:"string"`
+
+	// The number of records that failed to import.
+	FailedRecordsCount *int64 `locationName:"failedRecordsCount" type:"integer"`
+
+	// The reason batch import job failed.
+	FailureReason *string `locationName:"failureReason" type:"string"`
+
+	// The ARN of the IAM role to use for this job request.
+	IamRoleArn *string `locationName:"iamRoleArn" min:"1" type:"string"`
+
+	// The Amazon S3 location of your data file for batch import.
+	InputPath *string `locationName:"inputPath" min:"1" type:"string"`
+
+	// The ID of the batch import job.
+	JobId *string `locationName:"jobId" min:"1" type:"string"`
+
+	// The Amazon S3 location of your output file.
+	OutputPath *string `locationName:"outputPath" min:"1" type:"string"`
+
+	// The number of records processed by batch import job.
+	ProcessedRecordsCount *int64 `locationName:"processedRecordsCount" type:"integer"`
+
+	// Timestamp of when the batch import job started.
+	StartTime *string `locationName:"startTime" min:"11" type:"string"`
+
+	// The status of the batch import job.
+	Status *string `locationName:"status" type:"string" enum:"AsyncJobStatus"`
+
+	// The total number of records in the batch import job.
+	TotalRecordsCount *int64 `locationName:"totalRecordsCount" type:"integer"`
+}
+
+// String returns the string representation.
 //
-//    * DeleteDetector: A conflict exception will occur if the detector has
-//    associated Rules or DetectorVersions. You can only delete a detector if
-//    it has no Rules or DetectorVersions.
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s BatchImport) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
 //
-//    * DeleteDetectorVersion: A conflict exception will occur if the DetectorVersion
-//    status is ACTIVE.
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s BatchImport) GoString() string {
+	return s.String()
+}
+
+// SetArn sets the Arn field's value.
+func (s *BatchImport) SetArn(v string) *BatchImport {
+	s.Arn = &v
+	return s
+}
+
+// SetCompletionTime sets the CompletionTime field's value.
+func (s *BatchImport) SetCompletionTime(v string) *BatchImport {
+	s.CompletionTime = &v
+	return s
+}
+
+// SetEventTypeName sets the EventTypeName field's value.
+func (s *BatchImport) SetEventTypeName(v string) *BatchImport {
+	s.EventTypeName = &v
+	return s
+}
+
+// SetFailedRecordsCount sets the FailedRecordsCount field's value.
+func (s *BatchImport) SetFailedRecordsCount(v int64) *BatchImport {
+	s.FailedRecordsCount = &v
+	return s
+}
+
+// SetFailureReason sets the FailureReason field's value.
+func (s *BatchImport) SetFailureReason(v string) *BatchImport {
+	s.FailureReason = &v
+	return s
+}
+
+// SetIamRoleArn sets the IamRoleArn field's value.
+func (s *BatchImport) SetIamRoleArn(v string) *BatchImport {
+	s.IamRoleArn = &v
+	return s
+}
+
+// SetInputPath sets the InputPath field's value.
+func (s *BatchImport) SetInputPath(v string) *BatchImport {
+	s.InputPath = &v
+	return s
+}
+
+// SetJobId sets the JobId field's value.
+func (s *BatchImport) SetJobId(v string) *BatchImport {
+	s.JobId = &v
+	return s
+}
+
+// SetOutputPath sets the OutputPath field's value.
+func (s *BatchImport) SetOutputPath(v string) *BatchImport {
+	s.OutputPath = &v
+	return s
+}
+
+// SetProcessedRecordsCount sets the ProcessedRecordsCount field's value.
+func (s *BatchImport) SetProcessedRecordsCount(v int64) *BatchImport {
+	s.ProcessedRecordsCount = &v
+	return s
+}
+
+// SetStartTime sets the StartTime field's value.
+func (s *BatchImport) SetStartTime(v string) *BatchImport {
+	s.StartTime = &v
+	return s
+}
+
+// SetStatus sets the Status field's value.
+func (s *BatchImport) SetStatus(v string) *BatchImport {
+	s.Status = &v
+	return s
+}
+
+// SetTotalRecordsCount sets the TotalRecordsCount field's value.
+func (s *BatchImport) SetTotalRecordsCount(v int64) *BatchImport {
+	s.TotalRecordsCount = &v
+	return s
+}
+
+// The batch prediction details.
+type BatchPrediction struct {
+	_ struct{} `type:"structure"`
+
+	// The ARN of batch prediction job.
+	Arn *string `locationName:"arn" min:"1" type:"string"`
+
+	// Timestamp of when the batch prediction job completed.
+	CompletionTime *string `locationName:"completionTime" min:"11" type:"string"`
+
+	// The name of the detector.
+	DetectorName *string `locationName:"detectorName" min:"1" type:"string"`
+
+	// The detector version.
+	DetectorVersion *string `locationName:"detectorVersion" min:"3" type:"string"`
+
+	// The name of the event type.
+	EventTypeName *string `locationName:"eventTypeName" min:"1" type:"string"`
+
+	// The reason a batch prediction job failed.
+	FailureReason *string `locationName:"failureReason" type:"string"`
+
+	// The ARN of the IAM role to use for this job request.
+	IamRoleArn *string `locationName:"iamRoleArn" min:"1" type:"string"`
+
+	// The Amazon S3 location of your training file.
+	InputPath *string `locationName:"inputPath" min:"1" type:"string"`
+
+	// The job ID for the batch prediction.
+	JobId *string `locationName:"jobId" min:"1" type:"string"`
+
+	// Timestamp of most recent heartbeat indicating the batch prediction job was
+	// making progress.
+	LastHeartbeatTime *string `locationName:"lastHeartbeatTime" min:"11" type:"string"`
+
+	// The Amazon S3 location of your output file.
+	OutputPath *string `locationName:"outputPath" min:"1" type:"string"`
+
+	// The number of records processed by the batch prediction job.
+	ProcessedRecordsCount *int64 `locationName:"processedRecordsCount" type:"integer"`
+
+	// Timestamp of when the batch prediction job started.
+	StartTime *string `locationName:"startTime" min:"11" type:"string"`
+
+	// The batch prediction status.
+	Status *string `locationName:"status" type:"string" enum:"AsyncJobStatus"`
+
+	// The total number of records in the batch prediction job.
+	TotalRecordsCount *int64 `locationName:"totalRecordsCount" type:"integer"`
+}
+
+// String returns the string representation.
 //
-//    * DeleteRule: A conflict exception will occur if the RuleVersion is in
-//    use by an associated ACTIVE or INACTIVE DetectorVersion.
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s BatchPrediction) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s BatchPrediction) GoString() string {
+	return s.String()
+}
+
+// SetArn sets the Arn field's value.
+func (s *BatchPrediction) SetArn(v string) *BatchPrediction {
+	s.Arn = &v
+	return s
+}
+
+// SetCompletionTime sets the CompletionTime field's value.
+func (s *BatchPrediction) SetCompletionTime(v string) *BatchPrediction {
+	s.CompletionTime = &v
+	return s
+}
+
+// SetDetectorName sets the DetectorName field's value.
+func (s *BatchPrediction) SetDetectorName(v string) *BatchPrediction {
+	s.DetectorName = &v
+	return s
+}
+
+// SetDetectorVersion sets the DetectorVersion field's value.
+func (s *BatchPrediction) SetDetectorVersion(v string) *BatchPrediction {
+	s.DetectorVersion = &v
+	return s
+}
+
+// SetEventTypeName sets the EventTypeName field's value.
+func (s *BatchPrediction) SetEventTypeName(v string) *BatchPrediction {
+	s.EventTypeName = &v
+	return s
+}
+
+// SetFailureReason sets the FailureReason field's value.
+func (s *BatchPrediction) SetFailureReason(v string) *BatchPrediction {
+	s.FailureReason = &v
+	return s
+}
+
+// SetIamRoleArn sets the IamRoleArn field's value.
+func (s *BatchPrediction) SetIamRoleArn(v string) *BatchPrediction {
+	s.IamRoleArn = &v
+	return s
+}
+
+// SetInputPath sets the InputPath field's value.
+func (s *BatchPrediction) SetInputPath(v string) *BatchPrediction {
+	s.InputPath = &v
+	return s
+}
+
+// SetJobId sets the JobId field's value.
+func (s *BatchPrediction) SetJobId(v string) *BatchPrediction {
+	s.JobId = &v
+	return s
+}
+
+// SetLastHeartbeatTime sets the LastHeartbeatTime field's value.
+func (s *BatchPrediction) SetLastHeartbeatTime(v string) *BatchPrediction {
+	s.LastHeartbeatTime = &v
+	return s
+}
+
+// SetOutputPath sets the OutputPath field's value.
+func (s *BatchPrediction) SetOutputPath(v string) *BatchPrediction {
+	s.OutputPath = &v
+	return s
+}
+
+// SetProcessedRecordsCount sets the ProcessedRecordsCount field's value.
+func (s *BatchPrediction) SetProcessedRecordsCount(v int64) *BatchPrediction {
+	s.ProcessedRecordsCount = &v
+	return s
+}
+
+// SetStartTime sets the StartTime field's value.
+func (s *BatchPrediction) SetStartTime(v string) *BatchPrediction {
+	s.StartTime = &v
+	return s
+}
+
+// SetStatus sets the Status field's value.
+func (s *BatchPrediction) SetStatus(v string) *BatchPrediction {
+	s.Status = &v
+	return s
+}
+
+// SetTotalRecordsCount sets the TotalRecordsCount field's value.
+func (s *BatchPrediction) SetTotalRecordsCount(v int64) *BatchPrediction {
+	s.TotalRecordsCount = &v
+	return s
+}
+
+type CancelBatchImportJobInput struct {
+	_ struct{} `type:"structure"`
+
+	// The ID of an in-progress batch import job to cancel.
+	//
+	// Amazon Fraud Detector will throw an error if the batch import job is in FAILED,
+	// CANCELED, or COMPLETED state.
+	//
+	// JobId is a required field
+	JobId *string `locationName:"jobId" min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CancelBatchImportJobInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CancelBatchImportJobInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *CancelBatchImportJobInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "CancelBatchImportJobInput"}
+	if s.JobId == nil {
+		invalidParams.Add(request.NewErrParamRequired("JobId"))
+	}
+	if s.JobId != nil && len(*s.JobId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("JobId", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetJobId sets the JobId field's value.
+func (s *CancelBatchImportJobInput) SetJobId(v string) *CancelBatchImportJobInput {
+	s.JobId = &v
+	return s
+}
+
+type CancelBatchImportJobOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CancelBatchImportJobOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CancelBatchImportJobOutput) GoString() string {
+	return s.String()
+}
+
+type CancelBatchPredictionJobInput struct {
+	_ struct{} `type:"structure"`
+
+	// The ID of the batch prediction job to cancel.
+	//
+	// JobId is a required field
+	JobId *string `locationName:"jobId" min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CancelBatchPredictionJobInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CancelBatchPredictionJobInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *CancelBatchPredictionJobInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "CancelBatchPredictionJobInput"}
+	if s.JobId == nil {
+		invalidParams.Add(request.NewErrParamRequired("JobId"))
+	}
+	if s.JobId != nil && len(*s.JobId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("JobId", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetJobId sets the JobId field's value.
+func (s *CancelBatchPredictionJobInput) SetJobId(v string) *CancelBatchPredictionJobInput {
+	s.JobId = &v
+	return s
+}
+
+type CancelBatchPredictionJobOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CancelBatchPredictionJobOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CancelBatchPredictionJobOutput) GoString() string {
+	return s.String()
+}
+
+// An exception indicating there was a conflict during a delete operation.
 type ConflictException struct {
 	_            struct{}                  `type:"structure"`
 	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
@@ -6100,12 +7920,20 @@ type ConflictException struct {
 	Message_ *string `locationName:"message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ConflictException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ConflictException) GoString() string {
 	return s.String()
 }
@@ -6146,6 +7974,354 @@ func (s *ConflictException) StatusCode() int {
 // RequestID returns the service's response RequestID for request.
 func (s *ConflictException) RequestID() string {
 	return s.RespMetadata.RequestID
+}
+
+type CreateBatchImportJobInput struct {
+	_ struct{} `type:"structure"`
+
+	// The name of the event type.
+	//
+	// EventTypeName is a required field
+	EventTypeName *string `locationName:"eventTypeName" min:"1" type:"string" required:"true"`
+
+	// The ARN of the IAM role created for Amazon S3 bucket that holds your data
+	// file. The IAM role must have read and write permissions to both input and
+	// output S3 buckets.
+	//
+	// IamRoleArn is a required field
+	IamRoleArn *string `locationName:"iamRoleArn" min:"1" type:"string" required:"true"`
+
+	// The URI that points to the Amazon S3 location of your data file.
+	//
+	// InputPath is a required field
+	InputPath *string `locationName:"inputPath" min:"1" type:"string" required:"true"`
+
+	// The ID of the batch import job. The ID cannot be of a past job, unless the
+	// job exists in CREATE_FAILED state.
+	//
+	// JobId is a required field
+	JobId *string `locationName:"jobId" min:"1" type:"string" required:"true"`
+
+	// The URI that points to the Amazon S3 location for storing your results.
+	//
+	// OutputPath is a required field
+	OutputPath *string `locationName:"outputPath" min:"1" type:"string" required:"true"`
+
+	// A collection of key-value pairs associated with this request.
+	Tags []*Tag `locationName:"tags" type:"list"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateBatchImportJobInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateBatchImportJobInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *CreateBatchImportJobInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "CreateBatchImportJobInput"}
+	if s.EventTypeName == nil {
+		invalidParams.Add(request.NewErrParamRequired("EventTypeName"))
+	}
+	if s.EventTypeName != nil && len(*s.EventTypeName) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("EventTypeName", 1))
+	}
+	if s.IamRoleArn == nil {
+		invalidParams.Add(request.NewErrParamRequired("IamRoleArn"))
+	}
+	if s.IamRoleArn != nil && len(*s.IamRoleArn) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("IamRoleArn", 1))
+	}
+	if s.InputPath == nil {
+		invalidParams.Add(request.NewErrParamRequired("InputPath"))
+	}
+	if s.InputPath != nil && len(*s.InputPath) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("InputPath", 1))
+	}
+	if s.JobId == nil {
+		invalidParams.Add(request.NewErrParamRequired("JobId"))
+	}
+	if s.JobId != nil && len(*s.JobId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("JobId", 1))
+	}
+	if s.OutputPath == nil {
+		invalidParams.Add(request.NewErrParamRequired("OutputPath"))
+	}
+	if s.OutputPath != nil && len(*s.OutputPath) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("OutputPath", 1))
+	}
+	if s.Tags != nil {
+		for i, v := range s.Tags {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "Tags", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetEventTypeName sets the EventTypeName field's value.
+func (s *CreateBatchImportJobInput) SetEventTypeName(v string) *CreateBatchImportJobInput {
+	s.EventTypeName = &v
+	return s
+}
+
+// SetIamRoleArn sets the IamRoleArn field's value.
+func (s *CreateBatchImportJobInput) SetIamRoleArn(v string) *CreateBatchImportJobInput {
+	s.IamRoleArn = &v
+	return s
+}
+
+// SetInputPath sets the InputPath field's value.
+func (s *CreateBatchImportJobInput) SetInputPath(v string) *CreateBatchImportJobInput {
+	s.InputPath = &v
+	return s
+}
+
+// SetJobId sets the JobId field's value.
+func (s *CreateBatchImportJobInput) SetJobId(v string) *CreateBatchImportJobInput {
+	s.JobId = &v
+	return s
+}
+
+// SetOutputPath sets the OutputPath field's value.
+func (s *CreateBatchImportJobInput) SetOutputPath(v string) *CreateBatchImportJobInput {
+	s.OutputPath = &v
+	return s
+}
+
+// SetTags sets the Tags field's value.
+func (s *CreateBatchImportJobInput) SetTags(v []*Tag) *CreateBatchImportJobInput {
+	s.Tags = v
+	return s
+}
+
+type CreateBatchImportJobOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateBatchImportJobOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateBatchImportJobOutput) GoString() string {
+	return s.String()
+}
+
+type CreateBatchPredictionJobInput struct {
+	_ struct{} `type:"structure"`
+
+	// The name of the detector.
+	//
+	// DetectorName is a required field
+	DetectorName *string `locationName:"detectorName" min:"1" type:"string" required:"true"`
+
+	// The detector version.
+	DetectorVersion *string `locationName:"detectorVersion" min:"1" type:"string"`
+
+	// The name of the event type.
+	//
+	// EventTypeName is a required field
+	EventTypeName *string `locationName:"eventTypeName" min:"1" type:"string" required:"true"`
+
+	// The ARN of the IAM role to use for this job request.
+	//
+	// IamRoleArn is a required field
+	IamRoleArn *string `locationName:"iamRoleArn" min:"1" type:"string" required:"true"`
+
+	// The Amazon S3 location of your training file.
+	//
+	// InputPath is a required field
+	InputPath *string `locationName:"inputPath" min:"1" type:"string" required:"true"`
+
+	// The ID of the batch prediction job.
+	//
+	// JobId is a required field
+	JobId *string `locationName:"jobId" min:"1" type:"string" required:"true"`
+
+	// The Amazon S3 location of your output file.
+	//
+	// OutputPath is a required field
+	OutputPath *string `locationName:"outputPath" min:"1" type:"string" required:"true"`
+
+	// A collection of key and value pairs.
+	Tags []*Tag `locationName:"tags" type:"list"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateBatchPredictionJobInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateBatchPredictionJobInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *CreateBatchPredictionJobInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "CreateBatchPredictionJobInput"}
+	if s.DetectorName == nil {
+		invalidParams.Add(request.NewErrParamRequired("DetectorName"))
+	}
+	if s.DetectorName != nil && len(*s.DetectorName) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("DetectorName", 1))
+	}
+	if s.DetectorVersion != nil && len(*s.DetectorVersion) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("DetectorVersion", 1))
+	}
+	if s.EventTypeName == nil {
+		invalidParams.Add(request.NewErrParamRequired("EventTypeName"))
+	}
+	if s.EventTypeName != nil && len(*s.EventTypeName) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("EventTypeName", 1))
+	}
+	if s.IamRoleArn == nil {
+		invalidParams.Add(request.NewErrParamRequired("IamRoleArn"))
+	}
+	if s.IamRoleArn != nil && len(*s.IamRoleArn) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("IamRoleArn", 1))
+	}
+	if s.InputPath == nil {
+		invalidParams.Add(request.NewErrParamRequired("InputPath"))
+	}
+	if s.InputPath != nil && len(*s.InputPath) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("InputPath", 1))
+	}
+	if s.JobId == nil {
+		invalidParams.Add(request.NewErrParamRequired("JobId"))
+	}
+	if s.JobId != nil && len(*s.JobId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("JobId", 1))
+	}
+	if s.OutputPath == nil {
+		invalidParams.Add(request.NewErrParamRequired("OutputPath"))
+	}
+	if s.OutputPath != nil && len(*s.OutputPath) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("OutputPath", 1))
+	}
+	if s.Tags != nil {
+		for i, v := range s.Tags {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "Tags", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetDetectorName sets the DetectorName field's value.
+func (s *CreateBatchPredictionJobInput) SetDetectorName(v string) *CreateBatchPredictionJobInput {
+	s.DetectorName = &v
+	return s
+}
+
+// SetDetectorVersion sets the DetectorVersion field's value.
+func (s *CreateBatchPredictionJobInput) SetDetectorVersion(v string) *CreateBatchPredictionJobInput {
+	s.DetectorVersion = &v
+	return s
+}
+
+// SetEventTypeName sets the EventTypeName field's value.
+func (s *CreateBatchPredictionJobInput) SetEventTypeName(v string) *CreateBatchPredictionJobInput {
+	s.EventTypeName = &v
+	return s
+}
+
+// SetIamRoleArn sets the IamRoleArn field's value.
+func (s *CreateBatchPredictionJobInput) SetIamRoleArn(v string) *CreateBatchPredictionJobInput {
+	s.IamRoleArn = &v
+	return s
+}
+
+// SetInputPath sets the InputPath field's value.
+func (s *CreateBatchPredictionJobInput) SetInputPath(v string) *CreateBatchPredictionJobInput {
+	s.InputPath = &v
+	return s
+}
+
+// SetJobId sets the JobId field's value.
+func (s *CreateBatchPredictionJobInput) SetJobId(v string) *CreateBatchPredictionJobInput {
+	s.JobId = &v
+	return s
+}
+
+// SetOutputPath sets the OutputPath field's value.
+func (s *CreateBatchPredictionJobInput) SetOutputPath(v string) *CreateBatchPredictionJobInput {
+	s.OutputPath = &v
+	return s
+}
+
+// SetTags sets the Tags field's value.
+func (s *CreateBatchPredictionJobInput) SetTags(v []*Tag) *CreateBatchPredictionJobInput {
+	s.Tags = v
+	return s
+}
+
+type CreateBatchPredictionJobOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateBatchPredictionJobOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateBatchPredictionJobOutput) GoString() string {
+	return s.String()
 }
 
 type CreateDetectorVersionInput struct {
@@ -6189,12 +8365,20 @@ type CreateDetectorVersionInput struct {
 	Tags []*Tag `locationName:"tags" type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateDetectorVersionInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateDetectorVersionInput) GoString() string {
 	return s.String()
 }
@@ -6306,12 +8490,20 @@ type CreateDetectorVersionOutput struct {
 	Status *string `locationName:"status" type:"string" enum:"DetectorVersionStatus"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateDetectorVersionOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateDetectorVersionOutput) GoString() string {
 	return s.String()
 }
@@ -6359,12 +8551,20 @@ type CreateModelInput struct {
 	Tags []*Tag `locationName:"tags" type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateModelInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateModelInput) GoString() string {
 	return s.String()
 }
@@ -6438,12 +8638,20 @@ type CreateModelOutput struct {
 	_ struct{} `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateModelOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateModelOutput) GoString() string {
 	return s.String()
 }
@@ -6451,9 +8659,13 @@ func (s CreateModelOutput) GoString() string {
 type CreateModelVersionInput struct {
 	_ struct{} `type:"structure"`
 
-	// Details for the external events data used for model version training. Required
+	// Details of the external events data used for model version training. Required
 	// if trainingDataSource is EXTERNAL_EVENTS.
 	ExternalEventsDetail *ExternalEventsDetail `locationName:"externalEventsDetail" type:"structure"`
+
+	// Details of the ingested events data used for model version training. Required
+	// if trainingDataSource is INGESTED_EVENTS.
+	IngestedEventsDetail *IngestedEventsDetail `locationName:"ingestedEventsDetail" type:"structure"`
 
 	// The model ID.
 	//
@@ -6479,12 +8691,20 @@ type CreateModelVersionInput struct {
 	TrainingDataSource *string `locationName:"trainingDataSource" type:"string" required:"true" enum:"TrainingDataSourceEnum"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateModelVersionInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateModelVersionInput) GoString() string {
 	return s.String()
 }
@@ -6512,6 +8732,11 @@ func (s *CreateModelVersionInput) Validate() error {
 			invalidParams.AddNested("ExternalEventsDetail", err.(request.ErrInvalidParams))
 		}
 	}
+	if s.IngestedEventsDetail != nil {
+		if err := s.IngestedEventsDetail.Validate(); err != nil {
+			invalidParams.AddNested("IngestedEventsDetail", err.(request.ErrInvalidParams))
+		}
+	}
 	if s.Tags != nil {
 		for i, v := range s.Tags {
 			if v == nil {
@@ -6537,6 +8762,12 @@ func (s *CreateModelVersionInput) Validate() error {
 // SetExternalEventsDetail sets the ExternalEventsDetail field's value.
 func (s *CreateModelVersionInput) SetExternalEventsDetail(v *ExternalEventsDetail) *CreateModelVersionInput {
 	s.ExternalEventsDetail = v
+	return s
+}
+
+// SetIngestedEventsDetail sets the IngestedEventsDetail field's value.
+func (s *CreateModelVersionInput) SetIngestedEventsDetail(v *IngestedEventsDetail) *CreateModelVersionInput {
+	s.IngestedEventsDetail = v
 	return s
 }
 
@@ -6580,18 +8811,26 @@ type CreateModelVersionOutput struct {
 	ModelType *string `locationName:"modelType" type:"string" enum:"ModelTypeEnum"`
 
 	// The model version number of the model version created.
-	ModelVersionNumber *string `locationName:"modelVersionNumber" min:"1" type:"string"`
+	ModelVersionNumber *string `locationName:"modelVersionNumber" min:"3" type:"string"`
 
 	// The model version status.
 	Status *string `locationName:"status" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateModelVersionOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateModelVersionOutput) GoString() string {
 	return s.String()
 }
@@ -6633,6 +8872,10 @@ type CreateRuleInput struct {
 
 	// The rule expression.
 	//
+	// Expression is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by CreateRuleInput's
+	// String and GoString methods.
+	//
 	// Expression is a required field
 	Expression *string `locationName:"expression" min:"1" type:"string" required:"true" sensitive:"true"`
 
@@ -6655,12 +8898,20 @@ type CreateRuleInput struct {
 	Tags []*Tag `locationName:"tags" type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateRuleInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateRuleInput) GoString() string {
 	return s.String()
 }
@@ -6764,12 +9015,20 @@ type CreateRuleOutput struct {
 	Rule *Rule `locationName:"rule" type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateRuleOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateRuleOutput) GoString() string {
 	return s.String()
 }
@@ -6821,12 +9080,20 @@ type CreateVariableInput struct {
 	VariableType *string `locationName:"variableType" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateVariableInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateVariableInput) GoString() string {
 	return s.String()
 }
@@ -6909,12 +9176,20 @@ type CreateVariableOutput struct {
 	_ struct{} `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateVariableOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateVariableOutput) GoString() string {
 	return s.String()
 }
@@ -6930,12 +9205,20 @@ type DataValidationMetrics struct {
 	FileLevelMessages []*FileValidationMessage `locationName:"fileLevelMessages" type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DataValidationMetrics) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DataValidationMetrics) GoString() string {
 	return s.String()
 }
@@ -6952,6 +9235,148 @@ func (s *DataValidationMetrics) SetFileLevelMessages(v []*FileValidationMessage)
 	return s
 }
 
+type DeleteBatchImportJobInput struct {
+	_ struct{} `type:"structure"`
+
+	// The ID of the batch import job to delete.
+	//
+	// JobId is a required field
+	JobId *string `locationName:"jobId" min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeleteBatchImportJobInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeleteBatchImportJobInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DeleteBatchImportJobInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DeleteBatchImportJobInput"}
+	if s.JobId == nil {
+		invalidParams.Add(request.NewErrParamRequired("JobId"))
+	}
+	if s.JobId != nil && len(*s.JobId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("JobId", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetJobId sets the JobId field's value.
+func (s *DeleteBatchImportJobInput) SetJobId(v string) *DeleteBatchImportJobInput {
+	s.JobId = &v
+	return s
+}
+
+type DeleteBatchImportJobOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeleteBatchImportJobOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeleteBatchImportJobOutput) GoString() string {
+	return s.String()
+}
+
+type DeleteBatchPredictionJobInput struct {
+	_ struct{} `type:"structure"`
+
+	// The ID of the batch prediction job to delete.
+	//
+	// JobId is a required field
+	JobId *string `locationName:"jobId" min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeleteBatchPredictionJobInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeleteBatchPredictionJobInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DeleteBatchPredictionJobInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DeleteBatchPredictionJobInput"}
+	if s.JobId == nil {
+		invalidParams.Add(request.NewErrParamRequired("JobId"))
+	}
+	if s.JobId != nil && len(*s.JobId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("JobId", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetJobId sets the JobId field's value.
+func (s *DeleteBatchPredictionJobInput) SetJobId(v string) *DeleteBatchPredictionJobInput {
+	s.JobId = &v
+	return s
+}
+
+type DeleteBatchPredictionJobOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeleteBatchPredictionJobOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeleteBatchPredictionJobOutput) GoString() string {
+	return s.String()
+}
+
 type DeleteDetectorInput struct {
 	_ struct{} `type:"structure"`
 
@@ -6961,12 +9386,20 @@ type DeleteDetectorInput struct {
 	DetectorId *string `locationName:"detectorId" min:"1" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteDetectorInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteDetectorInput) GoString() string {
 	return s.String()
 }
@@ -6997,12 +9430,20 @@ type DeleteDetectorOutput struct {
 	_ struct{} `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteDetectorOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteDetectorOutput) GoString() string {
 	return s.String()
 }
@@ -7021,12 +9462,20 @@ type DeleteDetectorVersionInput struct {
 	DetectorVersionId *string `locationName:"detectorVersionId" min:"1" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteDetectorVersionInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteDetectorVersionInput) GoString() string {
 	return s.String()
 }
@@ -7069,12 +9518,20 @@ type DeleteDetectorVersionOutput struct {
 	_ struct{} `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteDetectorVersionOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteDetectorVersionOutput) GoString() string {
 	return s.String()
 }
@@ -7088,12 +9545,20 @@ type DeleteEntityTypeInput struct {
 	Name *string `locationName:"name" min:"1" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteEntityTypeInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteEntityTypeInput) GoString() string {
 	return s.String()
 }
@@ -7124,18 +9589,29 @@ type DeleteEntityTypeOutput struct {
 	_ struct{} `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteEntityTypeOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteEntityTypeOutput) GoString() string {
 	return s.String()
 }
 
 type DeleteEventInput struct {
 	_ struct{} `type:"structure"`
+
+	// Specifies whether or not to delete any predictions associated with the event.
+	DeleteAuditHistory *bool `locationName:"deleteAuditHistory" type:"boolean"`
 
 	// The ID of the event to delete.
 	//
@@ -7148,12 +9624,20 @@ type DeleteEventInput struct {
 	EventTypeName *string `locationName:"eventTypeName" min:"1" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteEventInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteEventInput) GoString() string {
 	return s.String()
 }
@@ -7180,6 +9664,12 @@ func (s *DeleteEventInput) Validate() error {
 	return nil
 }
 
+// SetDeleteAuditHistory sets the DeleteAuditHistory field's value.
+func (s *DeleteEventInput) SetDeleteAuditHistory(v bool) *DeleteEventInput {
+	s.DeleteAuditHistory = &v
+	return s
+}
+
 // SetEventId sets the EventId field's value.
 func (s *DeleteEventInput) SetEventId(v string) *DeleteEventInput {
 	s.EventId = &v
@@ -7196,12 +9686,20 @@ type DeleteEventOutput struct {
 	_ struct{} `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteEventOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteEventOutput) GoString() string {
 	return s.String()
 }
@@ -7215,12 +9713,20 @@ type DeleteEventTypeInput struct {
 	Name *string `locationName:"name" min:"1" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteEventTypeInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteEventTypeInput) GoString() string {
 	return s.String()
 }
@@ -7251,14 +9757,111 @@ type DeleteEventTypeOutput struct {
 	_ struct{} `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteEventTypeOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteEventTypeOutput) GoString() string {
 	return s.String()
+}
+
+type DeleteEventsByEventTypeInput struct {
+	_ struct{} `type:"structure"`
+
+	// The name of the event type.
+	//
+	// EventTypeName is a required field
+	EventTypeName *string `locationName:"eventTypeName" min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeleteEventsByEventTypeInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeleteEventsByEventTypeInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DeleteEventsByEventTypeInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DeleteEventsByEventTypeInput"}
+	if s.EventTypeName == nil {
+		invalidParams.Add(request.NewErrParamRequired("EventTypeName"))
+	}
+	if s.EventTypeName != nil && len(*s.EventTypeName) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("EventTypeName", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetEventTypeName sets the EventTypeName field's value.
+func (s *DeleteEventsByEventTypeInput) SetEventTypeName(v string) *DeleteEventsByEventTypeInput {
+	s.EventTypeName = &v
+	return s
+}
+
+type DeleteEventsByEventTypeOutput struct {
+	_ struct{} `type:"structure"`
+
+	// Name of event type for which to delete the events.
+	EventTypeName *string `locationName:"eventTypeName" min:"1" type:"string"`
+
+	// The status of the delete request.
+	EventsDeletionStatus *string `locationName:"eventsDeletionStatus" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeleteEventsByEventTypeOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeleteEventsByEventTypeOutput) GoString() string {
+	return s.String()
+}
+
+// SetEventTypeName sets the EventTypeName field's value.
+func (s *DeleteEventsByEventTypeOutput) SetEventTypeName(v string) *DeleteEventsByEventTypeOutput {
+	s.EventTypeName = &v
+	return s
+}
+
+// SetEventsDeletionStatus sets the EventsDeletionStatus field's value.
+func (s *DeleteEventsByEventTypeOutput) SetEventsDeletionStatus(v string) *DeleteEventsByEventTypeOutput {
+	s.EventsDeletionStatus = &v
+	return s
 }
 
 type DeleteExternalModelInput struct {
@@ -7270,12 +9873,20 @@ type DeleteExternalModelInput struct {
 	ModelEndpoint *string `locationName:"modelEndpoint" min:"1" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteExternalModelInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteExternalModelInput) GoString() string {
 	return s.String()
 }
@@ -7306,12 +9917,20 @@ type DeleteExternalModelOutput struct {
 	_ struct{} `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteExternalModelOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteExternalModelOutput) GoString() string {
 	return s.String()
 }
@@ -7325,12 +9944,20 @@ type DeleteLabelInput struct {
 	Name *string `locationName:"name" min:"1" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteLabelInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteLabelInput) GoString() string {
 	return s.String()
 }
@@ -7361,12 +9988,20 @@ type DeleteLabelOutput struct {
 	_ struct{} `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteLabelOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteLabelOutput) GoString() string {
 	return s.String()
 }
@@ -7385,12 +10020,20 @@ type DeleteModelInput struct {
 	ModelType *string `locationName:"modelType" type:"string" required:"true" enum:"ModelTypeEnum"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteModelInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteModelInput) GoString() string {
 	return s.String()
 }
@@ -7430,12 +10073,20 @@ type DeleteModelOutput struct {
 	_ struct{} `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteModelOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteModelOutput) GoString() string {
 	return s.String()
 }
@@ -7459,12 +10110,20 @@ type DeleteModelVersionInput struct {
 	ModelVersionNumber *string `locationName:"modelVersionNumber" min:"3" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteModelVersionInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteModelVersionInput) GoString() string {
 	return s.String()
 }
@@ -7516,12 +10175,20 @@ type DeleteModelVersionOutput struct {
 	_ struct{} `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteModelVersionOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteModelVersionOutput) GoString() string {
 	return s.String()
 }
@@ -7535,12 +10202,20 @@ type DeleteOutcomeInput struct {
 	Name *string `locationName:"name" min:"1" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteOutcomeInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteOutcomeInput) GoString() string {
 	return s.String()
 }
@@ -7571,12 +10246,20 @@ type DeleteOutcomeOutput struct {
 	_ struct{} `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteOutcomeOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteOutcomeOutput) GoString() string {
 	return s.String()
 }
@@ -7590,12 +10273,20 @@ type DeleteRuleInput struct {
 	Rule *Rule `locationName:"rule" type:"structure" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteRuleInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteRuleInput) GoString() string {
 	return s.String()
 }
@@ -7628,12 +10319,20 @@ type DeleteRuleOutput struct {
 	_ struct{} `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteRuleOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteRuleOutput) GoString() string {
 	return s.String()
 }
@@ -7647,12 +10346,20 @@ type DeleteVariableInput struct {
 	Name *string `locationName:"name" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteVariableInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteVariableInput) GoString() string {
 	return s.String()
 }
@@ -7680,12 +10387,20 @@ type DeleteVariableOutput struct {
 	_ struct{} `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteVariableOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteVariableOutput) GoString() string {
 	return s.String()
 }
@@ -7705,12 +10420,20 @@ type DescribeDetectorInput struct {
 	NextToken *string `locationName:"nextToken" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeDetectorInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeDetectorInput) GoString() string {
 	return s.String()
 }
@@ -7768,12 +10491,20 @@ type DescribeDetectorOutput struct {
 	NextToken *string `locationName:"nextToken" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeDetectorOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeDetectorOutput) GoString() string {
 	return s.String()
 }
@@ -7821,12 +10552,20 @@ type DescribeModelVersionsInput struct {
 	NextToken *string `locationName:"nextToken" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeModelVersionsInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeModelVersionsInput) GoString() string {
 	return s.String()
 }
@@ -7890,12 +10629,20 @@ type DescribeModelVersionsOutput struct {
 	NextToken *string `locationName:"nextToken" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeModelVersionsOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeModelVersionsOutput) GoString() string {
 	return s.String()
 }
@@ -7920,7 +10667,7 @@ type Detector struct {
 	Arn *string `locationName:"arn" min:"1" type:"string"`
 
 	// Timestamp of when the detector was created.
-	CreatedTime *string `locationName:"createdTime" type:"string"`
+	CreatedTime *string `locationName:"createdTime" min:"11" type:"string"`
 
 	// The detector description.
 	Description *string `locationName:"description" min:"1" type:"string"`
@@ -7932,15 +10679,23 @@ type Detector struct {
 	EventTypeName *string `locationName:"eventTypeName" min:"1" type:"string"`
 
 	// Timestamp of when the detector was last updated.
-	LastUpdatedTime *string `locationName:"lastUpdatedTime" type:"string"`
+	LastUpdatedTime *string `locationName:"lastUpdatedTime" min:"11" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s Detector) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s Detector) GoString() string {
 	return s.String()
 }
@@ -7992,18 +10747,26 @@ type DetectorVersionSummary struct {
 	DetectorVersionId *string `locationName:"detectorVersionId" min:"1" type:"string"`
 
 	// Timestamp of when the detector version was last updated.
-	LastUpdatedTime *string `locationName:"lastUpdatedTime" type:"string"`
+	LastUpdatedTime *string `locationName:"lastUpdatedTime" min:"11" type:"string"`
 
 	// The detector version status.
 	Status *string `locationName:"status" type:"string" enum:"DetectorVersionStatus"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DetectorVersionSummary) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DetectorVersionSummary) GoString() string {
 	return s.String()
 }
@@ -8034,7 +10797,7 @@ func (s *DetectorVersionSummary) SetStatus(v string) *DetectorVersionSummary {
 
 // The entity details.
 type Entity struct {
-	_ struct{} `type:"structure"`
+	_ struct{} `type:"structure" sensitive:"true"`
 
 	// The entity ID. If you do not know the entityId, you can pass unknown, which
 	// is areserved string literal.
@@ -8048,12 +10811,20 @@ type Entity struct {
 	EntityType *string `locationName:"entityType" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s Entity) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s Entity) GoString() string {
 	return s.String()
 }
@@ -8097,24 +10868,32 @@ type EntityType struct {
 	Arn *string `locationName:"arn" min:"1" type:"string"`
 
 	// Timestamp of when the entity type was created.
-	CreatedTime *string `locationName:"createdTime" type:"string"`
+	CreatedTime *string `locationName:"createdTime" min:"11" type:"string"`
 
 	// The entity type description.
 	Description *string `locationName:"description" min:"1" type:"string"`
 
 	// Timestamp of when the entity type was last updated.
-	LastUpdatedTime *string `locationName:"lastUpdatedTime" type:"string"`
+	LastUpdatedTime *string `locationName:"lastUpdatedTime" min:"11" type:"string"`
 
 	// The entity type name.
 	Name *string `locationName:"name" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s EntityType) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s EntityType) GoString() string {
 	return s.String()
 }
@@ -8149,15 +10928,105 @@ func (s *EntityType) SetName(v string) *EntityType {
 	return s
 }
 
+// The event details.
+type Event struct {
+	_ struct{} `type:"structure"`
+
+	// The label associated with the event.
+	CurrentLabel *string `locationName:"currentLabel" type:"string"`
+
+	// The event entities.
+	Entities []*Entity `locationName:"entities" type:"list"`
+
+	// The event ID.
+	EventId *string `locationName:"eventId" type:"string"`
+
+	// The timestamp that defines when the event under evaluation occurred. The
+	// timestamp must be specified using ISO 8601 standard in UTC.
+	EventTimestamp *string `locationName:"eventTimestamp" type:"string"`
+
+	// The event type.
+	EventTypeName *string `locationName:"eventTypeName" type:"string"`
+
+	// Names of the event type's variables you defined in Amazon Fraud Detector
+	// to represent data elements and their corresponding values for the event you
+	// are sending for evaluation.
+	EventVariables map[string]*string `locationName:"eventVariables" type:"map"`
+
+	// The timestamp associated with the label to update. The timestamp must be
+	// specified using ISO 8601 standard in UTC.
+	LabelTimestamp *string `locationName:"labelTimestamp" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s Event) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s Event) GoString() string {
+	return s.String()
+}
+
+// SetCurrentLabel sets the CurrentLabel field's value.
+func (s *Event) SetCurrentLabel(v string) *Event {
+	s.CurrentLabel = &v
+	return s
+}
+
+// SetEntities sets the Entities field's value.
+func (s *Event) SetEntities(v []*Entity) *Event {
+	s.Entities = v
+	return s
+}
+
+// SetEventId sets the EventId field's value.
+func (s *Event) SetEventId(v string) *Event {
+	s.EventId = &v
+	return s
+}
+
+// SetEventTimestamp sets the EventTimestamp field's value.
+func (s *Event) SetEventTimestamp(v string) *Event {
+	s.EventTimestamp = &v
+	return s
+}
+
+// SetEventTypeName sets the EventTypeName field's value.
+func (s *Event) SetEventTypeName(v string) *Event {
+	s.EventTypeName = &v
+	return s
+}
+
+// SetEventVariables sets the EventVariables field's value.
+func (s *Event) SetEventVariables(v map[string]*string) *Event {
+	s.EventVariables = v
+	return s
+}
+
+// SetLabelTimestamp sets the LabelTimestamp field's value.
+func (s *Event) SetLabelTimestamp(v string) *Event {
+	s.LabelTimestamp = &v
+	return s
+}
+
 // The event type details.
 type EventType struct {
-	_ struct{} `type:"structure"`
+	_ struct{} `type:"structure" sensitive:"true"`
 
 	// The entity type ARN.
 	Arn *string `locationName:"arn" min:"1" type:"string"`
 
 	// Timestamp of when the event type was created.
-	CreatedTime *string `locationName:"createdTime" type:"string"`
+	CreatedTime *string `locationName:"createdTime" min:"11" type:"string"`
 
 	// The event type description.
 	Description *string `locationName:"description" min:"1" type:"string"`
@@ -8165,25 +11034,42 @@ type EventType struct {
 	// The event type entity types.
 	EntityTypes []*string `locationName:"entityTypes" min:"1" type:"list"`
 
+	// If Enabled, Amazon Fraud Detector stores event data when you generate a prediction
+	// and uses that data to update calculated variables in near real-time. Amazon
+	// Fraud Detector uses this data, known as INGESTED_EVENTS, to train your model
+	// and improve fraud predictions.
+	EventIngestion *string `locationName:"eventIngestion" type:"string" enum:"EventIngestion"`
+
 	// The event type event variables.
 	EventVariables []*string `locationName:"eventVariables" type:"list"`
+
+	// Data about the stored events.
+	IngestedEventStatistics *IngestedEventStatistics `locationName:"ingestedEventStatistics" type:"structure"`
 
 	// The event type labels.
 	Labels []*string `locationName:"labels" type:"list"`
 
 	// Timestamp of when the event type was last updated.
-	LastUpdatedTime *string `locationName:"lastUpdatedTime" type:"string"`
+	LastUpdatedTime *string `locationName:"lastUpdatedTime" min:"11" type:"string"`
 
 	// The event type name.
 	Name *string `locationName:"name" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s EventType) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s EventType) GoString() string {
 	return s.String()
 }
@@ -8212,9 +11098,21 @@ func (s *EventType) SetEntityTypes(v []*string) *EventType {
 	return s
 }
 
+// SetEventIngestion sets the EventIngestion field's value.
+func (s *EventType) SetEventIngestion(v string) *EventType {
+	s.EventIngestion = &v
+	return s
+}
+
 // SetEventVariables sets the EventVariables field's value.
 func (s *EventType) SetEventVariables(v []*string) *EventType {
 	s.EventVariables = v
+	return s
+}
+
+// SetIngestedEventStatistics sets the IngestedEventStatistics field's value.
+func (s *EventType) SetIngestedEventStatistics(v *IngestedEventStatistics) *EventType {
+	s.IngestedEventStatistics = v
 	return s
 }
 
@@ -8252,12 +11150,20 @@ type ExternalEventsDetail struct {
 	DataLocation *string `locationName:"dataLocation" min:"1" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ExternalEventsDetail) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ExternalEventsDetail) GoString() string {
 	return s.String()
 }
@@ -8304,7 +11210,7 @@ type ExternalModel struct {
 	Arn *string `locationName:"arn" min:"1" type:"string"`
 
 	// Timestamp of when the model was last created.
-	CreatedTime *string `locationName:"createdTime" type:"string"`
+	CreatedTime *string `locationName:"createdTime" min:"11" type:"string"`
 
 	// The input configuration.
 	InputConfiguration *ModelInputConfiguration `locationName:"inputConfiguration" type:"structure"`
@@ -8313,7 +11219,7 @@ type ExternalModel struct {
 	InvokeModelEndpointRoleArn *string `locationName:"invokeModelEndpointRoleArn" type:"string"`
 
 	// Timestamp of when the model was last updated.
-	LastUpdatedTime *string `locationName:"lastUpdatedTime" type:"string"`
+	LastUpdatedTime *string `locationName:"lastUpdatedTime" min:"11" type:"string"`
 
 	// The Amazon SageMaker model endpoints.
 	ModelEndpoint *string `locationName:"modelEndpoint" type:"string"`
@@ -8328,12 +11234,20 @@ type ExternalModel struct {
 	OutputConfiguration *ModelOutputConfiguration `locationName:"outputConfiguration" type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ExternalModel) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ExternalModel) GoString() string {
 	return s.String()
 }
@@ -8392,6 +11306,88 @@ func (s *ExternalModel) SetOutputConfiguration(v *ModelOutputConfiguration) *Ext
 	return s
 }
 
+// The fraud prediction scores from Amazon SageMaker model.
+type ExternalModelOutputs struct {
+	_ struct{} `type:"structure"`
+
+	// The Amazon SageMaker model.
+	ExternalModel *ExternalModelSummary `locationName:"externalModel" type:"structure"`
+
+	// The fraud prediction scores from Amazon SageMaker model.
+	Outputs map[string]*string `locationName:"outputs" type:"map"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ExternalModelOutputs) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ExternalModelOutputs) GoString() string {
+	return s.String()
+}
+
+// SetExternalModel sets the ExternalModel field's value.
+func (s *ExternalModelOutputs) SetExternalModel(v *ExternalModelSummary) *ExternalModelOutputs {
+	s.ExternalModel = v
+	return s
+}
+
+// SetOutputs sets the Outputs field's value.
+func (s *ExternalModelOutputs) SetOutputs(v map[string]*string) *ExternalModelOutputs {
+	s.Outputs = v
+	return s
+}
+
+// The Amazon SageMaker model.
+type ExternalModelSummary struct {
+	_ struct{} `type:"structure"`
+
+	// The endpoint of the Amazon SageMaker model.
+	ModelEndpoint *string `locationName:"modelEndpoint" type:"string"`
+
+	// The source of the model.
+	ModelSource *string `locationName:"modelSource" type:"string" enum:"ModelSource"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ExternalModelSummary) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ExternalModelSummary) GoString() string {
+	return s.String()
+}
+
+// SetModelEndpoint sets the ModelEndpoint field's value.
+func (s *ExternalModelSummary) SetModelEndpoint(v string) *ExternalModelSummary {
+	s.ModelEndpoint = &v
+	return s
+}
+
+// SetModelSource sets the ModelSource field's value.
+func (s *ExternalModelSummary) SetModelSource(v string) *ExternalModelSummary {
+	s.ModelSource = &v
+	return s
+}
+
 // The message details.
 type FieldValidationMessage struct {
 	_ struct{} `type:"structure"`
@@ -8412,12 +11408,20 @@ type FieldValidationMessage struct {
 	Type *string `locationName:"type" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s FieldValidationMessage) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s FieldValidationMessage) GoString() string {
 	return s.String()
 }
@@ -8466,12 +11470,20 @@ type FileValidationMessage struct {
 	Type *string `locationName:"type" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s FileValidationMessage) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s FileValidationMessage) GoString() string {
 	return s.String()
 }
@@ -8494,6 +11506,305 @@ func (s *FileValidationMessage) SetType(v string) *FileValidationMessage {
 	return s
 }
 
+type GetBatchImportJobsInput struct {
+	_ struct{} `type:"structure"`
+
+	// The ID of the batch import job to get.
+	JobId *string `locationName:"jobId" min:"1" type:"string"`
+
+	// The maximum number of objects to return for request.
+	MaxResults *int64 `locationName:"maxResults" min:"1" type:"integer"`
+
+	// The next token from the previous request.
+	NextToken *string `locationName:"nextToken" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetBatchImportJobsInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetBatchImportJobsInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *GetBatchImportJobsInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "GetBatchImportJobsInput"}
+	if s.JobId != nil && len(*s.JobId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("JobId", 1))
+	}
+	if s.MaxResults != nil && *s.MaxResults < 1 {
+		invalidParams.Add(request.NewErrParamMinValue("MaxResults", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetJobId sets the JobId field's value.
+func (s *GetBatchImportJobsInput) SetJobId(v string) *GetBatchImportJobsInput {
+	s.JobId = &v
+	return s
+}
+
+// SetMaxResults sets the MaxResults field's value.
+func (s *GetBatchImportJobsInput) SetMaxResults(v int64) *GetBatchImportJobsInput {
+	s.MaxResults = &v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *GetBatchImportJobsInput) SetNextToken(v string) *GetBatchImportJobsInput {
+	s.NextToken = &v
+	return s
+}
+
+type GetBatchImportJobsOutput struct {
+	_ struct{} `type:"structure"`
+
+	// An array containing the details of each batch import job.
+	BatchImports []*BatchImport `locationName:"batchImports" type:"list"`
+
+	// The next token for the subsequent resquest.
+	NextToken *string `locationName:"nextToken" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetBatchImportJobsOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetBatchImportJobsOutput) GoString() string {
+	return s.String()
+}
+
+// SetBatchImports sets the BatchImports field's value.
+func (s *GetBatchImportJobsOutput) SetBatchImports(v []*BatchImport) *GetBatchImportJobsOutput {
+	s.BatchImports = v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *GetBatchImportJobsOutput) SetNextToken(v string) *GetBatchImportJobsOutput {
+	s.NextToken = &v
+	return s
+}
+
+type GetBatchPredictionJobsInput struct {
+	_ struct{} `type:"structure"`
+
+	// The batch prediction job for which to get the details.
+	JobId *string `locationName:"jobId" min:"1" type:"string"`
+
+	// The maximum number of objects to return for the request.
+	MaxResults *int64 `locationName:"maxResults" min:"1" type:"integer"`
+
+	// The next token from the previous request.
+	NextToken *string `locationName:"nextToken" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetBatchPredictionJobsInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetBatchPredictionJobsInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *GetBatchPredictionJobsInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "GetBatchPredictionJobsInput"}
+	if s.JobId != nil && len(*s.JobId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("JobId", 1))
+	}
+	if s.MaxResults != nil && *s.MaxResults < 1 {
+		invalidParams.Add(request.NewErrParamMinValue("MaxResults", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetJobId sets the JobId field's value.
+func (s *GetBatchPredictionJobsInput) SetJobId(v string) *GetBatchPredictionJobsInput {
+	s.JobId = &v
+	return s
+}
+
+// SetMaxResults sets the MaxResults field's value.
+func (s *GetBatchPredictionJobsInput) SetMaxResults(v int64) *GetBatchPredictionJobsInput {
+	s.MaxResults = &v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *GetBatchPredictionJobsInput) SetNextToken(v string) *GetBatchPredictionJobsInput {
+	s.NextToken = &v
+	return s
+}
+
+type GetBatchPredictionJobsOutput struct {
+	_ struct{} `type:"structure"`
+
+	// An array containing the details of each batch prediction job.
+	BatchPredictions []*BatchPrediction `locationName:"batchPredictions" type:"list"`
+
+	// The next token for the subsequent request.
+	NextToken *string `locationName:"nextToken" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetBatchPredictionJobsOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetBatchPredictionJobsOutput) GoString() string {
+	return s.String()
+}
+
+// SetBatchPredictions sets the BatchPredictions field's value.
+func (s *GetBatchPredictionJobsOutput) SetBatchPredictions(v []*BatchPrediction) *GetBatchPredictionJobsOutput {
+	s.BatchPredictions = v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *GetBatchPredictionJobsOutput) SetNextToken(v string) *GetBatchPredictionJobsOutput {
+	s.NextToken = &v
+	return s
+}
+
+type GetDeleteEventsByEventTypeStatusInput struct {
+	_ struct{} `type:"structure"`
+
+	// Name of event type for which to get the deletion status.
+	//
+	// EventTypeName is a required field
+	EventTypeName *string `locationName:"eventTypeName" min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetDeleteEventsByEventTypeStatusInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetDeleteEventsByEventTypeStatusInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *GetDeleteEventsByEventTypeStatusInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "GetDeleteEventsByEventTypeStatusInput"}
+	if s.EventTypeName == nil {
+		invalidParams.Add(request.NewErrParamRequired("EventTypeName"))
+	}
+	if s.EventTypeName != nil && len(*s.EventTypeName) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("EventTypeName", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetEventTypeName sets the EventTypeName field's value.
+func (s *GetDeleteEventsByEventTypeStatusInput) SetEventTypeName(v string) *GetDeleteEventsByEventTypeStatusInput {
+	s.EventTypeName = &v
+	return s
+}
+
+type GetDeleteEventsByEventTypeStatusOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The event type name.
+	EventTypeName *string `locationName:"eventTypeName" min:"1" type:"string"`
+
+	// The deletion status.
+	EventsDeletionStatus *string `locationName:"eventsDeletionStatus" type:"string" enum:"AsyncJobStatus"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetDeleteEventsByEventTypeStatusOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetDeleteEventsByEventTypeStatusOutput) GoString() string {
+	return s.String()
+}
+
+// SetEventTypeName sets the EventTypeName field's value.
+func (s *GetDeleteEventsByEventTypeStatusOutput) SetEventTypeName(v string) *GetDeleteEventsByEventTypeStatusOutput {
+	s.EventTypeName = &v
+	return s
+}
+
+// SetEventsDeletionStatus sets the EventsDeletionStatus field's value.
+func (s *GetDeleteEventsByEventTypeStatusOutput) SetEventsDeletionStatus(v string) *GetDeleteEventsByEventTypeStatusOutput {
+	s.EventsDeletionStatus = &v
+	return s
+}
+
 type GetDetectorVersionInput struct {
 	_ struct{} `type:"structure"`
 
@@ -8508,12 +11819,20 @@ type GetDetectorVersionInput struct {
 	DetectorVersionId *string `locationName:"detectorVersionId" min:"1" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetDetectorVersionInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetDetectorVersionInput) GoString() string {
 	return s.String()
 }
@@ -8559,7 +11878,7 @@ type GetDetectorVersionOutput struct {
 	Arn *string `locationName:"arn" min:"1" type:"string"`
 
 	// The timestamp when the detector version was created.
-	CreatedTime *string `locationName:"createdTime" type:"string"`
+	CreatedTime *string `locationName:"createdTime" min:"11" type:"string"`
 
 	// The detector version description.
 	Description *string `locationName:"description" min:"1" type:"string"`
@@ -8574,7 +11893,7 @@ type GetDetectorVersionOutput struct {
 	ExternalModelEndpoints []*string `locationName:"externalModelEndpoints" type:"list"`
 
 	// The timestamp when the detector version was last updated.
-	LastUpdatedTime *string `locationName:"lastUpdatedTime" type:"string"`
+	LastUpdatedTime *string `locationName:"lastUpdatedTime" min:"11" type:"string"`
 
 	// The model versions included in the detector version.
 	ModelVersions []*ModelVersion `locationName:"modelVersions" type:"list"`
@@ -8597,12 +11916,20 @@ type GetDetectorVersionOutput struct {
 	Status *string `locationName:"status" type:"string" enum:"DetectorVersionStatus"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetDetectorVersionOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetDetectorVersionOutput) GoString() string {
 	return s.String()
 }
@@ -8686,12 +12013,20 @@ type GetDetectorsInput struct {
 	NextToken *string `locationName:"nextToken" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetDetectorsInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetDetectorsInput) GoString() string {
 	return s.String()
 }
@@ -8740,12 +12075,20 @@ type GetDetectorsOutput struct {
 	NextToken *string `locationName:"nextToken" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetDetectorsOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetDetectorsOutput) GoString() string {
 	return s.String()
 }
@@ -8775,12 +12118,20 @@ type GetEntityTypesInput struct {
 	NextToken *string `locationName:"nextToken" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetEntityTypesInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetEntityTypesInput) GoString() string {
 	return s.String()
 }
@@ -8829,12 +12180,20 @@ type GetEntityTypesOutput struct {
 	NextToken *string `locationName:"nextToken" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetEntityTypesOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetEntityTypesOutput) GoString() string {
 	return s.String()
 }
@@ -8848,6 +12207,97 @@ func (s *GetEntityTypesOutput) SetEntityTypes(v []*EntityType) *GetEntityTypesOu
 // SetNextToken sets the NextToken field's value.
 func (s *GetEntityTypesOutput) SetNextToken(v string) *GetEntityTypesOutput {
 	s.NextToken = &v
+	return s
+}
+
+type GetEventInput struct {
+	_ struct{} `type:"structure"`
+
+	// The ID of the event to retrieve.
+	//
+	// EventId is a required field
+	EventId *string `locationName:"eventId" type:"string" required:"true"`
+
+	// The event type of the event to retrieve.
+	//
+	// EventTypeName is a required field
+	EventTypeName *string `locationName:"eventTypeName" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetEventInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetEventInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *GetEventInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "GetEventInput"}
+	if s.EventId == nil {
+		invalidParams.Add(request.NewErrParamRequired("EventId"))
+	}
+	if s.EventTypeName == nil {
+		invalidParams.Add(request.NewErrParamRequired("EventTypeName"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetEventId sets the EventId field's value.
+func (s *GetEventInput) SetEventId(v string) *GetEventInput {
+	s.EventId = &v
+	return s
+}
+
+// SetEventTypeName sets the EventTypeName field's value.
+func (s *GetEventInput) SetEventTypeName(v string) *GetEventInput {
+	s.EventTypeName = &v
+	return s
+}
+
+type GetEventOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The details of the event.
+	Event *Event `locationName:"event" type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetEventOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetEventOutput) GoString() string {
+	return s.String()
+}
+
+// SetEvent sets the Event field's value.
+func (s *GetEventOutput) SetEvent(v *Event) *GetEventOutput {
+	s.Event = v
 	return s
 }
 
@@ -8874,10 +12324,11 @@ type GetEventPredictionInput struct {
 	// EventId is a required field
 	EventId *string `locationName:"eventId" type:"string" required:"true"`
 
-	// Timestamp that defines when the event under evaluation occurred.
+	// Timestamp that defines when the event under evaluation occurred. The timestamp
+	// must be specified using ISO 8601 standard in UTC.
 	//
 	// EventTimestamp is a required field
-	EventTimestamp *string `locationName:"eventTimestamp" type:"string" required:"true"`
+	EventTimestamp *string `locationName:"eventTimestamp" min:"10" type:"string" required:"true"`
 
 	// The event type associated with the detector specified for the prediction.
 	//
@@ -8888,19 +12339,50 @@ type GetEventPredictionInput struct {
 	// to represent data elements and their corresponding values for the event you
 	// are sending for evaluation.
 	//
+	// You must provide at least one eventVariable
+	//
+	// To ensure most accurate fraud prediction and to simplify your data preparation,
+	// Amazon Fraud Detector will replace all missing variables or values as follows:
+	//
+	// For Amazon Fraud Detector trained models:
+	//
+	// If a null value is provided explicitly for a variable or if a variable is
+	// missing, model will replace the null value or the missing variable (no variable
+	// name in the eventVariables map) with calculated default mean/medians for
+	// numeric variables and with special values for categorical variables.
+	//
+	// For imported SageMaker models:
+	//
+	// If a null value is provided explicitly for a variable, the model and rules
+	// will use “null” as the value. If a variable is not provided (no variable
+	// name in the eventVariables map), model and rules will use the default value
+	// that is provided for the variable.
+	//
 	// EventVariables is a required field
 	EventVariables map[string]*string `locationName:"eventVariables" min:"1" type:"map" required:"true"`
 
 	// The Amazon SageMaker model endpoint input data blobs.
+	//
+	// ExternalModelEndpointDataBlobs is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by GetEventPredictionInput's
+	// String and GoString methods.
 	ExternalModelEndpointDataBlobs map[string]*ModelEndpointDataBlob `locationName:"externalModelEndpointDataBlobs" type:"map" sensitive:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetEventPredictionInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetEventPredictionInput) GoString() string {
 	return s.String()
 }
@@ -8922,6 +12404,9 @@ func (s *GetEventPredictionInput) Validate() error {
 	}
 	if s.EventTimestamp == nil {
 		invalidParams.Add(request.NewErrParamRequired("EventTimestamp"))
+	}
+	if s.EventTimestamp != nil && len(*s.EventTimestamp) < 10 {
+		invalidParams.Add(request.NewErrParamMinLen("EventTimestamp", 10))
 	}
 	if s.EventTypeName == nil {
 		invalidParams.Add(request.NewErrParamRequired("EventTypeName"))
@@ -9010,6 +12495,9 @@ func (s *GetEventPredictionInput) SetExternalModelEndpointDataBlobs(v map[string
 type GetEventPredictionOutput struct {
 	_ struct{} `type:"structure"`
 
+	// The model scores for Amazon SageMaker models.
+	ExternalModelOutputs []*ExternalModelOutputs `locationName:"externalModelOutputs" type:"list"`
+
 	// The model scores. Amazon Fraud Detector generates model scores between 0
 	// and 1000, where 0 is low fraud risk and 1000 is high fraud risk. Model scores
 	// are directly related to the false positive rate (FPR). For example, a score
@@ -9017,18 +12505,32 @@ type GetEventPredictionOutput struct {
 	// of 900 corresponds to an estimated 2% false positive rate.
 	ModelScores []*ModelScores `locationName:"modelScores" type:"list"`
 
-	// The results.
+	// The results from the rules.
 	RuleResults []*RuleResult `locationName:"ruleResults" type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetEventPredictionOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetEventPredictionOutput) GoString() string {
 	return s.String()
+}
+
+// SetExternalModelOutputs sets the ExternalModelOutputs field's value.
+func (s *GetEventPredictionOutput) SetExternalModelOutputs(v []*ExternalModelOutputs) *GetEventPredictionOutput {
+	s.ExternalModelOutputs = v
+	return s
 }
 
 // SetModelScores sets the ModelScores field's value.
@@ -9056,12 +12558,20 @@ type GetEventTypesInput struct {
 	NextToken *string `locationName:"nextToken" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetEventTypesInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetEventTypesInput) GoString() string {
 	return s.String()
 }
@@ -9110,12 +12620,20 @@ type GetEventTypesOutput struct {
 	NextToken *string `locationName:"nextToken" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetEventTypesOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetEventTypesOutput) GoString() string {
 	return s.String()
 }
@@ -9145,12 +12663,20 @@ type GetExternalModelsInput struct {
 	NextToken *string `locationName:"nextToken" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetExternalModelsInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetExternalModelsInput) GoString() string {
 	return s.String()
 }
@@ -9196,12 +12722,20 @@ type GetExternalModelsOutput struct {
 	NextToken *string `locationName:"nextToken" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetExternalModelsOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetExternalModelsOutput) GoString() string {
 	return s.String()
 }
@@ -9222,12 +12756,20 @@ type GetKMSEncryptionKeyInput struct {
 	_ struct{} `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetKMSEncryptionKeyInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetKMSEncryptionKeyInput) GoString() string {
 	return s.String()
 }
@@ -9239,12 +12781,20 @@ type GetKMSEncryptionKeyOutput struct {
 	KmsKey *KMSKey `locationName:"kmsKey" type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetKMSEncryptionKeyOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetKMSEncryptionKeyOutput) GoString() string {
 	return s.String()
 }
@@ -9268,12 +12818,20 @@ type GetLabelsInput struct {
 	NextToken *string `locationName:"nextToken" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetLabelsInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetLabelsInput) GoString() string {
 	return s.String()
 }
@@ -9322,12 +12880,20 @@ type GetLabelsOutput struct {
 	NextToken *string `locationName:"nextToken" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetLabelsOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetLabelsOutput) GoString() string {
 	return s.String()
 }
@@ -9363,12 +12929,20 @@ type GetModelVersionInput struct {
 	ModelVersionNumber *string `locationName:"modelVersionNumber" min:"3" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetModelVersionInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetModelVersionInput) GoString() string {
 	return s.String()
 }
@@ -9422,8 +12996,13 @@ type GetModelVersionOutput struct {
 	// The model version ARN.
 	Arn *string `locationName:"arn" min:"1" type:"string"`
 
-	// The event details.
+	// The details of the external events data used for training the model version.
+	// This will be populated if the trainingDataSource is EXTERNAL_EVENTS
 	ExternalEventsDetail *ExternalEventsDetail `locationName:"externalEventsDetail" type:"structure"`
+
+	// The details of the ingested events data used for training the model version.
+	// This will be populated if the trainingDataSource is INGESTED_EVENTS.
+	IngestedEventsDetail *IngestedEventsDetail `locationName:"ingestedEventsDetail" type:"structure"`
 
 	// The model ID.
 	ModelId *string `locationName:"modelId" min:"1" type:"string"`
@@ -9464,12 +13043,20 @@ type GetModelVersionOutput struct {
 	TrainingDataSource *string `locationName:"trainingDataSource" type:"string" enum:"TrainingDataSourceEnum"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetModelVersionOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetModelVersionOutput) GoString() string {
 	return s.String()
 }
@@ -9483,6 +13070,12 @@ func (s *GetModelVersionOutput) SetArn(v string) *GetModelVersionOutput {
 // SetExternalEventsDetail sets the ExternalEventsDetail field's value.
 func (s *GetModelVersionOutput) SetExternalEventsDetail(v *ExternalEventsDetail) *GetModelVersionOutput {
 	s.ExternalEventsDetail = v
+	return s
+}
+
+// SetIngestedEventsDetail sets the IngestedEventsDetail field's value.
+func (s *GetModelVersionOutput) SetIngestedEventsDetail(v *IngestedEventsDetail) *GetModelVersionOutput {
+	s.IngestedEventsDetail = v
 	return s
 }
 
@@ -9538,12 +13131,20 @@ type GetModelsInput struct {
 	NextToken *string `locationName:"nextToken" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetModelsInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetModelsInput) GoString() string {
 	return s.String()
 }
@@ -9598,12 +13199,20 @@ type GetModelsOutput struct {
 	NextToken *string `locationName:"nextToken" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetModelsOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetModelsOutput) GoString() string {
 	return s.String()
 }
@@ -9633,12 +13242,20 @@ type GetOutcomesInput struct {
 	NextToken *string `locationName:"nextToken" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetOutcomesInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetOutcomesInput) GoString() string {
 	return s.String()
 }
@@ -9687,12 +13304,20 @@ type GetOutcomesOutput struct {
 	Outcomes []*Outcome `locationName:"outcomes" type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetOutcomesOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetOutcomesOutput) GoString() string {
 	return s.String()
 }
@@ -9730,12 +13355,20 @@ type GetRulesInput struct {
 	RuleVersion *string `locationName:"ruleVersion" min:"1" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetRulesInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetRulesInput) GoString() string {
 	return s.String()
 }
@@ -9805,12 +13438,20 @@ type GetRulesOutput struct {
 	RuleDetails []*RuleDetail `locationName:"ruleDetails" type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetRulesOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetRulesOutput) GoString() string {
 	return s.String()
 }
@@ -9840,12 +13481,20 @@ type GetVariablesInput struct {
 	NextToken *string `locationName:"nextToken" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetVariablesInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetVariablesInput) GoString() string {
 	return s.String()
 }
@@ -9891,12 +13540,20 @@ type GetVariablesOutput struct {
 	Variables []*Variable `locationName:"variables" type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetVariablesOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetVariablesOutput) GoString() string {
 	return s.String()
 }
@@ -9913,6 +13570,193 @@ func (s *GetVariablesOutput) SetVariables(v []*Variable) *GetVariablesOutput {
 	return s
 }
 
+// Data about the stored events.
+type IngestedEventStatistics struct {
+	_ struct{} `type:"structure"`
+
+	// The total size of the stored events.
+	EventDataSizeInBytes *int64 `locationName:"eventDataSizeInBytes" type:"long"`
+
+	// Timestamp of when the stored event was last updated.
+	LastUpdatedTime *string `locationName:"lastUpdatedTime" min:"11" type:"string"`
+
+	// The oldest stored event.
+	LeastRecentEvent *string `locationName:"leastRecentEvent" min:"11" type:"string"`
+
+	// The newest stored event.
+	MostRecentEvent *string `locationName:"mostRecentEvent" min:"11" type:"string"`
+
+	// The number of stored events.
+	NumberOfEvents *int64 `locationName:"numberOfEvents" type:"long"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s IngestedEventStatistics) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s IngestedEventStatistics) GoString() string {
+	return s.String()
+}
+
+// SetEventDataSizeInBytes sets the EventDataSizeInBytes field's value.
+func (s *IngestedEventStatistics) SetEventDataSizeInBytes(v int64) *IngestedEventStatistics {
+	s.EventDataSizeInBytes = &v
+	return s
+}
+
+// SetLastUpdatedTime sets the LastUpdatedTime field's value.
+func (s *IngestedEventStatistics) SetLastUpdatedTime(v string) *IngestedEventStatistics {
+	s.LastUpdatedTime = &v
+	return s
+}
+
+// SetLeastRecentEvent sets the LeastRecentEvent field's value.
+func (s *IngestedEventStatistics) SetLeastRecentEvent(v string) *IngestedEventStatistics {
+	s.LeastRecentEvent = &v
+	return s
+}
+
+// SetMostRecentEvent sets the MostRecentEvent field's value.
+func (s *IngestedEventStatistics) SetMostRecentEvent(v string) *IngestedEventStatistics {
+	s.MostRecentEvent = &v
+	return s
+}
+
+// SetNumberOfEvents sets the NumberOfEvents field's value.
+func (s *IngestedEventStatistics) SetNumberOfEvents(v int64) *IngestedEventStatistics {
+	s.NumberOfEvents = &v
+	return s
+}
+
+// The details of the ingested event.
+type IngestedEventsDetail struct {
+	_ struct{} `type:"structure"`
+
+	// The start and stop time of the ingested events.
+	//
+	// IngestedEventsTimeWindow is a required field
+	IngestedEventsTimeWindow *IngestedEventsTimeWindow `locationName:"ingestedEventsTimeWindow" type:"structure" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s IngestedEventsDetail) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s IngestedEventsDetail) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *IngestedEventsDetail) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "IngestedEventsDetail"}
+	if s.IngestedEventsTimeWindow == nil {
+		invalidParams.Add(request.NewErrParamRequired("IngestedEventsTimeWindow"))
+	}
+	if s.IngestedEventsTimeWindow != nil {
+		if err := s.IngestedEventsTimeWindow.Validate(); err != nil {
+			invalidParams.AddNested("IngestedEventsTimeWindow", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetIngestedEventsTimeWindow sets the IngestedEventsTimeWindow field's value.
+func (s *IngestedEventsDetail) SetIngestedEventsTimeWindow(v *IngestedEventsTimeWindow) *IngestedEventsDetail {
+	s.IngestedEventsTimeWindow = v
+	return s
+}
+
+// The start and stop time of the ingested events.
+type IngestedEventsTimeWindow struct {
+	_ struct{} `type:"structure"`
+
+	// Timestamp of the final ingested event.
+	//
+	// EndTime is a required field
+	EndTime *string `locationName:"endTime" min:"11" type:"string" required:"true"`
+
+	// Timestamp of the first ingensted event.
+	//
+	// StartTime is a required field
+	StartTime *string `locationName:"startTime" min:"11" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s IngestedEventsTimeWindow) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s IngestedEventsTimeWindow) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *IngestedEventsTimeWindow) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "IngestedEventsTimeWindow"}
+	if s.EndTime == nil {
+		invalidParams.Add(request.NewErrParamRequired("EndTime"))
+	}
+	if s.EndTime != nil && len(*s.EndTime) < 11 {
+		invalidParams.Add(request.NewErrParamMinLen("EndTime", 11))
+	}
+	if s.StartTime == nil {
+		invalidParams.Add(request.NewErrParamRequired("StartTime"))
+	}
+	if s.StartTime != nil && len(*s.StartTime) < 11 {
+		invalidParams.Add(request.NewErrParamMinLen("StartTime", 11))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetEndTime sets the EndTime field's value.
+func (s *IngestedEventsTimeWindow) SetEndTime(v string) *IngestedEventsTimeWindow {
+	s.EndTime = &v
+	return s
+}
+
+// SetStartTime sets the StartTime field's value.
+func (s *IngestedEventsTimeWindow) SetStartTime(v string) *IngestedEventsTimeWindow {
+	s.StartTime = &v
+	return s
+}
+
 // An exception indicating an internal server error.
 type InternalServerException struct {
 	_            struct{}                  `type:"structure"`
@@ -9921,12 +13765,20 @@ type InternalServerException struct {
 	Message_ *string `locationName:"message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s InternalServerException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s InternalServerException) GoString() string {
 	return s.String()
 }
@@ -9977,12 +13829,20 @@ type KMSKey struct {
 	KmsEncryptionKeyArn *string `locationName:"kmsEncryptionKeyArn" min:"7" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s KMSKey) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s KMSKey) GoString() string {
 	return s.String()
 }
@@ -10001,24 +13861,32 @@ type Label struct {
 	Arn *string `locationName:"arn" min:"1" type:"string"`
 
 	// Timestamp of when the event type was created.
-	CreatedTime *string `locationName:"createdTime" type:"string"`
+	CreatedTime *string `locationName:"createdTime" min:"11" type:"string"`
 
 	// The label description.
 	Description *string `locationName:"description" min:"1" type:"string"`
 
 	// Timestamp of when the label was last updated.
-	LastUpdatedTime *string `locationName:"lastUpdatedTime" type:"string"`
+	LastUpdatedTime *string `locationName:"lastUpdatedTime" min:"11" type:"string"`
 
 	// The label name.
 	Name *string `locationName:"name" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s Label) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s Label) GoString() string {
 	return s.String()
 }
@@ -10067,14 +13935,25 @@ type LabelSchema struct {
 	//
 	// LabelMapper is a required field
 	LabelMapper map[string][]*string `locationName:"labelMapper" type:"map" required:"true"`
+
+	// The action to take for unlabeled events.
+	UnlabeledEventsTreatment *string `locationName:"unlabeledEventsTreatment" type:"string" enum:"UnlabeledEventsTreatment"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s LabelSchema) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s LabelSchema) GoString() string {
 	return s.String()
 }
@@ -10098,6 +13977,12 @@ func (s *LabelSchema) SetLabelMapper(v map[string][]*string) *LabelSchema {
 	return s
 }
 
+// SetUnlabeledEventsTreatment sets the UnlabeledEventsTreatment field's value.
+func (s *LabelSchema) SetUnlabeledEventsTreatment(v string) *LabelSchema {
+	s.UnlabeledEventsTreatment = &v
+	return s
+}
+
 type ListTagsForResourceInput struct {
 	_ struct{} `type:"structure"`
 
@@ -10113,12 +13998,20 @@ type ListTagsForResourceInput struct {
 	ResourceARN *string `locationName:"resourceARN" min:"1" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListTagsForResourceInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListTagsForResourceInput) GoString() string {
 	return s.String()
 }
@@ -10170,12 +14063,20 @@ type ListTagsForResourceOutput struct {
 	Tags []*Tag `locationName:"tags" type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListTagsForResourceOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListTagsForResourceOutput) GoString() string {
 	return s.String()
 }
@@ -10189,6 +14090,63 @@ func (s *ListTagsForResourceOutput) SetNextToken(v string) *ListTagsForResourceO
 // SetTags sets the Tags field's value.
 func (s *ListTagsForResourceOutput) SetTags(v []*Tag) *ListTagsForResourceOutput {
 	s.Tags = v
+	return s
+}
+
+// The log odds metric details.
+type LogOddsMetric struct {
+	_ struct{} `type:"structure"`
+
+	// The relative importance of the variable. For more information, see Model
+	// variable importance (https://docs.aws.amazon.com/frauddetector/latest/ug/model-variable-importance.html).
+	//
+	// VariableImportance is a required field
+	VariableImportance *float64 `locationName:"variableImportance" type:"float" required:"true"`
+
+	// The name of the variable.
+	//
+	// VariableName is a required field
+	VariableName *string `locationName:"variableName" type:"string" required:"true"`
+
+	// The type of variable.
+	//
+	// VariableType is a required field
+	VariableType *string `locationName:"variableType" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s LogOddsMetric) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s LogOddsMetric) GoString() string {
+	return s.String()
+}
+
+// SetVariableImportance sets the VariableImportance field's value.
+func (s *LogOddsMetric) SetVariableImportance(v float64) *LogOddsMetric {
+	s.VariableImportance = &v
+	return s
+}
+
+// SetVariableName sets the VariableName field's value.
+func (s *LogOddsMetric) SetVariableName(v string) *LogOddsMetric {
+	s.VariableName = &v
+	return s
+}
+
+// SetVariableType sets the VariableType field's value.
+func (s *LogOddsMetric) SetVariableType(v string) *LogOddsMetric {
+	s.VariableType = &v
 	return s
 }
 
@@ -10214,12 +14172,20 @@ type MetricDataPoint struct {
 	Tpr *float64 `locationName:"tpr" type:"float"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s MetricDataPoint) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s MetricDataPoint) GoString() string {
 	return s.String()
 }
@@ -10256,7 +14222,7 @@ type Model struct {
 	Arn *string `locationName:"arn" min:"1" type:"string"`
 
 	// Timestamp of when the model was created.
-	CreatedTime *string `locationName:"createdTime" type:"string"`
+	CreatedTime *string `locationName:"createdTime" min:"11" type:"string"`
 
 	// The model description.
 	Description *string `locationName:"description" min:"1" type:"string"`
@@ -10265,7 +14231,7 @@ type Model struct {
 	EventTypeName *string `locationName:"eventTypeName" type:"string"`
 
 	// Timestamp of last time the model was updated.
-	LastUpdatedTime *string `locationName:"lastUpdatedTime" type:"string"`
+	LastUpdatedTime *string `locationName:"lastUpdatedTime" min:"11" type:"string"`
 
 	// The model ID.
 	ModelId *string `locationName:"modelId" min:"1" type:"string"`
@@ -10274,12 +14240,20 @@ type Model struct {
 	ModelType *string `locationName:"modelType" type:"string" enum:"ModelTypeEnum"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s Model) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s Model) GoString() string {
 	return s.String()
 }
@@ -10333,7 +14307,6 @@ type ModelEndpointDataBlob struct {
 	_ struct{} `type:"structure"`
 
 	// The byte buffer of the Amazon SageMaker model endpoint input data blob.
-	//
 	// ByteBuffer is automatically base64 encoded/decoded by the SDK.
 	ByteBuffer []byte `locationName:"byteBuffer" type:"blob"`
 
@@ -10341,12 +14314,20 @@ type ModelEndpointDataBlob struct {
 	ContentType *string `locationName:"contentType" min:"1" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ModelEndpointDataBlob) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ModelEndpointDataBlob) GoString() string {
 	return s.String()
 }
@@ -10383,7 +14364,7 @@ type ModelInputConfiguration struct {
 	// Template for constructing the CSV input-data sent to SageMaker. At event-evaluation,
 	// the placeholders for variable-names in the template will be replaced with
 	// the variable values before being sent to SageMaker.
-	CsvInputTemplate *string `locationName:"csvInputTemplate" type:"string"`
+	CsvInputTemplate *string `locationName:"csvInputTemplate" min:"1" type:"string"`
 
 	// The event type name.
 	EventTypeName *string `locationName:"eventTypeName" min:"1" type:"string"`
@@ -10395,7 +14376,7 @@ type ModelInputConfiguration struct {
 	// Template for constructing the JSON input-data sent to SageMaker. At event-evaluation,
 	// the placeholders for variable names in the template will be replaced with
 	// the variable values before being sent to SageMaker.
-	JsonInputTemplate *string `locationName:"jsonInputTemplate" type:"string"`
+	JsonInputTemplate *string `locationName:"jsonInputTemplate" min:"1" type:"string"`
 
 	// The event variables.
 	//
@@ -10403,12 +14384,20 @@ type ModelInputConfiguration struct {
 	UseEventVariables *bool `locationName:"useEventVariables" type:"boolean" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ModelInputConfiguration) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ModelInputConfiguration) GoString() string {
 	return s.String()
 }
@@ -10416,8 +14405,14 @@ func (s ModelInputConfiguration) GoString() string {
 // Validate inspects the fields of the type to determine if they are valid.
 func (s *ModelInputConfiguration) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "ModelInputConfiguration"}
+	if s.CsvInputTemplate != nil && len(*s.CsvInputTemplate) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("CsvInputTemplate", 1))
+	}
 	if s.EventTypeName != nil && len(*s.EventTypeName) < 1 {
 		invalidParams.Add(request.NewErrParamMinLen("EventTypeName", 1))
+	}
+	if s.JsonInputTemplate != nil && len(*s.JsonInputTemplate) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("JsonInputTemplate", 1))
 	}
 	if s.UseEventVariables == nil {
 		invalidParams.Add(request.NewErrParamRequired("UseEventVariables"))
@@ -10477,12 +14472,20 @@ type ModelOutputConfiguration struct {
 	JsonKeyToVariableMap map[string]*string `locationName:"jsonKeyToVariableMap" type:"map"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ModelOutputConfiguration) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ModelOutputConfiguration) GoString() string {
 	return s.String()
 }
@@ -10529,12 +14532,20 @@ type ModelScores struct {
 	Scores map[string]*float64 `locationName:"scores" type:"map"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ModelScores) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ModelScores) GoString() string {
 	return s.String()
 }
@@ -10571,15 +14582,23 @@ type ModelVersion struct {
 	// The model version number.
 	//
 	// ModelVersionNumber is a required field
-	ModelVersionNumber *string `locationName:"modelVersionNumber" min:"1" type:"string" required:"true"`
+	ModelVersionNumber *string `locationName:"modelVersionNumber" min:"3" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ModelVersion) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ModelVersion) GoString() string {
 	return s.String()
 }
@@ -10602,8 +14621,8 @@ func (s *ModelVersion) Validate() error {
 	if s.ModelVersionNumber == nil {
 		invalidParams.Add(request.NewErrParamRequired("ModelVersionNumber"))
 	}
-	if s.ModelVersionNumber != nil && len(*s.ModelVersionNumber) < 1 {
-		invalidParams.Add(request.NewErrParamMinLen("ModelVersionNumber", 1))
+	if s.ModelVersionNumber != nil && len(*s.ModelVersionNumber) < 3 {
+		invalidParams.Add(request.NewErrParamMinLen("ModelVersionNumber", 3))
 	}
 
 	if invalidParams.Len() > 0 {
@@ -10644,13 +14663,18 @@ type ModelVersionDetail struct {
 	Arn *string `locationName:"arn" min:"1" type:"string"`
 
 	// The timestamp when the model was created.
-	CreatedTime *string `locationName:"createdTime" type:"string"`
+	CreatedTime *string `locationName:"createdTime" min:"11" type:"string"`
 
-	// The event details.
+	// The external events data details. This will be populated if the trainingDataSource
+	// for the model version is specified as EXTERNAL_EVENTS.
 	ExternalEventsDetail *ExternalEventsDetail `locationName:"externalEventsDetail" type:"structure"`
 
+	// The ingested events data details. This will be populated if the trainingDataSource
+	// for the model version is specified as INGESTED_EVENTS.
+	IngestedEventsDetail *IngestedEventsDetail `locationName:"ingestedEventsDetail" type:"structure"`
+
 	// The timestamp when the model was last updated.
-	LastUpdatedTime *string `locationName:"lastUpdatedTime" type:"string"`
+	LastUpdatedTime *string `locationName:"lastUpdatedTime" min:"11" type:"string"`
 
 	// The model ID.
 	ModelId *string `locationName:"modelId" min:"1" type:"string"`
@@ -10674,12 +14698,20 @@ type ModelVersionDetail struct {
 	TrainingResult *TrainingResult `locationName:"trainingResult" type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ModelVersionDetail) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ModelVersionDetail) GoString() string {
 	return s.String()
 }
@@ -10699,6 +14731,12 @@ func (s *ModelVersionDetail) SetCreatedTime(v string) *ModelVersionDetail {
 // SetExternalEventsDetail sets the ExternalEventsDetail field's value.
 func (s *ModelVersionDetail) SetExternalEventsDetail(v *ExternalEventsDetail) *ModelVersionDetail {
 	s.ExternalEventsDetail = v
+	return s
+}
+
+// SetIngestedEventsDetail sets the IngestedEventsDetail field's value.
+func (s *ModelVersionDetail) SetIngestedEventsDetail(v *IngestedEventsDetail) *ModelVersionDetail {
+	s.IngestedEventsDetail = v
 	return s
 }
 
@@ -10758,24 +14796,32 @@ type Outcome struct {
 	Arn *string `locationName:"arn" min:"1" type:"string"`
 
 	// The timestamp when the outcome was created.
-	CreatedTime *string `locationName:"createdTime" type:"string"`
+	CreatedTime *string `locationName:"createdTime" min:"11" type:"string"`
 
 	// The outcome description.
 	Description *string `locationName:"description" min:"1" type:"string"`
 
 	// The timestamp when the outcome was last updated.
-	LastUpdatedTime *string `locationName:"lastUpdatedTime" type:"string"`
+	LastUpdatedTime *string `locationName:"lastUpdatedTime" min:"11" type:"string"`
 
 	// The outcome name.
 	Name *string `locationName:"name" min:"1" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s Outcome) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s Outcome) GoString() string {
 	return s.String()
 }
@@ -10830,12 +14876,20 @@ type PutDetectorInput struct {
 	Tags []*Tag `locationName:"tags" type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s PutDetectorInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s PutDetectorInput) GoString() string {
 	return s.String()
 }
@@ -10903,12 +14957,20 @@ type PutDetectorOutput struct {
 	_ struct{} `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s PutDetectorOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s PutDetectorOutput) GoString() string {
 	return s.String()
 }
@@ -10928,12 +14990,20 @@ type PutEntityTypeInput struct {
 	Tags []*Tag `locationName:"tags" type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s PutEntityTypeInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s PutEntityTypeInput) GoString() string {
 	return s.String()
 }
@@ -10989,12 +15059,20 @@ type PutEntityTypeOutput struct {
 	_ struct{} `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s PutEntityTypeOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s PutEntityTypeOutput) GoString() string {
 	return s.String()
 }
@@ -11010,6 +15088,9 @@ type PutEventTypeInput struct {
 	//
 	// EntityTypes is a required field
 	EntityTypes []*string `locationName:"entityTypes" min:"1" type:"list" required:"true"`
+
+	// Specifies if ingenstion is enabled or disabled.
+	EventIngestion *string `locationName:"eventIngestion" type:"string" enum:"EventIngestion"`
 
 	// The event type variables.
 	//
@@ -11028,12 +15109,20 @@ type PutEventTypeInput struct {
 	Tags []*Tag `locationName:"tags" type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s PutEventTypeInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s PutEventTypeInput) GoString() string {
 	return s.String()
 }
@@ -11091,6 +15180,12 @@ func (s *PutEventTypeInput) SetEntityTypes(v []*string) *PutEventTypeInput {
 	return s
 }
 
+// SetEventIngestion sets the EventIngestion field's value.
+func (s *PutEventTypeInput) SetEventIngestion(v string) *PutEventTypeInput {
+	s.EventIngestion = &v
+	return s
+}
+
 // SetEventVariables sets the EventVariables field's value.
 func (s *PutEventTypeInput) SetEventVariables(v []*string) *PutEventTypeInput {
 	s.EventVariables = v
@@ -11119,12 +15214,20 @@ type PutEventTypeOutput struct {
 	_ struct{} `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s PutEventTypeOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s PutEventTypeOutput) GoString() string {
 	return s.String()
 }
@@ -11166,12 +15269,20 @@ type PutExternalModelInput struct {
 	Tags []*Tag `locationName:"tags" type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s PutExternalModelInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s PutExternalModelInput) GoString() string {
 	return s.String()
 }
@@ -11273,12 +15384,20 @@ type PutExternalModelOutput struct {
 	_ struct{} `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s PutExternalModelOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s PutExternalModelOutput) GoString() string {
 	return s.String()
 }
@@ -11292,12 +15411,20 @@ type PutKMSEncryptionKeyInput struct {
 	KmsEncryptionKeyArn *string `locationName:"kmsEncryptionKeyArn" min:"7" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s PutKMSEncryptionKeyInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s PutKMSEncryptionKeyInput) GoString() string {
 	return s.String()
 }
@@ -11328,12 +15455,20 @@ type PutKMSEncryptionKeyOutput struct {
 	_ struct{} `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s PutKMSEncryptionKeyOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s PutKMSEncryptionKeyOutput) GoString() string {
 	return s.String()
 }
@@ -11352,12 +15487,20 @@ type PutLabelInput struct {
 	Tags []*Tag `locationName:"tags" type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s PutLabelInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s PutLabelInput) GoString() string {
 	return s.String()
 }
@@ -11413,12 +15556,20 @@ type PutLabelOutput struct {
 	_ struct{} `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s PutLabelOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s PutLabelOutput) GoString() string {
 	return s.String()
 }
@@ -11438,12 +15589,20 @@ type PutOutcomeInput struct {
 	Tags []*Tag `locationName:"tags" type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s PutOutcomeInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s PutOutcomeInput) GoString() string {
 	return s.String()
 }
@@ -11499,12 +15658,20 @@ type PutOutcomeOutput struct {
 	_ struct{} `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s PutOutcomeOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s PutOutcomeOutput) GoString() string {
 	return s.String()
 }
@@ -11517,12 +15684,20 @@ type ResourceNotFoundException struct {
 	Message_ *string `locationName:"message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ResourceNotFoundException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ResourceNotFoundException) GoString() string {
 	return s.String()
 }
@@ -11565,6 +15740,71 @@ func (s *ResourceNotFoundException) RequestID() string {
 	return s.RespMetadata.RequestID
 }
 
+// An exception indicating that the attached customer-owned (external) model
+// threw an exception when Amazon Fraud Detector invoked the model.
+type ResourceUnavailableException struct {
+	_            struct{}                  `type:"structure"`
+	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
+
+	Message_ *string `locationName:"message" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ResourceUnavailableException) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ResourceUnavailableException) GoString() string {
+	return s.String()
+}
+
+func newErrorResourceUnavailableException(v protocol.ResponseMetadata) error {
+	return &ResourceUnavailableException{
+		RespMetadata: v,
+	}
+}
+
+// Code returns the exception type name.
+func (s *ResourceUnavailableException) Code() string {
+	return "ResourceUnavailableException"
+}
+
+// Message returns the exception's message.
+func (s *ResourceUnavailableException) Message() string {
+	if s.Message_ != nil {
+		return *s.Message_
+	}
+	return ""
+}
+
+// OrigErr always returns nil, satisfies awserr.Error interface.
+func (s *ResourceUnavailableException) OrigErr() error {
+	return nil
+}
+
+func (s *ResourceUnavailableException) Error() string {
+	return fmt.Sprintf("%s: %s", s.Code(), s.Message())
+}
+
+// Status code returns the HTTP status code for the request's response error.
+func (s *ResourceUnavailableException) StatusCode() int {
+	return s.RespMetadata.StatusCode
+}
+
+// RequestID returns the service's response RequestID for request.
+func (s *ResourceUnavailableException) RequestID() string {
+	return s.RespMetadata.RequestID
+}
+
 // A rule.
 type Rule struct {
 	_ struct{} `type:"structure"`
@@ -11585,12 +15825,20 @@ type Rule struct {
 	RuleVersion *string `locationName:"ruleVersion" min:"1" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s Rule) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s Rule) GoString() string {
 	return s.String()
 }
@@ -11649,7 +15897,7 @@ type RuleDetail struct {
 	Arn *string `locationName:"arn" min:"1" type:"string"`
 
 	// The timestamp of when the rule was created.
-	CreatedTime *string `locationName:"createdTime" type:"string"`
+	CreatedTime *string `locationName:"createdTime" min:"11" type:"string"`
 
 	// The rule description.
 	Description *string `locationName:"description" min:"1" type:"string"`
@@ -11658,13 +15906,17 @@ type RuleDetail struct {
 	DetectorId *string `locationName:"detectorId" min:"1" type:"string"`
 
 	// The rule expression.
+	//
+	// Expression is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by RuleDetail's
+	// String and GoString methods.
 	Expression *string `locationName:"expression" min:"1" type:"string" sensitive:"true"`
 
 	// The rule language.
 	Language *string `locationName:"language" type:"string" enum:"Language"`
 
 	// Timestamp of the last time the rule was updated.
-	LastUpdatedTime *string `locationName:"lastUpdatedTime" type:"string"`
+	LastUpdatedTime *string `locationName:"lastUpdatedTime" min:"11" type:"string"`
 
 	// The rule outcomes.
 	Outcomes []*string `locationName:"outcomes" min:"1" type:"list"`
@@ -11676,12 +15928,20 @@ type RuleDetail struct {
 	RuleVersion *string `locationName:"ruleVersion" min:"1" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s RuleDetail) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s RuleDetail) GoString() string {
 	return s.String()
 }
@@ -11757,12 +16017,20 @@ type RuleResult struct {
 	RuleId *string `locationName:"ruleId" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s RuleResult) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s RuleResult) GoString() string {
 	return s.String()
 }
@@ -11777,6 +16045,179 @@ func (s *RuleResult) SetOutcomes(v []*string) *RuleResult {
 func (s *RuleResult) SetRuleId(v string) *RuleResult {
 	s.RuleId = &v
 	return s
+}
+
+type SendEventInput struct {
+	_ struct{} `type:"structure"`
+
+	// The label to associate with the event. Required if specifying labelTimestamp.
+	AssignedLabel *string `locationName:"assignedLabel" min:"1" type:"string"`
+
+	// An array of entities.
+	//
+	// Entities is a required field
+	Entities []*Entity `locationName:"entities" type:"list" required:"true"`
+
+	// The event ID to upload.
+	//
+	// EventId is a required field
+	EventId *string `locationName:"eventId" min:"1" type:"string" required:"true"`
+
+	// The timestamp that defines when the event under evaluation occurred. The
+	// timestamp must be specified using ISO 8601 standard in UTC.
+	//
+	// EventTimestamp is a required field
+	EventTimestamp *string `locationName:"eventTimestamp" min:"10" type:"string" required:"true"`
+
+	// The event type name of the event.
+	//
+	// EventTypeName is a required field
+	EventTypeName *string `locationName:"eventTypeName" min:"1" type:"string" required:"true"`
+
+	// Names of the event type's variables you defined in Amazon Fraud Detector
+	// to represent data elements and their corresponding values for the event you
+	// are sending for evaluation.
+	//
+	// EventVariables is a required field
+	EventVariables map[string]*string `locationName:"eventVariables" min:"1" type:"map" required:"true"`
+
+	// The timestamp associated with the label. Required if specifying assignedLabel.
+	LabelTimestamp *string `locationName:"labelTimestamp" min:"10" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s SendEventInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s SendEventInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *SendEventInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "SendEventInput"}
+	if s.AssignedLabel != nil && len(*s.AssignedLabel) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("AssignedLabel", 1))
+	}
+	if s.Entities == nil {
+		invalidParams.Add(request.NewErrParamRequired("Entities"))
+	}
+	if s.EventId == nil {
+		invalidParams.Add(request.NewErrParamRequired("EventId"))
+	}
+	if s.EventId != nil && len(*s.EventId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("EventId", 1))
+	}
+	if s.EventTimestamp == nil {
+		invalidParams.Add(request.NewErrParamRequired("EventTimestamp"))
+	}
+	if s.EventTimestamp != nil && len(*s.EventTimestamp) < 10 {
+		invalidParams.Add(request.NewErrParamMinLen("EventTimestamp", 10))
+	}
+	if s.EventTypeName == nil {
+		invalidParams.Add(request.NewErrParamRequired("EventTypeName"))
+	}
+	if s.EventTypeName != nil && len(*s.EventTypeName) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("EventTypeName", 1))
+	}
+	if s.EventVariables == nil {
+		invalidParams.Add(request.NewErrParamRequired("EventVariables"))
+	}
+	if s.EventVariables != nil && len(s.EventVariables) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("EventVariables", 1))
+	}
+	if s.LabelTimestamp != nil && len(*s.LabelTimestamp) < 10 {
+		invalidParams.Add(request.NewErrParamMinLen("LabelTimestamp", 10))
+	}
+	if s.Entities != nil {
+		for i, v := range s.Entities {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "Entities", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetAssignedLabel sets the AssignedLabel field's value.
+func (s *SendEventInput) SetAssignedLabel(v string) *SendEventInput {
+	s.AssignedLabel = &v
+	return s
+}
+
+// SetEntities sets the Entities field's value.
+func (s *SendEventInput) SetEntities(v []*Entity) *SendEventInput {
+	s.Entities = v
+	return s
+}
+
+// SetEventId sets the EventId field's value.
+func (s *SendEventInput) SetEventId(v string) *SendEventInput {
+	s.EventId = &v
+	return s
+}
+
+// SetEventTimestamp sets the EventTimestamp field's value.
+func (s *SendEventInput) SetEventTimestamp(v string) *SendEventInput {
+	s.EventTimestamp = &v
+	return s
+}
+
+// SetEventTypeName sets the EventTypeName field's value.
+func (s *SendEventInput) SetEventTypeName(v string) *SendEventInput {
+	s.EventTypeName = &v
+	return s
+}
+
+// SetEventVariables sets the EventVariables field's value.
+func (s *SendEventInput) SetEventVariables(v map[string]*string) *SendEventInput {
+	s.EventVariables = v
+	return s
+}
+
+// SetLabelTimestamp sets the LabelTimestamp field's value.
+func (s *SendEventInput) SetLabelTimestamp(v string) *SendEventInput {
+	s.LabelTimestamp = &v
+	return s
+}
+
+type SendEventOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s SendEventOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s SendEventOutput) GoString() string {
+	return s.String()
 }
 
 // A key and value pair.
@@ -11794,12 +16235,20 @@ type Tag struct {
 	Value *string `locationName:"value" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s Tag) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s Tag) GoString() string {
 	return s.String()
 }
@@ -11849,12 +16298,20 @@ type TagResourceInput struct {
 	Tags []*Tag `locationName:"tags" type:"list" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s TagResourceInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s TagResourceInput) GoString() string {
 	return s.String()
 }
@@ -11904,12 +16361,20 @@ type TagResourceOutput struct {
 	_ struct{} `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s TagResourceOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s TagResourceOutput) GoString() string {
 	return s.String()
 }
@@ -11922,12 +16387,20 @@ type ThrottlingException struct {
 	Message_ *string `locationName:"message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ThrottlingException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ThrottlingException) GoString() string {
 	return s.String()
 }
@@ -11985,12 +16458,20 @@ type TrainingDataSchema struct {
 	ModelVariables []*string `locationName:"modelVariables" type:"list" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s TrainingDataSchema) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s TrainingDataSchema) GoString() string {
 	return s.String()
 }
@@ -12042,12 +16523,20 @@ type TrainingMetrics struct {
 	MetricDataPoints []*MetricDataPoint `locationName:"metricDataPoints" type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s TrainingMetrics) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s TrainingMetrics) GoString() string {
 	return s.String()
 }
@@ -12073,14 +16562,25 @@ type TrainingResult struct {
 
 	// The training metric details.
 	TrainingMetrics *TrainingMetrics `locationName:"trainingMetrics" type:"structure"`
+
+	// The variable importance metrics.
+	VariableImportanceMetrics *VariableImportanceMetrics `locationName:"variableImportanceMetrics" type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s TrainingResult) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s TrainingResult) GoString() string {
 	return s.String()
 }
@@ -12094,6 +16594,12 @@ func (s *TrainingResult) SetDataValidationMetrics(v *DataValidationMetrics) *Tra
 // SetTrainingMetrics sets the TrainingMetrics field's value.
 func (s *TrainingResult) SetTrainingMetrics(v *TrainingMetrics) *TrainingResult {
 	s.TrainingMetrics = v
+	return s
+}
+
+// SetVariableImportanceMetrics sets the VariableImportanceMetrics field's value.
+func (s *TrainingResult) SetVariableImportanceMetrics(v *VariableImportanceMetrics) *TrainingResult {
+	s.VariableImportanceMetrics = v
 	return s
 }
 
@@ -12111,12 +16617,20 @@ type UntagResourceInput struct {
 	TagKeys []*string `locationName:"tagKeys" type:"list" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UntagResourceInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UntagResourceInput) GoString() string {
 	return s.String()
 }
@@ -12156,12 +16670,20 @@ type UntagResourceOutput struct {
 	_ struct{} `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UntagResourceOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UntagResourceOutput) GoString() string {
 	return s.String()
 }
@@ -12209,12 +16731,20 @@ type UpdateDetectorVersionInput struct {
 	Rules []*Rule `locationName:"rules" type:"list" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpdateDetectorVersionInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpdateDetectorVersionInput) GoString() string {
 	return s.String()
 }
@@ -12331,12 +16861,20 @@ type UpdateDetectorVersionMetadataInput struct {
 	DetectorVersionId *string `locationName:"detectorVersionId" min:"1" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpdateDetectorVersionMetadataInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpdateDetectorVersionMetadataInput) GoString() string {
 	return s.String()
 }
@@ -12391,12 +16929,20 @@ type UpdateDetectorVersionMetadataOutput struct {
 	_ struct{} `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpdateDetectorVersionMetadataOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpdateDetectorVersionMetadataOutput) GoString() string {
 	return s.String()
 }
@@ -12405,12 +16951,20 @@ type UpdateDetectorVersionOutput struct {
 	_ struct{} `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpdateDetectorVersionOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpdateDetectorVersionOutput) GoString() string {
 	return s.String()
 }
@@ -12434,12 +16988,20 @@ type UpdateDetectorVersionStatusInput struct {
 	Status *string `locationName:"status" type:"string" required:"true" enum:"DetectorVersionStatus"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpdateDetectorVersionStatusInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpdateDetectorVersionStatusInput) GoString() string {
 	return s.String()
 }
@@ -12491,13 +17053,144 @@ type UpdateDetectorVersionStatusOutput struct {
 	_ struct{} `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpdateDetectorVersionStatusOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpdateDetectorVersionStatusOutput) GoString() string {
+	return s.String()
+}
+
+type UpdateEventLabelInput struct {
+	_ struct{} `type:"structure"`
+
+	// The new label to assign to the event.
+	//
+	// AssignedLabel is a required field
+	AssignedLabel *string `locationName:"assignedLabel" min:"1" type:"string" required:"true"`
+
+	// The ID of the event associated with the label to update.
+	//
+	// EventId is a required field
+	EventId *string `locationName:"eventId" min:"1" type:"string" required:"true"`
+
+	// The event type of the event associated with the label to update.
+	//
+	// EventTypeName is a required field
+	EventTypeName *string `locationName:"eventTypeName" min:"1" type:"string" required:"true"`
+
+	// The timestamp associated with the label. The timestamp must be specified
+	// using ISO 8601 standard in UTC.
+	//
+	// LabelTimestamp is a required field
+	LabelTimestamp *string `locationName:"labelTimestamp" min:"10" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdateEventLabelInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdateEventLabelInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *UpdateEventLabelInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "UpdateEventLabelInput"}
+	if s.AssignedLabel == nil {
+		invalidParams.Add(request.NewErrParamRequired("AssignedLabel"))
+	}
+	if s.AssignedLabel != nil && len(*s.AssignedLabel) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("AssignedLabel", 1))
+	}
+	if s.EventId == nil {
+		invalidParams.Add(request.NewErrParamRequired("EventId"))
+	}
+	if s.EventId != nil && len(*s.EventId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("EventId", 1))
+	}
+	if s.EventTypeName == nil {
+		invalidParams.Add(request.NewErrParamRequired("EventTypeName"))
+	}
+	if s.EventTypeName != nil && len(*s.EventTypeName) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("EventTypeName", 1))
+	}
+	if s.LabelTimestamp == nil {
+		invalidParams.Add(request.NewErrParamRequired("LabelTimestamp"))
+	}
+	if s.LabelTimestamp != nil && len(*s.LabelTimestamp) < 10 {
+		invalidParams.Add(request.NewErrParamMinLen("LabelTimestamp", 10))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetAssignedLabel sets the AssignedLabel field's value.
+func (s *UpdateEventLabelInput) SetAssignedLabel(v string) *UpdateEventLabelInput {
+	s.AssignedLabel = &v
+	return s
+}
+
+// SetEventId sets the EventId field's value.
+func (s *UpdateEventLabelInput) SetEventId(v string) *UpdateEventLabelInput {
+	s.EventId = &v
+	return s
+}
+
+// SetEventTypeName sets the EventTypeName field's value.
+func (s *UpdateEventLabelInput) SetEventTypeName(v string) *UpdateEventLabelInput {
+	s.EventTypeName = &v
+	return s
+}
+
+// SetLabelTimestamp sets the LabelTimestamp field's value.
+func (s *UpdateEventLabelInput) SetLabelTimestamp(v string) *UpdateEventLabelInput {
+	s.LabelTimestamp = &v
+	return s
+}
+
+type UpdateEventLabelOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdateEventLabelOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdateEventLabelOutput) GoString() string {
 	return s.String()
 }
 
@@ -12518,12 +17211,20 @@ type UpdateModelInput struct {
 	ModelType *string `locationName:"modelType" type:"string" required:"true" enum:"ModelTypeEnum"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpdateModelInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpdateModelInput) GoString() string {
 	return s.String()
 }
@@ -12572,12 +17273,20 @@ type UpdateModelOutput struct {
 	_ struct{} `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpdateModelOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpdateModelOutput) GoString() string {
 	return s.String()
 }
@@ -12585,8 +17294,13 @@ func (s UpdateModelOutput) GoString() string {
 type UpdateModelVersionInput struct {
 	_ struct{} `type:"structure"`
 
-	// The event details.
+	// The details of the external events data used for training the model version.
+	// Required if trainingDataSource is EXTERNAL_EVENTS.
 	ExternalEventsDetail *ExternalEventsDetail `locationName:"externalEventsDetail" type:"structure"`
+
+	// The details of the ingested event used for training the model version. Required
+	// if your trainingDataSource is INGESTED_EVENTS.
+	IngestedEventsDetail *IngestedEventsDetail `locationName:"ingestedEventsDetail" type:"structure"`
 
 	// The major version number.
 	//
@@ -12607,12 +17321,20 @@ type UpdateModelVersionInput struct {
 	Tags []*Tag `locationName:"tags" type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpdateModelVersionInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpdateModelVersionInput) GoString() string {
 	return s.String()
 }
@@ -12640,6 +17362,11 @@ func (s *UpdateModelVersionInput) Validate() error {
 			invalidParams.AddNested("ExternalEventsDetail", err.(request.ErrInvalidParams))
 		}
 	}
+	if s.IngestedEventsDetail != nil {
+		if err := s.IngestedEventsDetail.Validate(); err != nil {
+			invalidParams.AddNested("IngestedEventsDetail", err.(request.ErrInvalidParams))
+		}
+	}
 	if s.Tags != nil {
 		for i, v := range s.Tags {
 			if v == nil {
@@ -12660,6 +17387,12 @@ func (s *UpdateModelVersionInput) Validate() error {
 // SetExternalEventsDetail sets the ExternalEventsDetail field's value.
 func (s *UpdateModelVersionInput) SetExternalEventsDetail(v *ExternalEventsDetail) *UpdateModelVersionInput {
 	s.ExternalEventsDetail = v
+	return s
+}
+
+// SetIngestedEventsDetail sets the IngestedEventsDetail field's value.
+func (s *UpdateModelVersionInput) SetIngestedEventsDetail(v *IngestedEventsDetail) *UpdateModelVersionInput {
+	s.IngestedEventsDetail = v
 	return s
 }
 
@@ -12703,12 +17436,20 @@ type UpdateModelVersionOutput struct {
 	Status *string `locationName:"status" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpdateModelVersionOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpdateModelVersionOutput) GoString() string {
 	return s.String()
 }
@@ -12761,12 +17502,20 @@ type UpdateModelVersionStatusInput struct {
 	Status *string `locationName:"status" type:"string" required:"true" enum:"ModelVersionStatus"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpdateModelVersionStatusInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpdateModelVersionStatusInput) GoString() string {
 	return s.String()
 }
@@ -12827,12 +17576,20 @@ type UpdateModelVersionStatusOutput struct {
 	_ struct{} `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpdateModelVersionStatusOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpdateModelVersionStatusOutput) GoString() string {
 	return s.String()
 }
@@ -12851,12 +17608,20 @@ type UpdateRuleMetadataInput struct {
 	Rule *Rule `locationName:"rule" type:"structure" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpdateRuleMetadataInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpdateRuleMetadataInput) GoString() string {
 	return s.String()
 }
@@ -12901,12 +17666,20 @@ type UpdateRuleMetadataOutput struct {
 	_ struct{} `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpdateRuleMetadataOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpdateRuleMetadataOutput) GoString() string {
 	return s.String()
 }
@@ -12918,6 +17691,10 @@ type UpdateRuleVersionInput struct {
 	Description *string `locationName:"description" min:"1" type:"string"`
 
 	// The rule expression.
+	//
+	// Expression is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by UpdateRuleVersionInput's
+	// String and GoString methods.
 	//
 	// Expression is a required field
 	Expression *string `locationName:"expression" min:"1" type:"string" required:"true" sensitive:"true"`
@@ -12941,12 +17718,20 @@ type UpdateRuleVersionInput struct {
 	Tags []*Tag `locationName:"tags" type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpdateRuleVersionInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpdateRuleVersionInput) GoString() string {
 	return s.String()
 }
@@ -13040,12 +17825,20 @@ type UpdateRuleVersionOutput struct {
 	Rule *Rule `locationName:"rule" type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpdateRuleVersionOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpdateRuleVersionOutput) GoString() string {
 	return s.String()
 }
@@ -13074,12 +17867,20 @@ type UpdateVariableInput struct {
 	VariableType *string `locationName:"variableType" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpdateVariableInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpdateVariableInput) GoString() string {
 	return s.String()
 }
@@ -13125,12 +17926,20 @@ type UpdateVariableOutput struct {
 	_ struct{} `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpdateVariableOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpdateVariableOutput) GoString() string {
 	return s.String()
 }
@@ -13143,12 +17952,20 @@ type ValidationException struct {
 	Message_ *string `locationName:"message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ValidationException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ValidationException) GoString() string {
 	return s.String()
 }
@@ -13199,7 +18016,7 @@ type Variable struct {
 	Arn *string `locationName:"arn" min:"1" type:"string"`
 
 	// The time when the variable was created.
-	CreatedTime *string `locationName:"createdTime" type:"string"`
+	CreatedTime *string `locationName:"createdTime" min:"11" type:"string"`
 
 	// The data source of the variable.
 	DataSource *string `locationName:"dataSource" type:"string" enum:"DataSource"`
@@ -13214,7 +18031,7 @@ type Variable struct {
 	Description *string `locationName:"description" type:"string"`
 
 	// The time when variable was last updated.
-	LastUpdatedTime *string `locationName:"lastUpdatedTime" type:"string"`
+	LastUpdatedTime *string `locationName:"lastUpdatedTime" min:"11" type:"string"`
 
 	// The name of the variable.
 	Name *string `locationName:"name" type:"string"`
@@ -13231,12 +18048,20 @@ type Variable struct {
 	VariableType *string `locationName:"variableType" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s Variable) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s Variable) GoString() string {
 	return s.String()
 }
@@ -13326,12 +18151,20 @@ type VariableEntry struct {
 	VariableType *string `locationName:"variableType" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s VariableEntry) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s VariableEntry) GoString() string {
 	return s.String()
 }
@@ -13370,6 +18203,70 @@ func (s *VariableEntry) SetName(v string) *VariableEntry {
 func (s *VariableEntry) SetVariableType(v string) *VariableEntry {
 	s.VariableType = &v
 	return s
+}
+
+// The variable importance metrics details.
+type VariableImportanceMetrics struct {
+	_ struct{} `type:"structure"`
+
+	// List of variable metrics.
+	LogOddsMetrics []*LogOddsMetric `locationName:"logOddsMetrics" type:"list"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s VariableImportanceMetrics) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s VariableImportanceMetrics) GoString() string {
+	return s.String()
+}
+
+// SetLogOddsMetrics sets the LogOddsMetrics field's value.
+func (s *VariableImportanceMetrics) SetLogOddsMetrics(v []*LogOddsMetric) *VariableImportanceMetrics {
+	s.LogOddsMetrics = v
+	return s
+}
+
+const (
+	// AsyncJobStatusInProgressInitializing is a AsyncJobStatus enum value
+	AsyncJobStatusInProgressInitializing = "IN_PROGRESS_INITIALIZING"
+
+	// AsyncJobStatusInProgress is a AsyncJobStatus enum value
+	AsyncJobStatusInProgress = "IN_PROGRESS"
+
+	// AsyncJobStatusCancelInProgress is a AsyncJobStatus enum value
+	AsyncJobStatusCancelInProgress = "CANCEL_IN_PROGRESS"
+
+	// AsyncJobStatusCanceled is a AsyncJobStatus enum value
+	AsyncJobStatusCanceled = "CANCELED"
+
+	// AsyncJobStatusComplete is a AsyncJobStatus enum value
+	AsyncJobStatusComplete = "COMPLETE"
+
+	// AsyncJobStatusFailed is a AsyncJobStatus enum value
+	AsyncJobStatusFailed = "FAILED"
+)
+
+// AsyncJobStatus_Values returns all elements of the AsyncJobStatus enum
+func AsyncJobStatus_Values() []string {
+	return []string{
+		AsyncJobStatusInProgressInitializing,
+		AsyncJobStatusInProgress,
+		AsyncJobStatusCancelInProgress,
+		AsyncJobStatusCanceled,
+		AsyncJobStatusComplete,
+		AsyncJobStatusFailed,
+	}
 }
 
 const (
@@ -13433,6 +18330,22 @@ func DetectorVersionStatus_Values() []string {
 		DetectorVersionStatusDraft,
 		DetectorVersionStatusActive,
 		DetectorVersionStatusInactive,
+	}
+}
+
+const (
+	// EventIngestionEnabled is a EventIngestion enum value
+	EventIngestionEnabled = "ENABLED"
+
+	// EventIngestionDisabled is a EventIngestion enum value
+	EventIngestionDisabled = "DISABLED"
+)
+
+// EventIngestion_Values returns all elements of the EventIngestion enum
+func EventIngestion_Values() []string {
+	return []string{
+		EventIngestionEnabled,
+		EventIngestionDisabled,
 	}
 }
 
@@ -13511,12 +18424,16 @@ func ModelSource_Values() []string {
 const (
 	// ModelTypeEnumOnlineFraudInsights is a ModelTypeEnum enum value
 	ModelTypeEnumOnlineFraudInsights = "ONLINE_FRAUD_INSIGHTS"
+
+	// ModelTypeEnumTransactionFraudInsights is a ModelTypeEnum enum value
+	ModelTypeEnumTransactionFraudInsights = "TRANSACTION_FRAUD_INSIGHTS"
 )
 
 // ModelTypeEnum_Values returns all elements of the ModelTypeEnum enum
 func ModelTypeEnum_Values() []string {
 	return []string{
 		ModelTypeEnumOnlineFraudInsights,
+		ModelTypeEnumTransactionFraudInsights,
 	}
 }
 
@@ -13526,6 +18443,9 @@ const (
 
 	// ModelVersionStatusInactive is a ModelVersionStatus enum value
 	ModelVersionStatusInactive = "INACTIVE"
+
+	// ModelVersionStatusTrainingCancelled is a ModelVersionStatus enum value
+	ModelVersionStatusTrainingCancelled = "TRAINING_CANCELLED"
 )
 
 // ModelVersionStatus_Values returns all elements of the ModelVersionStatus enum
@@ -13533,6 +18453,7 @@ func ModelVersionStatus_Values() []string {
 	return []string{
 		ModelVersionStatusActive,
 		ModelVersionStatusInactive,
+		ModelVersionStatusTrainingCancelled,
 	}
 }
 
@@ -13555,11 +18476,35 @@ func RuleExecutionMode_Values() []string {
 const (
 	// TrainingDataSourceEnumExternalEvents is a TrainingDataSourceEnum enum value
 	TrainingDataSourceEnumExternalEvents = "EXTERNAL_EVENTS"
+
+	// TrainingDataSourceEnumIngestedEvents is a TrainingDataSourceEnum enum value
+	TrainingDataSourceEnumIngestedEvents = "INGESTED_EVENTS"
 )
 
 // TrainingDataSourceEnum_Values returns all elements of the TrainingDataSourceEnum enum
 func TrainingDataSourceEnum_Values() []string {
 	return []string{
 		TrainingDataSourceEnumExternalEvents,
+		TrainingDataSourceEnumIngestedEvents,
+	}
+}
+
+const (
+	// UnlabeledEventsTreatmentIgnore is a UnlabeledEventsTreatment enum value
+	UnlabeledEventsTreatmentIgnore = "IGNORE"
+
+	// UnlabeledEventsTreatmentFraud is a UnlabeledEventsTreatment enum value
+	UnlabeledEventsTreatmentFraud = "FRAUD"
+
+	// UnlabeledEventsTreatmentLegit is a UnlabeledEventsTreatment enum value
+	UnlabeledEventsTreatmentLegit = "LEGIT"
+)
+
+// UnlabeledEventsTreatment_Values returns all elements of the UnlabeledEventsTreatment enum
+func UnlabeledEventsTreatment_Values() []string {
+	return []string{
+		UnlabeledEventsTreatmentIgnore,
+		UnlabeledEventsTreatmentFraud,
+		UnlabeledEventsTreatmentLegit,
 	}
 }

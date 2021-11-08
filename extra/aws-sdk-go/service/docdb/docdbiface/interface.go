@@ -26,7 +26,7 @@ import (
 //    // myFunc uses an SDK service client to make a request to
 //    // Amazon DocumentDB with MongoDB compatibility.
 //    func myFunc(svc docdbiface.DocDBAPI) bool {
-//        // Make svc.AddTagsToResource request
+//        // Make svc.AddSourceIdentifierToSubscription request
 //    }
 //
 //    func main() {
@@ -42,7 +42,7 @@ import (
 //    type mockDocDBClient struct {
 //        docdbiface.DocDBAPI
 //    }
-//    func (m *mockDocDBClient) AddTagsToResource(input *docdb.AddTagsToResourceInput) (*docdb.AddTagsToResourceOutput, error) {
+//    func (m *mockDocDBClient) AddSourceIdentifierToSubscription(input *docdb.AddSourceIdentifierToSubscriptionInput) (*docdb.AddSourceIdentifierToSubscriptionOutput, error) {
 //        // mock response/functionality
 //    }
 //
@@ -60,6 +60,10 @@ import (
 // and waiters. Its suggested to use the pattern above for testing, or using
 // tooling to generate mocks to satisfy the interfaces.
 type DocDBAPI interface {
+	AddSourceIdentifierToSubscription(*docdb.AddSourceIdentifierToSubscriptionInput) (*docdb.AddSourceIdentifierToSubscriptionOutput, error)
+	AddSourceIdentifierToSubscriptionWithContext(aws.Context, *docdb.AddSourceIdentifierToSubscriptionInput, ...request.Option) (*docdb.AddSourceIdentifierToSubscriptionOutput, error)
+	AddSourceIdentifierToSubscriptionRequest(*docdb.AddSourceIdentifierToSubscriptionInput) (*request.Request, *docdb.AddSourceIdentifierToSubscriptionOutput)
+
 	AddTagsToResource(*docdb.AddTagsToResourceInput) (*docdb.AddTagsToResourceOutput, error)
 	AddTagsToResourceWithContext(aws.Context, *docdb.AddTagsToResourceInput, ...request.Option) (*docdb.AddTagsToResourceOutput, error)
 	AddTagsToResourceRequest(*docdb.AddTagsToResourceInput) (*request.Request, *docdb.AddTagsToResourceOutput)
@@ -96,6 +100,14 @@ type DocDBAPI interface {
 	CreateDBSubnetGroupWithContext(aws.Context, *docdb.CreateDBSubnetGroupInput, ...request.Option) (*docdb.CreateDBSubnetGroupOutput, error)
 	CreateDBSubnetGroupRequest(*docdb.CreateDBSubnetGroupInput) (*request.Request, *docdb.CreateDBSubnetGroupOutput)
 
+	CreateEventSubscription(*docdb.CreateEventSubscriptionInput) (*docdb.CreateEventSubscriptionOutput, error)
+	CreateEventSubscriptionWithContext(aws.Context, *docdb.CreateEventSubscriptionInput, ...request.Option) (*docdb.CreateEventSubscriptionOutput, error)
+	CreateEventSubscriptionRequest(*docdb.CreateEventSubscriptionInput) (*request.Request, *docdb.CreateEventSubscriptionOutput)
+
+	CreateGlobalCluster(*docdb.CreateGlobalClusterInput) (*docdb.CreateGlobalClusterOutput, error)
+	CreateGlobalClusterWithContext(aws.Context, *docdb.CreateGlobalClusterInput, ...request.Option) (*docdb.CreateGlobalClusterOutput, error)
+	CreateGlobalClusterRequest(*docdb.CreateGlobalClusterInput) (*request.Request, *docdb.CreateGlobalClusterOutput)
+
 	DeleteDBCluster(*docdb.DeleteDBClusterInput) (*docdb.DeleteDBClusterOutput, error)
 	DeleteDBClusterWithContext(aws.Context, *docdb.DeleteDBClusterInput, ...request.Option) (*docdb.DeleteDBClusterOutput, error)
 	DeleteDBClusterRequest(*docdb.DeleteDBClusterInput) (*request.Request, *docdb.DeleteDBClusterOutput)
@@ -115,6 +127,14 @@ type DocDBAPI interface {
 	DeleteDBSubnetGroup(*docdb.DeleteDBSubnetGroupInput) (*docdb.DeleteDBSubnetGroupOutput, error)
 	DeleteDBSubnetGroupWithContext(aws.Context, *docdb.DeleteDBSubnetGroupInput, ...request.Option) (*docdb.DeleteDBSubnetGroupOutput, error)
 	DeleteDBSubnetGroupRequest(*docdb.DeleteDBSubnetGroupInput) (*request.Request, *docdb.DeleteDBSubnetGroupOutput)
+
+	DeleteEventSubscription(*docdb.DeleteEventSubscriptionInput) (*docdb.DeleteEventSubscriptionOutput, error)
+	DeleteEventSubscriptionWithContext(aws.Context, *docdb.DeleteEventSubscriptionInput, ...request.Option) (*docdb.DeleteEventSubscriptionOutput, error)
+	DeleteEventSubscriptionRequest(*docdb.DeleteEventSubscriptionInput) (*request.Request, *docdb.DeleteEventSubscriptionOutput)
+
+	DeleteGlobalCluster(*docdb.DeleteGlobalClusterInput) (*docdb.DeleteGlobalClusterOutput, error)
+	DeleteGlobalClusterWithContext(aws.Context, *docdb.DeleteGlobalClusterInput, ...request.Option) (*docdb.DeleteGlobalClusterOutput, error)
+	DeleteGlobalClusterRequest(*docdb.DeleteGlobalClusterInput) (*request.Request, *docdb.DeleteGlobalClusterOutput)
 
 	DescribeCertificates(*docdb.DescribeCertificatesInput) (*docdb.DescribeCertificatesOutput, error)
 	DescribeCertificatesWithContext(aws.Context, *docdb.DescribeCertificatesInput, ...request.Option) (*docdb.DescribeCertificatesOutput, error)
@@ -184,12 +204,26 @@ type DocDBAPI interface {
 	DescribeEventCategoriesWithContext(aws.Context, *docdb.DescribeEventCategoriesInput, ...request.Option) (*docdb.DescribeEventCategoriesOutput, error)
 	DescribeEventCategoriesRequest(*docdb.DescribeEventCategoriesInput) (*request.Request, *docdb.DescribeEventCategoriesOutput)
 
+	DescribeEventSubscriptions(*docdb.DescribeEventSubscriptionsInput) (*docdb.DescribeEventSubscriptionsOutput, error)
+	DescribeEventSubscriptionsWithContext(aws.Context, *docdb.DescribeEventSubscriptionsInput, ...request.Option) (*docdb.DescribeEventSubscriptionsOutput, error)
+	DescribeEventSubscriptionsRequest(*docdb.DescribeEventSubscriptionsInput) (*request.Request, *docdb.DescribeEventSubscriptionsOutput)
+
+	DescribeEventSubscriptionsPages(*docdb.DescribeEventSubscriptionsInput, func(*docdb.DescribeEventSubscriptionsOutput, bool) bool) error
+	DescribeEventSubscriptionsPagesWithContext(aws.Context, *docdb.DescribeEventSubscriptionsInput, func(*docdb.DescribeEventSubscriptionsOutput, bool) bool, ...request.Option) error
+
 	DescribeEvents(*docdb.DescribeEventsInput) (*docdb.DescribeEventsOutput, error)
 	DescribeEventsWithContext(aws.Context, *docdb.DescribeEventsInput, ...request.Option) (*docdb.DescribeEventsOutput, error)
 	DescribeEventsRequest(*docdb.DescribeEventsInput) (*request.Request, *docdb.DescribeEventsOutput)
 
 	DescribeEventsPages(*docdb.DescribeEventsInput, func(*docdb.DescribeEventsOutput, bool) bool) error
 	DescribeEventsPagesWithContext(aws.Context, *docdb.DescribeEventsInput, func(*docdb.DescribeEventsOutput, bool) bool, ...request.Option) error
+
+	DescribeGlobalClusters(*docdb.DescribeGlobalClustersInput) (*docdb.DescribeGlobalClustersOutput, error)
+	DescribeGlobalClustersWithContext(aws.Context, *docdb.DescribeGlobalClustersInput, ...request.Option) (*docdb.DescribeGlobalClustersOutput, error)
+	DescribeGlobalClustersRequest(*docdb.DescribeGlobalClustersInput) (*request.Request, *docdb.DescribeGlobalClustersOutput)
+
+	DescribeGlobalClustersPages(*docdb.DescribeGlobalClustersInput, func(*docdb.DescribeGlobalClustersOutput, bool) bool) error
+	DescribeGlobalClustersPagesWithContext(aws.Context, *docdb.DescribeGlobalClustersInput, func(*docdb.DescribeGlobalClustersOutput, bool) bool, ...request.Option) error
 
 	DescribeOrderableDBInstanceOptions(*docdb.DescribeOrderableDBInstanceOptionsInput) (*docdb.DescribeOrderableDBInstanceOptionsOutput, error)
 	DescribeOrderableDBInstanceOptionsWithContext(aws.Context, *docdb.DescribeOrderableDBInstanceOptionsInput, ...request.Option) (*docdb.DescribeOrderableDBInstanceOptionsOutput, error)
@@ -233,9 +267,25 @@ type DocDBAPI interface {
 	ModifyDBSubnetGroupWithContext(aws.Context, *docdb.ModifyDBSubnetGroupInput, ...request.Option) (*docdb.ModifyDBSubnetGroupOutput, error)
 	ModifyDBSubnetGroupRequest(*docdb.ModifyDBSubnetGroupInput) (*request.Request, *docdb.ModifyDBSubnetGroupOutput)
 
+	ModifyEventSubscription(*docdb.ModifyEventSubscriptionInput) (*docdb.ModifyEventSubscriptionOutput, error)
+	ModifyEventSubscriptionWithContext(aws.Context, *docdb.ModifyEventSubscriptionInput, ...request.Option) (*docdb.ModifyEventSubscriptionOutput, error)
+	ModifyEventSubscriptionRequest(*docdb.ModifyEventSubscriptionInput) (*request.Request, *docdb.ModifyEventSubscriptionOutput)
+
+	ModifyGlobalCluster(*docdb.ModifyGlobalClusterInput) (*docdb.ModifyGlobalClusterOutput, error)
+	ModifyGlobalClusterWithContext(aws.Context, *docdb.ModifyGlobalClusterInput, ...request.Option) (*docdb.ModifyGlobalClusterOutput, error)
+	ModifyGlobalClusterRequest(*docdb.ModifyGlobalClusterInput) (*request.Request, *docdb.ModifyGlobalClusterOutput)
+
 	RebootDBInstance(*docdb.RebootDBInstanceInput) (*docdb.RebootDBInstanceOutput, error)
 	RebootDBInstanceWithContext(aws.Context, *docdb.RebootDBInstanceInput, ...request.Option) (*docdb.RebootDBInstanceOutput, error)
 	RebootDBInstanceRequest(*docdb.RebootDBInstanceInput) (*request.Request, *docdb.RebootDBInstanceOutput)
+
+	RemoveFromGlobalCluster(*docdb.RemoveFromGlobalClusterInput) (*docdb.RemoveFromGlobalClusterOutput, error)
+	RemoveFromGlobalClusterWithContext(aws.Context, *docdb.RemoveFromGlobalClusterInput, ...request.Option) (*docdb.RemoveFromGlobalClusterOutput, error)
+	RemoveFromGlobalClusterRequest(*docdb.RemoveFromGlobalClusterInput) (*request.Request, *docdb.RemoveFromGlobalClusterOutput)
+
+	RemoveSourceIdentifierFromSubscription(*docdb.RemoveSourceIdentifierFromSubscriptionInput) (*docdb.RemoveSourceIdentifierFromSubscriptionOutput, error)
+	RemoveSourceIdentifierFromSubscriptionWithContext(aws.Context, *docdb.RemoveSourceIdentifierFromSubscriptionInput, ...request.Option) (*docdb.RemoveSourceIdentifierFromSubscriptionOutput, error)
+	RemoveSourceIdentifierFromSubscriptionRequest(*docdb.RemoveSourceIdentifierFromSubscriptionInput) (*request.Request, *docdb.RemoveSourceIdentifierFromSubscriptionOutput)
 
 	RemoveTagsFromResource(*docdb.RemoveTagsFromResourceInput) (*docdb.RemoveTagsFromResourceOutput, error)
 	RemoveTagsFromResourceWithContext(aws.Context, *docdb.RemoveTagsFromResourceInput, ...request.Option) (*docdb.RemoveTagsFromResourceOutput, error)

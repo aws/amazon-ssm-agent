@@ -26,7 +26,7 @@ import (
 //    // myFunc uses an SDK service client to make a request to
 //    // Amazon Connect Service.
 //    func myFunc(svc connectiface.ConnectAPI) bool {
-//        // Make svc.AssociateRoutingProfileQueues request
+//        // Make svc.AssociateApprovedOrigin request
 //    }
 //
 //    func main() {
@@ -42,7 +42,7 @@ import (
 //    type mockConnectClient struct {
 //        connectiface.ConnectAPI
 //    }
-//    func (m *mockConnectClient) AssociateRoutingProfileQueues(input *connect.AssociateRoutingProfileQueuesInput) (*connect.AssociateRoutingProfileQueuesOutput, error) {
+//    func (m *mockConnectClient) AssociateApprovedOrigin(input *connect.AssociateApprovedOriginInput) (*connect.AssociateApprovedOriginOutput, error) {
 //        // mock response/functionality
 //    }
 //
@@ -60,29 +60,141 @@ import (
 // and waiters. Its suggested to use the pattern above for testing, or using
 // tooling to generate mocks to satisfy the interfaces.
 type ConnectAPI interface {
+	AssociateApprovedOrigin(*connect.AssociateApprovedOriginInput) (*connect.AssociateApprovedOriginOutput, error)
+	AssociateApprovedOriginWithContext(aws.Context, *connect.AssociateApprovedOriginInput, ...request.Option) (*connect.AssociateApprovedOriginOutput, error)
+	AssociateApprovedOriginRequest(*connect.AssociateApprovedOriginInput) (*request.Request, *connect.AssociateApprovedOriginOutput)
+
+	AssociateBot(*connect.AssociateBotInput) (*connect.AssociateBotOutput, error)
+	AssociateBotWithContext(aws.Context, *connect.AssociateBotInput, ...request.Option) (*connect.AssociateBotOutput, error)
+	AssociateBotRequest(*connect.AssociateBotInput) (*request.Request, *connect.AssociateBotOutput)
+
+	AssociateInstanceStorageConfig(*connect.AssociateInstanceStorageConfigInput) (*connect.AssociateInstanceStorageConfigOutput, error)
+	AssociateInstanceStorageConfigWithContext(aws.Context, *connect.AssociateInstanceStorageConfigInput, ...request.Option) (*connect.AssociateInstanceStorageConfigOutput, error)
+	AssociateInstanceStorageConfigRequest(*connect.AssociateInstanceStorageConfigInput) (*request.Request, *connect.AssociateInstanceStorageConfigOutput)
+
+	AssociateLambdaFunction(*connect.AssociateLambdaFunctionInput) (*connect.AssociateLambdaFunctionOutput, error)
+	AssociateLambdaFunctionWithContext(aws.Context, *connect.AssociateLambdaFunctionInput, ...request.Option) (*connect.AssociateLambdaFunctionOutput, error)
+	AssociateLambdaFunctionRequest(*connect.AssociateLambdaFunctionInput) (*request.Request, *connect.AssociateLambdaFunctionOutput)
+
+	AssociateLexBot(*connect.AssociateLexBotInput) (*connect.AssociateLexBotOutput, error)
+	AssociateLexBotWithContext(aws.Context, *connect.AssociateLexBotInput, ...request.Option) (*connect.AssociateLexBotOutput, error)
+	AssociateLexBotRequest(*connect.AssociateLexBotInput) (*request.Request, *connect.AssociateLexBotOutput)
+
+	AssociateQueueQuickConnects(*connect.AssociateQueueQuickConnectsInput) (*connect.AssociateQueueQuickConnectsOutput, error)
+	AssociateQueueQuickConnectsWithContext(aws.Context, *connect.AssociateQueueQuickConnectsInput, ...request.Option) (*connect.AssociateQueueQuickConnectsOutput, error)
+	AssociateQueueQuickConnectsRequest(*connect.AssociateQueueQuickConnectsInput) (*request.Request, *connect.AssociateQueueQuickConnectsOutput)
+
 	AssociateRoutingProfileQueues(*connect.AssociateRoutingProfileQueuesInput) (*connect.AssociateRoutingProfileQueuesOutput, error)
 	AssociateRoutingProfileQueuesWithContext(aws.Context, *connect.AssociateRoutingProfileQueuesInput, ...request.Option) (*connect.AssociateRoutingProfileQueuesOutput, error)
 	AssociateRoutingProfileQueuesRequest(*connect.AssociateRoutingProfileQueuesInput) (*request.Request, *connect.AssociateRoutingProfileQueuesOutput)
+
+	AssociateSecurityKey(*connect.AssociateSecurityKeyInput) (*connect.AssociateSecurityKeyOutput, error)
+	AssociateSecurityKeyWithContext(aws.Context, *connect.AssociateSecurityKeyInput, ...request.Option) (*connect.AssociateSecurityKeyOutput, error)
+	AssociateSecurityKeyRequest(*connect.AssociateSecurityKeyInput) (*request.Request, *connect.AssociateSecurityKeyOutput)
+
+	CreateAgentStatus(*connect.CreateAgentStatusInput) (*connect.CreateAgentStatusOutput, error)
+	CreateAgentStatusWithContext(aws.Context, *connect.CreateAgentStatusInput, ...request.Option) (*connect.CreateAgentStatusOutput, error)
+	CreateAgentStatusRequest(*connect.CreateAgentStatusInput) (*request.Request, *connect.CreateAgentStatusOutput)
 
 	CreateContactFlow(*connect.CreateContactFlowInput) (*connect.CreateContactFlowOutput, error)
 	CreateContactFlowWithContext(aws.Context, *connect.CreateContactFlowInput, ...request.Option) (*connect.CreateContactFlowOutput, error)
 	CreateContactFlowRequest(*connect.CreateContactFlowInput) (*request.Request, *connect.CreateContactFlowOutput)
 
+	CreateHoursOfOperation(*connect.CreateHoursOfOperationInput) (*connect.CreateHoursOfOperationOutput, error)
+	CreateHoursOfOperationWithContext(aws.Context, *connect.CreateHoursOfOperationInput, ...request.Option) (*connect.CreateHoursOfOperationOutput, error)
+	CreateHoursOfOperationRequest(*connect.CreateHoursOfOperationInput) (*request.Request, *connect.CreateHoursOfOperationOutput)
+
+	CreateInstance(*connect.CreateInstanceInput) (*connect.CreateInstanceOutput, error)
+	CreateInstanceWithContext(aws.Context, *connect.CreateInstanceInput, ...request.Option) (*connect.CreateInstanceOutput, error)
+	CreateInstanceRequest(*connect.CreateInstanceInput) (*request.Request, *connect.CreateInstanceOutput)
+
+	CreateIntegrationAssociation(*connect.CreateIntegrationAssociationInput) (*connect.CreateIntegrationAssociationOutput, error)
+	CreateIntegrationAssociationWithContext(aws.Context, *connect.CreateIntegrationAssociationInput, ...request.Option) (*connect.CreateIntegrationAssociationOutput, error)
+	CreateIntegrationAssociationRequest(*connect.CreateIntegrationAssociationInput) (*request.Request, *connect.CreateIntegrationAssociationOutput)
+
+	CreateQueue(*connect.CreateQueueInput) (*connect.CreateQueueOutput, error)
+	CreateQueueWithContext(aws.Context, *connect.CreateQueueInput, ...request.Option) (*connect.CreateQueueOutput, error)
+	CreateQueueRequest(*connect.CreateQueueInput) (*request.Request, *connect.CreateQueueOutput)
+
+	CreateQuickConnect(*connect.CreateQuickConnectInput) (*connect.CreateQuickConnectOutput, error)
+	CreateQuickConnectWithContext(aws.Context, *connect.CreateQuickConnectInput, ...request.Option) (*connect.CreateQuickConnectOutput, error)
+	CreateQuickConnectRequest(*connect.CreateQuickConnectInput) (*request.Request, *connect.CreateQuickConnectOutput)
+
 	CreateRoutingProfile(*connect.CreateRoutingProfileInput) (*connect.CreateRoutingProfileOutput, error)
 	CreateRoutingProfileWithContext(aws.Context, *connect.CreateRoutingProfileInput, ...request.Option) (*connect.CreateRoutingProfileOutput, error)
 	CreateRoutingProfileRequest(*connect.CreateRoutingProfileInput) (*request.Request, *connect.CreateRoutingProfileOutput)
+
+	CreateUseCase(*connect.CreateUseCaseInput) (*connect.CreateUseCaseOutput, error)
+	CreateUseCaseWithContext(aws.Context, *connect.CreateUseCaseInput, ...request.Option) (*connect.CreateUseCaseOutput, error)
+	CreateUseCaseRequest(*connect.CreateUseCaseInput) (*request.Request, *connect.CreateUseCaseOutput)
 
 	CreateUser(*connect.CreateUserInput) (*connect.CreateUserOutput, error)
 	CreateUserWithContext(aws.Context, *connect.CreateUserInput, ...request.Option) (*connect.CreateUserOutput, error)
 	CreateUserRequest(*connect.CreateUserInput) (*request.Request, *connect.CreateUserOutput)
 
+	CreateUserHierarchyGroup(*connect.CreateUserHierarchyGroupInput) (*connect.CreateUserHierarchyGroupOutput, error)
+	CreateUserHierarchyGroupWithContext(aws.Context, *connect.CreateUserHierarchyGroupInput, ...request.Option) (*connect.CreateUserHierarchyGroupOutput, error)
+	CreateUserHierarchyGroupRequest(*connect.CreateUserHierarchyGroupInput) (*request.Request, *connect.CreateUserHierarchyGroupOutput)
+
+	DeleteHoursOfOperation(*connect.DeleteHoursOfOperationInput) (*connect.DeleteHoursOfOperationOutput, error)
+	DeleteHoursOfOperationWithContext(aws.Context, *connect.DeleteHoursOfOperationInput, ...request.Option) (*connect.DeleteHoursOfOperationOutput, error)
+	DeleteHoursOfOperationRequest(*connect.DeleteHoursOfOperationInput) (*request.Request, *connect.DeleteHoursOfOperationOutput)
+
+	DeleteInstance(*connect.DeleteInstanceInput) (*connect.DeleteInstanceOutput, error)
+	DeleteInstanceWithContext(aws.Context, *connect.DeleteInstanceInput, ...request.Option) (*connect.DeleteInstanceOutput, error)
+	DeleteInstanceRequest(*connect.DeleteInstanceInput) (*request.Request, *connect.DeleteInstanceOutput)
+
+	DeleteIntegrationAssociation(*connect.DeleteIntegrationAssociationInput) (*connect.DeleteIntegrationAssociationOutput, error)
+	DeleteIntegrationAssociationWithContext(aws.Context, *connect.DeleteIntegrationAssociationInput, ...request.Option) (*connect.DeleteIntegrationAssociationOutput, error)
+	DeleteIntegrationAssociationRequest(*connect.DeleteIntegrationAssociationInput) (*request.Request, *connect.DeleteIntegrationAssociationOutput)
+
+	DeleteQuickConnect(*connect.DeleteQuickConnectInput) (*connect.DeleteQuickConnectOutput, error)
+	DeleteQuickConnectWithContext(aws.Context, *connect.DeleteQuickConnectInput, ...request.Option) (*connect.DeleteQuickConnectOutput, error)
+	DeleteQuickConnectRequest(*connect.DeleteQuickConnectInput) (*request.Request, *connect.DeleteQuickConnectOutput)
+
+	DeleteUseCase(*connect.DeleteUseCaseInput) (*connect.DeleteUseCaseOutput, error)
+	DeleteUseCaseWithContext(aws.Context, *connect.DeleteUseCaseInput, ...request.Option) (*connect.DeleteUseCaseOutput, error)
+	DeleteUseCaseRequest(*connect.DeleteUseCaseInput) (*request.Request, *connect.DeleteUseCaseOutput)
+
 	DeleteUser(*connect.DeleteUserInput) (*connect.DeleteUserOutput, error)
 	DeleteUserWithContext(aws.Context, *connect.DeleteUserInput, ...request.Option) (*connect.DeleteUserOutput, error)
 	DeleteUserRequest(*connect.DeleteUserInput) (*request.Request, *connect.DeleteUserOutput)
 
+	DeleteUserHierarchyGroup(*connect.DeleteUserHierarchyGroupInput) (*connect.DeleteUserHierarchyGroupOutput, error)
+	DeleteUserHierarchyGroupWithContext(aws.Context, *connect.DeleteUserHierarchyGroupInput, ...request.Option) (*connect.DeleteUserHierarchyGroupOutput, error)
+	DeleteUserHierarchyGroupRequest(*connect.DeleteUserHierarchyGroupInput) (*request.Request, *connect.DeleteUserHierarchyGroupOutput)
+
+	DescribeAgentStatus(*connect.DescribeAgentStatusInput) (*connect.DescribeAgentStatusOutput, error)
+	DescribeAgentStatusWithContext(aws.Context, *connect.DescribeAgentStatusInput, ...request.Option) (*connect.DescribeAgentStatusOutput, error)
+	DescribeAgentStatusRequest(*connect.DescribeAgentStatusInput) (*request.Request, *connect.DescribeAgentStatusOutput)
+
 	DescribeContactFlow(*connect.DescribeContactFlowInput) (*connect.DescribeContactFlowOutput, error)
 	DescribeContactFlowWithContext(aws.Context, *connect.DescribeContactFlowInput, ...request.Option) (*connect.DescribeContactFlowOutput, error)
 	DescribeContactFlowRequest(*connect.DescribeContactFlowInput) (*request.Request, *connect.DescribeContactFlowOutput)
+
+	DescribeHoursOfOperation(*connect.DescribeHoursOfOperationInput) (*connect.DescribeHoursOfOperationOutput, error)
+	DescribeHoursOfOperationWithContext(aws.Context, *connect.DescribeHoursOfOperationInput, ...request.Option) (*connect.DescribeHoursOfOperationOutput, error)
+	DescribeHoursOfOperationRequest(*connect.DescribeHoursOfOperationInput) (*request.Request, *connect.DescribeHoursOfOperationOutput)
+
+	DescribeInstance(*connect.DescribeInstanceInput) (*connect.DescribeInstanceOutput, error)
+	DescribeInstanceWithContext(aws.Context, *connect.DescribeInstanceInput, ...request.Option) (*connect.DescribeInstanceOutput, error)
+	DescribeInstanceRequest(*connect.DescribeInstanceInput) (*request.Request, *connect.DescribeInstanceOutput)
+
+	DescribeInstanceAttribute(*connect.DescribeInstanceAttributeInput) (*connect.DescribeInstanceAttributeOutput, error)
+	DescribeInstanceAttributeWithContext(aws.Context, *connect.DescribeInstanceAttributeInput, ...request.Option) (*connect.DescribeInstanceAttributeOutput, error)
+	DescribeInstanceAttributeRequest(*connect.DescribeInstanceAttributeInput) (*request.Request, *connect.DescribeInstanceAttributeOutput)
+
+	DescribeInstanceStorageConfig(*connect.DescribeInstanceStorageConfigInput) (*connect.DescribeInstanceStorageConfigOutput, error)
+	DescribeInstanceStorageConfigWithContext(aws.Context, *connect.DescribeInstanceStorageConfigInput, ...request.Option) (*connect.DescribeInstanceStorageConfigOutput, error)
+	DescribeInstanceStorageConfigRequest(*connect.DescribeInstanceStorageConfigInput) (*request.Request, *connect.DescribeInstanceStorageConfigOutput)
+
+	DescribeQueue(*connect.DescribeQueueInput) (*connect.DescribeQueueOutput, error)
+	DescribeQueueWithContext(aws.Context, *connect.DescribeQueueInput, ...request.Option) (*connect.DescribeQueueOutput, error)
+	DescribeQueueRequest(*connect.DescribeQueueInput) (*request.Request, *connect.DescribeQueueOutput)
+
+	DescribeQuickConnect(*connect.DescribeQuickConnectInput) (*connect.DescribeQuickConnectOutput, error)
+	DescribeQuickConnectWithContext(aws.Context, *connect.DescribeQuickConnectInput, ...request.Option) (*connect.DescribeQuickConnectOutput, error)
+	DescribeQuickConnectRequest(*connect.DescribeQuickConnectInput) (*request.Request, *connect.DescribeQuickConnectOutput)
 
 	DescribeRoutingProfile(*connect.DescribeRoutingProfileInput) (*connect.DescribeRoutingProfileOutput, error)
 	DescribeRoutingProfileWithContext(aws.Context, *connect.DescribeRoutingProfileInput, ...request.Option) (*connect.DescribeRoutingProfileOutput, error)
@@ -100,9 +212,37 @@ type ConnectAPI interface {
 	DescribeUserHierarchyStructureWithContext(aws.Context, *connect.DescribeUserHierarchyStructureInput, ...request.Option) (*connect.DescribeUserHierarchyStructureOutput, error)
 	DescribeUserHierarchyStructureRequest(*connect.DescribeUserHierarchyStructureInput) (*request.Request, *connect.DescribeUserHierarchyStructureOutput)
 
+	DisassociateApprovedOrigin(*connect.DisassociateApprovedOriginInput) (*connect.DisassociateApprovedOriginOutput, error)
+	DisassociateApprovedOriginWithContext(aws.Context, *connect.DisassociateApprovedOriginInput, ...request.Option) (*connect.DisassociateApprovedOriginOutput, error)
+	DisassociateApprovedOriginRequest(*connect.DisassociateApprovedOriginInput) (*request.Request, *connect.DisassociateApprovedOriginOutput)
+
+	DisassociateBot(*connect.DisassociateBotInput) (*connect.DisassociateBotOutput, error)
+	DisassociateBotWithContext(aws.Context, *connect.DisassociateBotInput, ...request.Option) (*connect.DisassociateBotOutput, error)
+	DisassociateBotRequest(*connect.DisassociateBotInput) (*request.Request, *connect.DisassociateBotOutput)
+
+	DisassociateInstanceStorageConfig(*connect.DisassociateInstanceStorageConfigInput) (*connect.DisassociateInstanceStorageConfigOutput, error)
+	DisassociateInstanceStorageConfigWithContext(aws.Context, *connect.DisassociateInstanceStorageConfigInput, ...request.Option) (*connect.DisassociateInstanceStorageConfigOutput, error)
+	DisassociateInstanceStorageConfigRequest(*connect.DisassociateInstanceStorageConfigInput) (*request.Request, *connect.DisassociateInstanceStorageConfigOutput)
+
+	DisassociateLambdaFunction(*connect.DisassociateLambdaFunctionInput) (*connect.DisassociateLambdaFunctionOutput, error)
+	DisassociateLambdaFunctionWithContext(aws.Context, *connect.DisassociateLambdaFunctionInput, ...request.Option) (*connect.DisassociateLambdaFunctionOutput, error)
+	DisassociateLambdaFunctionRequest(*connect.DisassociateLambdaFunctionInput) (*request.Request, *connect.DisassociateLambdaFunctionOutput)
+
+	DisassociateLexBot(*connect.DisassociateLexBotInput) (*connect.DisassociateLexBotOutput, error)
+	DisassociateLexBotWithContext(aws.Context, *connect.DisassociateLexBotInput, ...request.Option) (*connect.DisassociateLexBotOutput, error)
+	DisassociateLexBotRequest(*connect.DisassociateLexBotInput) (*request.Request, *connect.DisassociateLexBotOutput)
+
+	DisassociateQueueQuickConnects(*connect.DisassociateQueueQuickConnectsInput) (*connect.DisassociateQueueQuickConnectsOutput, error)
+	DisassociateQueueQuickConnectsWithContext(aws.Context, *connect.DisassociateQueueQuickConnectsInput, ...request.Option) (*connect.DisassociateQueueQuickConnectsOutput, error)
+	DisassociateQueueQuickConnectsRequest(*connect.DisassociateQueueQuickConnectsInput) (*request.Request, *connect.DisassociateQueueQuickConnectsOutput)
+
 	DisassociateRoutingProfileQueues(*connect.DisassociateRoutingProfileQueuesInput) (*connect.DisassociateRoutingProfileQueuesOutput, error)
 	DisassociateRoutingProfileQueuesWithContext(aws.Context, *connect.DisassociateRoutingProfileQueuesInput, ...request.Option) (*connect.DisassociateRoutingProfileQueuesOutput, error)
 	DisassociateRoutingProfileQueuesRequest(*connect.DisassociateRoutingProfileQueuesInput) (*request.Request, *connect.DisassociateRoutingProfileQueuesOutput)
+
+	DisassociateSecurityKey(*connect.DisassociateSecurityKeyInput) (*connect.DisassociateSecurityKeyOutput, error)
+	DisassociateSecurityKeyWithContext(aws.Context, *connect.DisassociateSecurityKeyInput, ...request.Option) (*connect.DisassociateSecurityKeyOutput, error)
+	DisassociateSecurityKeyRequest(*connect.DisassociateSecurityKeyInput) (*request.Request, *connect.DisassociateSecurityKeyOutput)
 
 	GetContactAttributes(*connect.GetContactAttributesInput) (*connect.GetContactAttributesOutput, error)
 	GetContactAttributesWithContext(aws.Context, *connect.GetContactAttributesInput, ...request.Option) (*connect.GetContactAttributesOutput, error)
@@ -126,6 +266,27 @@ type ConnectAPI interface {
 	GetMetricDataPages(*connect.GetMetricDataInput, func(*connect.GetMetricDataOutput, bool) bool) error
 	GetMetricDataPagesWithContext(aws.Context, *connect.GetMetricDataInput, func(*connect.GetMetricDataOutput, bool) bool, ...request.Option) error
 
+	ListAgentStatuses(*connect.ListAgentStatusesInput) (*connect.ListAgentStatusesOutput, error)
+	ListAgentStatusesWithContext(aws.Context, *connect.ListAgentStatusesInput, ...request.Option) (*connect.ListAgentStatusesOutput, error)
+	ListAgentStatusesRequest(*connect.ListAgentStatusesInput) (*request.Request, *connect.ListAgentStatusesOutput)
+
+	ListAgentStatusesPages(*connect.ListAgentStatusesInput, func(*connect.ListAgentStatusesOutput, bool) bool) error
+	ListAgentStatusesPagesWithContext(aws.Context, *connect.ListAgentStatusesInput, func(*connect.ListAgentStatusesOutput, bool) bool, ...request.Option) error
+
+	ListApprovedOrigins(*connect.ListApprovedOriginsInput) (*connect.ListApprovedOriginsOutput, error)
+	ListApprovedOriginsWithContext(aws.Context, *connect.ListApprovedOriginsInput, ...request.Option) (*connect.ListApprovedOriginsOutput, error)
+	ListApprovedOriginsRequest(*connect.ListApprovedOriginsInput) (*request.Request, *connect.ListApprovedOriginsOutput)
+
+	ListApprovedOriginsPages(*connect.ListApprovedOriginsInput, func(*connect.ListApprovedOriginsOutput, bool) bool) error
+	ListApprovedOriginsPagesWithContext(aws.Context, *connect.ListApprovedOriginsInput, func(*connect.ListApprovedOriginsOutput, bool) bool, ...request.Option) error
+
+	ListBots(*connect.ListBotsInput) (*connect.ListBotsOutput, error)
+	ListBotsWithContext(aws.Context, *connect.ListBotsInput, ...request.Option) (*connect.ListBotsOutput, error)
+	ListBotsRequest(*connect.ListBotsInput) (*request.Request, *connect.ListBotsOutput)
+
+	ListBotsPages(*connect.ListBotsInput, func(*connect.ListBotsOutput, bool) bool) error
+	ListBotsPagesWithContext(aws.Context, *connect.ListBotsInput, func(*connect.ListBotsOutput, bool) bool, ...request.Option) error
+
 	ListContactFlows(*connect.ListContactFlowsInput) (*connect.ListContactFlowsOutput, error)
 	ListContactFlowsWithContext(aws.Context, *connect.ListContactFlowsInput, ...request.Option) (*connect.ListContactFlowsOutput, error)
 	ListContactFlowsRequest(*connect.ListContactFlowsInput) (*request.Request, *connect.ListContactFlowsOutput)
@@ -139,6 +300,48 @@ type ConnectAPI interface {
 
 	ListHoursOfOperationsPages(*connect.ListHoursOfOperationsInput, func(*connect.ListHoursOfOperationsOutput, bool) bool) error
 	ListHoursOfOperationsPagesWithContext(aws.Context, *connect.ListHoursOfOperationsInput, func(*connect.ListHoursOfOperationsOutput, bool) bool, ...request.Option) error
+
+	ListInstanceAttributes(*connect.ListInstanceAttributesInput) (*connect.ListInstanceAttributesOutput, error)
+	ListInstanceAttributesWithContext(aws.Context, *connect.ListInstanceAttributesInput, ...request.Option) (*connect.ListInstanceAttributesOutput, error)
+	ListInstanceAttributesRequest(*connect.ListInstanceAttributesInput) (*request.Request, *connect.ListInstanceAttributesOutput)
+
+	ListInstanceAttributesPages(*connect.ListInstanceAttributesInput, func(*connect.ListInstanceAttributesOutput, bool) bool) error
+	ListInstanceAttributesPagesWithContext(aws.Context, *connect.ListInstanceAttributesInput, func(*connect.ListInstanceAttributesOutput, bool) bool, ...request.Option) error
+
+	ListInstanceStorageConfigs(*connect.ListInstanceStorageConfigsInput) (*connect.ListInstanceStorageConfigsOutput, error)
+	ListInstanceStorageConfigsWithContext(aws.Context, *connect.ListInstanceStorageConfigsInput, ...request.Option) (*connect.ListInstanceStorageConfigsOutput, error)
+	ListInstanceStorageConfigsRequest(*connect.ListInstanceStorageConfigsInput) (*request.Request, *connect.ListInstanceStorageConfigsOutput)
+
+	ListInstanceStorageConfigsPages(*connect.ListInstanceStorageConfigsInput, func(*connect.ListInstanceStorageConfigsOutput, bool) bool) error
+	ListInstanceStorageConfigsPagesWithContext(aws.Context, *connect.ListInstanceStorageConfigsInput, func(*connect.ListInstanceStorageConfigsOutput, bool) bool, ...request.Option) error
+
+	ListInstances(*connect.ListInstancesInput) (*connect.ListInstancesOutput, error)
+	ListInstancesWithContext(aws.Context, *connect.ListInstancesInput, ...request.Option) (*connect.ListInstancesOutput, error)
+	ListInstancesRequest(*connect.ListInstancesInput) (*request.Request, *connect.ListInstancesOutput)
+
+	ListInstancesPages(*connect.ListInstancesInput, func(*connect.ListInstancesOutput, bool) bool) error
+	ListInstancesPagesWithContext(aws.Context, *connect.ListInstancesInput, func(*connect.ListInstancesOutput, bool) bool, ...request.Option) error
+
+	ListIntegrationAssociations(*connect.ListIntegrationAssociationsInput) (*connect.ListIntegrationAssociationsOutput, error)
+	ListIntegrationAssociationsWithContext(aws.Context, *connect.ListIntegrationAssociationsInput, ...request.Option) (*connect.ListIntegrationAssociationsOutput, error)
+	ListIntegrationAssociationsRequest(*connect.ListIntegrationAssociationsInput) (*request.Request, *connect.ListIntegrationAssociationsOutput)
+
+	ListIntegrationAssociationsPages(*connect.ListIntegrationAssociationsInput, func(*connect.ListIntegrationAssociationsOutput, bool) bool) error
+	ListIntegrationAssociationsPagesWithContext(aws.Context, *connect.ListIntegrationAssociationsInput, func(*connect.ListIntegrationAssociationsOutput, bool) bool, ...request.Option) error
+
+	ListLambdaFunctions(*connect.ListLambdaFunctionsInput) (*connect.ListLambdaFunctionsOutput, error)
+	ListLambdaFunctionsWithContext(aws.Context, *connect.ListLambdaFunctionsInput, ...request.Option) (*connect.ListLambdaFunctionsOutput, error)
+	ListLambdaFunctionsRequest(*connect.ListLambdaFunctionsInput) (*request.Request, *connect.ListLambdaFunctionsOutput)
+
+	ListLambdaFunctionsPages(*connect.ListLambdaFunctionsInput, func(*connect.ListLambdaFunctionsOutput, bool) bool) error
+	ListLambdaFunctionsPagesWithContext(aws.Context, *connect.ListLambdaFunctionsInput, func(*connect.ListLambdaFunctionsOutput, bool) bool, ...request.Option) error
+
+	ListLexBots(*connect.ListLexBotsInput) (*connect.ListLexBotsOutput, error)
+	ListLexBotsWithContext(aws.Context, *connect.ListLexBotsInput, ...request.Option) (*connect.ListLexBotsOutput, error)
+	ListLexBotsRequest(*connect.ListLexBotsInput) (*request.Request, *connect.ListLexBotsOutput)
+
+	ListLexBotsPages(*connect.ListLexBotsInput, func(*connect.ListLexBotsOutput, bool) bool) error
+	ListLexBotsPagesWithContext(aws.Context, *connect.ListLexBotsInput, func(*connect.ListLexBotsOutput, bool) bool, ...request.Option) error
 
 	ListPhoneNumbers(*connect.ListPhoneNumbersInput) (*connect.ListPhoneNumbersOutput, error)
 	ListPhoneNumbersWithContext(aws.Context, *connect.ListPhoneNumbersInput, ...request.Option) (*connect.ListPhoneNumbersOutput, error)
@@ -154,12 +357,26 @@ type ConnectAPI interface {
 	ListPromptsPages(*connect.ListPromptsInput, func(*connect.ListPromptsOutput, bool) bool) error
 	ListPromptsPagesWithContext(aws.Context, *connect.ListPromptsInput, func(*connect.ListPromptsOutput, bool) bool, ...request.Option) error
 
+	ListQueueQuickConnects(*connect.ListQueueQuickConnectsInput) (*connect.ListQueueQuickConnectsOutput, error)
+	ListQueueQuickConnectsWithContext(aws.Context, *connect.ListQueueQuickConnectsInput, ...request.Option) (*connect.ListQueueQuickConnectsOutput, error)
+	ListQueueQuickConnectsRequest(*connect.ListQueueQuickConnectsInput) (*request.Request, *connect.ListQueueQuickConnectsOutput)
+
+	ListQueueQuickConnectsPages(*connect.ListQueueQuickConnectsInput, func(*connect.ListQueueQuickConnectsOutput, bool) bool) error
+	ListQueueQuickConnectsPagesWithContext(aws.Context, *connect.ListQueueQuickConnectsInput, func(*connect.ListQueueQuickConnectsOutput, bool) bool, ...request.Option) error
+
 	ListQueues(*connect.ListQueuesInput) (*connect.ListQueuesOutput, error)
 	ListQueuesWithContext(aws.Context, *connect.ListQueuesInput, ...request.Option) (*connect.ListQueuesOutput, error)
 	ListQueuesRequest(*connect.ListQueuesInput) (*request.Request, *connect.ListQueuesOutput)
 
 	ListQueuesPages(*connect.ListQueuesInput, func(*connect.ListQueuesOutput, bool) bool) error
 	ListQueuesPagesWithContext(aws.Context, *connect.ListQueuesInput, func(*connect.ListQueuesOutput, bool) bool, ...request.Option) error
+
+	ListQuickConnects(*connect.ListQuickConnectsInput) (*connect.ListQuickConnectsOutput, error)
+	ListQuickConnectsWithContext(aws.Context, *connect.ListQuickConnectsInput, ...request.Option) (*connect.ListQuickConnectsOutput, error)
+	ListQuickConnectsRequest(*connect.ListQuickConnectsInput) (*request.Request, *connect.ListQuickConnectsOutput)
+
+	ListQuickConnectsPages(*connect.ListQuickConnectsInput, func(*connect.ListQuickConnectsOutput, bool) bool) error
+	ListQuickConnectsPagesWithContext(aws.Context, *connect.ListQuickConnectsInput, func(*connect.ListQuickConnectsOutput, bool) bool, ...request.Option) error
 
 	ListRoutingProfileQueues(*connect.ListRoutingProfileQueuesInput) (*connect.ListRoutingProfileQueuesOutput, error)
 	ListRoutingProfileQueuesWithContext(aws.Context, *connect.ListRoutingProfileQueuesInput, ...request.Option) (*connect.ListRoutingProfileQueuesOutput, error)
@@ -175,6 +392,13 @@ type ConnectAPI interface {
 	ListRoutingProfilesPages(*connect.ListRoutingProfilesInput, func(*connect.ListRoutingProfilesOutput, bool) bool) error
 	ListRoutingProfilesPagesWithContext(aws.Context, *connect.ListRoutingProfilesInput, func(*connect.ListRoutingProfilesOutput, bool) bool, ...request.Option) error
 
+	ListSecurityKeys(*connect.ListSecurityKeysInput) (*connect.ListSecurityKeysOutput, error)
+	ListSecurityKeysWithContext(aws.Context, *connect.ListSecurityKeysInput, ...request.Option) (*connect.ListSecurityKeysOutput, error)
+	ListSecurityKeysRequest(*connect.ListSecurityKeysInput) (*request.Request, *connect.ListSecurityKeysOutput)
+
+	ListSecurityKeysPages(*connect.ListSecurityKeysInput, func(*connect.ListSecurityKeysOutput, bool) bool) error
+	ListSecurityKeysPagesWithContext(aws.Context, *connect.ListSecurityKeysInput, func(*connect.ListSecurityKeysOutput, bool) bool, ...request.Option) error
+
 	ListSecurityProfiles(*connect.ListSecurityProfilesInput) (*connect.ListSecurityProfilesOutput, error)
 	ListSecurityProfilesWithContext(aws.Context, *connect.ListSecurityProfilesInput, ...request.Option) (*connect.ListSecurityProfilesOutput, error)
 	ListSecurityProfilesRequest(*connect.ListSecurityProfilesInput) (*request.Request, *connect.ListSecurityProfilesOutput)
@@ -185,6 +409,13 @@ type ConnectAPI interface {
 	ListTagsForResource(*connect.ListTagsForResourceInput) (*connect.ListTagsForResourceOutput, error)
 	ListTagsForResourceWithContext(aws.Context, *connect.ListTagsForResourceInput, ...request.Option) (*connect.ListTagsForResourceOutput, error)
 	ListTagsForResourceRequest(*connect.ListTagsForResourceInput) (*request.Request, *connect.ListTagsForResourceOutput)
+
+	ListUseCases(*connect.ListUseCasesInput) (*connect.ListUseCasesOutput, error)
+	ListUseCasesWithContext(aws.Context, *connect.ListUseCasesInput, ...request.Option) (*connect.ListUseCasesOutput, error)
+	ListUseCasesRequest(*connect.ListUseCasesInput) (*request.Request, *connect.ListUseCasesOutput)
+
+	ListUseCasesPages(*connect.ListUseCasesInput, func(*connect.ListUseCasesOutput, bool) bool) error
+	ListUseCasesPagesWithContext(aws.Context, *connect.ListUseCasesInput, func(*connect.ListUseCasesOutput, bool) bool, ...request.Option) error
 
 	ListUserHierarchyGroups(*connect.ListUserHierarchyGroupsInput) (*connect.ListUserHierarchyGroupsOutput, error)
 	ListUserHierarchyGroupsWithContext(aws.Context, *connect.ListUserHierarchyGroupsInput, ...request.Option) (*connect.ListUserHierarchyGroupsOutput, error)
@@ -216,6 +447,10 @@ type ConnectAPI interface {
 	StartOutboundVoiceContactWithContext(aws.Context, *connect.StartOutboundVoiceContactInput, ...request.Option) (*connect.StartOutboundVoiceContactOutput, error)
 	StartOutboundVoiceContactRequest(*connect.StartOutboundVoiceContactInput) (*request.Request, *connect.StartOutboundVoiceContactOutput)
 
+	StartTaskContact(*connect.StartTaskContactInput) (*connect.StartTaskContactOutput, error)
+	StartTaskContactWithContext(aws.Context, *connect.StartTaskContactInput, ...request.Option) (*connect.StartTaskContactOutput, error)
+	StartTaskContactRequest(*connect.StartTaskContactInput) (*request.Request, *connect.StartTaskContactOutput)
+
 	StopContact(*connect.StopContactInput) (*connect.StopContactOutput, error)
 	StopContactWithContext(aws.Context, *connect.StopContactInput, ...request.Option) (*connect.StopContactOutput, error)
 	StopContactRequest(*connect.StopContactInput) (*request.Request, *connect.StopContactOutput)
@@ -236,6 +471,10 @@ type ConnectAPI interface {
 	UntagResourceWithContext(aws.Context, *connect.UntagResourceInput, ...request.Option) (*connect.UntagResourceOutput, error)
 	UntagResourceRequest(*connect.UntagResourceInput) (*request.Request, *connect.UntagResourceOutput)
 
+	UpdateAgentStatus(*connect.UpdateAgentStatusInput) (*connect.UpdateAgentStatusOutput, error)
+	UpdateAgentStatusWithContext(aws.Context, *connect.UpdateAgentStatusInput, ...request.Option) (*connect.UpdateAgentStatusOutput, error)
+	UpdateAgentStatusRequest(*connect.UpdateAgentStatusInput) (*request.Request, *connect.UpdateAgentStatusOutput)
+
 	UpdateContactAttributes(*connect.UpdateContactAttributesInput) (*connect.UpdateContactAttributesOutput, error)
 	UpdateContactAttributesWithContext(aws.Context, *connect.UpdateContactAttributesInput, ...request.Option) (*connect.UpdateContactAttributesOutput, error)
 	UpdateContactAttributesRequest(*connect.UpdateContactAttributesInput) (*request.Request, *connect.UpdateContactAttributesOutput)
@@ -247,6 +486,46 @@ type ConnectAPI interface {
 	UpdateContactFlowName(*connect.UpdateContactFlowNameInput) (*connect.UpdateContactFlowNameOutput, error)
 	UpdateContactFlowNameWithContext(aws.Context, *connect.UpdateContactFlowNameInput, ...request.Option) (*connect.UpdateContactFlowNameOutput, error)
 	UpdateContactFlowNameRequest(*connect.UpdateContactFlowNameInput) (*request.Request, *connect.UpdateContactFlowNameOutput)
+
+	UpdateHoursOfOperation(*connect.UpdateHoursOfOperationInput) (*connect.UpdateHoursOfOperationOutput, error)
+	UpdateHoursOfOperationWithContext(aws.Context, *connect.UpdateHoursOfOperationInput, ...request.Option) (*connect.UpdateHoursOfOperationOutput, error)
+	UpdateHoursOfOperationRequest(*connect.UpdateHoursOfOperationInput) (*request.Request, *connect.UpdateHoursOfOperationOutput)
+
+	UpdateInstanceAttribute(*connect.UpdateInstanceAttributeInput) (*connect.UpdateInstanceAttributeOutput, error)
+	UpdateInstanceAttributeWithContext(aws.Context, *connect.UpdateInstanceAttributeInput, ...request.Option) (*connect.UpdateInstanceAttributeOutput, error)
+	UpdateInstanceAttributeRequest(*connect.UpdateInstanceAttributeInput) (*request.Request, *connect.UpdateInstanceAttributeOutput)
+
+	UpdateInstanceStorageConfig(*connect.UpdateInstanceStorageConfigInput) (*connect.UpdateInstanceStorageConfigOutput, error)
+	UpdateInstanceStorageConfigWithContext(aws.Context, *connect.UpdateInstanceStorageConfigInput, ...request.Option) (*connect.UpdateInstanceStorageConfigOutput, error)
+	UpdateInstanceStorageConfigRequest(*connect.UpdateInstanceStorageConfigInput) (*request.Request, *connect.UpdateInstanceStorageConfigOutput)
+
+	UpdateQueueHoursOfOperation(*connect.UpdateQueueHoursOfOperationInput) (*connect.UpdateQueueHoursOfOperationOutput, error)
+	UpdateQueueHoursOfOperationWithContext(aws.Context, *connect.UpdateQueueHoursOfOperationInput, ...request.Option) (*connect.UpdateQueueHoursOfOperationOutput, error)
+	UpdateQueueHoursOfOperationRequest(*connect.UpdateQueueHoursOfOperationInput) (*request.Request, *connect.UpdateQueueHoursOfOperationOutput)
+
+	UpdateQueueMaxContacts(*connect.UpdateQueueMaxContactsInput) (*connect.UpdateQueueMaxContactsOutput, error)
+	UpdateQueueMaxContactsWithContext(aws.Context, *connect.UpdateQueueMaxContactsInput, ...request.Option) (*connect.UpdateQueueMaxContactsOutput, error)
+	UpdateQueueMaxContactsRequest(*connect.UpdateQueueMaxContactsInput) (*request.Request, *connect.UpdateQueueMaxContactsOutput)
+
+	UpdateQueueName(*connect.UpdateQueueNameInput) (*connect.UpdateQueueNameOutput, error)
+	UpdateQueueNameWithContext(aws.Context, *connect.UpdateQueueNameInput, ...request.Option) (*connect.UpdateQueueNameOutput, error)
+	UpdateQueueNameRequest(*connect.UpdateQueueNameInput) (*request.Request, *connect.UpdateQueueNameOutput)
+
+	UpdateQueueOutboundCallerConfig(*connect.UpdateQueueOutboundCallerConfigInput) (*connect.UpdateQueueOutboundCallerConfigOutput, error)
+	UpdateQueueOutboundCallerConfigWithContext(aws.Context, *connect.UpdateQueueOutboundCallerConfigInput, ...request.Option) (*connect.UpdateQueueOutboundCallerConfigOutput, error)
+	UpdateQueueOutboundCallerConfigRequest(*connect.UpdateQueueOutboundCallerConfigInput) (*request.Request, *connect.UpdateQueueOutboundCallerConfigOutput)
+
+	UpdateQueueStatus(*connect.UpdateQueueStatusInput) (*connect.UpdateQueueStatusOutput, error)
+	UpdateQueueStatusWithContext(aws.Context, *connect.UpdateQueueStatusInput, ...request.Option) (*connect.UpdateQueueStatusOutput, error)
+	UpdateQueueStatusRequest(*connect.UpdateQueueStatusInput) (*request.Request, *connect.UpdateQueueStatusOutput)
+
+	UpdateQuickConnectConfig(*connect.UpdateQuickConnectConfigInput) (*connect.UpdateQuickConnectConfigOutput, error)
+	UpdateQuickConnectConfigWithContext(aws.Context, *connect.UpdateQuickConnectConfigInput, ...request.Option) (*connect.UpdateQuickConnectConfigOutput, error)
+	UpdateQuickConnectConfigRequest(*connect.UpdateQuickConnectConfigInput) (*request.Request, *connect.UpdateQuickConnectConfigOutput)
+
+	UpdateQuickConnectName(*connect.UpdateQuickConnectNameInput) (*connect.UpdateQuickConnectNameOutput, error)
+	UpdateQuickConnectNameWithContext(aws.Context, *connect.UpdateQuickConnectNameInput, ...request.Option) (*connect.UpdateQuickConnectNameOutput, error)
+	UpdateQuickConnectNameRequest(*connect.UpdateQuickConnectNameInput) (*request.Request, *connect.UpdateQuickConnectNameOutput)
 
 	UpdateRoutingProfileConcurrency(*connect.UpdateRoutingProfileConcurrencyInput) (*connect.UpdateRoutingProfileConcurrencyOutput, error)
 	UpdateRoutingProfileConcurrencyWithContext(aws.Context, *connect.UpdateRoutingProfileConcurrencyInput, ...request.Option) (*connect.UpdateRoutingProfileConcurrencyOutput, error)
@@ -267,6 +546,14 @@ type ConnectAPI interface {
 	UpdateUserHierarchy(*connect.UpdateUserHierarchyInput) (*connect.UpdateUserHierarchyOutput, error)
 	UpdateUserHierarchyWithContext(aws.Context, *connect.UpdateUserHierarchyInput, ...request.Option) (*connect.UpdateUserHierarchyOutput, error)
 	UpdateUserHierarchyRequest(*connect.UpdateUserHierarchyInput) (*request.Request, *connect.UpdateUserHierarchyOutput)
+
+	UpdateUserHierarchyGroupName(*connect.UpdateUserHierarchyGroupNameInput) (*connect.UpdateUserHierarchyGroupNameOutput, error)
+	UpdateUserHierarchyGroupNameWithContext(aws.Context, *connect.UpdateUserHierarchyGroupNameInput, ...request.Option) (*connect.UpdateUserHierarchyGroupNameOutput, error)
+	UpdateUserHierarchyGroupNameRequest(*connect.UpdateUserHierarchyGroupNameInput) (*request.Request, *connect.UpdateUserHierarchyGroupNameOutput)
+
+	UpdateUserHierarchyStructure(*connect.UpdateUserHierarchyStructureInput) (*connect.UpdateUserHierarchyStructureOutput, error)
+	UpdateUserHierarchyStructureWithContext(aws.Context, *connect.UpdateUserHierarchyStructureInput, ...request.Option) (*connect.UpdateUserHierarchyStructureOutput, error)
+	UpdateUserHierarchyStructureRequest(*connect.UpdateUserHierarchyStructureInput) (*request.Request, *connect.UpdateUserHierarchyStructureOutput)
 
 	UpdateUserIdentityInfo(*connect.UpdateUserIdentityInfoInput) (*connect.UpdateUserIdentityInfoOutput, error)
 	UpdateUserIdentityInfoWithContext(aws.Context, *connect.UpdateUserIdentityInfoInput, ...request.Option) (*connect.UpdateUserIdentityInfoOutput, error)

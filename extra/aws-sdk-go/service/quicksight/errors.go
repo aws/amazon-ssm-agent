@@ -106,12 +106,25 @@ const (
 	// Access is throttled.
 	ErrCodeThrottlingException = "ThrottlingException"
 
+	// ErrCodeUnsupportedPricingPlanException for service response error code
+	// "UnsupportedPricingPlanException".
+	//
+	// This error indicates that you are calling an embedding operation in Amazon
+	// QuickSight without the required pricing plan on your Amazon Web Services
+	// account. Before you can use embedding for anonymous users, a Amazon QuickSight
+	// administrator needs to add capacity pricing to Amazon QuickSight. You can
+	// do this on the Manage Amazon QuickSight page.
+	//
+	// After capacity pricing is added, you can use the GetDashboardEmbedUrl API
+	// operation with the --identity-type ANONYMOUS option.
+	ErrCodeUnsupportedPricingPlanException = "UnsupportedPricingPlanException"
+
 	// ErrCodeUnsupportedUserEditionException for service response error code
 	// "UnsupportedUserEditionException".
 	//
 	// This error indicates that you are calling an operation on an Amazon QuickSight
 	// subscription where the edition doesn't include support for that operation.
-	// Amazon QuickSight currently has Standard Edition and Enterprise Edition.
+	// Amazon Amazon QuickSight currently has Standard Edition and Enterprise Edition.
 	// Not every operation and capability is available in every edition.
 	ErrCodeUnsupportedUserEditionException = "UnsupportedUserEditionException"
 
@@ -140,6 +153,7 @@ var exceptionFromCode = map[string]func(protocol.ResponseMetadata) error{
 	"ResourceUnavailableException":             newErrorResourceUnavailableException,
 	"SessionLifetimeInMinutesInvalidException": newErrorSessionLifetimeInMinutesInvalidException,
 	"ThrottlingException":                      newErrorThrottlingException,
+	"UnsupportedPricingPlanException":          newErrorUnsupportedPricingPlanException,
 	"UnsupportedUserEditionException":          newErrorUnsupportedUserEditionException,
 	"QuickSightUserNotFoundException":          newErrorUserNotFoundException,
 }

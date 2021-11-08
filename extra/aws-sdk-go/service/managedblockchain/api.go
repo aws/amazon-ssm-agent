@@ -59,6 +59,8 @@ func (c *ManagedBlockchain) CreateMemberRequest(input *CreateMemberInput) (req *
 //
 // Creates a member within a Managed Blockchain network.
 //
+// Applies only to Hyperledger Fabric.
+//
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
 // the error.
@@ -75,8 +77,8 @@ func (c *ManagedBlockchain) CreateMemberRequest(input *CreateMemberInput) (req *
 //   You do not have sufficient access to perform this action.
 //
 //   * ResourceNotFoundException
-//   A requested resource does not exist on the network. It may have been deleted
-//   or referenced inaccurately.
+//   A requested resource does not exist. It may have been deleted or referenced
+//   inaccurately.
 //
 //   * ResourceAlreadyExistsException
 //   A resource request is issued for a resource that already exists.
@@ -99,6 +101,8 @@ func (c *ManagedBlockchain) CreateMemberRequest(input *CreateMemberInput) (req *
 //   * InternalServiceErrorException
 //   The request processing has failed because of an unknown error, exception
 //   or failure.
+//
+//   * TooManyTagsException
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/managedblockchain-2018-09-24/CreateMember
 func (c *ManagedBlockchain) CreateMember(input *CreateMemberInput) (*CreateMemberOutput, error) {
@@ -168,6 +172,8 @@ func (c *ManagedBlockchain) CreateNetworkRequest(input *CreateNetworkInput) (req
 //
 // Creates a new blockchain network using Amazon Managed Blockchain.
 //
+// Applies only to Hyperledger Fabric.
+//
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
 // the error.
@@ -200,6 +206,8 @@ func (c *ManagedBlockchain) CreateNetworkRequest(input *CreateNetworkInput) (req
 //   * InternalServiceErrorException
 //   The request processing has failed because of an unknown error, exception
 //   or failure.
+//
+//   * TooManyTagsException
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/managedblockchain-2018-09-24/CreateNetwork
 func (c *ManagedBlockchain) CreateNetwork(input *CreateNetworkInput) (*CreateNetworkOutput, error) {
@@ -253,7 +261,7 @@ func (c *ManagedBlockchain) CreateNodeRequest(input *CreateNodeInput) (req *requ
 	op := &request.Operation{
 		Name:       opCreateNode,
 		HTTPMethod: "POST",
-		HTTPPath:   "/networks/{networkId}/members/{memberId}/nodes",
+		HTTPPath:   "/networks/{networkId}/nodes",
 	}
 
 	if input == nil {
@@ -267,7 +275,9 @@ func (c *ManagedBlockchain) CreateNodeRequest(input *CreateNodeInput) (req *requ
 
 // CreateNode API operation for Amazon Managed Blockchain.
 //
-// Creates a peer node in a member.
+// Creates a node on the specified blockchain network.
+//
+// Applies to Hyperledger Fabric and Ethereum.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -285,8 +295,8 @@ func (c *ManagedBlockchain) CreateNodeRequest(input *CreateNodeInput) (req *requ
 //   You do not have sufficient access to perform this action.
 //
 //   * ResourceNotFoundException
-//   A requested resource does not exist on the network. It may have been deleted
-//   or referenced inaccurately.
+//   A requested resource does not exist. It may have been deleted or referenced
+//   inaccurately.
 //
 //   * ResourceAlreadyExistsException
 //   A resource request is issued for a resource that already exists.
@@ -309,6 +319,8 @@ func (c *ManagedBlockchain) CreateNodeRequest(input *CreateNodeInput) (req *requ
 //   * InternalServiceErrorException
 //   The request processing has failed because of an unknown error, exception
 //   or failure.
+//
+//   * TooManyTagsException
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/managedblockchain-2018-09-24/CreateNode
 func (c *ManagedBlockchain) CreateNode(input *CreateNodeInput) (*CreateNodeOutput, error) {
@@ -380,6 +392,8 @@ func (c *ManagedBlockchain) CreateProposalRequest(input *CreateProposalInput) (r
 // network can vote on, for example, a proposal to add a new member to the network.
 // Any member can create a proposal.
 //
+// Applies only to Hyperledger Fabric.
+//
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
 // the error.
@@ -396,8 +410,8 @@ func (c *ManagedBlockchain) CreateProposalRequest(input *CreateProposalInput) (r
 //   You do not have sufficient access to perform this action.
 //
 //   * ResourceNotFoundException
-//   A requested resource does not exist on the network. It may have been deleted
-//   or referenced inaccurately.
+//   A requested resource does not exist. It may have been deleted or referenced
+//   inaccurately.
 //
 //   * ResourceNotReadyException
 //   The requested resource exists but is not in a status that can complete the
@@ -412,6 +426,8 @@ func (c *ManagedBlockchain) CreateProposalRequest(input *CreateProposalInput) (r
 //   * InternalServiceErrorException
 //   The request processing has failed because of an unknown error, exception
 //   or failure.
+//
+//   * TooManyTagsException
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/managedblockchain-2018-09-24/CreateProposal
 func (c *ManagedBlockchain) CreateProposal(input *CreateProposalInput) (*CreateProposalOutput, error) {
@@ -488,6 +504,8 @@ func (c *ManagedBlockchain) DeleteMemberRequest(input *DeleteMemberInput) (req *
 // If MemberId is the last member in a network specified by the last AWS account,
 // the network is deleted also.
 //
+// Applies only to Hyperledger Fabric.
+//
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
 // the error.
@@ -504,8 +522,8 @@ func (c *ManagedBlockchain) DeleteMemberRequest(input *DeleteMemberInput) (req *
 //   You do not have sufficient access to perform this action.
 //
 //   * ResourceNotFoundException
-//   A requested resource does not exist on the network. It may have been deleted
-//   or referenced inaccurately.
+//   A requested resource does not exist. It may have been deleted or referenced
+//   inaccurately.
 //
 //   * ResourceNotReadyException
 //   The requested resource exists but is not in a status that can complete the
@@ -573,7 +591,7 @@ func (c *ManagedBlockchain) DeleteNodeRequest(input *DeleteNodeInput) (req *requ
 	op := &request.Operation{
 		Name:       opDeleteNode,
 		HTTPMethod: "DELETE",
-		HTTPPath:   "/networks/{networkId}/members/{memberId}/nodes/{nodeId}",
+		HTTPPath:   "/networks/{networkId}/nodes/{nodeId}",
 	}
 
 	if input == nil {
@@ -588,8 +606,10 @@ func (c *ManagedBlockchain) DeleteNodeRequest(input *DeleteNodeInput) (req *requ
 
 // DeleteNode API operation for Amazon Managed Blockchain.
 //
-// Deletes a peer node from a member that your AWS account owns. All data on
-// the node is lost and cannot be recovered.
+// Deletes a node that your AWS account owns. All data on the node is lost and
+// cannot be recovered.
+//
+// Applies to Hyperledger Fabric and Ethereum.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -607,8 +627,8 @@ func (c *ManagedBlockchain) DeleteNodeRequest(input *DeleteNodeInput) (req *requ
 //   You do not have sufficient access to perform this action.
 //
 //   * ResourceNotFoundException
-//   A requested resource does not exist on the network. It may have been deleted
-//   or referenced inaccurately.
+//   A requested resource does not exist. It may have been deleted or referenced
+//   inaccurately.
 //
 //   * ResourceNotReadyException
 //   The requested resource exists but is not in a status that can complete the
@@ -692,6 +712,8 @@ func (c *ManagedBlockchain) GetMemberRequest(input *GetMemberInput) (req *reques
 //
 // Returns detailed information about a member.
 //
+// Applies only to Hyperledger Fabric.
+//
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
 // the error.
@@ -708,8 +730,8 @@ func (c *ManagedBlockchain) GetMemberRequest(input *GetMemberInput) (req *reques
 //   You do not have sufficient access to perform this action.
 //
 //   * ResourceNotFoundException
-//   A requested resource does not exist on the network. It may have been deleted
-//   or referenced inaccurately.
+//   A requested resource does not exist. It may have been deleted or referenced
+//   inaccurately.
 //
 //   * ThrottlingException
 //   The request or operation could not be performed because a service is throttling
@@ -789,6 +811,8 @@ func (c *ManagedBlockchain) GetNetworkRequest(input *GetNetworkInput) (req *requ
 //
 // Returns detailed information about a network.
 //
+// Applies to Hyperledger Fabric and Ethereum.
+//
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
 // the error.
@@ -805,8 +829,8 @@ func (c *ManagedBlockchain) GetNetworkRequest(input *GetNetworkInput) (req *requ
 //   You do not have sufficient access to perform this action.
 //
 //   * ResourceNotFoundException
-//   A requested resource does not exist on the network. It may have been deleted
-//   or referenced inaccurately.
+//   A requested resource does not exist. It may have been deleted or referenced
+//   inaccurately.
 //
 //   * ThrottlingException
 //   The request or operation could not be performed because a service is throttling
@@ -870,7 +894,7 @@ func (c *ManagedBlockchain) GetNodeRequest(input *GetNodeInput) (req *request.Re
 	op := &request.Operation{
 		Name:       opGetNode,
 		HTTPMethod: "GET",
-		HTTPPath:   "/networks/{networkId}/members/{memberId}/nodes/{nodeId}",
+		HTTPPath:   "/networks/{networkId}/nodes/{nodeId}",
 	}
 
 	if input == nil {
@@ -884,7 +908,9 @@ func (c *ManagedBlockchain) GetNodeRequest(input *GetNodeInput) (req *request.Re
 
 // GetNode API operation for Amazon Managed Blockchain.
 //
-// Returns detailed information about a peer node.
+// Returns detailed information about a node.
+//
+// Applies to Hyperledger Fabric and Ethereum.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -902,8 +928,8 @@ func (c *ManagedBlockchain) GetNodeRequest(input *GetNodeInput) (req *request.Re
 //   You do not have sufficient access to perform this action.
 //
 //   * ResourceNotFoundException
-//   A requested resource does not exist on the network. It may have been deleted
-//   or referenced inaccurately.
+//   A requested resource does not exist. It may have been deleted or referenced
+//   inaccurately.
 //
 //   * ThrottlingException
 //   The request or operation could not be performed because a service is throttling
@@ -983,6 +1009,8 @@ func (c *ManagedBlockchain) GetProposalRequest(input *GetProposalInput) (req *re
 //
 // Returns detailed information about a proposal.
 //
+// Applies only to Hyperledger Fabric.
+//
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
 // the error.
@@ -999,8 +1027,8 @@ func (c *ManagedBlockchain) GetProposalRequest(input *GetProposalInput) (req *re
 //   You do not have sufficient access to perform this action.
 //
 //   * ResourceNotFoundException
-//   A requested resource does not exist on the network. It may have been deleted
-//   or referenced inaccurately.
+//   A requested resource does not exist. It may have been deleted or referenced
+//   inaccurately.
 //
 //   * ThrottlingException
 //   The request or operation could not be performed because a service is throttling
@@ -1084,7 +1112,9 @@ func (c *ManagedBlockchain) ListInvitationsRequest(input *ListInvitationsInput) 
 
 // ListInvitations API operation for Amazon Managed Blockchain.
 //
-// Returns a listing of all invitations for the current AWS account.
+// Returns a list of all invitations for the current AWS account.
+//
+// Applies only to Hyperledger Fabric.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -1102,8 +1132,8 @@ func (c *ManagedBlockchain) ListInvitationsRequest(input *ListInvitationsInput) 
 //   You do not have sufficient access to perform this action.
 //
 //   * ResourceNotFoundException
-//   A requested resource does not exist on the network. It may have been deleted
-//   or referenced inaccurately.
+//   A requested resource does not exist. It may have been deleted or referenced
+//   inaccurately.
 //
 //   * ThrottlingException
 //   The request or operation could not be performed because a service is throttling
@@ -1244,7 +1274,9 @@ func (c *ManagedBlockchain) ListMembersRequest(input *ListMembersInput) (req *re
 
 // ListMembers API operation for Amazon Managed Blockchain.
 //
-// Returns a listing of the members in a network and properties of their configurations.
+// Returns a list of the members in a network and properties of their configurations.
+//
+// Applies only to Hyperledger Fabric.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -1395,8 +1427,9 @@ func (c *ManagedBlockchain) ListNetworksRequest(input *ListNetworksInput) (req *
 
 // ListNetworks API operation for Amazon Managed Blockchain.
 //
-// Returns information about the networks in which the current AWS account has
-// members.
+// Returns information about the networks in which the current AWS account participates.
+//
+// Applies to Hyperledger Fabric and Ethereum.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -1527,7 +1560,7 @@ func (c *ManagedBlockchain) ListNodesRequest(input *ListNodesInput) (req *reques
 	op := &request.Operation{
 		Name:       opListNodes,
 		HTTPMethod: "GET",
-		HTTPPath:   "/networks/{networkId}/members/{memberId}/nodes",
+		HTTPPath:   "/networks/{networkId}/nodes",
 		Paginator: &request.Paginator{
 			InputTokens:     []string{"NextToken"},
 			OutputTokens:    []string{"NextToken"},
@@ -1548,6 +1581,8 @@ func (c *ManagedBlockchain) ListNodesRequest(input *ListNodesInput) (req *reques
 // ListNodes API operation for Amazon Managed Blockchain.
 //
 // Returns information about the nodes within a network.
+//
+// Applies to Hyperledger Fabric and Ethereum.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -1698,8 +1733,10 @@ func (c *ManagedBlockchain) ListProposalVotesRequest(input *ListProposalVotesInp
 
 // ListProposalVotes API operation for Amazon Managed Blockchain.
 //
-// Returns the listing of votes for a specified proposal, including the value
-// of each vote and the unique identifier of the member that cast the vote.
+// Returns the list of votes for a specified proposal, including the value of
+// each vote and the unique identifier of the member that cast the vote.
+//
+// Applies only to Hyperledger Fabric.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -1850,7 +1887,9 @@ func (c *ManagedBlockchain) ListProposalsRequest(input *ListProposalsInput) (req
 
 // ListProposals API operation for Amazon Managed Blockchain.
 //
-// Returns a listing of proposals for the network.
+// Returns a list of proposals for the network.
+//
+// Applies only to Hyperledger Fabric.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -1865,8 +1904,8 @@ func (c *ManagedBlockchain) ListProposalsRequest(input *ListProposalsInput) (req
 //   correctly.
 //
 //   * ResourceNotFoundException
-//   A requested resource does not exist on the network. It may have been deleted
-//   or referenced inaccurately.
+//   A requested resource does not exist. It may have been deleted or referenced
+//   inaccurately.
 //
 //   * AccessDeniedException
 //   You do not have sufficient access to perform this action.
@@ -1955,6 +1994,104 @@ func (c *ManagedBlockchain) ListProposalsPagesWithContext(ctx aws.Context, input
 	return p.Err()
 }
 
+const opListTagsForResource = "ListTagsForResource"
+
+// ListTagsForResourceRequest generates a "aws/request.Request" representing the
+// client's request for the ListTagsForResource operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See ListTagsForResource for more information on using the ListTagsForResource
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the ListTagsForResourceRequest method.
+//    req, resp := client.ListTagsForResourceRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/managedblockchain-2018-09-24/ListTagsForResource
+func (c *ManagedBlockchain) ListTagsForResourceRequest(input *ListTagsForResourceInput) (req *request.Request, output *ListTagsForResourceOutput) {
+	op := &request.Operation{
+		Name:       opListTagsForResource,
+		HTTPMethod: "GET",
+		HTTPPath:   "/tags/{resourceArn}",
+	}
+
+	if input == nil {
+		input = &ListTagsForResourceInput{}
+	}
+
+	output = &ListTagsForResourceOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// ListTagsForResource API operation for Amazon Managed Blockchain.
+//
+// Returns a list of tags for the specified resource. Each tag consists of a
+// key and optional value.
+//
+// For more information about tags, see Tagging Resources (https://docs.aws.amazon.com/managed-blockchain/latest/ethereum-dev/tagging-resources.html)
+// in the Amazon Managed Blockchain Ethereum Developer Guide, or Tagging Resources
+// (https://docs.aws.amazon.com/managed-blockchain/latest/hyperledger-fabric-dev/tagging-resources.html)
+// in the Amazon Managed Blockchain Hyperledger Fabric Developer Guide.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Managed Blockchain's
+// API operation ListTagsForResource for usage and error information.
+//
+// Returned Error Types:
+//   * InternalServiceErrorException
+//   The request processing has failed because of an unknown error, exception
+//   or failure.
+//
+//   * InvalidRequestException
+//   The action or operation requested is invalid. Verify that the action is typed
+//   correctly.
+//
+//   * ResourceNotFoundException
+//   A requested resource does not exist. It may have been deleted or referenced
+//   inaccurately.
+//
+//   * ResourceNotReadyException
+//   The requested resource exists but is not in a status that can complete the
+//   operation.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/managedblockchain-2018-09-24/ListTagsForResource
+func (c *ManagedBlockchain) ListTagsForResource(input *ListTagsForResourceInput) (*ListTagsForResourceOutput, error) {
+	req, out := c.ListTagsForResourceRequest(input)
+	return out, req.Send()
+}
+
+// ListTagsForResourceWithContext is the same as ListTagsForResource with the addition of
+// the ability to pass a context and additional request options.
+//
+// See ListTagsForResource for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *ManagedBlockchain) ListTagsForResourceWithContext(ctx aws.Context, input *ListTagsForResourceInput, opts ...request.Option) (*ListTagsForResourceOutput, error) {
+	req, out := c.ListTagsForResourceRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opRejectInvitation = "RejectInvitation"
 
 // RejectInvitationRequest generates a "aws/request.Request" representing the
@@ -2004,6 +2141,8 @@ func (c *ManagedBlockchain) RejectInvitationRequest(input *RejectInvitationInput
 // in an AWS account that has received an invitation to create a member and
 // join a network.
 //
+// Applies only to Hyperledger Fabric.
+//
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
 // the error.
@@ -2022,8 +2161,8 @@ func (c *ManagedBlockchain) RejectInvitationRequest(input *RejectInvitationInput
 //   You do not have sufficient access to perform this action.
 //
 //   * ResourceNotFoundException
-//   A requested resource does not exist on the network. It may have been deleted
-//   or referenced inaccurately.
+//   A requested resource does not exist. It may have been deleted or referenced
+//   inaccurately.
 //
 //   * ThrottlingException
 //   The request or operation could not be performed because a service is throttling
@@ -2052,6 +2191,211 @@ func (c *ManagedBlockchain) RejectInvitation(input *RejectInvitationInput) (*Rej
 // for more information on using Contexts.
 func (c *ManagedBlockchain) RejectInvitationWithContext(ctx aws.Context, input *RejectInvitationInput, opts ...request.Option) (*RejectInvitationOutput, error) {
 	req, out := c.RejectInvitationRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opTagResource = "TagResource"
+
+// TagResourceRequest generates a "aws/request.Request" representing the
+// client's request for the TagResource operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See TagResource for more information on using the TagResource
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the TagResourceRequest method.
+//    req, resp := client.TagResourceRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/managedblockchain-2018-09-24/TagResource
+func (c *ManagedBlockchain) TagResourceRequest(input *TagResourceInput) (req *request.Request, output *TagResourceOutput) {
+	op := &request.Operation{
+		Name:       opTagResource,
+		HTTPMethod: "POST",
+		HTTPPath:   "/tags/{resourceArn}",
+	}
+
+	if input == nil {
+		input = &TagResourceInput{}
+	}
+
+	output = &TagResourceOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(restjson.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
+	return
+}
+
+// TagResource API operation for Amazon Managed Blockchain.
+//
+// Adds or overwrites the specified tags for the specified Amazon Managed Blockchain
+// resource. Each tag consists of a key and optional value.
+//
+// When you specify a tag key that already exists, the tag value is overwritten
+// with the new value. Use UntagResource to remove tag keys.
+//
+// A resource can have up to 50 tags. If you try to create more than 50 tags
+// for a resource, your request fails and returns an error.
+//
+// For more information about tags, see Tagging Resources (https://docs.aws.amazon.com/managed-blockchain/latest/ethereum-dev/tagging-resources.html)
+// in the Amazon Managed Blockchain Ethereum Developer Guide, or Tagging Resources
+// (https://docs.aws.amazon.com/managed-blockchain/latest/hyperledger-fabric-dev/tagging-resources.html)
+// in the Amazon Managed Blockchain Hyperledger Fabric Developer Guide.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Managed Blockchain's
+// API operation TagResource for usage and error information.
+//
+// Returned Error Types:
+//   * InternalServiceErrorException
+//   The request processing has failed because of an unknown error, exception
+//   or failure.
+//
+//   * InvalidRequestException
+//   The action or operation requested is invalid. Verify that the action is typed
+//   correctly.
+//
+//   * ResourceNotFoundException
+//   A requested resource does not exist. It may have been deleted or referenced
+//   inaccurately.
+//
+//   * TooManyTagsException
+//
+//   * ResourceNotReadyException
+//   The requested resource exists but is not in a status that can complete the
+//   operation.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/managedblockchain-2018-09-24/TagResource
+func (c *ManagedBlockchain) TagResource(input *TagResourceInput) (*TagResourceOutput, error) {
+	req, out := c.TagResourceRequest(input)
+	return out, req.Send()
+}
+
+// TagResourceWithContext is the same as TagResource with the addition of
+// the ability to pass a context and additional request options.
+//
+// See TagResource for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *ManagedBlockchain) TagResourceWithContext(ctx aws.Context, input *TagResourceInput, opts ...request.Option) (*TagResourceOutput, error) {
+	req, out := c.TagResourceRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opUntagResource = "UntagResource"
+
+// UntagResourceRequest generates a "aws/request.Request" representing the
+// client's request for the UntagResource operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See UntagResource for more information on using the UntagResource
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the UntagResourceRequest method.
+//    req, resp := client.UntagResourceRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/managedblockchain-2018-09-24/UntagResource
+func (c *ManagedBlockchain) UntagResourceRequest(input *UntagResourceInput) (req *request.Request, output *UntagResourceOutput) {
+	op := &request.Operation{
+		Name:       opUntagResource,
+		HTTPMethod: "DELETE",
+		HTTPPath:   "/tags/{resourceArn}",
+	}
+
+	if input == nil {
+		input = &UntagResourceInput{}
+	}
+
+	output = &UntagResourceOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(restjson.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
+	return
+}
+
+// UntagResource API operation for Amazon Managed Blockchain.
+//
+// Removes the specified tags from the Amazon Managed Blockchain resource.
+//
+// For more information about tags, see Tagging Resources (https://docs.aws.amazon.com/managed-blockchain/latest/ethereum-dev/tagging-resources.html)
+// in the Amazon Managed Blockchain Ethereum Developer Guide, or Tagging Resources
+// (https://docs.aws.amazon.com/managed-blockchain/latest/hyperledger-fabric-dev/tagging-resources.html)
+// in the Amazon Managed Blockchain Hyperledger Fabric Developer Guide.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Managed Blockchain's
+// API operation UntagResource for usage and error information.
+//
+// Returned Error Types:
+//   * InternalServiceErrorException
+//   The request processing has failed because of an unknown error, exception
+//   or failure.
+//
+//   * InvalidRequestException
+//   The action or operation requested is invalid. Verify that the action is typed
+//   correctly.
+//
+//   * ResourceNotFoundException
+//   A requested resource does not exist. It may have been deleted or referenced
+//   inaccurately.
+//
+//   * ResourceNotReadyException
+//   The requested resource exists but is not in a status that can complete the
+//   operation.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/managedblockchain-2018-09-24/UntagResource
+func (c *ManagedBlockchain) UntagResource(input *UntagResourceInput) (*UntagResourceOutput, error) {
+	req, out := c.UntagResourceRequest(input)
+	return out, req.Send()
+}
+
+// UntagResourceWithContext is the same as UntagResource with the addition of
+// the ability to pass a context and additional request options.
+//
+// See UntagResource for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *ManagedBlockchain) UntagResourceWithContext(ctx aws.Context, input *UntagResourceInput, opts ...request.Option) (*UntagResourceOutput, error) {
+	req, out := c.UntagResourceRequest(input)
 	req.SetContext(ctx)
 	req.ApplyOptions(opts...)
 	return out, req.Send()
@@ -2104,6 +2448,8 @@ func (c *ManagedBlockchain) UpdateMemberRequest(input *UpdateMemberInput) (req *
 //
 // Updates a member configuration with new parameters.
 //
+// Applies only to Hyperledger Fabric.
+//
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
 // the error.
@@ -2120,8 +2466,8 @@ func (c *ManagedBlockchain) UpdateMemberRequest(input *UpdateMemberInput) (req *
 //   You do not have sufficient access to perform this action.
 //
 //   * ResourceNotFoundException
-//   A requested resource does not exist on the network. It may have been deleted
-//   or referenced inaccurately.
+//   A requested resource does not exist. It may have been deleted or referenced
+//   inaccurately.
 //
 //   * ThrottlingException
 //   The request or operation could not be performed because a service is throttling
@@ -2185,7 +2531,7 @@ func (c *ManagedBlockchain) UpdateNodeRequest(input *UpdateNodeInput) (req *requ
 	op := &request.Operation{
 		Name:       opUpdateNode,
 		HTTPMethod: "PATCH",
-		HTTPPath:   "/networks/{networkId}/members/{memberId}/nodes/{nodeId}",
+		HTTPPath:   "/networks/{networkId}/nodes/{nodeId}",
 	}
 
 	if input == nil {
@@ -2201,6 +2547,8 @@ func (c *ManagedBlockchain) UpdateNodeRequest(input *UpdateNodeInput) (req *requ
 // UpdateNode API operation for Amazon Managed Blockchain.
 //
 // Updates a node configuration with new parameters.
+//
+// Applies only to Hyperledger Fabric.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -2218,8 +2566,8 @@ func (c *ManagedBlockchain) UpdateNodeRequest(input *UpdateNodeInput) (req *requ
 //   You do not have sufficient access to perform this action.
 //
 //   * ResourceNotFoundException
-//   A requested resource does not exist on the network. It may have been deleted
-//   or referenced inaccurately.
+//   A requested resource does not exist. It may have been deleted or referenced
+//   inaccurately.
 //
 //   * ThrottlingException
 //   The request or operation could not be performed because a service is throttling
@@ -2302,6 +2650,8 @@ func (c *ManagedBlockchain) VoteOnProposalRequest(input *VoteOnProposalInput) (r
 // to vote as, specified by VoterMemberId, must be in the same AWS account as
 // the principal that calls the action.
 //
+// Applies only to Hyperledger Fabric.
+//
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
 // the error.
@@ -2320,8 +2670,8 @@ func (c *ManagedBlockchain) VoteOnProposalRequest(input *VoteOnProposalInput) (r
 //   You do not have sufficient access to perform this action.
 //
 //   * ResourceNotFoundException
-//   A requested resource does not exist on the network. It may have been deleted
-//   or referenced inaccurately.
+//   A requested resource does not exist. It may have been deleted or referenced
+//   inaccurately.
 //
 //   * ThrottlingException
 //   The request or operation could not be performed because a service is throttling
@@ -2360,15 +2710,23 @@ type AccessDeniedException struct {
 	_            struct{}                  `type:"structure"`
 	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
 
-	Message_ *string `locationName:"message" type:"string"`
+	Message_ *string `locationName:"Message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AccessDeniedException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AccessDeniedException) GoString() string {
 	return s.String()
 }
@@ -2415,6 +2773,8 @@ func (s *AccessDeniedException) RequestID() string {
 // if a proposal is approved. Approval may be based on criteria such as the
 // percentage of YES votes and the duration of the proposal. The policy applies
 // to all proposals and is specified when the network is created.
+//
+// Applies only to Hyperledger Fabric.
 type ApprovalThresholdPolicy struct {
 	_ struct{} `type:"structure"`
 
@@ -2437,12 +2797,20 @@ type ApprovalThresholdPolicy struct {
 	ThresholdPercentage *int64 `type:"integer"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ApprovalThresholdPolicy) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ApprovalThresholdPolicy) GoString() string {
 	return s.String()
 }
@@ -2505,12 +2873,20 @@ type CreateMemberInput struct {
 	NetworkId *string `location:"uri" locationName:"networkId" min:"1" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateMemberInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateMemberInput) GoString() string {
 	return s.String()
 }
@@ -2579,12 +2955,20 @@ type CreateMemberOutput struct {
 	MemberId *string `min:"1" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateMemberOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateMemberOutput) GoString() string {
 	return s.String()
 }
@@ -2632,18 +3016,38 @@ type CreateNetworkInput struct {
 	// Name is a required field
 	Name *string `min:"1" type:"string" required:"true"`
 
+	// Tags to assign to the network. Each tag consists of a key and optional value.
+	//
+	// When specifying tags during creation, you can specify multiple key-value
+	// pairs in a single request, with an overall maximum of 50 tags added to each
+	// resource.
+	//
+	// For more information about tags, see Tagging Resources (https://docs.aws.amazon.com/managed-blockchain/latest/ethereum-dev/tagging-resources.html)
+	// in the Amazon Managed Blockchain Ethereum Developer Guide, or Tagging Resources
+	// (https://docs.aws.amazon.com/managed-blockchain/latest/hyperledger-fabric-dev/tagging-resources.html)
+	// in the Amazon Managed Blockchain Hyperledger Fabric Developer Guide.
+	Tags map[string]*string `type:"map"`
+
 	// The voting rules used by the network to determine if a proposal is approved.
 	//
 	// VotingPolicy is a required field
 	VotingPolicy *VotingPolicy `type:"structure" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateNetworkInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateNetworkInput) GoString() string {
 	return s.String()
 }
@@ -2739,6 +3143,12 @@ func (s *CreateNetworkInput) SetName(v string) *CreateNetworkInput {
 	return s
 }
 
+// SetTags sets the Tags field's value.
+func (s *CreateNetworkInput) SetTags(v map[string]*string) *CreateNetworkInput {
+	s.Tags = v
+	return s
+}
+
 // SetVotingPolicy sets the VotingPolicy field's value.
 func (s *CreateNetworkInput) SetVotingPolicy(v *VotingPolicy) *CreateNetworkInput {
 	s.VotingPolicy = v
@@ -2755,12 +3165,20 @@ type CreateNetworkOutput struct {
 	NetworkId *string `min:"1" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateNetworkOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateNetworkOutput) GoString() string {
 	return s.String()
 }
@@ -2789,10 +3207,18 @@ type CreateNodeInput struct {
 
 	// The unique identifier of the member that owns this node.
 	//
-	// MemberId is a required field
-	MemberId *string `location:"uri" locationName:"memberId" min:"1" type:"string" required:"true"`
+	// Applies only to Hyperledger Fabric.
+	MemberId *string `min:"1" type:"string"`
 
-	// The unique identifier of the network in which this node runs.
+	// The unique identifier of the network for the node.
+	//
+	// Ethereum public networks have the following NetworkIds:
+	//
+	//    * n-ethereum-mainnet
+	//
+	//    * n-ethereum-rinkeby
+	//
+	//    * n-ethereum-ropsten
 	//
 	// NetworkId is a required field
 	NetworkId *string `location:"uri" locationName:"networkId" min:"1" type:"string" required:"true"`
@@ -2801,14 +3227,34 @@ type CreateNodeInput struct {
 	//
 	// NodeConfiguration is a required field
 	NodeConfiguration *NodeConfiguration `type:"structure" required:"true"`
+
+	// Tags to assign to the node. Each tag consists of a key and optional value.
+	//
+	// When specifying tags during creation, you can specify multiple key-value
+	// pairs in a single request, with an overall maximum of 50 tags added to each
+	// resource.
+	//
+	// For more information about tags, see Tagging Resources (https://docs.aws.amazon.com/managed-blockchain/latest/ethereum-dev/tagging-resources.html)
+	// in the Amazon Managed Blockchain Ethereum Developer Guide, or Tagging Resources
+	// (https://docs.aws.amazon.com/managed-blockchain/latest/hyperledger-fabric-dev/tagging-resources.html)
+	// in the Amazon Managed Blockchain Hyperledger Fabric Developer Guide.
+	Tags map[string]*string `type:"map"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateNodeInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateNodeInput) GoString() string {
 	return s.String()
 }
@@ -2818,9 +3264,6 @@ func (s *CreateNodeInput) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "CreateNodeInput"}
 	if s.ClientRequestToken != nil && len(*s.ClientRequestToken) < 1 {
 		invalidParams.Add(request.NewErrParamMinLen("ClientRequestToken", 1))
-	}
-	if s.MemberId == nil {
-		invalidParams.Add(request.NewErrParamRequired("MemberId"))
 	}
 	if s.MemberId != nil && len(*s.MemberId) < 1 {
 		invalidParams.Add(request.NewErrParamMinLen("MemberId", 1))
@@ -2870,6 +3313,12 @@ func (s *CreateNodeInput) SetNodeConfiguration(v *NodeConfiguration) *CreateNode
 	return s
 }
 
+// SetTags sets the Tags field's value.
+func (s *CreateNodeInput) SetTags(v map[string]*string) *CreateNodeInput {
+	s.Tags = v
+	return s
+}
+
 type CreateNodeOutput struct {
 	_ struct{} `type:"structure"`
 
@@ -2877,12 +3326,20 @@ type CreateNodeOutput struct {
 	NodeId *string `min:"1" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateNodeOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateNodeOutput) GoString() string {
 	return s.String()
 }
@@ -2925,14 +3382,35 @@ type CreateProposalInput struct {
 	//
 	// NetworkId is a required field
 	NetworkId *string `location:"uri" locationName:"networkId" min:"1" type:"string" required:"true"`
+
+	// Tags to assign to the proposal. Each tag consists of a key and optional value.
+	//
+	// When specifying tags during creation, you can specify multiple key-value
+	// pairs in a single request, with an overall maximum of 50 tags added to each
+	// resource. If the proposal is for a network invitation, the invitation inherits
+	// the tags added to the proposal.
+	//
+	// For more information about tags, see Tagging Resources (https://docs.aws.amazon.com/managed-blockchain/latest/ethereum-dev/tagging-resources.html)
+	// in the Amazon Managed Blockchain Ethereum Developer Guide, or Tagging Resources
+	// (https://docs.aws.amazon.com/managed-blockchain/latest/hyperledger-fabric-dev/tagging-resources.html)
+	// in the Amazon Managed Blockchain Hyperledger Fabric Developer Guide.
+	Tags map[string]*string `type:"map"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateProposalInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateProposalInput) GoString() string {
 	return s.String()
 }
@@ -3000,6 +3478,12 @@ func (s *CreateProposalInput) SetNetworkId(v string) *CreateProposalInput {
 	return s
 }
 
+// SetTags sets the Tags field's value.
+func (s *CreateProposalInput) SetTags(v map[string]*string) *CreateProposalInput {
+	s.Tags = v
+	return s
+}
+
 type CreateProposalOutput struct {
 	_ struct{} `type:"structure"`
 
@@ -3007,12 +3491,20 @@ type CreateProposalOutput struct {
 	ProposalId *string `min:"1" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateProposalOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateProposalOutput) GoString() string {
 	return s.String()
 }
@@ -3024,7 +3516,7 @@ func (s *CreateProposalOutput) SetProposalId(v string) *CreateProposalOutput {
 }
 
 type DeleteMemberInput struct {
-	_ struct{} `type:"structure"`
+	_ struct{} `type:"structure" nopayload:"true"`
 
 	// The unique identifier of the member to remove.
 	//
@@ -3037,12 +3529,20 @@ type DeleteMemberInput struct {
 	NetworkId *string `location:"uri" locationName:"networkId" min:"1" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteMemberInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteMemberInput) GoString() string {
 	return s.String()
 }
@@ -3082,28 +3582,44 @@ func (s *DeleteMemberInput) SetNetworkId(v string) *DeleteMemberInput {
 }
 
 type DeleteMemberOutput struct {
-	_ struct{} `type:"structure"`
+	_ struct{} `type:"structure" nopayload:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteMemberOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteMemberOutput) GoString() string {
 	return s.String()
 }
 
 type DeleteNodeInput struct {
-	_ struct{} `type:"structure"`
+	_ struct{} `type:"structure" nopayload:"true"`
 
 	// The unique identifier of the member that owns this node.
 	//
-	// MemberId is a required field
-	MemberId *string `location:"uri" locationName:"memberId" min:"1" type:"string" required:"true"`
+	// Applies only to Hyperledger Fabric and is required for Hyperledger Fabric.
+	MemberId *string `location:"querystring" locationName:"memberId" min:"1" type:"string"`
 
-	// The unique identifier of the network that the node belongs to.
+	// The unique identifier of the network that the node is on.
+	//
+	// Ethereum public networks have the following NetworkIds:
+	//
+	//    * n-ethereum-mainnet
+	//
+	//    * n-ethereum-rinkeby
+	//
+	//    * n-ethereum-ropsten
 	//
 	// NetworkId is a required field
 	NetworkId *string `location:"uri" locationName:"networkId" min:"1" type:"string" required:"true"`
@@ -3114,12 +3630,20 @@ type DeleteNodeInput struct {
 	NodeId *string `location:"uri" locationName:"nodeId" min:"1" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteNodeInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteNodeInput) GoString() string {
 	return s.String()
 }
@@ -3127,9 +3651,6 @@ func (s DeleteNodeInput) GoString() string {
 // Validate inspects the fields of the type to determine if they are valid.
 func (s *DeleteNodeInput) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "DeleteNodeInput"}
-	if s.MemberId == nil {
-		invalidParams.Add(request.NewErrParamRequired("MemberId"))
-	}
 	if s.MemberId != nil && len(*s.MemberId) < 1 {
 		invalidParams.Add(request.NewErrParamMinLen("MemberId", 1))
 	}
@@ -3171,21 +3692,29 @@ func (s *DeleteNodeInput) SetNodeId(v string) *DeleteNodeInput {
 }
 
 type DeleteNodeOutput struct {
-	_ struct{} `type:"structure"`
+	_ struct{} `type:"structure" nopayload:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteNodeOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteNodeOutput) GoString() string {
 	return s.String()
 }
 
 type GetMemberInput struct {
-	_ struct{} `type:"structure"`
+	_ struct{} `type:"structure" nopayload:"true"`
 
 	// The unique identifier of the member.
 	//
@@ -3198,12 +3727,20 @@ type GetMemberInput struct {
 	NetworkId *string `location:"uri" locationName:"networkId" min:"1" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetMemberInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetMemberInput) GoString() string {
 	return s.String()
 }
@@ -3249,12 +3786,20 @@ type GetMemberOutput struct {
 	Member *Member `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetMemberOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetMemberOutput) GoString() string {
 	return s.String()
 }
@@ -3266,7 +3811,7 @@ func (s *GetMemberOutput) SetMember(v *Member) *GetMemberOutput {
 }
 
 type GetNetworkInput struct {
-	_ struct{} `type:"structure"`
+	_ struct{} `type:"structure" nopayload:"true"`
 
 	// The unique identifier of the network to get information about.
 	//
@@ -3274,12 +3819,20 @@ type GetNetworkInput struct {
 	NetworkId *string `location:"uri" locationName:"networkId" min:"1" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetNetworkInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetNetworkInput) GoString() string {
 	return s.String()
 }
@@ -3313,12 +3866,20 @@ type GetNetworkOutput struct {
 	Network *Network `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetNetworkOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetNetworkOutput) GoString() string {
 	return s.String()
 }
@@ -3330,14 +3891,14 @@ func (s *GetNetworkOutput) SetNetwork(v *Network) *GetNetworkOutput {
 }
 
 type GetNodeInput struct {
-	_ struct{} `type:"structure"`
+	_ struct{} `type:"structure" nopayload:"true"`
 
 	// The unique identifier of the member that owns the node.
 	//
-	// MemberId is a required field
-	MemberId *string `location:"uri" locationName:"memberId" min:"1" type:"string" required:"true"`
+	// Applies only to Hyperledger Fabric and is required for Hyperledger Fabric.
+	MemberId *string `location:"querystring" locationName:"memberId" min:"1" type:"string"`
 
-	// The unique identifier of the network to which the node belongs.
+	// The unique identifier of the network that the node is on.
 	//
 	// NetworkId is a required field
 	NetworkId *string `location:"uri" locationName:"networkId" min:"1" type:"string" required:"true"`
@@ -3348,12 +3909,20 @@ type GetNodeInput struct {
 	NodeId *string `location:"uri" locationName:"nodeId" min:"1" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetNodeInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetNodeInput) GoString() string {
 	return s.String()
 }
@@ -3361,9 +3930,6 @@ func (s GetNodeInput) GoString() string {
 // Validate inspects the fields of the type to determine if they are valid.
 func (s *GetNodeInput) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "GetNodeInput"}
-	if s.MemberId == nil {
-		invalidParams.Add(request.NewErrParamRequired("MemberId"))
-	}
 	if s.MemberId != nil && len(*s.MemberId) < 1 {
 		invalidParams.Add(request.NewErrParamMinLen("MemberId", 1))
 	}
@@ -3411,12 +3977,20 @@ type GetNodeOutput struct {
 	Node *Node `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetNodeOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetNodeOutput) GoString() string {
 	return s.String()
 }
@@ -3428,7 +4002,7 @@ func (s *GetNodeOutput) SetNode(v *Node) *GetNodeOutput {
 }
 
 type GetProposalInput struct {
-	_ struct{} `type:"structure"`
+	_ struct{} `type:"structure" nopayload:"true"`
 
 	// The unique identifier of the network for which the proposal is made.
 	//
@@ -3441,12 +4015,20 @@ type GetProposalInput struct {
 	ProposalId *string `location:"uri" locationName:"proposalId" min:"1" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetProposalInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetProposalInput) GoString() string {
 	return s.String()
 }
@@ -3492,12 +4074,20 @@ type GetProposalOutput struct {
 	Proposal *Proposal `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetProposalOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetProposalOutput) GoString() string {
 	return s.String()
 }
@@ -3515,12 +4105,20 @@ type IllegalActionException struct {
 	Message_ *string `locationName:"Message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s IllegalActionException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s IllegalActionException) GoString() string {
 	return s.String()
 }
@@ -3572,12 +4170,20 @@ type InternalServiceErrorException struct {
 	Message_ *string `locationName:"message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s InternalServiceErrorException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s InternalServiceErrorException) GoString() string {
 	return s.String()
 }
@@ -3629,12 +4235,20 @@ type InvalidRequestException struct {
 	Message_ *string `locationName:"Message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s InvalidRequestException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s InvalidRequestException) GoString() string {
 	return s.String()
 }
@@ -3678,8 +4292,15 @@ func (s *InvalidRequestException) RequestID() string {
 }
 
 // An invitation to an AWS account to create a member and join the network.
+//
+// Applies only to Hyperledger Fabric.
 type Invitation struct {
 	_ struct{} `type:"structure"`
+
+	// The Amazon Resource Name (ARN) of the invitation. For more information about
+	// ARNs and their format, see Amazon Resource Names (ARNs) (https://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html)
+	// in the AWS General Reference.
+	Arn *string `min:"1" type:"string"`
 
 	// The date and time that the invitation was created.
 	CreationDate *time.Time `type:"timestamp" timestampFormat:"iso8601"`
@@ -3714,14 +4335,28 @@ type Invitation struct {
 	Status *string `type:"string" enum:"InvitationStatus"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s Invitation) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s Invitation) GoString() string {
 	return s.String()
+}
+
+// SetArn sets the Arn field's value.
+func (s *Invitation) SetArn(v string) *Invitation {
+	s.Arn = &v
+	return s
 }
 
 // SetCreationDate sets the CreationDate field's value.
@@ -3756,6 +4391,8 @@ func (s *Invitation) SetStatus(v string) *Invitation {
 
 // An action to invite a specific AWS account to create a member and join the
 // network. The InviteAction is carried out when a Proposal is APPROVED.
+//
+// Applies only to Hyperledger Fabric.
 type InviteAction struct {
 	_ struct{} `type:"structure"`
 
@@ -3765,12 +4402,20 @@ type InviteAction struct {
 	Principal *string `type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s InviteAction) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s InviteAction) GoString() string {
 	return s.String()
 }
@@ -3795,7 +4440,7 @@ func (s *InviteAction) SetPrincipal(v string) *InviteAction {
 }
 
 type ListInvitationsInput struct {
-	_ struct{} `type:"structure"`
+	_ struct{} `type:"structure" nopayload:"true"`
 
 	// The maximum number of invitations to return.
 	MaxResults *int64 `location:"querystring" locationName:"maxResults" min:"1" type:"integer"`
@@ -3804,12 +4449,20 @@ type ListInvitationsInput struct {
 	NextToken *string `location:"querystring" locationName:"nextToken" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListInvitationsInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListInvitationsInput) GoString() string {
 	return s.String()
 }
@@ -3849,12 +4502,20 @@ type ListInvitationsOutput struct {
 	NextToken *string `type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListInvitationsOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListInvitationsOutput) GoString() string {
 	return s.String()
 }
@@ -3872,7 +4533,7 @@ func (s *ListInvitationsOutput) SetNextToken(v string) *ListInvitationsOutput {
 }
 
 type ListMembersInput struct {
-	_ struct{} `type:"structure"`
+	_ struct{} `type:"structure" nopayload:"true"`
 
 	// An optional Boolean value. If provided, the request is limited either to
 	// members that the current AWS account owns (true) or that other AWS accounts
@@ -3898,12 +4559,20 @@ type ListMembersInput struct {
 	Status *string `location:"querystring" locationName:"status" type:"string" enum:"MemberStatus"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListMembersInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListMembersInput) GoString() string {
 	return s.String()
 }
@@ -3974,12 +4643,20 @@ type ListMembersOutput struct {
 	NextToken *string `type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListMembersOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListMembersOutput) GoString() string {
 	return s.String()
 }
@@ -3997,7 +4674,7 @@ func (s *ListMembersOutput) SetNextToken(v string) *ListMembersOutput {
 }
 
 type ListNetworksInput struct {
-	_ struct{} `type:"structure"`
+	_ struct{} `type:"structure" nopayload:"true"`
 
 	// An optional framework specifier. If provided, only networks of this framework
 	// type are listed.
@@ -4014,15 +4691,25 @@ type ListNetworksInput struct {
 
 	// An optional status specifier. If provided, only networks currently in this
 	// status are listed.
+	//
+	// Applies only to Hyperledger Fabric.
 	Status *string `location:"querystring" locationName:"status" type:"string" enum:"NetworkStatus"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListNetworksInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListNetworksInput) GoString() string {
 	return s.String()
 }
@@ -4081,12 +4768,20 @@ type ListNetworksOutput struct {
 	NextToken *string `type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListNetworksOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListNetworksOutput) GoString() string {
 	return s.String()
 }
@@ -4104,15 +4799,15 @@ func (s *ListNetworksOutput) SetNextToken(v string) *ListNetworksOutput {
 }
 
 type ListNodesInput struct {
-	_ struct{} `type:"structure"`
+	_ struct{} `type:"structure" nopayload:"true"`
 
 	// The maximum number of nodes to list.
 	MaxResults *int64 `location:"querystring" locationName:"maxResults" min:"1" type:"integer"`
 
 	// The unique identifier of the member who owns the nodes to list.
 	//
-	// MemberId is a required field
-	MemberId *string `location:"uri" locationName:"memberId" min:"1" type:"string" required:"true"`
+	// Applies only to Hyperledger Fabric and is required for Hyperledger Fabric.
+	MemberId *string `location:"querystring" locationName:"memberId" min:"1" type:"string"`
 
 	// The unique identifier of the network for which to list nodes.
 	//
@@ -4127,12 +4822,20 @@ type ListNodesInput struct {
 	Status *string `location:"querystring" locationName:"status" type:"string" enum:"NodeStatus"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListNodesInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListNodesInput) GoString() string {
 	return s.String()
 }
@@ -4142,9 +4845,6 @@ func (s *ListNodesInput) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "ListNodesInput"}
 	if s.MaxResults != nil && *s.MaxResults < 1 {
 		invalidParams.Add(request.NewErrParamMinValue("MaxResults", 1))
-	}
-	if s.MemberId == nil {
-		invalidParams.Add(request.NewErrParamRequired("MemberId"))
 	}
 	if s.MemberId != nil && len(*s.MemberId) < 1 {
 		invalidParams.Add(request.NewErrParamMinLen("MemberId", 1))
@@ -4203,12 +4903,20 @@ type ListNodesOutput struct {
 	Nodes []*NodeSummary `type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListNodesOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListNodesOutput) GoString() string {
 	return s.String()
 }
@@ -4226,7 +4934,7 @@ func (s *ListNodesOutput) SetNodes(v []*NodeSummary) *ListNodesOutput {
 }
 
 type ListProposalVotesInput struct {
-	_ struct{} `type:"structure"`
+	_ struct{} `type:"structure" nopayload:"true"`
 
 	// The maximum number of votes to return.
 	MaxResults *int64 `location:"querystring" locationName:"maxResults" min:"1" type:"integer"`
@@ -4245,12 +4953,20 @@ type ListProposalVotesInput struct {
 	ProposalId *string `location:"uri" locationName:"proposalId" min:"1" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListProposalVotesInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListProposalVotesInput) GoString() string {
 	return s.String()
 }
@@ -4310,16 +5026,24 @@ type ListProposalVotesOutput struct {
 	// The pagination token that indicates the next set of results to retrieve.
 	NextToken *string `type:"string"`
 
-	// The listing of votes.
+	// The list of votes.
 	ProposalVotes []*VoteSummary `type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListProposalVotesOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListProposalVotesOutput) GoString() string {
 	return s.String()
 }
@@ -4337,7 +5061,7 @@ func (s *ListProposalVotesOutput) SetProposalVotes(v []*VoteSummary) *ListPropos
 }
 
 type ListProposalsInput struct {
-	_ struct{} `type:"structure"`
+	_ struct{} `type:"structure" nopayload:"true"`
 
 	// The maximum number of proposals to return.
 	MaxResults *int64 `location:"querystring" locationName:"maxResults" min:"1" type:"integer"`
@@ -4351,12 +5075,20 @@ type ListProposalsInput struct {
 	NextToken *string `location:"querystring" locationName:"nextToken" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListProposalsInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListProposalsInput) GoString() string {
 	return s.String()
 }
@@ -4408,12 +5140,20 @@ type ListProposalsOutput struct {
 	Proposals []*ProposalSummary `type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListProposalsOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListProposalsOutput) GoString() string {
 	return s.String()
 }
@@ -4430,6 +5170,88 @@ func (s *ListProposalsOutput) SetProposals(v []*ProposalSummary) *ListProposalsO
 	return s
 }
 
+type ListTagsForResourceInput struct {
+	_ struct{} `type:"structure" nopayload:"true"`
+
+	// The Amazon Resource Name (ARN) of the resource. For more information about
+	// ARNs and their format, see Amazon Resource Names (ARNs) (https://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html)
+	// in the AWS General Reference.
+	//
+	// ResourceArn is a required field
+	ResourceArn *string `location:"uri" locationName:"resourceArn" min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListTagsForResourceInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListTagsForResourceInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ListTagsForResourceInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ListTagsForResourceInput"}
+	if s.ResourceArn == nil {
+		invalidParams.Add(request.NewErrParamRequired("ResourceArn"))
+	}
+	if s.ResourceArn != nil && len(*s.ResourceArn) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ResourceArn", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetResourceArn sets the ResourceArn field's value.
+func (s *ListTagsForResourceInput) SetResourceArn(v string) *ListTagsForResourceInput {
+	s.ResourceArn = &v
+	return s
+}
+
+type ListTagsForResourceOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The tags assigned to the resource.
+	Tags map[string]*string `type:"map"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListTagsForResourceOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListTagsForResourceOutput) GoString() string {
+	return s.String()
+}
+
+// SetTags sets the Tags field's value.
+func (s *ListTagsForResourceOutput) SetTags(v map[string]*string) *ListTagsForResourceOutput {
+	s.Tags = v
+	return s
+}
+
 // A configuration for logging events.
 type LogConfiguration struct {
 	_ struct{} `type:"structure"`
@@ -4438,12 +5260,20 @@ type LogConfiguration struct {
 	Enabled *bool `type:"boolean"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s LogConfiguration) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s LogConfiguration) GoString() string {
 	return s.String()
 }
@@ -4462,12 +5292,20 @@ type LogConfigurations struct {
 	Cloudwatch *LogConfiguration `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s LogConfigurations) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s LogConfigurations) GoString() string {
 	return s.String()
 }
@@ -4479,8 +5317,15 @@ func (s *LogConfigurations) SetCloudwatch(v *LogConfiguration) *LogConfiguration
 }
 
 // Member configuration properties.
+//
+// Applies only to Hyperledger Fabric.
 type Member struct {
 	_ struct{} `type:"structure"`
+
+	// The Amazon Resource Name (ARN) of the member. For more information about
+	// ARNs and their format, see Amazon Resource Names (ARNs) (https://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html)
+	// in the AWS General Reference.
+	Arn *string `min:"1" type:"string"`
 
 	// The date and time that the member was created.
 	CreationDate *time.Time `type:"timestamp" timestampFormat:"iso8601"`
@@ -4494,6 +5339,13 @@ type Member struct {
 
 	// The unique identifier of the member.
 	Id *string `min:"1" type:"string"`
+
+	// The Amazon Resource Name (ARN) of the customer managed key in AWS Key Management
+	// Service (AWS KMS) that the member uses for encryption at rest. If the value
+	// of this parameter is "AWS Owned KMS Key", the member uses an AWS owned KMS
+	// key for encryption. This parameter is inherited by the nodes that this member
+	// owns.
+	KmsKeyArn *string `type:"string"`
 
 	// Configuration properties for logging events associated with a member.
 	LogPublishingConfiguration *MemberLogPublishingConfiguration `type:"structure"`
@@ -4513,6 +5365,8 @@ type Member struct {
 	//    * CREATE_FAILED - The AWS account attempted to create a member and creation
 	//    failed.
 	//
+	//    * UPDATING - The member is in the process of being updated.
+	//
 	//    * DELETING - The member and all associated resources are in the process
 	//    of being deleted. Either the AWS account that owns the member deleted
 	//    it, or the member is being deleted as the result of an APPROVED PROPOSAL
@@ -4522,17 +5376,44 @@ type Member struct {
 	//    associated resources are deleted. Either the AWS account that owns the
 	//    member deleted it, or the member is being deleted as the result of an
 	//    APPROVED PROPOSAL to remove the member.
+	//
+	//    * INACCESSIBLE_ENCRYPTION_KEY - The member is impaired and might not function
+	//    as expected because it cannot access the specified customer managed key
+	//    in AWS KMS for encryption at rest. Either the KMS key was disabled or
+	//    deleted, or the grants on the key were revoked. The effect of disabling
+	//    or deleting a key, or revoking a grant is not immediate. The member resource
+	//    might take some time to find that the key is inaccessible. When a resource
+	//    is in this state, we recommend deleting and recreating the resource.
 	Status *string `type:"string" enum:"MemberStatus"`
+
+	// Tags assigned to the member. Tags consist of a key and optional value. For
+	// more information about tags, see Tagging Resources (https://docs.aws.amazon.com/managed-blockchain/latest/hyperledger-fabric-dev/tagging-resources.html)
+	// in the Amazon Managed Blockchain Hyperledger Fabric Developer Guide.
+	Tags map[string]*string `type:"map"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s Member) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s Member) GoString() string {
 	return s.String()
+}
+
+// SetArn sets the Arn field's value.
+func (s *Member) SetArn(v string) *Member {
+	s.Arn = &v
+	return s
 }
 
 // SetCreationDate sets the CreationDate field's value.
@@ -4556,6 +5437,12 @@ func (s *Member) SetFrameworkAttributes(v *MemberFrameworkAttributes) *Member {
 // SetId sets the Id field's value.
 func (s *Member) SetId(v string) *Member {
 	s.Id = &v
+	return s
+}
+
+// SetKmsKeyArn sets the KmsKeyArn field's value.
+func (s *Member) SetKmsKeyArn(v string) *Member {
+	s.KmsKeyArn = &v
 	return s
 }
 
@@ -4583,7 +5470,15 @@ func (s *Member) SetStatus(v string) *Member {
 	return s
 }
 
+// SetTags sets the Tags field's value.
+func (s *Member) SetTags(v map[string]*string) *Member {
+	s.Tags = v
+	return s
+}
+
 // Configuration properties of the member.
+//
+// Applies only to Hyperledger Fabric.
 type MemberConfiguration struct {
 	_ struct{} `type:"structure"`
 
@@ -4595,6 +5490,22 @@ type MemberConfiguration struct {
 	// FrameworkConfiguration is a required field
 	FrameworkConfiguration *MemberFrameworkConfiguration `type:"structure" required:"true"`
 
+	// The Amazon Resource Name (ARN) of the customer managed key in AWS Key Management
+	// Service (AWS KMS) to use for encryption at rest in the member. This parameter
+	// is inherited by any nodes that this member creates.
+	//
+	// Use one of the following options to specify this parameter:
+	//
+	//    * Undefined or empty string - The member uses an AWS owned KMS key for
+	//    encryption by default.
+	//
+	//    * A valid symmetric customer managed KMS key - The member uses the specified
+	//    key for encryption. Amazon Managed Blockchain doesn't support asymmetric
+	//    keys. For more information, see Using symmetric and asymmetric keys (https://docs.aws.amazon.com/kms/latest/developerguide/symmetric-asymmetric.html)
+	//    in the AWS Key Management Service Developer Guide. The following is an
+	//    example of a KMS key ARN: arn:aws:kms:us-east-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab
+	KmsKeyArn *string `min:"1" type:"string"`
+
 	// Configuration properties for logging events associated with a member of a
 	// Managed Blockchain network.
 	LogPublishingConfiguration *MemberLogPublishingConfiguration `type:"structure"`
@@ -4603,14 +5514,31 @@ type MemberConfiguration struct {
 	//
 	// Name is a required field
 	Name *string `min:"1" type:"string" required:"true"`
+
+	// Tags assigned to the member. Tags consist of a key and optional value. For
+	// more information about tags, see Tagging Resources (https://docs.aws.amazon.com/managed-blockchain/latest/hyperledger-fabric-dev/tagging-resources.html)
+	// in the Amazon Managed Blockchain Hyperledger Fabric Developer Guide.
+	//
+	// When specifying tags during creation, you can specify multiple key-value
+	// pairs in a single request, with an overall maximum of 50 tags added to each
+	// resource.
+	Tags map[string]*string `type:"map"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s MemberConfiguration) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s MemberConfiguration) GoString() string {
 	return s.String()
 }
@@ -4620,6 +5548,9 @@ func (s *MemberConfiguration) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "MemberConfiguration"}
 	if s.FrameworkConfiguration == nil {
 		invalidParams.Add(request.NewErrParamRequired("FrameworkConfiguration"))
+	}
+	if s.KmsKeyArn != nil && len(*s.KmsKeyArn) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("KmsKeyArn", 1))
 	}
 	if s.Name == nil {
 		invalidParams.Add(request.NewErrParamRequired("Name"))
@@ -4651,6 +5582,12 @@ func (s *MemberConfiguration) SetFrameworkConfiguration(v *MemberFrameworkConfig
 	return s
 }
 
+// SetKmsKeyArn sets the KmsKeyArn field's value.
+func (s *MemberConfiguration) SetKmsKeyArn(v string) *MemberConfiguration {
+	s.KmsKeyArn = &v
+	return s
+}
+
 // SetLogPublishingConfiguration sets the LogPublishingConfiguration field's value.
 func (s *MemberConfiguration) SetLogPublishingConfiguration(v *MemberLogPublishingConfiguration) *MemberConfiguration {
 	s.LogPublishingConfiguration = v
@@ -4660,6 +5597,12 @@ func (s *MemberConfiguration) SetLogPublishingConfiguration(v *MemberLogPublishi
 // SetName sets the Name field's value.
 func (s *MemberConfiguration) SetName(v string) *MemberConfiguration {
 	s.Name = &v
+	return s
+}
+
+// SetTags sets the Tags field's value.
+func (s *MemberConfiguration) SetTags(v map[string]*string) *MemberConfiguration {
+	s.Tags = v
 	return s
 }
 
@@ -4675,12 +5618,20 @@ type MemberFabricAttributes struct {
 	CaEndpoint *string `type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s MemberFabricAttributes) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s MemberFabricAttributes) GoString() string {
 	return s.String()
 }
@@ -4705,8 +5656,12 @@ type MemberFabricConfiguration struct {
 	// The password for the member's initial administrative user. The AdminPassword
 	// must be at least eight characters long and no more than 32 characters. It
 	// must contain at least one uppercase letter, one lowercase letter, and one
-	// digit. It cannot have a single quote(‘), double quote(“), forward slash(/),
-	// backward slash(\), @, or a space.
+	// digit. It cannot have a single quotation mark (‘), a double quotation marks
+	// (“), a forward slash(/), a backward slash(\), @, or a space.
+	//
+	// AdminPassword is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by MemberFabricConfiguration's
+	// String and GoString methods.
 	//
 	// AdminPassword is a required field
 	AdminPassword *string `min:"8" type:"string" required:"true" sensitive:"true"`
@@ -4717,12 +5672,20 @@ type MemberFabricConfiguration struct {
 	AdminUsername *string `min:"1" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s MemberFabricConfiguration) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s MemberFabricConfiguration) GoString() string {
 	return s.String()
 }
@@ -4772,12 +5735,20 @@ type MemberFabricLogPublishingConfiguration struct {
 	CaLogs *LogConfigurations `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s MemberFabricLogPublishingConfiguration) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s MemberFabricLogPublishingConfiguration) GoString() string {
 	return s.String()
 }
@@ -4798,12 +5769,20 @@ type MemberFrameworkAttributes struct {
 	Fabric *MemberFabricAttributes `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s MemberFrameworkAttributes) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s MemberFrameworkAttributes) GoString() string {
 	return s.String()
 }
@@ -4824,12 +5803,20 @@ type MemberFrameworkConfiguration struct {
 	Fabric *MemberFabricConfiguration `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s MemberFrameworkConfiguration) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s MemberFrameworkConfiguration) GoString() string {
 	return s.String()
 }
@@ -4865,12 +5852,20 @@ type MemberLogPublishingConfiguration struct {
 	Fabric *MemberFabricLogPublishingConfiguration `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s MemberLogPublishingConfiguration) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s MemberLogPublishingConfiguration) GoString() string {
 	return s.String()
 }
@@ -4882,8 +5877,15 @@ func (s *MemberLogPublishingConfiguration) SetFabric(v *MemberFabricLogPublishin
 }
 
 // A summary of configuration properties for a member.
+//
+// Applies only to Hyperledger Fabric.
 type MemberSummary struct {
 	_ struct{} `type:"structure"`
+
+	// The Amazon Resource Name (ARN) of the member. For more information about
+	// ARNs and their format, see Amazon Resource Names (ARNs) (https://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html)
+	// in the AWS General Reference.
+	Arn *string `min:"1" type:"string"`
 
 	// The date and time that the member was created.
 	CreationDate *time.Time `type:"timestamp" timestampFormat:"iso8601"`
@@ -4910,6 +5912,8 @@ type MemberSummary struct {
 	//    * CREATE_FAILED - The AWS account attempted to create a member and creation
 	//    failed.
 	//
+	//    * UPDATING - The member is in the process of being updated.
+	//
 	//    * DELETING - The member and all associated resources are in the process
 	//    of being deleted. Either the AWS account that owns the member deleted
 	//    it, or the member is being deleted as the result of an APPROVED PROPOSAL
@@ -4919,17 +5923,40 @@ type MemberSummary struct {
 	//    associated resources are deleted. Either the AWS account that owns the
 	//    member deleted it, or the member is being deleted as the result of an
 	//    APPROVED PROPOSAL to remove the member.
+	//
+	//    * INACCESSIBLE_ENCRYPTION_KEY - The member is impaired and might not function
+	//    as expected because it cannot access the specified customer managed key
+	//    in AWS Key Management Service (AWS KMS) for encryption at rest. Either
+	//    the KMS key was disabled or deleted, or the grants on the key were revoked.
+	//    The effect of disabling or deleting a key, or revoking a grant is not
+	//    immediate. The member resource might take some time to find that the key
+	//    is inaccessible. When a resource is in this state, we recommend deleting
+	//    and recreating the resource.
 	Status *string `type:"string" enum:"MemberStatus"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s MemberSummary) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s MemberSummary) GoString() string {
 	return s.String()
+}
+
+// SetArn sets the Arn field's value.
+func (s *MemberSummary) SetArn(v string) *MemberSummary {
+	s.Arn = &v
+	return s
 }
 
 // SetCreationDate sets the CreationDate field's value.
@@ -4972,6 +5999,11 @@ func (s *MemberSummary) SetStatus(v string) *MemberSummary {
 type Network struct {
 	_ struct{} `type:"structure"`
 
+	// The Amazon Resource Name (ARN) of the network. For more information about
+	// ARNs and their format, see Amazon Resource Names (ARNs) (https://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html)
+	// in the AWS General Reference.
+	Arn *string `min:"1" type:"string"`
+
 	// The date and time that the network was created.
 	CreationDate *time.Time `type:"timestamp" timestampFormat:"iso8601"`
 
@@ -4996,6 +6028,14 @@ type Network struct {
 	// The current status of the network.
 	Status *string `type:"string" enum:"NetworkStatus"`
 
+	// Tags assigned to the network. Each tag consists of a key and optional value.
+	//
+	// For more information about tags, see Tagging Resources (https://docs.aws.amazon.com/managed-blockchain/latest/ethereum-dev/tagging-resources.html)
+	// in the Amazon Managed Blockchain Ethereum Developer Guide, or Tagging Resources
+	// (https://docs.aws.amazon.com/managed-blockchain/latest/hyperledger-fabric-dev/tagging-resources.html)
+	// in the Amazon Managed Blockchain Hyperledger Fabric Developer Guide.
+	Tags map[string]*string `type:"map"`
+
 	// The voting rules for the network to decide if a proposal is accepted.
 	VotingPolicy *VotingPolicy `type:"structure"`
 
@@ -5005,14 +6045,28 @@ type Network struct {
 	VpcEndpointServiceName *string `type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s Network) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s Network) GoString() string {
 	return s.String()
+}
+
+// SetArn sets the Arn field's value.
+func (s *Network) SetArn(v string) *Network {
+	s.Arn = &v
+	return s
 }
 
 // SetCreationDate sets the CreationDate field's value.
@@ -5063,6 +6117,12 @@ func (s *Network) SetStatus(v string) *Network {
 	return s
 }
 
+// SetTags sets the Tags field's value.
+func (s *Network) SetTags(v map[string]*string) *Network {
+	s.Tags = v
+	return s
+}
+
 // SetVotingPolicy sets the VotingPolicy field's value.
 func (s *Network) SetVotingPolicy(v *VotingPolicy) *Network {
 	s.VotingPolicy = v
@@ -5072,6 +6132,45 @@ func (s *Network) SetVotingPolicy(v *VotingPolicy) *Network {
 // SetVpcEndpointServiceName sets the VpcEndpointServiceName field's value.
 func (s *Network) SetVpcEndpointServiceName(v string) *Network {
 	s.VpcEndpointServiceName = &v
+	return s
+}
+
+// Attributes of Ethereum for a network.
+type NetworkEthereumAttributes struct {
+	_ struct{} `type:"structure"`
+
+	// The Ethereum CHAIN_ID associated with the Ethereum network. Chain IDs are
+	// as follows:
+	//
+	//    * mainnet = 1
+	//
+	//    * rinkeby = 4
+	//
+	//    * ropsten = 3
+	ChainId *string `type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s NetworkEthereumAttributes) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s NetworkEthereumAttributes) GoString() string {
+	return s.String()
+}
+
+// SetChainId sets the ChainId field's value.
+func (s *NetworkEthereumAttributes) SetChainId(v string) *NetworkEthereumAttributes {
+	s.ChainId = &v
 	return s
 }
 
@@ -5087,12 +6186,20 @@ type NetworkFabricAttributes struct {
 	OrderingServiceEndpoint *string `type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s NetworkFabricAttributes) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s NetworkFabricAttributes) GoString() string {
 	return s.String()
 }
@@ -5120,12 +6227,20 @@ type NetworkFabricConfiguration struct {
 	Edition *string `type:"string" required:"true" enum:"Edition"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s NetworkFabricConfiguration) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s NetworkFabricConfiguration) GoString() string {
 	return s.String()
 }
@@ -5154,19 +6269,37 @@ func (s *NetworkFabricConfiguration) SetEdition(v string) *NetworkFabricConfigur
 type NetworkFrameworkAttributes struct {
 	_ struct{} `type:"structure"`
 
+	// Attributes of an Ethereum network for Managed Blockchain resources participating
+	// in an Ethereum network.
+	Ethereum *NetworkEthereumAttributes `type:"structure"`
+
 	// Attributes of Hyperledger Fabric for a Managed Blockchain network that uses
 	// Hyperledger Fabric.
 	Fabric *NetworkFabricAttributes `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s NetworkFrameworkAttributes) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s NetworkFrameworkAttributes) GoString() string {
 	return s.String()
+}
+
+// SetEthereum sets the Ethereum field's value.
+func (s *NetworkFrameworkAttributes) SetEthereum(v *NetworkEthereumAttributes) *NetworkFrameworkAttributes {
+	s.Ethereum = v
+	return s
 }
 
 // SetFabric sets the Fabric field's value.
@@ -5185,12 +6318,20 @@ type NetworkFrameworkConfiguration struct {
 	Fabric *NetworkFabricConfiguration `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s NetworkFrameworkConfiguration) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s NetworkFrameworkConfiguration) GoString() string {
 	return s.String()
 }
@@ -5220,6 +6361,11 @@ func (s *NetworkFrameworkConfiguration) SetFabric(v *NetworkFabricConfiguration)
 type NetworkSummary struct {
 	_ struct{} `type:"structure"`
 
+	// The Amazon Resource Name (ARN) of the network. For more information about
+	// ARNs and their format, see Amazon Resource Names (ARNs) (https://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html)
+	// in the AWS General Reference.
+	Arn *string `min:"1" type:"string"`
+
 	// The date and time that the network was created.
 	CreationDate *time.Time `type:"timestamp" timestampFormat:"iso8601"`
 
@@ -5242,14 +6388,28 @@ type NetworkSummary struct {
 	Status *string `type:"string" enum:"NetworkStatus"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s NetworkSummary) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s NetworkSummary) GoString() string {
 	return s.String()
+}
+
+// SetArn sets the Arn field's value.
+func (s *NetworkSummary) SetArn(v string) *NetworkSummary {
+	s.Arn = &v
+	return s
 }
 
 // SetCreationDate sets the CreationDate field's value.
@@ -5294,11 +6454,16 @@ func (s *NetworkSummary) SetStatus(v string) *NetworkSummary {
 	return s
 }
 
-// Configuration properties of a peer node.
+// Configuration properties of a node.
 type Node struct {
 	_ struct{} `type:"structure"`
 
-	// The Availability Zone in which the node exists.
+	// The Amazon Resource Name (ARN) of the node. For more information about ARNs
+	// and their format, see Amazon Resource Names (ARNs) (https://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html)
+	// in the AWS General Reference.
+	Arn *string `min:"1" type:"string"`
+
+	// The Availability Zone in which the node exists. Required for Ethereum nodes.
 	AvailabilityZone *string `type:"string"`
 
 	// The date and time that the node was created.
@@ -5313,31 +6478,95 @@ type Node struct {
 	// The instance type of the node.
 	InstanceType *string `type:"string"`
 
-	// Configuration properties for logging events associated with a peer node owned
-	// by a member in a Managed Blockchain network.
+	// The Amazon Resource Name (ARN) of the customer managed key in AWS Key Management
+	// Service (AWS KMS) that the node uses for encryption at rest. If the value
+	// of this parameter is "AWS Owned KMS Key", the node uses an AWS owned KMS
+	// key for encryption. The node inherits this parameter from the member that
+	// it belongs to.
+	//
+	// Applies only to Hyperledger Fabric.
+	KmsKeyArn *string `type:"string"`
+
+	// Configuration properties for logging events associated with a peer node on
+	// a Hyperledger Fabric network on Managed Blockchain.
 	LogPublishingConfiguration *NodeLogPublishingConfiguration `type:"structure"`
 
 	// The unique identifier of the member to which the node belongs.
+	//
+	// Applies only to Hyperledger Fabric.
 	MemberId *string `min:"1" type:"string"`
 
-	// The unique identifier of the network that the node is in.
+	// The unique identifier of the network that the node is on.
 	NetworkId *string `min:"1" type:"string"`
 
 	// The state database that the node uses. Values are LevelDB or CouchDB.
+	//
+	// Applies only to Hyperledger Fabric.
 	StateDB *string `type:"string" enum:"StateDBType"`
 
 	// The status of the node.
+	//
+	//    * CREATING - The AWS account is in the process of creating a node.
+	//
+	//    * AVAILABLE - The node has been created and can participate in the network.
+	//
+	//    * UNHEALTHY - The node is impaired and might not function as expected.
+	//    Amazon Managed Blockchain automatically finds nodes in this state and
+	//    tries to recover them. If a node is recoverable, it returns to AVAILABLE.
+	//    Otherwise, it moves to FAILED status.
+	//
+	//    * CREATE_FAILED - The AWS account attempted to create a node and creation
+	//    failed.
+	//
+	//    * UPDATING - The node is in the process of being updated.
+	//
+	//    * DELETING - The node is in the process of being deleted.
+	//
+	//    * DELETED - The node can no longer participate on the network.
+	//
+	//    * FAILED - The node is no longer functional, cannot be recovered, and
+	//    must be deleted.
+	//
+	//    * INACCESSIBLE_ENCRYPTION_KEY - The node is impaired and might not function
+	//    as expected because it cannot access the specified customer managed key
+	//    in AWS KMS for encryption at rest. Either the KMS key was disabled or
+	//    deleted, or the grants on the key were revoked. The effect of disabling
+	//    or deleting a key, or revoking a grant is not immediate. The node resource
+	//    might take some time to find that the key is inaccessible. When a resource
+	//    is in this state, we recommend deleting and recreating the resource.
 	Status *string `type:"string" enum:"NodeStatus"`
+
+	// Tags assigned to the node. Each tag consists of a key and optional value.
+	//
+	// For more information about tags, see Tagging Resources (https://docs.aws.amazon.com/managed-blockchain/latest/ethereum-dev/tagging-resources.html)
+	// in the Amazon Managed Blockchain Ethereum Developer Guide, or Tagging Resources
+	// (https://docs.aws.amazon.com/managed-blockchain/latest/hyperledger-fabric-dev/tagging-resources.html)
+	// in the Amazon Managed Blockchain Hyperledger Fabric Developer Guide.
+	Tags map[string]*string `type:"map"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s Node) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s Node) GoString() string {
 	return s.String()
+}
+
+// SetArn sets the Arn field's value.
+func (s *Node) SetArn(v string) *Node {
+	s.Arn = &v
+	return s
 }
 
 // SetAvailabilityZone sets the AvailabilityZone field's value.
@@ -5367,6 +6596,12 @@ func (s *Node) SetId(v string) *Node {
 // SetInstanceType sets the InstanceType field's value.
 func (s *Node) SetInstanceType(v string) *Node {
 	s.InstanceType = &v
+	return s
+}
+
+// SetKmsKeyArn sets the KmsKeyArn field's value.
+func (s *Node) SetKmsKeyArn(v string) *Node {
+	s.KmsKeyArn = &v
 	return s
 }
 
@@ -5400,36 +6635,50 @@ func (s *Node) SetStatus(v string) *Node {
 	return s
 }
 
-// Configuration properties of a peer node.
+// SetTags sets the Tags field's value.
+func (s *Node) SetTags(v map[string]*string) *Node {
+	s.Tags = v
+	return s
+}
+
+// Configuration properties of a node.
 type NodeConfiguration struct {
 	_ struct{} `type:"structure"`
 
-	// The Availability Zone in which the node exists.
-	//
-	// AvailabilityZone is a required field
-	AvailabilityZone *string `type:"string" required:"true"`
+	// The Availability Zone in which the node exists. Required for Ethereum nodes.
+	AvailabilityZone *string `type:"string"`
 
 	// The Amazon Managed Blockchain instance type for the node.
 	//
 	// InstanceType is a required field
 	InstanceType *string `type:"string" required:"true"`
 
-	// Configuration properties for logging events associated with a peer node owned
-	// by a member in a Managed Blockchain network.
+	// Configuration properties for logging events associated with a peer node on
+	// a Hyperledger Fabric network on Managed Blockchain.
 	LogPublishingConfiguration *NodeLogPublishingConfiguration `type:"structure"`
 
 	// The state database that the node uses. Values are LevelDB or CouchDB. When
 	// using an Amazon Managed Blockchain network with Hyperledger Fabric version
 	// 1.4 or later, the default is CouchDB.
+	//
+	// Applies only to Hyperledger Fabric.
 	StateDB *string `type:"string" enum:"StateDBType"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s NodeConfiguration) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s NodeConfiguration) GoString() string {
 	return s.String()
 }
@@ -5437,9 +6686,6 @@ func (s NodeConfiguration) GoString() string {
 // Validate inspects the fields of the type to determine if they are valid.
 func (s *NodeConfiguration) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "NodeConfiguration"}
-	if s.AvailabilityZone == nil {
-		invalidParams.Add(request.NewErrParamRequired("AvailabilityZone"))
-	}
 	if s.InstanceType == nil {
 		invalidParams.Add(request.NewErrParamRequired("InstanceType"))
 	}
@@ -5474,8 +6720,55 @@ func (s *NodeConfiguration) SetStateDB(v string) *NodeConfiguration {
 	return s
 }
 
-// Attributes of Hyperledger Fabric for a peer node on a Managed Blockchain
-// network that uses Hyperledger Fabric.
+// Attributes of an Ethereum node.
+type NodeEthereumAttributes struct {
+	_ struct{} `type:"structure"`
+
+	// The endpoint on which the Ethereum node listens to run Ethereum JSON-RPC
+	// methods over HTTP connections from a client. Use this endpoint in client
+	// code for smart contracts when using an HTTP connection. Connections to this
+	// endpoint are authenticated using Signature Version 4 (https://docs.aws.amazon.com/general/latest/gr/signature-version-4.html).
+	HttpEndpoint *string `type:"string"`
+
+	// The endpoint on which the Ethereum node listens to run Ethereum JSON-RPC
+	// methods over WebSockets connections from a client. Use this endpoint in client
+	// code for smart contracts when using a WebSockets connection. Connections
+	// to this endpoint are authenticated using Signature Version 4 (https://docs.aws.amazon.com/general/latest/gr/signature-version-4.html).
+	WebSocketEndpoint *string `type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s NodeEthereumAttributes) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s NodeEthereumAttributes) GoString() string {
+	return s.String()
+}
+
+// SetHttpEndpoint sets the HttpEndpoint field's value.
+func (s *NodeEthereumAttributes) SetHttpEndpoint(v string) *NodeEthereumAttributes {
+	s.HttpEndpoint = &v
+	return s
+}
+
+// SetWebSocketEndpoint sets the WebSocketEndpoint field's value.
+func (s *NodeEthereumAttributes) SetWebSocketEndpoint(v string) *NodeEthereumAttributes {
+	s.WebSocketEndpoint = &v
+	return s
+}
+
+// Attributes of Hyperledger Fabric for a peer node on a Hyperledger Fabric
+// network on Managed Blockchain.
 type NodeFabricAttributes struct {
 	_ struct{} `type:"structure"`
 
@@ -5487,12 +6780,20 @@ type NodeFabricAttributes struct {
 	PeerEventEndpoint *string `type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s NodeFabricAttributes) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s NodeFabricAttributes) GoString() string {
 	return s.String()
 }
@@ -5528,12 +6829,20 @@ type NodeFabricLogPublishingConfiguration struct {
 	PeerLogs *LogConfigurations `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s NodeFabricLogPublishingConfiguration) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s NodeFabricLogPublishingConfiguration) GoString() string {
 	return s.String()
 }
@@ -5550,24 +6859,42 @@ func (s *NodeFabricLogPublishingConfiguration) SetPeerLogs(v *LogConfigurations)
 	return s
 }
 
-// Attributes relevant to a peer node on a Managed Blockchain network for the
-// blockchain framework that the network uses.
+// Attributes relevant to a node on a Managed Blockchain network for the blockchain
+// framework that the network uses.
 type NodeFrameworkAttributes struct {
 	_ struct{} `type:"structure"`
+
+	// Attributes of Ethereum for a node on a Managed Blockchain network that uses
+	// Ethereum.
+	Ethereum *NodeEthereumAttributes `type:"structure"`
 
 	// Attributes of Hyperledger Fabric for a peer node on a Managed Blockchain
 	// network that uses Hyperledger Fabric.
 	Fabric *NodeFabricAttributes `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s NodeFrameworkAttributes) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s NodeFrameworkAttributes) GoString() string {
 	return s.String()
+}
+
+// SetEthereum sets the Ethereum field's value.
+func (s *NodeFrameworkAttributes) SetEthereum(v *NodeEthereumAttributes) *NodeFrameworkAttributes {
+	s.Ethereum = v
+	return s
 }
 
 // SetFabric sets the Fabric field's value.
@@ -5576,8 +6903,8 @@ func (s *NodeFrameworkAttributes) SetFabric(v *NodeFabricAttributes) *NodeFramew
 	return s
 }
 
-// Configuration properties for logging events associated with a peer node owned
-// by a member in a Managed Blockchain network.
+// Configuration properties for logging events associated with a peer node on
+// a Hyperledger Fabric network on Managed Blockchain.
 type NodeLogPublishingConfiguration struct {
 	_ struct{} `type:"structure"`
 
@@ -5587,12 +6914,20 @@ type NodeLogPublishingConfiguration struct {
 	Fabric *NodeFabricLogPublishingConfiguration `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s NodeLogPublishingConfiguration) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s NodeLogPublishingConfiguration) GoString() string {
 	return s.String()
 }
@@ -5603,9 +6938,14 @@ func (s *NodeLogPublishingConfiguration) SetFabric(v *NodeFabricLogPublishingCon
 	return s
 }
 
-// A summary of configuration properties for a peer node.
+// A summary of configuration properties for a node.
 type NodeSummary struct {
 	_ struct{} `type:"structure"`
+
+	// The Amazon Resource Name (ARN) of the node. For more information about ARNs
+	// and their format, see Amazon Resource Names (ARNs) (https://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html)
+	// in the AWS General Reference.
+	Arn *string `min:"1" type:"string"`
 
 	// The Availability Zone in which the node exists.
 	AvailabilityZone *string `type:"string"`
@@ -5623,14 +6963,28 @@ type NodeSummary struct {
 	Status *string `type:"string" enum:"NodeStatus"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s NodeSummary) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s NodeSummary) GoString() string {
 	return s.String()
+}
+
+// SetArn sets the Arn field's value.
+func (s *NodeSummary) SetArn(v string) *NodeSummary {
+	s.Arn = &v
+	return s
 }
 
 // SetAvailabilityZone sets the AvailabilityZone field's value.
@@ -5664,11 +7018,18 @@ func (s *NodeSummary) SetStatus(v string) *NodeSummary {
 }
 
 // Properties of a proposal on a Managed Blockchain network.
+//
+// Applies only to Hyperledger Fabric.
 type Proposal struct {
 	_ struct{} `type:"structure"`
 
 	// The actions to perform on the network if the proposal is APPROVED.
 	Actions *ProposalActions `type:"structure"`
+
+	// The Amazon Resource Name (ARN) of the proposal. For more information about
+	// ARNs and their format, see Amazon Resource Names (ARNs) (https://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html)
+	// in the AWS General Reference.
+	Arn *string `min:"1" type:"string"`
 
 	// The date and time that the proposal was created.
 	CreationDate *time.Time `type:"timestamp" timestampFormat:"iso8601"`
@@ -5724,16 +7085,32 @@ type Proposal struct {
 	//    are successful.
 	Status *string `type:"string" enum:"ProposalStatus"`
 
+	// Tags assigned to the proposal. Each tag consists of a key and optional value.
+	//
+	// For more information about tags, see Tagging Resources (https://docs.aws.amazon.com/managed-blockchain/latest/ethereum-dev/tagging-resources.html)
+	// in the Amazon Managed Blockchain Ethereum Developer Guide, or Tagging Resources
+	// (https://docs.aws.amazon.com/managed-blockchain/latest/hyperledger-fabric-dev/tagging-resources.html)
+	// in the Amazon Managed Blockchain Hyperledger Fabric Developer Guide.
+	Tags map[string]*string `type:"map"`
+
 	// The current total of YES votes cast on the proposal by members.
 	YesVoteCount *int64 `type:"integer"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s Proposal) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s Proposal) GoString() string {
 	return s.String()
 }
@@ -5741,6 +7118,12 @@ func (s Proposal) GoString() string {
 // SetActions sets the Actions field's value.
 func (s *Proposal) SetActions(v *ProposalActions) *Proposal {
 	s.Actions = v
+	return s
+}
+
+// SetArn sets the Arn field's value.
+func (s *Proposal) SetArn(v string) *Proposal {
+	s.Arn = &v
 	return s
 }
 
@@ -5804,6 +7187,12 @@ func (s *Proposal) SetStatus(v string) *Proposal {
 	return s
 }
 
+// SetTags sets the Tags field's value.
+func (s *Proposal) SetTags(v map[string]*string) *Proposal {
+	s.Tags = v
+	return s
+}
+
 // SetYesVoteCount sets the YesVoteCount field's value.
 func (s *Proposal) SetYesVoteCount(v int64) *Proposal {
 	s.YesVoteCount = &v
@@ -5811,6 +7200,8 @@ func (s *Proposal) SetYesVoteCount(v int64) *Proposal {
 }
 
 // The actions to carry out if a proposal is APPROVED.
+//
+// Applies only to Hyperledger Fabric.
 type ProposalActions struct {
 	_ struct{} `type:"structure"`
 
@@ -5824,12 +7215,20 @@ type ProposalActions struct {
 	Removals []*RemoveAction `type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ProposalActions) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ProposalActions) GoString() string {
 	return s.String()
 }
@@ -5877,8 +7276,15 @@ func (s *ProposalActions) SetRemovals(v []*RemoveAction) *ProposalActions {
 }
 
 // Properties of a proposal.
+//
+// Applies only to Hyperledger Fabric.
 type ProposalSummary struct {
 	_ struct{} `type:"structure"`
+
+	// The Amazon Resource Name (ARN) of the proposal. For more information about
+	// ARNs and their format, see Amazon Resource Names (ARNs) (https://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html)
+	// in the AWS General Reference.
+	Arn *string `min:"1" type:"string"`
 
 	// The date and time that the proposal was created.
 	CreationDate *time.Time `type:"timestamp" timestampFormat:"iso8601"`
@@ -5923,14 +7329,28 @@ type ProposalSummary struct {
 	Status *string `type:"string" enum:"ProposalStatus"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ProposalSummary) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ProposalSummary) GoString() string {
 	return s.String()
+}
+
+// SetArn sets the Arn field's value.
+func (s *ProposalSummary) SetArn(v string) *ProposalSummary {
+	s.Arn = &v
+	return s
 }
 
 // SetCreationDate sets the CreationDate field's value.
@@ -5976,7 +7396,7 @@ func (s *ProposalSummary) SetStatus(v string) *ProposalSummary {
 }
 
 type RejectInvitationInput struct {
-	_ struct{} `type:"structure"`
+	_ struct{} `type:"structure" nopayload:"true"`
 
 	// The unique identifier of the invitation to reject.
 	//
@@ -5984,12 +7404,20 @@ type RejectInvitationInput struct {
 	InvitationId *string `location:"uri" locationName:"invitationId" min:"1" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s RejectInvitationInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s RejectInvitationInput) GoString() string {
 	return s.String()
 }
@@ -6017,15 +7445,23 @@ func (s *RejectInvitationInput) SetInvitationId(v string) *RejectInvitationInput
 }
 
 type RejectInvitationOutput struct {
-	_ struct{} `type:"structure"`
+	_ struct{} `type:"structure" nopayload:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s RejectInvitationOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s RejectInvitationOutput) GoString() string {
 	return s.String()
 }
@@ -6033,6 +7469,8 @@ func (s RejectInvitationOutput) GoString() string {
 // An action to remove a member from a Managed Blockchain network as the result
 // of a removal proposal that is APPROVED. The member and all associated resources
 // are deleted from the network.
+//
+// Applies only to Hyperledger Fabric.
 type RemoveAction struct {
 	_ struct{} `type:"structure"`
 
@@ -6042,12 +7480,20 @@ type RemoveAction struct {
 	MemberId *string `min:"1" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s RemoveAction) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s RemoveAction) GoString() string {
 	return s.String()
 }
@@ -6082,12 +7528,20 @@ type ResourceAlreadyExistsException struct {
 	Message_ *string `locationName:"Message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ResourceAlreadyExistsException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ResourceAlreadyExistsException) GoString() string {
 	return s.String()
 }
@@ -6140,12 +7594,20 @@ type ResourceLimitExceededException struct {
 	Message_ *string `locationName:"Message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ResourceLimitExceededException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ResourceLimitExceededException) GoString() string {
 	return s.String()
 }
@@ -6188,21 +7650,33 @@ func (s *ResourceLimitExceededException) RequestID() string {
 	return s.RespMetadata.RequestID
 }
 
-// A requested resource does not exist on the network. It may have been deleted
-// or referenced inaccurately.
+// A requested resource does not exist. It may have been deleted or referenced
+// inaccurately.
 type ResourceNotFoundException struct {
 	_            struct{}                  `type:"structure"`
 	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
 
 	Message_ *string `locationName:"Message" type:"string"`
+
+	// A requested resource does not exist. It may have been deleted or referenced
+	// inaccurately.
+	ResourceName *string `min:"1" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ResourceNotFoundException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ResourceNotFoundException) GoString() string {
 	return s.String()
 }
@@ -6232,7 +7706,7 @@ func (s *ResourceNotFoundException) OrigErr() error {
 }
 
 func (s *ResourceNotFoundException) Error() string {
-	return fmt.Sprintf("%s: %s", s.Code(), s.Message())
+	return fmt.Sprintf("%s: %s\n%s", s.Code(), s.Message(), s.String())
 }
 
 // Status code returns the HTTP status code for the request's response error.
@@ -6254,12 +7728,20 @@ type ResourceNotReadyException struct {
 	Message_ *string `locationName:"Message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ResourceNotReadyException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ResourceNotReadyException) GoString() string {
 	return s.String()
 }
@@ -6302,6 +7784,95 @@ func (s *ResourceNotReadyException) RequestID() string {
 	return s.RespMetadata.RequestID
 }
 
+type TagResourceInput struct {
+	_ struct{} `type:"structure"`
+
+	// The Amazon Resource Name (ARN) of the resource. For more information about
+	// ARNs and their format, see Amazon Resource Names (ARNs) (https://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html)
+	// in the AWS General Reference.
+	//
+	// ResourceArn is a required field
+	ResourceArn *string `location:"uri" locationName:"resourceArn" min:"1" type:"string" required:"true"`
+
+	// The tags to assign to the specified resource. Tag values can be empty, for
+	// example, "MyTagKey" : "". You can specify multiple key-value pairs in a single
+	// request, with an overall maximum of 50 tags added to each resource.
+	//
+	// Tags is a required field
+	Tags map[string]*string `type:"map" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s TagResourceInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s TagResourceInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *TagResourceInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "TagResourceInput"}
+	if s.ResourceArn == nil {
+		invalidParams.Add(request.NewErrParamRequired("ResourceArn"))
+	}
+	if s.ResourceArn != nil && len(*s.ResourceArn) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ResourceArn", 1))
+	}
+	if s.Tags == nil {
+		invalidParams.Add(request.NewErrParamRequired("Tags"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetResourceArn sets the ResourceArn field's value.
+func (s *TagResourceInput) SetResourceArn(v string) *TagResourceInput {
+	s.ResourceArn = &v
+	return s
+}
+
+// SetTags sets the Tags field's value.
+func (s *TagResourceInput) SetTags(v map[string]*string) *TagResourceInput {
+	s.Tags = v
+	return s
+}
+
+type TagResourceOutput struct {
+	_ struct{} `type:"structure" nopayload:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s TagResourceOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s TagResourceOutput) GoString() string {
+	return s.String()
+}
+
 // The request or operation could not be performed because a service is throttling
 // requests. The most common source of throttling errors is launching EC2 instances
 // such that your service limit for EC2 instances is exceeded. Request a limit
@@ -6313,12 +7884,20 @@ type ThrottlingException struct {
 	Message_ *string `locationName:"message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ThrottlingException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ThrottlingException) GoString() string {
 	return s.String()
 }
@@ -6361,29 +7940,190 @@ func (s *ThrottlingException) RequestID() string {
 	return s.RespMetadata.RequestID
 }
 
+type TooManyTagsException struct {
+	_            struct{}                  `type:"structure"`
+	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
+
+	Message_ *string `locationName:"Message" type:"string"`
+
+	ResourceName *string `min:"1" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s TooManyTagsException) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s TooManyTagsException) GoString() string {
+	return s.String()
+}
+
+func newErrorTooManyTagsException(v protocol.ResponseMetadata) error {
+	return &TooManyTagsException{
+		RespMetadata: v,
+	}
+}
+
+// Code returns the exception type name.
+func (s *TooManyTagsException) Code() string {
+	return "TooManyTagsException"
+}
+
+// Message returns the exception's message.
+func (s *TooManyTagsException) Message() string {
+	if s.Message_ != nil {
+		return *s.Message_
+	}
+	return ""
+}
+
+// OrigErr always returns nil, satisfies awserr.Error interface.
+func (s *TooManyTagsException) OrigErr() error {
+	return nil
+}
+
+func (s *TooManyTagsException) Error() string {
+	return fmt.Sprintf("%s: %s\n%s", s.Code(), s.Message(), s.String())
+}
+
+// Status code returns the HTTP status code for the request's response error.
+func (s *TooManyTagsException) StatusCode() int {
+	return s.RespMetadata.StatusCode
+}
+
+// RequestID returns the service's response RequestID for request.
+func (s *TooManyTagsException) RequestID() string {
+	return s.RespMetadata.RequestID
+}
+
+type UntagResourceInput struct {
+	_ struct{} `type:"structure" nopayload:"true"`
+
+	// The Amazon Resource Name (ARN) of the resource. For more information about
+	// ARNs and their format, see Amazon Resource Names (ARNs) (https://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html)
+	// in the AWS General Reference.
+	//
+	// ResourceArn is a required field
+	ResourceArn *string `location:"uri" locationName:"resourceArn" min:"1" type:"string" required:"true"`
+
+	// The tag keys.
+	//
+	// TagKeys is a required field
+	TagKeys []*string `location:"querystring" locationName:"tagKeys" type:"list" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UntagResourceInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UntagResourceInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *UntagResourceInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "UntagResourceInput"}
+	if s.ResourceArn == nil {
+		invalidParams.Add(request.NewErrParamRequired("ResourceArn"))
+	}
+	if s.ResourceArn != nil && len(*s.ResourceArn) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ResourceArn", 1))
+	}
+	if s.TagKeys == nil {
+		invalidParams.Add(request.NewErrParamRequired("TagKeys"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetResourceArn sets the ResourceArn field's value.
+func (s *UntagResourceInput) SetResourceArn(v string) *UntagResourceInput {
+	s.ResourceArn = &v
+	return s
+}
+
+// SetTagKeys sets the TagKeys field's value.
+func (s *UntagResourceInput) SetTagKeys(v []*string) *UntagResourceInput {
+	s.TagKeys = v
+	return s
+}
+
+type UntagResourceOutput struct {
+	_ struct{} `type:"structure" nopayload:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UntagResourceOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UntagResourceOutput) GoString() string {
+	return s.String()
+}
+
 type UpdateMemberInput struct {
 	_ struct{} `type:"structure"`
 
 	// Configuration properties for publishing to Amazon CloudWatch Logs.
 	LogPublishingConfiguration *MemberLogPublishingConfiguration `type:"structure"`
 
-	// The unique ID of the member.
+	// The unique identifier of the member.
 	//
 	// MemberId is a required field
 	MemberId *string `location:"uri" locationName:"memberId" min:"1" type:"string" required:"true"`
 
-	// The unique ID of the Managed Blockchain network to which the member belongs.
+	// The unique identifier of the Managed Blockchain network to which the member
+	// belongs.
 	//
 	// NetworkId is a required field
 	NetworkId *string `location:"uri" locationName:"networkId" min:"1" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpdateMemberInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpdateMemberInput) GoString() string {
 	return s.String()
 }
@@ -6429,15 +8169,23 @@ func (s *UpdateMemberInput) SetNetworkId(v string) *UpdateMemberInput {
 }
 
 type UpdateMemberOutput struct {
-	_ struct{} `type:"structure"`
+	_ struct{} `type:"structure" nopayload:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpdateMemberOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpdateMemberOutput) GoString() string {
 	return s.String()
 }
@@ -6448,28 +8196,36 @@ type UpdateNodeInput struct {
 	// Configuration properties for publishing to Amazon CloudWatch Logs.
 	LogPublishingConfiguration *NodeLogPublishingConfiguration `type:"structure"`
 
-	// The unique ID of the member that owns the node.
+	// The unique identifier of the member that owns the node.
 	//
-	// MemberId is a required field
-	MemberId *string `location:"uri" locationName:"memberId" min:"1" type:"string" required:"true"`
+	// Applies only to Hyperledger Fabric.
+	MemberId *string `min:"1" type:"string"`
 
-	// The unique ID of the Managed Blockchain network to which the node belongs.
+	// The unique identifier of the network that the node is on.
 	//
 	// NetworkId is a required field
 	NetworkId *string `location:"uri" locationName:"networkId" min:"1" type:"string" required:"true"`
 
-	// The unique ID of the node.
+	// The unique identifier of the node.
 	//
 	// NodeId is a required field
 	NodeId *string `location:"uri" locationName:"nodeId" min:"1" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpdateNodeInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpdateNodeInput) GoString() string {
 	return s.String()
 }
@@ -6477,9 +8233,6 @@ func (s UpdateNodeInput) GoString() string {
 // Validate inspects the fields of the type to determine if they are valid.
 func (s *UpdateNodeInput) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "UpdateNodeInput"}
-	if s.MemberId == nil {
-		invalidParams.Add(request.NewErrParamRequired("MemberId"))
-	}
 	if s.MemberId != nil && len(*s.MemberId) < 1 {
 		invalidParams.Add(request.NewErrParamMinLen("MemberId", 1))
 	}
@@ -6527,15 +8280,23 @@ func (s *UpdateNodeInput) SetNodeId(v string) *UpdateNodeInput {
 }
 
 type UpdateNodeOutput struct {
-	_ struct{} `type:"structure"`
+	_ struct{} `type:"structure" nopayload:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpdateNodeOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpdateNodeOutput) GoString() string {
 	return s.String()
 }
@@ -6564,12 +8325,20 @@ type VoteOnProposalInput struct {
 	VoterMemberId *string `min:"1" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s VoteOnProposalInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s VoteOnProposalInput) GoString() string {
 	return s.String()
 }
@@ -6630,20 +8399,30 @@ func (s *VoteOnProposalInput) SetVoterMemberId(v string) *VoteOnProposalInput {
 }
 
 type VoteOnProposalOutput struct {
-	_ struct{} `type:"structure"`
+	_ struct{} `type:"structure" nopayload:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s VoteOnProposalOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s VoteOnProposalOutput) GoString() string {
 	return s.String()
 }
 
 // Properties of an individual vote that a member cast for a proposal.
+//
+// Applies only to Hyperledger Fabric.
 type VoteSummary struct {
 	_ struct{} `type:"structure"`
 
@@ -6657,12 +8436,20 @@ type VoteSummary struct {
 	Vote *string `type:"string" enum:"VoteValue"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s VoteSummary) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s VoteSummary) GoString() string {
 	return s.String()
 }
@@ -6686,6 +8473,8 @@ func (s *VoteSummary) SetVote(v string) *VoteSummary {
 }
 
 // The voting rules for the network to decide if a proposal is accepted
+//
+// Applies only to Hyperledger Fabric.
 type VotingPolicy struct {
 	_ struct{} `type:"structure"`
 
@@ -6696,12 +8485,20 @@ type VotingPolicy struct {
 	ApprovalThresholdPolicy *ApprovalThresholdPolicy `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s VotingPolicy) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s VotingPolicy) GoString() string {
 	return s.String()
 }
@@ -6746,12 +8543,16 @@ func Edition_Values() []string {
 const (
 	// FrameworkHyperledgerFabric is a Framework enum value
 	FrameworkHyperledgerFabric = "HYPERLEDGER_FABRIC"
+
+	// FrameworkEthereum is a Framework enum value
+	FrameworkEthereum = "ETHEREUM"
 )
 
 // Framework_Values returns all elements of the Framework enum
 func Framework_Values() []string {
 	return []string{
 		FrameworkHyperledgerFabric,
+		FrameworkEthereum,
 	}
 }
 
@@ -6801,6 +8602,9 @@ const (
 
 	// MemberStatusDeleted is a MemberStatus enum value
 	MemberStatusDeleted = "DELETED"
+
+	// MemberStatusInaccessibleEncryptionKey is a MemberStatus enum value
+	MemberStatusInaccessibleEncryptionKey = "INACCESSIBLE_ENCRYPTION_KEY"
 )
 
 // MemberStatus_Values returns all elements of the MemberStatus enum
@@ -6812,6 +8616,7 @@ func MemberStatus_Values() []string {
 		MemberStatusUpdating,
 		MemberStatusDeleting,
 		MemberStatusDeleted,
+		MemberStatusInaccessibleEncryptionKey,
 	}
 }
 
@@ -6850,6 +8655,9 @@ const (
 	// NodeStatusAvailable is a NodeStatus enum value
 	NodeStatusAvailable = "AVAILABLE"
 
+	// NodeStatusUnhealthy is a NodeStatus enum value
+	NodeStatusUnhealthy = "UNHEALTHY"
+
 	// NodeStatusCreateFailed is a NodeStatus enum value
 	NodeStatusCreateFailed = "CREATE_FAILED"
 
@@ -6864,6 +8672,9 @@ const (
 
 	// NodeStatusFailed is a NodeStatus enum value
 	NodeStatusFailed = "FAILED"
+
+	// NodeStatusInaccessibleEncryptionKey is a NodeStatus enum value
+	NodeStatusInaccessibleEncryptionKey = "INACCESSIBLE_ENCRYPTION_KEY"
 )
 
 // NodeStatus_Values returns all elements of the NodeStatus enum
@@ -6871,11 +8682,13 @@ func NodeStatus_Values() []string {
 	return []string{
 		NodeStatusCreating,
 		NodeStatusAvailable,
+		NodeStatusUnhealthy,
 		NodeStatusCreateFailed,
 		NodeStatusUpdating,
 		NodeStatusDeleting,
 		NodeStatusDeleted,
 		NodeStatusFailed,
+		NodeStatusInaccessibleEncryptionKey,
 	}
 }
 

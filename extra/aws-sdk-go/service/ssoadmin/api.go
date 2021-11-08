@@ -61,8 +61,9 @@ func (c *SSOAdmin) AttachManagedPolicyToPermissionSetRequest(input *AttachManage
 // Attaches an IAM managed policy ARN to a permission set.
 //
 // If the permission set is already referenced by one or more account assignments,
-// you will need to call ProvisionPermissionSet after this action to apply the
-// corresponding IAM policy updates to all assigned accounts.
+// you will need to call ProvisionPermissionSet after this operation. Calling
+// ProvisionPermissionSet applies the corresponding IAM policy updates to all
+// assigned accounts.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -165,18 +166,18 @@ func (c *SSOAdmin) CreateAccountAssignmentRequest(input *CreateAccountAssignment
 
 // CreateAccountAssignment API operation for AWS Single Sign-On Admin.
 //
-// Assigns access to a principal for a specified AWS account using a specified
-// permission set.
+// Assigns access to a principal for a specified Amazon Web Services account
+// using a specified permission set.
 //
-// The term principal here refers to a user or group that is defined in AWS
-// SSO.
+// The term principal here refers to a user or group that is defined in Amazon
+// Web Services SSO.
 //
 // As part of a successful CreateAccountAssignment call, the specified permission
 // set will automatically be provisioned to the account in the form of an IAM
-// policy attached to the SSO-created IAM role. If the permission set is subsequently
-// updated, the corresponding IAM policies attached to roles in your accounts
-// will not be updated automatically. In this case, you will need to call ProvisionPermissionSet
-// to make these updates.
+// policy. That policy is attached to the SSO-created IAM role. If the permission
+// set is subsequently updated, the corresponding IAM policies attached to roles
+// in your accounts will not be updated automatically. In this case, you must
+// call ProvisionPermissionSet to make these updates.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -235,6 +236,110 @@ func (c *SSOAdmin) CreateAccountAssignmentWithContext(ctx aws.Context, input *Cr
 	return out, req.Send()
 }
 
+const opCreateInstanceAccessControlAttributeConfiguration = "CreateInstanceAccessControlAttributeConfiguration"
+
+// CreateInstanceAccessControlAttributeConfigurationRequest generates a "aws/request.Request" representing the
+// client's request for the CreateInstanceAccessControlAttributeConfiguration operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See CreateInstanceAccessControlAttributeConfiguration for more information on using the CreateInstanceAccessControlAttributeConfiguration
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the CreateInstanceAccessControlAttributeConfigurationRequest method.
+//    req, resp := client.CreateInstanceAccessControlAttributeConfigurationRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/sso-admin-2020-07-20/CreateInstanceAccessControlAttributeConfiguration
+func (c *SSOAdmin) CreateInstanceAccessControlAttributeConfigurationRequest(input *CreateInstanceAccessControlAttributeConfigurationInput) (req *request.Request, output *CreateInstanceAccessControlAttributeConfigurationOutput) {
+	op := &request.Operation{
+		Name:       opCreateInstanceAccessControlAttributeConfiguration,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &CreateInstanceAccessControlAttributeConfigurationInput{}
+	}
+
+	output = &CreateInstanceAccessControlAttributeConfigurationOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
+	return
+}
+
+// CreateInstanceAccessControlAttributeConfiguration API operation for AWS Single Sign-On Admin.
+//
+// Enables the attributes-based access control (ABAC) feature for the specified
+// Amazon Web Services SSO instance. You can also specify new attributes to
+// add to your ABAC configuration during the enabling process. For more information
+// about ABAC, see Attribute-Based Access Control (/singlesignon/latest/userguide/abac.html)
+// in the Amazon Web Services SSO User Guide.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Single Sign-On Admin's
+// API operation CreateInstanceAccessControlAttributeConfiguration for usage and error information.
+//
+// Returned Error Types:
+//   * InternalServerException
+//   The request processing has failed because of an unknown error, exception,
+//   or failure with an internal server.
+//
+//   * AccessDeniedException
+//   You do not have sufficient access to perform this action.
+//
+//   * ThrottlingException
+//   Indicates that the principal has crossed the throttling limits of the API
+//   operations.
+//
+//   * ValidationException
+//   The request failed because it contains a syntax error.
+//
+//   * ResourceNotFoundException
+//   Indicates that a requested resource is not found.
+//
+//   * ConflictException
+//   Occurs when a conflict with a previous successful write is detected. This
+//   generally occurs when the previous write did not have time to propagate to
+//   the host serving the current request. A retry (with appropriate backoff logic)
+//   is the recommended response to this exception.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/sso-admin-2020-07-20/CreateInstanceAccessControlAttributeConfiguration
+func (c *SSOAdmin) CreateInstanceAccessControlAttributeConfiguration(input *CreateInstanceAccessControlAttributeConfigurationInput) (*CreateInstanceAccessControlAttributeConfigurationOutput, error) {
+	req, out := c.CreateInstanceAccessControlAttributeConfigurationRequest(input)
+	return out, req.Send()
+}
+
+// CreateInstanceAccessControlAttributeConfigurationWithContext is the same as CreateInstanceAccessControlAttributeConfiguration with the addition of
+// the ability to pass a context and additional request options.
+//
+// See CreateInstanceAccessControlAttributeConfiguration for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *SSOAdmin) CreateInstanceAccessControlAttributeConfigurationWithContext(ctx aws.Context, input *CreateInstanceAccessControlAttributeConfigurationInput, opts ...request.Option) (*CreateInstanceAccessControlAttributeConfigurationOutput, error) {
+	req, out := c.CreateInstanceAccessControlAttributeConfigurationRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opCreatePermissionSet = "CreatePermissionSet"
 
 // CreatePermissionSetRequest generates a "aws/request.Request" representing the
@@ -281,7 +386,8 @@ func (c *SSOAdmin) CreatePermissionSetRequest(input *CreatePermissionSetInput) (
 //
 // Creates a permission set within a specified SSO instance.
 //
-// To grant users and groups access to AWS account resources, use CreateAccountAssignment .
+// To grant users and groups access to Amazon Web Services account resources,
+// use CreateAccountAssignment .
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -384,8 +490,8 @@ func (c *SSOAdmin) DeleteAccountAssignmentRequest(input *DeleteAccountAssignment
 
 // DeleteAccountAssignment API operation for AWS Single Sign-On Admin.
 //
-// Deletes a principal's access from a specified AWS account using a specified
-// permission set.
+// Deletes a principal's access from a specified Amazon Web Services account
+// using a specified permission set.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -535,6 +641,112 @@ func (c *SSOAdmin) DeleteInlinePolicyFromPermissionSet(input *DeleteInlinePolicy
 // for more information on using Contexts.
 func (c *SSOAdmin) DeleteInlinePolicyFromPermissionSetWithContext(ctx aws.Context, input *DeleteInlinePolicyFromPermissionSetInput, opts ...request.Option) (*DeleteInlinePolicyFromPermissionSetOutput, error) {
 	req, out := c.DeleteInlinePolicyFromPermissionSetRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opDeleteInstanceAccessControlAttributeConfiguration = "DeleteInstanceAccessControlAttributeConfiguration"
+
+// DeleteInstanceAccessControlAttributeConfigurationRequest generates a "aws/request.Request" representing the
+// client's request for the DeleteInstanceAccessControlAttributeConfiguration operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See DeleteInstanceAccessControlAttributeConfiguration for more information on using the DeleteInstanceAccessControlAttributeConfiguration
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the DeleteInstanceAccessControlAttributeConfigurationRequest method.
+//    req, resp := client.DeleteInstanceAccessControlAttributeConfigurationRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/sso-admin-2020-07-20/DeleteInstanceAccessControlAttributeConfiguration
+func (c *SSOAdmin) DeleteInstanceAccessControlAttributeConfigurationRequest(input *DeleteInstanceAccessControlAttributeConfigurationInput) (req *request.Request, output *DeleteInstanceAccessControlAttributeConfigurationOutput) {
+	op := &request.Operation{
+		Name:       opDeleteInstanceAccessControlAttributeConfiguration,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &DeleteInstanceAccessControlAttributeConfigurationInput{}
+	}
+
+	output = &DeleteInstanceAccessControlAttributeConfigurationOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
+	return
+}
+
+// DeleteInstanceAccessControlAttributeConfiguration API operation for AWS Single Sign-On Admin.
+//
+// Disables the attributes-based access control (ABAC) feature for the specified
+// Amazon Web Services SSO instance and deletes all of the attribute mappings
+// that have been configured. Once deleted, any attributes that are received
+// from an identity source and any custom attributes you have previously configured
+// will not be passed. For more information about ABAC, see Attribute-Based
+// Access Control (/singlesignon/latest/userguide/abac.html) in the Amazon Web
+// Services SSO User Guide.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Single Sign-On Admin's
+// API operation DeleteInstanceAccessControlAttributeConfiguration for usage and error information.
+//
+// Returned Error Types:
+//   * InternalServerException
+//   The request processing has failed because of an unknown error, exception,
+//   or failure with an internal server.
+//
+//   * AccessDeniedException
+//   You do not have sufficient access to perform this action.
+//
+//   * ThrottlingException
+//   Indicates that the principal has crossed the throttling limits of the API
+//   operations.
+//
+//   * ValidationException
+//   The request failed because it contains a syntax error.
+//
+//   * ResourceNotFoundException
+//   Indicates that a requested resource is not found.
+//
+//   * ConflictException
+//   Occurs when a conflict with a previous successful write is detected. This
+//   generally occurs when the previous write did not have time to propagate to
+//   the host serving the current request. A retry (with appropriate backoff logic)
+//   is the recommended response to this exception.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/sso-admin-2020-07-20/DeleteInstanceAccessControlAttributeConfiguration
+func (c *SSOAdmin) DeleteInstanceAccessControlAttributeConfiguration(input *DeleteInstanceAccessControlAttributeConfigurationInput) (*DeleteInstanceAccessControlAttributeConfigurationOutput, error) {
+	req, out := c.DeleteInstanceAccessControlAttributeConfigurationRequest(input)
+	return out, req.Send()
+}
+
+// DeleteInstanceAccessControlAttributeConfigurationWithContext is the same as DeleteInstanceAccessControlAttributeConfiguration with the addition of
+// the ability to pass a context and additional request options.
+//
+// See DeleteInstanceAccessControlAttributeConfiguration for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *SSOAdmin) DeleteInstanceAccessControlAttributeConfigurationWithContext(ctx aws.Context, input *DeleteInstanceAccessControlAttributeConfigurationInput, opts ...request.Option) (*DeleteInstanceAccessControlAttributeConfigurationOutput, error) {
+	req, out := c.DeleteInstanceAccessControlAttributeConfigurationRequest(input)
 	req.SetContext(ctx)
 	req.ApplyOptions(opts...)
 	return out, req.Send()
@@ -821,6 +1033,104 @@ func (c *SSOAdmin) DescribeAccountAssignmentDeletionStatus(input *DescribeAccoun
 // for more information on using Contexts.
 func (c *SSOAdmin) DescribeAccountAssignmentDeletionStatusWithContext(ctx aws.Context, input *DescribeAccountAssignmentDeletionStatusInput, opts ...request.Option) (*DescribeAccountAssignmentDeletionStatusOutput, error) {
 	req, out := c.DescribeAccountAssignmentDeletionStatusRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opDescribeInstanceAccessControlAttributeConfiguration = "DescribeInstanceAccessControlAttributeConfiguration"
+
+// DescribeInstanceAccessControlAttributeConfigurationRequest generates a "aws/request.Request" representing the
+// client's request for the DescribeInstanceAccessControlAttributeConfiguration operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See DescribeInstanceAccessControlAttributeConfiguration for more information on using the DescribeInstanceAccessControlAttributeConfiguration
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the DescribeInstanceAccessControlAttributeConfigurationRequest method.
+//    req, resp := client.DescribeInstanceAccessControlAttributeConfigurationRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/sso-admin-2020-07-20/DescribeInstanceAccessControlAttributeConfiguration
+func (c *SSOAdmin) DescribeInstanceAccessControlAttributeConfigurationRequest(input *DescribeInstanceAccessControlAttributeConfigurationInput) (req *request.Request, output *DescribeInstanceAccessControlAttributeConfigurationOutput) {
+	op := &request.Operation{
+		Name:       opDescribeInstanceAccessControlAttributeConfiguration,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &DescribeInstanceAccessControlAttributeConfigurationInput{}
+	}
+
+	output = &DescribeInstanceAccessControlAttributeConfigurationOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// DescribeInstanceAccessControlAttributeConfiguration API operation for AWS Single Sign-On Admin.
+//
+// Returns the list of Amazon Web Services SSO identity store attributes that
+// have been configured to work with attributes-based access control (ABAC)
+// for the specified Amazon Web Services SSO instance. This will not return
+// attributes configured and sent by an external identity provider. For more
+// information about ABAC, see Attribute-Based Access Control (/singlesignon/latest/userguide/abac.html)
+// in the Amazon Web Services SSO User Guide.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Single Sign-On Admin's
+// API operation DescribeInstanceAccessControlAttributeConfiguration for usage and error information.
+//
+// Returned Error Types:
+//   * ResourceNotFoundException
+//   Indicates that a requested resource is not found.
+//
+//   * InternalServerException
+//   The request processing has failed because of an unknown error, exception,
+//   or failure with an internal server.
+//
+//   * AccessDeniedException
+//   You do not have sufficient access to perform this action.
+//
+//   * ThrottlingException
+//   Indicates that the principal has crossed the throttling limits of the API
+//   operations.
+//
+//   * ValidationException
+//   The request failed because it contains a syntax error.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/sso-admin-2020-07-20/DescribeInstanceAccessControlAttributeConfiguration
+func (c *SSOAdmin) DescribeInstanceAccessControlAttributeConfiguration(input *DescribeInstanceAccessControlAttributeConfigurationInput) (*DescribeInstanceAccessControlAttributeConfigurationOutput, error) {
+	req, out := c.DescribeInstanceAccessControlAttributeConfigurationRequest(input)
+	return out, req.Send()
+}
+
+// DescribeInstanceAccessControlAttributeConfigurationWithContext is the same as DescribeInstanceAccessControlAttributeConfiguration with the addition of
+// the ability to pass a context and additional request options.
+//
+// See DescribeInstanceAccessControlAttributeConfiguration for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *SSOAdmin) DescribeInstanceAccessControlAttributeConfigurationWithContext(ctx aws.Context, input *DescribeInstanceAccessControlAttributeConfigurationInput, opts ...request.Option) (*DescribeInstanceAccessControlAttributeConfigurationOutput, error) {
+	req, out := c.DescribeInstanceAccessControlAttributeConfigurationRequest(input)
 	req.SetContext(ctx)
 	req.ApplyOptions(opts...)
 	return out, req.Send()
@@ -1256,8 +1566,8 @@ func (c *SSOAdmin) ListAccountAssignmentCreationStatusRequest(input *ListAccount
 
 // ListAccountAssignmentCreationStatus API operation for AWS Single Sign-On Admin.
 //
-// Lists the status of the AWS account assignment creation requests for a specified
-// SSO instance.
+// Lists the status of the Amazon Web Services account assignment creation requests
+// for a specified SSO instance.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -1408,8 +1718,8 @@ func (c *SSOAdmin) ListAccountAssignmentDeletionStatusRequest(input *ListAccount
 
 // ListAccountAssignmentDeletionStatus API operation for AWS Single Sign-On Admin.
 //
-// Lists the status of the AWS account assignment deletion requests for a specified
-// SSO instance.
+// Lists the status of the Amazon Web Services account assignment deletion requests
+// for a specified SSO instance.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -1560,8 +1870,8 @@ func (c *SSOAdmin) ListAccountAssignmentsRequest(input *ListAccountAssignmentsIn
 
 // ListAccountAssignments API operation for AWS Single Sign-On Admin.
 //
-// Lists the assignee of the specified AWS account with the specified permission
-// set.
+// Lists the assignee of the specified Amazon Web Services account with the
+// specified permission set.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -1712,7 +2022,8 @@ func (c *SSOAdmin) ListAccountsForProvisionedPermissionSetRequest(input *ListAcc
 
 // ListAccountsForProvisionedPermissionSet API operation for AWS Single Sign-On Admin.
 //
-// Lists all the AWS accounts where the specified permission set is provisioned.
+// Lists all the Amazon Web Services accounts where the specified permission
+// set is provisioned.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -2465,7 +2776,8 @@ func (c *SSOAdmin) ListPermissionSetsProvisionedToAccountRequest(input *ListPerm
 
 // ListPermissionSetsProvisionedToAccount API operation for AWS Single Sign-On Admin.
 //
-// Lists all the permission sets that are provisioned to a specified AWS account.
+// Lists all the permission sets that are provisioned to a specified Amazon
+// Web Services account.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -3129,6 +3441,114 @@ func (c *SSOAdmin) UntagResourceWithContext(ctx aws.Context, input *UntagResourc
 	return out, req.Send()
 }
 
+const opUpdateInstanceAccessControlAttributeConfiguration = "UpdateInstanceAccessControlAttributeConfiguration"
+
+// UpdateInstanceAccessControlAttributeConfigurationRequest generates a "aws/request.Request" representing the
+// client's request for the UpdateInstanceAccessControlAttributeConfiguration operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See UpdateInstanceAccessControlAttributeConfiguration for more information on using the UpdateInstanceAccessControlAttributeConfiguration
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the UpdateInstanceAccessControlAttributeConfigurationRequest method.
+//    req, resp := client.UpdateInstanceAccessControlAttributeConfigurationRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/sso-admin-2020-07-20/UpdateInstanceAccessControlAttributeConfiguration
+func (c *SSOAdmin) UpdateInstanceAccessControlAttributeConfigurationRequest(input *UpdateInstanceAccessControlAttributeConfigurationInput) (req *request.Request, output *UpdateInstanceAccessControlAttributeConfigurationOutput) {
+	op := &request.Operation{
+		Name:       opUpdateInstanceAccessControlAttributeConfiguration,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &UpdateInstanceAccessControlAttributeConfigurationInput{}
+	}
+
+	output = &UpdateInstanceAccessControlAttributeConfigurationOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
+	return
+}
+
+// UpdateInstanceAccessControlAttributeConfiguration API operation for AWS Single Sign-On Admin.
+//
+// Updates the Amazon Web Services SSO identity store attributes that you can
+// use with the Amazon Web Services SSO instance for attributes-based access
+// control (ABAC). When using an external identity provider as an identity source,
+// you can pass attributes through the SAML assertion as an alternative to configuring
+// attributes from the Amazon Web Services SSO identity store. If a SAML assertion
+// passes any of these attributes, Amazon Web Services SSO replaces the attribute
+// value with the value from the Amazon Web Services SSO identity store. For
+// more information about ABAC, see Attribute-Based Access Control (/singlesignon/latest/userguide/abac.html)
+// in the Amazon Web Services SSO User Guide.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Single Sign-On Admin's
+// API operation UpdateInstanceAccessControlAttributeConfiguration for usage and error information.
+//
+// Returned Error Types:
+//   * InternalServerException
+//   The request processing has failed because of an unknown error, exception,
+//   or failure with an internal server.
+//
+//   * AccessDeniedException
+//   You do not have sufficient access to perform this action.
+//
+//   * ThrottlingException
+//   Indicates that the principal has crossed the throttling limits of the API
+//   operations.
+//
+//   * ValidationException
+//   The request failed because it contains a syntax error.
+//
+//   * ResourceNotFoundException
+//   Indicates that a requested resource is not found.
+//
+//   * ConflictException
+//   Occurs when a conflict with a previous successful write is detected. This
+//   generally occurs when the previous write did not have time to propagate to
+//   the host serving the current request. A retry (with appropriate backoff logic)
+//   is the recommended response to this exception.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/sso-admin-2020-07-20/UpdateInstanceAccessControlAttributeConfiguration
+func (c *SSOAdmin) UpdateInstanceAccessControlAttributeConfiguration(input *UpdateInstanceAccessControlAttributeConfigurationInput) (*UpdateInstanceAccessControlAttributeConfigurationOutput, error) {
+	req, out := c.UpdateInstanceAccessControlAttributeConfigurationRequest(input)
+	return out, req.Send()
+}
+
+// UpdateInstanceAccessControlAttributeConfigurationWithContext is the same as UpdateInstanceAccessControlAttributeConfiguration with the addition of
+// the ability to pass a context and additional request options.
+//
+// See UpdateInstanceAccessControlAttributeConfiguration for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *SSOAdmin) UpdateInstanceAccessControlAttributeConfigurationWithContext(ctx aws.Context, input *UpdateInstanceAccessControlAttributeConfigurationInput, opts ...request.Option) (*UpdateInstanceAccessControlAttributeConfigurationOutput, error) {
+	req, out := c.UpdateInstanceAccessControlAttributeConfigurationRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opUpdatePermissionSet = "UpdatePermissionSet"
 
 // UpdatePermissionSetRequest generates a "aws/request.Request" representing the
@@ -3229,6 +3649,133 @@ func (c *SSOAdmin) UpdatePermissionSetWithContext(ctx aws.Context, input *Update
 	return out, req.Send()
 }
 
+// These are Amazon Web Services SSO identity store attributes that you can
+// configure for use in attributes-based access control (ABAC). You can create
+// permissions policies that determine who can access your Amazon Web Services
+// resources based upon the configured attribute values. When you enable ABAC
+// and specify AccessControlAttributes, Amazon Web Services SSO passes the attribute
+// values of the authenticated user into IAM for use in policy evaluation.
+type AccessControlAttribute struct {
+	_ struct{} `type:"structure"`
+
+	// The name of the attribute associated with your identities in your identity
+	// source. This is used to map a specified attribute in your identity source
+	// with an attribute in Amazon Web Services SSO.
+	//
+	// Key is a required field
+	Key *string `min:"1" type:"string" required:"true"`
+
+	// The value used for mapping a specified attribute to an identity source.
+	//
+	// Value is a required field
+	Value *AccessControlAttributeValue `type:"structure" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s AccessControlAttribute) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s AccessControlAttribute) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *AccessControlAttribute) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "AccessControlAttribute"}
+	if s.Key == nil {
+		invalidParams.Add(request.NewErrParamRequired("Key"))
+	}
+	if s.Key != nil && len(*s.Key) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Key", 1))
+	}
+	if s.Value == nil {
+		invalidParams.Add(request.NewErrParamRequired("Value"))
+	}
+	if s.Value != nil {
+		if err := s.Value.Validate(); err != nil {
+			invalidParams.AddNested("Value", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetKey sets the Key field's value.
+func (s *AccessControlAttribute) SetKey(v string) *AccessControlAttribute {
+	s.Key = &v
+	return s
+}
+
+// SetValue sets the Value field's value.
+func (s *AccessControlAttribute) SetValue(v *AccessControlAttributeValue) *AccessControlAttribute {
+	s.Value = v
+	return s
+}
+
+// The value used for mapping a specified attribute to an identity source.
+type AccessControlAttributeValue struct {
+	_ struct{} `type:"structure"`
+
+	// The identity source to use when mapping a specified attribute to Amazon Web
+	// Services SSO.
+	//
+	// Source is a required field
+	Source []*string `min:"1" type:"list" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s AccessControlAttributeValue) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s AccessControlAttributeValue) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *AccessControlAttributeValue) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "AccessControlAttributeValue"}
+	if s.Source == nil {
+		invalidParams.Add(request.NewErrParamRequired("Source"))
+	}
+	if s.Source != nil && len(s.Source) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Source", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetSource sets the Source field's value.
+func (s *AccessControlAttributeValue) SetSource(v []*string) *AccessControlAttributeValue {
+	s.Source = v
+	return s
+}
+
 // You do not have sufficient access to perform this action.
 type AccessDeniedException struct {
 	_            struct{}                  `type:"structure"`
@@ -3237,12 +3784,20 @@ type AccessDeniedException struct {
 	Message_ *string `locationName:"Message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AccessDeniedException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AccessDeniedException) GoString() string {
 	return s.String()
 }
@@ -3286,37 +3841,45 @@ func (s *AccessDeniedException) RequestID() string {
 }
 
 // The assignment that indicates a principal's limited access to a specified
-// AWS account with a specified permission set.
+// Amazon Web Services account with a specified permission set.
 //
-// The term principal here refers to a user or group that is defined in AWS
-// SSO.
+// The term principal here refers to a user or group that is defined in Amazon
+// Web Services SSO.
 type AccountAssignment struct {
 	_ struct{} `type:"structure"`
 
-	// The identifier of the AWS account.
+	// The identifier of the Amazon Web Services account.
 	AccountId *string `type:"string"`
 
 	// The ARN of the permission set. For more information about ARNs, see Amazon
-	// Resource Names (ARNs) and AWS Service Namespaces (/general/latest/gr/aws-arns-and-namespaces.html)
-	// in the AWS General Reference.
+	// Resource Names (ARNs) and Amazon Web Services Service Namespaces (/general/latest/gr/aws-arns-and-namespaces.html)
+	// in the Amazon Web Services General Reference.
 	PermissionSetArn *string `min:"10" type:"string"`
 
-	// An identifier for an object in AWS SSO, such as a user or group. PrincipalIds
-	// are GUIDs (For example, f81d4fae-7dec-11d0-a765-00a0c91e6bf6). For more information
-	// about PrincipalIds in AWS SSO, see the AWS SSO Identity Store API Reference
-	// (/singlesignon/latest/IdentityStoreAPIReference/welcome.html).
+	// An identifier for an object in Amazon Web Services SSO, such as a user or
+	// group. PrincipalIds are GUIDs (For example, f81d4fae-7dec-11d0-a765-00a0c91e6bf6).
+	// For more information about PrincipalIds in Amazon Web Services SSO, see the
+	// Amazon Web Services SSO Identity Store API Reference (/singlesignon/latest/IdentityStoreAPIReference/welcome.html).
 	PrincipalId *string `min:"1" type:"string"`
 
 	// The entity type for which the assignment will be created.
 	PrincipalType *string `type:"string" enum:"PrincipalType"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AccountAssignment) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AccountAssignment) GoString() string {
 	return s.String()
 }
@@ -3357,14 +3920,14 @@ type AccountAssignmentOperationStatus struct {
 	FailureReason *string `type:"string"`
 
 	// The ARN of the permission set. For more information about ARNs, see Amazon
-	// Resource Names (ARNs) and AWS Service Namespaces (/general/latest/gr/aws-arns-and-namespaces.html)
-	// in the AWS General Reference.
+	// Resource Names (ARNs) and Amazon Web Services Service Namespaces (/general/latest/gr/aws-arns-and-namespaces.html)
+	// in the Amazon Web Services General Reference.
 	PermissionSetArn *string `min:"10" type:"string"`
 
-	// An identifier for an object in AWS SSO, such as a user or group. PrincipalIds
-	// are GUIDs (For example, f81d4fae-7dec-11d0-a765-00a0c91e6bf6). For more information
-	// about PrincipalIds in AWS SSO, see the AWS SSO Identity Store API Reference
-	// (/singlesignon/latest/IdentityStoreAPIReference/welcome.html).
+	// An identifier for an object in Amazon Web Services SSO, such as a user or
+	// group. PrincipalIds are GUIDs (For example, f81d4fae-7dec-11d0-a765-00a0c91e6bf6).
+	// For more information about PrincipalIds in Amazon Web Services SSO, see the
+	// Amazon Web Services SSO Identity Store API Reference (/singlesignon/latest/IdentityStoreAPIReference/welcome.html).
 	PrincipalId *string `min:"1" type:"string"`
 
 	// The entity type for which the assignment will be created.
@@ -3377,20 +3940,28 @@ type AccountAssignmentOperationStatus struct {
 	// The status of the permission set provisioning process.
 	Status *string `type:"string" enum:"StatusValues"`
 
-	// TargetID is an AWS account identifier, typically a 10-12 digit string (For
-	// example, 123456789012).
+	// TargetID is an Amazon Web Services account identifier, typically a 10-12
+	// digit string (For example, 123456789012).
 	TargetId *string `type:"string"`
 
 	// The entity type for which the assignment will be created.
 	TargetType *string `type:"string" enum:"TargetType"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AccountAssignmentOperationStatus) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AccountAssignmentOperationStatus) GoString() string {
 	return s.String()
 }
@@ -3464,12 +4035,20 @@ type AccountAssignmentOperationStatusMetadata struct {
 	Status *string `type:"string" enum:"StatusValues"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AccountAssignmentOperationStatusMetadata) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AccountAssignmentOperationStatusMetadata) GoString() string {
 	return s.String()
 }
@@ -3496,9 +4075,9 @@ type AttachManagedPolicyToPermissionSetInput struct {
 	_ struct{} `type:"structure"`
 
 	// The ARN of the SSO instance under which the operation will be executed. For
-	// more information about ARNs, see Amazon Resource Names (ARNs) and AWS Service
-	// Namespaces (/general/latest/gr/aws-arns-and-namespaces.html) in the AWS General
-	// Reference.
+	// more information about ARNs, see Amazon Resource Names (ARNs) and Amazon
+	// Web Services Service Namespaces (/general/latest/gr/aws-arns-and-namespaces.html)
+	// in the Amazon Web Services General Reference.
 	//
 	// InstanceArn is a required field
 	InstanceArn *string `min:"10" type:"string" required:"true"`
@@ -3514,12 +4093,20 @@ type AttachManagedPolicyToPermissionSetInput struct {
 	PermissionSetArn *string `min:"10" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AttachManagedPolicyToPermissionSetInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AttachManagedPolicyToPermissionSetInput) GoString() string {
 	return s.String()
 }
@@ -3574,12 +4161,20 @@ type AttachManagedPolicyToPermissionSetOutput struct {
 	_ struct{} `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AttachManagedPolicyToPermissionSetOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AttachManagedPolicyToPermissionSetOutput) GoString() string {
 	return s.String()
 }
@@ -3589,20 +4184,28 @@ type AttachedManagedPolicy struct {
 	_ struct{} `type:"structure"`
 
 	// The ARN of the IAM managed policy. For more information about ARNs, see Amazon
-	// Resource Names (ARNs) and AWS Service Namespaces (/general/latest/gr/aws-arns-and-namespaces.html)
-	// in the AWS General Reference.
+	// Resource Names (ARNs) and Amazon Web Services Service Namespaces (/general/latest/gr/aws-arns-and-namespaces.html)
+	// in the Amazon Web Services General Reference.
 	Arn *string `min:"20" type:"string"`
 
 	// The name of the IAM managed policy.
 	Name *string `min:"1" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AttachedManagedPolicy) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AttachedManagedPolicy) GoString() string {
 	return s.String()
 }
@@ -3630,12 +4233,20 @@ type ConflictException struct {
 	Message_ *string `locationName:"Message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ConflictException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ConflictException) GoString() string {
 	return s.String()
 }
@@ -3682,9 +4293,9 @@ type CreateAccountAssignmentInput struct {
 	_ struct{} `type:"structure"`
 
 	// The ARN of the SSO instance under which the operation will be executed. For
-	// more information about ARNs, see Amazon Resource Names (ARNs) and AWS Service
-	// Namespaces (/general/latest/gr/aws-arns-and-namespaces.html) in the AWS General
-	// Reference.
+	// more information about ARNs, see Amazon Resource Names (ARNs) and Amazon
+	// Web Services Service Namespaces (/general/latest/gr/aws-arns-and-namespaces.html)
+	// in the Amazon Web Services General Reference.
 	//
 	// InstanceArn is a required field
 	InstanceArn *string `min:"10" type:"string" required:"true"`
@@ -3695,10 +4306,10 @@ type CreateAccountAssignmentInput struct {
 	// PermissionSetArn is a required field
 	PermissionSetArn *string `min:"10" type:"string" required:"true"`
 
-	// An identifier for an object in AWS SSO, such as a user or group. PrincipalIds
-	// are GUIDs (For example, f81d4fae-7dec-11d0-a765-00a0c91e6bf6). For more information
-	// about PrincipalIds in AWS SSO, see the AWS SSO Identity Store API Reference
-	// (/singlesignon/latest/IdentityStoreAPIReference/welcome.html).
+	// An identifier for an object in Amazon Web Services SSO, such as a user or
+	// group. PrincipalIds are GUIDs (For example, f81d4fae-7dec-11d0-a765-00a0c91e6bf6).
+	// For more information about PrincipalIds in Amazon Web Services SSO, see the
+	// Amazon Web Services SSO Identity Store API Reference (/singlesignon/latest/IdentityStoreAPIReference/welcome.html).
 	//
 	// PrincipalId is a required field
 	PrincipalId *string `min:"1" type:"string" required:"true"`
@@ -3708,8 +4319,8 @@ type CreateAccountAssignmentInput struct {
 	// PrincipalType is a required field
 	PrincipalType *string `type:"string" required:"true" enum:"PrincipalType"`
 
-	// TargetID is an AWS account identifier, typically a 10-12 digit string (For
-	// example, 123456789012).
+	// TargetID is an Amazon Web Services account identifier, typically a 10-12
+	// digit string (For example, 123456789012).
 	//
 	// TargetId is a required field
 	TargetId *string `type:"string" required:"true"`
@@ -3720,12 +4331,20 @@ type CreateAccountAssignmentInput struct {
 	TargetType *string `type:"string" required:"true" enum:"TargetType"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateAccountAssignmentInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateAccountAssignmentInput) GoString() string {
 	return s.String()
 }
@@ -3810,12 +4429,20 @@ type CreateAccountAssignmentOutput struct {
 	AccountAssignmentCreationStatus *AccountAssignmentOperationStatus `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateAccountAssignmentOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateAccountAssignmentOutput) GoString() string {
 	return s.String()
 }
@@ -3826,6 +4453,102 @@ func (s *CreateAccountAssignmentOutput) SetAccountAssignmentCreationStatus(v *Ac
 	return s
 }
 
+type CreateInstanceAccessControlAttributeConfigurationInput struct {
+	_ struct{} `type:"structure"`
+
+	// Specifies the Amazon Web Services SSO identity store attributes to add to
+	// your ABAC configuration. When using an external identity provider as an identity
+	// source, you can pass attributes through the SAML assertion. Doing so provides
+	// an alternative to configuring attributes from the Amazon Web Services SSO
+	// identity store. If a SAML assertion passes any of these attributes, Amazon
+	// Web Services SSO will replace the attribute value with the value from the
+	// Amazon Web Services SSO identity store.
+	//
+	// InstanceAccessControlAttributeConfiguration is a required field
+	InstanceAccessControlAttributeConfiguration *InstanceAccessControlAttributeConfiguration `type:"structure" required:"true"`
+
+	// The ARN of the SSO instance under which the operation will be executed.
+	//
+	// InstanceArn is a required field
+	InstanceArn *string `min:"10" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateInstanceAccessControlAttributeConfigurationInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateInstanceAccessControlAttributeConfigurationInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *CreateInstanceAccessControlAttributeConfigurationInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "CreateInstanceAccessControlAttributeConfigurationInput"}
+	if s.InstanceAccessControlAttributeConfiguration == nil {
+		invalidParams.Add(request.NewErrParamRequired("InstanceAccessControlAttributeConfiguration"))
+	}
+	if s.InstanceArn == nil {
+		invalidParams.Add(request.NewErrParamRequired("InstanceArn"))
+	}
+	if s.InstanceArn != nil && len(*s.InstanceArn) < 10 {
+		invalidParams.Add(request.NewErrParamMinLen("InstanceArn", 10))
+	}
+	if s.InstanceAccessControlAttributeConfiguration != nil {
+		if err := s.InstanceAccessControlAttributeConfiguration.Validate(); err != nil {
+			invalidParams.AddNested("InstanceAccessControlAttributeConfiguration", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetInstanceAccessControlAttributeConfiguration sets the InstanceAccessControlAttributeConfiguration field's value.
+func (s *CreateInstanceAccessControlAttributeConfigurationInput) SetInstanceAccessControlAttributeConfiguration(v *InstanceAccessControlAttributeConfiguration) *CreateInstanceAccessControlAttributeConfigurationInput {
+	s.InstanceAccessControlAttributeConfiguration = v
+	return s
+}
+
+// SetInstanceArn sets the InstanceArn field's value.
+func (s *CreateInstanceAccessControlAttributeConfigurationInput) SetInstanceArn(v string) *CreateInstanceAccessControlAttributeConfigurationInput {
+	s.InstanceArn = &v
+	return s
+}
+
+type CreateInstanceAccessControlAttributeConfigurationOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateInstanceAccessControlAttributeConfigurationOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateInstanceAccessControlAttributeConfigurationOutput) GoString() string {
+	return s.String()
+}
+
 type CreatePermissionSetInput struct {
 	_ struct{} `type:"structure"`
 
@@ -3833,9 +4556,9 @@ type CreatePermissionSetInput struct {
 	Description *string `min:"1" type:"string"`
 
 	// The ARN of the SSO instance under which the operation will be executed. For
-	// more information about ARNs, see Amazon Resource Names (ARNs) and AWS Service
-	// Namespaces (/general/latest/gr/aws-arns-and-namespaces.html) in the AWS General
-	// Reference.
+	// more information about ARNs, see Amazon Resource Names (ARNs) and Amazon
+	// Web Services Service Namespaces (/general/latest/gr/aws-arns-and-namespaces.html)
+	// in the Amazon Web Services General Reference.
 	//
 	// InstanceArn is a required field
 	InstanceArn *string `min:"10" type:"string" required:"true"`
@@ -3857,12 +4580,20 @@ type CreatePermissionSetInput struct {
 	Tags []*Tag `type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreatePermissionSetInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreatePermissionSetInput) GoString() string {
 	return s.String()
 }
@@ -3947,16 +4678,24 @@ func (s *CreatePermissionSetInput) SetTags(v []*Tag) *CreatePermissionSetInput {
 type CreatePermissionSetOutput struct {
 	_ struct{} `type:"structure"`
 
-	// Defines the level of access on an AWS account.
+	// Defines the level of access on an Amazon Web Services account.
 	PermissionSet *PermissionSet `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreatePermissionSetOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreatePermissionSetOutput) GoString() string {
 	return s.String()
 }
@@ -3971,9 +4710,9 @@ type DeleteAccountAssignmentInput struct {
 	_ struct{} `type:"structure"`
 
 	// The ARN of the SSO instance under which the operation will be executed. For
-	// more information about ARNs, see Amazon Resource Names (ARNs) and AWS Service
-	// Namespaces (/general/latest/gr/aws-arns-and-namespaces.html) in the AWS General
-	// Reference.
+	// more information about ARNs, see Amazon Resource Names (ARNs) and Amazon
+	// Web Services Service Namespaces (/general/latest/gr/aws-arns-and-namespaces.html)
+	// in the Amazon Web Services General Reference.
 	//
 	// InstanceArn is a required field
 	InstanceArn *string `min:"10" type:"string" required:"true"`
@@ -3983,10 +4722,10 @@ type DeleteAccountAssignmentInput struct {
 	// PermissionSetArn is a required field
 	PermissionSetArn *string `min:"10" type:"string" required:"true"`
 
-	// An identifier for an object in AWS SSO, such as a user or group. PrincipalIds
-	// are GUIDs (For example, f81d4fae-7dec-11d0-a765-00a0c91e6bf6). For more information
-	// about PrincipalIds in AWS SSO, see the AWS SSO Identity Store API Reference
-	// (/singlesignon/latest/IdentityStoreAPIReference/welcome.html).
+	// An identifier for an object in Amazon Web Services SSO, such as a user or
+	// group. PrincipalIds are GUIDs (For example, f81d4fae-7dec-11d0-a765-00a0c91e6bf6).
+	// For more information about PrincipalIds in Amazon Web Services SSO, see the
+	// Amazon Web Services SSO Identity Store API Reference (/singlesignon/latest/IdentityStoreAPIReference/welcome.html).
 	//
 	// PrincipalId is a required field
 	PrincipalId *string `min:"1" type:"string" required:"true"`
@@ -3996,8 +4735,8 @@ type DeleteAccountAssignmentInput struct {
 	// PrincipalType is a required field
 	PrincipalType *string `type:"string" required:"true" enum:"PrincipalType"`
 
-	// TargetID is an AWS account identifier, typically a 10-12 digit string (For
-	// example, 123456789012).
+	// TargetID is an Amazon Web Services account identifier, typically a 10-12
+	// digit string (For example, 123456789012).
 	//
 	// TargetId is a required field
 	TargetId *string `type:"string" required:"true"`
@@ -4008,12 +4747,20 @@ type DeleteAccountAssignmentInput struct {
 	TargetType *string `type:"string" required:"true" enum:"TargetType"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteAccountAssignmentInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteAccountAssignmentInput) GoString() string {
 	return s.String()
 }
@@ -4098,12 +4845,20 @@ type DeleteAccountAssignmentOutput struct {
 	AccountAssignmentDeletionStatus *AccountAssignmentOperationStatus `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteAccountAssignmentOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteAccountAssignmentOutput) GoString() string {
 	return s.String()
 }
@@ -4118,9 +4873,9 @@ type DeleteInlinePolicyFromPermissionSetInput struct {
 	_ struct{} `type:"structure"`
 
 	// The ARN of the SSO instance under which the operation will be executed. For
-	// more information about ARNs, see Amazon Resource Names (ARNs) and AWS Service
-	// Namespaces (/general/latest/gr/aws-arns-and-namespaces.html) in the AWS General
-	// Reference.
+	// more information about ARNs, see Amazon Resource Names (ARNs) and Amazon
+	// Web Services Service Namespaces (/general/latest/gr/aws-arns-and-namespaces.html)
+	// in the Amazon Web Services General Reference.
 	//
 	// InstanceArn is a required field
 	InstanceArn *string `min:"10" type:"string" required:"true"`
@@ -4131,12 +4886,20 @@ type DeleteInlinePolicyFromPermissionSetInput struct {
 	PermissionSetArn *string `min:"10" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteInlinePolicyFromPermissionSetInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteInlinePolicyFromPermissionSetInput) GoString() string {
 	return s.String()
 }
@@ -4179,13 +4942,92 @@ type DeleteInlinePolicyFromPermissionSetOutput struct {
 	_ struct{} `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteInlinePolicyFromPermissionSetOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteInlinePolicyFromPermissionSetOutput) GoString() string {
+	return s.String()
+}
+
+type DeleteInstanceAccessControlAttributeConfigurationInput struct {
+	_ struct{} `type:"structure"`
+
+	// The ARN of the SSO instance under which the operation will be executed.
+	//
+	// InstanceArn is a required field
+	InstanceArn *string `min:"10" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeleteInstanceAccessControlAttributeConfigurationInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeleteInstanceAccessControlAttributeConfigurationInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DeleteInstanceAccessControlAttributeConfigurationInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DeleteInstanceAccessControlAttributeConfigurationInput"}
+	if s.InstanceArn == nil {
+		invalidParams.Add(request.NewErrParamRequired("InstanceArn"))
+	}
+	if s.InstanceArn != nil && len(*s.InstanceArn) < 10 {
+		invalidParams.Add(request.NewErrParamMinLen("InstanceArn", 10))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetInstanceArn sets the InstanceArn field's value.
+func (s *DeleteInstanceAccessControlAttributeConfigurationInput) SetInstanceArn(v string) *DeleteInstanceAccessControlAttributeConfigurationInput {
+	s.InstanceArn = &v
+	return s
+}
+
+type DeleteInstanceAccessControlAttributeConfigurationOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeleteInstanceAccessControlAttributeConfigurationOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeleteInstanceAccessControlAttributeConfigurationOutput) GoString() string {
 	return s.String()
 }
 
@@ -4193,9 +5035,9 @@ type DeletePermissionSetInput struct {
 	_ struct{} `type:"structure"`
 
 	// The ARN of the SSO instance under which the operation will be executed. For
-	// more information about ARNs, see Amazon Resource Names (ARNs) and AWS Service
-	// Namespaces (/general/latest/gr/aws-arns-and-namespaces.html) in the AWS General
-	// Reference.
+	// more information about ARNs, see Amazon Resource Names (ARNs) and Amazon
+	// Web Services Service Namespaces (/general/latest/gr/aws-arns-and-namespaces.html)
+	// in the Amazon Web Services General Reference.
 	//
 	// InstanceArn is a required field
 	InstanceArn *string `min:"10" type:"string" required:"true"`
@@ -4206,12 +5048,20 @@ type DeletePermissionSetInput struct {
 	PermissionSetArn *string `min:"10" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeletePermissionSetInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeletePermissionSetInput) GoString() string {
 	return s.String()
 }
@@ -4254,12 +5104,20 @@ type DeletePermissionSetOutput struct {
 	_ struct{} `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeletePermissionSetOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeletePermissionSetOutput) GoString() string {
 	return s.String()
 }
@@ -4273,20 +5131,28 @@ type DescribeAccountAssignmentCreationStatusInput struct {
 	AccountAssignmentCreationRequestId *string `type:"string" required:"true"`
 
 	// The ARN of the SSO instance under which the operation will be executed. For
-	// more information about ARNs, see Amazon Resource Names (ARNs) and AWS Service
-	// Namespaces (/general/latest/gr/aws-arns-and-namespaces.html) in the AWS General
-	// Reference.
+	// more information about ARNs, see Amazon Resource Names (ARNs) and Amazon
+	// Web Services Service Namespaces (/general/latest/gr/aws-arns-and-namespaces.html)
+	// in the Amazon Web Services General Reference.
 	//
 	// InstanceArn is a required field
 	InstanceArn *string `min:"10" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeAccountAssignmentCreationStatusInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeAccountAssignmentCreationStatusInput) GoString() string {
 	return s.String()
 }
@@ -4329,12 +5195,20 @@ type DescribeAccountAssignmentCreationStatusOutput struct {
 	AccountAssignmentCreationStatus *AccountAssignmentOperationStatus `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeAccountAssignmentCreationStatusOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeAccountAssignmentCreationStatusOutput) GoString() string {
 	return s.String()
 }
@@ -4354,20 +5228,28 @@ type DescribeAccountAssignmentDeletionStatusInput struct {
 	AccountAssignmentDeletionRequestId *string `type:"string" required:"true"`
 
 	// The ARN of the SSO instance under which the operation will be executed. For
-	// more information about ARNs, see Amazon Resource Names (ARNs) and AWS Service
-	// Namespaces (/general/latest/gr/aws-arns-and-namespaces.html) in the AWS General
-	// Reference.
+	// more information about ARNs, see Amazon Resource Names (ARNs) and Amazon
+	// Web Services Service Namespaces (/general/latest/gr/aws-arns-and-namespaces.html)
+	// in the Amazon Web Services General Reference.
 	//
 	// InstanceArn is a required field
 	InstanceArn *string `min:"10" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeAccountAssignmentDeletionStatusInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeAccountAssignmentDeletionStatusInput) GoString() string {
 	return s.String()
 }
@@ -4410,12 +5292,20 @@ type DescribeAccountAssignmentDeletionStatusOutput struct {
 	AccountAssignmentDeletionStatus *AccountAssignmentOperationStatus `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeAccountAssignmentDeletionStatusOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeAccountAssignmentDeletionStatusOutput) GoString() string {
 	return s.String()
 }
@@ -4426,13 +5316,112 @@ func (s *DescribeAccountAssignmentDeletionStatusOutput) SetAccountAssignmentDele
 	return s
 }
 
+type DescribeInstanceAccessControlAttributeConfigurationInput struct {
+	_ struct{} `type:"structure"`
+
+	// The ARN of the SSO instance under which the operation will be executed.
+	//
+	// InstanceArn is a required field
+	InstanceArn *string `min:"10" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DescribeInstanceAccessControlAttributeConfigurationInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DescribeInstanceAccessControlAttributeConfigurationInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DescribeInstanceAccessControlAttributeConfigurationInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DescribeInstanceAccessControlAttributeConfigurationInput"}
+	if s.InstanceArn == nil {
+		invalidParams.Add(request.NewErrParamRequired("InstanceArn"))
+	}
+	if s.InstanceArn != nil && len(*s.InstanceArn) < 10 {
+		invalidParams.Add(request.NewErrParamMinLen("InstanceArn", 10))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetInstanceArn sets the InstanceArn field's value.
+func (s *DescribeInstanceAccessControlAttributeConfigurationInput) SetInstanceArn(v string) *DescribeInstanceAccessControlAttributeConfigurationInput {
+	s.InstanceArn = &v
+	return s
+}
+
+type DescribeInstanceAccessControlAttributeConfigurationOutput struct {
+	_ struct{} `type:"structure"`
+
+	// Gets the list of Amazon Web Services SSO identity store attributes that have
+	// been added to your ABAC configuration.
+	InstanceAccessControlAttributeConfiguration *InstanceAccessControlAttributeConfiguration `type:"structure"`
+
+	// The status of the attribute configuration process.
+	Status *string `type:"string" enum:"InstanceAccessControlAttributeConfigurationStatus"`
+
+	// Provides more details about the current status of the specified attribute.
+	StatusReason *string `type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DescribeInstanceAccessControlAttributeConfigurationOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DescribeInstanceAccessControlAttributeConfigurationOutput) GoString() string {
+	return s.String()
+}
+
+// SetInstanceAccessControlAttributeConfiguration sets the InstanceAccessControlAttributeConfiguration field's value.
+func (s *DescribeInstanceAccessControlAttributeConfigurationOutput) SetInstanceAccessControlAttributeConfiguration(v *InstanceAccessControlAttributeConfiguration) *DescribeInstanceAccessControlAttributeConfigurationOutput {
+	s.InstanceAccessControlAttributeConfiguration = v
+	return s
+}
+
+// SetStatus sets the Status field's value.
+func (s *DescribeInstanceAccessControlAttributeConfigurationOutput) SetStatus(v string) *DescribeInstanceAccessControlAttributeConfigurationOutput {
+	s.Status = &v
+	return s
+}
+
+// SetStatusReason sets the StatusReason field's value.
+func (s *DescribeInstanceAccessControlAttributeConfigurationOutput) SetStatusReason(v string) *DescribeInstanceAccessControlAttributeConfigurationOutput {
+	s.StatusReason = &v
+	return s
+}
+
 type DescribePermissionSetInput struct {
 	_ struct{} `type:"structure"`
 
 	// The ARN of the SSO instance under which the operation will be executed. For
-	// more information about ARNs, see Amazon Resource Names (ARNs) and AWS Service
-	// Namespaces (/general/latest/gr/aws-arns-and-namespaces.html) in the AWS General
-	// Reference.
+	// more information about ARNs, see Amazon Resource Names (ARNs) and Amazon
+	// Web Services Service Namespaces (/general/latest/gr/aws-arns-and-namespaces.html)
+	// in the Amazon Web Services General Reference.
 	//
 	// InstanceArn is a required field
 	InstanceArn *string `min:"10" type:"string" required:"true"`
@@ -4443,12 +5432,20 @@ type DescribePermissionSetInput struct {
 	PermissionSetArn *string `min:"10" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribePermissionSetInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribePermissionSetInput) GoString() string {
 	return s.String()
 }
@@ -4490,16 +5487,24 @@ func (s *DescribePermissionSetInput) SetPermissionSetArn(v string) *DescribePerm
 type DescribePermissionSetOutput struct {
 	_ struct{} `type:"structure"`
 
-	// Describes the level of access on an AWS account.
+	// Describes the level of access on an Amazon Web Services account.
 	PermissionSet *PermissionSet `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribePermissionSetOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribePermissionSetOutput) GoString() string {
 	return s.String()
 }
@@ -4514,9 +5519,9 @@ type DescribePermissionSetProvisioningStatusInput struct {
 	_ struct{} `type:"structure"`
 
 	// The ARN of the SSO instance under which the operation will be executed. For
-	// more information about ARNs, see Amazon Resource Names (ARNs) and AWS Service
-	// Namespaces (/general/latest/gr/aws-arns-and-namespaces.html) in the AWS General
-	// Reference.
+	// more information about ARNs, see Amazon Resource Names (ARNs) and Amazon
+	// Web Services Service Namespaces (/general/latest/gr/aws-arns-and-namespaces.html)
+	// in the Amazon Web Services General Reference.
 	//
 	// InstanceArn is a required field
 	InstanceArn *string `min:"10" type:"string" required:"true"`
@@ -4528,12 +5533,20 @@ type DescribePermissionSetProvisioningStatusInput struct {
 	ProvisionPermissionSetRequestId *string `type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribePermissionSetProvisioningStatusInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribePermissionSetProvisioningStatusInput) GoString() string {
 	return s.String()
 }
@@ -4576,12 +5589,20 @@ type DescribePermissionSetProvisioningStatusOutput struct {
 	PermissionSetProvisioningStatus *PermissionSetProvisioningStatus `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribePermissionSetProvisioningStatusOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribePermissionSetProvisioningStatusOutput) GoString() string {
 	return s.String()
 }
@@ -4596,9 +5617,9 @@ type DetachManagedPolicyFromPermissionSetInput struct {
 	_ struct{} `type:"structure"`
 
 	// The ARN of the SSO instance under which the operation will be executed. For
-	// more information about ARNs, see Amazon Resource Names (ARNs) and AWS Service
-	// Namespaces (/general/latest/gr/aws-arns-and-namespaces.html) in the AWS General
-	// Reference.
+	// more information about ARNs, see Amazon Resource Names (ARNs) and Amazon
+	// Web Services Service Namespaces (/general/latest/gr/aws-arns-and-namespaces.html)
+	// in the Amazon Web Services General Reference.
 	//
 	// InstanceArn is a required field
 	InstanceArn *string `min:"10" type:"string" required:"true"`
@@ -4614,12 +5635,20 @@ type DetachManagedPolicyFromPermissionSetInput struct {
 	PermissionSetArn *string `min:"10" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DetachManagedPolicyFromPermissionSetInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DetachManagedPolicyFromPermissionSetInput) GoString() string {
 	return s.String()
 }
@@ -4674,12 +5703,20 @@ type DetachManagedPolicyFromPermissionSetOutput struct {
 	_ struct{} `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DetachManagedPolicyFromPermissionSetOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DetachManagedPolicyFromPermissionSetOutput) GoString() string {
 	return s.String()
 }
@@ -4688,9 +5725,9 @@ type GetInlinePolicyForPermissionSetInput struct {
 	_ struct{} `type:"structure"`
 
 	// The ARN of the SSO instance under which the operation will be executed. For
-	// more information about ARNs, see Amazon Resource Names (ARNs) and AWS Service
-	// Namespaces (/general/latest/gr/aws-arns-and-namespaces.html) in the AWS General
-	// Reference.
+	// more information about ARNs, see Amazon Resource Names (ARNs) and Amazon
+	// Web Services Service Namespaces (/general/latest/gr/aws-arns-and-namespaces.html)
+	// in the Amazon Web Services General Reference.
 	//
 	// InstanceArn is a required field
 	InstanceArn *string `min:"10" type:"string" required:"true"`
@@ -4701,12 +5738,20 @@ type GetInlinePolicyForPermissionSetInput struct {
 	PermissionSetArn *string `min:"10" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetInlinePolicyForPermissionSetInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetInlinePolicyForPermissionSetInput) GoString() string {
 	return s.String()
 }
@@ -4749,15 +5794,27 @@ type GetInlinePolicyForPermissionSetOutput struct {
 	_ struct{} `type:"structure"`
 
 	// The IAM inline policy that is attached to the permission set.
+	//
+	// InlinePolicy is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by GetInlinePolicyForPermissionSetOutput's
+	// String and GoString methods.
 	InlinePolicy *string `min:"1" type:"string" sensitive:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetInlinePolicyForPermissionSetOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetInlinePolicyForPermissionSetOutput) GoString() string {
 	return s.String()
 }
@@ -4765,6 +5822,65 @@ func (s GetInlinePolicyForPermissionSetOutput) GoString() string {
 // SetInlinePolicy sets the InlinePolicy field's value.
 func (s *GetInlinePolicyForPermissionSetOutput) SetInlinePolicy(v string) *GetInlinePolicyForPermissionSetOutput {
 	s.InlinePolicy = &v
+	return s
+}
+
+// Specifies the attributes to add to your attribute-based access control (ABAC)
+// configuration.
+type InstanceAccessControlAttributeConfiguration struct {
+	_ struct{} `type:"structure"`
+
+	// Lists the attributes that are configured for ABAC in the specified Amazon
+	// Web Services SSO instance.
+	//
+	// AccessControlAttributes is a required field
+	AccessControlAttributes []*AccessControlAttribute `type:"list" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s InstanceAccessControlAttributeConfiguration) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s InstanceAccessControlAttributeConfiguration) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *InstanceAccessControlAttributeConfiguration) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "InstanceAccessControlAttributeConfiguration"}
+	if s.AccessControlAttributes == nil {
+		invalidParams.Add(request.NewErrParamRequired("AccessControlAttributes"))
+	}
+	if s.AccessControlAttributes != nil {
+		for i, v := range s.AccessControlAttributes {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "AccessControlAttributes", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetAccessControlAttributes sets the AccessControlAttributes field's value.
+func (s *InstanceAccessControlAttributeConfiguration) SetAccessControlAttributes(v []*AccessControlAttribute) *InstanceAccessControlAttributeConfiguration {
+	s.AccessControlAttributes = v
 	return s
 }
 
@@ -4776,18 +5892,26 @@ type InstanceMetadata struct {
 	IdentityStoreId *string `min:"1" type:"string"`
 
 	// The ARN of the SSO instance under which the operation will be executed. For
-	// more information about ARNs, see Amazon Resource Names (ARNs) and AWS Service
-	// Namespaces (/general/latest/gr/aws-arns-and-namespaces.html) in the AWS General
-	// Reference.
+	// more information about ARNs, see Amazon Resource Names (ARNs) and Amazon
+	// Web Services Service Namespaces (/general/latest/gr/aws-arns-and-namespaces.html)
+	// in the Amazon Web Services General Reference.
 	InstanceArn *string `min:"10" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s InstanceMetadata) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s InstanceMetadata) GoString() string {
 	return s.String()
 }
@@ -4813,12 +5937,20 @@ type InternalServerException struct {
 	Message_ *string `locationName:"Message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s InternalServerException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s InternalServerException) GoString() string {
 	return s.String()
 }
@@ -4868,9 +6000,9 @@ type ListAccountAssignmentCreationStatusInput struct {
 	Filter *OperationStatusFilter `type:"structure"`
 
 	// The ARN of the SSO instance under which the operation will be executed. For
-	// more information about ARNs, see Amazon Resource Names (ARNs) and AWS Service
-	// Namespaces (/general/latest/gr/aws-arns-and-namespaces.html) in the AWS General
-	// Reference.
+	// more information about ARNs, see Amazon Resource Names (ARNs) and Amazon
+	// Web Services Service Namespaces (/general/latest/gr/aws-arns-and-namespaces.html)
+	// in the Amazon Web Services General Reference.
 	//
 	// InstanceArn is a required field
 	InstanceArn *string `min:"10" type:"string" required:"true"`
@@ -4883,12 +6015,20 @@ type ListAccountAssignmentCreationStatusInput struct {
 	NextToken *string `type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListAccountAssignmentCreationStatusInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListAccountAssignmentCreationStatusInput) GoString() string {
 	return s.String()
 }
@@ -4947,12 +6087,20 @@ type ListAccountAssignmentCreationStatusOutput struct {
 	NextToken *string `type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListAccountAssignmentCreationStatusOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListAccountAssignmentCreationStatusOutput) GoString() string {
 	return s.String()
 }
@@ -4976,9 +6124,9 @@ type ListAccountAssignmentDeletionStatusInput struct {
 	Filter *OperationStatusFilter `type:"structure"`
 
 	// The ARN of the SSO instance under which the operation will be executed. For
-	// more information about ARNs, see Amazon Resource Names (ARNs) and AWS Service
-	// Namespaces (/general/latest/gr/aws-arns-and-namespaces.html) in the AWS General
-	// Reference.
+	// more information about ARNs, see Amazon Resource Names (ARNs) and Amazon
+	// Web Services Service Namespaces (/general/latest/gr/aws-arns-and-namespaces.html)
+	// in the Amazon Web Services General Reference.
 	//
 	// InstanceArn is a required field
 	InstanceArn *string `min:"10" type:"string" required:"true"`
@@ -4991,12 +6139,20 @@ type ListAccountAssignmentDeletionStatusInput struct {
 	NextToken *string `type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListAccountAssignmentDeletionStatusInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListAccountAssignmentDeletionStatusInput) GoString() string {
 	return s.String()
 }
@@ -5055,12 +6211,20 @@ type ListAccountAssignmentDeletionStatusOutput struct {
 	NextToken *string `type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListAccountAssignmentDeletionStatusOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListAccountAssignmentDeletionStatusOutput) GoString() string {
 	return s.String()
 }
@@ -5080,15 +6244,16 @@ func (s *ListAccountAssignmentDeletionStatusOutput) SetNextToken(v string) *List
 type ListAccountAssignmentsInput struct {
 	_ struct{} `type:"structure"`
 
-	// The identifier of the AWS account from which to list the assignments.
+	// The identifier of the Amazon Web Services account from which to list the
+	// assignments.
 	//
 	// AccountId is a required field
 	AccountId *string `type:"string" required:"true"`
 
 	// The ARN of the SSO instance under which the operation will be executed. For
-	// more information about ARNs, see Amazon Resource Names (ARNs) and AWS Service
-	// Namespaces (/general/latest/gr/aws-arns-and-namespaces.html) in the AWS General
-	// Reference.
+	// more information about ARNs, see Amazon Resource Names (ARNs) and Amazon
+	// Web Services Service Namespaces (/general/latest/gr/aws-arns-and-namespaces.html)
+	// in the Amazon Web Services General Reference.
 	//
 	// InstanceArn is a required field
 	InstanceArn *string `min:"10" type:"string" required:"true"`
@@ -5106,12 +6271,20 @@ type ListAccountAssignmentsInput struct {
 	PermissionSetArn *string `min:"10" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListAccountAssignmentsInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListAccountAssignmentsInput) GoString() string {
 	return s.String()
 }
@@ -5177,7 +6350,8 @@ func (s *ListAccountAssignmentsInput) SetPermissionSetArn(v string) *ListAccount
 type ListAccountAssignmentsOutput struct {
 	_ struct{} `type:"structure"`
 
-	// The list of assignments that match the input AWS account and permission set.
+	// The list of assignments that match the input Amazon Web Services account
+	// and permission set.
 	AccountAssignments []*AccountAssignment `type:"list"`
 
 	// The pagination token for the list API. Initially the value is null. Use the
@@ -5185,12 +6359,20 @@ type ListAccountAssignmentsOutput struct {
 	NextToken *string `type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListAccountAssignmentsOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListAccountAssignmentsOutput) GoString() string {
 	return s.String()
 }
@@ -5211,9 +6393,9 @@ type ListAccountsForProvisionedPermissionSetInput struct {
 	_ struct{} `type:"structure"`
 
 	// The ARN of the SSO instance under which the operation will be executed. For
-	// more information about ARNs, see Amazon Resource Names (ARNs) and AWS Service
-	// Namespaces (/general/latest/gr/aws-arns-and-namespaces.html) in the AWS General
-	// Reference.
+	// more information about ARNs, see Amazon Resource Names (ARNs) and Amazon
+	// Web Services Service Namespaces (/general/latest/gr/aws-arns-and-namespaces.html)
+	// in the Amazon Web Services General Reference.
 	//
 	// InstanceArn is a required field
 	InstanceArn *string `min:"10" type:"string" required:"true"`
@@ -5225,22 +6407,30 @@ type ListAccountsForProvisionedPermissionSetInput struct {
 	// output of previous API calls to make subsequent calls.
 	NextToken *string `type:"string"`
 
-	// The ARN of the PermissionSet from which the associated AWS accounts will
-	// be listed.
+	// The ARN of the PermissionSet from which the associated Amazon Web Services
+	// accounts will be listed.
 	//
 	// PermissionSetArn is a required field
 	PermissionSetArn *string `min:"10" type:"string" required:"true"`
 
-	// The permission set provisioning status for an AWS account.
+	// The permission set provisioning status for an Amazon Web Services account.
 	ProvisioningStatus *string `type:"string" enum:"ProvisioningStatus"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListAccountsForProvisionedPermissionSetInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListAccountsForProvisionedPermissionSetInput) GoString() string {
 	return s.String()
 }
@@ -5303,7 +6493,7 @@ func (s *ListAccountsForProvisionedPermissionSetInput) SetProvisioningStatus(v s
 type ListAccountsForProvisionedPermissionSetOutput struct {
 	_ struct{} `type:"structure"`
 
-	// The list of AWS AccountIds.
+	// The list of Amazon Web Services AccountIds.
 	AccountIds []*string `type:"list"`
 
 	// The pagination token for the list API. Initially the value is null. Use the
@@ -5311,12 +6501,20 @@ type ListAccountsForProvisionedPermissionSetOutput struct {
 	NextToken *string `type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListAccountsForProvisionedPermissionSetOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListAccountsForProvisionedPermissionSetOutput) GoString() string {
 	return s.String()
 }
@@ -5344,12 +6542,20 @@ type ListInstancesInput struct {
 	NextToken *string `type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListInstancesInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListInstancesInput) GoString() string {
 	return s.String()
 }
@@ -5390,12 +6596,20 @@ type ListInstancesOutput struct {
 	NextToken *string `type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListInstancesOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListInstancesOutput) GoString() string {
 	return s.String()
 }
@@ -5416,9 +6630,9 @@ type ListManagedPoliciesInPermissionSetInput struct {
 	_ struct{} `type:"structure"`
 
 	// The ARN of the SSO instance under which the operation will be executed. For
-	// more information about ARNs, see Amazon Resource Names (ARNs) and AWS Service
-	// Namespaces (/general/latest/gr/aws-arns-and-namespaces.html) in the AWS General
-	// Reference.
+	// more information about ARNs, see Amazon Resource Names (ARNs) and Amazon
+	// Web Services Service Namespaces (/general/latest/gr/aws-arns-and-namespaces.html)
+	// in the Amazon Web Services General Reference.
 	//
 	// InstanceArn is a required field
 	InstanceArn *string `min:"10" type:"string" required:"true"`
@@ -5436,12 +6650,20 @@ type ListManagedPoliciesInPermissionSetInput struct {
 	PermissionSetArn *string `min:"10" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListManagedPoliciesInPermissionSetInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListManagedPoliciesInPermissionSetInput) GoString() string {
 	return s.String()
 }
@@ -5506,12 +6728,20 @@ type ListManagedPoliciesInPermissionSetOutput struct {
 	NextToken *string `type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListManagedPoliciesInPermissionSetOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListManagedPoliciesInPermissionSetOutput) GoString() string {
 	return s.String()
 }
@@ -5535,9 +6765,9 @@ type ListPermissionSetProvisioningStatusInput struct {
 	Filter *OperationStatusFilter `type:"structure"`
 
 	// The ARN of the SSO instance under which the operation will be executed. For
-	// more information about ARNs, see Amazon Resource Names (ARNs) and AWS Service
-	// Namespaces (/general/latest/gr/aws-arns-and-namespaces.html) in the AWS General
-	// Reference.
+	// more information about ARNs, see Amazon Resource Names (ARNs) and Amazon
+	// Web Services Service Namespaces (/general/latest/gr/aws-arns-and-namespaces.html)
+	// in the Amazon Web Services General Reference.
 	//
 	// InstanceArn is a required field
 	InstanceArn *string `min:"10" type:"string" required:"true"`
@@ -5550,12 +6780,20 @@ type ListPermissionSetProvisioningStatusInput struct {
 	NextToken *string `type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListPermissionSetProvisioningStatusInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListPermissionSetProvisioningStatusInput) GoString() string {
 	return s.String()
 }
@@ -5614,12 +6852,20 @@ type ListPermissionSetProvisioningStatusOutput struct {
 	PermissionSetsProvisioningStatus []*PermissionSetProvisioningStatusMetadata `type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListPermissionSetProvisioningStatusOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListPermissionSetProvisioningStatusOutput) GoString() string {
 	return s.String()
 }
@@ -5640,9 +6886,9 @@ type ListPermissionSetsInput struct {
 	_ struct{} `type:"structure"`
 
 	// The ARN of the SSO instance under which the operation will be executed. For
-	// more information about ARNs, see Amazon Resource Names (ARNs) and AWS Service
-	// Namespaces (/general/latest/gr/aws-arns-and-namespaces.html) in the AWS General
-	// Reference.
+	// more information about ARNs, see Amazon Resource Names (ARNs) and Amazon
+	// Web Services Service Namespaces (/general/latest/gr/aws-arns-and-namespaces.html)
+	// in the Amazon Web Services General Reference.
 	//
 	// InstanceArn is a required field
 	InstanceArn *string `min:"10" type:"string" required:"true"`
@@ -5655,12 +6901,20 @@ type ListPermissionSetsInput struct {
 	NextToken *string `type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListPermissionSetsInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListPermissionSetsInput) GoString() string {
 	return s.String()
 }
@@ -5709,16 +6963,24 @@ type ListPermissionSetsOutput struct {
 	// output of previous API calls to make subsequent calls.
 	NextToken *string `type:"string"`
 
-	// Defines the level of access on an AWS account.
+	// Defines the level of access on an Amazon Web Services account.
 	PermissionSets []*string `type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListPermissionSetsOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListPermissionSetsOutput) GoString() string {
 	return s.String()
 }
@@ -5738,15 +7000,16 @@ func (s *ListPermissionSetsOutput) SetPermissionSets(v []*string) *ListPermissio
 type ListPermissionSetsProvisionedToAccountInput struct {
 	_ struct{} `type:"structure"`
 
-	// The identifier of the AWS account from which to list the assignments.
+	// The identifier of the Amazon Web Services account from which to list the
+	// assignments.
 	//
 	// AccountId is a required field
 	AccountId *string `type:"string" required:"true"`
 
 	// The ARN of the SSO instance under which the operation will be executed. For
-	// more information about ARNs, see Amazon Resource Names (ARNs) and AWS Service
-	// Namespaces (/general/latest/gr/aws-arns-and-namespaces.html) in the AWS General
-	// Reference.
+	// more information about ARNs, see Amazon Resource Names (ARNs) and Amazon
+	// Web Services Service Namespaces (/general/latest/gr/aws-arns-and-namespaces.html)
+	// in the Amazon Web Services General Reference.
 	//
 	// InstanceArn is a required field
 	InstanceArn *string `min:"10" type:"string" required:"true"`
@@ -5762,12 +7025,20 @@ type ListPermissionSetsProvisionedToAccountInput struct {
 	ProvisioningStatus *string `type:"string" enum:"ProvisioningStatus"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListPermissionSetsProvisionedToAccountInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListPermissionSetsProvisionedToAccountInput) GoString() string {
 	return s.String()
 }
@@ -5831,16 +7102,24 @@ type ListPermissionSetsProvisionedToAccountOutput struct {
 	// output of previous API calls to make subsequent calls.
 	NextToken *string `type:"string"`
 
-	// Defines the level of access that an AWS account has.
+	// Defines the level of access that an Amazon Web Services account has.
 	PermissionSets []*string `type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListPermissionSetsProvisionedToAccountOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListPermissionSetsProvisionedToAccountOutput) GoString() string {
 	return s.String()
 }
@@ -5861,9 +7140,9 @@ type ListTagsForResourceInput struct {
 	_ struct{} `type:"structure"`
 
 	// The ARN of the SSO instance under which the operation will be executed. For
-	// more information about ARNs, see Amazon Resource Names (ARNs) and AWS Service
-	// Namespaces (/general/latest/gr/aws-arns-and-namespaces.html) in the AWS General
-	// Reference.
+	// more information about ARNs, see Amazon Resource Names (ARNs) and Amazon
+	// Web Services Service Namespaces (/general/latest/gr/aws-arns-and-namespaces.html)
+	// in the Amazon Web Services General Reference.
 	//
 	// InstanceArn is a required field
 	InstanceArn *string `min:"10" type:"string" required:"true"`
@@ -5878,12 +7157,20 @@ type ListTagsForResourceInput struct {
 	ResourceArn *string `min:"10" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListTagsForResourceInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListTagsForResourceInput) GoString() string {
 	return s.String()
 }
@@ -5939,12 +7226,20 @@ type ListTagsForResourceOutput struct {
 	Tags []*Tag `type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListTagsForResourceOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListTagsForResourceOutput) GoString() string {
 	return s.String()
 }
@@ -5969,12 +7264,20 @@ type OperationStatusFilter struct {
 	Status *string `type:"string" enum:"StatusValues"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s OperationStatusFilter) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s OperationStatusFilter) GoString() string {
 	return s.String()
 }
@@ -5999,8 +7302,8 @@ type PermissionSet struct {
 	Name *string `min:"1" type:"string"`
 
 	// The ARN of the permission set. For more information about ARNs, see Amazon
-	// Resource Names (ARNs) and AWS Service Namespaces (/general/latest/gr/aws-arns-and-namespaces.html)
-	// in the AWS General Reference.
+	// Resource Names (ARNs) and Amazon Web Services Service Namespaces (/general/latest/gr/aws-arns-and-namespaces.html)
+	// in the Amazon Web Services General Reference.
 	PermissionSetArn *string `min:"10" type:"string"`
 
 	// Used to redirect users within the application during the federation authentication
@@ -6012,12 +7315,20 @@ type PermissionSet struct {
 	SessionDuration *string `min:"1" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s PermissionSet) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s PermissionSet) GoString() string {
 	return s.String()
 }
@@ -6063,7 +7374,8 @@ func (s *PermissionSet) SetSessionDuration(v string) *PermissionSet {
 type PermissionSetProvisioningStatus struct {
 	_ struct{} `type:"structure"`
 
-	// The identifier of the AWS account from which to list the assignments.
+	// The identifier of the Amazon Web Services account from which to list the
+	// assignments.
 	AccountId *string `type:"string"`
 
 	// The date that the permission set was created.
@@ -6073,8 +7385,9 @@ type PermissionSetProvisioningStatus struct {
 	FailureReason *string `type:"string"`
 
 	// The ARN of the permission set that is being provisioned. For more information
-	// about ARNs, see Amazon Resource Names (ARNs) and AWS Service Namespaces (/general/latest/gr/aws-arns-and-namespaces.html)
-	// in the AWS General Reference.
+	// about ARNs, see Amazon Resource Names (ARNs) and Amazon Web Services Service
+	// Namespaces (/general/latest/gr/aws-arns-and-namespaces.html) in the Amazon
+	// Web Services General Reference.
 	PermissionSetArn *string `min:"10" type:"string"`
 
 	// The identifier for tracking the request operation that is generated by the
@@ -6085,12 +7398,20 @@ type PermissionSetProvisioningStatus struct {
 	Status *string `type:"string" enum:"StatusValues"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s PermissionSetProvisioningStatus) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s PermissionSetProvisioningStatus) GoString() string {
 	return s.String()
 }
@@ -6146,12 +7467,20 @@ type PermissionSetProvisioningStatusMetadata struct {
 	Status *string `type:"string" enum:"StatusValues"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s PermissionSetProvisioningStatusMetadata) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s PermissionSetProvisioningStatusMetadata) GoString() string {
 	return s.String()
 }
@@ -6178,9 +7507,9 @@ type ProvisionPermissionSetInput struct {
 	_ struct{} `type:"structure"`
 
 	// The ARN of the SSO instance under which the operation will be executed. For
-	// more information about ARNs, see Amazon Resource Names (ARNs) and AWS Service
-	// Namespaces (/general/latest/gr/aws-arns-and-namespaces.html) in the AWS General
-	// Reference.
+	// more information about ARNs, see Amazon Resource Names (ARNs) and Amazon
+	// Web Services Service Namespaces (/general/latest/gr/aws-arns-and-namespaces.html)
+	// in the Amazon Web Services General Reference.
 	//
 	// InstanceArn is a required field
 	InstanceArn *string `min:"10" type:"string" required:"true"`
@@ -6190,8 +7519,8 @@ type ProvisionPermissionSetInput struct {
 	// PermissionSetArn is a required field
 	PermissionSetArn *string `min:"10" type:"string" required:"true"`
 
-	// TargetID is an AWS account identifier, typically a 10-12 digit string (For
-	// example, 123456789012).
+	// TargetID is an Amazon Web Services account identifier, typically a 10-12
+	// digit string (For example, 123456789012).
 	TargetId *string `type:"string"`
 
 	// The entity type for which the assignment will be created.
@@ -6200,12 +7529,20 @@ type ProvisionPermissionSetInput struct {
 	TargetType *string `type:"string" required:"true" enum:"ProvisionTargetType"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ProvisionPermissionSetInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ProvisionPermissionSetInput) GoString() string {
 	return s.String()
 }
@@ -6266,12 +7603,20 @@ type ProvisionPermissionSetOutput struct {
 	PermissionSetProvisioningStatus *PermissionSetProvisioningStatus `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ProvisionPermissionSetOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ProvisionPermissionSetOutput) GoString() string {
 	return s.String()
 }
@@ -6287,13 +7632,17 @@ type PutInlinePolicyToPermissionSetInput struct {
 
 	// The IAM inline policy to attach to a PermissionSet.
 	//
+	// InlinePolicy is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by PutInlinePolicyToPermissionSetInput's
+	// String and GoString methods.
+	//
 	// InlinePolicy is a required field
 	InlinePolicy *string `min:"1" type:"string" required:"true" sensitive:"true"`
 
 	// The ARN of the SSO instance under which the operation will be executed. For
-	// more information about ARNs, see Amazon Resource Names (ARNs) and AWS Service
-	// Namespaces (/general/latest/gr/aws-arns-and-namespaces.html) in the AWS General
-	// Reference.
+	// more information about ARNs, see Amazon Resource Names (ARNs) and Amazon
+	// Web Services Service Namespaces (/general/latest/gr/aws-arns-and-namespaces.html)
+	// in the Amazon Web Services General Reference.
 	//
 	// InstanceArn is a required field
 	InstanceArn *string `min:"10" type:"string" required:"true"`
@@ -6304,12 +7653,20 @@ type PutInlinePolicyToPermissionSetInput struct {
 	PermissionSetArn *string `min:"10" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s PutInlinePolicyToPermissionSetInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s PutInlinePolicyToPermissionSetInput) GoString() string {
 	return s.String()
 }
@@ -6364,12 +7721,20 @@ type PutInlinePolicyToPermissionSetOutput struct {
 	_ struct{} `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s PutInlinePolicyToPermissionSetOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s PutInlinePolicyToPermissionSetOutput) GoString() string {
 	return s.String()
 }
@@ -6382,12 +7747,20 @@ type ResourceNotFoundException struct {
 	Message_ *string `locationName:"Message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ResourceNotFoundException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ResourceNotFoundException) GoString() string {
 	return s.String()
 }
@@ -6439,12 +7812,20 @@ type ServiceQuotaExceededException struct {
 	Message_ *string `locationName:"Message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ServiceQuotaExceededException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ServiceQuotaExceededException) GoString() string {
 	return s.String()
 }
@@ -6489,7 +7870,7 @@ func (s *ServiceQuotaExceededException) RequestID() string {
 
 // A set of key-value pairs that are used to manage the resource. Tags can only
 // be applied to permission sets and cannot be applied to corresponding roles
-// that AWS SSO creates in AWS accounts.
+// that Amazon Web Services SSO creates in Amazon Web Services accounts.
 type Tag struct {
 	_ struct{} `type:"structure"`
 
@@ -6500,12 +7881,20 @@ type Tag struct {
 	Value *string `type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s Tag) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s Tag) GoString() string {
 	return s.String()
 }
@@ -6539,9 +7928,9 @@ type TagResourceInput struct {
 	_ struct{} `type:"structure"`
 
 	// The ARN of the SSO instance under which the operation will be executed. For
-	// more information about ARNs, see Amazon Resource Names (ARNs) and AWS Service
-	// Namespaces (/general/latest/gr/aws-arns-and-namespaces.html) in the AWS General
-	// Reference.
+	// more information about ARNs, see Amazon Resource Names (ARNs) and Amazon
+	// Web Services Service Namespaces (/general/latest/gr/aws-arns-and-namespaces.html)
+	// in the Amazon Web Services General Reference.
 	//
 	// InstanceArn is a required field
 	InstanceArn *string `min:"10" type:"string" required:"true"`
@@ -6557,12 +7946,20 @@ type TagResourceInput struct {
 	Tags []*Tag `type:"list" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s TagResourceInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s TagResourceInput) GoString() string {
 	return s.String()
 }
@@ -6624,12 +8021,20 @@ type TagResourceOutput struct {
 	_ struct{} `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s TagResourceOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s TagResourceOutput) GoString() string {
 	return s.String()
 }
@@ -6643,12 +8048,20 @@ type ThrottlingException struct {
 	Message_ *string `locationName:"Message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ThrottlingException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ThrottlingException) GoString() string {
 	return s.String()
 }
@@ -6695,9 +8108,9 @@ type UntagResourceInput struct {
 	_ struct{} `type:"structure"`
 
 	// The ARN of the SSO instance under which the operation will be executed. For
-	// more information about ARNs, see Amazon Resource Names (ARNs) and AWS Service
-	// Namespaces (/general/latest/gr/aws-arns-and-namespaces.html) in the AWS General
-	// Reference.
+	// more information about ARNs, see Amazon Resource Names (ARNs) and Amazon
+	// Web Services Service Namespaces (/general/latest/gr/aws-arns-and-namespaces.html)
+	// in the Amazon Web Services General Reference.
 	//
 	// InstanceArn is a required field
 	InstanceArn *string `min:"10" type:"string" required:"true"`
@@ -6713,12 +8126,20 @@ type UntagResourceInput struct {
 	TagKeys []*string `min:"1" type:"list" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UntagResourceInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UntagResourceInput) GoString() string {
 	return s.String()
 }
@@ -6773,13 +8194,111 @@ type UntagResourceOutput struct {
 	_ struct{} `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UntagResourceOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UntagResourceOutput) GoString() string {
+	return s.String()
+}
+
+type UpdateInstanceAccessControlAttributeConfigurationInput struct {
+	_ struct{} `type:"structure"`
+
+	// Updates the attributes for your ABAC configuration.
+	//
+	// InstanceAccessControlAttributeConfiguration is a required field
+	InstanceAccessControlAttributeConfiguration *InstanceAccessControlAttributeConfiguration `type:"structure" required:"true"`
+
+	// The ARN of the SSO instance under which the operation will be executed.
+	//
+	// InstanceArn is a required field
+	InstanceArn *string `min:"10" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdateInstanceAccessControlAttributeConfigurationInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdateInstanceAccessControlAttributeConfigurationInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *UpdateInstanceAccessControlAttributeConfigurationInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "UpdateInstanceAccessControlAttributeConfigurationInput"}
+	if s.InstanceAccessControlAttributeConfiguration == nil {
+		invalidParams.Add(request.NewErrParamRequired("InstanceAccessControlAttributeConfiguration"))
+	}
+	if s.InstanceArn == nil {
+		invalidParams.Add(request.NewErrParamRequired("InstanceArn"))
+	}
+	if s.InstanceArn != nil && len(*s.InstanceArn) < 10 {
+		invalidParams.Add(request.NewErrParamMinLen("InstanceArn", 10))
+	}
+	if s.InstanceAccessControlAttributeConfiguration != nil {
+		if err := s.InstanceAccessControlAttributeConfiguration.Validate(); err != nil {
+			invalidParams.AddNested("InstanceAccessControlAttributeConfiguration", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetInstanceAccessControlAttributeConfiguration sets the InstanceAccessControlAttributeConfiguration field's value.
+func (s *UpdateInstanceAccessControlAttributeConfigurationInput) SetInstanceAccessControlAttributeConfiguration(v *InstanceAccessControlAttributeConfiguration) *UpdateInstanceAccessControlAttributeConfigurationInput {
+	s.InstanceAccessControlAttributeConfiguration = v
+	return s
+}
+
+// SetInstanceArn sets the InstanceArn field's value.
+func (s *UpdateInstanceAccessControlAttributeConfigurationInput) SetInstanceArn(v string) *UpdateInstanceAccessControlAttributeConfigurationInput {
+	s.InstanceArn = &v
+	return s
+}
+
+type UpdateInstanceAccessControlAttributeConfigurationOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdateInstanceAccessControlAttributeConfigurationOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdateInstanceAccessControlAttributeConfigurationOutput) GoString() string {
 	return s.String()
 }
 
@@ -6790,9 +8309,9 @@ type UpdatePermissionSetInput struct {
 	Description *string `min:"1" type:"string"`
 
 	// The ARN of the SSO instance under which the operation will be executed. For
-	// more information about ARNs, see Amazon Resource Names (ARNs) and AWS Service
-	// Namespaces (/general/latest/gr/aws-arns-and-namespaces.html) in the AWS General
-	// Reference.
+	// more information about ARNs, see Amazon Resource Names (ARNs) and Amazon
+	// Web Services Service Namespaces (/general/latest/gr/aws-arns-and-namespaces.html)
+	// in the Amazon Web Services General Reference.
 	//
 	// InstanceArn is a required field
 	InstanceArn *string `min:"10" type:"string" required:"true"`
@@ -6811,12 +8330,20 @@ type UpdatePermissionSetInput struct {
 	SessionDuration *string `min:"1" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpdatePermissionSetInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpdatePermissionSetInput) GoString() string {
 	return s.String()
 }
@@ -6886,12 +8413,20 @@ type UpdatePermissionSetOutput struct {
 	_ struct{} `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpdatePermissionSetOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpdatePermissionSetOutput) GoString() string {
 	return s.String()
 }
@@ -6904,12 +8439,20 @@ type ValidationException struct {
 	Message_ *string `locationName:"Message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ValidationException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ValidationException) GoString() string {
 	return s.String()
 }
@@ -6950,6 +8493,26 @@ func (s *ValidationException) StatusCode() int {
 // RequestID returns the service's response RequestID for request.
 func (s *ValidationException) RequestID() string {
 	return s.RespMetadata.RequestID
+}
+
+const (
+	// InstanceAccessControlAttributeConfigurationStatusEnabled is a InstanceAccessControlAttributeConfigurationStatus enum value
+	InstanceAccessControlAttributeConfigurationStatusEnabled = "ENABLED"
+
+	// InstanceAccessControlAttributeConfigurationStatusCreationInProgress is a InstanceAccessControlAttributeConfigurationStatus enum value
+	InstanceAccessControlAttributeConfigurationStatusCreationInProgress = "CREATION_IN_PROGRESS"
+
+	// InstanceAccessControlAttributeConfigurationStatusCreationFailed is a InstanceAccessControlAttributeConfigurationStatus enum value
+	InstanceAccessControlAttributeConfigurationStatusCreationFailed = "CREATION_FAILED"
+)
+
+// InstanceAccessControlAttributeConfigurationStatus_Values returns all elements of the InstanceAccessControlAttributeConfigurationStatus enum
+func InstanceAccessControlAttributeConfigurationStatus_Values() []string {
+	return []string{
+		InstanceAccessControlAttributeConfigurationStatusEnabled,
+		InstanceAccessControlAttributeConfigurationStatusCreationInProgress,
+		InstanceAccessControlAttributeConfigurationStatusCreationFailed,
+	}
 }
 
 const (

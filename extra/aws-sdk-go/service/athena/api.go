@@ -240,7 +240,8 @@ func (c *Athena) CreateDataCatalogRequest(input *CreateDataCatalogInput) (req *r
 // CreateDataCatalog API operation for Amazon Athena.
 //
 // Creates (registers) a data catalog with the specified name and properties.
-// Catalogs created are visible to all users of the same AWS account.
+// Catalogs created are visible to all users of the same Amazon Web Services
+// account.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -327,9 +328,9 @@ func (c *Athena) CreateNamedQueryRequest(input *CreateNamedQueryInput) (req *req
 // Creates a named query in the specified workgroup. Requires that you have
 // access to the workgroup.
 //
-// For code samples using the AWS SDK for Java, see Examples and Code Samples
-// (http://docs.aws.amazon.com/athena/latest/ug/code-samples.html) in the Amazon
-// Athena User Guide.
+// For code samples using the Amazon Web Services SDK for Java, see Examples
+// and Code Samples (http://docs.aws.amazon.com/athena/latest/ug/code-samples.html)
+// in the Amazon Athena User Guide.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -364,6 +365,91 @@ func (c *Athena) CreateNamedQuery(input *CreateNamedQueryInput) (*CreateNamedQue
 // for more information on using Contexts.
 func (c *Athena) CreateNamedQueryWithContext(ctx aws.Context, input *CreateNamedQueryInput, opts ...request.Option) (*CreateNamedQueryOutput, error) {
 	req, out := c.CreateNamedQueryRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opCreatePreparedStatement = "CreatePreparedStatement"
+
+// CreatePreparedStatementRequest generates a "aws/request.Request" representing the
+// client's request for the CreatePreparedStatement operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See CreatePreparedStatement for more information on using the CreatePreparedStatement
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the CreatePreparedStatementRequest method.
+//    req, resp := client.CreatePreparedStatementRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/athena-2017-05-18/CreatePreparedStatement
+func (c *Athena) CreatePreparedStatementRequest(input *CreatePreparedStatementInput) (req *request.Request, output *CreatePreparedStatementOutput) {
+	op := &request.Operation{
+		Name:       opCreatePreparedStatement,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &CreatePreparedStatementInput{}
+	}
+
+	output = &CreatePreparedStatementOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
+	return
+}
+
+// CreatePreparedStatement API operation for Amazon Athena.
+//
+// Creates a prepared statement for use with SQL queries in Athena.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Athena's
+// API operation CreatePreparedStatement for usage and error information.
+//
+// Returned Error Types:
+//   * InternalServerException
+//   Indicates a platform issue, which may be due to a transient condition or
+//   outage.
+//
+//   * InvalidRequestException
+//   Indicates that something is wrong with the input to the request. For example,
+//   a required parameter may be missing or out of range.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/athena-2017-05-18/CreatePreparedStatement
+func (c *Athena) CreatePreparedStatement(input *CreatePreparedStatementInput) (*CreatePreparedStatementOutput, error) {
+	req, out := c.CreatePreparedStatementRequest(input)
+	return out, req.Send()
+}
+
+// CreatePreparedStatementWithContext is the same as CreatePreparedStatement with the addition of
+// the ability to pass a context and additional request options.
+//
+// See CreatePreparedStatement for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Athena) CreatePreparedStatementWithContext(ctx aws.Context, input *CreatePreparedStatementInput, opts ...request.Option) (*CreatePreparedStatementOutput, error) {
+	req, out := c.CreatePreparedStatementRequest(input)
 	req.SetContext(ctx)
 	req.ApplyOptions(opts...)
 	return out, req.Send()
@@ -587,9 +673,9 @@ func (c *Athena) DeleteNamedQueryRequest(input *DeleteNamedQueryInput) (req *req
 // Deletes the named query if you have access to the workgroup in which the
 // query was saved.
 //
-// For code samples using the AWS SDK for Java, see Examples and Code Samples
-// (http://docs.aws.amazon.com/athena/latest/ug/code-samples.html) in the Amazon
-// Athena User Guide.
+// For code samples using the Amazon Web Services SDK for Java, see Examples
+// and Code Samples (http://docs.aws.amazon.com/athena/latest/ug/code-samples.html)
+// in the Amazon Athena User Guide.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -624,6 +710,95 @@ func (c *Athena) DeleteNamedQuery(input *DeleteNamedQueryInput) (*DeleteNamedQue
 // for more information on using Contexts.
 func (c *Athena) DeleteNamedQueryWithContext(ctx aws.Context, input *DeleteNamedQueryInput, opts ...request.Option) (*DeleteNamedQueryOutput, error) {
 	req, out := c.DeleteNamedQueryRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opDeletePreparedStatement = "DeletePreparedStatement"
+
+// DeletePreparedStatementRequest generates a "aws/request.Request" representing the
+// client's request for the DeletePreparedStatement operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See DeletePreparedStatement for more information on using the DeletePreparedStatement
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the DeletePreparedStatementRequest method.
+//    req, resp := client.DeletePreparedStatementRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/athena-2017-05-18/DeletePreparedStatement
+func (c *Athena) DeletePreparedStatementRequest(input *DeletePreparedStatementInput) (req *request.Request, output *DeletePreparedStatementOutput) {
+	op := &request.Operation{
+		Name:       opDeletePreparedStatement,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &DeletePreparedStatementInput{}
+	}
+
+	output = &DeletePreparedStatementOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
+	return
+}
+
+// DeletePreparedStatement API operation for Amazon Athena.
+//
+// Deletes the prepared statement with the specified name from the specified
+// workgroup.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Athena's
+// API operation DeletePreparedStatement for usage and error information.
+//
+// Returned Error Types:
+//   * InternalServerException
+//   Indicates a platform issue, which may be due to a transient condition or
+//   outage.
+//
+//   * InvalidRequestException
+//   Indicates that something is wrong with the input to the request. For example,
+//   a required parameter may be missing or out of range.
+//
+//   * ResourceNotFoundException
+//   A resource, such as a workgroup, was not found.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/athena-2017-05-18/DeletePreparedStatement
+func (c *Athena) DeletePreparedStatement(input *DeletePreparedStatementInput) (*DeletePreparedStatementOutput, error) {
+	req, out := c.DeletePreparedStatementRequest(input)
+	return out, req.Send()
+}
+
+// DeletePreparedStatementWithContext is the same as DeletePreparedStatement with the addition of
+// the ability to pass a context and additional request options.
+//
+// See DeletePreparedStatement for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Athena) DeletePreparedStatementWithContext(ctx aws.Context, input *DeletePreparedStatementInput, opts ...request.Option) (*DeletePreparedStatementOutput, error) {
+	req, out := c.DeletePreparedStatementRequest(input)
 	req.SetContext(ctx)
 	req.ApplyOptions(opts...)
 	return out, req.Send()
@@ -843,7 +1018,7 @@ func (c *Athena) GetDatabaseRequest(input *GetDatabaseInput) (req *request.Reque
 
 // GetDatabase API operation for Amazon Athena.
 //
-// Returns a database object for the specfied database and data catalog.
+// Returns a database object for the specified database and data catalog.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -970,6 +1145,94 @@ func (c *Athena) GetNamedQuery(input *GetNamedQueryInput) (*GetNamedQueryOutput,
 // for more information on using Contexts.
 func (c *Athena) GetNamedQueryWithContext(ctx aws.Context, input *GetNamedQueryInput, opts ...request.Option) (*GetNamedQueryOutput, error) {
 	req, out := c.GetNamedQueryRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opGetPreparedStatement = "GetPreparedStatement"
+
+// GetPreparedStatementRequest generates a "aws/request.Request" representing the
+// client's request for the GetPreparedStatement operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See GetPreparedStatement for more information on using the GetPreparedStatement
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the GetPreparedStatementRequest method.
+//    req, resp := client.GetPreparedStatementRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/athena-2017-05-18/GetPreparedStatement
+func (c *Athena) GetPreparedStatementRequest(input *GetPreparedStatementInput) (req *request.Request, output *GetPreparedStatementOutput) {
+	op := &request.Operation{
+		Name:       opGetPreparedStatement,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &GetPreparedStatementInput{}
+	}
+
+	output = &GetPreparedStatementOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// GetPreparedStatement API operation for Amazon Athena.
+//
+// Retrieves the prepared statement with the specified name from the specified
+// workgroup.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Athena's
+// API operation GetPreparedStatement for usage and error information.
+//
+// Returned Error Types:
+//   * InternalServerException
+//   Indicates a platform issue, which may be due to a transient condition or
+//   outage.
+//
+//   * InvalidRequestException
+//   Indicates that something is wrong with the input to the request. For example,
+//   a required parameter may be missing or out of range.
+//
+//   * ResourceNotFoundException
+//   A resource, such as a workgroup, was not found.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/athena-2017-05-18/GetPreparedStatement
+func (c *Athena) GetPreparedStatement(input *GetPreparedStatementInput) (*GetPreparedStatementOutput, error) {
+	req, out := c.GetPreparedStatementRequest(input)
+	return out, req.Send()
+}
+
+// GetPreparedStatementWithContext is the same as GetPreparedStatement with the addition of
+// the ability to pass a context and additional request options.
+//
+// See GetPreparedStatement for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Athena) GetPreparedStatementWithContext(ctx aws.Context, input *GetPreparedStatementInput, opts ...request.Option) (*GetPreparedStatementOutput, error) {
+	req, out := c.GetPreparedStatementRequest(input)
 	req.SetContext(ctx)
 	req.ApplyOptions(opts...)
 	return out, req.Send()
@@ -1442,7 +1705,7 @@ func (c *Athena) ListDataCatalogsRequest(input *ListDataCatalogsInput) (req *req
 
 // ListDataCatalogs API operation for Amazon Athena.
 //
-// Lists the data catalogs in the current AWS account.
+// Lists the data catalogs in the current Amazon Web Services account.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -1683,6 +1946,91 @@ func (c *Athena) ListDatabasesPagesWithContext(ctx aws.Context, input *ListDatab
 	return p.Err()
 }
 
+const opListEngineVersions = "ListEngineVersions"
+
+// ListEngineVersionsRequest generates a "aws/request.Request" representing the
+// client's request for the ListEngineVersions operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See ListEngineVersions for more information on using the ListEngineVersions
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the ListEngineVersionsRequest method.
+//    req, resp := client.ListEngineVersionsRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/athena-2017-05-18/ListEngineVersions
+func (c *Athena) ListEngineVersionsRequest(input *ListEngineVersionsInput) (req *request.Request, output *ListEngineVersionsOutput) {
+	op := &request.Operation{
+		Name:       opListEngineVersions,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &ListEngineVersionsInput{}
+	}
+
+	output = &ListEngineVersionsOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// ListEngineVersions API operation for Amazon Athena.
+//
+// Returns a list of engine versions that are available to choose from, including
+// the Auto option.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Athena's
+// API operation ListEngineVersions for usage and error information.
+//
+// Returned Error Types:
+//   * InternalServerException
+//   Indicates a platform issue, which may be due to a transient condition or
+//   outage.
+//
+//   * InvalidRequestException
+//   Indicates that something is wrong with the input to the request. For example,
+//   a required parameter may be missing or out of range.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/athena-2017-05-18/ListEngineVersions
+func (c *Athena) ListEngineVersions(input *ListEngineVersionsInput) (*ListEngineVersionsOutput, error) {
+	req, out := c.ListEngineVersionsRequest(input)
+	return out, req.Send()
+}
+
+// ListEngineVersionsWithContext is the same as ListEngineVersions with the addition of
+// the ability to pass a context and additional request options.
+//
+// See ListEngineVersions for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Athena) ListEngineVersionsWithContext(ctx aws.Context, input *ListEngineVersionsInput, opts ...request.Option) (*ListEngineVersionsOutput, error) {
+	req, out := c.ListEngineVersionsRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opListNamedQueries = "ListNamedQueries"
 
 // ListNamedQueriesRequest generates a "aws/request.Request" representing the
@@ -1737,9 +2085,9 @@ func (c *Athena) ListNamedQueriesRequest(input *ListNamedQueriesInput) (req *req
 // workgroup. Requires that you have access to the specified workgroup. If a
 // workgroup is not specified, lists the saved queries for the primary workgroup.
 //
-// For code samples using the AWS SDK for Java, see Examples and Code Samples
-// (http://docs.aws.amazon.com/athena/latest/ug/code-samples.html) in the Amazon
-// Athena User Guide.
+// For code samples using the Amazon Web Services SDK for Java, see Examples
+// and Code Samples (http://docs.aws.amazon.com/athena/latest/ug/code-samples.html)
+// in the Amazon Athena User Guide.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -1831,6 +2179,148 @@ func (c *Athena) ListNamedQueriesPagesWithContext(ctx aws.Context, input *ListNa
 	return p.Err()
 }
 
+const opListPreparedStatements = "ListPreparedStatements"
+
+// ListPreparedStatementsRequest generates a "aws/request.Request" representing the
+// client's request for the ListPreparedStatements operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See ListPreparedStatements for more information on using the ListPreparedStatements
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the ListPreparedStatementsRequest method.
+//    req, resp := client.ListPreparedStatementsRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/athena-2017-05-18/ListPreparedStatements
+func (c *Athena) ListPreparedStatementsRequest(input *ListPreparedStatementsInput) (req *request.Request, output *ListPreparedStatementsOutput) {
+	op := &request.Operation{
+		Name:       opListPreparedStatements,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+		Paginator: &request.Paginator{
+			InputTokens:     []string{"NextToken"},
+			OutputTokens:    []string{"NextToken"},
+			LimitToken:      "MaxResults",
+			TruncationToken: "",
+		},
+	}
+
+	if input == nil {
+		input = &ListPreparedStatementsInput{}
+	}
+
+	output = &ListPreparedStatementsOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// ListPreparedStatements API operation for Amazon Athena.
+//
+// Lists the prepared statements in the specfied workgroup.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Athena's
+// API operation ListPreparedStatements for usage and error information.
+//
+// Returned Error Types:
+//   * InternalServerException
+//   Indicates a platform issue, which may be due to a transient condition or
+//   outage.
+//
+//   * InvalidRequestException
+//   Indicates that something is wrong with the input to the request. For example,
+//   a required parameter may be missing or out of range.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/athena-2017-05-18/ListPreparedStatements
+func (c *Athena) ListPreparedStatements(input *ListPreparedStatementsInput) (*ListPreparedStatementsOutput, error) {
+	req, out := c.ListPreparedStatementsRequest(input)
+	return out, req.Send()
+}
+
+// ListPreparedStatementsWithContext is the same as ListPreparedStatements with the addition of
+// the ability to pass a context and additional request options.
+//
+// See ListPreparedStatements for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Athena) ListPreparedStatementsWithContext(ctx aws.Context, input *ListPreparedStatementsInput, opts ...request.Option) (*ListPreparedStatementsOutput, error) {
+	req, out := c.ListPreparedStatementsRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+// ListPreparedStatementsPages iterates over the pages of a ListPreparedStatements operation,
+// calling the "fn" function with the response data for each page. To stop
+// iterating, return false from the fn function.
+//
+// See ListPreparedStatements method for more information on how to use this operation.
+//
+// Note: This operation can generate multiple requests to a service.
+//
+//    // Example iterating over at most 3 pages of a ListPreparedStatements operation.
+//    pageNum := 0
+//    err := client.ListPreparedStatementsPages(params,
+//        func(page *athena.ListPreparedStatementsOutput, lastPage bool) bool {
+//            pageNum++
+//            fmt.Println(page)
+//            return pageNum <= 3
+//        })
+//
+func (c *Athena) ListPreparedStatementsPages(input *ListPreparedStatementsInput, fn func(*ListPreparedStatementsOutput, bool) bool) error {
+	return c.ListPreparedStatementsPagesWithContext(aws.BackgroundContext(), input, fn)
+}
+
+// ListPreparedStatementsPagesWithContext same as ListPreparedStatementsPages except
+// it takes a Context and allows setting request options on the pages.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Athena) ListPreparedStatementsPagesWithContext(ctx aws.Context, input *ListPreparedStatementsInput, fn func(*ListPreparedStatementsOutput, bool) bool, opts ...request.Option) error {
+	p := request.Pagination{
+		NewRequest: func() (*request.Request, error) {
+			var inCpy *ListPreparedStatementsInput
+			if input != nil {
+				tmp := *input
+				inCpy = &tmp
+			}
+			req, _ := c.ListPreparedStatementsRequest(inCpy)
+			req.SetContext(ctx)
+			req.ApplyOptions(opts...)
+			return req, nil
+		},
+	}
+
+	for p.Next() {
+		if !fn(p.Page().(*ListPreparedStatementsOutput), !p.HasNextPage()) {
+			break
+		}
+	}
+
+	return p.Err()
+}
+
 const opListQueryExecutions = "ListQueryExecutions"
 
 // ListQueryExecutionsRequest generates a "aws/request.Request" representing the
@@ -1886,9 +2376,9 @@ func (c *Athena) ListQueryExecutionsRequest(input *ListQueryExecutionsInput) (re
 // IDs for the primary workgroup. Requires you to have access to the workgroup
 // in which the queries ran.
 //
-// For code samples using the AWS SDK for Java, see Examples and Code Samples
-// (http://docs.aws.amazon.com/athena/latest/ug/code-samples.html) in the Amazon
-// Athena User Guide.
+// For code samples using the Amazon Web Services SDK for Java, see Examples
+// and Code Samples (http://docs.aws.amazon.com/athena/latest/ug/code-samples.html)
+// in the Amazon Athena User Guide.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -2463,8 +2953,9 @@ func (c *Athena) StartQueryExecutionRequest(input *StartQueryExecutionInput) (re
 // Runs the SQL query statements contained in the Query. Requires you to have
 // access to the workgroup in which the query ran. Running queries against an
 // external catalog requires GetDataCatalog permission to the catalog. For code
-// samples using the AWS SDK for Java, see Examples and Code Samples (http://docs.aws.amazon.com/athena/latest/ug/code-samples.html)
-// in the Amazon Athena User Guide.
+// samples using the Amazon Web Services SDK for Java, see Examples and Code
+// Samples (http://docs.aws.amazon.com/athena/latest/ug/code-samples.html) in
+// the Amazon Athena User Guide.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -2555,9 +3046,9 @@ func (c *Athena) StopQueryExecutionRequest(input *StopQueryExecutionInput) (req 
 // Stops a query execution. Requires you to have access to the workgroup in
 // which the query ran.
 //
-// For code samples using the AWS SDK for Java, see Examples and Code Samples
-// (http://docs.aws.amazon.com/athena/latest/ug/code-samples.html) in the Amazon
-// Athena User Guide.
+// For code samples using the Amazon Web Services SDK for Java, see Examples
+// and Code Samples (http://docs.aws.amazon.com/athena/latest/ug/code-samples.html)
+// in the Amazon Athena User Guide.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -2869,6 +3360,94 @@ func (c *Athena) UpdateDataCatalogWithContext(ctx aws.Context, input *UpdateData
 	return out, req.Send()
 }
 
+const opUpdatePreparedStatement = "UpdatePreparedStatement"
+
+// UpdatePreparedStatementRequest generates a "aws/request.Request" representing the
+// client's request for the UpdatePreparedStatement operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See UpdatePreparedStatement for more information on using the UpdatePreparedStatement
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the UpdatePreparedStatementRequest method.
+//    req, resp := client.UpdatePreparedStatementRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/athena-2017-05-18/UpdatePreparedStatement
+func (c *Athena) UpdatePreparedStatementRequest(input *UpdatePreparedStatementInput) (req *request.Request, output *UpdatePreparedStatementOutput) {
+	op := &request.Operation{
+		Name:       opUpdatePreparedStatement,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &UpdatePreparedStatementInput{}
+	}
+
+	output = &UpdatePreparedStatementOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
+	return
+}
+
+// UpdatePreparedStatement API operation for Amazon Athena.
+//
+// Updates a prepared statement.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Athena's
+// API operation UpdatePreparedStatement for usage and error information.
+//
+// Returned Error Types:
+//   * InternalServerException
+//   Indicates a platform issue, which may be due to a transient condition or
+//   outage.
+//
+//   * InvalidRequestException
+//   Indicates that something is wrong with the input to the request. For example,
+//   a required parameter may be missing or out of range.
+//
+//   * ResourceNotFoundException
+//   A resource, such as a workgroup, was not found.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/athena-2017-05-18/UpdatePreparedStatement
+func (c *Athena) UpdatePreparedStatement(input *UpdatePreparedStatementInput) (*UpdatePreparedStatementOutput, error) {
+	req, out := c.UpdatePreparedStatementRequest(input)
+	return out, req.Send()
+}
+
+// UpdatePreparedStatementWithContext is the same as UpdatePreparedStatement with the addition of
+// the ability to pass a context and additional request options.
+//
+// See UpdatePreparedStatement for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Athena) UpdatePreparedStatementWithContext(ctx aws.Context, input *UpdatePreparedStatementInput, opts ...request.Option) (*UpdatePreparedStatementOutput, error) {
+	req, out := c.UpdatePreparedStatementRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opUpdateWorkGroup = "UpdateWorkGroup"
 
 // UpdateWorkGroupRequest generates a "aws/request.Request" representing the
@@ -2964,12 +3543,20 @@ type BatchGetNamedQueryInput struct {
 	NamedQueryIds []*string `min:"1" type:"list" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s BatchGetNamedQueryInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s BatchGetNamedQueryInput) GoString() string {
 	return s.String()
 }
@@ -3006,12 +3593,20 @@ type BatchGetNamedQueryOutput struct {
 	UnprocessedNamedQueryIds []*UnprocessedNamedQueryId `type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s BatchGetNamedQueryOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s BatchGetNamedQueryOutput) GoString() string {
 	return s.String()
 }
@@ -3037,12 +3632,20 @@ type BatchGetQueryExecutionInput struct {
 	QueryExecutionIds []*string `min:"1" type:"list" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s BatchGetQueryExecutionInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s BatchGetQueryExecutionInput) GoString() string {
 	return s.String()
 }
@@ -3079,12 +3682,20 @@ type BatchGetQueryExecutionOutput struct {
 	UnprocessedQueryExecutionIds []*UnprocessedQueryExecutionId `type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s BatchGetQueryExecutionOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s BatchGetQueryExecutionOutput) GoString() string {
 	return s.String()
 }
@@ -3117,12 +3728,20 @@ type Column struct {
 	Type *string `type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s Column) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s Column) GoString() string {
 	return s.String()
 }
@@ -3186,12 +3805,20 @@ type ColumnInfo struct {
 	Type *string `type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ColumnInfo) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ColumnInfo) GoString() string {
 	return s.String()
 }
@@ -3263,8 +3890,8 @@ type CreateDataCatalogInput struct {
 	Description *string `min:"1" type:"string"`
 
 	// The name of the data catalog to create. The catalog name must be unique for
-	// the AWS account and can use a maximum of 128 alphanumeric, underscore, at
-	// sign, or hyphen characters.
+	// the Amazon Web Services account and can use a maximum of 128 alphanumeric,
+	// underscore, at sign, or hyphen characters.
 	//
 	// Name is a required field
 	Name *string `min:"1" type:"string" required:"true"`
@@ -3283,25 +3910,41 @@ type CreateDataCatalogInput struct {
 	//    If you have a composite Lambda function that processes both metadata and
 	//    data, use the following syntax to specify your Lambda function. function=lambda_arn
 	//
-	//    * The GLUE type has no parameters.
+	//    * The GLUE type takes a catalog ID parameter and is required. The catalog_id
+	//    is the account ID of the Amazon Web Services account to which the Glue
+	//    Data Catalog belongs. catalog-id=catalog_id The GLUE data catalog type
+	//    also applies to the default AwsDataCatalog that already exists in your
+	//    account, of which you can have only one and cannot modify. Queries that
+	//    specify a Glue Data Catalog other than the default AwsDataCatalog must
+	//    be run on Athena engine version 2. In Regions where Athena engine version
+	//    2 is not available, creating new Glue data catalogs results in an INVALID_INPUT
+	//    error.
 	Parameters map[string]*string `type:"map"`
 
 	// A list of comma separated tags to add to the data catalog that is created.
 	Tags []*Tag `type:"list"`
 
-	// The type of data catalog to create: LAMBDA for a federated catalog, GLUE
-	// for AWS Glue Catalog, or HIVE for an external hive metastore.
+	// The type of data catalog to create: LAMBDA for a federated catalog, HIVE
+	// for an external hive metastore, or GLUE for an Glue Data Catalog.
 	//
 	// Type is a required field
 	Type *string `type:"string" required:"true" enum:"DataCatalogType"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateDataCatalogInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateDataCatalogInput) GoString() string {
 	return s.String()
 }
@@ -3372,12 +4015,20 @@ type CreateDataCatalogOutput struct {
 	_ struct{} `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateDataCatalogOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateDataCatalogOutput) GoString() string {
 	return s.String()
 }
@@ -3390,9 +4041,10 @@ type CreateNamedQueryInput struct {
 	// received, the same response is returned and another query is not created.
 	// If a parameter has changed, for example, the QueryString, an error is returned.
 	//
-	// This token is listed as not required because AWS SDKs (for example the AWS
-	// SDK for Java) auto-generate the token for users. If you are not using the
-	// AWS SDK or the AWS CLI, you must provide this token or the action will fail.
+	// This token is listed as not required because Amazon Web Services SDKs (for
+	// example the Amazon Web Services SDK for Java) auto-generate the token for
+	// users. If you are not using the Amazon Web Services SDK or the Amazon Web
+	// Services CLI, you must provide this token or the action will fail.
 	ClientRequestToken *string `min:"32" type:"string" idempotencyToken:"true"`
 
 	// The database to which the query belongs.
@@ -3417,12 +4069,20 @@ type CreateNamedQueryInput struct {
 	WorkGroup *string `type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateNamedQueryInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateNamedQueryInput) GoString() string {
 	return s.String()
 }
@@ -3504,12 +4164,20 @@ type CreateNamedQueryOutput struct {
 	NamedQueryId *string `type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateNamedQueryOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateNamedQueryOutput) GoString() string {
 	return s.String()
 }
@@ -3518,6 +4186,120 @@ func (s CreateNamedQueryOutput) GoString() string {
 func (s *CreateNamedQueryOutput) SetNamedQueryId(v string) *CreateNamedQueryOutput {
 	s.NamedQueryId = &v
 	return s
+}
+
+type CreatePreparedStatementInput struct {
+	_ struct{} `type:"structure"`
+
+	// The description of the prepared statement.
+	Description *string `min:"1" type:"string"`
+
+	// The query string for the prepared statement.
+	//
+	// QueryStatement is a required field
+	QueryStatement *string `min:"1" type:"string" required:"true"`
+
+	// The name of the prepared statement.
+	//
+	// StatementName is a required field
+	StatementName *string `min:"1" type:"string" required:"true"`
+
+	// The name of the workgroup to which the prepared statement belongs.
+	//
+	// WorkGroup is a required field
+	WorkGroup *string `type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreatePreparedStatementInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreatePreparedStatementInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *CreatePreparedStatementInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "CreatePreparedStatementInput"}
+	if s.Description != nil && len(*s.Description) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Description", 1))
+	}
+	if s.QueryStatement == nil {
+		invalidParams.Add(request.NewErrParamRequired("QueryStatement"))
+	}
+	if s.QueryStatement != nil && len(*s.QueryStatement) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("QueryStatement", 1))
+	}
+	if s.StatementName == nil {
+		invalidParams.Add(request.NewErrParamRequired("StatementName"))
+	}
+	if s.StatementName != nil && len(*s.StatementName) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("StatementName", 1))
+	}
+	if s.WorkGroup == nil {
+		invalidParams.Add(request.NewErrParamRequired("WorkGroup"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetDescription sets the Description field's value.
+func (s *CreatePreparedStatementInput) SetDescription(v string) *CreatePreparedStatementInput {
+	s.Description = &v
+	return s
+}
+
+// SetQueryStatement sets the QueryStatement field's value.
+func (s *CreatePreparedStatementInput) SetQueryStatement(v string) *CreatePreparedStatementInput {
+	s.QueryStatement = &v
+	return s
+}
+
+// SetStatementName sets the StatementName field's value.
+func (s *CreatePreparedStatementInput) SetStatementName(v string) *CreatePreparedStatementInput {
+	s.StatementName = &v
+	return s
+}
+
+// SetWorkGroup sets the WorkGroup field's value.
+func (s *CreatePreparedStatementInput) SetWorkGroup(v string) *CreatePreparedStatementInput {
+	s.WorkGroup = &v
+	return s
+}
+
+type CreatePreparedStatementOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreatePreparedStatementOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreatePreparedStatementOutput) GoString() string {
+	return s.String()
 }
 
 type CreateWorkGroupInput struct {
@@ -3544,12 +4326,20 @@ type CreateWorkGroupInput struct {
 	Tags []*Tag `type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateWorkGroupInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateWorkGroupInput) GoString() string {
 	return s.String()
 }
@@ -3610,26 +4400,34 @@ type CreateWorkGroupOutput struct {
 	_ struct{} `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateWorkGroupOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateWorkGroupOutput) GoString() string {
 	return s.String()
 }
 
-// Contains information about a data catalog in an AWS account.
+// Contains information about a data catalog in an Amazon Web Services account.
 type DataCatalog struct {
 	_ struct{} `type:"structure"`
 
 	// An optional description of the data catalog.
 	Description *string `min:"1" type:"string"`
 
-	// The name of the data catalog. The catalog name must be unique for the AWS
-	// account and can use a maximum of 128 alphanumeric, underscore, at sign, or
-	// hyphen characters.
+	// The name of the data catalog. The catalog name must be unique for the Amazon
+	// Web Services account and can use a maximum of 128 alphanumeric, underscore,
+	// at sign, or hyphen characters.
 	//
 	// Name is a required field
 	Name *string `min:"1" type:"string" required:"true"`
@@ -3648,22 +4446,36 @@ type DataCatalog struct {
 	//    If you have a composite Lambda function that processes both metadata and
 	//    data, use the following syntax to specify your Lambda function. function=lambda_arn
 	//
-	//    * The GLUE type has no parameters.
+	//    * The GLUE type takes a catalog ID parameter and is required. The catalog_id
+	//    is the account ID of the Amazon Web Services account to which the Glue
+	//    catalog belongs. catalog-id=catalog_id The GLUE data catalog type also
+	//    applies to the default AwsDataCatalog that already exists in your account,
+	//    of which you can have only one and cannot modify. Queries that specify
+	//    a Glue Data Catalog other than the default AwsDataCatalog must be run
+	//    on Athena engine version 2.
 	Parameters map[string]*string `type:"map"`
 
-	// The type of data catalog: LAMBDA for a federated catalog, GLUE for AWS Glue
-	// Catalog, or HIVE for an external hive metastore.
+	// The type of data catalog to create: LAMBDA for a federated catalog, HIVE
+	// for an external hive metastore, or GLUE for an Glue Data Catalog.
 	//
 	// Type is a required field
 	Type *string `type:"string" required:"true" enum:"DataCatalogType"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DataCatalog) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DataCatalog) GoString() string {
 	return s.String()
 }
@@ -3704,12 +4516,20 @@ type DataCatalogSummary struct {
 	Type *string `type:"string" enum:"DataCatalogType"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DataCatalogSummary) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DataCatalogSummary) GoString() string {
 	return s.String()
 }
@@ -3742,12 +4562,20 @@ type Database struct {
 	Parameters map[string]*string `type:"map"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s Database) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s Database) GoString() string {
 	return s.String()
 }
@@ -3778,12 +4606,20 @@ type Datum struct {
 	VarCharValue *string `type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s Datum) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s Datum) GoString() string {
 	return s.String()
 }
@@ -3803,12 +4639,20 @@ type DeleteDataCatalogInput struct {
 	Name *string `min:"1" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteDataCatalogInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteDataCatalogInput) GoString() string {
 	return s.String()
 }
@@ -3839,12 +4683,20 @@ type DeleteDataCatalogOutput struct {
 	_ struct{} `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteDataCatalogOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteDataCatalogOutput) GoString() string {
 	return s.String()
 }
@@ -3856,12 +4708,20 @@ type DeleteNamedQueryInput struct {
 	NamedQueryId *string `type:"string" idempotencyToken:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteNamedQueryInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteNamedQueryInput) GoString() string {
 	return s.String()
 }
@@ -3876,13 +4736,106 @@ type DeleteNamedQueryOutput struct {
 	_ struct{} `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteNamedQueryOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteNamedQueryOutput) GoString() string {
+	return s.String()
+}
+
+type DeletePreparedStatementInput struct {
+	_ struct{} `type:"structure"`
+
+	// The name of the prepared statement to delete.
+	//
+	// StatementName is a required field
+	StatementName *string `min:"1" type:"string" required:"true"`
+
+	// The workgroup to which the statement to be deleted belongs.
+	//
+	// WorkGroup is a required field
+	WorkGroup *string `type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeletePreparedStatementInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeletePreparedStatementInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DeletePreparedStatementInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DeletePreparedStatementInput"}
+	if s.StatementName == nil {
+		invalidParams.Add(request.NewErrParamRequired("StatementName"))
+	}
+	if s.StatementName != nil && len(*s.StatementName) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("StatementName", 1))
+	}
+	if s.WorkGroup == nil {
+		invalidParams.Add(request.NewErrParamRequired("WorkGroup"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetStatementName sets the StatementName field's value.
+func (s *DeletePreparedStatementInput) SetStatementName(v string) *DeletePreparedStatementInput {
+	s.StatementName = &v
+	return s
+}
+
+// SetWorkGroup sets the WorkGroup field's value.
+func (s *DeletePreparedStatementInput) SetWorkGroup(v string) *DeletePreparedStatementInput {
+	s.WorkGroup = &v
+	return s
+}
+
+type DeletePreparedStatementOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeletePreparedStatementOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeletePreparedStatementOutput) GoString() string {
 	return s.String()
 }
 
@@ -3890,7 +4843,7 @@ type DeleteWorkGroupInput struct {
 	_ struct{} `type:"structure"`
 
 	// The option to delete the workgroup and its contents even if the workgroup
-	// contains any named queries.
+	// contains any named queries or query executions.
 	RecursiveDeleteOption *bool `type:"boolean"`
 
 	// The unique name of the workgroup to delete.
@@ -3899,12 +4852,20 @@ type DeleteWorkGroupInput struct {
 	WorkGroup *string `type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteWorkGroupInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteWorkGroupInput) GoString() string {
 	return s.String()
 }
@@ -3938,12 +4899,20 @@ type DeleteWorkGroupOutput struct {
 	_ struct{} `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteWorkGroupOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteWorkGroupOutput) GoString() string {
 	return s.String()
 }
@@ -3968,12 +4937,20 @@ type EncryptionConfiguration struct {
 	KmsKey *string `type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s EncryptionConfiguration) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s EncryptionConfiguration) GoString() string {
 	return s.String()
 }
@@ -4003,6 +4980,69 @@ func (s *EncryptionConfiguration) SetKmsKey(v string) *EncryptionConfiguration {
 	return s
 }
 
+// The Athena engine version for running queries.
+type EngineVersion struct {
+	_ struct{} `type:"structure"`
+
+	// Read only. The engine version on which the query runs. If the user requests
+	// a valid engine version other than Auto, the effective engine version is the
+	// same as the engine version that the user requested. If the user requests
+	// Auto, the effective engine version is chosen by Athena. When a request to
+	// update the engine version is made by a CreateWorkGroup or UpdateWorkGroup
+	// operation, the EffectiveEngineVersion field is ignored.
+	EffectiveEngineVersion *string `min:"1" type:"string"`
+
+	// The engine version requested by the user. Possible values are determined
+	// by the output of ListEngineVersions, including Auto. The default is Auto.
+	SelectedEngineVersion *string `min:"1" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s EngineVersion) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s EngineVersion) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *EngineVersion) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "EngineVersion"}
+	if s.EffectiveEngineVersion != nil && len(*s.EffectiveEngineVersion) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("EffectiveEngineVersion", 1))
+	}
+	if s.SelectedEngineVersion != nil && len(*s.SelectedEngineVersion) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("SelectedEngineVersion", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetEffectiveEngineVersion sets the EffectiveEngineVersion field's value.
+func (s *EngineVersion) SetEffectiveEngineVersion(v string) *EngineVersion {
+	s.EffectiveEngineVersion = &v
+	return s
+}
+
+// SetSelectedEngineVersion sets the SelectedEngineVersion field's value.
+func (s *EngineVersion) SetSelectedEngineVersion(v string) *EngineVersion {
+	s.SelectedEngineVersion = &v
+	return s
+}
+
 type GetDataCatalogInput struct {
 	_ struct{} `type:"structure"`
 
@@ -4012,12 +5052,20 @@ type GetDataCatalogInput struct {
 	Name *string `min:"1" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetDataCatalogInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetDataCatalogInput) GoString() string {
 	return s.String()
 }
@@ -4051,12 +5099,20 @@ type GetDataCatalogOutput struct {
 	DataCatalog *DataCatalog `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetDataCatalogOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetDataCatalogOutput) GoString() string {
 	return s.String()
 }
@@ -4081,12 +5137,20 @@ type GetDatabaseInput struct {
 	DatabaseName *string `min:"1" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetDatabaseInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetDatabaseInput) GoString() string {
 	return s.String()
 }
@@ -4132,12 +5196,20 @@ type GetDatabaseOutput struct {
 	Database *Database `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetDatabaseOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetDatabaseOutput) GoString() string {
 	return s.String()
 }
@@ -4157,12 +5229,20 @@ type GetNamedQueryInput struct {
 	NamedQueryId *string `type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetNamedQueryInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetNamedQueryInput) GoString() string {
 	return s.String()
 }
@@ -4193,12 +5273,20 @@ type GetNamedQueryOutput struct {
 	NamedQuery *NamedQuery `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetNamedQueryOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetNamedQueryOutput) GoString() string {
 	return s.String()
 }
@@ -4206,6 +5294,100 @@ func (s GetNamedQueryOutput) GoString() string {
 // SetNamedQuery sets the NamedQuery field's value.
 func (s *GetNamedQueryOutput) SetNamedQuery(v *NamedQuery) *GetNamedQueryOutput {
 	s.NamedQuery = v
+	return s
+}
+
+type GetPreparedStatementInput struct {
+	_ struct{} `type:"structure"`
+
+	// The name of the prepared statement to retrieve.
+	//
+	// StatementName is a required field
+	StatementName *string `min:"1" type:"string" required:"true"`
+
+	// The workgroup to which the statement to be retrieved belongs.
+	//
+	// WorkGroup is a required field
+	WorkGroup *string `type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetPreparedStatementInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetPreparedStatementInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *GetPreparedStatementInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "GetPreparedStatementInput"}
+	if s.StatementName == nil {
+		invalidParams.Add(request.NewErrParamRequired("StatementName"))
+	}
+	if s.StatementName != nil && len(*s.StatementName) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("StatementName", 1))
+	}
+	if s.WorkGroup == nil {
+		invalidParams.Add(request.NewErrParamRequired("WorkGroup"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetStatementName sets the StatementName field's value.
+func (s *GetPreparedStatementInput) SetStatementName(v string) *GetPreparedStatementInput {
+	s.StatementName = &v
+	return s
+}
+
+// SetWorkGroup sets the WorkGroup field's value.
+func (s *GetPreparedStatementInput) SetWorkGroup(v string) *GetPreparedStatementInput {
+	s.WorkGroup = &v
+	return s
+}
+
+type GetPreparedStatementOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The name of the prepared statement that was retrieved.
+	PreparedStatement *PreparedStatement `type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetPreparedStatementOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetPreparedStatementOutput) GoString() string {
+	return s.String()
+}
+
+// SetPreparedStatement sets the PreparedStatement field's value.
+func (s *GetPreparedStatementOutput) SetPreparedStatement(v *PreparedStatement) *GetPreparedStatementOutput {
+	s.PreparedStatement = v
 	return s
 }
 
@@ -4218,12 +5400,20 @@ type GetQueryExecutionInput struct {
 	QueryExecutionId *string `type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetQueryExecutionInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetQueryExecutionInput) GoString() string {
 	return s.String()
 }
@@ -4254,12 +5444,20 @@ type GetQueryExecutionOutput struct {
 	QueryExecution *QueryExecution `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetQueryExecutionOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetQueryExecutionOutput) GoString() string {
 	return s.String()
 }
@@ -4288,12 +5486,20 @@ type GetQueryResultsInput struct {
 	QueryExecutionId *string `type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetQueryResultsInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetQueryResultsInput) GoString() string {
 	return s.String()
 }
@@ -4351,12 +5557,20 @@ type GetQueryResultsOutput struct {
 	UpdateCount *int64 `type:"long"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetQueryResultsOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetQueryResultsOutput) GoString() string {
 	return s.String()
 }
@@ -4399,12 +5613,20 @@ type GetTableMetadataInput struct {
 	TableName *string `min:"1" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetTableMetadataInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetTableMetadataInput) GoString() string {
 	return s.String()
 }
@@ -4462,12 +5684,20 @@ type GetTableMetadataOutput struct {
 	TableMetadata *TableMetadata `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetTableMetadataOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetTableMetadataOutput) GoString() string {
 	return s.String()
 }
@@ -4487,12 +5717,20 @@ type GetWorkGroupInput struct {
 	WorkGroup *string `type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetWorkGroupInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetWorkGroupInput) GoString() string {
 	return s.String()
 }
@@ -4523,12 +5761,20 @@ type GetWorkGroupOutput struct {
 	WorkGroup *WorkGroup `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetWorkGroupOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetWorkGroupOutput) GoString() string {
 	return s.String()
 }
@@ -4548,12 +5794,20 @@ type InternalServerException struct {
 	Message_ *string `locationName:"Message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s InternalServerException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s InternalServerException) GoString() string {
 	return s.String()
 }
@@ -4609,12 +5863,20 @@ type InvalidRequestException struct {
 	Message_ *string `locationName:"Message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s InvalidRequestException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s InvalidRequestException) GoString() string {
 	return s.String()
 }
@@ -4670,12 +5932,20 @@ type ListDataCatalogsInput struct {
 	NextToken *string `min:"1" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListDataCatalogsInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListDataCatalogsInput) GoString() string {
 	return s.String()
 }
@@ -4721,12 +5991,20 @@ type ListDataCatalogsOutput struct {
 	NextToken *string `min:"1" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListDataCatalogsOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListDataCatalogsOutput) GoString() string {
 	return s.String()
 }
@@ -4761,12 +6039,20 @@ type ListDatabasesInput struct {
 	NextToken *string `min:"1" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListDatabasesInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListDatabasesInput) GoString() string {
 	return s.String()
 }
@@ -4824,12 +6110,20 @@ type ListDatabasesOutput struct {
 	NextToken *string `min:"1" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListDatabasesOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListDatabasesOutput) GoString() string {
 	return s.String()
 }
@@ -4842,6 +6136,108 @@ func (s *ListDatabasesOutput) SetDatabaseList(v []*Database) *ListDatabasesOutpu
 
 // SetNextToken sets the NextToken field's value.
 func (s *ListDatabasesOutput) SetNextToken(v string) *ListDatabasesOutput {
+	s.NextToken = &v
+	return s
+}
+
+type ListEngineVersionsInput struct {
+	_ struct{} `type:"structure"`
+
+	// The maximum number of engine versions to return in this request.
+	MaxResults *int64 `min:"1" type:"integer"`
+
+	// A token generated by the Athena service that specifies where to continue
+	// pagination if a previous request was truncated. To obtain the next set of
+	// pages, pass in the NextToken from the response object of the previous page
+	// call.
+	NextToken *string `min:"1" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListEngineVersionsInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListEngineVersionsInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ListEngineVersionsInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ListEngineVersionsInput"}
+	if s.MaxResults != nil && *s.MaxResults < 1 {
+		invalidParams.Add(request.NewErrParamMinValue("MaxResults", 1))
+	}
+	if s.NextToken != nil && len(*s.NextToken) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("NextToken", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetMaxResults sets the MaxResults field's value.
+func (s *ListEngineVersionsInput) SetMaxResults(v int64) *ListEngineVersionsInput {
+	s.MaxResults = &v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListEngineVersionsInput) SetNextToken(v string) *ListEngineVersionsInput {
+	s.NextToken = &v
+	return s
+}
+
+type ListEngineVersionsOutput struct {
+	_ struct{} `type:"structure"`
+
+	// A list of engine versions that are available to choose from.
+	EngineVersions []*EngineVersion `type:"list"`
+
+	// A token generated by the Athena service that specifies where to continue
+	// pagination if a previous request was truncated. To obtain the next set of
+	// pages, pass in the NextToken from the response object of the previous page
+	// call.
+	NextToken *string `min:"1" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListEngineVersionsOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListEngineVersionsOutput) GoString() string {
+	return s.String()
+}
+
+// SetEngineVersions sets the EngineVersions field's value.
+func (s *ListEngineVersionsOutput) SetEngineVersions(v []*EngineVersion) *ListEngineVersionsOutput {
+	s.EngineVersions = v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListEngineVersionsOutput) SetNextToken(v string) *ListEngineVersionsOutput {
 	s.NextToken = &v
 	return s
 }
@@ -4864,12 +6260,20 @@ type ListNamedQueriesInput struct {
 	WorkGroup *string `type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListNamedQueriesInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListNamedQueriesInput) GoString() string {
 	return s.String()
 }
@@ -4918,12 +6322,20 @@ type ListNamedQueriesOutput struct {
 	NextToken *string `min:"1" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListNamedQueriesOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListNamedQueriesOutput) GoString() string {
 	return s.String()
 }
@@ -4937,6 +6349,122 @@ func (s *ListNamedQueriesOutput) SetNamedQueryIds(v []*string) *ListNamedQueries
 // SetNextToken sets the NextToken field's value.
 func (s *ListNamedQueriesOutput) SetNextToken(v string) *ListNamedQueriesOutput {
 	s.NextToken = &v
+	return s
+}
+
+type ListPreparedStatementsInput struct {
+	_ struct{} `type:"structure"`
+
+	// The maximum number of results to return in this request.
+	MaxResults *int64 `min:"1" type:"integer"`
+
+	// A token generated by the Athena service that specifies where to continue
+	// pagination if a previous request was truncated. To obtain the next set of
+	// pages, pass in the NextToken from the response object of the previous page
+	// call.
+	NextToken *string `min:"1" type:"string"`
+
+	// The workgroup to list the prepared statements for.
+	//
+	// WorkGroup is a required field
+	WorkGroup *string `type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListPreparedStatementsInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListPreparedStatementsInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ListPreparedStatementsInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ListPreparedStatementsInput"}
+	if s.MaxResults != nil && *s.MaxResults < 1 {
+		invalidParams.Add(request.NewErrParamMinValue("MaxResults", 1))
+	}
+	if s.NextToken != nil && len(*s.NextToken) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("NextToken", 1))
+	}
+	if s.WorkGroup == nil {
+		invalidParams.Add(request.NewErrParamRequired("WorkGroup"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetMaxResults sets the MaxResults field's value.
+func (s *ListPreparedStatementsInput) SetMaxResults(v int64) *ListPreparedStatementsInput {
+	s.MaxResults = &v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListPreparedStatementsInput) SetNextToken(v string) *ListPreparedStatementsInput {
+	s.NextToken = &v
+	return s
+}
+
+// SetWorkGroup sets the WorkGroup field's value.
+func (s *ListPreparedStatementsInput) SetWorkGroup(v string) *ListPreparedStatementsInput {
+	s.WorkGroup = &v
+	return s
+}
+
+type ListPreparedStatementsOutput struct {
+	_ struct{} `type:"structure"`
+
+	// A token generated by the Athena service that specifies where to continue
+	// pagination if a previous request was truncated. To obtain the next set of
+	// pages, pass in the NextToken from the response object of the previous page
+	// call.
+	NextToken *string `min:"1" type:"string"`
+
+	// The list of prepared statements for the workgroup.
+	PreparedStatements []*PreparedStatementSummary `type:"list"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListPreparedStatementsOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListPreparedStatementsOutput) GoString() string {
+	return s.String()
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListPreparedStatementsOutput) SetNextToken(v string) *ListPreparedStatementsOutput {
+	s.NextToken = &v
+	return s
+}
+
+// SetPreparedStatements sets the PreparedStatements field's value.
+func (s *ListPreparedStatementsOutput) SetPreparedStatements(v []*PreparedStatementSummary) *ListPreparedStatementsOutput {
+	s.PreparedStatements = v
 	return s
 }
 
@@ -4958,12 +6486,20 @@ type ListQueryExecutionsInput struct {
 	WorkGroup *string `type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListQueryExecutionsInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListQueryExecutionsInput) GoString() string {
 	return s.String()
 }
@@ -5009,12 +6545,20 @@ type ListQueryExecutionsOutput struct {
 	QueryExecutionIds []*string `min:"1" type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListQueryExecutionsOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListQueryExecutionsOutput) GoString() string {
 	return s.String()
 }
@@ -5058,12 +6602,20 @@ type ListTableMetadataInput struct {
 	NextToken *string `min:"1" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListTableMetadataInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListTableMetadataInput) GoString() string {
 	return s.String()
 }
@@ -5139,12 +6691,20 @@ type ListTableMetadataOutput struct {
 	TableMetadataList []*TableMetadata `type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListTableMetadataOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListTableMetadataOutput) GoString() string {
 	return s.String()
 }
@@ -5179,12 +6739,20 @@ type ListTagsForResourceInput struct {
 	ResourceARN *string `min:"1" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListTagsForResourceInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListTagsForResourceInput) GoString() string {
 	return s.String()
 }
@@ -5239,12 +6807,20 @@ type ListTagsForResourceOutput struct {
 	Tags []*Tag `type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListTagsForResourceOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListTagsForResourceOutput) GoString() string {
 	return s.String()
 }
@@ -5274,12 +6850,20 @@ type ListWorkGroupsInput struct {
 	NextToken *string `min:"1" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListWorkGroupsInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListWorkGroupsInput) GoString() string {
 	return s.String()
 }
@@ -5321,17 +6905,25 @@ type ListWorkGroupsOutput struct {
 	// call.
 	NextToken *string `min:"1" type:"string"`
 
-	// The list of workgroups, including their names, descriptions, creation times,
-	// and states.
+	// A list of WorkGroupSummary objects that include the names, descriptions,
+	// creation times, and states for each workgroup.
 	WorkGroups []*WorkGroupSummary `type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListWorkGroupsOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListWorkGroupsOutput) GoString() string {
 	return s.String()
 }
@@ -5360,12 +6952,20 @@ type MetadataException struct {
 	Message_ *string `locationName:"Message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s MetadataException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s MetadataException) GoString() string {
 	return s.String()
 }
@@ -5438,12 +7038,20 @@ type NamedQuery struct {
 	WorkGroup *string `type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s NamedQuery) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s NamedQuery) GoString() string {
 	return s.String()
 }
@@ -5484,9 +7092,121 @@ func (s *NamedQuery) SetWorkGroup(v string) *NamedQuery {
 	return s
 }
 
+// A prepared SQL statement for use with Athena.
+type PreparedStatement struct {
+	_ struct{} `type:"structure"`
+
+	// The description of the prepared statement.
+	Description *string `min:"1" type:"string"`
+
+	// The last modified time of the prepared statement.
+	LastModifiedTime *time.Time `type:"timestamp"`
+
+	// The query string for the prepared statement.
+	QueryStatement *string `min:"1" type:"string"`
+
+	// The name of the prepared statement.
+	StatementName *string `min:"1" type:"string"`
+
+	// The name of the workgroup to which the prepared statement belongs.
+	WorkGroupName *string `type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s PreparedStatement) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s PreparedStatement) GoString() string {
+	return s.String()
+}
+
+// SetDescription sets the Description field's value.
+func (s *PreparedStatement) SetDescription(v string) *PreparedStatement {
+	s.Description = &v
+	return s
+}
+
+// SetLastModifiedTime sets the LastModifiedTime field's value.
+func (s *PreparedStatement) SetLastModifiedTime(v time.Time) *PreparedStatement {
+	s.LastModifiedTime = &v
+	return s
+}
+
+// SetQueryStatement sets the QueryStatement field's value.
+func (s *PreparedStatement) SetQueryStatement(v string) *PreparedStatement {
+	s.QueryStatement = &v
+	return s
+}
+
+// SetStatementName sets the StatementName field's value.
+func (s *PreparedStatement) SetStatementName(v string) *PreparedStatement {
+	s.StatementName = &v
+	return s
+}
+
+// SetWorkGroupName sets the WorkGroupName field's value.
+func (s *PreparedStatement) SetWorkGroupName(v string) *PreparedStatement {
+	s.WorkGroupName = &v
+	return s
+}
+
+// The name and last modified time of the prepared statement.
+type PreparedStatementSummary struct {
+	_ struct{} `type:"structure"`
+
+	// The last modified time of the prepared statement.
+	LastModifiedTime *time.Time `type:"timestamp"`
+
+	// The name of the prepared statement.
+	StatementName *string `min:"1" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s PreparedStatementSummary) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s PreparedStatementSummary) GoString() string {
+	return s.String()
+}
+
+// SetLastModifiedTime sets the LastModifiedTime field's value.
+func (s *PreparedStatementSummary) SetLastModifiedTime(v time.Time) *PreparedStatementSummary {
+	s.LastModifiedTime = &v
+	return s
+}
+
+// SetStatementName sets the StatementName field's value.
+func (s *PreparedStatementSummary) SetStatementName(v string) *PreparedStatementSummary {
+	s.StatementName = &v
+	return s
+}
+
 // Information about a single instance of a query execution.
 type QueryExecution struct {
 	_ struct{} `type:"structure"`
+
+	// The engine version that executed the query.
+	EngineVersion *EngineVersion `type:"structure"`
 
 	// The SQL query statements which the query execution ran.
 	Query *string `min:"1" type:"string"`
@@ -5507,7 +7227,7 @@ type QueryExecution struct {
 	// The type of query statement that was run. DDL indicates DDL query statements.
 	// DML indicates DML (Data Manipulation Language) query statements, such as
 	// CREATE TABLE AS SELECT. UTILITY indicates query statements other than DDL
-	// and DML, such as SHOW CREATE TABLE, or DESCRIBE <table>.
+	// and DML, such as SHOW CREATE TABLE, or DESCRIBE TABLE.
 	StatementType *string `type:"string" enum:"StatementType"`
 
 	// Query execution statistics, such as the amount of data scanned, the amount
@@ -5523,14 +7243,28 @@ type QueryExecution struct {
 	WorkGroup *string `type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s QueryExecution) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s QueryExecution) GoString() string {
 	return s.String()
+}
+
+// SetEngineVersion sets the EngineVersion field's value.
+func (s *QueryExecution) SetEngineVersion(v *EngineVersion) *QueryExecution {
+	s.EngineVersion = v
+	return s
 }
 
 // SetQuery sets the Query field's value.
@@ -5588,16 +7322,25 @@ type QueryExecutionContext struct {
 	// The name of the data catalog used in the query execution.
 	Catalog *string `min:"1" type:"string"`
 
-	// The name of the database used in the query execution.
+	// The name of the database used in the query execution. The database must exist
+	// in the catalog.
 	Database *string `min:"1" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s QueryExecutionContext) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s QueryExecutionContext) GoString() string {
 	return s.String()
 }
@@ -5670,12 +7413,20 @@ type QueryExecutionStatistics struct {
 	TotalExecutionTimeInMillis *int64 `type:"long"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s QueryExecutionStatistics) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s QueryExecutionStatistics) GoString() string {
 	return s.String()
 }
@@ -5749,12 +7500,20 @@ type QueryExecutionStatus struct {
 	SubmissionDateTime *time.Time `type:"timestamp"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s QueryExecutionStatus) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s QueryExecutionStatus) GoString() string {
 	return s.String()
 }
@@ -5793,12 +7552,20 @@ type ResourceNotFoundException struct {
 	ResourceName *string `min:"1" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ResourceNotFoundException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ResourceNotFoundException) GoString() string {
 	return s.String()
 }
@@ -5868,12 +7635,20 @@ type ResultConfiguration struct {
 	OutputLocation *string `type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ResultConfiguration) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ResultConfiguration) GoString() string {
 	return s.String()
 }
@@ -5941,12 +7716,20 @@ type ResultConfigurationUpdates struct {
 	RemoveOutputLocation *bool `type:"boolean"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ResultConfigurationUpdates) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ResultConfigurationUpdates) GoString() string {
 	return s.String()
 }
@@ -6003,12 +7786,20 @@ type ResultSet struct {
 	Rows []*Row `type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ResultSet) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ResultSet) GoString() string {
 	return s.String()
 }
@@ -6034,12 +7825,20 @@ type ResultSetMetadata struct {
 	ColumnInfo []*ColumnInfo `type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ResultSetMetadata) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ResultSetMetadata) GoString() string {
 	return s.String()
 }
@@ -6058,12 +7857,20 @@ type Row struct {
 	Data []*Datum `type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s Row) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s Row) GoString() string {
 	return s.String()
 }
@@ -6082,9 +7889,10 @@ type StartQueryExecutionInput struct {
 	// is received, the same response is returned and another query is not created.
 	// If a parameter has changed, for example, the QueryString, an error is returned.
 	//
-	// This token is listed as not required because AWS SDKs (for example the AWS
-	// SDK for Java) auto-generate the token for users. If you are not using the
-	// AWS SDK or the AWS CLI, you must provide this token or the action will fail.
+	// This token is listed as not required because Amazon Web Services SDKs (for
+	// example the Amazon Web Services SDK for Java) auto-generate the token for
+	// users. If you are not using the Amazon Web Services SDK or the Amazon Web
+	// Services CLI, you must provide this token or the action will fail.
 	ClientRequestToken *string `min:"32" type:"string" idempotencyToken:"true"`
 
 	// The database within which the query executes.
@@ -6106,12 +7914,20 @@ type StartQueryExecutionInput struct {
 	WorkGroup *string `type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s StartQueryExecutionInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s StartQueryExecutionInput) GoString() string {
 	return s.String()
 }
@@ -6182,12 +7998,20 @@ type StartQueryExecutionOutput struct {
 	QueryExecutionId *string `type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s StartQueryExecutionOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s StartQueryExecutionOutput) GoString() string {
 	return s.String()
 }
@@ -6205,12 +8029,20 @@ type StopQueryExecutionInput struct {
 	QueryExecutionId *string `type:"string" idempotencyToken:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s StopQueryExecutionInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s StopQueryExecutionInput) GoString() string {
 	return s.String()
 }
@@ -6225,12 +8057,20 @@ type StopQueryExecutionOutput struct {
 	_ struct{} `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s StopQueryExecutionOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s StopQueryExecutionOutput) GoString() string {
 	return s.String()
 }
@@ -6263,12 +8103,20 @@ type TableMetadata struct {
 	TableType *string `type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s TableMetadata) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s TableMetadata) GoString() string {
 	return s.String()
 }
@@ -6341,12 +8189,20 @@ type Tag struct {
 	Value *string `type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s Tag) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s Tag) GoString() string {
 	return s.String()
 }
@@ -6392,12 +8248,20 @@ type TagResourceInput struct {
 	Tags []*Tag `type:"list" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s TagResourceInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s TagResourceInput) GoString() string {
 	return s.String()
 }
@@ -6447,12 +8311,20 @@ type TagResourceOutput struct {
 	_ struct{} `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s TagResourceOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s TagResourceOutput) GoString() string {
 	return s.String()
 }
@@ -6469,12 +8341,20 @@ type TooManyRequestsException struct {
 	Reason *string `type:"string" enum:"ThrottleReason"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s TooManyRequestsException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s TooManyRequestsException) GoString() string {
 	return s.String()
 }
@@ -6533,12 +8413,20 @@ type UnprocessedNamedQueryId struct {
 	NamedQueryId *string `type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UnprocessedNamedQueryId) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UnprocessedNamedQueryId) GoString() string {
 	return s.String()
 }
@@ -6576,12 +8464,20 @@ type UnprocessedQueryExecutionId struct {
 	QueryExecutionId *string `type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UnprocessedQueryExecutionId) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UnprocessedQueryExecutionId) GoString() string {
 	return s.String()
 }
@@ -6619,12 +8515,20 @@ type UntagResourceInput struct {
 	TagKeys []*string `type:"list" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UntagResourceInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UntagResourceInput) GoString() string {
 	return s.String()
 }
@@ -6664,12 +8568,20 @@ type UntagResourceOutput struct {
 	_ struct{} `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UntagResourceOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UntagResourceOutput) GoString() string {
 	return s.String()
 }
@@ -6681,8 +8593,8 @@ type UpdateDataCatalogInput struct {
 	Description *string `min:"1" type:"string"`
 
 	// The name of the data catalog to update. The catalog name must be unique for
-	// the AWS account and can use a maximum of 128 alphanumeric, underscore, at
-	// sign, or hyphen characters.
+	// the Amazon Web Services account and can use a maximum of 128 alphanumeric,
+	// underscore, at sign, or hyphen characters.
 	//
 	// Name is a required field
 	Name *string `min:"1" type:"string" required:"true"`
@@ -6700,23 +8612,29 @@ type UpdateDataCatalogInput struct {
 	//    Both parameters are required. metadata-function=lambda_arn, record-function=lambda_arn
 	//    If you have a composite Lambda function that processes both metadata and
 	//    data, use the following syntax to specify your Lambda function. function=lambda_arn
-	//
-	//    * The GLUE type has no parameters.
 	Parameters map[string]*string `type:"map"`
 
 	// Specifies the type of data catalog to update. Specify LAMBDA for a federated
-	// catalog, GLUE for AWS Glue Catalog, or HIVE for an external hive metastore.
+	// catalog, HIVE for an external hive metastore, or GLUE for an Glue Data Catalog.
 	//
 	// Type is a required field
 	Type *string `type:"string" required:"true" enum:"DataCatalogType"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpdateDataCatalogInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpdateDataCatalogInput) GoString() string {
 	return s.String()
 }
@@ -6771,13 +8689,135 @@ type UpdateDataCatalogOutput struct {
 	_ struct{} `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpdateDataCatalogOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpdateDataCatalogOutput) GoString() string {
+	return s.String()
+}
+
+type UpdatePreparedStatementInput struct {
+	_ struct{} `type:"structure"`
+
+	// The description of the prepared statement.
+	Description *string `min:"1" type:"string"`
+
+	// The query string for the prepared statement.
+	//
+	// QueryStatement is a required field
+	QueryStatement *string `min:"1" type:"string" required:"true"`
+
+	// The name of the prepared statement.
+	//
+	// StatementName is a required field
+	StatementName *string `min:"1" type:"string" required:"true"`
+
+	// The workgroup for the prepared statement.
+	//
+	// WorkGroup is a required field
+	WorkGroup *string `type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdatePreparedStatementInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdatePreparedStatementInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *UpdatePreparedStatementInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "UpdatePreparedStatementInput"}
+	if s.Description != nil && len(*s.Description) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Description", 1))
+	}
+	if s.QueryStatement == nil {
+		invalidParams.Add(request.NewErrParamRequired("QueryStatement"))
+	}
+	if s.QueryStatement != nil && len(*s.QueryStatement) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("QueryStatement", 1))
+	}
+	if s.StatementName == nil {
+		invalidParams.Add(request.NewErrParamRequired("StatementName"))
+	}
+	if s.StatementName != nil && len(*s.StatementName) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("StatementName", 1))
+	}
+	if s.WorkGroup == nil {
+		invalidParams.Add(request.NewErrParamRequired("WorkGroup"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetDescription sets the Description field's value.
+func (s *UpdatePreparedStatementInput) SetDescription(v string) *UpdatePreparedStatementInput {
+	s.Description = &v
+	return s
+}
+
+// SetQueryStatement sets the QueryStatement field's value.
+func (s *UpdatePreparedStatementInput) SetQueryStatement(v string) *UpdatePreparedStatementInput {
+	s.QueryStatement = &v
+	return s
+}
+
+// SetStatementName sets the StatementName field's value.
+func (s *UpdatePreparedStatementInput) SetStatementName(v string) *UpdatePreparedStatementInput {
+	s.StatementName = &v
+	return s
+}
+
+// SetWorkGroup sets the WorkGroup field's value.
+func (s *UpdatePreparedStatementInput) SetWorkGroup(v string) *UpdatePreparedStatementInput {
+	s.WorkGroup = &v
+	return s
+}
+
+type UpdatePreparedStatementOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdatePreparedStatementOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdatePreparedStatementOutput) GoString() string {
 	return s.String()
 }
 
@@ -6799,12 +8839,20 @@ type UpdateWorkGroupInput struct {
 	WorkGroup *string `type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpdateWorkGroupInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpdateWorkGroupInput) GoString() string {
 	return s.String()
 }
@@ -6855,12 +8903,20 @@ type UpdateWorkGroupOutput struct {
 	_ struct{} `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpdateWorkGroupOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpdateWorkGroupOutput) GoString() string {
 	return s.String()
 }
@@ -6901,12 +8957,20 @@ type WorkGroup struct {
 	State *string `type:"string" enum:"WorkGroupState"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s WorkGroup) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s WorkGroup) GoString() string {
 	return s.String()
 }
@@ -6960,6 +9024,11 @@ type WorkGroupConfiguration struct {
 	// Workgroup Settings Override Client-Side Settings (https://docs.aws.amazon.com/athena/latest/ug/workgroups-settings-override.html).
 	EnforceWorkGroupConfiguration *bool `type:"boolean"`
 
+	// The engine version that all queries running on the workgroup use. Queries
+	// on the AmazonAthenaPreviewFunctionality workgroup run on the preview engine
+	// regardless of this setting.
+	EngineVersion *EngineVersion `type:"structure"`
+
 	// Indicates that the Amazon CloudWatch metrics are enabled for the workgroup.
 	PublishCloudWatchMetricsEnabled *bool `type:"boolean"`
 
@@ -6982,12 +9051,20 @@ type WorkGroupConfiguration struct {
 	ResultConfiguration *ResultConfiguration `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s WorkGroupConfiguration) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s WorkGroupConfiguration) GoString() string {
 	return s.String()
 }
@@ -6997,6 +9074,11 @@ func (s *WorkGroupConfiguration) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "WorkGroupConfiguration"}
 	if s.BytesScannedCutoffPerQuery != nil && *s.BytesScannedCutoffPerQuery < 1e+07 {
 		invalidParams.Add(request.NewErrParamMinValue("BytesScannedCutoffPerQuery", 1e+07))
+	}
+	if s.EngineVersion != nil {
+		if err := s.EngineVersion.Validate(); err != nil {
+			invalidParams.AddNested("EngineVersion", err.(request.ErrInvalidParams))
+		}
 	}
 	if s.ResultConfiguration != nil {
 		if err := s.ResultConfiguration.Validate(); err != nil {
@@ -7019,6 +9101,12 @@ func (s *WorkGroupConfiguration) SetBytesScannedCutoffPerQuery(v int64) *WorkGro
 // SetEnforceWorkGroupConfiguration sets the EnforceWorkGroupConfiguration field's value.
 func (s *WorkGroupConfiguration) SetEnforceWorkGroupConfiguration(v bool) *WorkGroupConfiguration {
 	s.EnforceWorkGroupConfiguration = &v
+	return s
+}
+
+// SetEngineVersion sets the EngineVersion field's value.
+func (s *WorkGroupConfiguration) SetEngineVersion(v *EngineVersion) *WorkGroupConfiguration {
+	s.EngineVersion = v
 	return s
 }
 
@@ -7058,6 +9146,12 @@ type WorkGroupConfigurationUpdates struct {
 	// Workgroup Settings Override Client-Side Settings (https://docs.aws.amazon.com/athena/latest/ug/workgroups-settings-override.html).
 	EnforceWorkGroupConfiguration *bool `type:"boolean"`
 
+	// The engine version requested when a workgroup is updated. After the update,
+	// all queries on the workgroup run on the requested engine version. If no value
+	// was previously set, the default is Auto. Queries on the AmazonAthenaPreviewFunctionality
+	// workgroup run on the preview engine regardless of this setting.
+	EngineVersion *EngineVersion `type:"structure"`
+
 	// Indicates whether this workgroup enables publishing metrics to Amazon CloudWatch.
 	PublishCloudWatchMetricsEnabled *bool `type:"boolean"`
 
@@ -7079,12 +9173,20 @@ type WorkGroupConfigurationUpdates struct {
 	ResultConfigurationUpdates *ResultConfigurationUpdates `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s WorkGroupConfigurationUpdates) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s WorkGroupConfigurationUpdates) GoString() string {
 	return s.String()
 }
@@ -7094,6 +9196,11 @@ func (s *WorkGroupConfigurationUpdates) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "WorkGroupConfigurationUpdates"}
 	if s.BytesScannedCutoffPerQuery != nil && *s.BytesScannedCutoffPerQuery < 1e+07 {
 		invalidParams.Add(request.NewErrParamMinValue("BytesScannedCutoffPerQuery", 1e+07))
+	}
+	if s.EngineVersion != nil {
+		if err := s.EngineVersion.Validate(); err != nil {
+			invalidParams.AddNested("EngineVersion", err.(request.ErrInvalidParams))
+		}
 	}
 	if s.ResultConfigurationUpdates != nil {
 		if err := s.ResultConfigurationUpdates.Validate(); err != nil {
@@ -7116,6 +9223,12 @@ func (s *WorkGroupConfigurationUpdates) SetBytesScannedCutoffPerQuery(v int64) *
 // SetEnforceWorkGroupConfiguration sets the EnforceWorkGroupConfiguration field's value.
 func (s *WorkGroupConfigurationUpdates) SetEnforceWorkGroupConfiguration(v bool) *WorkGroupConfigurationUpdates {
 	s.EnforceWorkGroupConfiguration = &v
+	return s
+}
+
+// SetEngineVersion sets the EngineVersion field's value.
+func (s *WorkGroupConfigurationUpdates) SetEngineVersion(v *EngineVersion) *WorkGroupConfigurationUpdates {
+	s.EngineVersion = v
 	return s
 }
 
@@ -7154,6 +9267,11 @@ type WorkGroupSummary struct {
 	// The workgroup description.
 	Description *string `type:"string"`
 
+	// The engine version setting for all queries on the workgroup. Queries on the
+	// AmazonAthenaPreviewFunctionality workgroup run on the preview engine regardless
+	// of this setting.
+	EngineVersion *EngineVersion `type:"structure"`
+
 	// The name of the workgroup.
 	Name *string `type:"string"`
 
@@ -7161,12 +9279,20 @@ type WorkGroupSummary struct {
 	State *string `type:"string" enum:"WorkGroupState"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s WorkGroupSummary) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s WorkGroupSummary) GoString() string {
 	return s.String()
 }
@@ -7180,6 +9306,12 @@ func (s *WorkGroupSummary) SetCreationTime(v time.Time) *WorkGroupSummary {
 // SetDescription sets the Description field's value.
 func (s *WorkGroupSummary) SetDescription(v string) *WorkGroupSummary {
 	s.Description = &v
+	return s
+}
+
+// SetEngineVersion sets the EngineVersion field's value.
+func (s *WorkGroupSummary) SetEngineVersion(v *EngineVersion) *WorkGroupSummary {
+	s.EngineVersion = v
 	return s
 }
 

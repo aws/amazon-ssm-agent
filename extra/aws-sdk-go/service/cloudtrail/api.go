@@ -63,8 +63,8 @@ func (c *CloudTrail) AddTagsRequest(input *AddTagsInput) (req *request.Request, 
 // names must be unique for a trail; you cannot have two keys with the same
 // name but different values. If you specify a key without a value, the tag
 // will be created with the specified key and a value of null. You can tag a
-// trail that applies to all AWS Regions only from the Region in which the trail
-// was created (also known as its home region).
+// trail that applies to all Amazon Web Services Regions only from the Region
+// in which the trail was created (also known as its home region).
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -78,8 +78,8 @@ func (c *CloudTrail) AddTagsRequest(input *AddTagsInput) (req *request.Request, 
 //   This exception is thrown when the specified resource is not found.
 //
 //   * ARNInvalidException
-//   This exception is thrown when an operation is called with an invalid trail
-//   ARN. The format of a trail ARN is:
+//   This exception is thrown when an operation is called with a trail ARN that
+//   is not valid. The following is the format of a trail ARN.
 //
 //   arn:aws:cloudtrail:us-east-2:123456789012:trail/MyTrail
 //
@@ -103,7 +103,7 @@ func (c *CloudTrail) AddTagsRequest(input *AddTagsInput) (req *request.Request, 
 //      * Be between 3 and 128 characters
 //
 //      * Have no adjacent periods, underscores or dashes. Names like my-_namespace
-//      and my--namespace are invalid.
+//      and my--namespace are not valid.
 //
 //      * Not be in IP address format (for example, 192.168.5.4)
 //
@@ -118,10 +118,10 @@ func (c *CloudTrail) AddTagsRequest(input *AddTagsInput) (req *request.Request, 
 //   This exception is thrown when the requested operation is not permitted.
 //
 //   * NotOrganizationMasterAccountException
-//   This exception is thrown when the AWS account making the request to create
-//   or update an organization trail is not the master account for an organization
-//   in AWS Organizations. For more information, see Prepare For Creating a Trail
-//   For Your Organization (https://docs.aws.amazon.com/awscloudtrail/latest/userguide/creating-an-organizational-trail-prepare.html).
+//   This exception is thrown when the Amazon Web Services account making the
+//   request to create or update an organization trail is not the management account
+//   for an organization in Organizations. For more information, see Prepare For
+//   Creating a Trail For Your Organization (https://docs.aws.amazon.com/awscloudtrail/latest/userguide/creating-an-organizational-trail-prepare.html).
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/cloudtrail-2013-11-01/AddTags
 func (c *CloudTrail) AddTags(input *AddTagsInput) (*AddTagsOutput, error) {
@@ -213,7 +213,7 @@ func (c *CloudTrail) CreateTrailRequest(input *CreateTrailInput) (req *request.R
 //   This exception is thrown when the policy on the S3 bucket is not sufficient.
 //
 //   * InsufficientSnsTopicPolicyException
-//   This exception is thrown when the policy on the SNS topic is not sufficient.
+//   This exception is thrown when the policy on the Amazon SNS topic is not sufficient.
 //
 //   * InsufficientEncryptionPolicyException
 //   This exception is thrown when the policy on the S3 bucket or KMS key is not
@@ -229,7 +229,7 @@ func (c *CloudTrail) CreateTrailRequest(input *CreateTrailInput) (req *request.R
 //   This exception is thrown when the provided SNS topic name is not valid.
 //
 //   * InvalidKmsKeyIdException
-//   This exception is thrown when the KMS key ARN is invalid.
+//   This exception is thrown when the KMS key ARN is not valid.
 //
 //   * InvalidTrailNameException
 //   This exception is thrown when the provided trail name is not valid. Trail
@@ -243,7 +243,7 @@ func (c *CloudTrail) CreateTrailRequest(input *CreateTrailInput) (req *request.R
 //      * Be between 3 and 128 characters
 //
 //      * Have no adjacent periods, underscores or dashes. Names like my-_namespace
-//      and my--namespace are invalid.
+//      and my--namespace are not valid.
 //
 //      * Not be in IP address format (for example, 192.168.5.4)
 //
@@ -255,8 +255,9 @@ func (c *CloudTrail) CreateTrailRequest(input *CreateTrailInput) (req *request.R
 //   valid.
 //
 //   * KmsKeyNotFoundException
-//   This exception is thrown when the KMS key does not exist, or when the S3
-//   bucket and the KMS key are not in the same region.
+//   This exception is thrown when the KMS key does not exist, when the S3 bucket
+//   and the KMS key are not in the same region, or when the KMS key associated
+//   with the Amazon SNS topic either does not exist or is not in the same region.
 //
 //   * KmsKeyDisabledException
 //   This exception is no longer in use.
@@ -266,7 +267,8 @@ func (c *CloudTrail) CreateTrailRequest(input *CreateTrailInput) (req *request.R
 //   and the trail can’t be updated.
 //
 //   * InvalidCloudWatchLogsLogGroupArnException
-//   This exception is thrown when the provided CloudWatch log group is not valid.
+//   This exception is thrown when the provided CloudWatch Logs log group is not
+//   valid.
 //
 //   * InvalidCloudWatchLogsRoleArnException
 //   This exception is thrown when the provided role is not valid.
@@ -286,8 +288,8 @@ func (c *CloudTrail) CreateTrailRequest(input *CreateTrailInput) (req *request.R
 //
 //   * AccessNotEnabledException
 //   This exception is thrown when trusted access has not been enabled between
-//   AWS CloudTrail and AWS Organizations. For more information, see Enabling
-//   Trusted Access with Other AWS Services (https://docs.aws.amazon.com/organizations/latest/userguide/orgs_integrate_services.html)
+//   CloudTrail and Organizations. For more information, see Enabling Trusted
+//   Access with Other Amazon Web Services Services (https://docs.aws.amazon.com/organizations/latest/userguide/orgs_integrate_services.html)
 //   and Prepare For Creating a Trail For Your Organization (https://docs.aws.amazon.com/awscloudtrail/latest/userguide/creating-an-organizational-trail-prepare.html).
 //
 //   * InsufficientDependencyServiceAccessPermissionException
@@ -297,21 +299,27 @@ func (c *CloudTrail) CreateTrailRequest(input *CreateTrailInput) (req *request.R
 //   For Creating a Trail For Your Organization (https://docs.aws.amazon.com/awscloudtrail/latest/userguide/creating-an-organizational-trail-prepare.html).
 //
 //   * NotOrganizationMasterAccountException
-//   This exception is thrown when the AWS account making the request to create
-//   or update an organization trail is not the master account for an organization
-//   in AWS Organizations. For more information, see Prepare For Creating a Trail
-//   For Your Organization (https://docs.aws.amazon.com/awscloudtrail/latest/userguide/creating-an-organizational-trail-prepare.html).
+//   This exception is thrown when the Amazon Web Services account making the
+//   request to create or update an organization trail is not the management account
+//   for an organization in Organizations. For more information, see Prepare For
+//   Creating a Trail For Your Organization (https://docs.aws.amazon.com/awscloudtrail/latest/userguide/creating-an-organizational-trail-prepare.html).
 //
 //   * OrganizationsNotInUseException
-//   This exception is thrown when the request is made from an AWS account that
-//   is not a member of an organization. To make this request, sign in using the
-//   credentials of an account that belongs to an organization.
+//   This exception is thrown when the request is made from an Amazon Web Services
+//   account that is not a member of an organization. To make this request, sign
+//   in using the credentials of an account that belongs to an organization.
 //
 //   * OrganizationNotInAllFeaturesModeException
-//   This exception is thrown when AWS Organizations is not configured to support
-//   all features. All features must be enabled in AWS Organization to support
-//   creating an organization trail. For more information, see Prepare For Creating
-//   a Trail For Your Organization (https://docs.aws.amazon.com/awscloudtrail/latest/userguide/creating-an-organizational-trail-prepare.html).
+//   This exception is thrown when Organizations is not configured to support
+//   all features. All features must be enabled in Organizations to support creating
+//   an organization trail. For more information, see Prepare For Creating a Trail
+//   For Your Organization (https://docs.aws.amazon.com/awscloudtrail/latest/userguide/creating-an-organizational-trail-prepare.html).
+//
+//   * CloudTrailInvalidClientTokenIdException
+//   This exception is thrown when a call results in the InvalidClientTokenId
+//   error code. This can occur when you are creating or updating a trail to send
+//   notifications to an Amazon SNS topic that is in a suspended Amazon Web Services
+//   account.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/cloudtrail-2013-11-01/CreateTrail
 func (c *CloudTrail) CreateTrail(input *CreateTrailInput) (*CreateTrailOutput, error) {
@@ -407,7 +415,7 @@ func (c *CloudTrail) DeleteTrailRequest(input *DeleteTrailInput) (req *request.R
 //      * Be between 3 and 128 characters
 //
 //      * Have no adjacent periods, underscores or dashes. Names like my-_namespace
-//      and my--namespace are invalid.
+//      and my--namespace are not valid.
 //
 //      * Not be in IP address format (for example, 192.168.5.4)
 //
@@ -422,16 +430,22 @@ func (c *CloudTrail) DeleteTrailRequest(input *DeleteTrailInput) (req *request.R
 //   This exception is thrown when the requested operation is not permitted.
 //
 //   * NotOrganizationMasterAccountException
-//   This exception is thrown when the AWS account making the request to create
-//   or update an organization trail is not the master account for an organization
-//   in AWS Organizations. For more information, see Prepare For Creating a Trail
-//   For Your Organization (https://docs.aws.amazon.com/awscloudtrail/latest/userguide/creating-an-organizational-trail-prepare.html).
+//   This exception is thrown when the Amazon Web Services account making the
+//   request to create or update an organization trail is not the management account
+//   for an organization in Organizations. For more information, see Prepare For
+//   Creating a Trail For Your Organization (https://docs.aws.amazon.com/awscloudtrail/latest/userguide/creating-an-organizational-trail-prepare.html).
 //
 //   * InsufficientDependencyServiceAccessPermissionException
 //   This exception is thrown when the IAM user or role that is used to create
 //   the organization trail is lacking one or more required permissions for creating
 //   an organization trail in a required service. For more information, see Prepare
 //   For Creating a Trail For Your Organization (https://docs.aws.amazon.com/awscloudtrail/latest/userguide/creating-an-organizational-trail-prepare.html).
+//
+//   * ConflictException
+//   This exception is thrown when the specified resource is not ready for an
+//   operation. This can occur when you try to run an operation on a trail before
+//   CloudTrail has time to fully load the trail. If this exception occurs, wait
+//   a few minutes, and then try the operation again.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/cloudtrail-2013-11-01/DeleteTrail
 func (c *CloudTrail) DeleteTrail(input *DeleteTrailInput) (*DeleteTrailOutput, error) {
@@ -528,7 +542,7 @@ func (c *CloudTrail) DescribeTrailsRequest(input *DescribeTrailsInput) (req *req
 //      * Be between 3 and 128 characters
 //
 //      * Have no adjacent periods, underscores or dashes. Names like my-_namespace
-//      and my--namespace are invalid.
+//      and my--namespace are not valid.
 //
 //      * Not be in IP address format (for example, 192.168.5.4)
 //
@@ -606,11 +620,11 @@ func (c *CloudTrail) GetEventSelectorsRequest(input *GetEventSelectorsInput) (re
 //
 //    * If your event selector includes management events.
 //
-//    * If your event selector includes data events, the Amazon S3 objects or
-//    AWS Lambda functions that you are logging for data events.
+//    * If your event selector includes data events, the resources on which
+//    you are logging data events.
 //
 // For more information, see Logging Data and Management Events for Trails (https://docs.aws.amazon.com/awscloudtrail/latest/userguide/logging-management-and-data-events-with-cloudtrail.html)
-// in the AWS CloudTrail User Guide.
+// in the CloudTrail User Guide.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -635,7 +649,7 @@ func (c *CloudTrail) GetEventSelectorsRequest(input *GetEventSelectorsInput) (re
 //      * Be between 3 and 128 characters
 //
 //      * Have no adjacent periods, underscores or dashes. Names like my-_namespace
-//      and my--namespace are invalid.
+//      and my--namespace are not valid.
 //
 //      * Not be in IP address format (for example, 192.168.5.4)
 //
@@ -718,7 +732,7 @@ func (c *CloudTrail) GetInsightSelectorsRequest(input *GetInsightSelectorsInput)
 // enabled, the operation throws the exception InsightNotEnabledException
 //
 // For more information, see Logging CloudTrail Insights Events for Trails (https://docs.aws.amazon.com/awscloudtrail/latest/userguide/logging-insights-events-with-cloudtrail.html)
-// in the AWS CloudTrail User Guide.
+// in the CloudTrail User Guide.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -743,7 +757,7 @@ func (c *CloudTrail) GetInsightSelectorsRequest(input *GetInsightSelectorsInput)
 //      * Be between 3 and 128 characters
 //
 //      * Have no adjacent periods, underscores or dashes. Names like my-_namespace
-//      and my--namespace are invalid.
+//      and my--namespace are not valid.
 //
 //      * Not be in IP address format (for example, 192.168.5.4)
 //
@@ -848,7 +862,7 @@ func (c *CloudTrail) GetTrailRequest(input *GetTrailInput) (req *request.Request
 //      * Be between 3 and 128 characters
 //
 //      * Have no adjacent periods, underscores or dashes. Names like my-_namespace
-//      and my--namespace are invalid.
+//      and my--namespace are not valid.
 //
 //      * Not be in IP address format (for example, 192.168.5.4)
 //
@@ -953,7 +967,7 @@ func (c *CloudTrail) GetTrailStatusRequest(input *GetTrailStatusInput) (req *req
 //      * Be between 3 and 128 characters
 //
 //      * Have no adjacent periods, underscores or dashes. Names like my-_namespace
-//      and my--namespace are invalid.
+//      and my--namespace are not valid.
 //
 //      * Not be in IP address format (for example, 192.168.5.4)
 //
@@ -1039,10 +1053,10 @@ func (c *CloudTrail) ListPublicKeysRequest(input *ListPublicKeysInput) (req *req
 // within the specified time range. The public key is needed to validate digest
 // files that were signed with its corresponding private key.
 //
-// CloudTrail uses different private/public key pairs per region. Each digest
-// file is signed with a private key unique to its region. Therefore, when you
-// validate a digest file from a particular region, you must look in the same
-// region for its corresponding public key.
+// CloudTrail uses different private and public key pairs per region. Each digest
+// file is signed with a private key unique to its region. When you validate
+// a digest file from a specific region, you must look in the same region for
+// its corresponding public key.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -1053,8 +1067,8 @@ func (c *CloudTrail) ListPublicKeysRequest(input *ListPublicKeysInput) (req *req
 //
 // Returned Error Types:
 //   * InvalidTimeRangeException
-//   Occurs if the timestamp values are invalid. Either the start time occurs
-//   after the end time or the time range is outside the range of possible values.
+//   Occurs if the timestamp values are not valid. Either the start time occurs
+//   after the end time, or the time range is outside the range of possible values.
 //
 //   * UnsupportedOperationException
 //   This exception is thrown when the requested operation is not supported.
@@ -1203,8 +1217,8 @@ func (c *CloudTrail) ListTagsRequest(input *ListTagsInput) (req *request.Request
 //   This exception is thrown when the specified resource is not found.
 //
 //   * ARNInvalidException
-//   This exception is thrown when an operation is called with an invalid trail
-//   ARN. The format of a trail ARN is:
+//   This exception is thrown when an operation is called with a trail ARN that
+//   is not valid. The following is the format of a trail ARN.
 //
 //   arn:aws:cloudtrail:us-east-2:123456789012:trail/MyTrail
 //
@@ -1224,7 +1238,7 @@ func (c *CloudTrail) ListTagsRequest(input *ListTagsInput) (req *request.Request
 //      * Be between 3 and 128 characters
 //
 //      * Have no adjacent periods, underscores or dashes. Names like my-_namespace
-//      and my--namespace are invalid.
+//      and my--namespace are not valid.
 //
 //      * Not be in IP address format (for example, 192.168.5.4)
 //
@@ -1507,7 +1521,7 @@ func (c *CloudTrail) LookupEventsRequest(input *LookupEventsInput) (req *request
 // a region within the last 90 days. Lookup supports the following attributes
 // for management events:
 //
-//    * AWS access key
+//    * Amazon Web Services access key
 //
 //    * Event ID
 //
@@ -1535,8 +1549,8 @@ func (c *CloudTrail) LookupEventsRequest(input *LookupEventsInput) (req *request
 // with a maximum of 50 possible. The response includes a token that you can
 // use to get the next page of results.
 //
-// The rate of lookup requests is limited to two per second per account. If
-// this limit is exceeded, a throttling error occurs.
+// The rate of lookup requests is limited to two per second, per account, per
+// region. If this limit is exceeded, a throttling error occurs.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -1547,18 +1561,18 @@ func (c *CloudTrail) LookupEventsRequest(input *LookupEventsInput) (req *request
 //
 // Returned Error Types:
 //   * InvalidLookupAttributesException
-//   Occurs when an invalid lookup attribute is specified.
+//   Occurs when a lookup attribute is specified that is not valid.
 //
 //   * InvalidTimeRangeException
-//   Occurs if the timestamp values are invalid. Either the start time occurs
-//   after the end time or the time range is outside the range of possible values.
+//   Occurs if the timestamp values are not valid. Either the start time occurs
+//   after the end time, or the time range is outside the range of possible values.
 //
 //   * InvalidMaxResultsException
-//   This exception is thrown if the limit specified is invalid.
+//   This exception is thrown if the limit specified is not valid.
 //
 //   * InvalidNextTokenException
-//   Invalid token or token that was previously used in a request with different
-//   parameters. This exception is thrown if the token is invalid.
+//   A token that is not valid, or a token that was previously used in a request
+//   with different parameters. This exception is thrown if the token is not valid.
 //
 //   * InvalidEventCategoryException
 //   Occurs if an event category that is not valid is specified as a value of
@@ -1688,15 +1702,16 @@ func (c *CloudTrail) PutEventSelectorsRequest(input *PutEventSelectorsInput) (re
 
 // PutEventSelectors API operation for AWS CloudTrail.
 //
-// Configures an event selector for your trail. Use event selectors to further
-// specify the management and data event settings for your trail. By default,
-// trails created without specific event selectors will be configured to log
-// all read and write management events, and no data events.
+// Configures an event selector or advanced event selectors for your trail.
+// Use event selectors or advanced event selectors to specify management and
+// data event settings for your trail. By default, trails created without specific
+// event selectors are configured to log all read and write management events,
+// and no data events.
 //
 // When an event occurs in your account, CloudTrail evaluates the event selectors
-// in all trails. For each trail, if the event matches any event selector, the
-// trail processes and logs the event. If the event doesn't match any event
-// selector, the trail doesn't log the event.
+// or advanced event selectors in all trails. For each trail, if the event matches
+// any event selector, the trail processes and logs the event. If the event
+// doesn't match any event selector, the trail doesn't log the event.
 //
 // Example
 //
@@ -1710,16 +1725,25 @@ func (c *CloudTrail) PutEventSelectorsRequest(input *PutEventSelectorsInput) (re
 // The RunInstances is a write-only event and it matches your event selector.
 // The trail logs the event.
 //
-// The GetConsoleOutput is a read-only event but it doesn't match your event
-// selector. The trail doesn't log the event.
+// The GetConsoleOutput is a read-only event that doesn't match your event selector.
+// The trail doesn't log the event.
 //
 // The PutEventSelectors operation must be called from the region in which the
-// trail was created; otherwise, an InvalidHomeRegionException is thrown.
+// trail was created; otherwise, an InvalidHomeRegionException exception is
+// thrown.
 //
 // You can configure up to five event selectors for each trail. For more information,
-// see Logging Data and Management Events for Trails (https://docs.aws.amazon.com/awscloudtrail/latest/userguide/logging-management-and-data-events-with-cloudtrail.html)
-// and Limits in AWS CloudTrail (https://docs.aws.amazon.com/awscloudtrail/latest/userguide/WhatIsCloudTrail-Limits.html)
-// in the AWS CloudTrail User Guide.
+// see Logging data and management events for trails (https://docs.aws.amazon.com/awscloudtrail/latest/userguide/logging-management-and-data-events-with-cloudtrail.html)
+// and Quotas in CloudTrail (https://docs.aws.amazon.com/awscloudtrail/latest/userguide/WhatIsCloudTrail-Limits.html)
+// in the CloudTrail User Guide.
+//
+// You can add advanced event selectors, and conditions for your advanced event
+// selectors, up to a maximum of 500 values for all conditions and selectors
+// on a trail. You can use either AdvancedEventSelectors or EventSelectors,
+// but not both. If you apply AdvancedEventSelectors to a trail, any existing
+// EventSelectors are overwritten. For more information about advanced event
+// selectors, see Logging data events for trails (https://docs.aws.amazon.com/awscloudtrail/latest/userguide/logging-data-events-with-cloudtrail.html)
+// in the CloudTrail User Guide.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -1744,7 +1768,7 @@ func (c *CloudTrail) PutEventSelectorsRequest(input *PutEventSelectorsInput) (re
 //      * Be between 3 and 128 characters
 //
 //      * Have no adjacent periods, underscores or dashes. Names like my-_namespace
-//      and my--namespace are invalid.
+//      and my--namespace are not valid.
 //
 //      * Not be in IP address format (for example, 192.168.5.4)
 //
@@ -1754,11 +1778,13 @@ func (c *CloudTrail) PutEventSelectorsRequest(input *PutEventSelectorsInput) (re
 //
 //   * InvalidEventSelectorsException
 //   This exception is thrown when the PutEventSelectors operation is called with
-//   a number of event selectors or data resources that is not valid. The combination
-//   of event selectors and data resources is not valid. A trail can have up to
-//   5 event selectors. A trail is limited to 250 data resources. These data resources
-//   can be distributed across event selectors, but the overall total cannot exceed
-//   250.
+//   a number of event selectors, advanced event selectors, or data resources
+//   that is not valid. The combination of event selectors or advanced event selectors
+//   and data resources is not valid. A trail can have up to 5 event selectors.
+//   If a trail uses advanced event selectors, a maximum of 500 total values for
+//   all conditions in all advanced event selectors is allowed. A trail is limited
+//   to 250 data resources. These data resources can be distributed across event
+//   selectors, but the overall total cannot exceed 250.
 //
 //   You can:
 //
@@ -1770,8 +1796,11 @@ func (c *CloudTrail) PutEventSelectorsRequest(input *PutEventSelectorsInput) (re
 //      of data resources does not exceed 250 across all event selectors for a
 //      trail.
 //
+//      * Specify up to 500 values for all conditions in all advanced event selectors
+//      for a trail.
+//
 //      * Specify a valid value for a parameter. For example, specifying the ReadWriteType
-//      parameter with a value of read-only is invalid.
+//      parameter with a value of read-only is not valid.
 //
 //   * UnsupportedOperationException
 //   This exception is thrown when the requested operation is not supported.
@@ -1780,10 +1809,10 @@ func (c *CloudTrail) PutEventSelectorsRequest(input *PutEventSelectorsInput) (re
 //   This exception is thrown when the requested operation is not permitted.
 //
 //   * NotOrganizationMasterAccountException
-//   This exception is thrown when the AWS account making the request to create
-//   or update an organization trail is not the master account for an organization
-//   in AWS Organizations. For more information, see Prepare For Creating a Trail
-//   For Your Organization (https://docs.aws.amazon.com/awscloudtrail/latest/userguide/creating-an-organizational-trail-prepare.html).
+//   This exception is thrown when the Amazon Web Services account making the
+//   request to create or update an organization trail is not the management account
+//   for an organization in Organizations. For more information, see Prepare For
+//   Creating a Trail For Your Organization (https://docs.aws.amazon.com/awscloudtrail/latest/userguide/creating-an-organizational-trail-prepare.html).
 //
 //   * InsufficientDependencyServiceAccessPermissionException
 //   This exception is thrown when the IAM user or role that is used to create
@@ -1860,7 +1889,7 @@ func (c *CloudTrail) PutInsightSelectorsRequest(input *PutInsightSelectorsInput)
 // Lets you enable Insights event logging by specifying the Insights selectors
 // that you want to enable on an existing trail. You also use PutInsightSelectors
 // to turn off Insights event logging, by passing an empty list of insight types.
-// In this release, only ApiCallRateInsight is supported as an Insights selector.
+// The valid Insights event type in this release is ApiCallRateInsight.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -1885,7 +1914,7 @@ func (c *CloudTrail) PutInsightSelectorsRequest(input *PutInsightSelectorsInput)
 //      * Be between 3 and 128 characters
 //
 //      * Have no adjacent periods, underscores or dashes. Names like my-_namespace
-//      and my--namespace are invalid.
+//      and my--namespace are not valid.
 //
 //      * Not be in IP address format (for example, 192.168.5.4)
 //
@@ -1905,6 +1934,13 @@ func (c *CloudTrail) PutInsightSelectorsRequest(input *PutInsightSelectorsInput)
 //   This exception is thrown when the policy on the S3 bucket or KMS key is not
 //   sufficient.
 //
+//   * S3BucketDoesNotExistException
+//   This exception is thrown when the specified S3 bucket does not exist.
+//
+//   * KmsException
+//   This exception is thrown when there is an issue with the specified KMS key
+//   and the trail can’t be updated.
+//
 //   * UnsupportedOperationException
 //   This exception is thrown when the requested operation is not supported.
 //
@@ -1912,10 +1948,10 @@ func (c *CloudTrail) PutInsightSelectorsRequest(input *PutInsightSelectorsInput)
 //   This exception is thrown when the requested operation is not permitted.
 //
 //   * NotOrganizationMasterAccountException
-//   This exception is thrown when the AWS account making the request to create
-//   or update an organization trail is not the master account for an organization
-//   in AWS Organizations. For more information, see Prepare For Creating a Trail
-//   For Your Organization (https://docs.aws.amazon.com/awscloudtrail/latest/userguide/creating-an-organizational-trail-prepare.html).
+//   This exception is thrown when the Amazon Web Services account making the
+//   request to create or update an organization trail is not the management account
+//   for an organization in Organizations. For more information, see Prepare For
+//   Creating a Trail For Your Organization (https://docs.aws.amazon.com/awscloudtrail/latest/userguide/creating-an-organizational-trail-prepare.html).
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/cloudtrail-2013-11-01/PutInsightSelectors
 func (c *CloudTrail) PutInsightSelectors(input *PutInsightSelectorsInput) (*PutInsightSelectorsOutput, error) {
@@ -1998,8 +2034,8 @@ func (c *CloudTrail) RemoveTagsRequest(input *RemoveTagsInput) (req *request.Req
 //   This exception is thrown when the specified resource is not found.
 //
 //   * ARNInvalidException
-//   This exception is thrown when an operation is called with an invalid trail
-//   ARN. The format of a trail ARN is:
+//   This exception is thrown when an operation is called with a trail ARN that
+//   is not valid. The following is the format of a trail ARN.
 //
 //   arn:aws:cloudtrail:us-east-2:123456789012:trail/MyTrail
 //
@@ -2019,7 +2055,7 @@ func (c *CloudTrail) RemoveTagsRequest(input *RemoveTagsInput) (req *request.Req
 //      * Be between 3 and 128 characters
 //
 //      * Have no adjacent periods, underscores or dashes. Names like my-_namespace
-//      and my--namespace are invalid.
+//      and my--namespace are not valid.
 //
 //      * Not be in IP address format (for example, 192.168.5.4)
 //
@@ -2034,10 +2070,10 @@ func (c *CloudTrail) RemoveTagsRequest(input *RemoveTagsInput) (req *request.Req
 //   This exception is thrown when the requested operation is not permitted.
 //
 //   * NotOrganizationMasterAccountException
-//   This exception is thrown when the AWS account making the request to create
-//   or update an organization trail is not the master account for an organization
-//   in AWS Organizations. For more information, see Prepare For Creating a Trail
-//   For Your Organization (https://docs.aws.amazon.com/awscloudtrail/latest/userguide/creating-an-organizational-trail-prepare.html).
+//   This exception is thrown when the Amazon Web Services account making the
+//   request to create or update an organization trail is not the management account
+//   for an organization in Organizations. For more information, see Prepare For
+//   Creating a Trail For Your Organization (https://docs.aws.amazon.com/awscloudtrail/latest/userguide/creating-an-organizational-trail-prepare.html).
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/cloudtrail-2013-11-01/RemoveTags
 func (c *CloudTrail) RemoveTags(input *RemoveTagsInput) (*RemoveTagsOutput, error) {
@@ -2106,11 +2142,11 @@ func (c *CloudTrail) StartLoggingRequest(input *StartLoggingInput) (req *request
 
 // StartLogging API operation for AWS CloudTrail.
 //
-// Starts the recording of AWS API calls and log file delivery for a trail.
-// For a trail that is enabled in all regions, this operation must be called
-// from the region in which the trail was created. This operation cannot be
-// called on the shadow trails (replicated trails in other regions) of a trail
-// that is enabled in all regions.
+// Starts the recording of Amazon Web Services API calls and log file delivery
+// for a trail. For a trail that is enabled in all regions, this operation must
+// be called from the region in which the trail was created. This operation
+// cannot be called on the shadow trails (replicated trails in other regions)
+// of a trail that is enabled in all regions.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -2135,7 +2171,7 @@ func (c *CloudTrail) StartLoggingRequest(input *StartLoggingInput) (req *request
 //      * Be between 3 and 128 characters
 //
 //      * Have no adjacent periods, underscores or dashes. Names like my-_namespace
-//      and my--namespace are invalid.
+//      and my--namespace are not valid.
 //
 //      * Not be in IP address format (for example, 192.168.5.4)
 //
@@ -2150,10 +2186,10 @@ func (c *CloudTrail) StartLoggingRequest(input *StartLoggingInput) (req *request
 //   This exception is thrown when the requested operation is not permitted.
 //
 //   * NotOrganizationMasterAccountException
-//   This exception is thrown when the AWS account making the request to create
-//   or update an organization trail is not the master account for an organization
-//   in AWS Organizations. For more information, see Prepare For Creating a Trail
-//   For Your Organization (https://docs.aws.amazon.com/awscloudtrail/latest/userguide/creating-an-organizational-trail-prepare.html).
+//   This exception is thrown when the Amazon Web Services account making the
+//   request to create or update an organization trail is not the management account
+//   for an organization in Organizations. For more information, see Prepare For
+//   Creating a Trail For Your Organization (https://docs.aws.amazon.com/awscloudtrail/latest/userguide/creating-an-organizational-trail-prepare.html).
 //
 //   * InsufficientDependencyServiceAccessPermissionException
 //   This exception is thrown when the IAM user or role that is used to create
@@ -2228,13 +2264,14 @@ func (c *CloudTrail) StopLoggingRequest(input *StopLoggingInput) (req *request.R
 
 // StopLogging API operation for AWS CloudTrail.
 //
-// Suspends the recording of AWS API calls and log file delivery for the specified
-// trail. Under most circumstances, there is no need to use this action. You
-// can update a trail without stopping it first. This action is the only way
-// to stop recording. For a trail enabled in all regions, this operation must
-// be called from the region in which the trail was created, or an InvalidHomeRegionException
-// will occur. This operation cannot be called on the shadow trails (replicated
-// trails in other regions) of a trail enabled in all regions.
+// Suspends the recording of Amazon Web Services API calls and log file delivery
+// for the specified trail. Under most circumstances, there is no need to use
+// this action. You can update a trail without stopping it first. This action
+// is the only way to stop recording. For a trail enabled in all regions, this
+// operation must be called from the region in which the trail was created,
+// or an InvalidHomeRegionException will occur. This operation cannot be called
+// on the shadow trails (replicated trails in other regions) of a trail enabled
+// in all regions.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -2259,7 +2296,7 @@ func (c *CloudTrail) StopLoggingRequest(input *StopLoggingInput) (req *request.R
 //      * Be between 3 and 128 characters
 //
 //      * Have no adjacent periods, underscores or dashes. Names like my-_namespace
-//      and my--namespace are invalid.
+//      and my--namespace are not valid.
 //
 //      * Not be in IP address format (for example, 192.168.5.4)
 //
@@ -2274,10 +2311,10 @@ func (c *CloudTrail) StopLoggingRequest(input *StopLoggingInput) (req *request.R
 //   This exception is thrown when the requested operation is not permitted.
 //
 //   * NotOrganizationMasterAccountException
-//   This exception is thrown when the AWS account making the request to create
-//   or update an organization trail is not the master account for an organization
-//   in AWS Organizations. For more information, see Prepare For Creating a Trail
-//   For Your Organization (https://docs.aws.amazon.com/awscloudtrail/latest/userguide/creating-an-organizational-trail-prepare.html).
+//   This exception is thrown when the Amazon Web Services account making the
+//   request to create or update an organization trail is not the management account
+//   for an organization in Organizations. For more information, see Prepare For
+//   Creating a Trail For Your Organization (https://docs.aws.amazon.com/awscloudtrail/latest/userguide/creating-an-organizational-trail-prepare.html).
 //
 //   * InsufficientDependencyServiceAccessPermissionException
 //   This exception is thrown when the IAM user or role that is used to create
@@ -2351,12 +2388,13 @@ func (c *CloudTrail) UpdateTrailRequest(input *UpdateTrailInput) (req *request.R
 
 // UpdateTrail API operation for AWS CloudTrail.
 //
-// Updates the settings that specify delivery of log files. Changes to a trail
-// do not require stopping the CloudTrail service. Use this action to designate
-// an existing bucket for log delivery. If the existing bucket has previously
-// been a target for CloudTrail log files, an IAM policy exists for the bucket.
-// UpdateTrail must be called from the region in which the trail was created;
-// otherwise, an InvalidHomeRegionException is thrown.
+// Updates trail settings that control what events you are logging, and how
+// to handle log files. Changes to a trail do not require stopping the CloudTrail
+// service. Use this action to designate an existing bucket for log delivery.
+// If the existing bucket has previously been a target for CloudTrail log files,
+// an IAM policy exists for the bucket. UpdateTrail must be called from the
+// region in which the trail was created; otherwise, an InvalidHomeRegionException
+// is thrown.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -2373,7 +2411,7 @@ func (c *CloudTrail) UpdateTrailRequest(input *UpdateTrailInput) (req *request.R
 //   This exception is thrown when the policy on the S3 bucket is not sufficient.
 //
 //   * InsufficientSnsTopicPolicyException
-//   This exception is thrown when the policy on the SNS topic is not sufficient.
+//   This exception is thrown when the policy on the Amazon SNS topic is not sufficient.
 //
 //   * InsufficientEncryptionPolicyException
 //   This exception is thrown when the policy on the S3 bucket or KMS key is not
@@ -2392,7 +2430,7 @@ func (c *CloudTrail) UpdateTrailRequest(input *UpdateTrailInput) (req *request.R
 //   This exception is thrown when the provided SNS topic name is not valid.
 //
 //   * InvalidKmsKeyIdException
-//   This exception is thrown when the KMS key ARN is invalid.
+//   This exception is thrown when the KMS key ARN is not valid.
 //
 //   * InvalidTrailNameException
 //   This exception is thrown when the provided trail name is not valid. Trail
@@ -2406,7 +2444,7 @@ func (c *CloudTrail) UpdateTrailRequest(input *UpdateTrailInput) (req *request.R
 //      * Be between 3 and 128 characters
 //
 //      * Have no adjacent periods, underscores or dashes. Names like my-_namespace
-//      and my--namespace are invalid.
+//      and my--namespace are not valid.
 //
 //      * Not be in IP address format (for example, 192.168.5.4)
 //
@@ -2415,11 +2453,13 @@ func (c *CloudTrail) UpdateTrailRequest(input *UpdateTrailInput) (req *request.R
 //
 //   * InvalidEventSelectorsException
 //   This exception is thrown when the PutEventSelectors operation is called with
-//   a number of event selectors or data resources that is not valid. The combination
-//   of event selectors and data resources is not valid. A trail can have up to
-//   5 event selectors. A trail is limited to 250 data resources. These data resources
-//   can be distributed across event selectors, but the overall total cannot exceed
-//   250.
+//   a number of event selectors, advanced event selectors, or data resources
+//   that is not valid. The combination of event selectors or advanced event selectors
+//   and data resources is not valid. A trail can have up to 5 event selectors.
+//   If a trail uses advanced event selectors, a maximum of 500 total values for
+//   all conditions in all advanced event selectors is allowed. A trail is limited
+//   to 250 data resources. These data resources can be distributed across event
+//   selectors, but the overall total cannot exceed 250.
 //
 //   You can:
 //
@@ -2431,8 +2471,11 @@ func (c *CloudTrail) UpdateTrailRequest(input *UpdateTrailInput) (req *request.R
 //      of data resources does not exceed 250 across all event selectors for a
 //      trail.
 //
+//      * Specify up to 500 values for all conditions in all advanced event selectors
+//      for a trail.
+//
 //      * Specify a valid value for a parameter. For example, specifying the ReadWriteType
-//      parameter with a value of read-only is invalid.
+//      parameter with a value of read-only is not valid.
 //
 //   * InvalidParameterCombinationException
 //   This exception is thrown when the combination of parameters provided is not
@@ -2443,8 +2486,9 @@ func (c *CloudTrail) UpdateTrailRequest(input *UpdateTrailInput) (req *request.R
 //   other than the region in which the trail was created.
 //
 //   * KmsKeyNotFoundException
-//   This exception is thrown when the KMS key does not exist, or when the S3
-//   bucket and the KMS key are not in the same region.
+//   This exception is thrown when the KMS key does not exist, when the S3 bucket
+//   and the KMS key are not in the same region, or when the KMS key associated
+//   with the Amazon SNS topic either does not exist or is not in the same region.
 //
 //   * KmsKeyDisabledException
 //   This exception is no longer in use.
@@ -2454,7 +2498,8 @@ func (c *CloudTrail) UpdateTrailRequest(input *UpdateTrailInput) (req *request.R
 //   and the trail can’t be updated.
 //
 //   * InvalidCloudWatchLogsLogGroupArnException
-//   This exception is thrown when the provided CloudWatch log group is not valid.
+//   This exception is thrown when the provided CloudWatch Logs log group is not
+//   valid.
 //
 //   * InvalidCloudWatchLogsRoleArnException
 //   This exception is thrown when the provided role is not valid.
@@ -2470,8 +2515,8 @@ func (c *CloudTrail) UpdateTrailRequest(input *UpdateTrailInput) (req *request.R
 //
 //   * AccessNotEnabledException
 //   This exception is thrown when trusted access has not been enabled between
-//   AWS CloudTrail and AWS Organizations. For more information, see Enabling
-//   Trusted Access with Other AWS Services (https://docs.aws.amazon.com/organizations/latest/userguide/orgs_integrate_services.html)
+//   CloudTrail and Organizations. For more information, see Enabling Trusted
+//   Access with Other Amazon Web Services Services (https://docs.aws.amazon.com/organizations/latest/userguide/orgs_integrate_services.html)
 //   and Prepare For Creating a Trail For Your Organization (https://docs.aws.amazon.com/awscloudtrail/latest/userguide/creating-an-organizational-trail-prepare.html).
 //
 //   * InsufficientDependencyServiceAccessPermissionException
@@ -2481,21 +2526,27 @@ func (c *CloudTrail) UpdateTrailRequest(input *UpdateTrailInput) (req *request.R
 //   For Creating a Trail For Your Organization (https://docs.aws.amazon.com/awscloudtrail/latest/userguide/creating-an-organizational-trail-prepare.html).
 //
 //   * OrganizationsNotInUseException
-//   This exception is thrown when the request is made from an AWS account that
-//   is not a member of an organization. To make this request, sign in using the
-//   credentials of an account that belongs to an organization.
+//   This exception is thrown when the request is made from an Amazon Web Services
+//   account that is not a member of an organization. To make this request, sign
+//   in using the credentials of an account that belongs to an organization.
 //
 //   * NotOrganizationMasterAccountException
-//   This exception is thrown when the AWS account making the request to create
-//   or update an organization trail is not the master account for an organization
-//   in AWS Organizations. For more information, see Prepare For Creating a Trail
-//   For Your Organization (https://docs.aws.amazon.com/awscloudtrail/latest/userguide/creating-an-organizational-trail-prepare.html).
+//   This exception is thrown when the Amazon Web Services account making the
+//   request to create or update an organization trail is not the management account
+//   for an organization in Organizations. For more information, see Prepare For
+//   Creating a Trail For Your Organization (https://docs.aws.amazon.com/awscloudtrail/latest/userguide/creating-an-organizational-trail-prepare.html).
 //
 //   * OrganizationNotInAllFeaturesModeException
-//   This exception is thrown when AWS Organizations is not configured to support
-//   all features. All features must be enabled in AWS Organization to support
-//   creating an organization trail. For more information, see Prepare For Creating
-//   a Trail For Your Organization (https://docs.aws.amazon.com/awscloudtrail/latest/userguide/creating-an-organizational-trail-prepare.html).
+//   This exception is thrown when Organizations is not configured to support
+//   all features. All features must be enabled in Organizations to support creating
+//   an organization trail. For more information, see Prepare For Creating a Trail
+//   For Your Organization (https://docs.aws.amazon.com/awscloudtrail/latest/userguide/creating-an-organizational-trail-prepare.html).
+//
+//   * CloudTrailInvalidClientTokenIdException
+//   This exception is thrown when a call results in the InvalidClientTokenId
+//   error code. This can occur when you are creating or updating a trail to send
+//   notifications to an Amazon SNS topic that is in a suspended Amazon Web Services
+//   account.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/cloudtrail-2013-11-01/UpdateTrail
 func (c *CloudTrail) UpdateTrail(input *UpdateTrailInput) (*UpdateTrailOutput, error) {
@@ -2519,8 +2570,8 @@ func (c *CloudTrail) UpdateTrailWithContext(ctx aws.Context, input *UpdateTrailI
 	return out, req.Send()
 }
 
-// This exception is thrown when an operation is called with an invalid trail
-// ARN. The format of a trail ARN is:
+// This exception is thrown when an operation is called with a trail ARN that
+// is not valid. The following is the format of a trail ARN.
 //
 // arn:aws:cloudtrail:us-east-2:123456789012:trail/MyTrail
 type ARNInvalidException struct {
@@ -2530,12 +2581,20 @@ type ARNInvalidException struct {
 	Message_ *string `locationName:"message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ARNInvalidException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ARNInvalidException) GoString() string {
 	return s.String()
 }
@@ -2579,8 +2638,8 @@ func (s *ARNInvalidException) RequestID() string {
 }
 
 // This exception is thrown when trusted access has not been enabled between
-// AWS CloudTrail and AWS Organizations. For more information, see Enabling
-// Trusted Access with Other AWS Services (https://docs.aws.amazon.com/organizations/latest/userguide/orgs_integrate_services.html)
+// CloudTrail and Organizations. For more information, see Enabling Trusted
+// Access with Other Amazon Web Services Services (https://docs.aws.amazon.com/organizations/latest/userguide/orgs_integrate_services.html)
 // and Prepare For Creating a Trail For Your Organization (https://docs.aws.amazon.com/awscloudtrail/latest/userguide/creating-an-organizational-trail-prepare.html).
 type AccessNotEnabledException struct {
 	_            struct{}                  `type:"structure"`
@@ -2589,12 +2648,20 @@ type AccessNotEnabledException struct {
 	Message_ *string `locationName:"message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AccessNotEnabledException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AccessNotEnabledException) GoString() string {
 	return s.String()
 }
@@ -2649,16 +2716,24 @@ type AddTagsInput struct {
 	// ResourceId is a required field
 	ResourceId *string `type:"string" required:"true"`
 
-	// Contains a list of CloudTrail tags, up to a limit of 50
+	// Contains a list of tags, up to a limit of 50
 	TagsList []*Tag `type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AddTagsInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AddTagsInput) GoString() string {
 	return s.String()
 }
@@ -2698,20 +2773,364 @@ func (s *AddTagsInput) SetTagsList(v []*Tag) *AddTagsInput {
 	return s
 }
 
-// Returns the objects or data listed below if successful. Otherwise, returns
-// an error.
+// Returns the objects or data if successful. Otherwise, returns an error.
 type AddTagsOutput struct {
 	_ struct{} `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AddTagsOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AddTagsOutput) GoString() string {
 	return s.String()
+}
+
+// Advanced event selectors let you create fine-grained selectors for the following
+// CloudTrail event record ﬁelds. They help you control costs by logging only
+// those events that are important to you. For more information about advanced
+// event selectors, see Logging data events for trails (https://docs.aws.amazon.com/awscloudtrail/latest/userguide/logging-data-events-with-cloudtrail.html)
+// in the CloudTrail User Guide.
+//
+//    * readOnly
+//
+//    * eventSource
+//
+//    * eventName
+//
+//    * eventCategory
+//
+//    * resources.type
+//
+//    * resources.ARN
+//
+// You cannot apply both event selectors and advanced event selectors to a trail.
+type AdvancedEventSelector struct {
+	_ struct{} `type:"structure"`
+
+	// Contains all selector statements in an advanced event selector.
+	//
+	// FieldSelectors is a required field
+	FieldSelectors []*AdvancedFieldSelector `min:"1" type:"list" required:"true"`
+
+	// An optional, descriptive name for an advanced event selector, such as "Log
+	// data events for only two S3 buckets".
+	Name *string `type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s AdvancedEventSelector) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s AdvancedEventSelector) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *AdvancedEventSelector) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "AdvancedEventSelector"}
+	if s.FieldSelectors == nil {
+		invalidParams.Add(request.NewErrParamRequired("FieldSelectors"))
+	}
+	if s.FieldSelectors != nil && len(s.FieldSelectors) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("FieldSelectors", 1))
+	}
+	if s.FieldSelectors != nil {
+		for i, v := range s.FieldSelectors {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "FieldSelectors", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetFieldSelectors sets the FieldSelectors field's value.
+func (s *AdvancedEventSelector) SetFieldSelectors(v []*AdvancedFieldSelector) *AdvancedEventSelector {
+	s.FieldSelectors = v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *AdvancedEventSelector) SetName(v string) *AdvancedEventSelector {
+	s.Name = &v
+	return s
+}
+
+// A single selector statement in an advanced event selector.
+type AdvancedFieldSelector struct {
+	_ struct{} `type:"structure"`
+
+	// An operator that includes events that match the last few characters of the
+	// event record field specified as the value of Field.
+	EndsWith []*string `min:"1" type:"list"`
+
+	// An operator that includes events that match the exact value of the event
+	// record field specified as the value of Field. This is the only valid operator
+	// that you can use with the readOnly, eventCategory, and resources.type fields.
+	Equals []*string `min:"1" type:"list"`
+
+	// A field in an event record on which to filter events to be logged. Supported
+	// fields include readOnly, eventCategory, eventSource (for management events),
+	// eventName, resources.type, and resources.ARN.
+	//
+	//    * readOnly - Optional. Can be set to Equals a value of true or false.
+	//    A value of false logs both read and write events.
+	//
+	//    * eventSource - For filtering management events only. This can be set
+	//    only to NotEquals kms.amazonaws.com.
+	//
+	//    * eventName - Can use any operator. You can use it to ﬁlter in or ﬁlter
+	//    out any data event logged to CloudTrail, such as PutBucket or GetSnapshotBlock.
+	//    You can have multiple values for this ﬁeld, separated by commas.
+	//
+	//    * eventCategory - This is required. It must be set to Equals, and the
+	//    value must be Management or Data.
+	//
+	//    * resources.type - This ﬁeld is required. resources.type can only use
+	//    the Equals operator, and the value can be one of the following: AWS::S3::Object,
+	//    AWS::S3::AccessPoint, AWS::Lambda::Function, AWS::DynamoDB::Table, AWS::S3Outposts::Object,
+	//    AWS::ManagedBlockchain::Node, AWS::S3ObjectLambda::AccessPoint, or AWS::EC2::Snapshot.
+	//    You can have only one resources.type ﬁeld per selector. To log data
+	//    events on more than one resource type, add another selector.
+	//
+	//    * resources.ARN - You can use any operator with resources.ARN, but if
+	//    you use Equals or NotEquals, the value must exactly match the ARN of a
+	//    valid resource of the type you've speciﬁed in the template as the value
+	//    of resources.type. For example, if resources.type equals AWS::S3::Object,
+	//    the ARN must be in one of the following formats. To log all data events
+	//    for all objects in a specific S3 bucket, use the StartsWith operator,
+	//    and include only the bucket ARN as the matching value. The trailing slash
+	//    is intentional; do not exclude it. Replace the text between less than
+	//    and greater than symbols (<>) with resource-specific information. arn:<partition>:s3:::<bucket_name>/
+	//    arn:<partition>:s3:::<bucket_name>/<object_path>/ When resources.type
+	//    equals AWS::S3::AccessPoint, and the operator is set to Equals or NotEquals,
+	//    the ARN must be in one of the following formats. To log events on all
+	//    objects in an S3 access point, we recommend that you use only the access
+	//    point ARN, don’t include the object path, and use the StartsWith or
+	//    NotStartsWith operators. arn:<partition>:s3:<region>:<account_ID>:accesspoint/<access_point_name>
+	//    arn:<partition>:s3:<region>:<account_ID>:accesspoint/<access_point_name>/object/<object_path>
+	//    When resources.type equals AWS::Lambda::Function, and the operator is
+	//    set to Equals or NotEquals, the ARN must be in the following format: arn:<partition>:lambda:<region>:<account_ID>:function:<function_name>
+	//    When resources.type equals AWS::DynamoDB::Table, and the operator is set
+	//    to Equals or NotEquals, the ARN must be in the following format: arn:<partition>:dynamodb:<region>:<account_ID>:table:<table_name>
+	//    When resources.type equals AWS::S3Outposts::Object, and the operator is
+	//    set to Equals or NotEquals, the ARN must be in the following format: arn:<partition>:s3-outposts:<region>:<account_ID>:<object_path>
+	//    When resources.type equals AWS::ManagedBlockchain::Node, and the operator
+	//    is set to Equals or NotEquals, the ARN must be in the following format:
+	//    arn:<partition>:managedblockchain:<region>:<account_ID>:nodes/<node_ID>
+	//    When resources.type equals AWS::S3ObjectLambda::AccessPoint, and the operator
+	//    is set to Equals or NotEquals, the ARN must be in the following format:
+	//    arn:<partition>:s3-object-lambda:<region>:<account_ID>:accesspoint/<access_point_name>
+	//    When resources.type equals AWS::EC2::Snapshot, and the operator is set
+	//    to Equals or NotEquals, the ARN must be in the following format: arn:<partition>:ec2:<region>::snapshot/<snapshot_ID>
+	//
+	// Field is a required field
+	Field *string `min:"1" type:"string" required:"true"`
+
+	// An operator that excludes events that match the last few characters of the
+	// event record field specified as the value of Field.
+	NotEndsWith []*string `min:"1" type:"list"`
+
+	// An operator that excludes events that match the exact value of the event
+	// record field specified as the value of Field.
+	NotEquals []*string `min:"1" type:"list"`
+
+	// An operator that excludes events that match the first few characters of the
+	// event record field specified as the value of Field.
+	NotStartsWith []*string `min:"1" type:"list"`
+
+	// An operator that includes events that match the first few characters of the
+	// event record field specified as the value of Field.
+	StartsWith []*string `min:"1" type:"list"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s AdvancedFieldSelector) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s AdvancedFieldSelector) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *AdvancedFieldSelector) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "AdvancedFieldSelector"}
+	if s.EndsWith != nil && len(s.EndsWith) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("EndsWith", 1))
+	}
+	if s.Equals != nil && len(s.Equals) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Equals", 1))
+	}
+	if s.Field == nil {
+		invalidParams.Add(request.NewErrParamRequired("Field"))
+	}
+	if s.Field != nil && len(*s.Field) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Field", 1))
+	}
+	if s.NotEndsWith != nil && len(s.NotEndsWith) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("NotEndsWith", 1))
+	}
+	if s.NotEquals != nil && len(s.NotEquals) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("NotEquals", 1))
+	}
+	if s.NotStartsWith != nil && len(s.NotStartsWith) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("NotStartsWith", 1))
+	}
+	if s.StartsWith != nil && len(s.StartsWith) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("StartsWith", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetEndsWith sets the EndsWith field's value.
+func (s *AdvancedFieldSelector) SetEndsWith(v []*string) *AdvancedFieldSelector {
+	s.EndsWith = v
+	return s
+}
+
+// SetEquals sets the Equals field's value.
+func (s *AdvancedFieldSelector) SetEquals(v []*string) *AdvancedFieldSelector {
+	s.Equals = v
+	return s
+}
+
+// SetField sets the Field field's value.
+func (s *AdvancedFieldSelector) SetField(v string) *AdvancedFieldSelector {
+	s.Field = &v
+	return s
+}
+
+// SetNotEndsWith sets the NotEndsWith field's value.
+func (s *AdvancedFieldSelector) SetNotEndsWith(v []*string) *AdvancedFieldSelector {
+	s.NotEndsWith = v
+	return s
+}
+
+// SetNotEquals sets the NotEquals field's value.
+func (s *AdvancedFieldSelector) SetNotEquals(v []*string) *AdvancedFieldSelector {
+	s.NotEquals = v
+	return s
+}
+
+// SetNotStartsWith sets the NotStartsWith field's value.
+func (s *AdvancedFieldSelector) SetNotStartsWith(v []*string) *AdvancedFieldSelector {
+	s.NotStartsWith = v
+	return s
+}
+
+// SetStartsWith sets the StartsWith field's value.
+func (s *AdvancedFieldSelector) SetStartsWith(v []*string) *AdvancedFieldSelector {
+	s.StartsWith = v
+	return s
+}
+
+// This exception is thrown when a call results in the InvalidClientTokenId
+// error code. This can occur when you are creating or updating a trail to send
+// notifications to an Amazon SNS topic that is in a suspended Amazon Web Services
+// account.
+type CloudTrailInvalidClientTokenIdException struct {
+	_            struct{}                  `type:"structure"`
+	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
+
+	Message_ *string `locationName:"message" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CloudTrailInvalidClientTokenIdException) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CloudTrailInvalidClientTokenIdException) GoString() string {
+	return s.String()
+}
+
+func newErrorCloudTrailInvalidClientTokenIdException(v protocol.ResponseMetadata) error {
+	return &CloudTrailInvalidClientTokenIdException{
+		RespMetadata: v,
+	}
+}
+
+// Code returns the exception type name.
+func (s *CloudTrailInvalidClientTokenIdException) Code() string {
+	return "CloudTrailInvalidClientTokenIdException"
+}
+
+// Message returns the exception's message.
+func (s *CloudTrailInvalidClientTokenIdException) Message() string {
+	if s.Message_ != nil {
+		return *s.Message_
+	}
+	return ""
+}
+
+// OrigErr always returns nil, satisfies awserr.Error interface.
+func (s *CloudTrailInvalidClientTokenIdException) OrigErr() error {
+	return nil
+}
+
+func (s *CloudTrailInvalidClientTokenIdException) Error() string {
+	return fmt.Sprintf("%s: %s", s.Code(), s.Message())
+}
+
+// Status code returns the HTTP status code for the request's response error.
+func (s *CloudTrailInvalidClientTokenIdException) StatusCode() int {
+	return s.RespMetadata.StatusCode
+}
+
+// RequestID returns the service's response RequestID for request.
+func (s *CloudTrailInvalidClientTokenIdException) RequestID() string {
+	return s.RespMetadata.RequestID
 }
 
 // Cannot set a CloudWatch Logs delivery for this region.
@@ -2722,12 +3141,20 @@ type CloudWatchLogsDeliveryUnavailableException struct {
 	Message_ *string `locationName:"message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CloudWatchLogsDeliveryUnavailableException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CloudWatchLogsDeliveryUnavailableException) GoString() string {
 	return s.String()
 }
@@ -2770,6 +3197,73 @@ func (s *CloudWatchLogsDeliveryUnavailableException) RequestID() string {
 	return s.RespMetadata.RequestID
 }
 
+// This exception is thrown when the specified resource is not ready for an
+// operation. This can occur when you try to run an operation on a trail before
+// CloudTrail has time to fully load the trail. If this exception occurs, wait
+// a few minutes, and then try the operation again.
+type ConflictException struct {
+	_            struct{}                  `type:"structure"`
+	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
+
+	Message_ *string `locationName:"message" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ConflictException) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ConflictException) GoString() string {
+	return s.String()
+}
+
+func newErrorConflictException(v protocol.ResponseMetadata) error {
+	return &ConflictException{
+		RespMetadata: v,
+	}
+}
+
+// Code returns the exception type name.
+func (s *ConflictException) Code() string {
+	return "ConflictException"
+}
+
+// Message returns the exception's message.
+func (s *ConflictException) Message() string {
+	if s.Message_ != nil {
+		return *s.Message_
+	}
+	return ""
+}
+
+// OrigErr always returns nil, satisfies awserr.Error interface.
+func (s *ConflictException) OrigErr() error {
+	return nil
+}
+
+func (s *ConflictException) Error() string {
+	return fmt.Sprintf("%s: %s", s.Code(), s.Message())
+}
+
+// Status code returns the HTTP status code for the request's response error.
+func (s *ConflictException) StatusCode() int {
+	return s.RespMetadata.StatusCode
+}
+
+// RequestID returns the service's response RequestID for request.
+func (s *ConflictException) RequestID() string {
+	return s.RespMetadata.RequestID
+}
+
 // Specifies the settings for each trail.
 type CreateTrailInput struct {
 	_ struct{} `type:"structure"`
@@ -2787,7 +3281,7 @@ type CreateTrailInput struct {
 	// false.
 	//
 	// When you disable log file integrity validation, the chain of digest files
-	// is broken after one hour. CloudTrail will not create digest files for log
+	// is broken after one hour. CloudTrail does not create digest files for log
 	// files that were delivered during a period in which log file integrity validation
 	// was disabled. For example, if you enable log file integrity validation at
 	// noon on January 1, disable it at noon on January 2, and re-enable it at noon
@@ -2807,14 +3301,19 @@ type CreateTrailInput struct {
 	IsMultiRegionTrail *bool `type:"boolean"`
 
 	// Specifies whether the trail is created for all accounts in an organization
-	// in AWS Organizations, or only for the current AWS account. The default is
-	// false, and cannot be true unless the call is made on behalf of an AWS account
-	// that is the master account for an organization in AWS Organizations.
+	// in Organizations, or only for the current Amazon Web Services account. The
+	// default is false, and cannot be true unless the call is made on behalf of
+	// an Amazon Web Services account that is the management account for an organization
+	// in Organizations.
 	IsOrganizationTrail *bool `type:"boolean"`
 
 	// Specifies the KMS key ID to use to encrypt the logs delivered by CloudTrail.
 	// The value can be an alias name prefixed by "alias/", a fully specified ARN
 	// to an alias, a fully specified ARN to a key, or a globally unique identifier.
+	//
+	// CloudTrail also supports KMS multi-Region keys. For more information about
+	// multi-Region keys, see Using multi-Region keys (https://docs.aws.amazon.com/kms/latest/developerguide/multi-region-keys-overview.html)
+	// in the Key Management Service Developer Guide.
 	//
 	// Examples:
 	//
@@ -2837,7 +3336,7 @@ type CreateTrailInput struct {
 	//    * Be between 3 and 128 characters
 	//
 	//    * Have no adjacent periods, underscores or dashes. Names like my-_namespace
-	//    and my--namespace are invalid.
+	//    and my--namespace are not valid.
 	//
 	//    * Not be in IP address format (for example, 192.168.5.4)
 	//
@@ -2864,12 +3363,20 @@ type CreateTrailInput struct {
 	TagsList []*Tag `type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateTrailInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateTrailInput) GoString() string {
 	return s.String()
 }
@@ -2996,7 +3503,7 @@ type CreateTrailOutput struct {
 	IsOrganizationTrail *bool `type:"boolean"`
 
 	// Specifies the KMS key ID that encrypts the logs delivered by CloudTrail.
-	// The value is a fully specified ARN to a KMS key in the format:
+	// The value is a fully specified ARN to a KMS key in the following format.
 	//
 	// arn:aws:kms:us-east-2:123456789012:key/12345678-1234-1234-1234-123456789012
 	KmsKeyId *string `type:"string"`
@@ -3034,12 +3541,20 @@ type CreateTrailOutput struct {
 	TrailARN *string `type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateTrailOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateTrailOutput) GoString() string {
 	return s.String()
 }
@@ -3122,15 +3637,19 @@ func (s *CreateTrailOutput) SetTrailARN(v string) *CreateTrailOutput {
 	return s
 }
 
-// The Amazon S3 buckets or AWS Lambda functions that you specify in your event
-// selectors for your trail to log data events. Data events provide information
-// about the resource operations performed on or within a resource itself. These
-// are also known as data plane operations. You can specify up to 250 data resources
-// for a trail.
+// The Amazon S3 buckets, Lambda functions, or Amazon DynamoDB tables that you
+// specify in your event selectors for your trail to log data events. Data events
+// provide information about the resource operations performed on or within
+// a resource itself. These are also known as data plane operations. You can
+// specify up to 250 data resources for a trail.
 //
 // The total number of allowed data resources is 250. This number can be distributed
 // between 1 and 5 event selectors, but the total cannot exceed 250 across all
 // selectors.
+//
+// If you are using advanced event selectors, the maximum total number of values
+// for all conditions, across all advanced event selectors for the trail, is
+// 500.
 //
 // The following example demonstrates how logging works when you configure logging
 // of all data events for an S3 bucket named bucket-1. In this example, the
@@ -3151,36 +3670,40 @@ func (s *CreateTrailOutput) SetTrailARN(v string) *CreateTrailOutput {
 // event.
 //
 // The following example demonstrates how logging works when you configure logging
-// of AWS Lambda data events for a Lambda function named MyLambdaFunction, but
-// not for all AWS Lambda functions.
+// of Lambda data events for a Lambda function named MyLambdaFunction, but not
+// for all Lambda functions.
 //
 // A user runs a script that includes a call to the MyLambdaFunction function
 // and the MyOtherLambdaFunction function.
 //
-// The Invoke API operation on MyLambdaFunction is an AWS Lambda API. It is
-// recorded as a data event in CloudTrail. Because the CloudTrail user specified
-// logging data events for MyLambdaFunction, any invocations of that function
-// are logged. The trail processes and logs the event.
+// The Invoke API operation on MyLambdaFunction is an Lambda API. It is recorded
+// as a data event in CloudTrail. Because the CloudTrail user specified logging
+// data events for MyLambdaFunction, any invocations of that function are logged.
+// The trail processes and logs the event.
 //
-// The Invoke API operation on MyOtherLambdaFunction is an AWS Lambda API. Because
+// The Invoke API operation on MyOtherLambdaFunction is an Lambda API. Because
 // the CloudTrail user did not specify logging data events for all Lambda functions,
 // the Invoke operation for MyOtherLambdaFunction does not match the function
 // specified for the trail. The trail doesn’t log the event.
 type DataResource struct {
 	_ struct{} `type:"structure"`
 
-	// The resource type in which you want to log data events. You can specify AWS::S3::Object
-	// or AWS::Lambda::Function resources.
+	// The resource type in which you want to log data events. You can specify AWS::S3::Object,
+	// AWS::Lambda::Function, or AWS::DynamoDB::Table resources.
+	//
+	// The AWS::S3Outposts::Object, AWS::ManagedBlockchain::Node, AWS::S3ObjectLambda::AccessPoint,
+	// and AWS::EC2::Snapshot resource types are not valid in basic event selectors.
+	// To log data events on these resource types, use advanced event selectors.
 	Type *string `type:"string"`
 
 	// An array of Amazon Resource Name (ARN) strings or partial ARN strings for
 	// the specified objects.
 	//
-	//    * To log data events for all objects in all S3 buckets in your AWS account,
-	//    specify the prefix as arn:aws:s3:::. This will also enable logging of
-	//    data event activity performed by any user or role in your AWS account,
-	//    even if that activity is performed on a bucket that belongs to another
-	//    AWS account.
+	//    * To log data events for all objects in all S3 buckets in your Amazon
+	//    Web Services account, specify the prefix as arn:aws:s3:::. This also enables
+	//    logging of data event activity performed by any user or role in your Amazon
+	//    Web Services account, even if that activity is performed on a bucket that
+	//    belongs to another Amazon Web Services account.
 	//
 	//    * To log data events for all objects in an S3 bucket, specify the bucket
 	//    and an empty object prefix such as arn:aws:s3:::bucket-1/. The trail logs
@@ -3190,25 +3713,37 @@ type DataResource struct {
 	//    prefix such as arn:aws:s3:::bucket-1/example-images. The trail logs data
 	//    events for objects in this S3 bucket that match the prefix.
 	//
-	//    * To log data events for all functions in your AWS account, specify the
-	//    prefix as arn:aws:lambda. This will also enable logging of Invoke activity
-	//    performed by any user or role in your AWS account, even if that activity
-	//    is performed on a function that belongs to another AWS account.
+	//    * To log data events for all Lambda functions in your Amazon Web Services
+	//    account, specify the prefix as arn:aws:lambda. This also enables logging
+	//    of Invoke activity performed by any user or role in your Amazon Web Services
+	//    account, even if that activity is performed on a function that belongs
+	//    to another Amazon Web Services account.
 	//
 	//    * To log data events for a specific Lambda function, specify the function
 	//    ARN. Lambda function ARNs are exact. For example, if you specify a function
 	//    ARN arn:aws:lambda:us-west-2:111111111111:function:helloworld, data events
 	//    will only be logged for arn:aws:lambda:us-west-2:111111111111:function:helloworld.
 	//    They will not be logged for arn:aws:lambda:us-west-2:111111111111:function:helloworld2.
+	//
+	//    * To log data events for all DynamoDB tables in your Amazon Web Services
+	//    account, specify the prefix as arn:aws:dynamodb.
 	Values []*string `type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DataResource) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DataResource) GoString() string {
 	return s.String()
 }
@@ -3230,18 +3765,26 @@ type DeleteTrailInput struct {
 	_ struct{} `type:"structure"`
 
 	// Specifies the name or the CloudTrail ARN of the trail to be deleted. The
-	// format of a trail ARN is: arn:aws:cloudtrail:us-east-2:123456789012:trail/MyTrail
+	// following is the format of a trail ARN. arn:aws:cloudtrail:us-east-2:123456789012:trail/MyTrail
 	//
 	// Name is a required field
 	Name *string `type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteTrailInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteTrailInput) GoString() string {
 	return s.String()
 }
@@ -3271,12 +3814,20 @@ type DeleteTrailOutput struct {
 	_ struct{} `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteTrailOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteTrailOutput) GoString() string {
 	return s.String()
 }
@@ -3315,12 +3866,20 @@ type DescribeTrailsInput struct {
 	TrailNameList []*string `locationName:"trailNameList" type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeTrailsInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeTrailsInput) GoString() string {
 	return s.String()
 }
@@ -3346,16 +3905,24 @@ type DescribeTrailsOutput struct {
 	// if values for the objects exist in a trail's configuration. For example,
 	// SNSTopicName and SNSTopicARN are only returned in results if a trail is configured
 	// to send SNS notifications. Similarly, KMSKeyId only appears in results if
-	// a trail's log files are encrypted with AWS KMS-managed keys.
+	// a trail's log files are encrypted with KMS customer managed keys.
 	TrailList []*Trail `locationName:"trailList" type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeTrailsOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeTrailsOutput) GoString() string {
 	return s.String()
 }
@@ -3371,9 +3938,9 @@ func (s *DescribeTrailsOutput) SetTrailList(v []*Trail) *DescribeTrailsOutput {
 type Event struct {
 	_ struct{} `type:"structure"`
 
-	// The AWS access key ID that was used to sign the request. If the request was
-	// made with temporary security credentials, this is the access key ID of the
-	// temporary credentials.
+	// The Amazon Web Services access key ID that was used to sign the request.
+	// If the request was made with temporary security credentials, this is the
+	// access key ID of the temporary credentials.
 	AccessKeyId *string `type:"string"`
 
 	// A JSON string that contains a representation of the event returned.
@@ -3385,7 +3952,7 @@ type Event struct {
 	// The name of the event returned.
 	EventName *string `type:"string"`
 
-	// The AWS service that the request was made to.
+	// The Amazon Web Services service to which the request was made.
 	EventSource *string `type:"string"`
 
 	// The date and time of the event returned.
@@ -3402,12 +3969,20 @@ type Event struct {
 	Username *string `type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s Event) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s Event) GoString() string {
 	return s.String()
 }
@@ -3475,35 +4050,42 @@ func (s *Event) SetUsername(v string) *Event {
 // selector, the trail doesn't log the event.
 //
 // You can configure up to five event selectors for a trail.
+//
+// You cannot apply both event selectors and advanced event selectors to a trail.
 type EventSelector struct {
 	_ struct{} `type:"structure"`
 
-	// CloudTrail supports data event logging for Amazon S3 objects and AWS Lambda
-	// functions. You can specify up to 250 resources for an individual event selector,
-	// but the total number of data resources cannot exceed 250 across all event
-	// selectors in a trail. This limit does not apply if you configure resource
-	// logging for all data events.
+	// CloudTrail supports data event logging for Amazon S3 objects, Lambda functions,
+	// and Amazon DynamoDB tables with basic event selectors. You can specify up
+	// to 250 resources for an individual event selector, but the total number of
+	// data resources cannot exceed 250 across all event selectors in a trail. This
+	// limit does not apply if you configure resource logging for all data events.
 	//
 	// For more information, see Data Events (https://docs.aws.amazon.com/awscloudtrail/latest/userguide/logging-management-and-data-events-with-cloudtrail.html#logging-data-events)
-	// and Limits in AWS CloudTrail (https://docs.aws.amazon.com/awscloudtrail/latest/userguide/WhatIsCloudTrail-Limits.html)
-	// in the AWS CloudTrail User Guide.
+	// and Limits in CloudTrail (https://docs.aws.amazon.com/awscloudtrail/latest/userguide/WhatIsCloudTrail-Limits.html)
+	// in the CloudTrail User Guide.
 	DataResources []*DataResource `type:"list"`
 
 	// An optional list of service event sources from which you do not want management
 	// events to be logged on your trail. In this release, the list can be empty
-	// (disables the filter), or it can filter out AWS Key Management Service events
-	// by containing "kms.amazonaws.com". By default, ExcludeManagementEventSources
-	// is empty, and AWS KMS events are included in events that are logged to your
-	// trail.
+	// (disables the filter), or it can filter out Key Management Service or Amazon
+	// RDS Data API events by containing kms.amazonaws.com or rdsdata.amazonaws.com.
+	// By default, ExcludeManagementEventSources is empty, and KMS and Amazon RDS
+	// Data API events are logged to your trail.
 	ExcludeManagementEventSources []*string `type:"list"`
 
 	// Specify if you want your event selector to include management events for
 	// your trail.
 	//
 	// For more information, see Management Events (https://docs.aws.amazon.com/awscloudtrail/latest/userguide/logging-management-and-data-events-with-cloudtrail.html#logging-management-events)
-	// in the AWS CloudTrail User Guide.
+	// in the CloudTrail User Guide.
 	//
 	// By default, the value is true.
+	//
+	// The first copy of management events is free. You are charged for additional
+	// copies of management events that you are logging on any subsequent trail
+	// in the same region. For more information about CloudTrail pricing, see CloudTrail
+	// Pricing (http://aws.amazon.com/cloudtrail/pricing/).
 	IncludeManagementEvents *bool `type:"boolean"`
 
 	// Specify if you want your trail to log read-only events, write-only events,
@@ -3514,12 +4096,20 @@ type EventSelector struct {
 	ReadWriteType *string `type:"string" enum:"ReadWriteType"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s EventSelector) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s EventSelector) GoString() string {
 	return s.String()
 }
@@ -3574,12 +4164,20 @@ type GetEventSelectorsInput struct {
 	TrailName *string `type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetEventSelectorsInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetEventSelectorsInput) GoString() string {
 	return s.String()
 }
@@ -3606,6 +4204,9 @@ func (s *GetEventSelectorsInput) SetTrailName(v string) *GetEventSelectorsInput 
 type GetEventSelectorsOutput struct {
 	_ struct{} `type:"structure"`
 
+	// The advanced event selectors that are configured for the trail.
+	AdvancedEventSelectors []*AdvancedEventSelector `type:"list"`
+
 	// The event selectors that are configured for the trail.
 	EventSelectors []*EventSelector `type:"list"`
 
@@ -3613,14 +4214,28 @@ type GetEventSelectorsOutput struct {
 	TrailARN *string `type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetEventSelectorsOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetEventSelectorsOutput) GoString() string {
 	return s.String()
+}
+
+// SetAdvancedEventSelectors sets the AdvancedEventSelectors field's value.
+func (s *GetEventSelectorsOutput) SetAdvancedEventSelectors(v []*AdvancedEventSelector) *GetEventSelectorsOutput {
+	s.AdvancedEventSelectors = v
+	return s
 }
 
 // SetEventSelectors sets the EventSelectors field's value.
@@ -3661,12 +4276,20 @@ type GetInsightSelectorsInput struct {
 	TrailName *string `type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetInsightSelectorsInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetInsightSelectorsInput) GoString() string {
 	return s.String()
 }
@@ -3702,12 +4325,20 @@ type GetInsightSelectorsOutput struct {
 	TrailARN *string `type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetInsightSelectorsOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetInsightSelectorsOutput) GoString() string {
 	return s.String()
 }
@@ -3734,12 +4365,20 @@ type GetTrailInput struct {
 	Name *string `type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetTrailInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetTrailInput) GoString() string {
 	return s.String()
 }
@@ -3770,12 +4409,20 @@ type GetTrailOutput struct {
 	Trail *Trail `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetTrailOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetTrailOutput) GoString() string {
 	return s.String()
 }
@@ -3792,7 +4439,8 @@ type GetTrailStatusInput struct {
 
 	// Specifies the name or the CloudTrail ARN of the trail for which you are requesting
 	// status. To get the status of a shadow trail (a replication of the trail in
-	// another region), you must specify its ARN. The format of a trail ARN is:
+	// another region), you must specify its ARN. The following is the format of
+	// a trail ARN.
 	//
 	// arn:aws:cloudtrail:us-east-2:123456789012:trail/MyTrail
 	//
@@ -3800,12 +4448,20 @@ type GetTrailStatusInput struct {
 	Name *string `type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetTrailStatusInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetTrailStatusInput) GoString() string {
 	return s.String()
 }
@@ -3834,7 +4490,8 @@ func (s *GetTrailStatusInput) SetName(v string) *GetTrailStatusInput {
 type GetTrailStatusOutput struct {
 	_ struct{} `type:"structure"`
 
-	// Whether the CloudTrail is currently logging AWS API calls.
+	// Whether the CloudTrail trail is currently logging Amazon Web Services API
+	// calls.
 	IsLogging *bool `type:"boolean"`
 
 	// Displays any CloudWatch Logs error that CloudTrail encountered when attempting
@@ -3852,14 +4509,14 @@ type GetTrailStatusOutput struct {
 	LatestDeliveryAttemptTime *string `type:"string"`
 
 	// Displays any Amazon S3 error that CloudTrail encountered when attempting
-	// to deliver log files to the designated bucket. For more information see the
-	// topic Error Responses (https://docs.aws.amazon.com/AmazonS3/latest/API/ErrorResponses.html)
+	// to deliver log files to the designated bucket. For more information, see
+	// Error Responses (https://docs.aws.amazon.com/AmazonS3/latest/API/ErrorResponses.html)
 	// in the Amazon S3 API Reference.
 	//
-	// This error occurs only when there is a problem with the destination S3 bucket
-	// and will not occur for timeouts. To resolve the issue, create a new bucket
-	// and call UpdateTrail to specify the new bucket, or fix the existing objects
-	// so that CloudTrail can again write to the bucket.
+	// This error occurs only when there is a problem with the destination S3 bucket,
+	// and does not occur for requests that time out. To resolve the issue, create
+	// a new bucket, and then call UpdateTrail to specify the new bucket; or fix
+	// the existing objects so that CloudTrail can again write to the bucket.
 	LatestDeliveryError *string `type:"string"`
 
 	// Specifies the date and time that CloudTrail last delivered log files to an
@@ -3867,14 +4524,14 @@ type GetTrailStatusOutput struct {
 	LatestDeliveryTime *time.Time `type:"timestamp"`
 
 	// Displays any Amazon S3 error that CloudTrail encountered when attempting
-	// to deliver a digest file to the designated bucket. For more information see
-	// the topic Error Responses (https://docs.aws.amazon.com/AmazonS3/latest/API/ErrorResponses.html)
+	// to deliver a digest file to the designated bucket. For more information,
+	// see Error Responses (https://docs.aws.amazon.com/AmazonS3/latest/API/ErrorResponses.html)
 	// in the Amazon S3 API Reference.
 	//
-	// This error occurs only when there is a problem with the destination S3 bucket
-	// and will not occur for timeouts. To resolve the issue, create a new bucket
-	// and call UpdateTrail to specify the new bucket, or fix the existing objects
-	// so that CloudTrail can again write to the bucket.
+	// This error occurs only when there is a problem with the destination S3 bucket,
+	// and does not occur for requests that time out. To resolve the issue, create
+	// a new bucket, and then call UpdateTrail to specify the new bucket; or fix
+	// the existing objects so that CloudTrail can again write to the bucket.
 	LatestDigestDeliveryError *string `type:"string"`
 
 	// Specifies the date and time that CloudTrail last delivered a digest file
@@ -3897,11 +4554,11 @@ type GetTrailStatusOutput struct {
 	LatestNotificationTime *time.Time `type:"timestamp"`
 
 	// Specifies the most recent date and time when CloudTrail started recording
-	// API calls for an AWS account.
+	// API calls for an Amazon Web Services account.
 	StartLoggingTime *time.Time `type:"timestamp"`
 
 	// Specifies the most recent date and time when CloudTrail stopped recording
-	// API calls for an AWS account.
+	// API calls for an Amazon Web Services account.
 	StopLoggingTime *time.Time `type:"timestamp"`
 
 	// This field is no longer in use.
@@ -3911,12 +4568,20 @@ type GetTrailStatusOutput struct {
 	TimeLoggingStopped *string `type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetTrailStatusOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetTrailStatusOutput) GoString() string {
 	return s.String()
 }
@@ -4032,12 +4697,20 @@ type InsightNotEnabledException struct {
 	Message_ *string `locationName:"message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s InsightNotEnabledException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s InsightNotEnabledException) GoString() string {
 	return s.String()
 }
@@ -4085,17 +4758,25 @@ func (s *InsightNotEnabledException) RequestID() string {
 type InsightSelector struct {
 	_ struct{} `type:"structure"`
 
-	// The type of insights to log on a trail. In this release, only ApiCallRateInsight
-	// is supported as an insight type.
+	// The type of Insights events to log on a trail. The valid Insights type in
+	// this release is ApiCallRateInsight.
 	InsightType *string `type:"string" enum:"InsightType"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s InsightSelector) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s InsightSelector) GoString() string {
 	return s.String()
 }
@@ -4117,12 +4798,20 @@ type InsufficientDependencyServiceAccessPermissionException struct {
 	Message_ *string `locationName:"message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s InsufficientDependencyServiceAccessPermissionException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s InsufficientDependencyServiceAccessPermissionException) GoString() string {
 	return s.String()
 }
@@ -4174,12 +4863,20 @@ type InsufficientEncryptionPolicyException struct {
 	Message_ *string `locationName:"message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s InsufficientEncryptionPolicyException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s InsufficientEncryptionPolicyException) GoString() string {
 	return s.String()
 }
@@ -4230,12 +4927,20 @@ type InsufficientS3BucketPolicyException struct {
 	Message_ *string `locationName:"message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s InsufficientS3BucketPolicyException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s InsufficientS3BucketPolicyException) GoString() string {
 	return s.String()
 }
@@ -4278,7 +4983,7 @@ func (s *InsufficientS3BucketPolicyException) RequestID() string {
 	return s.RespMetadata.RequestID
 }
 
-// This exception is thrown when the policy on the SNS topic is not sufficient.
+// This exception is thrown when the policy on the Amazon SNS topic is not sufficient.
 type InsufficientSnsTopicPolicyException struct {
 	_            struct{}                  `type:"structure"`
 	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
@@ -4286,12 +4991,20 @@ type InsufficientSnsTopicPolicyException struct {
 	Message_ *string `locationName:"message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s InsufficientSnsTopicPolicyException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s InsufficientSnsTopicPolicyException) GoString() string {
 	return s.String()
 }
@@ -4334,7 +5047,8 @@ func (s *InsufficientSnsTopicPolicyException) RequestID() string {
 	return s.RespMetadata.RequestID
 }
 
-// This exception is thrown when the provided CloudWatch log group is not valid.
+// This exception is thrown when the provided CloudWatch Logs log group is not
+// valid.
 type InvalidCloudWatchLogsLogGroupArnException struct {
 	_            struct{}                  `type:"structure"`
 	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
@@ -4342,12 +5056,20 @@ type InvalidCloudWatchLogsLogGroupArnException struct {
 	Message_ *string `locationName:"message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s InvalidCloudWatchLogsLogGroupArnException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s InvalidCloudWatchLogsLogGroupArnException) GoString() string {
 	return s.String()
 }
@@ -4398,12 +5120,20 @@ type InvalidCloudWatchLogsRoleArnException struct {
 	Message_ *string `locationName:"message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s InvalidCloudWatchLogsRoleArnException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s InvalidCloudWatchLogsRoleArnException) GoString() string {
 	return s.String()
 }
@@ -4455,12 +5185,20 @@ type InvalidEventCategoryException struct {
 	Message_ *string `locationName:"message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s InvalidEventCategoryException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s InvalidEventCategoryException) GoString() string {
 	return s.String()
 }
@@ -4504,11 +5242,13 @@ func (s *InvalidEventCategoryException) RequestID() string {
 }
 
 // This exception is thrown when the PutEventSelectors operation is called with
-// a number of event selectors or data resources that is not valid. The combination
-// of event selectors and data resources is not valid. A trail can have up to
-// 5 event selectors. A trail is limited to 250 data resources. These data resources
-// can be distributed across event selectors, but the overall total cannot exceed
-// 250.
+// a number of event selectors, advanced event selectors, or data resources
+// that is not valid. The combination of event selectors or advanced event selectors
+// and data resources is not valid. A trail can have up to 5 event selectors.
+// If a trail uses advanced event selectors, a maximum of 500 total values for
+// all conditions in all advanced event selectors is allowed. A trail is limited
+// to 250 data resources. These data resources can be distributed across event
+// selectors, but the overall total cannot exceed 250.
 //
 // You can:
 //
@@ -4520,8 +5260,11 @@ func (s *InvalidEventCategoryException) RequestID() string {
 //    of data resources does not exceed 250 across all event selectors for a
 //    trail.
 //
+//    * Specify up to 500 values for all conditions in all advanced event selectors
+//    for a trail.
+//
 //    * Specify a valid value for a parameter. For example, specifying the ReadWriteType
-//    parameter with a value of read-only is invalid.
+//    parameter with a value of read-only is not valid.
 type InvalidEventSelectorsException struct {
 	_            struct{}                  `type:"structure"`
 	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
@@ -4529,12 +5272,20 @@ type InvalidEventSelectorsException struct {
 	Message_ *string `locationName:"message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s InvalidEventSelectorsException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s InvalidEventSelectorsException) GoString() string {
 	return s.String()
 }
@@ -4586,12 +5337,20 @@ type InvalidHomeRegionException struct {
 	Message_ *string `locationName:"message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s InvalidHomeRegionException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s InvalidHomeRegionException) GoString() string {
 	return s.String()
 }
@@ -4644,12 +5403,20 @@ type InvalidInsightSelectorsException struct {
 	Message_ *string `locationName:"message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s InvalidInsightSelectorsException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s InvalidInsightSelectorsException) GoString() string {
 	return s.String()
 }
@@ -4692,7 +5459,7 @@ func (s *InvalidInsightSelectorsException) RequestID() string {
 	return s.RespMetadata.RequestID
 }
 
-// This exception is thrown when the KMS key ARN is invalid.
+// This exception is thrown when the KMS key ARN is not valid.
 type InvalidKmsKeyIdException struct {
 	_            struct{}                  `type:"structure"`
 	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
@@ -4700,12 +5467,20 @@ type InvalidKmsKeyIdException struct {
 	Message_ *string `locationName:"message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s InvalidKmsKeyIdException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s InvalidKmsKeyIdException) GoString() string {
 	return s.String()
 }
@@ -4748,7 +5523,7 @@ func (s *InvalidKmsKeyIdException) RequestID() string {
 	return s.RespMetadata.RequestID
 }
 
-// Occurs when an invalid lookup attribute is specified.
+// Occurs when a lookup attribute is specified that is not valid.
 type InvalidLookupAttributesException struct {
 	_            struct{}                  `type:"structure"`
 	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
@@ -4756,12 +5531,20 @@ type InvalidLookupAttributesException struct {
 	Message_ *string `locationName:"message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s InvalidLookupAttributesException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s InvalidLookupAttributesException) GoString() string {
 	return s.String()
 }
@@ -4804,7 +5587,7 @@ func (s *InvalidLookupAttributesException) RequestID() string {
 	return s.RespMetadata.RequestID
 }
 
-// This exception is thrown if the limit specified is invalid.
+// This exception is thrown if the limit specified is not valid.
 type InvalidMaxResultsException struct {
 	_            struct{}                  `type:"structure"`
 	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
@@ -4812,12 +5595,20 @@ type InvalidMaxResultsException struct {
 	Message_ *string `locationName:"message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s InvalidMaxResultsException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s InvalidMaxResultsException) GoString() string {
 	return s.String()
 }
@@ -4860,8 +5651,8 @@ func (s *InvalidMaxResultsException) RequestID() string {
 	return s.RespMetadata.RequestID
 }
 
-// Invalid token or token that was previously used in a request with different
-// parameters. This exception is thrown if the token is invalid.
+// A token that is not valid, or a token that was previously used in a request
+// with different parameters. This exception is thrown if the token is not valid.
 type InvalidNextTokenException struct {
 	_            struct{}                  `type:"structure"`
 	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
@@ -4869,12 +5660,20 @@ type InvalidNextTokenException struct {
 	Message_ *string `locationName:"message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s InvalidNextTokenException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s InvalidNextTokenException) GoString() string {
 	return s.String()
 }
@@ -4926,12 +5725,20 @@ type InvalidParameterCombinationException struct {
 	Message_ *string `locationName:"message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s InvalidParameterCombinationException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s InvalidParameterCombinationException) GoString() string {
 	return s.String()
 }
@@ -4982,12 +5789,20 @@ type InvalidS3BucketNameException struct {
 	Message_ *string `locationName:"message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s InvalidS3BucketNameException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s InvalidS3BucketNameException) GoString() string {
 	return s.String()
 }
@@ -5038,12 +5853,20 @@ type InvalidS3PrefixException struct {
 	Message_ *string `locationName:"message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s InvalidS3PrefixException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s InvalidS3PrefixException) GoString() string {
 	return s.String()
 }
@@ -5094,12 +5917,20 @@ type InvalidSnsTopicNameException struct {
 	Message_ *string `locationName:"message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s InvalidSnsTopicNameException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s InvalidSnsTopicNameException) GoString() string {
 	return s.String()
 }
@@ -5151,12 +5982,20 @@ type InvalidTagParameterException struct {
 	Message_ *string `locationName:"message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s InvalidTagParameterException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s InvalidTagParameterException) GoString() string {
 	return s.String()
 }
@@ -5199,8 +6038,8 @@ func (s *InvalidTagParameterException) RequestID() string {
 	return s.RespMetadata.RequestID
 }
 
-// Occurs if the timestamp values are invalid. Either the start time occurs
-// after the end time or the time range is outside the range of possible values.
+// Occurs if the timestamp values are not valid. Either the start time occurs
+// after the end time, or the time range is outside the range of possible values.
 type InvalidTimeRangeException struct {
 	_            struct{}                  `type:"structure"`
 	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
@@ -5208,12 +6047,20 @@ type InvalidTimeRangeException struct {
 	Message_ *string `locationName:"message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s InvalidTimeRangeException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s InvalidTimeRangeException) GoString() string {
 	return s.String()
 }
@@ -5264,12 +6111,20 @@ type InvalidTokenException struct {
 	Message_ *string `locationName:"message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s InvalidTokenException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s InvalidTokenException) GoString() string {
 	return s.String()
 }
@@ -5323,7 +6178,7 @@ func (s *InvalidTokenException) RequestID() string {
 //    * Be between 3 and 128 characters
 //
 //    * Have no adjacent periods, underscores or dashes. Names like my-_namespace
-//    and my--namespace are invalid.
+//    and my--namespace are not valid.
 //
 //    * Not be in IP address format (for example, 192.168.5.4)
 type InvalidTrailNameException struct {
@@ -5333,12 +6188,20 @@ type InvalidTrailNameException struct {
 	Message_ *string `locationName:"message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s InvalidTrailNameException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s InvalidTrailNameException) GoString() string {
 	return s.String()
 }
@@ -5390,12 +6253,20 @@ type KmsException struct {
 	Message_ *string `locationName:"message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s KmsException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s KmsException) GoString() string {
 	return s.String()
 }
@@ -5448,12 +6319,20 @@ type KmsKeyDisabledException struct {
 	Message_ *string `locationName:"message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s KmsKeyDisabledException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s KmsKeyDisabledException) GoString() string {
 	return s.String()
 }
@@ -5496,8 +6375,9 @@ func (s *KmsKeyDisabledException) RequestID() string {
 	return s.RespMetadata.RequestID
 }
 
-// This exception is thrown when the KMS key does not exist, or when the S3
-// bucket and the KMS key are not in the same region.
+// This exception is thrown when the KMS key does not exist, when the S3 bucket
+// and the KMS key are not in the same region, or when the KMS key associated
+// with the Amazon SNS topic either does not exist or is not in the same region.
 type KmsKeyNotFoundException struct {
 	_            struct{}                  `type:"structure"`
 	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
@@ -5505,12 +6385,20 @@ type KmsKeyNotFoundException struct {
 	Message_ *string `locationName:"message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s KmsKeyNotFoundException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s KmsKeyNotFoundException) GoString() string {
 	return s.String()
 }
@@ -5570,12 +6458,20 @@ type ListPublicKeysInput struct {
 	StartTime *time.Time `type:"timestamp"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListPublicKeysInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListPublicKeysInput) GoString() string {
 	return s.String()
 }
@@ -5612,12 +6508,20 @@ type ListPublicKeysOutput struct {
 	PublicKeyList []*PublicKey `type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListPublicKeysOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListPublicKeysOutput) GoString() string {
 	return s.String()
 }
@@ -5642,7 +6546,7 @@ type ListTagsInput struct {
 	NextToken *string `type:"string"`
 
 	// Specifies a list of trail ARNs whose tags will be listed. The list has a
-	// limit of 20 ARNs. The format of a trail ARN is:
+	// limit of 20 ARNs. The following is the format of a trail ARN.
 	//
 	// arn:aws:cloudtrail:us-east-2:123456789012:trail/MyTrail
 	//
@@ -5650,12 +6554,20 @@ type ListTagsInput struct {
 	ResourceIdList []*string `type:"list" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListTagsInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListTagsInput) GoString() string {
 	return s.String()
 }
@@ -5697,12 +6609,20 @@ type ListTagsOutput struct {
 	ResourceTagList []*ResourceTag `type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListTagsOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListTagsOutput) GoString() string {
 	return s.String()
 }
@@ -5730,12 +6650,20 @@ type ListTrailsInput struct {
 	NextToken *string `type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListTrailsInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListTrailsInput) GoString() string {
 	return s.String()
 }
@@ -5760,12 +6688,20 @@ type ListTrailsOutput struct {
 	Trails []*TrailInfo `type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListTrailsOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListTrailsOutput) GoString() string {
 	return s.String()
 }
@@ -5797,12 +6733,20 @@ type LookupAttribute struct {
 	AttributeValue *string `type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s LookupAttribute) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s LookupAttribute) GoString() string {
 	return s.String()
 }
@@ -5871,12 +6815,20 @@ type LookupEventsInput struct {
 	StartTime *time.Time `type:"timestamp"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s LookupEventsInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s LookupEventsInput) GoString() string {
 	return s.String()
 }
@@ -5957,12 +6909,20 @@ type LookupEventsOutput struct {
 	NextToken *string `type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s LookupEventsOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s LookupEventsOutput) GoString() string {
 	return s.String()
 }
@@ -5987,12 +6947,20 @@ type MaximumNumberOfTrailsExceededException struct {
 	Message_ *string `locationName:"message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s MaximumNumberOfTrailsExceededException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s MaximumNumberOfTrailsExceededException) GoString() string {
 	return s.String()
 }
@@ -6035,10 +7003,10 @@ func (s *MaximumNumberOfTrailsExceededException) RequestID() string {
 	return s.RespMetadata.RequestID
 }
 
-// This exception is thrown when the AWS account making the request to create
-// or update an organization trail is not the master account for an organization
-// in AWS Organizations. For more information, see Prepare For Creating a Trail
-// For Your Organization (https://docs.aws.amazon.com/awscloudtrail/latest/userguide/creating-an-organizational-trail-prepare.html).
+// This exception is thrown when the Amazon Web Services account making the
+// request to create or update an organization trail is not the management account
+// for an organization in Organizations. For more information, see Prepare For
+// Creating a Trail For Your Organization (https://docs.aws.amazon.com/awscloudtrail/latest/userguide/creating-an-organizational-trail-prepare.html).
 type NotOrganizationMasterAccountException struct {
 	_            struct{}                  `type:"structure"`
 	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
@@ -6046,12 +7014,20 @@ type NotOrganizationMasterAccountException struct {
 	Message_ *string `locationName:"message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s NotOrganizationMasterAccountException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s NotOrganizationMasterAccountException) GoString() string {
 	return s.String()
 }
@@ -6102,12 +7078,20 @@ type OperationNotPermittedException struct {
 	Message_ *string `locationName:"message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s OperationNotPermittedException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s OperationNotPermittedException) GoString() string {
 	return s.String()
 }
@@ -6150,10 +7134,10 @@ func (s *OperationNotPermittedException) RequestID() string {
 	return s.RespMetadata.RequestID
 }
 
-// This exception is thrown when AWS Organizations is not configured to support
-// all features. All features must be enabled in AWS Organization to support
-// creating an organization trail. For more information, see Prepare For Creating
-// a Trail For Your Organization (https://docs.aws.amazon.com/awscloudtrail/latest/userguide/creating-an-organizational-trail-prepare.html).
+// This exception is thrown when Organizations is not configured to support
+// all features. All features must be enabled in Organizations to support creating
+// an organization trail. For more information, see Prepare For Creating a Trail
+// For Your Organization (https://docs.aws.amazon.com/awscloudtrail/latest/userguide/creating-an-organizational-trail-prepare.html).
 type OrganizationNotInAllFeaturesModeException struct {
 	_            struct{}                  `type:"structure"`
 	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
@@ -6161,12 +7145,20 @@ type OrganizationNotInAllFeaturesModeException struct {
 	Message_ *string `locationName:"message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s OrganizationNotInAllFeaturesModeException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s OrganizationNotInAllFeaturesModeException) GoString() string {
 	return s.String()
 }
@@ -6209,9 +7201,9 @@ func (s *OrganizationNotInAllFeaturesModeException) RequestID() string {
 	return s.RespMetadata.RequestID
 }
 
-// This exception is thrown when the request is made from an AWS account that
-// is not a member of an organization. To make this request, sign in using the
-// credentials of an account that belongs to an organization.
+// This exception is thrown when the request is made from an Amazon Web Services
+// account that is not a member of an organization. To make this request, sign
+// in using the credentials of an account that belongs to an organization.
 type OrganizationsNotInUseException struct {
 	_            struct{}                  `type:"structure"`
 	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
@@ -6219,12 +7211,20 @@ type OrganizationsNotInUseException struct {
 	Message_ *string `locationName:"message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s OrganizationsNotInUseException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s OrganizationsNotInUseException) GoString() string {
 	return s.String()
 }
@@ -6281,17 +7281,24 @@ type PublicKey struct {
 	ValidityStartTime *time.Time `type:"timestamp"`
 
 	// The DER encoded public key value in PKCS#1 format.
-	//
 	// Value is automatically base64 encoded/decoded by the SDK.
 	Value []byte `type:"blob"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s PublicKey) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s PublicKey) GoString() string {
 	return s.String()
 }
@@ -6323,11 +7330,21 @@ func (s *PublicKey) SetValue(v []byte) *PublicKey {
 type PutEventSelectorsInput struct {
 	_ struct{} `type:"structure"`
 
+	// Specifies the settings for advanced event selectors. You can add advanced
+	// event selectors, and conditions for your advanced event selectors, up to
+	// a maximum of 500 values for all conditions and selectors on a trail. You
+	// can use either AdvancedEventSelectors or EventSelectors, but not both. If
+	// you apply AdvancedEventSelectors to a trail, any existing EventSelectors
+	// are overwritten. For more information about advanced event selectors, see
+	// Logging data events for trails (https://docs.aws.amazon.com/awscloudtrail/latest/userguide/logging-data-events-with-cloudtrail.html)
+	// in the CloudTrail User Guide.
+	AdvancedEventSelectors []*AdvancedEventSelector `type:"list"`
+
 	// Specifies the settings for your event selectors. You can configure up to
-	// five event selectors for a trail.
-	//
-	// EventSelectors is a required field
-	EventSelectors []*EventSelector `type:"list" required:"true"`
+	// five event selectors for a trail. You can use either EventSelectors or AdvancedEventSelectors
+	// in a PutEventSelectors request, but not both. If you apply EventSelectors
+	// to a trail, any existing AdvancedEventSelectors are overwritten.
+	EventSelectors []*EventSelector `type:"list"`
 
 	// Specifies the name of the trail or trail ARN. If you specify a trail name,
 	// the string must meet the following requirements:
@@ -6340,11 +7357,11 @@ type PutEventSelectorsInput struct {
 	//    * Be between 3 and 128 characters
 	//
 	//    * Have no adjacent periods, underscores or dashes. Names like my-_namespace
-	//    and my--namespace are invalid.
+	//    and my--namespace are not valid.
 	//
 	//    * Not be in IP address format (for example, 192.168.5.4)
 	//
-	// If you specify a trail ARN, it must be in the format:
+	// If you specify a trail ARN, it must be in the following format.
 	//
 	// arn:aws:cloudtrail:us-east-2:123456789012:trail/MyTrail
 	//
@@ -6352,12 +7369,20 @@ type PutEventSelectorsInput struct {
 	TrailName *string `type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s PutEventSelectorsInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s PutEventSelectorsInput) GoString() string {
 	return s.String()
 }
@@ -6365,17 +7390,30 @@ func (s PutEventSelectorsInput) GoString() string {
 // Validate inspects the fields of the type to determine if they are valid.
 func (s *PutEventSelectorsInput) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "PutEventSelectorsInput"}
-	if s.EventSelectors == nil {
-		invalidParams.Add(request.NewErrParamRequired("EventSelectors"))
-	}
 	if s.TrailName == nil {
 		invalidParams.Add(request.NewErrParamRequired("TrailName"))
+	}
+	if s.AdvancedEventSelectors != nil {
+		for i, v := range s.AdvancedEventSelectors {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "AdvancedEventSelectors", i), err.(request.ErrInvalidParams))
+			}
+		}
 	}
 
 	if invalidParams.Len() > 0 {
 		return invalidParams
 	}
 	return nil
+}
+
+// SetAdvancedEventSelectors sets the AdvancedEventSelectors field's value.
+func (s *PutEventSelectorsInput) SetAdvancedEventSelectors(v []*AdvancedEventSelector) *PutEventSelectorsInput {
+	s.AdvancedEventSelectors = v
+	return s
 }
 
 // SetEventSelectors sets the EventSelectors field's value.
@@ -6393,24 +7431,41 @@ func (s *PutEventSelectorsInput) SetTrailName(v string) *PutEventSelectorsInput 
 type PutEventSelectorsOutput struct {
 	_ struct{} `type:"structure"`
 
+	// Specifies the advanced event selectors configured for your trail.
+	AdvancedEventSelectors []*AdvancedEventSelector `type:"list"`
+
 	// Specifies the event selectors configured for your trail.
 	EventSelectors []*EventSelector `type:"list"`
 
 	// Specifies the ARN of the trail that was updated with event selectors. The
-	// format of a trail ARN is:
+	// following is the format of a trail ARN.
 	//
 	// arn:aws:cloudtrail:us-east-2:123456789012:trail/MyTrail
 	TrailARN *string `type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s PutEventSelectorsOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s PutEventSelectorsOutput) GoString() string {
 	return s.String()
+}
+
+// SetAdvancedEventSelectors sets the AdvancedEventSelectors field's value.
+func (s *PutEventSelectorsOutput) SetAdvancedEventSelectors(v []*AdvancedEventSelector) *PutEventSelectorsOutput {
+	s.AdvancedEventSelectors = v
+	return s
 }
 
 // SetEventSelectors sets the EventSelectors field's value.
@@ -6428,8 +7483,8 @@ func (s *PutEventSelectorsOutput) SetTrailARN(v string) *PutEventSelectorsOutput
 type PutInsightSelectorsInput struct {
 	_ struct{} `type:"structure"`
 
-	// A JSON string that contains the insight types you want to log on a trail.
-	// In this release, only ApiCallRateInsight is supported as an insight type.
+	// A JSON string that contains the Insights types that you want to log on a
+	// trail. The valid Insights type in this release is ApiCallRateInsight.
 	//
 	// InsightSelectors is a required field
 	InsightSelectors []*InsightSelector `type:"list" required:"true"`
@@ -6441,12 +7496,20 @@ type PutInsightSelectorsInput struct {
 	TrailName *string `type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s PutInsightSelectorsInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s PutInsightSelectorsInput) GoString() string {
 	return s.String()
 }
@@ -6482,8 +7545,8 @@ func (s *PutInsightSelectorsInput) SetTrailName(v string) *PutInsightSelectorsIn
 type PutInsightSelectorsOutput struct {
 	_ struct{} `type:"structure"`
 
-	// A JSON string that contains the insight types you want to log on a trail.
-	// In this release, only ApiCallRateInsight is supported as an insight type.
+	// A JSON string that contains the Insights event types that you want to log
+	// on a trail. The valid Insights type in this release is ApiCallRateInsight.
 	InsightSelectors []*InsightSelector `type:"list"`
 
 	// The Amazon Resource Name (ARN) of a trail for which you want to change or
@@ -6491,12 +7554,20 @@ type PutInsightSelectorsOutput struct {
 	TrailARN *string `type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s PutInsightSelectorsOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s PutInsightSelectorsOutput) GoString() string {
 	return s.String()
 }
@@ -6529,12 +7600,20 @@ type RemoveTagsInput struct {
 	TagsList []*Tag `type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s RemoveTagsInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s RemoveTagsInput) GoString() string {
 	return s.String()
 }
@@ -6580,12 +7659,20 @@ type RemoveTagsOutput struct {
 	_ struct{} `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s RemoveTagsOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s RemoveTagsOutput) GoString() string {
 	return s.String()
 }
@@ -6602,18 +7689,27 @@ type Resource struct {
 
 	// The type of a resource referenced by the event returned. When the resource
 	// type cannot be determined, null is returned. Some examples of resource types
-	// are: Instance for EC2, Trail for CloudTrail, DBInstance for RDS, and AccessKey
-	// for IAM. To learn more about how to look up and filter events by the resource
-	// types supported for a service, see Filtering CloudTrail Events (https://docs.aws.amazon.com/awscloudtrail/latest/userguide/view-cloudtrail-events-console.html#filtering-cloudtrail-events).
+	// are: Instance for EC2, Trail for CloudTrail, DBInstance for Amazon RDS, and
+	// AccessKey for IAM. To learn more about how to look up and filter events by
+	// the resource types supported for a service, see Filtering CloudTrail Events
+	// (https://docs.aws.amazon.com/awscloudtrail/latest/userguide/view-cloudtrail-events-console.html#filtering-cloudtrail-events).
 	ResourceType *string `type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s Resource) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s Resource) GoString() string {
 	return s.String()
 }
@@ -6638,12 +7734,20 @@ type ResourceNotFoundException struct {
 	Message_ *string `locationName:"message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ResourceNotFoundException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ResourceNotFoundException) GoString() string {
 	return s.String()
 }
@@ -6697,12 +7801,20 @@ type ResourceTag struct {
 	TagsList []*Tag `type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ResourceTag) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ResourceTag) GoString() string {
 	return s.String()
 }
@@ -6728,12 +7840,20 @@ type ResourceTypeNotSupportedException struct {
 	Message_ *string `locationName:"message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ResourceTypeNotSupportedException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ResourceTypeNotSupportedException) GoString() string {
 	return s.String()
 }
@@ -6784,12 +7904,20 @@ type S3BucketDoesNotExistException struct {
 	Message_ *string `locationName:"message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s S3BucketDoesNotExistException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s S3BucketDoesNotExistException) GoString() string {
 	return s.String()
 }
@@ -6832,12 +7960,14 @@ func (s *S3BucketDoesNotExistException) RequestID() string {
 	return s.RespMetadata.RequestID
 }
 
-// The request to CloudTrail to start logging AWS API calls for an account.
+// The request to CloudTrail to start logging Amazon Web Services API calls
+// for an account.
 type StartLoggingInput struct {
 	_ struct{} `type:"structure"`
 
 	// Specifies the name or the CloudTrail ARN of the trail for which CloudTrail
-	// logs AWS API calls. The format of a trail ARN is:
+	// logs Amazon Web Services API calls. The following is the format of a trail
+	// ARN.
 	//
 	// arn:aws:cloudtrail:us-east-2:123456789012:trail/MyTrail
 	//
@@ -6845,12 +7975,20 @@ type StartLoggingInput struct {
 	Name *string `type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s StartLoggingInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s StartLoggingInput) GoString() string {
 	return s.String()
 }
@@ -6880,23 +8018,32 @@ type StartLoggingOutput struct {
 	_ struct{} `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s StartLoggingOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s StartLoggingOutput) GoString() string {
 	return s.String()
 }
 
-// Passes the request to CloudTrail to stop logging AWS API calls for the specified
-// account.
+// Passes the request to CloudTrail to stop logging Amazon Web Services API
+// calls for the specified account.
 type StopLoggingInput struct {
 	_ struct{} `type:"structure"`
 
 	// Specifies the name or the CloudTrail ARN of the trail for which CloudTrail
-	// will stop logging AWS API calls. The format of a trail ARN is:
+	// will stop logging Amazon Web Services API calls. The following is the format
+	// of a trail ARN.
 	//
 	// arn:aws:cloudtrail:us-east-2:123456789012:trail/MyTrail
 	//
@@ -6904,12 +8051,20 @@ type StopLoggingInput struct {
 	Name *string `type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s StopLoggingInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s StopLoggingInput) GoString() string {
 	return s.String()
 }
@@ -6939,12 +8094,20 @@ type StopLoggingOutput struct {
 	_ struct{} `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s StopLoggingOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s StopLoggingOutput) GoString() string {
 	return s.String()
 }
@@ -6964,12 +8127,20 @@ type Tag struct {
 	Value *string `type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s Tag) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s Tag) GoString() string {
 	return s.String()
 }
@@ -7008,12 +8179,20 @@ type TagsLimitExceededException struct {
 	Message_ *string `locationName:"message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s TagsLimitExceededException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s TagsLimitExceededException) GoString() string {
 	return s.String()
 }
@@ -7078,8 +8257,8 @@ type Trail struct {
 	// The region in which the trail was created.
 	HomeRegion *string `type:"string"`
 
-	// Set to True to include AWS API calls from AWS global services such as IAM.
-	// Otherwise, False.
+	// Set to True to include Amazon Web Services API calls from Amazon Web Services
+	// global services such as IAM. Otherwise, False.
 	IncludeGlobalServiceEvents *bool `type:"boolean"`
 
 	// Specifies whether the trail exists only in one region or exists in all regions.
@@ -7089,7 +8268,7 @@ type Trail struct {
 	IsOrganizationTrail *bool `type:"boolean"`
 
 	// Specifies the KMS key ID that encrypts the logs delivered by CloudTrail.
-	// The value is a fully specified ARN to a KMS key in the format:
+	// The value is a fully specified ARN to a KMS key in the following format.
 	//
 	// arn:aws:kms:us-east-2:123456789012:key/12345678-1234-1234-1234-123456789012
 	KmsKeyId *string `type:"string"`
@@ -7106,12 +8285,12 @@ type Trail struct {
 
 	// Specifies the Amazon S3 key prefix that comes after the name of the bucket
 	// you have designated for log file delivery. For more information, see Finding
-	// Your CloudTrail Log Files (https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-find-log-files.html).The
-	// maximum length is 200 characters.
+	// Your CloudTrail Log Files (https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-find-log-files.html).
+	// The maximum length is 200 characters.
 	S3KeyPrefix *string `type:"string"`
 
 	// Specifies the ARN of the Amazon SNS topic that CloudTrail uses to send notifications
-	// when log files are delivered. The format of a topic ARN is:
+	// when log files are delivered. The following is the format of a topic ARN.
 	//
 	// arn:aws:sns:us-east-2:123456789012:MyTopic
 	SnsTopicARN *string `type:"string"`
@@ -7121,18 +8300,26 @@ type Trail struct {
 	// Deprecated: SnsTopicName has been deprecated
 	SnsTopicName *string `deprecated:"true" type:"string"`
 
-	// Specifies the ARN of the trail. The format of a trail ARN is:
+	// Specifies the ARN of the trail. The following is the format of a trail ARN.
 	//
 	// arn:aws:cloudtrail:us-east-2:123456789012:trail/MyTrail
 	TrailARN *string `type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s Trail) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s Trail) GoString() string {
 	return s.String()
 }
@@ -7241,12 +8428,20 @@ type TrailAlreadyExistsException struct {
 	Message_ *string `locationName:"message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s TrailAlreadyExistsException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s TrailAlreadyExistsException) GoString() string {
 	return s.String()
 }
@@ -7294,7 +8489,7 @@ func (s *TrailAlreadyExistsException) RequestID() string {
 type TrailInfo struct {
 	_ struct{} `type:"structure"`
 
-	// The AWS region in which a trail was created.
+	// The Amazon Web Services Region in which a trail was created.
 	HomeRegion *string `type:"string"`
 
 	// The name of a trail.
@@ -7304,12 +8499,20 @@ type TrailInfo struct {
 	TrailARN *string `type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s TrailInfo) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s TrailInfo) GoString() string {
 	return s.String()
 }
@@ -7340,12 +8543,20 @@ type TrailNotFoundException struct {
 	Message_ *string `locationName:"message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s TrailNotFoundException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s TrailNotFoundException) GoString() string {
 	return s.String()
 }
@@ -7396,12 +8607,20 @@ type TrailNotProvidedException struct {
 	Message_ *string `locationName:"message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s TrailNotProvidedException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s TrailNotProvidedException) GoString() string {
 	return s.String()
 }
@@ -7452,12 +8671,20 @@ type UnsupportedOperationException struct {
 	Message_ *string `locationName:"message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UnsupportedOperationException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UnsupportedOperationException) GoString() string {
 	return s.String()
 }
@@ -7505,8 +8732,8 @@ type UpdateTrailInput struct {
 	_ struct{} `type:"structure"`
 
 	// Specifies a log group name using an Amazon Resource Name (ARN), a unique
-	// identifier that represents the log group to which CloudTrail logs will be
-	// delivered. Not required unless you specify CloudWatchLogsRoleArn.
+	// identifier that represents the log group to which CloudTrail logs are delivered.
+	// Not required unless you specify CloudWatchLogsRoleArn.
 	CloudWatchLogsLogGroupArn *string `type:"string"`
 
 	// Specifies the role for the CloudWatch Logs endpoint to assume to write to
@@ -7516,7 +8743,7 @@ type UpdateTrailInput struct {
 	// Specifies whether log file validation is enabled. The default is false.
 	//
 	// When you disable log file integrity validation, the chain of digest files
-	// is broken after one hour. CloudTrail will not create digest files for log
+	// is broken after one hour. CloudTrail does not create digest files for log
 	// files that were delivered during a period in which log file integrity validation
 	// was disabled. For example, if you enable log file integrity validation at
 	// noon on January 1, disable it at noon on January 2, and re-enable it at noon
@@ -7539,19 +8766,23 @@ type UpdateTrailInput struct {
 	IsMultiRegionTrail *bool `type:"boolean"`
 
 	// Specifies whether the trail is applied to all accounts in an organization
-	// in AWS Organizations, or only for the current AWS account. The default is
-	// false, and cannot be true unless the call is made on behalf of an AWS account
-	// that is the master account for an organization in AWS Organizations. If the
-	// trail is not an organization trail and this is set to true, the trail will
-	// be created in all AWS accounts that belong to the organization. If the trail
-	// is an organization trail and this is set to false, the trail will remain
-	// in the current AWS account but be deleted from all member accounts in the
-	// organization.
+	// in Organizations, or only for the current Amazon Web Services account. The
+	// default is false, and cannot be true unless the call is made on behalf of
+	// an Amazon Web Services account that is the management account for an organization
+	// in Organizations. If the trail is not an organization trail and this is set
+	// to true, the trail will be created in all Amazon Web Services accounts that
+	// belong to the organization. If the trail is an organization trail and this
+	// is set to false, the trail will remain in the current Amazon Web Services
+	// account but be deleted from all member accounts in the organization.
 	IsOrganizationTrail *bool `type:"boolean"`
 
 	// Specifies the KMS key ID to use to encrypt the logs delivered by CloudTrail.
 	// The value can be an alias name prefixed by "alias/", a fully specified ARN
 	// to an alias, a fully specified ARN to a key, or a globally unique identifier.
+	//
+	// CloudTrail also supports KMS multi-Region keys. For more information about
+	// multi-Region keys, see Using multi-Region keys (https://docs.aws.amazon.com/kms/latest/developerguide/multi-region-keys-overview.html)
+	// in the Key Management Service Developer Guide.
 	//
 	// Examples:
 	//
@@ -7575,11 +8806,11 @@ type UpdateTrailInput struct {
 	//    * Be between 3 and 128 characters
 	//
 	//    * Have no adjacent periods, underscores or dashes. Names like my-_namespace
-	//    and my--namespace are invalid.
+	//    and my--namespace are not valid.
 	//
 	//    * Not be in IP address format (for example, 192.168.5.4)
 	//
-	// If Name is a trail ARN, it must be in the format:
+	// If Name is a trail ARN, it must be in the following format.
 	//
 	// arn:aws:cloudtrail:us-east-2:123456789012:trail/MyTrail
 	//
@@ -7601,12 +8832,20 @@ type UpdateTrailInput struct {
 	SnsTopicName *string `type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpdateTrailInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpdateTrailInput) GoString() string {
 	return s.String()
 }
@@ -7696,7 +8935,7 @@ type UpdateTrailOutput struct {
 	_ struct{} `type:"structure"`
 
 	// Specifies the Amazon Resource Name (ARN) of the log group to which CloudTrail
-	// logs will be delivered.
+	// logs are delivered.
 	CloudWatchLogsLogGroupArn *string `type:"string"`
 
 	// Specifies the role for the CloudWatch Logs endpoint to assume to write to
@@ -7714,7 +8953,7 @@ type UpdateTrailOutput struct {
 	IsOrganizationTrail *bool `type:"boolean"`
 
 	// Specifies the KMS key ID that encrypts the logs delivered by CloudTrail.
-	// The value is a fully specified ARN to a KMS key in the format:
+	// The value is a fully specified ARN to a KMS key in the following format.
 	//
 	// arn:aws:kms:us-east-2:123456789012:key/12345678-1234-1234-1234-123456789012
 	KmsKeyId *string `type:"string"`
@@ -7731,33 +8970,41 @@ type UpdateTrailOutput struct {
 
 	// Specifies the Amazon S3 key prefix that comes after the name of the bucket
 	// you have designated for log file delivery. For more information, see Finding
-	// Your CloudTrail Log Files (https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-find-log-files.html).
+	// Your IAM Log Files (https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-find-log-files.html).
 	S3KeyPrefix *string `type:"string"`
 
 	// Specifies the ARN of the Amazon SNS topic that CloudTrail uses to send notifications
-	// when log files are delivered. The format of a topic ARN is:
+	// when log files are delivered. The following is the format of a topic ARN.
 	//
 	// arn:aws:sns:us-east-2:123456789012:MyTopic
 	SnsTopicARN *string `type:"string"`
 
-	// This field is no longer in use. Use SnsTopicARN.
+	// This field is no longer in use. Use UpdateTrailResponse$SnsTopicARN.
 	//
 	// Deprecated: SnsTopicName has been deprecated
 	SnsTopicName *string `deprecated:"true" type:"string"`
 
-	// Specifies the ARN of the trail that was updated. The format of a trail ARN
-	// is:
+	// Specifies the ARN of the trail that was updated. The following is the format
+	// of a trail ARN.
 	//
 	// arn:aws:cloudtrail:us-east-2:123456789012:trail/MyTrail
 	TrailARN *string `type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpdateTrailOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpdateTrailOutput) GoString() string {
 	return s.String()
 }

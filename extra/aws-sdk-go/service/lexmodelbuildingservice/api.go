@@ -3209,6 +3209,242 @@ func (c *LexModelBuildingService) GetIntentsPagesWithContext(ctx aws.Context, in
 	return p.Err()
 }
 
+const opGetMigration = "GetMigration"
+
+// GetMigrationRequest generates a "aws/request.Request" representing the
+// client's request for the GetMigration operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See GetMigration for more information on using the GetMigration
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the GetMigrationRequest method.
+//    req, resp := client.GetMigrationRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/lex-models-2017-04-19/GetMigration
+func (c *LexModelBuildingService) GetMigrationRequest(input *GetMigrationInput) (req *request.Request, output *GetMigrationOutput) {
+	op := &request.Operation{
+		Name:       opGetMigration,
+		HTTPMethod: "GET",
+		HTTPPath:   "/migrations/{migrationId}",
+	}
+
+	if input == nil {
+		input = &GetMigrationInput{}
+	}
+
+	output = &GetMigrationOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// GetMigration API operation for Amazon Lex Model Building Service.
+//
+// Provides details about an ongoing or complete migration from an Amazon Lex
+// V1 bot to an Amazon Lex V2 bot. Use this operation to view the migration
+// alerts and warnings related to the migration.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Lex Model Building Service's
+// API operation GetMigration for usage and error information.
+//
+// Returned Error Types:
+//   * LimitExceededException
+//   The request exceeded a limit. Try your request again.
+//
+//   * InternalFailureException
+//   An internal Amazon Lex error occurred. Try your request again.
+//
+//   * BadRequestException
+//   The request is not well formed. For example, a value is invalid or a required
+//   field is missing. Check the field values, and try again.
+//
+//   * NotFoundException
+//   The resource specified in the request was not found. Check the resource and
+//   try again.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/lex-models-2017-04-19/GetMigration
+func (c *LexModelBuildingService) GetMigration(input *GetMigrationInput) (*GetMigrationOutput, error) {
+	req, out := c.GetMigrationRequest(input)
+	return out, req.Send()
+}
+
+// GetMigrationWithContext is the same as GetMigration with the addition of
+// the ability to pass a context and additional request options.
+//
+// See GetMigration for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *LexModelBuildingService) GetMigrationWithContext(ctx aws.Context, input *GetMigrationInput, opts ...request.Option) (*GetMigrationOutput, error) {
+	req, out := c.GetMigrationRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opGetMigrations = "GetMigrations"
+
+// GetMigrationsRequest generates a "aws/request.Request" representing the
+// client's request for the GetMigrations operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See GetMigrations for more information on using the GetMigrations
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the GetMigrationsRequest method.
+//    req, resp := client.GetMigrationsRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/lex-models-2017-04-19/GetMigrations
+func (c *LexModelBuildingService) GetMigrationsRequest(input *GetMigrationsInput) (req *request.Request, output *GetMigrationsOutput) {
+	op := &request.Operation{
+		Name:       opGetMigrations,
+		HTTPMethod: "GET",
+		HTTPPath:   "/migrations",
+		Paginator: &request.Paginator{
+			InputTokens:     []string{"nextToken"},
+			OutputTokens:    []string{"nextToken"},
+			LimitToken:      "maxResults",
+			TruncationToken: "",
+		},
+	}
+
+	if input == nil {
+		input = &GetMigrationsInput{}
+	}
+
+	output = &GetMigrationsOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// GetMigrations API operation for Amazon Lex Model Building Service.
+//
+// Gets a list of migrations between Amazon Lex V1 and Amazon Lex V2.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Lex Model Building Service's
+// API operation GetMigrations for usage and error information.
+//
+// Returned Error Types:
+//   * LimitExceededException
+//   The request exceeded a limit. Try your request again.
+//
+//   * InternalFailureException
+//   An internal Amazon Lex error occurred. Try your request again.
+//
+//   * BadRequestException
+//   The request is not well formed. For example, a value is invalid or a required
+//   field is missing. Check the field values, and try again.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/lex-models-2017-04-19/GetMigrations
+func (c *LexModelBuildingService) GetMigrations(input *GetMigrationsInput) (*GetMigrationsOutput, error) {
+	req, out := c.GetMigrationsRequest(input)
+	return out, req.Send()
+}
+
+// GetMigrationsWithContext is the same as GetMigrations with the addition of
+// the ability to pass a context and additional request options.
+//
+// See GetMigrations for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *LexModelBuildingService) GetMigrationsWithContext(ctx aws.Context, input *GetMigrationsInput, opts ...request.Option) (*GetMigrationsOutput, error) {
+	req, out := c.GetMigrationsRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+// GetMigrationsPages iterates over the pages of a GetMigrations operation,
+// calling the "fn" function with the response data for each page. To stop
+// iterating, return false from the fn function.
+//
+// See GetMigrations method for more information on how to use this operation.
+//
+// Note: This operation can generate multiple requests to a service.
+//
+//    // Example iterating over at most 3 pages of a GetMigrations operation.
+//    pageNum := 0
+//    err := client.GetMigrationsPages(params,
+//        func(page *lexmodelbuildingservice.GetMigrationsOutput, lastPage bool) bool {
+//            pageNum++
+//            fmt.Println(page)
+//            return pageNum <= 3
+//        })
+//
+func (c *LexModelBuildingService) GetMigrationsPages(input *GetMigrationsInput, fn func(*GetMigrationsOutput, bool) bool) error {
+	return c.GetMigrationsPagesWithContext(aws.BackgroundContext(), input, fn)
+}
+
+// GetMigrationsPagesWithContext same as GetMigrationsPages except
+// it takes a Context and allows setting request options on the pages.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *LexModelBuildingService) GetMigrationsPagesWithContext(ctx aws.Context, input *GetMigrationsInput, fn func(*GetMigrationsOutput, bool) bool, opts ...request.Option) error {
+	p := request.Pagination{
+		NewRequest: func() (*request.Request, error) {
+			var inCpy *GetMigrationsInput
+			if input != nil {
+				tmp := *input
+				inCpy = &tmp
+			}
+			req, _ := c.GetMigrationsRequest(inCpy)
+			req.SetContext(ctx)
+			req.ApplyOptions(opts...)
+			return req, nil
+		},
+	}
+
+	for p.Next() {
+		if !fn(p.Page().(*GetMigrationsOutput), !p.HasNextPage()) {
+			break
+		}
+	}
+
+	return p.Err()
+}
+
 const opGetSlotType = "GetSlotType"
 
 // GetSlotTypeRequest generates a "aws/request.Request" representing the
@@ -3681,8 +3917,9 @@ func (c *LexModelBuildingService) GetUtterancesViewRequest(input *GetUtterancesV
 // by the bot in the last 15 days. The response contains information about a
 // maximum of 100 utterances for each version.
 //
-// If you set childDirected field to true when you created your bot, or if you
-// opted out of participating in improving Amazon Lex, utterances are not available.
+// If you set childDirected field to true when you created your bot, if you
+// are using slot obfuscation with one or more slots, or if you opted out of
+// participating in improving Amazon Lex, utterances are not available.
 //
 // This operation requires permissions for the lex:GetUtterancesView action.
 //
@@ -4353,6 +4590,104 @@ func (c *LexModelBuildingService) StartImportWithContext(ctx aws.Context, input 
 	return out, req.Send()
 }
 
+const opStartMigration = "StartMigration"
+
+// StartMigrationRequest generates a "aws/request.Request" representing the
+// client's request for the StartMigration operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See StartMigration for more information on using the StartMigration
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the StartMigrationRequest method.
+//    req, resp := client.StartMigrationRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/lex-models-2017-04-19/StartMigration
+func (c *LexModelBuildingService) StartMigrationRequest(input *StartMigrationInput) (req *request.Request, output *StartMigrationOutput) {
+	op := &request.Operation{
+		Name:       opStartMigration,
+		HTTPMethod: "POST",
+		HTTPPath:   "/migrations",
+	}
+
+	if input == nil {
+		input = &StartMigrationInput{}
+	}
+
+	output = &StartMigrationOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// StartMigration API operation for Amazon Lex Model Building Service.
+//
+// Starts migrating a bot from Amazon Lex V1 to Amazon Lex V2. Migrate your
+// bot when you want to take advantage of the new features of Amazon Lex V2.
+//
+// For more information, see Migrating a bot (https://docs.aws.amazon.com/lex/latest/dg/migrate.html)
+// in the Amazon Lex developer guide.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Lex Model Building Service's
+// API operation StartMigration for usage and error information.
+//
+// Returned Error Types:
+//   * LimitExceededException
+//   The request exceeded a limit. Try your request again.
+//
+//   * InternalFailureException
+//   An internal Amazon Lex error occurred. Try your request again.
+//
+//   * BadRequestException
+//   The request is not well formed. For example, a value is invalid or a required
+//   field is missing. Check the field values, and try again.
+//
+//   * AccessDeniedException
+//   Your IAM user or role does not have permission to call the Amazon Lex V2
+//   APIs required to migrate your bot.
+//
+//   * NotFoundException
+//   The resource specified in the request was not found. Check the resource and
+//   try again.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/lex-models-2017-04-19/StartMigration
+func (c *LexModelBuildingService) StartMigration(input *StartMigrationInput) (*StartMigrationOutput, error) {
+	req, out := c.StartMigrationRequest(input)
+	return out, req.Send()
+}
+
+// StartMigrationWithContext is the same as StartMigration with the addition of
+// the ability to pass a context and additional request options.
+//
+// See StartMigration for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *LexModelBuildingService) StartMigrationWithContext(ctx aws.Context, input *StartMigrationInput, opts ...request.Option) (*StartMigrationOutput, error) {
+	req, out := c.StartMigrationRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opTagResource = "TagResource"
 
 // TagResourceRequest generates a "aws/request.Request" representing the
@@ -4542,6 +4877,71 @@ func (c *LexModelBuildingService) UntagResourceWithContext(ctx aws.Context, inpu
 	return out, req.Send()
 }
 
+// Your IAM user or role does not have permission to call the Amazon Lex V2
+// APIs required to migrate your bot.
+type AccessDeniedException struct {
+	_            struct{}                  `type:"structure"`
+	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
+
+	Message_ *string `locationName:"message" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s AccessDeniedException) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s AccessDeniedException) GoString() string {
+	return s.String()
+}
+
+func newErrorAccessDeniedException(v protocol.ResponseMetadata) error {
+	return &AccessDeniedException{
+		RespMetadata: v,
+	}
+}
+
+// Code returns the exception type name.
+func (s *AccessDeniedException) Code() string {
+	return "AccessDeniedException"
+}
+
+// Message returns the exception's message.
+func (s *AccessDeniedException) Message() string {
+	if s.Message_ != nil {
+		return *s.Message_
+	}
+	return ""
+}
+
+// OrigErr always returns nil, satisfies awserr.Error interface.
+func (s *AccessDeniedException) OrigErr() error {
+	return nil
+}
+
+func (s *AccessDeniedException) Error() string {
+	return fmt.Sprintf("%s: %s", s.Code(), s.Message())
+}
+
+// Status code returns the HTTP status code for the request's response error.
+func (s *AccessDeniedException) StatusCode() int {
+	return s.RespMetadata.StatusCode
+}
+
+// RequestID returns the service's response RequestID for request.
+func (s *AccessDeniedException) RequestID() string {
+	return s.RespMetadata.RequestID
+}
+
 // The request is not well formed. For example, a value is invalid or a required
 // field is missing. Check the field values, and try again.
 type BadRequestException struct {
@@ -4551,12 +4951,20 @@ type BadRequestException struct {
 	Message_ *string `locationName:"message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s BadRequestException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s BadRequestException) GoString() string {
 	return s.String()
 }
@@ -4629,12 +5037,20 @@ type BotAliasMetadata struct {
 	Name *string `locationName:"name" min:"1" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s BotAliasMetadata) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s BotAliasMetadata) GoString() string {
 	return s.String()
 }
@@ -4697,6 +5113,10 @@ type BotChannelAssociation struct {
 	BotAlias *string `locationName:"botAlias" min:"1" type:"string"`
 
 	// Provides information necessary to communicate with the messaging platform.
+	//
+	// BotConfiguration is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by BotChannelAssociation's
+	// String and GoString methods.
 	BotConfiguration map[string]*string `locationName:"botConfiguration" min:"1" type:"map" sensitive:"true"`
 
 	// The name of the Amazon Lex bot to which this association is being made.
@@ -4734,12 +5154,20 @@ type BotChannelAssociation struct {
 	Type *string `locationName:"type" type:"string" enum:"ChannelType"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s BotChannelAssociation) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s BotChannelAssociation) GoString() string {
 	return s.String()
 }
@@ -4822,12 +5250,20 @@ type BotMetadata struct {
 	Version *string `locationName:"version" min:"1" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s BotMetadata) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s BotMetadata) GoString() string {
 	return s.String()
 }
@@ -4881,12 +5317,20 @@ type BuiltinIntentMetadata struct {
 	SupportedLocales []*string `locationName:"supportedLocales" type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s BuiltinIntentMetadata) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s BuiltinIntentMetadata) GoString() string {
 	return s.String()
 }
@@ -4911,12 +5355,20 @@ type BuiltinIntentSlot struct {
 	Name *string `locationName:"name" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s BuiltinIntentSlot) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s BuiltinIntentSlot) GoString() string {
 	return s.String()
 }
@@ -4940,12 +5392,20 @@ type BuiltinSlotTypeMetadata struct {
 	SupportedLocales []*string `locationName:"supportedLocales" type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s BuiltinSlotTypeMetadata) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s BuiltinSlotTypeMetadata) GoString() string {
 	return s.String()
 }
@@ -4979,12 +5439,20 @@ type CodeHook struct {
 	Uri *string `locationName:"uri" min:"20" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CodeHook) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CodeHook) GoString() string {
 	return s.String()
 }
@@ -5031,12 +5499,20 @@ type ConflictException struct {
 	Message_ *string `locationName:"message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ConflictException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ConflictException) GoString() string {
 	return s.String()
 }
@@ -5099,12 +5575,20 @@ type ConversationLogsRequest struct {
 	LogSettings []*LogSettingsRequest `locationName:"logSettings" type:"list" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ConversationLogsRequest) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ConversationLogsRequest) GoString() string {
 	return s.String()
 }
@@ -5162,12 +5646,20 @@ type ConversationLogsResponse struct {
 	LogSettings []*LogSettingsResponse `locationName:"logSettings" type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ConversationLogsResponse) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ConversationLogsResponse) GoString() string {
 	return s.String()
 }
@@ -5201,12 +5693,20 @@ type CreateBotVersionInput struct {
 	Name *string `location:"uri" locationName:"name" min:"2" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateBotVersionInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateBotVersionInput) GoString() string {
 	return s.String()
 }
@@ -5326,12 +5826,20 @@ type CreateBotVersionOutput struct {
 	VoiceId *string `locationName:"voiceId" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateBotVersionOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateBotVersionOutput) GoString() string {
 	return s.String()
 }
@@ -5455,12 +5963,20 @@ type CreateIntentVersionInput struct {
 	Name *string `location:"uri" locationName:"name" min:"1" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateIntentVersionInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateIntentVersionInput) GoString() string {
 	return s.String()
 }
@@ -5523,6 +6039,10 @@ type CreateIntentVersionOutput struct {
 	// Describes how the intent is fulfilled.
 	FulfillmentActivity *FulfillmentActivity `locationName:"fulfillmentActivity" type:"structure"`
 
+	// An array of InputContext objects that lists the contexts that must be active
+	// for Amazon Lex to choose the intent in a conversation with the user.
+	InputContexts []*InputContext `locationName:"inputContexts" type:"list"`
+
 	// Configuration information, if any, for connecting an Amazon Kendra index
 	// with the AMAZON.KendraSearchIntent intent.
 	KendraConfiguration *KendraConfiguration `locationName:"kendraConfiguration" type:"structure"`
@@ -5532,6 +6052,10 @@ type CreateIntentVersionOutput struct {
 
 	// The name of the intent.
 	Name *string `locationName:"name" min:"1" type:"string"`
+
+	// An array of OutputContext objects that lists the contexts that the intent
+	// activates when the intent is fulfilled.
+	OutputContexts []*OutputContext `locationName:"outputContexts" type:"list"`
 
 	// A unique identifier for a built-in intent.
 	ParentIntentSignature *string `locationName:"parentIntentSignature" type:"string"`
@@ -5551,12 +6075,20 @@ type CreateIntentVersionOutput struct {
 	Version *string `locationName:"version" min:"1" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateIntentVersionOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateIntentVersionOutput) GoString() string {
 	return s.String()
 }
@@ -5609,6 +6141,12 @@ func (s *CreateIntentVersionOutput) SetFulfillmentActivity(v *FulfillmentActivit
 	return s
 }
 
+// SetInputContexts sets the InputContexts field's value.
+func (s *CreateIntentVersionOutput) SetInputContexts(v []*InputContext) *CreateIntentVersionOutput {
+	s.InputContexts = v
+	return s
+}
+
 // SetKendraConfiguration sets the KendraConfiguration field's value.
 func (s *CreateIntentVersionOutput) SetKendraConfiguration(v *KendraConfiguration) *CreateIntentVersionOutput {
 	s.KendraConfiguration = v
@@ -5624,6 +6162,12 @@ func (s *CreateIntentVersionOutput) SetLastUpdatedDate(v time.Time) *CreateInten
 // SetName sets the Name field's value.
 func (s *CreateIntentVersionOutput) SetName(v string) *CreateIntentVersionOutput {
 	s.Name = &v
+	return s
+}
+
+// SetOutputContexts sets the OutputContexts field's value.
+func (s *CreateIntentVersionOutput) SetOutputContexts(v []*OutputContext) *CreateIntentVersionOutput {
+	s.OutputContexts = v
 	return s
 }
 
@@ -5674,12 +6218,20 @@ type CreateSlotTypeVersionInput struct {
 	Name *string `location:"uri" locationName:"name" min:"1" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateSlotTypeVersionInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateSlotTypeVersionInput) GoString() string {
 	return s.String()
 }
@@ -5749,12 +6301,20 @@ type CreateSlotTypeVersionOutput struct {
 	Version *string `locationName:"version" min:"1" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateSlotTypeVersionOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateSlotTypeVersionOutput) GoString() string {
 	return s.String()
 }
@@ -5820,7 +6380,7 @@ func (s *CreateSlotTypeVersionOutput) SetVersion(v string) *CreateSlotTypeVersio
 }
 
 type DeleteBotAliasInput struct {
-	_ struct{} `type:"structure"`
+	_ struct{} `type:"structure" nopayload:"true"`
 
 	// The name of the bot that the alias points to.
 	//
@@ -5833,12 +6393,20 @@ type DeleteBotAliasInput struct {
 	Name *string `location:"uri" locationName:"name" min:"1" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteBotAliasInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteBotAliasInput) GoString() string {
 	return s.String()
 }
@@ -5878,21 +6446,29 @@ func (s *DeleteBotAliasInput) SetName(v string) *DeleteBotAliasInput {
 }
 
 type DeleteBotAliasOutput struct {
-	_ struct{} `type:"structure"`
+	_ struct{} `type:"structure" nopayload:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteBotAliasOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteBotAliasOutput) GoString() string {
 	return s.String()
 }
 
 type DeleteBotChannelAssociationInput struct {
-	_ struct{} `type:"structure"`
+	_ struct{} `type:"structure" nopayload:"true"`
 
 	// An alias that points to the specific version of the Amazon Lex bot to which
 	// this association is being made.
@@ -5911,12 +6487,20 @@ type DeleteBotChannelAssociationInput struct {
 	Name *string `location:"uri" locationName:"name" min:"1" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteBotChannelAssociationInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteBotChannelAssociationInput) GoString() string {
 	return s.String()
 }
@@ -5968,21 +6552,29 @@ func (s *DeleteBotChannelAssociationInput) SetName(v string) *DeleteBotChannelAs
 }
 
 type DeleteBotChannelAssociationOutput struct {
-	_ struct{} `type:"structure"`
+	_ struct{} `type:"structure" nopayload:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteBotChannelAssociationOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteBotChannelAssociationOutput) GoString() string {
 	return s.String()
 }
 
 type DeleteBotInput struct {
-	_ struct{} `type:"structure"`
+	_ struct{} `type:"structure" nopayload:"true"`
 
 	// The name of the bot. The name is case sensitive.
 	//
@@ -5990,12 +6582,20 @@ type DeleteBotInput struct {
 	Name *string `location:"uri" locationName:"name" min:"2" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteBotInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteBotInput) GoString() string {
 	return s.String()
 }
@@ -6023,21 +6623,29 @@ func (s *DeleteBotInput) SetName(v string) *DeleteBotInput {
 }
 
 type DeleteBotOutput struct {
-	_ struct{} `type:"structure"`
+	_ struct{} `type:"structure" nopayload:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteBotOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteBotOutput) GoString() string {
 	return s.String()
 }
 
 type DeleteBotVersionInput struct {
-	_ struct{} `type:"structure"`
+	_ struct{} `type:"structure" nopayload:"true"`
 
 	// The name of the bot.
 	//
@@ -6051,12 +6659,20 @@ type DeleteBotVersionInput struct {
 	Version *string `location:"uri" locationName:"version" min:"1" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteBotVersionInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteBotVersionInput) GoString() string {
 	return s.String()
 }
@@ -6096,21 +6712,29 @@ func (s *DeleteBotVersionInput) SetVersion(v string) *DeleteBotVersionInput {
 }
 
 type DeleteBotVersionOutput struct {
-	_ struct{} `type:"structure"`
+	_ struct{} `type:"structure" nopayload:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteBotVersionOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteBotVersionOutput) GoString() string {
 	return s.String()
 }
 
 type DeleteIntentInput struct {
-	_ struct{} `type:"structure"`
+	_ struct{} `type:"structure" nopayload:"true"`
 
 	// The name of the intent. The name is case sensitive.
 	//
@@ -6118,12 +6742,20 @@ type DeleteIntentInput struct {
 	Name *string `location:"uri" locationName:"name" min:"1" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteIntentInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteIntentInput) GoString() string {
 	return s.String()
 }
@@ -6151,21 +6783,29 @@ func (s *DeleteIntentInput) SetName(v string) *DeleteIntentInput {
 }
 
 type DeleteIntentOutput struct {
-	_ struct{} `type:"structure"`
+	_ struct{} `type:"structure" nopayload:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteIntentOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteIntentOutput) GoString() string {
 	return s.String()
 }
 
 type DeleteIntentVersionInput struct {
-	_ struct{} `type:"structure"`
+	_ struct{} `type:"structure" nopayload:"true"`
 
 	// The name of the intent.
 	//
@@ -6179,12 +6819,20 @@ type DeleteIntentVersionInput struct {
 	Version *string `location:"uri" locationName:"version" min:"1" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteIntentVersionInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteIntentVersionInput) GoString() string {
 	return s.String()
 }
@@ -6224,21 +6872,29 @@ func (s *DeleteIntentVersionInput) SetVersion(v string) *DeleteIntentVersionInpu
 }
 
 type DeleteIntentVersionOutput struct {
-	_ struct{} `type:"structure"`
+	_ struct{} `type:"structure" nopayload:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteIntentVersionOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteIntentVersionOutput) GoString() string {
 	return s.String()
 }
 
 type DeleteSlotTypeInput struct {
-	_ struct{} `type:"structure"`
+	_ struct{} `type:"structure" nopayload:"true"`
 
 	// The name of the slot type. The name is case sensitive.
 	//
@@ -6246,12 +6902,20 @@ type DeleteSlotTypeInput struct {
 	Name *string `location:"uri" locationName:"name" min:"1" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteSlotTypeInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteSlotTypeInput) GoString() string {
 	return s.String()
 }
@@ -6279,21 +6943,29 @@ func (s *DeleteSlotTypeInput) SetName(v string) *DeleteSlotTypeInput {
 }
 
 type DeleteSlotTypeOutput struct {
-	_ struct{} `type:"structure"`
+	_ struct{} `type:"structure" nopayload:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteSlotTypeOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteSlotTypeOutput) GoString() string {
 	return s.String()
 }
 
 type DeleteSlotTypeVersionInput struct {
-	_ struct{} `type:"structure"`
+	_ struct{} `type:"structure" nopayload:"true"`
 
 	// The name of the slot type.
 	//
@@ -6307,12 +6979,20 @@ type DeleteSlotTypeVersionInput struct {
 	Version *string `location:"uri" locationName:"version" min:"1" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteSlotTypeVersionInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteSlotTypeVersionInput) GoString() string {
 	return s.String()
 }
@@ -6352,21 +7032,29 @@ func (s *DeleteSlotTypeVersionInput) SetVersion(v string) *DeleteSlotTypeVersion
 }
 
 type DeleteSlotTypeVersionOutput struct {
-	_ struct{} `type:"structure"`
+	_ struct{} `type:"structure" nopayload:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteSlotTypeVersionOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteSlotTypeVersionOutput) GoString() string {
 	return s.String()
 }
 
 type DeleteUtterancesInput struct {
-	_ struct{} `type:"structure"`
+	_ struct{} `type:"structure" nopayload:"true"`
 
 	// The name of the bot that stored the utterances.
 	//
@@ -6382,12 +7070,20 @@ type DeleteUtterancesInput struct {
 	UserId *string `location:"uri" locationName:"userId" min:"2" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteUtterancesInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteUtterancesInput) GoString() string {
 	return s.String()
 }
@@ -6427,15 +7123,23 @@ func (s *DeleteUtterancesInput) SetUserId(v string) *DeleteUtterancesInput {
 }
 
 type DeleteUtterancesOutput struct {
-	_ struct{} `type:"structure"`
+	_ struct{} `type:"structure" nopayload:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteUtterancesOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteUtterancesOutput) GoString() string {
 	return s.String()
 }
@@ -6464,12 +7168,20 @@ type EnumerationValue struct {
 	Value *string `locationName:"value" min:"1" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s EnumerationValue) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s EnumerationValue) GoString() string {
 	return s.String()
 }
@@ -6520,12 +7232,20 @@ type FollowUpPrompt struct {
 	RejectionStatement *Statement `locationName:"rejectionStatement" type:"structure" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s FollowUpPrompt) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s FollowUpPrompt) GoString() string {
 	return s.String()
 }
@@ -6599,12 +7319,20 @@ type FulfillmentActivity struct {
 	Type *string `locationName:"type" type:"string" required:"true" enum:"FulfillmentActivityType"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s FulfillmentActivity) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s FulfillmentActivity) GoString() string {
 	return s.String()
 }
@@ -6640,7 +7368,7 @@ func (s *FulfillmentActivity) SetType(v string) *FulfillmentActivity {
 }
 
 type GetBotAliasInput struct {
-	_ struct{} `type:"structure"`
+	_ struct{} `type:"structure" nopayload:"true"`
 
 	// The name of the bot.
 	//
@@ -6653,12 +7381,20 @@ type GetBotAliasInput struct {
 	Name *string `location:"uri" locationName:"name" min:"1" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetBotAliasInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetBotAliasInput) GoString() string {
 	return s.String()
 }
@@ -6727,12 +7463,20 @@ type GetBotAliasOutput struct {
 	Name *string `locationName:"name" min:"1" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetBotAliasOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetBotAliasOutput) GoString() string {
 	return s.String()
 }
@@ -6786,7 +7530,7 @@ func (s *GetBotAliasOutput) SetName(v string) *GetBotAliasOutput {
 }
 
 type GetBotAliasesInput struct {
-	_ struct{} `type:"structure"`
+	_ struct{} `type:"structure" nopayload:"true"`
 
 	// The name of the bot.
 	//
@@ -6808,12 +7552,20 @@ type GetBotAliasesInput struct {
 	NextToken *string `location:"querystring" locationName:"nextToken" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetBotAliasesInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetBotAliasesInput) GoString() string {
 	return s.String()
 }
@@ -6877,12 +7629,20 @@ type GetBotAliasesOutput struct {
 	NextToken *string `locationName:"nextToken" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetBotAliasesOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetBotAliasesOutput) GoString() string {
 	return s.String()
 }
@@ -6900,7 +7660,7 @@ func (s *GetBotAliasesOutput) SetNextToken(v string) *GetBotAliasesOutput {
 }
 
 type GetBotChannelAssociationInput struct {
-	_ struct{} `type:"structure"`
+	_ struct{} `type:"structure" nopayload:"true"`
 
 	// An alias pointing to the specific version of the Amazon Lex bot to which
 	// this association is being made.
@@ -6920,12 +7680,20 @@ type GetBotChannelAssociationInput struct {
 	Name *string `location:"uri" locationName:"name" min:"1" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetBotChannelAssociationInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetBotChannelAssociationInput) GoString() string {
 	return s.String()
 }
@@ -6985,6 +7753,10 @@ type GetBotChannelAssociationOutput struct {
 
 	// Provides information that the messaging platform needs to communicate with
 	// the Amazon Lex bot.
+	//
+	// BotConfiguration is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by GetBotChannelAssociationOutput's
+	// String and GoString methods.
 	BotConfiguration map[string]*string `locationName:"botConfiguration" min:"1" type:"map" sensitive:"true"`
 
 	// The name of the Amazon Lex bot.
@@ -7017,12 +7789,20 @@ type GetBotChannelAssociationOutput struct {
 	Type *string `locationName:"type" type:"string" enum:"ChannelType"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetBotChannelAssociationOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetBotChannelAssociationOutput) GoString() string {
 	return s.String()
 }
@@ -7082,7 +7862,7 @@ func (s *GetBotChannelAssociationOutput) SetType(v string) *GetBotChannelAssocia
 }
 
 type GetBotChannelAssociationsInput struct {
-	_ struct{} `type:"structure"`
+	_ struct{} `type:"structure" nopayload:"true"`
 
 	// An alias pointing to the specific version of the Amazon Lex bot to which
 	// this association is being made.
@@ -7112,12 +7892,20 @@ type GetBotChannelAssociationsInput struct {
 	NextToken *string `location:"querystring" locationName:"nextToken" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetBotChannelAssociationsInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetBotChannelAssociationsInput) GoString() string {
 	return s.String()
 }
@@ -7194,12 +7982,20 @@ type GetBotChannelAssociationsOutput struct {
 	NextToken *string `locationName:"nextToken" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetBotChannelAssociationsOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetBotChannelAssociationsOutput) GoString() string {
 	return s.String()
 }
@@ -7217,7 +8013,7 @@ func (s *GetBotChannelAssociationsOutput) SetNextToken(v string) *GetBotChannelA
 }
 
 type GetBotInput struct {
-	_ struct{} `type:"structure"`
+	_ struct{} `type:"structure" nopayload:"true"`
 
 	// The name of the bot. The name is case sensitive.
 	//
@@ -7230,12 +8026,20 @@ type GetBotInput struct {
 	VersionOrAlias *string `location:"uri" locationName:"versionoralias" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetBotInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetBotInput) GoString() string {
 	return s.String()
 }
@@ -7380,12 +8184,20 @@ type GetBotOutput struct {
 	VoiceId *string `locationName:"voiceId" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetBotOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetBotOutput) GoString() string {
 	return s.String()
 }
@@ -7499,7 +8311,7 @@ func (s *GetBotOutput) SetVoiceId(v string) *GetBotOutput {
 }
 
 type GetBotVersionsInput struct {
-	_ struct{} `type:"structure"`
+	_ struct{} `type:"structure" nopayload:"true"`
 
 	// The maximum number of bot versions to return in the response. The default
 	// is 10.
@@ -7517,12 +8329,20 @@ type GetBotVersionsInput struct {
 	NextToken *string `location:"querystring" locationName:"nextToken" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetBotVersionsInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetBotVersionsInput) GoString() string {
 	return s.String()
 }
@@ -7578,12 +8398,20 @@ type GetBotVersionsOutput struct {
 	NextToken *string `locationName:"nextToken" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetBotVersionsOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetBotVersionsOutput) GoString() string {
 	return s.String()
 }
@@ -7601,7 +8429,7 @@ func (s *GetBotVersionsOutput) SetNextToken(v string) *GetBotVersionsOutput {
 }
 
 type GetBotsInput struct {
-	_ struct{} `type:"structure"`
+	_ struct{} `type:"structure" nopayload:"true"`
 
 	// The maximum number of bots to return in the response that the request will
 	// return. The default is 10.
@@ -7619,12 +8447,20 @@ type GetBotsInput struct {
 	NextToken *string `location:"querystring" locationName:"nextToken" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetBotsInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetBotsInput) GoString() string {
 	return s.String()
 }
@@ -7674,12 +8510,20 @@ type GetBotsOutput struct {
 	NextToken *string `locationName:"nextToken" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetBotsOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetBotsOutput) GoString() string {
 	return s.String()
 }
@@ -7697,7 +8541,7 @@ func (s *GetBotsOutput) SetNextToken(v string) *GetBotsOutput {
 }
 
 type GetBuiltinIntentInput struct {
-	_ struct{} `type:"structure"`
+	_ struct{} `type:"structure" nopayload:"true"`
 
 	// The unique identifier for a built-in intent. To find the signature for an
 	// intent, see Standard Built-in Intents (https://developer.amazon.com/public/solutions/alexa/alexa-skills-kit/docs/built-in-intent-ref/standard-intents)
@@ -7707,12 +8551,20 @@ type GetBuiltinIntentInput struct {
 	Signature *string `location:"uri" locationName:"signature" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetBuiltinIntentInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetBuiltinIntentInput) GoString() string {
 	return s.String()
 }
@@ -7753,12 +8605,20 @@ type GetBuiltinIntentOutput struct {
 	SupportedLocales []*string `locationName:"supportedLocales" type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetBuiltinIntentOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetBuiltinIntentOutput) GoString() string {
 	return s.String()
 }
@@ -7782,7 +8642,7 @@ func (s *GetBuiltinIntentOutput) SetSupportedLocales(v []*string) *GetBuiltinInt
 }
 
 type GetBuiltinIntentsInput struct {
-	_ struct{} `type:"structure"`
+	_ struct{} `type:"structure" nopayload:"true"`
 
 	// A list of locales that the intent supports.
 	Locale *string `location:"querystring" locationName:"locale" type:"string" enum:"Locale"`
@@ -7803,12 +8663,20 @@ type GetBuiltinIntentsInput struct {
 	SignatureContains *string `location:"querystring" locationName:"signatureContains" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetBuiltinIntentsInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetBuiltinIntentsInput) GoString() string {
 	return s.String()
 }
@@ -7863,12 +8731,20 @@ type GetBuiltinIntentsOutput struct {
 	NextToken *string `locationName:"nextToken" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetBuiltinIntentsOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetBuiltinIntentsOutput) GoString() string {
 	return s.String()
 }
@@ -7886,7 +8762,7 @@ func (s *GetBuiltinIntentsOutput) SetNextToken(v string) *GetBuiltinIntentsOutpu
 }
 
 type GetBuiltinSlotTypesInput struct {
-	_ struct{} `type:"structure"`
+	_ struct{} `type:"structure" nopayload:"true"`
 
 	// A list of locales that the slot type supports.
 	Locale *string `location:"querystring" locationName:"locale" type:"string" enum:"Locale"`
@@ -7907,12 +8783,20 @@ type GetBuiltinSlotTypesInput struct {
 	SignatureContains *string `location:"querystring" locationName:"signatureContains" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetBuiltinSlotTypesInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetBuiltinSlotTypesInput) GoString() string {
 	return s.String()
 }
@@ -7966,12 +8850,20 @@ type GetBuiltinSlotTypesOutput struct {
 	SlotTypes []*BuiltinSlotTypeMetadata `locationName:"slotTypes" type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetBuiltinSlotTypesOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetBuiltinSlotTypesOutput) GoString() string {
 	return s.String()
 }
@@ -7989,7 +8881,7 @@ func (s *GetBuiltinSlotTypesOutput) SetSlotTypes(v []*BuiltinSlotTypeMetadata) *
 }
 
 type GetExportInput struct {
-	_ struct{} `type:"structure"`
+	_ struct{} `type:"structure" nopayload:"true"`
 
 	// The format of the exported data.
 	//
@@ -8012,12 +8904,20 @@ type GetExportInput struct {
 	Version *string `location:"querystring" locationName:"version" min:"1" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetExportInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetExportInput) GoString() string {
 	return s.String()
 }
@@ -8109,12 +9009,20 @@ type GetExportOutput struct {
 	Version *string `locationName:"version" min:"1" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetExportOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetExportOutput) GoString() string {
 	return s.String()
 }
@@ -8162,7 +9070,7 @@ func (s *GetExportOutput) SetVersion(v string) *GetExportOutput {
 }
 
 type GetImportInput struct {
-	_ struct{} `type:"structure"`
+	_ struct{} `type:"structure" nopayload:"true"`
 
 	// The identifier of the import job information to return.
 	//
@@ -8170,12 +9078,20 @@ type GetImportInput struct {
 	ImportId *string `location:"uri" locationName:"importId" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetImportInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetImportInput) GoString() string {
 	return s.String()
 }
@@ -8229,12 +9145,20 @@ type GetImportOutput struct {
 	ResourceType *string `locationName:"resourceType" type:"string" enum:"ResourceType"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetImportOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetImportOutput) GoString() string {
 	return s.String()
 }
@@ -8282,7 +9206,7 @@ func (s *GetImportOutput) SetResourceType(v string) *GetImportOutput {
 }
 
 type GetIntentInput struct {
-	_ struct{} `type:"structure"`
+	_ struct{} `type:"structure" nopayload:"true"`
 
 	// The name of the intent. The name is case sensitive.
 	//
@@ -8295,12 +9219,20 @@ type GetIntentInput struct {
 	Version *string `location:"uri" locationName:"version" min:"1" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetIntentInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetIntentInput) GoString() string {
 	return s.String()
 }
@@ -8370,6 +9302,10 @@ type GetIntentOutput struct {
 	// Describes how the intent is fulfilled. For more information, see PutIntent.
 	FulfillmentActivity *FulfillmentActivity `locationName:"fulfillmentActivity" type:"structure"`
 
+	// An array of InputContext objects that lists the contexts that must be active
+	// for Amazon Lex to choose the intent in a conversation with the user.
+	InputContexts []*InputContext `locationName:"inputContexts" type:"list"`
+
 	// Configuration information, if any, to connect to an Amazon Kendra index with
 	// the AMAZON.KendraSearchIntent intent.
 	KendraConfiguration *KendraConfiguration `locationName:"kendraConfiguration" type:"structure"`
@@ -8380,6 +9316,10 @@ type GetIntentOutput struct {
 
 	// The name of the intent.
 	Name *string `locationName:"name" min:"1" type:"string"`
+
+	// An array of OutputContext objects that lists the contexts that the intent
+	// activates when the intent is fulfilled.
+	OutputContexts []*OutputContext `locationName:"outputContexts" type:"list"`
 
 	// A unique identifier for a built-in intent.
 	ParentIntentSignature *string `locationName:"parentIntentSignature" type:"string"`
@@ -8398,12 +9338,20 @@ type GetIntentOutput struct {
 	Version *string `locationName:"version" min:"1" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetIntentOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetIntentOutput) GoString() string {
 	return s.String()
 }
@@ -8456,6 +9404,12 @@ func (s *GetIntentOutput) SetFulfillmentActivity(v *FulfillmentActivity) *GetInt
 	return s
 }
 
+// SetInputContexts sets the InputContexts field's value.
+func (s *GetIntentOutput) SetInputContexts(v []*InputContext) *GetIntentOutput {
+	s.InputContexts = v
+	return s
+}
+
 // SetKendraConfiguration sets the KendraConfiguration field's value.
 func (s *GetIntentOutput) SetKendraConfiguration(v *KendraConfiguration) *GetIntentOutput {
 	s.KendraConfiguration = v
@@ -8471,6 +9425,12 @@ func (s *GetIntentOutput) SetLastUpdatedDate(v time.Time) *GetIntentOutput {
 // SetName sets the Name field's value.
 func (s *GetIntentOutput) SetName(v string) *GetIntentOutput {
 	s.Name = &v
+	return s
+}
+
+// SetOutputContexts sets the OutputContexts field's value.
+func (s *GetIntentOutput) SetOutputContexts(v []*OutputContext) *GetIntentOutput {
+	s.OutputContexts = v
 	return s
 }
 
@@ -8505,7 +9465,7 @@ func (s *GetIntentOutput) SetVersion(v string) *GetIntentOutput {
 }
 
 type GetIntentVersionsInput struct {
-	_ struct{} `type:"structure"`
+	_ struct{} `type:"structure" nopayload:"true"`
 
 	// The maximum number of intent versions to return in the response. The default
 	// is 10.
@@ -8523,12 +9483,20 @@ type GetIntentVersionsInput struct {
 	NextToken *string `location:"querystring" locationName:"nextToken" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetIntentVersionsInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetIntentVersionsInput) GoString() string {
 	return s.String()
 }
@@ -8584,12 +9552,20 @@ type GetIntentVersionsOutput struct {
 	NextToken *string `locationName:"nextToken" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetIntentVersionsOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetIntentVersionsOutput) GoString() string {
 	return s.String()
 }
@@ -8607,7 +9583,7 @@ func (s *GetIntentVersionsOutput) SetNextToken(v string) *GetIntentVersionsOutpu
 }
 
 type GetIntentsInput struct {
-	_ struct{} `type:"structure"`
+	_ struct{} `type:"structure" nopayload:"true"`
 
 	// The maximum number of intents to return in the response. The default is 10.
 	MaxResults *int64 `location:"querystring" locationName:"maxResults" min:"1" type:"integer"`
@@ -8624,12 +9600,20 @@ type GetIntentsInput struct {
 	NextToken *string `location:"querystring" locationName:"nextToken" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetIntentsInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetIntentsInput) GoString() string {
 	return s.String()
 }
@@ -8679,12 +9663,20 @@ type GetIntentsOutput struct {
 	NextToken *string `locationName:"nextToken" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetIntentsOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetIntentsOutput) GoString() string {
 	return s.String()
 }
@@ -8701,8 +9693,328 @@ func (s *GetIntentsOutput) SetNextToken(v string) *GetIntentsOutput {
 	return s
 }
 
-type GetSlotTypeInput struct {
+type GetMigrationInput struct {
+	_ struct{} `type:"structure" nopayload:"true"`
+
+	// The unique identifier of the migration to view. The migrationID is returned
+	// by the operation.
+	//
+	// MigrationId is a required field
+	MigrationId *string `location:"uri" locationName:"migrationId" min:"10" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetMigrationInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetMigrationInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *GetMigrationInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "GetMigrationInput"}
+	if s.MigrationId == nil {
+		invalidParams.Add(request.NewErrParamRequired("MigrationId"))
+	}
+	if s.MigrationId != nil && len(*s.MigrationId) < 10 {
+		invalidParams.Add(request.NewErrParamMinLen("MigrationId", 10))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetMigrationId sets the MigrationId field's value.
+func (s *GetMigrationInput) SetMigrationId(v string) *GetMigrationInput {
+	s.MigrationId = &v
+	return s
+}
+
+type GetMigrationOutput struct {
 	_ struct{} `type:"structure"`
+
+	// A list of alerts and warnings that indicate issues with the migration for
+	// the Amazon Lex V1 bot to Amazon Lex V2. You receive a warning when an Amazon
+	// Lex V1 feature has a different implementation if Amazon Lex V2.
+	//
+	// For more information, see Migrating a bot (https://docs.aws.amazon.com/lexv2/latest/dg/migrate.html)
+	// in the Amazon Lex V2 developer guide.
+	Alerts []*MigrationAlert `locationName:"alerts" type:"list"`
+
+	// The unique identifier of the migration. This is the same as the identifier
+	// used when calling the GetMigration operation.
+	MigrationId *string `locationName:"migrationId" min:"10" type:"string"`
+
+	// Indicates the status of the migration. When the status is COMPLETE the migration
+	// is finished and the bot is available in Amazon Lex V2. There may be alerts
+	// and warnings that need to be resolved to complete the migration.
+	MigrationStatus *string `locationName:"migrationStatus" type:"string" enum:"MigrationStatus"`
+
+	// The strategy used to conduct the migration.
+	//
+	//    * CREATE_NEW - Creates a new Amazon Lex V2 bot and migrates the Amazon
+	//    Lex V1 bot to the new bot.
+	//
+	//    * UPDATE_EXISTING - Overwrites the existing Amazon Lex V2 bot metadata
+	//    and the locale being migrated. It doesn't change any other locales in
+	//    the Amazon Lex V2 bot. If the locale doesn't exist, a new locale is created
+	//    in the Amazon Lex V2 bot.
+	MigrationStrategy *string `locationName:"migrationStrategy" type:"string" enum:"MigrationStrategy"`
+
+	// The date and time that the migration started.
+	MigrationTimestamp *time.Time `locationName:"migrationTimestamp" type:"timestamp"`
+
+	// The locale of the Amazon Lex V1 bot migrated to Amazon Lex V2.
+	V1BotLocale *string `locationName:"v1BotLocale" type:"string" enum:"Locale"`
+
+	// The name of the Amazon Lex V1 bot migrated to Amazon Lex V2.
+	V1BotName *string `locationName:"v1BotName" min:"2" type:"string"`
+
+	// The version of the Amazon Lex V1 bot migrated to Amazon Lex V2.
+	V1BotVersion *string `locationName:"v1BotVersion" min:"1" type:"string"`
+
+	// The unique identifier of the Amazon Lex V2 bot that the Amazon Lex V1 is
+	// being migrated to.
+	V2BotId *string `locationName:"v2BotId" min:"10" type:"string"`
+
+	// The IAM role that Amazon Lex uses to run the Amazon Lex V2 bot.
+	V2BotRole *string `locationName:"v2BotRole" min:"20" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetMigrationOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetMigrationOutput) GoString() string {
+	return s.String()
+}
+
+// SetAlerts sets the Alerts field's value.
+func (s *GetMigrationOutput) SetAlerts(v []*MigrationAlert) *GetMigrationOutput {
+	s.Alerts = v
+	return s
+}
+
+// SetMigrationId sets the MigrationId field's value.
+func (s *GetMigrationOutput) SetMigrationId(v string) *GetMigrationOutput {
+	s.MigrationId = &v
+	return s
+}
+
+// SetMigrationStatus sets the MigrationStatus field's value.
+func (s *GetMigrationOutput) SetMigrationStatus(v string) *GetMigrationOutput {
+	s.MigrationStatus = &v
+	return s
+}
+
+// SetMigrationStrategy sets the MigrationStrategy field's value.
+func (s *GetMigrationOutput) SetMigrationStrategy(v string) *GetMigrationOutput {
+	s.MigrationStrategy = &v
+	return s
+}
+
+// SetMigrationTimestamp sets the MigrationTimestamp field's value.
+func (s *GetMigrationOutput) SetMigrationTimestamp(v time.Time) *GetMigrationOutput {
+	s.MigrationTimestamp = &v
+	return s
+}
+
+// SetV1BotLocale sets the V1BotLocale field's value.
+func (s *GetMigrationOutput) SetV1BotLocale(v string) *GetMigrationOutput {
+	s.V1BotLocale = &v
+	return s
+}
+
+// SetV1BotName sets the V1BotName field's value.
+func (s *GetMigrationOutput) SetV1BotName(v string) *GetMigrationOutput {
+	s.V1BotName = &v
+	return s
+}
+
+// SetV1BotVersion sets the V1BotVersion field's value.
+func (s *GetMigrationOutput) SetV1BotVersion(v string) *GetMigrationOutput {
+	s.V1BotVersion = &v
+	return s
+}
+
+// SetV2BotId sets the V2BotId field's value.
+func (s *GetMigrationOutput) SetV2BotId(v string) *GetMigrationOutput {
+	s.V2BotId = &v
+	return s
+}
+
+// SetV2BotRole sets the V2BotRole field's value.
+func (s *GetMigrationOutput) SetV2BotRole(v string) *GetMigrationOutput {
+	s.V2BotRole = &v
+	return s
+}
+
+type GetMigrationsInput struct {
+	_ struct{} `type:"structure" nopayload:"true"`
+
+	// The maximum number of migrations to return in the response. The default is
+	// 10.
+	MaxResults *int64 `location:"querystring" locationName:"maxResults" min:"1" type:"integer"`
+
+	// Filters the list to contain only migrations in the specified state.
+	MigrationStatusEquals *string `location:"querystring" locationName:"migrationStatusEquals" type:"string" enum:"MigrationStatus"`
+
+	// A pagination token that fetches the next page of migrations. If the response
+	// to this operation is truncated, Amazon Lex returns a pagination token in
+	// the response. To fetch the next page of migrations, specify the pagination
+	// token in the request.
+	NextToken *string `location:"querystring" locationName:"nextToken" type:"string"`
+
+	// The field to sort the list of migrations by. You can sort by the Amazon Lex
+	// V1 bot name or the date and time that the migration was started.
+	SortByAttribute *string `location:"querystring" locationName:"sortByAttribute" type:"string" enum:"MigrationSortAttribute"`
+
+	// The order so sort the list.
+	SortByOrder *string `location:"querystring" locationName:"sortByOrder" type:"string" enum:"SortOrder"`
+
+	// Filters the list to contain only bots whose name contains the specified string.
+	// The string is matched anywhere in bot name.
+	V1BotNameContains *string `location:"querystring" locationName:"v1BotNameContains" min:"2" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetMigrationsInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetMigrationsInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *GetMigrationsInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "GetMigrationsInput"}
+	if s.MaxResults != nil && *s.MaxResults < 1 {
+		invalidParams.Add(request.NewErrParamMinValue("MaxResults", 1))
+	}
+	if s.V1BotNameContains != nil && len(*s.V1BotNameContains) < 2 {
+		invalidParams.Add(request.NewErrParamMinLen("V1BotNameContains", 2))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetMaxResults sets the MaxResults field's value.
+func (s *GetMigrationsInput) SetMaxResults(v int64) *GetMigrationsInput {
+	s.MaxResults = &v
+	return s
+}
+
+// SetMigrationStatusEquals sets the MigrationStatusEquals field's value.
+func (s *GetMigrationsInput) SetMigrationStatusEquals(v string) *GetMigrationsInput {
+	s.MigrationStatusEquals = &v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *GetMigrationsInput) SetNextToken(v string) *GetMigrationsInput {
+	s.NextToken = &v
+	return s
+}
+
+// SetSortByAttribute sets the SortByAttribute field's value.
+func (s *GetMigrationsInput) SetSortByAttribute(v string) *GetMigrationsInput {
+	s.SortByAttribute = &v
+	return s
+}
+
+// SetSortByOrder sets the SortByOrder field's value.
+func (s *GetMigrationsInput) SetSortByOrder(v string) *GetMigrationsInput {
+	s.SortByOrder = &v
+	return s
+}
+
+// SetV1BotNameContains sets the V1BotNameContains field's value.
+func (s *GetMigrationsInput) SetV1BotNameContains(v string) *GetMigrationsInput {
+	s.V1BotNameContains = &v
+	return s
+}
+
+type GetMigrationsOutput struct {
+	_ struct{} `type:"structure"`
+
+	// An array of summaries for migrations from Amazon Lex V1 to Amazon Lex V2.
+	// To see details of the migration, use the migrationId from the summary in
+	// a call to the operation.
+	MigrationSummaries []*MigrationSummary `locationName:"migrationSummaries" type:"list"`
+
+	// If the response is truncated, it includes a pagination token that you can
+	// specify in your next request to fetch the next page of migrations.
+	NextToken *string `locationName:"nextToken" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetMigrationsOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetMigrationsOutput) GoString() string {
+	return s.String()
+}
+
+// SetMigrationSummaries sets the MigrationSummaries field's value.
+func (s *GetMigrationsOutput) SetMigrationSummaries(v []*MigrationSummary) *GetMigrationsOutput {
+	s.MigrationSummaries = v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *GetMigrationsOutput) SetNextToken(v string) *GetMigrationsOutput {
+	s.NextToken = &v
+	return s
+}
+
+type GetSlotTypeInput struct {
+	_ struct{} `type:"structure" nopayload:"true"`
 
 	// The name of the slot type. The name is case sensitive.
 	//
@@ -8715,12 +10027,20 @@ type GetSlotTypeInput struct {
 	Version *string `location:"uri" locationName:"version" min:"1" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetSlotTypeInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetSlotTypeInput) GoString() string {
 	return s.String()
 }
@@ -8796,12 +10116,20 @@ type GetSlotTypeOutput struct {
 	Version *string `locationName:"version" min:"1" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetSlotTypeOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetSlotTypeOutput) GoString() string {
 	return s.String()
 }
@@ -8867,7 +10195,7 @@ func (s *GetSlotTypeOutput) SetVersion(v string) *GetSlotTypeOutput {
 }
 
 type GetSlotTypeVersionsInput struct {
-	_ struct{} `type:"structure"`
+	_ struct{} `type:"structure" nopayload:"true"`
 
 	// The maximum number of slot type versions to return in the response. The default
 	// is 10.
@@ -8885,12 +10213,20 @@ type GetSlotTypeVersionsInput struct {
 	NextToken *string `location:"querystring" locationName:"nextToken" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetSlotTypeVersionsInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetSlotTypeVersionsInput) GoString() string {
 	return s.String()
 }
@@ -8946,12 +10282,20 @@ type GetSlotTypeVersionsOutput struct {
 	SlotTypes []*SlotTypeMetadata `locationName:"slotTypes" type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetSlotTypeVersionsOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetSlotTypeVersionsOutput) GoString() string {
 	return s.String()
 }
@@ -8969,7 +10313,7 @@ func (s *GetSlotTypeVersionsOutput) SetSlotTypes(v []*SlotTypeMetadata) *GetSlot
 }
 
 type GetSlotTypesInput struct {
-	_ struct{} `type:"structure"`
+	_ struct{} `type:"structure" nopayload:"true"`
 
 	// The maximum number of slot types to return in the response. The default is
 	// 10.
@@ -8987,12 +10331,20 @@ type GetSlotTypesInput struct {
 	NextToken *string `location:"querystring" locationName:"nextToken" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetSlotTypesInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetSlotTypesInput) GoString() string {
 	return s.String()
 }
@@ -9043,12 +10395,20 @@ type GetSlotTypesOutput struct {
 	SlotTypes []*SlotTypeMetadata `locationName:"slotTypes" type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetSlotTypesOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetSlotTypesOutput) GoString() string {
 	return s.String()
 }
@@ -9066,7 +10426,7 @@ func (s *GetSlotTypesOutput) SetSlotTypes(v []*SlotTypeMetadata) *GetSlotTypesOu
 }
 
 type GetUtterancesViewInput struct {
-	_ struct{} `type:"structure"`
+	_ struct{} `type:"structure" nopayload:"true"`
 
 	// The name of the bot for which utterance information should be returned.
 	//
@@ -9086,12 +10446,20 @@ type GetUtterancesViewInput struct {
 	StatusType *string `location:"querystring" locationName:"status_type" type:"string" required:"true" enum:"StatusType"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetUtterancesViewInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetUtterancesViewInput) GoString() string {
 	return s.String()
 }
@@ -9153,12 +10521,20 @@ type GetUtterancesViewOutput struct {
 	Utterances []*UtteranceList `locationName:"utterances" type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetUtterancesViewOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetUtterancesViewOutput) GoString() string {
 	return s.String()
 }
@@ -9172,6 +10548,57 @@ func (s *GetUtterancesViewOutput) SetBotName(v string) *GetUtterancesViewOutput 
 // SetUtterances sets the Utterances field's value.
 func (s *GetUtterancesViewOutput) SetUtterances(v []*UtteranceList) *GetUtterancesViewOutput {
 	s.Utterances = v
+	return s
+}
+
+// The name of a context that must be active for an intent to be selected by
+// Amazon Lex.
+type InputContext struct {
+	_ struct{} `type:"structure"`
+
+	// The name of the context.
+	//
+	// Name is a required field
+	Name *string `locationName:"name" min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s InputContext) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s InputContext) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *InputContext) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "InputContext"}
+	if s.Name == nil {
+		invalidParams.Add(request.NewErrParamRequired("Name"))
+	}
+	if s.Name != nil && len(*s.Name) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Name", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetName sets the Name field's value.
+func (s *InputContext) SetName(v string) *InputContext {
+	s.Name = &v
 	return s
 }
 
@@ -9190,12 +10617,20 @@ type Intent struct {
 	IntentVersion *string `locationName:"intentVersion" min:"1" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s Intent) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s Intent) GoString() string {
 	return s.String()
 }
@@ -9255,12 +10690,20 @@ type IntentMetadata struct {
 	Version *string `locationName:"version" min:"1" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s IntentMetadata) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s IntentMetadata) GoString() string {
 	return s.String()
 }
@@ -9303,12 +10746,20 @@ type InternalFailureException struct {
 	Message_ *string `locationName:"message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s InternalFailureException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s InternalFailureException) GoString() string {
 	return s.String()
 }
@@ -9382,12 +10833,20 @@ type KendraConfiguration struct {
 	Role *string `locationName:"role" min:"20" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s KendraConfiguration) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s KendraConfiguration) GoString() string {
 	return s.String()
 }
@@ -9442,12 +10901,20 @@ type LimitExceededException struct {
 	RetryAfterSeconds *string `location:"header" locationName:"Retry-After" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s LimitExceededException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s LimitExceededException) GoString() string {
 	return s.String()
 }
@@ -9491,7 +10958,7 @@ func (s *LimitExceededException) RequestID() string {
 }
 
 type ListTagsForResourceInput struct {
-	_ struct{} `type:"structure"`
+	_ struct{} `type:"structure" nopayload:"true"`
 
 	// The Amazon Resource Name (ARN) of the resource to get a list of tags for.
 	//
@@ -9499,12 +10966,20 @@ type ListTagsForResourceInput struct {
 	ResourceArn *string `location:"uri" locationName:"resourceArn" min:"1" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListTagsForResourceInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListTagsForResourceInput) GoString() string {
 	return s.String()
 }
@@ -9538,12 +11013,20 @@ type ListTagsForResourceOutput struct {
 	Tags []*Tag `locationName:"tags" type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListTagsForResourceOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListTagsForResourceOutput) GoString() string {
 	return s.String()
 }
@@ -9583,12 +11066,20 @@ type LogSettingsRequest struct {
 	ResourceArn *string `locationName:"resourceArn" min:"1" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s LogSettingsRequest) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s LogSettingsRequest) GoString() string {
 	return s.String()
 }
@@ -9666,12 +11157,20 @@ type LogSettingsResponse struct {
 	ResourcePrefix *string `locationName:"resourcePrefix" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s LogSettingsResponse) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s LogSettingsResponse) GoString() string {
 	return s.String()
 }
@@ -9726,12 +11225,20 @@ type Message struct {
 	GroupNumber *int64 `locationName:"groupNumber" min:"1" type:"integer"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s Message) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s Message) GoString() string {
 	return s.String()
 }
@@ -9776,6 +11283,181 @@ func (s *Message) SetGroupNumber(v int64) *Message {
 	return s
 }
 
+// Provides information about alerts and warnings that Amazon Lex sends during
+// a migration. The alerts include information about how to resolve the issue.
+type MigrationAlert struct {
+	_ struct{} `type:"structure"`
+
+	// Additional details about the alert.
+	Details []*string `locationName:"details" type:"list"`
+
+	// A message that describes why the alert was issued.
+	Message *string `locationName:"message" type:"string"`
+
+	// A link to the Amazon Lex documentation that describes how to resolve the
+	// alert.
+	ReferenceURLs []*string `locationName:"referenceURLs" type:"list"`
+
+	// The type of alert. There are two kinds of alerts:
+	//
+	//    * ERROR - There was an issue with the migration that can't be resolved.
+	//    The migration stops.
+	//
+	//    * WARN - There was an issue with the migration that requires manual changes
+	//    to the new Amazon Lex V2 bot. The migration continues.
+	Type *string `locationName:"type" type:"string" enum:"MigrationAlertType"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s MigrationAlert) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s MigrationAlert) GoString() string {
+	return s.String()
+}
+
+// SetDetails sets the Details field's value.
+func (s *MigrationAlert) SetDetails(v []*string) *MigrationAlert {
+	s.Details = v
+	return s
+}
+
+// SetMessage sets the Message field's value.
+func (s *MigrationAlert) SetMessage(v string) *MigrationAlert {
+	s.Message = &v
+	return s
+}
+
+// SetReferenceURLs sets the ReferenceURLs field's value.
+func (s *MigrationAlert) SetReferenceURLs(v []*string) *MigrationAlert {
+	s.ReferenceURLs = v
+	return s
+}
+
+// SetType sets the Type field's value.
+func (s *MigrationAlert) SetType(v string) *MigrationAlert {
+	s.Type = &v
+	return s
+}
+
+// Provides information about migrating a bot from Amazon Lex V1 to Amazon Lex
+// V2.
+type MigrationSummary struct {
+	_ struct{} `type:"structure"`
+
+	// The unique identifier that Amazon Lex assigned to the migration.
+	MigrationId *string `locationName:"migrationId" min:"10" type:"string"`
+
+	// The status of the operation. When the status is COMPLETE the bot is available
+	// in Amazon Lex V2. There may be alerts and warnings that need to be resolved
+	// to complete the migration.
+	MigrationStatus *string `locationName:"migrationStatus" type:"string" enum:"MigrationStatus"`
+
+	// The strategy used to conduct the migration.
+	MigrationStrategy *string `locationName:"migrationStrategy" type:"string" enum:"MigrationStrategy"`
+
+	// The date and time that the migration started.
+	MigrationTimestamp *time.Time `locationName:"migrationTimestamp" type:"timestamp"`
+
+	// The locale of the Amazon Lex V1 bot that is the source of the migration.
+	V1BotLocale *string `locationName:"v1BotLocale" type:"string" enum:"Locale"`
+
+	// The name of the Amazon Lex V1 bot that is the source of the migration.
+	V1BotName *string `locationName:"v1BotName" min:"2" type:"string"`
+
+	// The version of the Amazon Lex V1 bot that is the source of the migration.
+	V1BotVersion *string `locationName:"v1BotVersion" min:"1" type:"string"`
+
+	// The unique identifier of the Amazon Lex V2 that is the destination of the
+	// migration.
+	V2BotId *string `locationName:"v2BotId" min:"10" type:"string"`
+
+	// The IAM role that Amazon Lex uses to run the Amazon Lex V2 bot.
+	V2BotRole *string `locationName:"v2BotRole" min:"20" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s MigrationSummary) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s MigrationSummary) GoString() string {
+	return s.String()
+}
+
+// SetMigrationId sets the MigrationId field's value.
+func (s *MigrationSummary) SetMigrationId(v string) *MigrationSummary {
+	s.MigrationId = &v
+	return s
+}
+
+// SetMigrationStatus sets the MigrationStatus field's value.
+func (s *MigrationSummary) SetMigrationStatus(v string) *MigrationSummary {
+	s.MigrationStatus = &v
+	return s
+}
+
+// SetMigrationStrategy sets the MigrationStrategy field's value.
+func (s *MigrationSummary) SetMigrationStrategy(v string) *MigrationSummary {
+	s.MigrationStrategy = &v
+	return s
+}
+
+// SetMigrationTimestamp sets the MigrationTimestamp field's value.
+func (s *MigrationSummary) SetMigrationTimestamp(v time.Time) *MigrationSummary {
+	s.MigrationTimestamp = &v
+	return s
+}
+
+// SetV1BotLocale sets the V1BotLocale field's value.
+func (s *MigrationSummary) SetV1BotLocale(v string) *MigrationSummary {
+	s.V1BotLocale = &v
+	return s
+}
+
+// SetV1BotName sets the V1BotName field's value.
+func (s *MigrationSummary) SetV1BotName(v string) *MigrationSummary {
+	s.V1BotName = &v
+	return s
+}
+
+// SetV1BotVersion sets the V1BotVersion field's value.
+func (s *MigrationSummary) SetV1BotVersion(v string) *MigrationSummary {
+	s.V1BotVersion = &v
+	return s
+}
+
+// SetV2BotId sets the V2BotId field's value.
+func (s *MigrationSummary) SetV2BotId(v string) *MigrationSummary {
+	s.V2BotId = &v
+	return s
+}
+
+// SetV2BotRole sets the V2BotRole field's value.
+func (s *MigrationSummary) SetV2BotRole(v string) *MigrationSummary {
+	s.V2BotRole = &v
+	return s
+}
+
 // The resource specified in the request was not found. Check the resource and
 // try again.
 type NotFoundException struct {
@@ -9785,12 +11467,20 @@ type NotFoundException struct {
 	Message_ *string `locationName:"message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s NotFoundException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s NotFoundException) GoString() string {
 	return s.String()
 }
@@ -9833,6 +11523,94 @@ func (s *NotFoundException) RequestID() string {
 	return s.RespMetadata.RequestID
 }
 
+// The specification of an output context that is set when an intent is fulfilled.
+type OutputContext struct {
+	_ struct{} `type:"structure"`
+
+	// The name of the context.
+	//
+	// Name is a required field
+	Name *string `locationName:"name" min:"1" type:"string" required:"true"`
+
+	// The number of seconds that the context should be active after it is first
+	// sent in a PostContent or PostText response. You can set the value between
+	// 5 and 86,400 seconds (24 hours).
+	//
+	// TimeToLiveInSeconds is a required field
+	TimeToLiveInSeconds *int64 `locationName:"timeToLiveInSeconds" min:"5" type:"integer" required:"true"`
+
+	// The number of conversation turns that the context should be active. A conversation
+	// turn is one PostContent or PostText request and the corresponding response
+	// from Amazon Lex.
+	//
+	// TurnsToLive is a required field
+	TurnsToLive *int64 `locationName:"turnsToLive" min:"1" type:"integer" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s OutputContext) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s OutputContext) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *OutputContext) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "OutputContext"}
+	if s.Name == nil {
+		invalidParams.Add(request.NewErrParamRequired("Name"))
+	}
+	if s.Name != nil && len(*s.Name) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Name", 1))
+	}
+	if s.TimeToLiveInSeconds == nil {
+		invalidParams.Add(request.NewErrParamRequired("TimeToLiveInSeconds"))
+	}
+	if s.TimeToLiveInSeconds != nil && *s.TimeToLiveInSeconds < 5 {
+		invalidParams.Add(request.NewErrParamMinValue("TimeToLiveInSeconds", 5))
+	}
+	if s.TurnsToLive == nil {
+		invalidParams.Add(request.NewErrParamRequired("TurnsToLive"))
+	}
+	if s.TurnsToLive != nil && *s.TurnsToLive < 1 {
+		invalidParams.Add(request.NewErrParamMinValue("TurnsToLive", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetName sets the Name field's value.
+func (s *OutputContext) SetName(v string) *OutputContext {
+	s.Name = &v
+	return s
+}
+
+// SetTimeToLiveInSeconds sets the TimeToLiveInSeconds field's value.
+func (s *OutputContext) SetTimeToLiveInSeconds(v int64) *OutputContext {
+	s.TimeToLiveInSeconds = &v
+	return s
+}
+
+// SetTurnsToLive sets the TurnsToLive field's value.
+func (s *OutputContext) SetTurnsToLive(v int64) *OutputContext {
+	s.TurnsToLive = &v
+	return s
+}
+
 // The checksum of the resource that you are trying to change does not match
 // the checksum in the request. Check the resource's checksum and try again.
 type PreconditionFailedException struct {
@@ -9842,12 +11620,20 @@ type PreconditionFailedException struct {
 	Message_ *string `locationName:"message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s PreconditionFailedException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s PreconditionFailedException) GoString() string {
 	return s.String()
 }
@@ -9915,12 +11701,20 @@ type Prompt struct {
 	ResponseCard *string `locationName:"responseCard" min:"1" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s Prompt) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s Prompt) GoString() string {
 	return s.String()
 }
@@ -10019,12 +11813,20 @@ type PutBotAliasInput struct {
 	Tags []*Tag `locationName:"tags" type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s PutBotAliasInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s PutBotAliasInput) GoString() string {
 	return s.String()
 }
@@ -10147,12 +11949,20 @@ type PutBotAliasOutput struct {
 	Tags []*Tag `locationName:"tags" type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s PutBotAliasOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s PutBotAliasOutput) GoString() string {
 	return s.String()
 }
@@ -10339,14 +12149,6 @@ type PutBotInput struct {
 	// In other Regions, the enableModelImprovements parameter is set to true by
 	// default. In these Regions setting the parameter to false throws a ValidationException
 	// exception.
-	//
-	//    * Asia Pacific (Singapore) (ap-southeast-1)
-	//
-	//    * Asia Pacific (Tokyo) (ap-northeast-1)
-	//
-	//    * EU (Frankfurt) (eu-central-1)
-	//
-	//    * EU (London) (eu-west-2)
 	EnableModelImprovements *bool `locationName:"enableModelImprovements" type:"boolean"`
 
 	// The maximum time in seconds that Amazon Lex retains the data gathered in
@@ -10394,7 +12196,7 @@ type PutBotInput struct {
 	// if they are configured for the bot.
 	//
 	// You must set the enableModelImprovements parameter to true to use confidence
-	// scores.
+	// scores in the following regions.
 	//
 	//    * US East (N. Virginia) (us-east-1)
 	//
@@ -10440,12 +12242,20 @@ type PutBotInput struct {
 	VoiceId *string `locationName:"voiceId" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s PutBotInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s PutBotInput) GoString() string {
 	return s.String()
 }
@@ -10717,12 +12527,20 @@ type PutBotOutput struct {
 	VoiceId *string `locationName:"voiceId" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s PutBotOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s PutBotOutput) GoString() string {
 	return s.String()
 }
@@ -10934,6 +12752,10 @@ type PutIntentInput struct {
 	// process the intent (for example, place an order with a pizzeria).
 	FulfillmentActivity *FulfillmentActivity `locationName:"fulfillmentActivity" type:"structure"`
 
+	// An array of InputContext objects that lists the contexts that must be active
+	// for Amazon Lex to choose the intent in a conversation with the user.
+	InputContexts []*InputContext `locationName:"inputContexts" type:"list"`
+
 	// Configuration information required to use the AMAZON.KendraSearchIntent intent
 	// to connect to an Amazon Kendra index. For more information, see AMAZON.KendraSearchIntent
 	// (http://docs.aws.amazon.com/lex/latest/dg/built-in-intent-kendra-search.html).
@@ -10950,6 +12772,10 @@ type PutIntentInput struct {
 	//
 	// Name is a required field
 	Name *string `location:"uri" locationName:"name" min:"1" type:"string" required:"true"`
+
+	// An array of OutputContext objects that lists the contexts that the intent
+	// activates when the intent is fulfilled.
+	OutputContexts []*OutputContext `locationName:"outputContexts" type:"list"`
 
 	// A unique identifier for the built-in intent to base this intent on. To find
 	// the signature for an intent, see Standard Built-in Intents (https://developer.amazon.com/public/solutions/alexa/alexa-skills-kit/docs/built-in-intent-ref/standard-intents)
@@ -10976,12 +12802,20 @@ type PutIntentInput struct {
 	Slots []*Slot `locationName:"slots" type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s PutIntentInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s PutIntentInput) GoString() string {
 	return s.String()
 }
@@ -11020,9 +12854,29 @@ func (s *PutIntentInput) Validate() error {
 			invalidParams.AddNested("FulfillmentActivity", err.(request.ErrInvalidParams))
 		}
 	}
+	if s.InputContexts != nil {
+		for i, v := range s.InputContexts {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "InputContexts", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
 	if s.KendraConfiguration != nil {
 		if err := s.KendraConfiguration.Validate(); err != nil {
 			invalidParams.AddNested("KendraConfiguration", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.OutputContexts != nil {
+		for i, v := range s.OutputContexts {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "OutputContexts", i), err.(request.ErrInvalidParams))
+			}
 		}
 	}
 	if s.RejectionStatement != nil {
@@ -11095,6 +12949,12 @@ func (s *PutIntentInput) SetFulfillmentActivity(v *FulfillmentActivity) *PutInte
 	return s
 }
 
+// SetInputContexts sets the InputContexts field's value.
+func (s *PutIntentInput) SetInputContexts(v []*InputContext) *PutIntentInput {
+	s.InputContexts = v
+	return s
+}
+
 // SetKendraConfiguration sets the KendraConfiguration field's value.
 func (s *PutIntentInput) SetKendraConfiguration(v *KendraConfiguration) *PutIntentInput {
 	s.KendraConfiguration = v
@@ -11104,6 +12964,12 @@ func (s *PutIntentInput) SetKendraConfiguration(v *KendraConfiguration) *PutInte
 // SetName sets the Name field's value.
 func (s *PutIntentInput) SetName(v string) *PutIntentInput {
 	s.Name = &v
+	return s
+}
+
+// SetOutputContexts sets the OutputContexts field's value.
+func (s *PutIntentInput) SetOutputContexts(v []*OutputContext) *PutIntentInput {
+	s.OutputContexts = v
 	return s
 }
 
@@ -11169,6 +13035,10 @@ type PutIntentOutput struct {
 	// intent.
 	FulfillmentActivity *FulfillmentActivity `locationName:"fulfillmentActivity" type:"structure"`
 
+	// An array of InputContext objects that lists the contexts that must be active
+	// for Amazon Lex to choose the intent in a conversation with the user.
+	InputContexts []*InputContext `locationName:"inputContexts" type:"list"`
+
 	// Configuration information, if any, required to connect to an Amazon Kendra
 	// index and use the AMAZON.KendraSearchIntent intent.
 	KendraConfiguration *KendraConfiguration `locationName:"kendraConfiguration" type:"structure"`
@@ -11179,6 +13049,10 @@ type PutIntentOutput struct {
 
 	// The name of the intent.
 	Name *string `locationName:"name" min:"1" type:"string"`
+
+	// An array of OutputContext objects that lists the contexts that the intent
+	// activates when the intent is fulfilled.
+	OutputContexts []*OutputContext `locationName:"outputContexts" type:"list"`
 
 	// A unique identifier for the built-in intent that this intent is based on.
 	ParentIntentSignature *string `locationName:"parentIntentSignature" type:"string"`
@@ -11197,12 +13071,20 @@ type PutIntentOutput struct {
 	Version *string `locationName:"version" min:"1" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s PutIntentOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s PutIntentOutput) GoString() string {
 	return s.String()
 }
@@ -11261,6 +13143,12 @@ func (s *PutIntentOutput) SetFulfillmentActivity(v *FulfillmentActivity) *PutInt
 	return s
 }
 
+// SetInputContexts sets the InputContexts field's value.
+func (s *PutIntentOutput) SetInputContexts(v []*InputContext) *PutIntentOutput {
+	s.InputContexts = v
+	return s
+}
+
 // SetKendraConfiguration sets the KendraConfiguration field's value.
 func (s *PutIntentOutput) SetKendraConfiguration(v *KendraConfiguration) *PutIntentOutput {
 	s.KendraConfiguration = v
@@ -11276,6 +13164,12 @@ func (s *PutIntentOutput) SetLastUpdatedDate(v time.Time) *PutIntentOutput {
 // SetName sets the Name field's value.
 func (s *PutIntentOutput) SetName(v string) *PutIntentOutput {
 	s.Name = &v
+	return s
+}
+
+// SetOutputContexts sets the OutputContexts field's value.
+func (s *PutIntentOutput) SetOutputContexts(v []*OutputContext) *PutIntentOutput {
+	s.OutputContexts = v
 	return s
 }
 
@@ -11384,12 +13278,20 @@ type PutSlotTypeInput struct {
 	ValueSelectionStrategy *string `locationName:"valueSelectionStrategy" type:"string" enum:"SlotValueSelectionStrategy"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s PutSlotTypeInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s PutSlotTypeInput) GoString() string {
 	return s.String()
 }
@@ -11524,12 +13426,20 @@ type PutSlotTypeOutput struct {
 	Version *string `locationName:"version" min:"1" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s PutSlotTypeOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s PutSlotTypeOutput) GoString() string {
 	return s.String()
 }
@@ -11625,12 +13535,20 @@ type ResourceInUseException struct {
 	ReferenceType *string `locationName:"referenceType" type:"string" enum:"ReferenceType"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ResourceInUseException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ResourceInUseException) GoString() string {
 	return s.String()
 }
@@ -11688,12 +13606,20 @@ type ResourceReference struct {
 	Version *string `locationName:"version" min:"1" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ResourceReference) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ResourceReference) GoString() string {
 	return s.String()
 }
@@ -11713,6 +13639,11 @@ func (s *ResourceReference) SetVersion(v string) *ResourceReference {
 // Identifies the version of a specific slot.
 type Slot struct {
 	_ struct{} `type:"structure"`
+
+	// A list of default values for the slot. Default values are used when Amazon
+	// Lex hasn't determined a value for a slot. You can specify default values
+	// from context variables, session attributes, and defined values.
+	DefaultValueSpec *SlotDefaultValueSpec `locationName:"defaultValueSpec" type:"structure"`
 
 	// A description of the slot.
 	Description *string `locationName:"description" type:"string"`
@@ -11764,12 +13695,20 @@ type Slot struct {
 	ValueElicitationPrompt *Prompt `locationName:"valueElicitationPrompt" type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s Slot) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s Slot) GoString() string {
 	return s.String()
 }
@@ -11795,6 +13734,11 @@ func (s *Slot) Validate() error {
 	if s.SlotTypeVersion != nil && len(*s.SlotTypeVersion) < 1 {
 		invalidParams.Add(request.NewErrParamMinLen("SlotTypeVersion", 1))
 	}
+	if s.DefaultValueSpec != nil {
+		if err := s.DefaultValueSpec.Validate(); err != nil {
+			invalidParams.AddNested("DefaultValueSpec", err.(request.ErrInvalidParams))
+		}
+	}
 	if s.ValueElicitationPrompt != nil {
 		if err := s.ValueElicitationPrompt.Validate(); err != nil {
 			invalidParams.AddNested("ValueElicitationPrompt", err.(request.ErrInvalidParams))
@@ -11805,6 +13749,12 @@ func (s *Slot) Validate() error {
 		return invalidParams
 	}
 	return nil
+}
+
+// SetDefaultValueSpec sets the DefaultValueSpec field's value.
+func (s *Slot) SetDefaultValueSpec(v *SlotDefaultValueSpec) *Slot {
+	s.DefaultValueSpec = v
+	return s
 }
 
 // SetDescription sets the Description field's value.
@@ -11867,6 +13817,128 @@ func (s *Slot) SetValueElicitationPrompt(v *Prompt) *Slot {
 	return s
 }
 
+// A default value for a slot.
+type SlotDefaultValue struct {
+	_ struct{} `type:"structure"`
+
+	// The default value for the slot. You can specify one of the following:
+	//
+	//    * #context-name.slot-name - The slot value "slot-name" in the context
+	//    "context-name."
+	//
+	//    * {attribute} - The slot value of the session attribute "attribute."
+	//
+	//    * 'value' - The discrete value "value."
+	//
+	// DefaultValue is a required field
+	DefaultValue *string `locationName:"defaultValue" min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s SlotDefaultValue) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s SlotDefaultValue) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *SlotDefaultValue) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "SlotDefaultValue"}
+	if s.DefaultValue == nil {
+		invalidParams.Add(request.NewErrParamRequired("DefaultValue"))
+	}
+	if s.DefaultValue != nil && len(*s.DefaultValue) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("DefaultValue", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetDefaultValue sets the DefaultValue field's value.
+func (s *SlotDefaultValue) SetDefaultValue(v string) *SlotDefaultValue {
+	s.DefaultValue = &v
+	return s
+}
+
+// Contains the default values for a slot. Default values are used when Amazon
+// Lex hasn't determined a value for a slot.
+type SlotDefaultValueSpec struct {
+	_ struct{} `type:"structure"`
+
+	// The default values for a slot. You can specify more than one default. For
+	// example, you can specify a default value to use from a matching context variable,
+	// a session attribute, or a fixed value.
+	//
+	// The default value chosen is selected based on the order that you specify
+	// them in the list. For example, if you specify a context variable and a fixed
+	// value in that order, Amazon Lex uses the context variable if it is available,
+	// else it uses the fixed value.
+	//
+	// DefaultValueList is a required field
+	DefaultValueList []*SlotDefaultValue `locationName:"defaultValueList" type:"list" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s SlotDefaultValueSpec) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s SlotDefaultValueSpec) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *SlotDefaultValueSpec) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "SlotDefaultValueSpec"}
+	if s.DefaultValueList == nil {
+		invalidParams.Add(request.NewErrParamRequired("DefaultValueList"))
+	}
+	if s.DefaultValueList != nil {
+		for i, v := range s.DefaultValueList {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "DefaultValueList", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetDefaultValueList sets the DefaultValueList field's value.
+func (s *SlotDefaultValueSpec) SetDefaultValueList(v []*SlotDefaultValue) *SlotDefaultValueSpec {
+	s.DefaultValueList = v
+	return s
+}
+
 // Provides configuration information for a slot type.
 type SlotTypeConfiguration struct {
 	_ struct{} `type:"structure"`
@@ -11875,12 +13947,20 @@ type SlotTypeConfiguration struct {
 	RegexConfiguration *SlotTypeRegexConfiguration `locationName:"regexConfiguration" type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s SlotTypeConfiguration) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s SlotTypeConfiguration) GoString() string {
 	return s.String()
 }
@@ -11927,12 +14007,20 @@ type SlotTypeMetadata struct {
 	Version *string `locationName:"version" min:"1" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s SlotTypeMetadata) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s SlotTypeMetadata) GoString() string {
 	return s.String()
 }
@@ -11994,12 +14082,20 @@ type SlotTypeRegexConfiguration struct {
 	Pattern *string `locationName:"pattern" min:"1" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s SlotTypeRegexConfiguration) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s SlotTypeRegexConfiguration) GoString() string {
 	return s.String()
 }
@@ -12046,7 +14142,6 @@ type StartImportInput struct {
 	// A zip archive in binary format. The archive should contain one file, a JSON
 	// file containing the resource to import. The resource should match the type
 	// specified in the resourceType field.
-	//
 	// Payload is automatically base64 encoded/decoded by the SDK.
 	//
 	// Payload is a required field
@@ -12067,12 +14162,20 @@ type StartImportInput struct {
 	Tags []*Tag `locationName:"tags" type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s StartImportInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s StartImportInput) GoString() string {
 	return s.String()
 }
@@ -12156,12 +14259,20 @@ type StartImportOutput struct {
 	Tags []*Tag `locationName:"tags" type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s StartImportOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s StartImportOutput) GoString() string {
 	return s.String()
 }
@@ -12208,6 +14319,230 @@ func (s *StartImportOutput) SetTags(v []*Tag) *StartImportOutput {
 	return s
 }
 
+type StartMigrationInput struct {
+	_ struct{} `type:"structure"`
+
+	// The strategy used to conduct the migration.
+	//
+	//    * CREATE_NEW - Creates a new Amazon Lex V2 bot and migrates the Amazon
+	//    Lex V1 bot to the new bot.
+	//
+	//    * UPDATE_EXISTING - Overwrites the existing Amazon Lex V2 bot metadata
+	//    and the locale being migrated. It doesn't change any other locales in
+	//    the Amazon Lex V2 bot. If the locale doesn't exist, a new locale is created
+	//    in the Amazon Lex V2 bot.
+	//
+	// MigrationStrategy is a required field
+	MigrationStrategy *string `locationName:"migrationStrategy" type:"string" required:"true" enum:"MigrationStrategy"`
+
+	// The name of the Amazon Lex V1 bot that you are migrating to Amazon Lex V2.
+	//
+	// V1BotName is a required field
+	V1BotName *string `locationName:"v1BotName" min:"2" type:"string" required:"true"`
+
+	// The version of the bot to migrate to Amazon Lex V2. You can migrate the $LATEST
+	// version as well as any numbered version.
+	//
+	// V1BotVersion is a required field
+	V1BotVersion *string `locationName:"v1BotVersion" min:"1" type:"string" required:"true"`
+
+	// The name of the Amazon Lex V2 bot that you are migrating the Amazon Lex V1
+	// bot to.
+	//
+	//    * If the Amazon Lex V2 bot doesn't exist, you must use the CREATE_NEW
+	//    migration strategy.
+	//
+	//    * If the Amazon Lex V2 bot exists, you must use the UPDATE_EXISTING migration
+	//    strategy to change the contents of the Amazon Lex V2 bot.
+	//
+	// V2BotName is a required field
+	V2BotName *string `locationName:"v2BotName" min:"1" type:"string" required:"true"`
+
+	// The IAM role that Amazon Lex uses to run the Amazon Lex V2 bot.
+	//
+	// V2BotRole is a required field
+	V2BotRole *string `locationName:"v2BotRole" min:"20" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s StartMigrationInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s StartMigrationInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *StartMigrationInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "StartMigrationInput"}
+	if s.MigrationStrategy == nil {
+		invalidParams.Add(request.NewErrParamRequired("MigrationStrategy"))
+	}
+	if s.V1BotName == nil {
+		invalidParams.Add(request.NewErrParamRequired("V1BotName"))
+	}
+	if s.V1BotName != nil && len(*s.V1BotName) < 2 {
+		invalidParams.Add(request.NewErrParamMinLen("V1BotName", 2))
+	}
+	if s.V1BotVersion == nil {
+		invalidParams.Add(request.NewErrParamRequired("V1BotVersion"))
+	}
+	if s.V1BotVersion != nil && len(*s.V1BotVersion) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("V1BotVersion", 1))
+	}
+	if s.V2BotName == nil {
+		invalidParams.Add(request.NewErrParamRequired("V2BotName"))
+	}
+	if s.V2BotName != nil && len(*s.V2BotName) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("V2BotName", 1))
+	}
+	if s.V2BotRole == nil {
+		invalidParams.Add(request.NewErrParamRequired("V2BotRole"))
+	}
+	if s.V2BotRole != nil && len(*s.V2BotRole) < 20 {
+		invalidParams.Add(request.NewErrParamMinLen("V2BotRole", 20))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetMigrationStrategy sets the MigrationStrategy field's value.
+func (s *StartMigrationInput) SetMigrationStrategy(v string) *StartMigrationInput {
+	s.MigrationStrategy = &v
+	return s
+}
+
+// SetV1BotName sets the V1BotName field's value.
+func (s *StartMigrationInput) SetV1BotName(v string) *StartMigrationInput {
+	s.V1BotName = &v
+	return s
+}
+
+// SetV1BotVersion sets the V1BotVersion field's value.
+func (s *StartMigrationInput) SetV1BotVersion(v string) *StartMigrationInput {
+	s.V1BotVersion = &v
+	return s
+}
+
+// SetV2BotName sets the V2BotName field's value.
+func (s *StartMigrationInput) SetV2BotName(v string) *StartMigrationInput {
+	s.V2BotName = &v
+	return s
+}
+
+// SetV2BotRole sets the V2BotRole field's value.
+func (s *StartMigrationInput) SetV2BotRole(v string) *StartMigrationInput {
+	s.V2BotRole = &v
+	return s
+}
+
+type StartMigrationOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The unique identifier that Amazon Lex assigned to the migration.
+	MigrationId *string `locationName:"migrationId" min:"10" type:"string"`
+
+	// The strategy used to conduct the migration.
+	MigrationStrategy *string `locationName:"migrationStrategy" type:"string" enum:"MigrationStrategy"`
+
+	// The date and time that the migration started.
+	MigrationTimestamp *time.Time `locationName:"migrationTimestamp" type:"timestamp"`
+
+	// The locale used for the Amazon Lex V1 bot.
+	V1BotLocale *string `locationName:"v1BotLocale" type:"string" enum:"Locale"`
+
+	// The name of the Amazon Lex V1 bot that you are migrating to Amazon Lex V2.
+	V1BotName *string `locationName:"v1BotName" min:"2" type:"string"`
+
+	// The version of the bot to migrate to Amazon Lex V2.
+	V1BotVersion *string `locationName:"v1BotVersion" min:"1" type:"string"`
+
+	// The unique identifier for the Amazon Lex V2 bot.
+	V2BotId *string `locationName:"v2BotId" min:"10" type:"string"`
+
+	// The IAM role that Amazon Lex uses to run the Amazon Lex V2 bot.
+	V2BotRole *string `locationName:"v2BotRole" min:"20" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s StartMigrationOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s StartMigrationOutput) GoString() string {
+	return s.String()
+}
+
+// SetMigrationId sets the MigrationId field's value.
+func (s *StartMigrationOutput) SetMigrationId(v string) *StartMigrationOutput {
+	s.MigrationId = &v
+	return s
+}
+
+// SetMigrationStrategy sets the MigrationStrategy field's value.
+func (s *StartMigrationOutput) SetMigrationStrategy(v string) *StartMigrationOutput {
+	s.MigrationStrategy = &v
+	return s
+}
+
+// SetMigrationTimestamp sets the MigrationTimestamp field's value.
+func (s *StartMigrationOutput) SetMigrationTimestamp(v time.Time) *StartMigrationOutput {
+	s.MigrationTimestamp = &v
+	return s
+}
+
+// SetV1BotLocale sets the V1BotLocale field's value.
+func (s *StartMigrationOutput) SetV1BotLocale(v string) *StartMigrationOutput {
+	s.V1BotLocale = &v
+	return s
+}
+
+// SetV1BotName sets the V1BotName field's value.
+func (s *StartMigrationOutput) SetV1BotName(v string) *StartMigrationOutput {
+	s.V1BotName = &v
+	return s
+}
+
+// SetV1BotVersion sets the V1BotVersion field's value.
+func (s *StartMigrationOutput) SetV1BotVersion(v string) *StartMigrationOutput {
+	s.V1BotVersion = &v
+	return s
+}
+
+// SetV2BotId sets the V2BotId field's value.
+func (s *StartMigrationOutput) SetV2BotId(v string) *StartMigrationOutput {
+	s.V2BotId = &v
+	return s
+}
+
+// SetV2BotRole sets the V2BotRole field's value.
+func (s *StartMigrationOutput) SetV2BotRole(v string) *StartMigrationOutput {
+	s.V2BotRole = &v
+	return s
+}
+
 // A collection of messages that convey information to the user. At runtime,
 // Amazon Lex selects the message to convey.
 type Statement struct {
@@ -12225,12 +14560,20 @@ type Statement struct {
 	ResponseCard *string `locationName:"responseCard" min:"1" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s Statement) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s Statement) GoString() string {
 	return s.String()
 }
@@ -12294,12 +14637,20 @@ type Tag struct {
 	Value *string `locationName:"value" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s Tag) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s Tag) GoString() string {
 	return s.String()
 }
@@ -12350,12 +14701,20 @@ type TagResourceInput struct {
 	Tags []*Tag `locationName:"tags" type:"list" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s TagResourceInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s TagResourceInput) GoString() string {
 	return s.String()
 }
@@ -12402,21 +14761,29 @@ func (s *TagResourceInput) SetTags(v []*Tag) *TagResourceInput {
 }
 
 type TagResourceOutput struct {
-	_ struct{} `type:"structure"`
+	_ struct{} `type:"structure" nopayload:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s TagResourceOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s TagResourceOutput) GoString() string {
 	return s.String()
 }
 
 type UntagResourceInput struct {
-	_ struct{} `type:"structure"`
+	_ struct{} `type:"structure" nopayload:"true"`
 
 	// The Amazon Resource Name (ARN) of the resource to remove the tags from.
 	//
@@ -12430,12 +14797,20 @@ type UntagResourceInput struct {
 	TagKeys []*string `location:"querystring" locationName:"tagKeys" type:"list" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UntagResourceInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UntagResourceInput) GoString() string {
 	return s.String()
 }
@@ -12472,15 +14847,23 @@ func (s *UntagResourceInput) SetTagKeys(v []*string) *UntagResourceInput {
 }
 
 type UntagResourceOutput struct {
-	_ struct{} `type:"structure"`
+	_ struct{} `type:"structure" nopayload:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UntagResourceOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UntagResourceOutput) GoString() string {
 	return s.String()
 }
@@ -12506,12 +14889,20 @@ type UtteranceData struct {
 	UtteranceString *string `locationName:"utteranceString" min:"1" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UtteranceData) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UtteranceData) GoString() string {
 	return s.String()
 }
@@ -12559,12 +14950,20 @@ type UtteranceList struct {
 	Utterances []*UtteranceData `locationName:"utterances" type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UtteranceList) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UtteranceList) GoString() string {
 	return s.String()
 }
@@ -12743,11 +15142,35 @@ const (
 	// LocaleEnGb is a Locale enum value
 	LocaleEnGb = "en-GB"
 
+	// LocaleEnIn is a Locale enum value
+	LocaleEnIn = "en-IN"
+
 	// LocaleEnUs is a Locale enum value
 	LocaleEnUs = "en-US"
 
+	// LocaleEs419 is a Locale enum value
+	LocaleEs419 = "es-419"
+
+	// LocaleEsEs is a Locale enum value
+	LocaleEsEs = "es-ES"
+
 	// LocaleEsUs is a Locale enum value
 	LocaleEsUs = "es-US"
+
+	// LocaleFrFr is a Locale enum value
+	LocaleFrFr = "fr-FR"
+
+	// LocaleFrCa is a Locale enum value
+	LocaleFrCa = "fr-CA"
+
+	// LocaleItIt is a Locale enum value
+	LocaleItIt = "it-IT"
+
+	// LocaleJaJp is a Locale enum value
+	LocaleJaJp = "ja-JP"
+
+	// LocaleKoKr is a Locale enum value
+	LocaleKoKr = "ko-KR"
 )
 
 // Locale_Values returns all elements of the Locale enum
@@ -12756,8 +15179,16 @@ func Locale_Values() []string {
 		LocaleDeDe,
 		LocaleEnAu,
 		LocaleEnGb,
+		LocaleEnIn,
 		LocaleEnUs,
+		LocaleEs419,
+		LocaleEsEs,
 		LocaleEsUs,
+		LocaleFrFr,
+		LocaleFrCa,
+		LocaleItIt,
+		LocaleJaJp,
+		LocaleKoKr,
 	}
 }
 
@@ -12790,6 +15221,74 @@ func MergeStrategy_Values() []string {
 	return []string{
 		MergeStrategyOverwriteLatest,
 		MergeStrategyFailOnConflict,
+	}
+}
+
+const (
+	// MigrationAlertTypeError is a MigrationAlertType enum value
+	MigrationAlertTypeError = "ERROR"
+
+	// MigrationAlertTypeWarn is a MigrationAlertType enum value
+	MigrationAlertTypeWarn = "WARN"
+)
+
+// MigrationAlertType_Values returns all elements of the MigrationAlertType enum
+func MigrationAlertType_Values() []string {
+	return []string{
+		MigrationAlertTypeError,
+		MigrationAlertTypeWarn,
+	}
+}
+
+const (
+	// MigrationSortAttributeV1BotName is a MigrationSortAttribute enum value
+	MigrationSortAttributeV1BotName = "V1_BOT_NAME"
+
+	// MigrationSortAttributeMigrationDateTime is a MigrationSortAttribute enum value
+	MigrationSortAttributeMigrationDateTime = "MIGRATION_DATE_TIME"
+)
+
+// MigrationSortAttribute_Values returns all elements of the MigrationSortAttribute enum
+func MigrationSortAttribute_Values() []string {
+	return []string{
+		MigrationSortAttributeV1BotName,
+		MigrationSortAttributeMigrationDateTime,
+	}
+}
+
+const (
+	// MigrationStatusInProgress is a MigrationStatus enum value
+	MigrationStatusInProgress = "IN_PROGRESS"
+
+	// MigrationStatusCompleted is a MigrationStatus enum value
+	MigrationStatusCompleted = "COMPLETED"
+
+	// MigrationStatusFailed is a MigrationStatus enum value
+	MigrationStatusFailed = "FAILED"
+)
+
+// MigrationStatus_Values returns all elements of the MigrationStatus enum
+func MigrationStatus_Values() []string {
+	return []string{
+		MigrationStatusInProgress,
+		MigrationStatusCompleted,
+		MigrationStatusFailed,
+	}
+}
+
+const (
+	// MigrationStrategyCreateNew is a MigrationStrategy enum value
+	MigrationStrategyCreateNew = "CREATE_NEW"
+
+	// MigrationStrategyUpdateExisting is a MigrationStrategy enum value
+	MigrationStrategyUpdateExisting = "UPDATE_EXISTING"
+)
+
+// MigrationStrategy_Values returns all elements of the MigrationStrategy enum
+func MigrationStrategy_Values() []string {
+	return []string{
+		MigrationStrategyCreateNew,
+		MigrationStrategyUpdateExisting,
 	}
 }
 
@@ -12898,6 +15397,22 @@ func SlotValueSelectionStrategy_Values() []string {
 	return []string{
 		SlotValueSelectionStrategyOriginalValue,
 		SlotValueSelectionStrategyTopResolution,
+	}
+}
+
+const (
+	// SortOrderAscending is a SortOrder enum value
+	SortOrderAscending = "ASCENDING"
+
+	// SortOrderDescending is a SortOrder enum value
+	SortOrderDescending = "DESCENDING"
+)
+
+// SortOrder_Values returns all elements of the SortOrder enum
+func SortOrder_Values() []string {
+	return []string{
+		SortOrderAscending,
+		SortOrderDescending,
 	}
 }
 

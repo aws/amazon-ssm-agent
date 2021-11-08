@@ -59,9 +59,10 @@ func (c *Polly) DeleteLexiconRequest(input *DeleteLexiconInput) (req *request.Re
 
 // DeleteLexicon API operation for Amazon Polly.
 //
-// Deletes the specified pronunciation lexicon stored in an AWS Region. A lexicon
-// which has been deleted is not available for speech synthesis, nor is it possible
-// to retrieve it using either the GetLexicon or ListLexicon APIs.
+// Deletes the specified pronunciation lexicon stored in an Amazon Web Services
+// Region. A lexicon which has been deleted is not available for speech synthesis,
+// nor is it possible to retrieve it using either the GetLexicon or ListLexicon
+// APIs.
 //
 // For more information, see Managing Lexicons (https://docs.aws.amazon.com/polly/latest/dg/managing-lexicons.html).
 //
@@ -249,8 +250,8 @@ func (c *Polly) GetLexiconRequest(input *GetLexiconInput) (req *request.Request,
 
 // GetLexicon API operation for Amazon Polly.
 //
-// Returns the content of the specified pronunciation lexicon stored in an AWS
-// Region. For more information, see Managing Lexicons (https://docs.aws.amazon.com/polly/latest/dg/managing-lexicons.html).
+// Returns the content of the specified pronunciation lexicon stored in an Amazon
+// Web Services Region. For more information, see Managing Lexicons (https://docs.aws.amazon.com/polly/latest/dg/managing-lexicons.html).
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -426,8 +427,8 @@ func (c *Polly) ListLexiconsRequest(input *ListLexiconsInput) (req *request.Requ
 
 // ListLexicons API operation for Amazon Polly.
 //
-// Returns a list of pronunciation lexicons stored in an AWS Region. For more
-// information, see Managing Lexicons (https://docs.aws.amazon.com/polly/latest/dg/managing-lexicons.html).
+// Returns a list of pronunciation lexicons stored in an Amazon Web Services
+// Region. For more information, see Managing Lexicons (https://docs.aws.amazon.com/polly/latest/dg/managing-lexicons.html).
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -654,10 +655,11 @@ func (c *Polly) PutLexiconRequest(input *PutLexiconInput) (req *request.Request,
 
 // PutLexicon API operation for Amazon Polly.
 //
-// Stores a pronunciation lexicon in an AWS Region. If a lexicon with the same
-// name already exists in the region, it is overwritten by the new lexicon.
-// Lexicon operations have eventual consistency, therefore, it might take some
-// time before the lexicon is available to the SynthesizeSpeech operation.
+// Stores a pronunciation lexicon in an Amazon Web Services Region. If a lexicon
+// with the same name already exists in the region, it is overwritten by the
+// new lexicon. Lexicon operations have eventual consistency, therefore, it
+// might take some time before the lexicon is available to the SynthesizeSpeech
+// operation.
 //
 // For more information, see Managing Lexicons (https://docs.aws.amazon.com/polly/latest/dg/managing-lexicons.html).
 //
@@ -765,7 +767,9 @@ func (c *Polly) StartSpeechSynthesisTaskRequest(input *StartSpeechSynthesisTaskI
 // service to store the output of the synthesis task and two optional parameters
 // (OutputS3KeyPrefix and SnsTopicArn). Once the synthesis task is created,
 // this operation will return a SpeechSynthesisTask object, which will include
-// an identifier of this task as well as the current status.
+// an identifier of this task as well as the current status. The SpeechSynthesisTask
+// object is available for 72 hours after starting the asynchronous synthesis
+// task.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -972,20 +976,28 @@ func (c *Polly) SynthesizeSpeechWithContext(ctx aws.Context, input *SynthesizeSp
 }
 
 type DeleteLexiconInput struct {
-	_ struct{} `type:"structure"`
+	_ struct{} `type:"structure" nopayload:"true"`
 
 	// The name of the lexicon to delete. Must be an existing lexicon in the region.
 	//
 	// Name is a required field
-	Name *string `location:"uri" locationName:"LexiconName" type:"string" required:"true" sensitive:"true"`
+	Name *string `location:"uri" locationName:"LexiconName" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteLexiconInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteLexiconInput) GoString() string {
 	return s.String()
 }
@@ -1013,21 +1025,29 @@ func (s *DeleteLexiconInput) SetName(v string) *DeleteLexiconInput {
 }
 
 type DeleteLexiconOutput struct {
-	_ struct{} `type:"structure"`
+	_ struct{} `type:"structure" nopayload:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteLexiconOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteLexiconOutput) GoString() string {
 	return s.String()
 }
 
 type DescribeVoicesInput struct {
-	_ struct{} `type:"structure"`
+	_ struct{} `type:"structure" nopayload:"true"`
 
 	// Specifies the engine (standard or neural) used by Amazon Polly when processing
 	// input text for speech synthesis.
@@ -1050,12 +1070,20 @@ type DescribeVoicesInput struct {
 	NextToken *string `location:"querystring" locationName:"NextToken" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeVoicesInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeVoicesInput) GoString() string {
 	return s.String()
 }
@@ -1095,12 +1123,20 @@ type DescribeVoicesOutput struct {
 	Voices []*Voice `type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeVoicesOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeVoicesOutput) GoString() string {
 	return s.String()
 }
@@ -1127,12 +1163,20 @@ type EngineNotSupportedException struct {
 	Message_ *string `locationName:"message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s EngineNotSupportedException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s EngineNotSupportedException) GoString() string {
 	return s.String()
 }
@@ -1176,20 +1220,28 @@ func (s *EngineNotSupportedException) RequestID() string {
 }
 
 type GetLexiconInput struct {
-	_ struct{} `type:"structure"`
+	_ struct{} `type:"structure" nopayload:"true"`
 
 	// Name of the lexicon.
 	//
 	// Name is a required field
-	Name *string `location:"uri" locationName:"LexiconName" type:"string" required:"true" sensitive:"true"`
+	Name *string `location:"uri" locationName:"LexiconName" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetLexiconInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetLexiconInput) GoString() string {
 	return s.String()
 }
@@ -1228,12 +1280,20 @@ type GetLexiconOutput struct {
 	LexiconAttributes *LexiconAttributes `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetLexiconOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetLexiconOutput) GoString() string {
 	return s.String()
 }
@@ -1251,7 +1311,7 @@ func (s *GetLexiconOutput) SetLexiconAttributes(v *LexiconAttributes) *GetLexico
 }
 
 type GetSpeechSynthesisTaskInput struct {
-	_ struct{} `type:"structure"`
+	_ struct{} `type:"structure" nopayload:"true"`
 
 	// The Amazon Polly generated identifier for a speech synthesis task.
 	//
@@ -1259,12 +1319,20 @@ type GetSpeechSynthesisTaskInput struct {
 	TaskId *string `location:"uri" locationName:"TaskId" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetSpeechSynthesisTaskInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetSpeechSynthesisTaskInput) GoString() string {
 	return s.String()
 }
@@ -1299,12 +1367,20 @@ type GetSpeechSynthesisTaskOutput struct {
 	SynthesisTask *SynthesisTask `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetSpeechSynthesisTaskOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetSpeechSynthesisTaskOutput) GoString() string {
 	return s.String()
 }
@@ -1324,12 +1400,20 @@ type InvalidLexiconException struct {
 	Message_ *string `locationName:"message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s InvalidLexiconException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s InvalidLexiconException) GoString() string {
 	return s.String()
 }
@@ -1381,12 +1465,20 @@ type InvalidNextTokenException struct {
 	Message_ *string `locationName:"message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s InvalidNextTokenException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s InvalidNextTokenException) GoString() string {
 	return s.String()
 }
@@ -1438,12 +1530,20 @@ type InvalidS3BucketException struct {
 	Message_ *string `locationName:"message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s InvalidS3BucketException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s InvalidS3BucketException) GoString() string {
 	return s.String()
 }
@@ -1495,12 +1595,20 @@ type InvalidS3KeyException struct {
 	Message_ *string `locationName:"message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s InvalidS3KeyException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s InvalidS3KeyException) GoString() string {
 	return s.String()
 }
@@ -1551,12 +1659,20 @@ type InvalidSampleRateException struct {
 	Message_ *string `locationName:"message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s InvalidSampleRateException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s InvalidSampleRateException) GoString() string {
 	return s.String()
 }
@@ -1608,12 +1724,20 @@ type InvalidSnsTopicArnException struct {
 	Message_ *string `locationName:"message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s InvalidSnsTopicArnException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s InvalidSnsTopicArnException) GoString() string {
 	return s.String()
 }
@@ -1665,12 +1789,20 @@ type InvalidSsmlException struct {
 	Message_ *string `locationName:"message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s InvalidSsmlException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s InvalidSsmlException) GoString() string {
 	return s.String()
 }
@@ -1722,12 +1854,20 @@ type InvalidTaskIdException struct {
 	Message_ *string `locationName:"message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s InvalidTaskIdException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s InvalidTaskIdException) GoString() string {
 	return s.String()
 }
@@ -1779,12 +1919,20 @@ type LanguageNotSupportedException struct {
 	Message_ *string `locationName:"message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s LanguageNotSupportedException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s LanguageNotSupportedException) GoString() string {
 	return s.String()
 }
@@ -1834,18 +1982,30 @@ type Lexicon struct {
 
 	// Lexicon content in string format. The content of a lexicon must be in PLS
 	// format.
-	Content *string `type:"string"`
+	//
+	// Content is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by Lexicon's
+	// String and GoString methods.
+	Content *string `type:"string" sensitive:"true"`
 
 	// Name of the lexicon.
-	Name *string `type:"string" sensitive:"true"`
+	Name *string `type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s Lexicon) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s Lexicon) GoString() string {
 	return s.String()
 }
@@ -1888,12 +2048,20 @@ type LexiconAttributes struct {
 	Size *int64 `type:"integer"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s LexiconAttributes) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s LexiconAttributes) GoString() string {
 	return s.String()
 }
@@ -1942,15 +2110,23 @@ type LexiconDescription struct {
 	Attributes *LexiconAttributes `type:"structure"`
 
 	// Name of the lexicon.
-	Name *string `type:"string" sensitive:"true"`
+	Name *string `type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s LexiconDescription) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s LexiconDescription) GoString() string {
 	return s.String()
 }
@@ -1980,12 +2156,20 @@ type LexiconNotFoundException struct {
 	Message_ *string `locationName:"message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s LexiconNotFoundException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s LexiconNotFoundException) GoString() string {
 	return s.String()
 }
@@ -2036,12 +2220,20 @@ type LexiconSizeExceededException struct {
 	Message_ *string `locationName:"message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s LexiconSizeExceededException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s LexiconSizeExceededException) GoString() string {
 	return s.String()
 }
@@ -2085,19 +2277,27 @@ func (s *LexiconSizeExceededException) RequestID() string {
 }
 
 type ListLexiconsInput struct {
-	_ struct{} `type:"structure"`
+	_ struct{} `type:"structure" nopayload:"true"`
 
 	// An opaque pagination token returned from previous ListLexicons operation.
 	// If present, indicates where to continue the list of lexicons.
 	NextToken *string `location:"querystring" locationName:"NextToken" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListLexiconsInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListLexiconsInput) GoString() string {
 	return s.String()
 }
@@ -2119,12 +2319,20 @@ type ListLexiconsOutput struct {
 	NextToken *string `type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListLexiconsOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListLexiconsOutput) GoString() string {
 	return s.String()
 }
@@ -2142,7 +2350,7 @@ func (s *ListLexiconsOutput) SetNextToken(v string) *ListLexiconsOutput {
 }
 
 type ListSpeechSynthesisTasksInput struct {
-	_ struct{} `type:"structure"`
+	_ struct{} `type:"structure" nopayload:"true"`
 
 	// Maximum number of speech synthesis tasks returned in a List operation.
 	MaxResults *int64 `location:"querystring" locationName:"MaxResults" min:"1" type:"integer"`
@@ -2155,12 +2363,20 @@ type ListSpeechSynthesisTasksInput struct {
 	Status *string `location:"querystring" locationName:"Status" type:"string" enum:"TaskStatus"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListSpeechSynthesisTasksInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListSpeechSynthesisTasksInput) GoString() string {
 	return s.String()
 }
@@ -2209,12 +2425,20 @@ type ListSpeechSynthesisTasksOutput struct {
 	SynthesisTasks []*SynthesisTask `type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListSpeechSynthesisTasksOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListSpeechSynthesisTasksOutput) GoString() string {
 	return s.String()
 }
@@ -2240,12 +2464,20 @@ type MarksNotSupportedForFormatException struct {
 	Message_ *string `locationName:"message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s MarksNotSupportedForFormatException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s MarksNotSupportedForFormatException) GoString() string {
 	return s.String()
 }
@@ -2296,12 +2528,20 @@ type MaxLexemeLengthExceededException struct {
 	Message_ *string `locationName:"message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s MaxLexemeLengthExceededException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s MaxLexemeLengthExceededException) GoString() string {
 	return s.String()
 }
@@ -2352,12 +2592,20 @@ type MaxLexiconsNumberExceededException struct {
 	Message_ *string `locationName:"message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s MaxLexiconsNumberExceededException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s MaxLexiconsNumberExceededException) GoString() string {
 	return s.String()
 }
@@ -2405,23 +2653,35 @@ type PutLexiconInput struct {
 
 	// Content of the PLS lexicon as string data.
 	//
+	// Content is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by PutLexiconInput's
+	// String and GoString methods.
+	//
 	// Content is a required field
-	Content *string `type:"string" required:"true"`
+	Content *string `type:"string" required:"true" sensitive:"true"`
 
 	// Name of the lexicon. The name must follow the regular express format [0-9A-Za-z]{1,20}.
 	// That is, the name is a case-sensitive alphanumeric string up to 20 characters
 	// long.
 	//
 	// Name is a required field
-	Name *string `location:"uri" locationName:"LexiconName" type:"string" required:"true" sensitive:"true"`
+	Name *string `location:"uri" locationName:"LexiconName" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s PutLexiconInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s PutLexiconInput) GoString() string {
 	return s.String()
 }
@@ -2458,15 +2718,23 @@ func (s *PutLexiconInput) SetName(v string) *PutLexiconInput {
 }
 
 type PutLexiconOutput struct {
-	_ struct{} `type:"structure"`
+	_ struct{} `type:"structure" nopayload:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s PutLexiconOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s PutLexiconOutput) GoString() string {
 	return s.String()
 }
@@ -2479,12 +2747,20 @@ type ServiceFailureException struct {
 	Message_ *string `locationName:"message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ServiceFailureException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ServiceFailureException) GoString() string {
 	return s.String()
 }
@@ -2535,12 +2811,20 @@ type SsmlMarksNotSupportedForTextTypeException struct {
 	Message_ *string `locationName:"message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s SsmlMarksNotSupportedForTextTypeException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s SsmlMarksNotSupportedForTextTypeException) GoString() string {
 	return s.String()
 }
@@ -2596,8 +2880,8 @@ type StartSpeechSynthesisTaskInput struct {
 	// English (en-IN) or Hindi (hi-IN).
 	//
 	// If a bilingual voice is used and no language code is specified, Amazon Polly
-	// will use the default language of the bilingual voice. The default language
-	// for any voice is the one returned by the DescribeVoices (https://docs.aws.amazon.com/polly/latest/dg/API_DescribeVoices.html)
+	// uses the default language of the bilingual voice. The default language for
+	// any voice is the one returned by the DescribeVoices (https://docs.aws.amazon.com/polly/latest/dg/API_DescribeVoices.html)
 	// operation for the LanguageCode parameter. For example, if no language code
 	// is specified, Aditi will use Indian English rather than Hindi.
 	LanguageCode *string `type:"string" enum:"LanguageCode"`
@@ -2653,12 +2937,20 @@ type StartSpeechSynthesisTaskInput struct {
 	VoiceId *string `type:"string" required:"true" enum:"VoiceId"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s StartSpeechSynthesisTaskInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s StartSpeechSynthesisTaskInput) GoString() string {
 	return s.String()
 }
@@ -2765,12 +3057,20 @@ type StartSpeechSynthesisTaskOutput struct {
 	SynthesisTask *SynthesisTask `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s StartSpeechSynthesisTaskOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s StartSpeechSynthesisTaskOutput) GoString() string {
 	return s.String()
 }
@@ -2798,8 +3098,8 @@ type SynthesisTask struct {
 	// (en-IN) or Hindi (hi-IN).
 	//
 	// If a bilingual voice is used and no language code is specified, Amazon Polly
-	// will use the default language of the bilingual voice. The default language
-	// for any voice is the one returned by the DescribeVoices (https://docs.aws.amazon.com/polly/latest/dg/API_DescribeVoices.html)
+	// uses the default language of the bilingual voice. The default language for
+	// any voice is the one returned by the DescribeVoices (https://docs.aws.amazon.com/polly/latest/dg/API_DescribeVoices.html)
 	// operation for the LanguageCode parameter. For example, if no language code
 	// is specified, Aditi will use Indian English rather than Hindi.
 	LanguageCode *string `type:"string" enum:"LanguageCode"`
@@ -2853,12 +3153,20 @@ type SynthesisTask struct {
 	VoiceId *string `type:"string" enum:"VoiceId"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s SynthesisTask) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s SynthesisTask) GoString() string {
 	return s.String()
 }
@@ -2961,12 +3269,20 @@ type SynthesisTaskNotFoundException struct {
 	Message_ *string `locationName:"message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s SynthesisTaskNotFoundException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s SynthesisTaskNotFoundException) GoString() string {
 	return s.String()
 }
@@ -3013,8 +3329,27 @@ type SynthesizeSpeechInput struct {
 	_ struct{} `type:"structure"`
 
 	// Specifies the engine (standard or neural) for Amazon Polly to use when processing
-	// input text for speech synthesis. Using a voice that is not supported for
-	// the engine selected will result in an error.
+	// input text for speech synthesis. For information on Amazon Polly voices and
+	// which voices are available in standard-only, NTTS-only, and both standard
+	// and NTTS formats, see Available Voices (https://docs.aws.amazon.com/polly/latest/dg/voicelist.html).
+	//
+	// NTTS-only voices
+	//
+	// When using NTTS-only voices such as Kevin (en-US), this parameter is required
+	// and must be set to neural. If the engine is not specified, or is set to standard,
+	// this will result in an error.
+	//
+	// Type: String
+	//
+	// Valid Values: standard | neural
+	//
+	// Required: Yes
+	//
+	// Standard voices
+	//
+	// For standard voices, this is not required; the engine parameter defaults
+	// to standard. If the engine is not specified, or is set to standard and an
+	// NTTS-only voice is selected, this will result in an error.
 	Engine *string `type:"string" enum:"Engine"`
 
 	// Optional language code for the Synthesize Speech request. This is only necessary
@@ -3022,8 +3357,8 @@ type SynthesizeSpeechInput struct {
 	// English (en-IN) or Hindi (hi-IN).
 	//
 	// If a bilingual voice is used and no language code is specified, Amazon Polly
-	// will use the default language of the bilingual voice. The default language
-	// for any voice is the one returned by the DescribeVoices (https://docs.aws.amazon.com/polly/latest/dg/API_DescribeVoices.html)
+	// uses the default language of the bilingual voice. The default language for
+	// any voice is the one returned by the DescribeVoices (https://docs.aws.amazon.com/polly/latest/dg/API_DescribeVoices.html)
 	// operation for the LanguageCode parameter. For example, if no language code
 	// is specified, Aditi will use Indian English rather than Hindi.
 	LanguageCode *string `type:"string" enum:"LanguageCode"`
@@ -3073,12 +3408,20 @@ type SynthesizeSpeechInput struct {
 	VoiceId *string `type:"string" required:"true" enum:"VoiceId"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s SynthesizeSpeechInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s SynthesizeSpeechInput) GoString() string {
 	return s.String()
 }
@@ -3182,12 +3525,20 @@ type SynthesizeSpeechOutput struct {
 	RequestCharacters *int64 `location:"header" locationName:"x-amzn-RequestCharacters" type:"integer"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s SynthesizeSpeechOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s SynthesizeSpeechOutput) GoString() string {
 	return s.String()
 }
@@ -3222,12 +3573,20 @@ type TextLengthExceededException struct {
 	Message_ *string `locationName:"message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s TextLengthExceededException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s TextLengthExceededException) GoString() string {
 	return s.String()
 }
@@ -3279,12 +3638,20 @@ type UnsupportedPlsAlphabetException struct {
 	Message_ *string `locationName:"message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UnsupportedPlsAlphabetException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UnsupportedPlsAlphabetException) GoString() string {
 	return s.String()
 }
@@ -3336,12 +3703,20 @@ type UnsupportedPlsLanguageException struct {
 	Message_ *string `locationName:"message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UnsupportedPlsLanguageException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UnsupportedPlsLanguageException) GoString() string {
 	return s.String()
 }
@@ -3418,12 +3793,20 @@ type Voice struct {
 	SupportedEngines []*string `type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s Voice) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s Voice) GoString() string {
 	return s.String()
 }
@@ -3589,6 +3972,12 @@ const (
 
 	// LanguageCodeTrTr is a LanguageCode enum value
 	LanguageCodeTrTr = "tr-TR"
+
+	// LanguageCodeEnNz is a LanguageCode enum value
+	LanguageCodeEnNz = "en-NZ"
+
+	// LanguageCodeEnZa is a LanguageCode enum value
+	LanguageCodeEnZa = "en-ZA"
 )
 
 // LanguageCode_Values returns all elements of the LanguageCode enum
@@ -3623,6 +4012,8 @@ func LanguageCode_Values() []string {
 		LanguageCodeRuRu,
 		LanguageCodeSvSe,
 		LanguageCodeTrTr,
+		LanguageCodeEnNz,
+		LanguageCodeEnZa,
 	}
 }
 
@@ -3766,6 +4157,9 @@ const (
 	// VoiceIdFiliz is a VoiceId enum value
 	VoiceIdFiliz = "Filiz"
 
+	// VoiceIdGabrielle is a VoiceId enum value
+	VoiceIdGabrielle = "Gabrielle"
+
 	// VoiceIdGeraint is a VoiceId enum value
 	VoiceIdGeraint = "Geraint"
 
@@ -3859,6 +4253,9 @@ const (
 	// VoiceIdNicole is a VoiceId enum value
 	VoiceIdNicole = "Nicole"
 
+	// VoiceIdOlivia is a VoiceId enum value
+	VoiceIdOlivia = "Olivia"
+
 	// VoiceIdPenelope is a VoiceId enum value
 	VoiceIdPenelope = "Penelope"
 
@@ -3897,6 +4294,12 @@ const (
 
 	// VoiceIdZhiyu is a VoiceId enum value
 	VoiceIdZhiyu = "Zhiyu"
+
+	// VoiceIdAria is a VoiceId enum value
+	VoiceIdAria = "Aria"
+
+	// VoiceIdAyanda is a VoiceId enum value
+	VoiceIdAyanda = "Ayanda"
 )
 
 // VoiceId_Values returns all elements of the VoiceId enum
@@ -3919,6 +4322,7 @@ func VoiceId_Values() []string {
 		VoiceIdEnrique,
 		VoiceIdEwa,
 		VoiceIdFiliz,
+		VoiceIdGabrielle,
 		VoiceIdGeraint,
 		VoiceIdGiorgio,
 		VoiceIdGwyneth,
@@ -3950,6 +4354,7 @@ func VoiceId_Values() []string {
 		VoiceIdMizuki,
 		VoiceIdNaja,
 		VoiceIdNicole,
+		VoiceIdOlivia,
 		VoiceIdPenelope,
 		VoiceIdRaveena,
 		VoiceIdRicardo,
@@ -3963,5 +4368,7 @@ func VoiceId_Values() []string {
 		VoiceIdVitoria,
 		VoiceIdZeina,
 		VoiceIdZhiyu,
+		VoiceIdAria,
+		VoiceIdAyanda,
 	}
 }

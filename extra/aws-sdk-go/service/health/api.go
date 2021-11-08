@@ -70,7 +70,7 @@ func (c *Health) DescribeAffectedAccountsForOrganizationRequest(input *DescribeA
 // Before you can call this operation, you must first enable AWS Health to work
 // with AWS Organizations. To do this, call the EnableHealthServiceAccessForOrganization
 // (https://docs.aws.amazon.com/health/latest/APIReference/API_EnableHealthServiceAccessForOrganization.html)
-// operation from your organization's master account.
+// operation from your organization's management account.
 //
 // This API operation uses pagination. Specify the nextToken parameter in the
 // next request to return more results.
@@ -220,8 +220,13 @@ func (c *Health) DescribeAffectedEntitiesRequest(input *DescribeAffectedEntities
 // At least one event ARN is required. Results are sorted by the lastUpdatedTime
 // of the entity, starting with the most recent.
 //
-// This API operation uses pagination. Specify the nextToken parameter in the
-// next request to return more results.
+//    * This API operation uses pagination. Specify the nextToken parameter
+//    in the next request to return more results.
+//
+//    * This operation supports resource-level permissions. You can use this
+//    operation to allow or deny access to specific AWS Health events. For more
+//    information, see Resource- and action-based conditions (https://docs.aws.amazon.com/health/latest/ug/security_iam_id-based-policy-examples.html#resource-action-based-conditions)
+//    in the AWS Health User Guide.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -374,10 +379,15 @@ func (c *Health) DescribeAffectedEntitiesForOrganizationRequest(input *DescribeA
 // Before you can call this operation, you must first enable AWS Health to work
 // with AWS Organizations. To do this, call the EnableHealthServiceAccessForOrganization
 // (https://docs.aws.amazon.com/health/latest/APIReference/API_EnableHealthServiceAccessForOrganization.html)
-// operation from your organization's master account.
+// operation from your organization's management account.
 //
-// This API operation uses pagination. Specify the nextToken parameter in the
-// next request to return more results.
+//    * This API operation uses pagination. Specify the nextToken parameter
+//    in the next request to return more results.
+//
+//    * This operation doesn't support resource-level permissions. You can't
+//    use this operation to allow or deny access to specific AWS Health events.
+//    For more information, see Resource- and action-based conditions (https://docs.aws.amazon.com/health/latest/ug/security_iam_id-based-policy-examples.html#resource-action-based-conditions)
+//    in the AWS Health User Guide.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -730,15 +740,20 @@ func (c *Health) DescribeEventDetailsRequest(input *DescribeEventDetailsInput) (
 // DescribeEventDetails API operation for AWS Health APIs and Notifications.
 //
 // Returns detailed information about one or more specified events. Information
-// includes standard event data (Region, service, and so on, as returned by
-// DescribeEvents (https://docs.aws.amazon.com/health/latest/APIReference/API_DescribeEvents.html)),
+// includes standard event data (AWS Region, service, and so on, as returned
+// by DescribeEvents (https://docs.aws.amazon.com/health/latest/APIReference/API_DescribeEvents.html)),
 // a detailed event description, and possible additional metadata that depends
 // upon the nature of the event. Affected entities are not included. To retrieve
-// those, use the DescribeAffectedEntities (https://docs.aws.amazon.com/health/latest/APIReference/API_DescribeAffectedEntities.html)
+// the entities, use the DescribeAffectedEntities (https://docs.aws.amazon.com/health/latest/APIReference/API_DescribeAffectedEntities.html)
 // operation.
 //
-// If a specified event cannot be retrieved, an error message is returned for
+// If a specified event can't be retrieved, an error message is returned for
 // that event.
+//
+// This operation supports resource-level permissions. You can use this operation
+// to allow or deny access to specific AWS Health events. For more information,
+// see Resource- and action-based conditions (https://docs.aws.amazon.com/health/latest/ug/security_iam_id-based-policy-examples.html#resource-action-based-conditions)
+// in the AWS Health User Guide.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -818,34 +833,38 @@ func (c *Health) DescribeEventDetailsForOrganizationRequest(input *DescribeEvent
 // DescribeEventDetailsForOrganization API operation for AWS Health APIs and Notifications.
 //
 // Returns detailed information about one or more specified events for one or
-// more accounts in your organization. Information includes standard event data
-// (Region, service, and so on, as returned by DescribeEventsForOrganization
-// (https://docs.aws.amazon.com/health/latest/APIReference/API_DescribeEventsForOrganization.html)),
-// a detailed event description, and possible additional metadata that depends
-// upon the nature of the event. Affected entities are not included; to retrieve
-// those, use the DescribeAffectedEntitiesForOrganization (https://docs.aws.amazon.com/health/latest/APIReference/API_DescribeAffectedEntitiesForOrganization.html)
+// more AWS accounts in your organization. This information includes standard
+// event data (such as the AWS Region and service), an event description, and
+// (depending on the event) possible metadata. This operation doesn't return
+// affected entities, such as the resources related to the event. To return
+// affected entities, use the DescribeAffectedEntitiesForOrganization (https://docs.aws.amazon.com/health/latest/APIReference/API_DescribeAffectedEntitiesForOrganization.html)
 // operation.
 //
 // Before you can call this operation, you must first enable AWS Health to work
 // with AWS Organizations. To do this, call the EnableHealthServiceAccessForOrganization
 // (https://docs.aws.amazon.com/health/latest/APIReference/API_EnableHealthServiceAccessForOrganization.html)
-// operation from your organization's master account.
+// operation from your organization's management account.
 //
-// When you call the DescribeEventDetailsForOrganization operation, you specify
+// When you call the DescribeEventDetailsForOrganization operation, specify
 // the organizationEventDetailFilters object in the request. Depending on the
 // AWS Health event type, note the following differences:
 //
-//    * If the event is public, the awsAccountId parameter must be empty. If
-//    you specify an account ID for a public event, then an error message is
-//    returned. That's because the event might apply to all AWS accounts and
-//    isn't specific to an account in your organization.
+//    * To return event details for a public event, you must specify a null
+//    value for the awsAccountId parameter. If you specify an account ID for
+//    a public event, AWS Health returns an error message because public events
+//    aren't specific to an account.
 //
-//    * If the event is specific to an account, then you must specify the awsAccountId
-//    parameter in the request. If you don't specify an account ID, an error
-//    message returns because the event is specific to an AWS account in your
-//    organization.
+//    * To return event details for an event that is specific to an account
+//    in your organization, you must specify the awsAccountId parameter in the
+//    request. If you don't specify an account ID, AWS Health returns an error
+//    message because the event is specific to an account in your organization.
 //
 // For more information, see Event (https://docs.aws.amazon.com/health/latest/APIReference/API_Event.html).
+//
+// This operation doesn't support resource-level permissions. You can't use
+// this operation to allow or deny access to specific AWS Health events. For
+// more information, see Resource- and action-based conditions (https://docs.aws.amazon.com/health/latest/ug/security_iam_id-based-policy-examples.html#resource-action-based-conditions)
+// in the AWS Health User Guide.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -930,8 +949,14 @@ func (c *Health) DescribeEventTypesRequest(input *DescribeEventTypesInput) (req 
 
 // DescribeEventTypes API operation for AWS Health APIs and Notifications.
 //
-// Returns the event types that meet the specified filter criteria. If no filter
-// criteria are specified, all event types are returned, in no particular order.
+// Returns the event types that meet the specified filter criteria. You can
+// use this API operation to find information about the AWS Health event, such
+// as the category, AWS service, and event code. The metadata for each event
+// appears in the EventType (https://docs.aws.amazon.com/health/latest/APIReference/API_EventType.html)
+// object.
+//
+// If you don't specify a filter criteria, the API operation returns all event
+// types, in no particular order.
 //
 // This API operation uses pagination. Specify the nextToken parameter in the
 // next request to return more results.
@@ -1256,7 +1281,7 @@ func (c *Health) DescribeEventsForOrganizationRequest(input *DescribeEventsForOr
 // Before you can call this operation, you must first enable AWS Health to work
 // with AWS Organizations. To do this, call the EnableHealthServiceAccessForOrganization
 // (https://docs.aws.amazon.com/health/latest/APIReference/API_EnableHealthServiceAccessForOrganization.html)
-// operation from your organization's master AWS account.
+// operation from your organization's management account.
 //
 // This API operation uses pagination. Specify the nextToken parameter in the
 // next request to return more results.
@@ -1396,7 +1421,7 @@ func (c *Health) DescribeHealthServiceStatusForOrganizationRequest(input *Descri
 // This operation provides status information on enabling or disabling AWS Health
 // to work with your organization. To call this operation, you must sign in
 // as an IAM user, assume an IAM role, or sign in as the root user (not recommended)
-// in the organization's master account.
+// in the organization's management account.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -1474,13 +1499,13 @@ func (c *Health) DisableHealthServiceAccessForOrganizationRequest(input *Disable
 // Disables AWS Health from working with AWS Organizations. To call this operation,
 // you must sign in as an AWS Identity and Access Management (IAM) user, assume
 // an IAM role, or sign in as the root user (not recommended) in the organization's
-// master AWS account. For more information, see Aggregating AWS Health events
+// management account. For more information, see Aggregating AWS Health events
 // (https://docs.aws.amazon.com/health/latest/ug/aggregate-events.html) in the
 // AWS Health User Guide.
 //
-// This operation doesn't remove the service-linked role (SLR) from the AWS
-// master account in your organization. You must use the IAM console, API, or
-// AWS Command Line Interface (AWS CLI) to remove the SLR. For more information,
+// This operation doesn't remove the service-linked role from the management
+// account in your organization. You must use the IAM console, API, or AWS Command
+// Line Interface (AWS CLI) to remove the service-linked role. For more information,
 // see Deleting a Service-Linked Role (https://docs.aws.amazon.com/IAM/latest/UserGuide/using-service-linked-roles.html#delete-service-linked-role)
 // in the IAM User Guide.
 //
@@ -1573,13 +1598,28 @@ func (c *Health) EnableHealthServiceAccessForOrganizationRequest(input *EnableHe
 
 // EnableHealthServiceAccessForOrganization API operation for AWS Health APIs and Notifications.
 //
-// Calling this operation enables AWS Health to work with AWS Organizations.
-// This applies a service-linked role (SLR) to the master account in the organization.
-// To call this operation, you must sign in as an IAM user, assume an IAM role,
-// or sign in as the root user (not recommended) in the organization's master
-// account.
+// Enables AWS Health to work with AWS Organizations. You can use the organizational
+// view feature to aggregate events from all AWS accounts in your organization
+// in a centralized location.
 //
-// For more information, see Aggregating AWS Health events (https://docs.aws.amazon.com/health/latest/ug/aggregate-events.html)
+// This operation also creates a service-linked role for the management account
+// in the organization.
+//
+// To call this operation, you must meet the following requirements:
+//
+//    * You must have a Business or Enterprise Support plan from AWS Support
+//    (http://aws.amazon.com/premiumsupport/) to use the AWS Health API. If
+//    you call the AWS Health API from an AWS account that doesn't have a Business
+//    or Enterprise Support plan, you receive a SubscriptionRequiredException
+//    error.
+//
+//    * You must have permission to call this operation from the organization's
+//    management account. For example IAM policies, see AWS Health identity-based
+//    policy examples (https://docs.aws.amazon.com/health/latest/ug/security_iam_id-based-policy-examples.html).
+//
+// If you don't have the required support plan, you can instead use the AWS
+// Health console to enable the organizational view feature. For more information,
+// see Aggregating AWS Health events (https://docs.aws.amazon.com/health/latest/ug/aggregate-events.html)
 // in the AWS Health User Guide.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
@@ -1636,8 +1676,12 @@ type AffectedEntity struct {
 	// The ID of the affected entity.
 	EntityValue *string `locationName:"entityValue" type:"string"`
 
-	// The unique identifier for the event. Format: arn:aws:health:event-region::event/SERVICE/EVENT_TYPE_CODE/EVENT_TYPE_PLUS_ID
-	// . Example: Example: arn:aws:health:us-east-1::event/EC2/EC2_INSTANCE_RETIREMENT_SCHEDULED/EC2_INSTANCE_RETIREMENT_SCHEDULED_ABC123-DEF456
+	// The unique identifier for the event. The event ARN has the arn:aws:health:event-region::event/SERVICE/EVENT_TYPE_CODE/EVENT_TYPE_PLUS_ID
+	// format.
+	//
+	// For example, an event ARN might look like the following:
+	//
+	// arn:aws:health:us-east-1::event/EC2/EC2_INSTANCE_RETIREMENT_SCHEDULED/EC2_INSTANCE_RETIREMENT_SCHEDULED_ABC123-DEF456
 	EventArn *string `locationName:"eventArn" type:"string"`
 
 	// The most recent time that the entity was updated.
@@ -1653,12 +1697,20 @@ type AffectedEntity struct {
 	Tags map[string]*string `locationName:"tags" type:"map"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AffectedEntity) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AffectedEntity) GoString() string {
 	return s.String()
 }
@@ -1723,12 +1775,20 @@ type ConcurrentModificationException struct {
 	Message_ *string `locationName:"message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ConcurrentModificationException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ConcurrentModificationException) GoString() string {
 	return s.String()
 }
@@ -1788,12 +1848,20 @@ type DateTimeRange struct {
 	To *time.Time `locationName:"to" type:"timestamp"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DateTimeRange) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DateTimeRange) GoString() string {
 	return s.String()
 }
@@ -1813,8 +1881,12 @@ func (s *DateTimeRange) SetTo(v time.Time) *DateTimeRange {
 type DescribeAffectedAccountsForOrganizationInput struct {
 	_ struct{} `type:"structure"`
 
-	// The unique identifier for the event. Format: arn:aws:health:event-region::event/SERVICE/EVENT_TYPE_CODE/EVENT_TYPE_PLUS_ID
-	// . Example: Example: arn:aws:health:us-east-1::event/EC2/EC2_INSTANCE_RETIREMENT_SCHEDULED/EC2_INSTANCE_RETIREMENT_SCHEDULED_ABC123-DEF456
+	// The unique identifier for the event. The event ARN has the arn:aws:health:event-region::event/SERVICE/EVENT_TYPE_CODE/EVENT_TYPE_PLUS_ID
+	// format.
+	//
+	// For example, an event ARN might look like the following:
+	//
+	// arn:aws:health:us-east-1::event/EC2/EC2_INSTANCE_RETIREMENT_SCHEDULED/EC2_INSTANCE_RETIREMENT_SCHEDULED_ABC123-DEF456
 	//
 	// EventArn is a required field
 	EventArn *string `locationName:"eventArn" type:"string" required:"true"`
@@ -1830,12 +1902,20 @@ type DescribeAffectedAccountsForOrganizationInput struct {
 	NextToken *string `locationName:"nextToken" min:"4" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeAffectedAccountsForOrganizationInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeAffectedAccountsForOrganizationInput) GoString() string {
 	return s.String()
 }
@@ -1907,12 +1987,20 @@ type DescribeAffectedAccountsForOrganizationOutput struct {
 	NextToken *string `locationName:"nextToken" min:"4" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeAffectedAccountsForOrganizationOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeAffectedAccountsForOrganizationOutput) GoString() string {
 	return s.String()
 }
@@ -1943,7 +2031,7 @@ type DescribeAffectedEntitiesForOrganizationInput struct {
 	Locale *string `locationName:"locale" min:"2" type:"string"`
 
 	// The maximum number of items to return in one batch, between 10 and 100, inclusive.
-	MaxResults *int64 `locationName:"maxResults" min:"10" type:"integer"`
+	MaxResults *int64 `locationName:"maxResults" min:"1" type:"integer"`
 
 	// If the results of a search are large, only a portion of the results are returned,
 	// and a nextToken pagination token is returned in the response. To retrieve
@@ -1958,12 +2046,20 @@ type DescribeAffectedEntitiesForOrganizationInput struct {
 	OrganizationEntityFilters []*EventAccountFilter `locationName:"organizationEntityFilters" min:"1" type:"list" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeAffectedEntitiesForOrganizationInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeAffectedEntitiesForOrganizationInput) GoString() string {
 	return s.String()
 }
@@ -1974,8 +2070,8 @@ func (s *DescribeAffectedEntitiesForOrganizationInput) Validate() error {
 	if s.Locale != nil && len(*s.Locale) < 2 {
 		invalidParams.Add(request.NewErrParamMinLen("Locale", 2))
 	}
-	if s.MaxResults != nil && *s.MaxResults < 10 {
-		invalidParams.Add(request.NewErrParamMinValue("MaxResults", 10))
+	if s.MaxResults != nil && *s.MaxResults < 1 {
+		invalidParams.Add(request.NewErrParamMinValue("MaxResults", 1))
 	}
 	if s.NextToken != nil && len(*s.NextToken) < 4 {
 		invalidParams.Add(request.NewErrParamMinLen("NextToken", 4))
@@ -2046,12 +2142,20 @@ type DescribeAffectedEntitiesForOrganizationOutput struct {
 	NextToken *string `locationName:"nextToken" min:"4" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeAffectedEntitiesForOrganizationOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeAffectedEntitiesForOrganizationOutput) GoString() string {
 	return s.String()
 }
@@ -2097,12 +2201,20 @@ type DescribeAffectedEntitiesInput struct {
 	NextToken *string `locationName:"nextToken" min:"4" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeAffectedEntitiesInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeAffectedEntitiesInput) GoString() string {
 	return s.String()
 }
@@ -2172,12 +2284,20 @@ type DescribeAffectedEntitiesOutput struct {
 	NextToken *string `locationName:"nextToken" min:"4" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeAffectedEntitiesOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeAffectedEntitiesOutput) GoString() string {
 	return s.String()
 }
@@ -2202,12 +2322,20 @@ type DescribeEntityAggregatesInput struct {
 	EventArns []*string `locationName:"eventArns" min:"1" type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeEntityAggregatesInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeEntityAggregatesInput) GoString() string {
 	return s.String()
 }
@@ -2238,12 +2366,20 @@ type DescribeEntityAggregatesOutput struct {
 	EntityAggregates []*EntityAggregate `locationName:"entityAggregates" type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeEntityAggregatesOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeEntityAggregatesOutput) GoString() string {
 	return s.String()
 }
@@ -2276,12 +2412,20 @@ type DescribeEventAggregatesInput struct {
 	NextToken *string `locationName:"nextToken" min:"4" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeEventAggregatesInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeEventAggregatesInput) GoString() string {
 	return s.String()
 }
@@ -2348,12 +2492,20 @@ type DescribeEventAggregatesOutput struct {
 	NextToken *string `locationName:"nextToken" min:"4" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeEventAggregatesOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeEventAggregatesOutput) GoString() string {
 	return s.String()
 }
@@ -2383,12 +2535,20 @@ type DescribeEventDetailsForOrganizationInput struct {
 	OrganizationEventDetailFilters []*EventAccountFilter `locationName:"organizationEventDetailFilters" min:"1" type:"list" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeEventDetailsForOrganizationInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeEventDetailsForOrganizationInput) GoString() string {
 	return s.String()
 }
@@ -2444,12 +2604,20 @@ type DescribeEventDetailsForOrganizationOutput struct {
 	SuccessfulSet []*OrganizationEventDetails `locationName:"successfulSet" type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeEventDetailsForOrganizationOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeEventDetailsForOrganizationOutput) GoString() string {
 	return s.String()
 }
@@ -2480,12 +2648,20 @@ type DescribeEventDetailsInput struct {
 	Locale *string `locationName:"locale" min:"2" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeEventDetailsInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeEventDetailsInput) GoString() string {
 	return s.String()
 }
@@ -2531,12 +2707,20 @@ type DescribeEventDetailsOutput struct {
 	SuccessfulSet []*EventDetails `locationName:"successfulSet" type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeEventDetailsOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeEventDetailsOutput) GoString() string {
 	return s.String()
 }
@@ -2574,12 +2758,20 @@ type DescribeEventTypesInput struct {
 	NextToken *string `locationName:"nextToken" min:"4" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeEventTypesInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeEventTypesInput) GoString() string {
 	return s.String()
 }
@@ -2649,12 +2841,20 @@ type DescribeEventTypesOutput struct {
 	NextToken *string `locationName:"nextToken" min:"4" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeEventTypesOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeEventTypesOutput) GoString() string {
 	return s.String()
 }
@@ -2682,7 +2882,7 @@ type DescribeEventsForOrganizationInput struct {
 	Locale *string `locationName:"locale" min:"2" type:"string"`
 
 	// The maximum number of items to return in one batch, between 10 and 100, inclusive.
-	MaxResults *int64 `locationName:"maxResults" min:"10" type:"integer"`
+	MaxResults *int64 `locationName:"maxResults" min:"1" type:"integer"`
 
 	// If the results of a search are large, only a portion of the results are returned,
 	// and a nextToken pagination token is returned in the response. To retrieve
@@ -2692,12 +2892,20 @@ type DescribeEventsForOrganizationInput struct {
 	NextToken *string `locationName:"nextToken" min:"4" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeEventsForOrganizationInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeEventsForOrganizationInput) GoString() string {
 	return s.String()
 }
@@ -2708,8 +2916,8 @@ func (s *DescribeEventsForOrganizationInput) Validate() error {
 	if s.Locale != nil && len(*s.Locale) < 2 {
 		invalidParams.Add(request.NewErrParamMinLen("Locale", 2))
 	}
-	if s.MaxResults != nil && *s.MaxResults < 10 {
-		invalidParams.Add(request.NewErrParamMinValue("MaxResults", 10))
+	if s.MaxResults != nil && *s.MaxResults < 1 {
+		invalidParams.Add(request.NewErrParamMinValue("MaxResults", 1))
 	}
 	if s.NextToken != nil && len(*s.NextToken) < 4 {
 		invalidParams.Add(request.NewErrParamMinLen("NextToken", 4))
@@ -2764,12 +2972,20 @@ type DescribeEventsForOrganizationOutput struct {
 	NextToken *string `locationName:"nextToken" min:"4" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeEventsForOrganizationOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeEventsForOrganizationOutput) GoString() string {
 	return s.String()
 }
@@ -2807,12 +3023,20 @@ type DescribeEventsInput struct {
 	NextToken *string `locationName:"nextToken" min:"4" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeEventsInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeEventsInput) GoString() string {
 	return s.String()
 }
@@ -2879,12 +3103,20 @@ type DescribeEventsOutput struct {
 	NextToken *string `locationName:"nextToken" min:"4" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeEventsOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeEventsOutput) GoString() string {
 	return s.String()
 }
@@ -2905,12 +3137,20 @@ type DescribeHealthServiceStatusForOrganizationInput struct {
 	_ struct{} `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeHealthServiceStatusForOrganizationInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeHealthServiceStatusForOrganizationInput) GoString() string {
 	return s.String()
 }
@@ -2925,12 +3165,20 @@ type DescribeHealthServiceStatusForOrganizationOutput struct {
 	HealthServiceAccessStatusForOrganization *string `locationName:"healthServiceAccessStatusForOrganization" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeHealthServiceStatusForOrganizationOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeHealthServiceStatusForOrganizationOutput) GoString() string {
 	return s.String()
 }
@@ -2945,12 +3193,20 @@ type DisableHealthServiceAccessForOrganizationInput struct {
 	_ struct{} `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DisableHealthServiceAccessForOrganizationInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DisableHealthServiceAccessForOrganizationInput) GoString() string {
 	return s.String()
 }
@@ -2959,12 +3215,20 @@ type DisableHealthServiceAccessForOrganizationOutput struct {
 	_ struct{} `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DisableHealthServiceAccessForOrganizationOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DisableHealthServiceAccessForOrganizationOutput) GoString() string {
 	return s.String()
 }
@@ -2973,12 +3237,20 @@ type EnableHealthServiceAccessForOrganizationInput struct {
 	_ struct{} `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s EnableHealthServiceAccessForOrganizationInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s EnableHealthServiceAccessForOrganizationInput) GoString() string {
 	return s.String()
 }
@@ -2987,12 +3259,20 @@ type EnableHealthServiceAccessForOrganizationOutput struct {
 	_ struct{} `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s EnableHealthServiceAccessForOrganizationOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s EnableHealthServiceAccessForOrganizationOutput) GoString() string {
 	return s.String()
 }
@@ -3006,17 +3286,29 @@ type EntityAggregate struct {
 	// The number of entities that match the criteria for the specified events.
 	Count *int64 `locationName:"count" type:"integer"`
 
-	// The unique identifier for the event. Format: arn:aws:health:event-region::event/SERVICE/EVENT_TYPE_CODE/EVENT_TYPE_PLUS_ID
-	// . Example: Example: arn:aws:health:us-east-1::event/EC2/EC2_INSTANCE_RETIREMENT_SCHEDULED/EC2_INSTANCE_RETIREMENT_SCHEDULED_ABC123-DEF456
+	// The unique identifier for the event. The event ARN has the arn:aws:health:event-region::event/SERVICE/EVENT_TYPE_CODE/EVENT_TYPE_PLUS_ID
+	// format.
+	//
+	// For example, an event ARN might look like the following:
+	//
+	// arn:aws:health:us-east-1::event/EC2/EC2_INSTANCE_RETIREMENT_SCHEDULED/EC2_INSTANCE_RETIREMENT_SCHEDULED_ABC123-DEF456
 	EventArn *string `locationName:"eventArn" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s EntityAggregate) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s EntityAggregate) GoString() string {
 	return s.String()
 }
@@ -3062,12 +3354,20 @@ type EntityFilter struct {
 	Tags []map[string]*string `locationName:"tags" type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s EntityFilter) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s EntityFilter) GoString() string {
 	return s.String()
 }
@@ -3155,8 +3455,12 @@ func (s *EntityFilter) SetTags(v []map[string]*string) *EntityFilter {
 type Event struct {
 	_ struct{} `type:"structure"`
 
-	// The unique identifier for the event. Format: arn:aws:health:event-region::event/SERVICE/EVENT_TYPE_CODE/EVENT_TYPE_PLUS_ID
-	// . Example: Example: arn:aws:health:us-east-1::event/EC2/EC2_INSTANCE_RETIREMENT_SCHEDULED/EC2_INSTANCE_RETIREMENT_SCHEDULED_ABC123-DEF456
+	// The unique identifier for the event. The event ARN has the arn:aws:health:event-region::event/SERVICE/EVENT_TYPE_CODE/EVENT_TYPE_PLUS_ID
+	// format.
+	//
+	// For example, an event ARN might look like the following:
+	//
+	// arn:aws:health:us-east-1::event/EC2/EC2_INSTANCE_RETIREMENT_SCHEDULED/EC2_INSTANCE_RETIREMENT_SCHEDULED_ABC123-DEF456
 	Arn *string `locationName:"arn" type:"string"`
 
 	// The AWS Availability Zone of the event. For example, us-east-1a.
@@ -3192,7 +3496,7 @@ type Event struct {
 	// The most recent date and time that the event was updated.
 	LastUpdatedTime *time.Time `locationName:"lastUpdatedTime" type:"timestamp"`
 
-	// The AWS region name of the event.
+	// The AWS Region name of the event.
 	Region *string `locationName:"region" min:"2" type:"string"`
 
 	// The AWS service that is affected by the event. For example, EC2, RDS.
@@ -3206,12 +3510,20 @@ type Event struct {
 	StatusCode *string `locationName:"statusCode" type:"string" enum:"EventStatusCode"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s Event) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s Event) GoString() string {
 	return s.String()
 }
@@ -3292,19 +3604,31 @@ type EventAccountFilter struct {
 	// The 12-digit AWS account numbers that contains the affected entities.
 	AwsAccountId *string `locationName:"awsAccountId" type:"string"`
 
-	// The unique identifier for the event. Format: arn:aws:health:event-region::event/SERVICE/EVENT_TYPE_CODE/EVENT_TYPE_PLUS_ID
-	// . Example: Example: arn:aws:health:us-east-1::event/EC2/EC2_INSTANCE_RETIREMENT_SCHEDULED/EC2_INSTANCE_RETIREMENT_SCHEDULED_ABC123-DEF456
+	// The unique identifier for the event. The event ARN has the arn:aws:health:event-region::event/SERVICE/EVENT_TYPE_CODE/EVENT_TYPE_PLUS_ID
+	// format.
+	//
+	// For example, an event ARN might look like the following:
+	//
+	// arn:aws:health:us-east-1::event/EC2/EC2_INSTANCE_RETIREMENT_SCHEDULED/EC2_INSTANCE_RETIREMENT_SCHEDULED_ABC123-DEF456
 	//
 	// EventArn is a required field
 	EventArn *string `locationName:"eventArn" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s EventAccountFilter) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s EventAccountFilter) GoString() string {
 	return s.String()
 }
@@ -3347,12 +3671,20 @@ type EventAggregate struct {
 	Count *int64 `locationName:"count" type:"integer"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s EventAggregate) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s EventAggregate) GoString() string {
 	return s.String()
 }
@@ -3379,12 +3711,20 @@ type EventDescription struct {
 	LatestDescription *string `locationName:"latestDescription" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s EventDescription) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s EventDescription) GoString() string {
 	return s.String()
 }
@@ -3413,12 +3753,20 @@ type EventDetails struct {
 	EventMetadata map[string]*string `locationName:"eventMetadata" type:"map"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s EventDetails) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s EventDetails) GoString() string {
 	return s.String()
 }
@@ -3442,7 +3790,7 @@ func (s *EventDetails) SetEventMetadata(v map[string]*string) *EventDetails {
 }
 
 // Error information returned when a DescribeEventDetails (https://docs.aws.amazon.com/health/latest/APIReference/API_DescribeEventDetails.html)
-// operation cannot find a specified event.
+// operation can't find a specified event.
 type EventDetailsErrorItem struct {
 	_ struct{} `type:"structure"`
 
@@ -3452,17 +3800,29 @@ type EventDetailsErrorItem struct {
 	// The name of the error.
 	ErrorName *string `locationName:"errorName" type:"string"`
 
-	// The unique identifier for the event. Format: arn:aws:health:event-region::event/SERVICE/EVENT_TYPE_CODE/EVENT_TYPE_PLUS_ID
-	// . Example: Example: arn:aws:health:us-east-1::event/EC2/EC2_INSTANCE_RETIREMENT_SCHEDULED/EC2_INSTANCE_RETIREMENT_SCHEDULED_ABC123-DEF456
+	// The unique identifier for the event. The event ARN has the arn:aws:health:event-region::event/SERVICE/EVENT_TYPE_CODE/EVENT_TYPE_PLUS_ID
+	// format.
+	//
+	// For example, an event ARN might look like the following:
+	//
+	// arn:aws:health:us-east-1::event/EC2/EC2_INSTANCE_RETIREMENT_SCHEDULED/EC2_INSTANCE_RETIREMENT_SCHEDULED_ABC123-DEF456
 	EventArn *string `locationName:"eventArn" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s EventDetailsErrorItem) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s EventDetailsErrorItem) GoString() string {
 	return s.String()
 }
@@ -3491,7 +3851,7 @@ func (s *EventDetailsErrorItem) SetEventArn(v string) *EventDetailsErrorItem {
 type EventFilter struct {
 	_ struct{} `type:"structure"`
 
-	// A list of AWS availability zones.
+	// A list of AWS Availability Zones.
 	AvailabilityZones []*string `locationName:"availabilityZones" type:"list"`
 
 	// A list of dates and times that the event ended.
@@ -3520,7 +3880,7 @@ type EventFilter struct {
 	// A list of dates and times that the event was last updated.
 	LastUpdatedTimes []*DateTimeRange `locationName:"lastUpdatedTimes" min:"1" type:"list"`
 
-	// A list of AWS regions.
+	// A list of AWS Regions.
 	Regions []*string `locationName:"regions" min:"1" type:"list"`
 
 	// The AWS services associated with the event. For example, EC2, RDS.
@@ -3535,12 +3895,20 @@ type EventFilter struct {
 	Tags []map[string]*string `locationName:"tags" type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s EventFilter) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s EventFilter) GoString() string {
 	return s.String()
 }
@@ -3666,9 +4034,19 @@ func (s *EventFilter) SetTags(v []map[string]*string) *EventFilter {
 	return s
 }
 
-// Metadata about a type of event that is reported by AWS Health. Data consists
-// of the category (for example, issue), the service (for example, EC2), and
-// the event type code (for example, AWS_EC2_SYSTEM_MAINTENANCE_EVENT).
+// Contains the metadata about a type of event that is reported by AWS Health.
+// The EventType shows the category, service, and the event type code of the
+// event. For example, an issue might be the category, EC2 the service, and
+// AWS_EC2_SYSTEM_MAINTENANCE_EVENT the event type code.
+//
+// You can use the DescribeEventTypes (https://docs.aws.amazon.com/health/latest/APIReference/API_DescribeEventTypes.html)
+// API operation to return this information about an event.
+//
+// You can also use the Amazon CloudWatch Events console to create a rule so
+// that you can get notified or take action when AWS Health delivers a specific
+// event to your AWS account. For more information, see Monitor for AWS Health
+// events with Amazon CloudWatch Events (https://docs.aws.amazon.com/health/latest/ug/cloudwatch-events-health.html)
+// in the AWS Health User Guide.
 type EventType struct {
 	_ struct{} `type:"structure"`
 
@@ -3683,12 +4061,20 @@ type EventType struct {
 	Service *string `locationName:"service" min:"2" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s EventType) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s EventType) GoString() string {
 	return s.String()
 }
@@ -3726,12 +4112,20 @@ type EventTypeFilter struct {
 	Services []*string `locationName:"services" min:"1" type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s EventTypeFilter) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s EventTypeFilter) GoString() string {
 	return s.String()
 }
@@ -3781,12 +4175,20 @@ type InvalidPaginationToken struct {
 	Message_ *string `locationName:"message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s InvalidPaginationToken) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s InvalidPaginationToken) GoString() string {
 	return s.String()
 }
@@ -3831,7 +4233,7 @@ func (s *InvalidPaginationToken) RequestID() string {
 
 // Error information returned when a DescribeAffectedEntitiesForOrganization
 // (https://docs.aws.amazon.com/health/latest/APIReference/API_DescribeAffectedEntitiesForOrganization.html)
-// operation cannot find or process a specific entity.
+// operation can't find or process a specific entity.
 type OrganizationAffectedEntitiesErrorItem struct {
 	_ struct{} `type:"structure"`
 
@@ -3845,17 +4247,29 @@ type OrganizationAffectedEntitiesErrorItem struct {
 	// The name of the error.
 	ErrorName *string `locationName:"errorName" type:"string"`
 
-	// The unique identifier for the event. Format: arn:aws:health:event-region::event/SERVICE/EVENT_TYPE_CODE/EVENT_TYPE_PLUS_ID
-	// . Example: Example: arn:aws:health:us-east-1::event/EC2/EC2_INSTANCE_RETIREMENT_SCHEDULED/EC2_INSTANCE_RETIREMENT_SCHEDULED_ABC123-DEF456
+	// The unique identifier for the event. The event ARN has the arn:aws:health:event-region::event/SERVICE/EVENT_TYPE_CODE/EVENT_TYPE_PLUS_ID
+	// format.
+	//
+	// For example, an event ARN might look like the following:
+	//
+	// arn:aws:health:us-east-1::event/EC2/EC2_INSTANCE_RETIREMENT_SCHEDULED/EC2_INSTANCE_RETIREMENT_SCHEDULED_ABC123-DEF456
 	EventArn *string `locationName:"eventArn" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s OrganizationAffectedEntitiesErrorItem) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s OrganizationAffectedEntitiesErrorItem) GoString() string {
 	return s.String()
 }
@@ -3890,8 +4304,12 @@ func (s *OrganizationAffectedEntitiesErrorItem) SetEventArn(v string) *Organizat
 type OrganizationEvent struct {
 	_ struct{} `type:"structure"`
 
-	// The unique identifier for the event. Format: arn:aws:health:event-region::event/SERVICE/EVENT_TYPE_CODE/EVENT_TYPE_PLUS_ID
-	// . Example: Example: arn:aws:health:us-east-1::event/EC2/EC2_INSTANCE_RETIREMENT_SCHEDULED/EC2_INSTANCE_RETIREMENT_SCHEDULED_ABC123-DEF456
+	// The unique identifier for the event. The event ARN has the arn:aws:health:event-region::event/SERVICE/EVENT_TYPE_CODE/EVENT_TYPE_PLUS_ID
+	// format.
+	//
+	// For example, an event ARN might look like the following:
+	//
+	// arn:aws:health:us-east-1::event/EC2/EC2_INSTANCE_RETIREMENT_SCHEDULED/EC2_INSTANCE_RETIREMENT_SCHEDULED_ABC123-DEF456
 	Arn *string `locationName:"arn" type:"string"`
 
 	// The date and time that the event ended.
@@ -3926,7 +4344,7 @@ type OrganizationEvent struct {
 	// The AWS Region name of the event.
 	Region *string `locationName:"region" min:"2" type:"string"`
 
-	// The AWS service that is affected by the event. For example, EC2, RDS.
+	// The AWS service that is affected by the event, such as EC2 and RDS.
 	Service *string `locationName:"service" min:"2" type:"string"`
 
 	// The date and time that the event began.
@@ -3937,12 +4355,20 @@ type OrganizationEvent struct {
 	StatusCode *string `locationName:"statusCode" type:"string" enum:"EventStatusCode"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s OrganizationEvent) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s OrganizationEvent) GoString() string {
 	return s.String()
 }
@@ -4045,12 +4471,20 @@ type OrganizationEventDetails struct {
 	EventMetadata map[string]*string `locationName:"eventMetadata" type:"map"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s OrganizationEventDetails) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s OrganizationEventDetails) GoString() string {
 	return s.String()
 }
@@ -4080,31 +4514,58 @@ func (s *OrganizationEventDetails) SetEventMetadata(v map[string]*string) *Organ
 }
 
 // Error information returned when a DescribeEventDetailsForOrganization (https://docs.aws.amazon.com/health/latest/APIReference/API_DescribeEventDetailsForOrganization.html)
-// operation cannot find a specified event.
+// operation can't find a specified event.
 type OrganizationEventDetailsErrorItem struct {
 	_ struct{} `type:"structure"`
 
 	// Error information returned when a DescribeEventDetailsForOrganization (https://docs.aws.amazon.com/health/latest/APIReference/API_DescribeEventDetailsForOrganization.html)
-	// operation cannot find a specified event.
+	// operation can't find a specified event.
 	AwsAccountId *string `locationName:"awsAccountId" type:"string"`
 
 	// A message that describes the error.
+	//
+	// If you call the DescribeEventDetailsForOrganization operation and receive
+	// one of the following errors, follow the recommendations in the message:
+	//
+	//    * We couldn't find a public event that matches your request. To find an
+	//    event that is account specific, you must enter an AWS account ID in the
+	//    request.
+	//
+	//    * We couldn't find an account specific event for the specified AWS account.
+	//    To find an event that is public, you must enter a null value for the AWS
+	//    account ID in the request.
+	//
+	//    * Your AWS account doesn't include the AWS Support plan required to use
+	//    the AWS Health API. You must have either a Business or Enterprise Support
+	//    plan.
 	ErrorMessage *string `locationName:"errorMessage" type:"string"`
 
 	// The name of the error.
 	ErrorName *string `locationName:"errorName" type:"string"`
 
-	// The unique identifier for the event. Format: arn:aws:health:event-region::event/SERVICE/EVENT_TYPE_CODE/EVENT_TYPE_PLUS_ID
-	// . Example: Example: arn:aws:health:us-east-1::event/EC2/EC2_INSTANCE_RETIREMENT_SCHEDULED/EC2_INSTANCE_RETIREMENT_SCHEDULED_ABC123-DEF456
+	// The unique identifier for the event. The event ARN has the arn:aws:health:event-region::event/SERVICE/EVENT_TYPE_CODE/EVENT_TYPE_PLUS_ID
+	// format.
+	//
+	// For example, an event ARN might look like the following:
+	//
+	// arn:aws:health:us-east-1::event/EC2/EC2_INSTANCE_RETIREMENT_SCHEDULED/EC2_INSTANCE_RETIREMENT_SCHEDULED_ABC123-DEF456
 	EventArn *string `locationName:"eventArn" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s OrganizationEventDetailsErrorItem) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s OrganizationEventDetailsErrorItem) GoString() string {
 	return s.String()
 }
@@ -4191,12 +4652,20 @@ type OrganizationEventFilter struct {
 	StartTime *DateTimeRange `locationName:"startTime" type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s OrganizationEventFilter) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s OrganizationEventFilter) GoString() string {
 	return s.String()
 }
@@ -4309,12 +4778,20 @@ type UnsupportedLocale struct {
 	Message_ *string `locationName:"message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UnsupportedLocale) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UnsupportedLocale) GoString() string {
 	return s.String()
 }

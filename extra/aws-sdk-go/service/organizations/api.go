@@ -129,6 +129,10 @@ func (c *Organizations) AcceptHandshakeRequest(input *AcceptHandshakeInput) (req
 //      * ORGANIZATION_ALREADY_HAS_ALL_FEATURES: The handshake request is invalid
 //      because the organization has already enabled all features.
 //
+//      * ORGANIZATION_IS_ALREADY_PENDING_ALL_FEATURES_MIGRATION: The handshake
+//      request is invalid because the organization has already started the process
+//      to enable all features.
+//
 //      * ORGANIZATION_FROM_DIFFERENT_SELLER_OF_RECORD: The request failed because
 //      the account is from a different marketplace than the accounts in the organization.
 //      For example, accounts with India addresses must be associated with the
@@ -169,6 +173,9 @@ func (c *Organizations) AcceptHandshakeRequest(input *AcceptHandshakeInput) (req
 //      can't be modified.
 //
 //      * INPUT_REQUIRED: You must include a value for all required parameters.
+//
+//      * INVALID_EMAIL_ADDRESS_TARGET: You specified an invalid email address
+//      for the invited account owner.
 //
 //      * INVALID_ENUM: You specified an invalid value.
 //
@@ -365,7 +372,7 @@ func (c *Organizations) AttachPolicyRequest(input *AttachPolicyInput) (req *requ
 //   Some of the reasons in the following list might not be applicable to this
 //   specific API or operation.
 //
-//      * ACCOUNT_CANNOT_LEAVE_ORGANIZAION: You attempted to remove the management
+//      * ACCOUNT_CANNOT_LEAVE_ORGANIZATION: You attempted to remove the management
 //      account from the organization. You can't remove the management account.
 //      Instead, after you remove all member accounts, delete the organization
 //      itself.
@@ -432,7 +439,7 @@ func (c *Organizations) AttachPolicyRequest(input *AttachPolicyInput) (req *requ
 //      with the same marketplace.
 //
 //      * MASTER_ACCOUNT_MISSING_BUSINESS_LICENSE: Applies only to the AWS Regions
-//      in China. To create an organization, the master must have an valid business
+//      in China. To create an organization, the master must have a valid business
 //      license. For more information, contact customer support.
 //
 //      * MASTER_ACCOUNT_MISSING_CONTACT_INFO: To complete this operation, you
@@ -512,6 +519,9 @@ func (c *Organizations) AttachPolicyRequest(input *AttachPolicyInput) (req *requ
 //      can't be modified.
 //
 //      * INPUT_REQUIRED: You must include a value for all required parameters.
+//
+//      * INVALID_EMAIL_ADDRESS_TARGET: You specified an invalid email address
+//      for the invited account owner.
 //
 //      * INVALID_ENUM: You specified an invalid value.
 //
@@ -727,6 +737,9 @@ func (c *Organizations) CancelHandshakeRequest(input *CancelHandshakeInput) (req
 //
 //      * INPUT_REQUIRED: You must include a value for all required parameters.
 //
+//      * INVALID_EMAIL_ADDRESS_TARGET: You specified an invalid email address
+//      for the invited account owner.
+//
 //      * INVALID_ENUM: You specified an invalid value.
 //
 //      * INVALID_ENUM_POLICY_TYPE: You specified an invalid policy type string.
@@ -877,8 +890,8 @@ func (c *Organizations) CreateAccountRequest(input *CreateAccountInput) (req *re
 //    operation.
 //
 //    * Check the AWS CloudTrail log for the CreateAccountResult event. For
-//    information on using AWS CloudTrail with AWS Organizations, see Monitoring
-//    the Activity in Your Organization (http://docs.aws.amazon.com/organizations/latest/userguide/orgs_monitoring.html)
+//    information on using AWS CloudTrail with AWS Organizations, see Logging
+//    and monitoring in AWS Organizations (http://docs.aws.amazon.com/organizations/latest/userguide/orgs_security_incident-response.html#orgs_cloudtrail-integration)
 //    in the AWS Organizations User Guide.
 //
 // The user who calls the API to create an account must have the organizations:CreateAccount
@@ -967,7 +980,7 @@ func (c *Organizations) CreateAccountRequest(input *CreateAccountInput) (req *re
 //   Some of the reasons in the following list might not be applicable to this
 //   specific API or operation.
 //
-//      * ACCOUNT_CANNOT_LEAVE_ORGANIZAION: You attempted to remove the management
+//      * ACCOUNT_CANNOT_LEAVE_ORGANIZATION: You attempted to remove the management
 //      account from the organization. You can't remove the management account.
 //      Instead, after you remove all member accounts, delete the organization
 //      itself.
@@ -1034,7 +1047,7 @@ func (c *Organizations) CreateAccountRequest(input *CreateAccountInput) (req *re
 //      with the same marketplace.
 //
 //      * MASTER_ACCOUNT_MISSING_BUSINESS_LICENSE: Applies only to the AWS Regions
-//      in China. To create an organization, the master must have an valid business
+//      in China. To create an organization, the master must have a valid business
 //      license. For more information, contact customer support.
 //
 //      * MASTER_ACCOUNT_MISSING_CONTACT_INFO: To complete this operation, you
@@ -1111,6 +1124,9 @@ func (c *Organizations) CreateAccountRequest(input *CreateAccountInput) (req *re
 //      can't be modified.
 //
 //      * INPUT_REQUIRED: You must include a value for all required parameters.
+//
+//      * INVALID_EMAIL_ADDRESS_TARGET: You specified an invalid email address
+//      for the invited account owner.
 //
 //      * INVALID_ENUM: You specified an invalid value.
 //
@@ -1402,7 +1418,7 @@ func (c *Organizations) CreateGovCloudAccountRequest(input *CreateGovCloudAccoun
 //   Some of the reasons in the following list might not be applicable to this
 //   specific API or operation.
 //
-//      * ACCOUNT_CANNOT_LEAVE_ORGANIZAION: You attempted to remove the management
+//      * ACCOUNT_CANNOT_LEAVE_ORGANIZATION: You attempted to remove the management
 //      account from the organization. You can't remove the management account.
 //      Instead, after you remove all member accounts, delete the organization
 //      itself.
@@ -1469,7 +1485,7 @@ func (c *Organizations) CreateGovCloudAccountRequest(input *CreateGovCloudAccoun
 //      with the same marketplace.
 //
 //      * MASTER_ACCOUNT_MISSING_BUSINESS_LICENSE: Applies only to the AWS Regions
-//      in China. To create an organization, the master must have an valid business
+//      in China. To create an organization, the master must have a valid business
 //      license. For more information, contact customer support.
 //
 //      * MASTER_ACCOUNT_MISSING_CONTACT_INFO: To complete this operation, you
@@ -1546,6 +1562,9 @@ func (c *Organizations) CreateGovCloudAccountRequest(input *CreateGovCloudAccoun
 //      can't be modified.
 //
 //      * INPUT_REQUIRED: You must include a value for all required parameters.
+//
+//      * INVALID_EMAIL_ADDRESS_TARGET: You specified an invalid email address
+//      for the invited account owner.
 //
 //      * INVALID_ENUM: You specified an invalid value.
 //
@@ -1742,7 +1761,7 @@ func (c *Organizations) CreateOrganizationRequest(input *CreateOrganizationInput
 //   Some of the reasons in the following list might not be applicable to this
 //   specific API or operation.
 //
-//      * ACCOUNT_CANNOT_LEAVE_ORGANIZAION: You attempted to remove the management
+//      * ACCOUNT_CANNOT_LEAVE_ORGANIZATION: You attempted to remove the management
 //      account from the organization. You can't remove the management account.
 //      Instead, after you remove all member accounts, delete the organization
 //      itself.
@@ -1809,7 +1828,7 @@ func (c *Organizations) CreateOrganizationRequest(input *CreateOrganizationInput
 //      with the same marketplace.
 //
 //      * MASTER_ACCOUNT_MISSING_BUSINESS_LICENSE: Applies only to the AWS Regions
-//      in China. To create an organization, the master must have an valid business
+//      in China. To create an organization, the master must have a valid business
 //      license. For more information, contact customer support.
 //
 //      * MASTER_ACCOUNT_MISSING_CONTACT_INFO: To complete this operation, you
@@ -1886,6 +1905,9 @@ func (c *Organizations) CreateOrganizationRequest(input *CreateOrganizationInput
 //      can't be modified.
 //
 //      * INPUT_REQUIRED: You must include a value for all required parameters.
+//
+//      * INVALID_EMAIL_ADDRESS_TARGET: You specified an invalid email address
+//      for the invited account owner.
 //
 //      * INVALID_ENUM: You specified an invalid value.
 //
@@ -2077,7 +2099,7 @@ func (c *Organizations) CreateOrganizationalUnitRequest(input *CreateOrganizatio
 //   Some of the reasons in the following list might not be applicable to this
 //   specific API or operation.
 //
-//      * ACCOUNT_CANNOT_LEAVE_ORGANIZAION: You attempted to remove the management
+//      * ACCOUNT_CANNOT_LEAVE_ORGANIZATION: You attempted to remove the management
 //      account from the organization. You can't remove the management account.
 //      Instead, after you remove all member accounts, delete the organization
 //      itself.
@@ -2144,7 +2166,7 @@ func (c *Organizations) CreateOrganizationalUnitRequest(input *CreateOrganizatio
 //      with the same marketplace.
 //
 //      * MASTER_ACCOUNT_MISSING_BUSINESS_LICENSE: Applies only to the AWS Regions
-//      in China. To create an organization, the master must have an valid business
+//      in China. To create an organization, the master must have a valid business
 //      license. For more information, contact customer support.
 //
 //      * MASTER_ACCOUNT_MISSING_CONTACT_INFO: To complete this operation, you
@@ -2224,6 +2246,9 @@ func (c *Organizations) CreateOrganizationalUnitRequest(input *CreateOrganizatio
 //      can't be modified.
 //
 //      * INPUT_REQUIRED: You must include a value for all required parameters.
+//
+//      * INVALID_EMAIL_ADDRESS_TARGET: You specified an invalid email address
+//      for the invited account owner.
 //
 //      * INVALID_ENUM: You specified an invalid value.
 //
@@ -2410,7 +2435,7 @@ func (c *Organizations) CreatePolicyRequest(input *CreatePolicyInput) (req *requ
 //   Some of the reasons in the following list might not be applicable to this
 //   specific API or operation.
 //
-//      * ACCOUNT_CANNOT_LEAVE_ORGANIZAION: You attempted to remove the management
+//      * ACCOUNT_CANNOT_LEAVE_ORGANIZATION: You attempted to remove the management
 //      account from the organization. You can't remove the management account.
 //      Instead, after you remove all member accounts, delete the organization
 //      itself.
@@ -2477,7 +2502,7 @@ func (c *Organizations) CreatePolicyRequest(input *CreatePolicyInput) (req *requ
 //      with the same marketplace.
 //
 //      * MASTER_ACCOUNT_MISSING_BUSINESS_LICENSE: Applies only to the AWS Regions
-//      in China. To create an organization, the master must have an valid business
+//      in China. To create an organization, the master must have a valid business
 //      license. For more information, contact customer support.
 //
 //      * MASTER_ACCOUNT_MISSING_CONTACT_INFO: To complete this operation, you
@@ -2557,6 +2582,9 @@ func (c *Organizations) CreatePolicyRequest(input *CreatePolicyInput) (req *requ
 //      can't be modified.
 //
 //      * INPUT_REQUIRED: You must include a value for all required parameters.
+//
+//      * INVALID_EMAIL_ADDRESS_TARGET: You specified an invalid email address
+//      for the invited account owner.
 //
 //      * INVALID_ENUM: You specified an invalid value.
 //
@@ -2769,6 +2797,9 @@ func (c *Organizations) DeclineHandshakeRequest(input *DeclineHandshakeInput) (r
 //
 //      * INPUT_REQUIRED: You must include a value for all required parameters.
 //
+//      * INVALID_EMAIL_ADDRESS_TARGET: You specified an invalid email address
+//      for the invited account owner.
+//
 //      * INVALID_ENUM: You specified an invalid value.
 //
 //      * INVALID_ENUM_POLICY_TYPE: You specified an invalid policy type string.
@@ -2948,6 +2979,9 @@ func (c *Organizations) DeleteOrganizationRequest(input *DeleteOrganizationInput
 //      can't be modified.
 //
 //      * INPUT_REQUIRED: You must include a value for all required parameters.
+//
+//      * INVALID_EMAIL_ADDRESS_TARGET: You specified an invalid email address
+//      for the invited account owner.
 //
 //      * INVALID_ENUM: You specified an invalid value.
 //
@@ -3135,6 +3169,9 @@ func (c *Organizations) DeleteOrganizationalUnitRequest(input *DeleteOrganizatio
 //      can't be modified.
 //
 //      * INPUT_REQUIRED: You must include a value for all required parameters.
+//
+//      * INVALID_EMAIL_ADDRESS_TARGET: You specified an invalid email address
+//      for the invited account owner.
 //
 //      * INVALID_ENUM: You specified an invalid value.
 //
@@ -3326,6 +3363,9 @@ func (c *Organizations) DeletePolicyRequest(input *DeletePolicyInput) (req *requ
 //
 //      * INPUT_REQUIRED: You must include a value for all required parameters.
 //
+//      * INVALID_EMAIL_ADDRESS_TARGET: You specified an invalid email address
+//      for the invited account owner.
+//
 //      * INVALID_ENUM: You specified an invalid value.
 //
 //      * INVALID_ENUM_POLICY_TYPE: You specified an invalid policy type string.
@@ -3485,7 +3525,7 @@ func (c *Organizations) DeregisterDelegatedAdministratorRequest(input *Deregiste
 // You can run this action only for AWS services that support this feature.
 // For a current list of services that support it, see the column Supports Delegated
 // Administrator in the table at AWS Services that you can use with AWS Organizations
-// (https://docs.aws.amazon.com/organizations/latest/userguide/orgs_integrated-services-list.html)
+// (https://docs.aws.amazon.com/organizations/latest/userguide/orgs_integrate_services_list.html)
 // in the AWS Organizations User Guide.
 //
 // This operation can be called only from the organization's management account.
@@ -3532,7 +3572,7 @@ func (c *Organizations) DeregisterDelegatedAdministratorRequest(input *Deregiste
 //   Some of the reasons in the following list might not be applicable to this
 //   specific API or operation.
 //
-//      * ACCOUNT_CANNOT_LEAVE_ORGANIZAION: You attempted to remove the management
+//      * ACCOUNT_CANNOT_LEAVE_ORGANIZATION: You attempted to remove the management
 //      account from the organization. You can't remove the management account.
 //      Instead, after you remove all member accounts, delete the organization
 //      itself.
@@ -3599,7 +3639,7 @@ func (c *Organizations) DeregisterDelegatedAdministratorRequest(input *Deregiste
 //      with the same marketplace.
 //
 //      * MASTER_ACCOUNT_MISSING_BUSINESS_LICENSE: Applies only to the AWS Regions
-//      in China. To create an organization, the master must have an valid business
+//      in China. To create an organization, the master must have a valid business
 //      license. For more information, contact customer support.
 //
 //      * MASTER_ACCOUNT_MISSING_CONTACT_INFO: To complete this operation, you
@@ -3676,6 +3716,9 @@ func (c *Organizations) DeregisterDelegatedAdministratorRequest(input *Deregiste
 //      can't be modified.
 //
 //      * INPUT_REQUIRED: You must include a value for all required parameters.
+//
+//      * INVALID_EMAIL_ADDRESS_TARGET: You specified an invalid email address
+//      for the invited account owner.
 //
 //      * INVALID_ENUM: You specified an invalid value.
 //
@@ -3862,6 +3905,9 @@ func (c *Organizations) DescribeAccountRequest(input *DescribeAccountInput) (req
 //
 //      * INPUT_REQUIRED: You must include a value for all required parameters.
 //
+//      * INVALID_EMAIL_ADDRESS_TARGET: You specified an invalid email address
+//      for the invited account owner.
+//
 //      * INVALID_ENUM: You specified an invalid value.
 //
 //      * INVALID_ENUM_POLICY_TYPE: You specified an invalid policy type string.
@@ -4042,6 +4088,9 @@ func (c *Organizations) DescribeCreateAccountStatusRequest(input *DescribeCreate
 //      can't be modified.
 //
 //      * INPUT_REQUIRED: You must include a value for all required parameters.
+//
+//      * INVALID_EMAIL_ADDRESS_TARGET: You specified an invalid email address
+//      for the invited account owner.
 //
 //      * INVALID_ENUM: You specified an invalid value.
 //
@@ -4228,7 +4277,7 @@ func (c *Organizations) DescribeEffectivePolicyRequest(input *DescribeEffectiveP
 //   Some of the reasons in the following list might not be applicable to this
 //   specific API or operation.
 //
-//      * ACCOUNT_CANNOT_LEAVE_ORGANIZAION: You attempted to remove the management
+//      * ACCOUNT_CANNOT_LEAVE_ORGANIZATION: You attempted to remove the management
 //      account from the organization. You can't remove the management account.
 //      Instead, after you remove all member accounts, delete the organization
 //      itself.
@@ -4295,7 +4344,7 @@ func (c *Organizations) DescribeEffectivePolicyRequest(input *DescribeEffectiveP
 //      with the same marketplace.
 //
 //      * MASTER_ACCOUNT_MISSING_BUSINESS_LICENSE: Applies only to the AWS Regions
-//      in China. To create an organization, the master must have an valid business
+//      in China. To create an organization, the master must have a valid business
 //      license. For more information, contact customer support.
 //
 //      * MASTER_ACCOUNT_MISSING_CONTACT_INFO: To complete this operation, you
@@ -4393,6 +4442,9 @@ func (c *Organizations) DescribeEffectivePolicyRequest(input *DescribeEffectiveP
 //      can't be modified.
 //
 //      * INPUT_REQUIRED: You must include a value for all required parameters.
+//
+//      * INVALID_EMAIL_ADDRESS_TARGET: You specified an invalid email address
+//      for the invited account owner.
 //
 //      * INVALID_ENUM: You specified an invalid value.
 //
@@ -4569,6 +4621,9 @@ func (c *Organizations) DescribeHandshakeRequest(input *DescribeHandshakeInput) 
 //      can't be modified.
 //
 //      * INPUT_REQUIRED: You must include a value for all required parameters.
+//
+//      * INVALID_EMAIL_ADDRESS_TARGET: You specified an invalid email address
+//      for the invited account owner.
 //
 //      * INVALID_ENUM: You specified an invalid value.
 //
@@ -4857,6 +4912,9 @@ func (c *Organizations) DescribeOrganizationalUnitRequest(input *DescribeOrganiz
 //
 //      * INPUT_REQUIRED: You must include a value for all required parameters.
 //
+//      * INVALID_EMAIL_ADDRESS_TARGET: You specified an invalid email address
+//      for the invited account owner.
+//
 //      * INVALID_ENUM: You specified an invalid value.
 //
 //      * INVALID_ENUM_POLICY_TYPE: You specified an invalid policy type string.
@@ -5036,6 +5094,9 @@ func (c *Organizations) DescribePolicyRequest(input *DescribePolicyInput) (req *
 //      can't be modified.
 //
 //      * INPUT_REQUIRED: You must include a value for all required parameters.
+//
+//      * INVALID_EMAIL_ADDRESS_TARGET: You specified an invalid email address
+//      for the invited account owner.
 //
 //      * INVALID_ENUM: You specified an invalid value.
 //
@@ -5233,7 +5294,7 @@ func (c *Organizations) DetachPolicyRequest(input *DetachPolicyInput) (req *requ
 //   Some of the reasons in the following list might not be applicable to this
 //   specific API or operation.
 //
-//      * ACCOUNT_CANNOT_LEAVE_ORGANIZAION: You attempted to remove the management
+//      * ACCOUNT_CANNOT_LEAVE_ORGANIZATION: You attempted to remove the management
 //      account from the organization. You can't remove the management account.
 //      Instead, after you remove all member accounts, delete the organization
 //      itself.
@@ -5300,7 +5361,7 @@ func (c *Organizations) DetachPolicyRequest(input *DetachPolicyInput) (req *requ
 //      with the same marketplace.
 //
 //      * MASTER_ACCOUNT_MISSING_BUSINESS_LICENSE: Applies only to the AWS Regions
-//      in China. To create an organization, the master must have an valid business
+//      in China. To create an organization, the master must have a valid business
 //      license. For more information, contact customer support.
 //
 //      * MASTER_ACCOUNT_MISSING_CONTACT_INFO: To complete this operation, you
@@ -5377,6 +5438,9 @@ func (c *Organizations) DetachPolicyRequest(input *DetachPolicyInput) (req *requ
 //      can't be modified.
 //
 //      * INPUT_REQUIRED: You must include a value for all required parameters.
+//
+//      * INVALID_EMAIL_ADDRESS_TARGET: You specified an invalid email address
+//      for the invited account owner.
 //
 //      * INVALID_ENUM: You specified an invalid value.
 //
@@ -5540,18 +5604,46 @@ func (c *Organizations) DisableAWSServiceAccessRequest(input *DisableAWSServiceA
 // can still perform operations in older accounts until the service completes
 // its clean-up from AWS Organizations.
 //
-// We recommend that you disable integration between AWS Organizations and the
-// specified AWS service by using the console or commands that are provided
-// by the specified service. Doing so ensures that the other service is aware
-// that it can clean up any resources that are required only for the integration.
-// How the service cleans up its resources in the organization's accounts depends
-// on that service. For more information, see the documentation for the other
-// AWS service.
+// We strongly recommend that you don't use this command to disable integration
+// between AWS Organizations and the specified AWS service. Instead, use the
+// console or commands that are provided by the specified service. This lets
+// the trusted service perform any required initialization when enabling trusted
+// access, such as creating any required resources and any required clean up
+// of resources when disabling trusted access.
+//
+// For information about how to disable trusted service access to your organization
+// using the trusted service, see the Learn more link under the Supports Trusted
+// Access column at AWS services that you can use with AWS Organizations (https://docs.aws.amazon.com/organizations/latest/userguide/orgs_integrate_services_list.html).
+// on this page.
+//
+// If you disable access by using this command, it causes the following actions
+// to occur:
+//
+//    * The service can no longer create a service-linked role in the accounts
+//    in your organization. This means that the service can't perform operations
+//    on your behalf on any new accounts in your organization. The service can
+//    still perform operations in older accounts until the service completes
+//    its clean-up from AWS Organizations.
+//
+//    * The service can no longer perform tasks in the member accounts in the
+//    organization, unless those operations are explicitly permitted by the
+//    IAM policies that are attached to your roles. This includes any data aggregation
+//    from the member accounts to the management account, or to a delegated
+//    administrator account, where relevant.
+//
+//    * Some services detect this and clean up any remaining data or resources
+//    related to the integration, while other services stop accessing the organization
+//    but leave any historical data and configuration in place to support a
+//    possible re-enabling of the integration.
+//
+// Using the other service's console or commands to disable the integration
+// ensures that the other service is aware that it can clean up any resources
+// that are required only for the integration. How the service cleans up its
+// resources in the organization's accounts depends on that service. For more
+// information, see the documentation for the other AWS service.
 //
 // After you perform the DisableAWSServiceAccess operation, the specified service
-// can no longer perform operations in your organization's accounts unless the
-// operations are explicitly permitted by the IAM policies that are attached
-// to your roles.
+// can no longer perform operations in your organization's accounts
 //
 // For more information about integrating other services with AWS Organizations,
 // including the list of services that work with Organizations, see Integrating
@@ -5594,7 +5686,7 @@ func (c *Organizations) DisableAWSServiceAccessRequest(input *DisableAWSServiceA
 //   Some of the reasons in the following list might not be applicable to this
 //   specific API or operation.
 //
-//      * ACCOUNT_CANNOT_LEAVE_ORGANIZAION: You attempted to remove the management
+//      * ACCOUNT_CANNOT_LEAVE_ORGANIZATION: You attempted to remove the management
 //      account from the organization. You can't remove the management account.
 //      Instead, after you remove all member accounts, delete the organization
 //      itself.
@@ -5661,7 +5753,7 @@ func (c *Organizations) DisableAWSServiceAccessRequest(input *DisableAWSServiceA
 //      with the same marketplace.
 //
 //      * MASTER_ACCOUNT_MISSING_BUSINESS_LICENSE: Applies only to the AWS Regions
-//      in China. To create an organization, the master must have an valid business
+//      in China. To create an organization, the master must have a valid business
 //      license. For more information, contact customer support.
 //
 //      * MASTER_ACCOUNT_MISSING_CONTACT_INFO: To complete this operation, you
@@ -5738,6 +5830,9 @@ func (c *Organizations) DisableAWSServiceAccessRequest(input *DisableAWSServiceA
 //      can't be modified.
 //
 //      * INPUT_REQUIRED: You must include a value for all required parameters.
+//
+//      * INVALID_EMAIL_ADDRESS_TARGET: You specified an invalid email address
+//      for the invited account owner.
 //
 //      * INVALID_ENUM: You specified an invalid value.
 //
@@ -5930,7 +6025,7 @@ func (c *Organizations) DisablePolicyTypeRequest(input *DisablePolicyTypeInput) 
 //   Some of the reasons in the following list might not be applicable to this
 //   specific API or operation.
 //
-//      * ACCOUNT_CANNOT_LEAVE_ORGANIZAION: You attempted to remove the management
+//      * ACCOUNT_CANNOT_LEAVE_ORGANIZATION: You attempted to remove the management
 //      account from the organization. You can't remove the management account.
 //      Instead, after you remove all member accounts, delete the organization
 //      itself.
@@ -5997,7 +6092,7 @@ func (c *Organizations) DisablePolicyTypeRequest(input *DisablePolicyTypeInput) 
 //      with the same marketplace.
 //
 //      * MASTER_ACCOUNT_MISSING_BUSINESS_LICENSE: Applies only to the AWS Regions
-//      in China. To create an organization, the master must have an valid business
+//      in China. To create an organization, the master must have a valid business
 //      license. For more information, contact customer support.
 //
 //      * MASTER_ACCOUNT_MISSING_CONTACT_INFO: To complete this operation, you
@@ -6074,6 +6169,9 @@ func (c *Organizations) DisablePolicyTypeRequest(input *DisablePolicyTypeInput) 
 //      can't be modified.
 //
 //      * INPUT_REQUIRED: You must include a value for all required parameters.
+//
+//      * INVALID_EMAIL_ADDRESS_TARGET: You specified an invalid email address
+//      for the invited account owner.
 //
 //      * INVALID_ENUM: You specified an invalid value.
 //
@@ -6285,7 +6383,7 @@ func (c *Organizations) EnableAWSServiceAccessRequest(input *EnableAWSServiceAcc
 //   Some of the reasons in the following list might not be applicable to this
 //   specific API or operation.
 //
-//      * ACCOUNT_CANNOT_LEAVE_ORGANIZAION: You attempted to remove the management
+//      * ACCOUNT_CANNOT_LEAVE_ORGANIZATION: You attempted to remove the management
 //      account from the organization. You can't remove the management account.
 //      Instead, after you remove all member accounts, delete the organization
 //      itself.
@@ -6352,7 +6450,7 @@ func (c *Organizations) EnableAWSServiceAccessRequest(input *EnableAWSServiceAcc
 //      with the same marketplace.
 //
 //      * MASTER_ACCOUNT_MISSING_BUSINESS_LICENSE: Applies only to the AWS Regions
-//      in China. To create an organization, the master must have an valid business
+//      in China. To create an organization, the master must have a valid business
 //      license. For more information, contact customer support.
 //
 //      * MASTER_ACCOUNT_MISSING_CONTACT_INFO: To complete this operation, you
@@ -6429,6 +6527,9 @@ func (c *Organizations) EnableAWSServiceAccessRequest(input *EnableAWSServiceAcc
 //      can't be modified.
 //
 //      * INPUT_REQUIRED: You must include a value for all required parameters.
+//
+//      * INVALID_EMAIL_ADDRESS_TARGET: You specified an invalid email address
+//      for the invited account owner.
 //
 //      * INVALID_ENUM: You specified an invalid value.
 //
@@ -6651,6 +6752,10 @@ func (c *Organizations) EnableAllFeaturesRequest(input *EnableAllFeaturesInput) 
 //      * ORGANIZATION_ALREADY_HAS_ALL_FEATURES: The handshake request is invalid
 //      because the organization has already enabled all features.
 //
+//      * ORGANIZATION_IS_ALREADY_PENDING_ALL_FEATURES_MIGRATION: The handshake
+//      request is invalid because the organization has already started the process
+//      to enable all features.
+//
 //      * ORGANIZATION_FROM_DIFFERENT_SELLER_OF_RECORD: The request failed because
 //      the account is from a different marketplace than the accounts in the organization.
 //      For example, accounts with India addresses must be associated with the
@@ -6679,6 +6784,9 @@ func (c *Organizations) EnableAllFeaturesRequest(input *EnableAllFeaturesInput) 
 //      can't be modified.
 //
 //      * INPUT_REQUIRED: You must include a value for all required parameters.
+//
+//      * INVALID_EMAIL_ADDRESS_TARGET: You specified an invalid email address
+//      for the invited account owner.
 //
 //      * INVALID_ENUM: You specified an invalid value.
 //
@@ -6866,7 +6974,7 @@ func (c *Organizations) EnablePolicyTypeRequest(input *EnablePolicyTypeInput) (r
 //   Some of the reasons in the following list might not be applicable to this
 //   specific API or operation.
 //
-//      * ACCOUNT_CANNOT_LEAVE_ORGANIZAION: You attempted to remove the management
+//      * ACCOUNT_CANNOT_LEAVE_ORGANIZATION: You attempted to remove the management
 //      account from the organization. You can't remove the management account.
 //      Instead, after you remove all member accounts, delete the organization
 //      itself.
@@ -6933,7 +7041,7 @@ func (c *Organizations) EnablePolicyTypeRequest(input *EnablePolicyTypeInput) (r
 //      with the same marketplace.
 //
 //      * MASTER_ACCOUNT_MISSING_BUSINESS_LICENSE: Applies only to the AWS Regions
-//      in China. To create an organization, the master must have an valid business
+//      in China. To create an organization, the master must have a valid business
 //      license. For more information, contact customer support.
 //
 //      * MASTER_ACCOUNT_MISSING_CONTACT_INFO: To complete this operation, you
@@ -7010,6 +7118,9 @@ func (c *Organizations) EnablePolicyTypeRequest(input *EnablePolicyTypeInput) (r
 //      can't be modified.
 //
 //      * INPUT_REQUIRED: You must include a value for all required parameters.
+//
+//      * INVALID_EMAIL_ADDRESS_TARGET: You specified an invalid email address
+//      for the invited account owner.
 //
 //      * INVALID_ENUM: You specified an invalid value.
 //
@@ -7246,6 +7357,10 @@ func (c *Organizations) InviteAccountToOrganizationRequest(input *InviteAccountT
 //      * ORGANIZATION_ALREADY_HAS_ALL_FEATURES: The handshake request is invalid
 //      because the organization has already enabled all features.
 //
+//      * ORGANIZATION_IS_ALREADY_PENDING_ALL_FEATURES_MIGRATION: The handshake
+//      request is invalid because the organization has already started the process
+//      to enable all features.
+//
 //      * ORGANIZATION_FROM_DIFFERENT_SELLER_OF_RECORD: The request failed because
 //      the account is from a different marketplace than the accounts in the organization.
 //      For example, accounts with India addresses must be associated with the
@@ -7277,7 +7392,7 @@ func (c *Organizations) InviteAccountToOrganizationRequest(input *InviteAccountT
 //   Some of the reasons in the following list might not be applicable to this
 //   specific API or operation.
 //
-//      * ACCOUNT_CANNOT_LEAVE_ORGANIZAION: You attempted to remove the management
+//      * ACCOUNT_CANNOT_LEAVE_ORGANIZATION: You attempted to remove the management
 //      account from the organization. You can't remove the management account.
 //      Instead, after you remove all member accounts, delete the organization
 //      itself.
@@ -7344,7 +7459,7 @@ func (c *Organizations) InviteAccountToOrganizationRequest(input *InviteAccountT
 //      with the same marketplace.
 //
 //      * MASTER_ACCOUNT_MISSING_BUSINESS_LICENSE: Applies only to the AWS Regions
-//      in China. To create an organization, the master must have an valid business
+//      in China. To create an organization, the master must have a valid business
 //      license. For more information, contact customer support.
 //
 //      * MASTER_ACCOUNT_MISSING_CONTACT_INFO: To complete this operation, you
@@ -7421,6 +7536,9 @@ func (c *Organizations) InviteAccountToOrganizationRequest(input *InviteAccountT
 //      can't be modified.
 //
 //      * INPUT_REQUIRED: You must include a value for all required parameters.
+//
+//      * INVALID_EMAIL_ADDRESS_TARGET: You specified an invalid email address
+//      for the invited account owner.
 //
 //      * INVALID_ENUM: You specified an invalid value.
 //
@@ -7592,6 +7710,11 @@ func (c *Organizations) LeaveOrganizationRequest(input *LeaveOrganizationInput) 
 //    when all required account information has not yet been provided (http://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_accounts_remove.html#leave-without-all-info)
 //    in the AWS Organizations User Guide.
 //
+//    * The account that you want to leave must not be a delegated administrator
+//    account for any AWS service enabled for your organization. If the account
+//    is a delegated administrator, you must first change the delegated administrator
+//    account to another account that is remaining in the organization.
+//
 //    * You can leave an organization only after you enable IAM user access
 //    to billing in your account. For more information, see Activating Access
 //    to the Billing and Cost Management Console (http://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/grantaccess.html#ControllingAccessWebsite-Activate)
@@ -7600,6 +7723,10 @@ func (c *Organizations) LeaveOrganizationRequest(input *LeaveOrganizationInput) 
 //    * After the account leaves the organization, all tags that were attached
 //    to the account object in the organization are deleted. AWS accounts outside
 //    of an organization do not support tags.
+//
+//    * A newly created account has a waiting period before it can be removed
+//    from its organization. If you get an error that indicates that a wait
+//    period is required, then try again in a few days.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -7640,7 +7767,7 @@ func (c *Organizations) LeaveOrganizationRequest(input *LeaveOrganizationInput) 
 //   Some of the reasons in the following list might not be applicable to this
 //   specific API or operation.
 //
-//      * ACCOUNT_CANNOT_LEAVE_ORGANIZAION: You attempted to remove the management
+//      * ACCOUNT_CANNOT_LEAVE_ORGANIZATION: You attempted to remove the management
 //      account from the organization. You can't remove the management account.
 //      Instead, after you remove all member accounts, delete the organization
 //      itself.
@@ -7707,7 +7834,7 @@ func (c *Organizations) LeaveOrganizationRequest(input *LeaveOrganizationInput) 
 //      with the same marketplace.
 //
 //      * MASTER_ACCOUNT_MISSING_BUSINESS_LICENSE: Applies only to the AWS Regions
-//      in China. To create an organization, the master must have an valid business
+//      in China. To create an organization, the master must have a valid business
 //      license. For more information, contact customer support.
 //
 //      * MASTER_ACCOUNT_MISSING_CONTACT_INFO: To complete this operation, you
@@ -7784,6 +7911,9 @@ func (c *Organizations) LeaveOrganizationRequest(input *LeaveOrganizationInput) 
 //      can't be modified.
 //
 //      * INPUT_REQUIRED: You must include a value for all required parameters.
+//
+//      * INVALID_EMAIL_ADDRESS_TARGET: You specified an invalid email address
+//      for the invited account owner.
 //
 //      * INVALID_ENUM: You specified an invalid value.
 //
@@ -7976,7 +8106,7 @@ func (c *Organizations) ListAWSServiceAccessForOrganizationRequest(input *ListAW
 //   Some of the reasons in the following list might not be applicable to this
 //   specific API or operation.
 //
-//      * ACCOUNT_CANNOT_LEAVE_ORGANIZAION: You attempted to remove the management
+//      * ACCOUNT_CANNOT_LEAVE_ORGANIZATION: You attempted to remove the management
 //      account from the organization. You can't remove the management account.
 //      Instead, after you remove all member accounts, delete the organization
 //      itself.
@@ -8043,7 +8173,7 @@ func (c *Organizations) ListAWSServiceAccessForOrganizationRequest(input *ListAW
 //      with the same marketplace.
 //
 //      * MASTER_ACCOUNT_MISSING_BUSINESS_LICENSE: Applies only to the AWS Regions
-//      in China. To create an organization, the master must have an valid business
+//      in China. To create an organization, the master must have a valid business
 //      license. For more information, contact customer support.
 //
 //      * MASTER_ACCOUNT_MISSING_CONTACT_INFO: To complete this operation, you
@@ -8120,6 +8250,9 @@ func (c *Organizations) ListAWSServiceAccessForOrganizationRequest(input *ListAW
 //      can't be modified.
 //
 //      * INPUT_REQUIRED: You must include a value for all required parameters.
+//
+//      * INVALID_EMAIL_ADDRESS_TARGET: You specified an invalid email address
+//      for the invited account owner.
 //
 //      * INVALID_ENUM: You specified an invalid value.
 //
@@ -8366,6 +8499,9 @@ func (c *Organizations) ListAccountsRequest(input *ListAccountsInput) (req *requ
 //
 //      * INPUT_REQUIRED: You must include a value for all required parameters.
 //
+//      * INVALID_EMAIL_ADDRESS_TARGET: You specified an invalid email address
+//      for the invited account owner.
+//
 //      * INVALID_ENUM: You specified an invalid value.
 //
 //      * INVALID_ENUM_POLICY_TYPE: You specified an invalid policy type string.
@@ -8609,6 +8745,9 @@ func (c *Organizations) ListAccountsForParentRequest(input *ListAccountsForParen
 //      can't be modified.
 //
 //      * INPUT_REQUIRED: You must include a value for all required parameters.
+//
+//      * INVALID_EMAIL_ADDRESS_TARGET: You specified an invalid email address
+//      for the invited account owner.
 //
 //      * INVALID_ENUM: You specified an invalid value.
 //
@@ -8855,6 +8994,9 @@ func (c *Organizations) ListChildrenRequest(input *ListChildrenInput) (req *requ
 //
 //      * INPUT_REQUIRED: You must include a value for all required parameters.
 //
+//      * INVALID_EMAIL_ADDRESS_TARGET: You specified an invalid email address
+//      for the invited account owner.
+//
 //      * INVALID_ENUM: You specified an invalid value.
 //
 //      * INVALID_ENUM_POLICY_TYPE: You specified an invalid policy type string.
@@ -9099,6 +9241,9 @@ func (c *Organizations) ListCreateAccountStatusRequest(input *ListCreateAccountS
 //
 //      * INPUT_REQUIRED: You must include a value for all required parameters.
 //
+//      * INVALID_EMAIL_ADDRESS_TARGET: You specified an invalid email address
+//      for the invited account owner.
+//
 //      * INVALID_ENUM: You specified an invalid value.
 //
 //      * INVALID_ENUM_POLICY_TYPE: You specified an invalid policy type string.
@@ -9333,7 +9478,7 @@ func (c *Organizations) ListDelegatedAdministratorsRequest(input *ListDelegatedA
 //   Some of the reasons in the following list might not be applicable to this
 //   specific API or operation.
 //
-//      * ACCOUNT_CANNOT_LEAVE_ORGANIZAION: You attempted to remove the management
+//      * ACCOUNT_CANNOT_LEAVE_ORGANIZATION: You attempted to remove the management
 //      account from the organization. You can't remove the management account.
 //      Instead, after you remove all member accounts, delete the organization
 //      itself.
@@ -9400,7 +9545,7 @@ func (c *Organizations) ListDelegatedAdministratorsRequest(input *ListDelegatedA
 //      with the same marketplace.
 //
 //      * MASTER_ACCOUNT_MISSING_BUSINESS_LICENSE: Applies only to the AWS Regions
-//      in China. To create an organization, the master must have an valid business
+//      in China. To create an organization, the master must have a valid business
 //      license. For more information, contact customer support.
 //
 //      * MASTER_ACCOUNT_MISSING_CONTACT_INFO: To complete this operation, you
@@ -9477,6 +9622,9 @@ func (c *Organizations) ListDelegatedAdministratorsRequest(input *ListDelegatedA
 //      can't be modified.
 //
 //      * INPUT_REQUIRED: You must include a value for all required parameters.
+//
+//      * INVALID_EMAIL_ADDRESS_TARGET: You specified an invalid email address
+//      for the invited account owner.
 //
 //      * INVALID_ENUM: You specified an invalid value.
 //
@@ -9719,7 +9867,7 @@ func (c *Organizations) ListDelegatedServicesForAccountRequest(input *ListDelega
 //   Some of the reasons in the following list might not be applicable to this
 //   specific API or operation.
 //
-//      * ACCOUNT_CANNOT_LEAVE_ORGANIZAION: You attempted to remove the management
+//      * ACCOUNT_CANNOT_LEAVE_ORGANIZATION: You attempted to remove the management
 //      account from the organization. You can't remove the management account.
 //      Instead, after you remove all member accounts, delete the organization
 //      itself.
@@ -9786,7 +9934,7 @@ func (c *Organizations) ListDelegatedServicesForAccountRequest(input *ListDelega
 //      with the same marketplace.
 //
 //      * MASTER_ACCOUNT_MISSING_BUSINESS_LICENSE: Applies only to the AWS Regions
-//      in China. To create an organization, the master must have an valid business
+//      in China. To create an organization, the master must have a valid business
 //      license. For more information, contact customer support.
 //
 //      * MASTER_ACCOUNT_MISSING_CONTACT_INFO: To complete this operation, you
@@ -9863,6 +10011,9 @@ func (c *Organizations) ListDelegatedServicesForAccountRequest(input *ListDelega
 //      can't be modified.
 //
 //      * INPUT_REQUIRED: You must include a value for all required parameters.
+//
+//      * INVALID_EMAIL_ADDRESS_TARGET: You specified an invalid email address
+//      for the invited account owner.
 //
 //      * INVALID_ENUM: You specified an invalid value.
 //
@@ -10110,6 +10261,9 @@ func (c *Organizations) ListHandshakesForAccountRequest(input *ListHandshakesFor
 //      can't be modified.
 //
 //      * INPUT_REQUIRED: You must include a value for all required parameters.
+//
+//      * INVALID_EMAIL_ADDRESS_TARGET: You specified an invalid email address
+//      for the invited account owner.
 //
 //      * INVALID_ENUM: You specified an invalid value.
 //
@@ -10362,6 +10516,9 @@ func (c *Organizations) ListHandshakesForOrganizationRequest(input *ListHandshak
 //
 //      * INPUT_REQUIRED: You must include a value for all required parameters.
 //
+//      * INVALID_EMAIL_ADDRESS_TARGET: You specified an invalid email address
+//      for the invited account owner.
+//
 //      * INVALID_ENUM: You specified an invalid value.
 //
 //      * INVALID_ENUM_POLICY_TYPE: You specified an invalid policy type string.
@@ -10601,6 +10758,9 @@ func (c *Organizations) ListOrganizationalUnitsForParentRequest(input *ListOrgan
 //      can't be modified.
 //
 //      * INPUT_REQUIRED: You must include a value for all required parameters.
+//
+//      * INVALID_EMAIL_ADDRESS_TARGET: You specified an invalid email address
+//      for the invited account owner.
 //
 //      * INVALID_ENUM: You specified an invalid value.
 //
@@ -10853,6 +11013,9 @@ func (c *Organizations) ListParentsRequest(input *ListParentsInput) (req *reques
 //
 //      * INPUT_REQUIRED: You must include a value for all required parameters.
 //
+//      * INVALID_EMAIL_ADDRESS_TARGET: You specified an invalid email address
+//      for the invited account owner.
+//
 //      * INVALID_ENUM: You specified an invalid value.
 //
 //      * INVALID_ENUM_POLICY_TYPE: You specified an invalid policy type string.
@@ -11092,6 +11255,9 @@ func (c *Organizations) ListPoliciesRequest(input *ListPoliciesInput) (req *requ
 //      can't be modified.
 //
 //      * INPUT_REQUIRED: You must include a value for all required parameters.
+//
+//      * INVALID_EMAIL_ADDRESS_TARGET: You specified an invalid email address
+//      for the invited account owner.
 //
 //      * INVALID_ENUM: You specified an invalid value.
 //
@@ -11337,6 +11503,9 @@ func (c *Organizations) ListPoliciesForTargetRequest(input *ListPoliciesForTarge
 //      can't be modified.
 //
 //      * INPUT_REQUIRED: You must include a value for all required parameters.
+//
+//      * INVALID_EMAIL_ADDRESS_TARGET: You specified an invalid email address
+//      for the invited account owner.
 //
 //      * INVALID_ENUM: You specified an invalid value.
 //
@@ -11590,6 +11759,9 @@ func (c *Organizations) ListRootsRequest(input *ListRootsInput) (req *request.Re
 //
 //      * INPUT_REQUIRED: You must include a value for all required parameters.
 //
+//      * INVALID_EMAIL_ADDRESS_TARGET: You specified an invalid email address
+//      for the invited account owner.
+//
 //      * INVALID_ENUM: You specified an invalid value.
 //
 //      * INVALID_ENUM_POLICY_TYPE: You specified an invalid policy type string.
@@ -11838,6 +12010,9 @@ func (c *Organizations) ListTagsForResourceRequest(input *ListTagsForResourceInp
 //
 //      * INPUT_REQUIRED: You must include a value for all required parameters.
 //
+//      * INVALID_EMAIL_ADDRESS_TARGET: You specified an invalid email address
+//      for the invited account owner.
+//
 //      * INVALID_ENUM: You specified an invalid value.
 //
 //      * INVALID_ENUM_POLICY_TYPE: You specified an invalid policy type string.
@@ -12079,6 +12254,9 @@ func (c *Organizations) ListTargetsForPolicyRequest(input *ListTargetsForPolicyI
 //
 //      * INPUT_REQUIRED: You must include a value for all required parameters.
 //
+//      * INVALID_EMAIL_ADDRESS_TARGET: You specified an invalid email address
+//      for the invited account owner.
+//
 //      * INVALID_ENUM: You specified an invalid value.
 //
 //      * INVALID_ENUM_POLICY_TYPE: You specified an invalid policy type string.
@@ -12311,6 +12489,9 @@ func (c *Organizations) MoveAccountRequest(input *MoveAccountInput) (req *reques
 //
 //      * INPUT_REQUIRED: You must include a value for all required parameters.
 //
+//      * INVALID_EMAIL_ADDRESS_TARGET: You specified an invalid email address
+//      for the invited account owner.
+//
 //      * INVALID_ENUM: You specified an invalid value.
 //
 //      * INVALID_ENUM_POLICY_TYPE: You specified an invalid policy type string.
@@ -12480,7 +12661,7 @@ func (c *Organizations) RegisterDelegatedAdministratorRequest(input *RegisterDel
 // You can run this action only for AWS services that support this feature.
 // For a current list of services that support it, see the column Supports Delegated
 // Administrator in the table at AWS Services that you can use with AWS Organizations
-// (https://docs.aws.amazon.com/organizations/latest/userguide/orgs_integrated-services-list.html)
+// (https://docs.aws.amazon.com/organizations/latest/userguide/orgs_integrate_services_list.html)
 // in the AWS Organizations User Guide.
 //
 // This operation can be called only from the organization's management account.
@@ -12527,7 +12708,7 @@ func (c *Organizations) RegisterDelegatedAdministratorRequest(input *RegisterDel
 //   Some of the reasons in the following list might not be applicable to this
 //   specific API or operation.
 //
-//      * ACCOUNT_CANNOT_LEAVE_ORGANIZAION: You attempted to remove the management
+//      * ACCOUNT_CANNOT_LEAVE_ORGANIZATION: You attempted to remove the management
 //      account from the organization. You can't remove the management account.
 //      Instead, after you remove all member accounts, delete the organization
 //      itself.
@@ -12594,7 +12775,7 @@ func (c *Organizations) RegisterDelegatedAdministratorRequest(input *RegisterDel
 //      with the same marketplace.
 //
 //      * MASTER_ACCOUNT_MISSING_BUSINESS_LICENSE: Applies only to the AWS Regions
-//      in China. To create an organization, the master must have an valid business
+//      in China. To create an organization, the master must have a valid business
 //      license. For more information, contact customer support.
 //
 //      * MASTER_ACCOUNT_MISSING_CONTACT_INFO: To complete this operation, you
@@ -12671,6 +12852,9 @@ func (c *Organizations) RegisterDelegatedAdministratorRequest(input *RegisterDel
 //      can't be modified.
 //
 //      * INPUT_REQUIRED: You must include a value for all required parameters.
+//
+//      * INVALID_EMAIL_ADDRESS_TARGET: You specified an invalid email address
+//      for the invited account owner.
 //
 //      * INVALID_ENUM: You specified an invalid value.
 //
@@ -12838,6 +13022,11 @@ func (c *Organizations) RemoveAccountFromOrganizationRequest(input *RemoveAccoun
 //    when all required account information has not yet been provided (http://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_accounts_remove.html#leave-without-all-info)
 //    in the AWS Organizations User Guide.
 //
+//    * The account that you want to leave must not be a delegated administrator
+//    account for any AWS service enabled for your organization. If the account
+//    is a delegated administrator, you must first change the delegated administrator
+//    account to another account that is remaining in the organization.
+//
 //    * After the account leaves the organization, all tags that were attached
 //    to the account object in the organization are deleted. AWS accounts outside
 //    of an organization do not support tags.
@@ -12881,7 +13070,7 @@ func (c *Organizations) RemoveAccountFromOrganizationRequest(input *RemoveAccoun
 //   Some of the reasons in the following list might not be applicable to this
 //   specific API or operation.
 //
-//      * ACCOUNT_CANNOT_LEAVE_ORGANIZAION: You attempted to remove the management
+//      * ACCOUNT_CANNOT_LEAVE_ORGANIZATION: You attempted to remove the management
 //      account from the organization. You can't remove the management account.
 //      Instead, after you remove all member accounts, delete the organization
 //      itself.
@@ -12948,7 +13137,7 @@ func (c *Organizations) RemoveAccountFromOrganizationRequest(input *RemoveAccoun
 //      with the same marketplace.
 //
 //      * MASTER_ACCOUNT_MISSING_BUSINESS_LICENSE: Applies only to the AWS Regions
-//      in China. To create an organization, the master must have an valid business
+//      in China. To create an organization, the master must have a valid business
 //      license. For more information, contact customer support.
 //
 //      * MASTER_ACCOUNT_MISSING_CONTACT_INFO: To complete this operation, you
@@ -13025,6 +13214,9 @@ func (c *Organizations) RemoveAccountFromOrganizationRequest(input *RemoveAccoun
 //      can't be modified.
 //
 //      * INPUT_REQUIRED: You must include a value for all required parameters.
+//
+//      * INVALID_EMAIL_ADDRESS_TARGET: You specified an invalid email address
+//      for the invited account owner.
 //
 //      * INVALID_ENUM: You specified an invalid value.
 //
@@ -13220,7 +13412,7 @@ func (c *Organizations) TagResourceRequest(input *TagResourceInput) (req *reques
 //   Some of the reasons in the following list might not be applicable to this
 //   specific API or operation.
 //
-//      * ACCOUNT_CANNOT_LEAVE_ORGANIZAION: You attempted to remove the management
+//      * ACCOUNT_CANNOT_LEAVE_ORGANIZATION: You attempted to remove the management
 //      account from the organization. You can't remove the management account.
 //      Instead, after you remove all member accounts, delete the organization
 //      itself.
@@ -13287,7 +13479,7 @@ func (c *Organizations) TagResourceRequest(input *TagResourceInput) (req *reques
 //      with the same marketplace.
 //
 //      * MASTER_ACCOUNT_MISSING_BUSINESS_LICENSE: Applies only to the AWS Regions
-//      in China. To create an organization, the master must have an valid business
+//      in China. To create an organization, the master must have a valid business
 //      license. For more information, contact customer support.
 //
 //      * MASTER_ACCOUNT_MISSING_CONTACT_INFO: To complete this operation, you
@@ -13364,6 +13556,9 @@ func (c *Organizations) TagResourceRequest(input *TagResourceInput) (req *reques
 //      can't be modified.
 //
 //      * INPUT_REQUIRED: You must include a value for all required parameters.
+//
+//      * INVALID_EMAIL_ADDRESS_TARGET: You specified an invalid email address
+//      for the invited account owner.
 //
 //      * INVALID_ENUM: You specified an invalid value.
 //
@@ -13554,7 +13749,7 @@ func (c *Organizations) UntagResourceRequest(input *UntagResourceInput) (req *re
 //   Some of the reasons in the following list might not be applicable to this
 //   specific API or operation.
 //
-//      * ACCOUNT_CANNOT_LEAVE_ORGANIZAION: You attempted to remove the management
+//      * ACCOUNT_CANNOT_LEAVE_ORGANIZATION: You attempted to remove the management
 //      account from the organization. You can't remove the management account.
 //      Instead, after you remove all member accounts, delete the organization
 //      itself.
@@ -13621,7 +13816,7 @@ func (c *Organizations) UntagResourceRequest(input *UntagResourceInput) (req *re
 //      with the same marketplace.
 //
 //      * MASTER_ACCOUNT_MISSING_BUSINESS_LICENSE: Applies only to the AWS Regions
-//      in China. To create an organization, the master must have an valid business
+//      in China. To create an organization, the master must have a valid business
 //      license. For more information, contact customer support.
 //
 //      * MASTER_ACCOUNT_MISSING_CONTACT_INFO: To complete this operation, you
@@ -13698,6 +13893,9 @@ func (c *Organizations) UntagResourceRequest(input *UntagResourceInput) (req *re
 //      can't be modified.
 //
 //      * INPUT_REQUIRED: You must include a value for all required parameters.
+//
+//      * INVALID_EMAIL_ADDRESS_TARGET: You specified an invalid email address
+//      for the invited account owner.
 //
 //      * INVALID_ENUM: You specified an invalid value.
 //
@@ -13884,6 +14082,9 @@ func (c *Organizations) UpdateOrganizationalUnitRequest(input *UpdateOrganizatio
 //
 //      * INPUT_REQUIRED: You must include a value for all required parameters.
 //
+//      * INVALID_EMAIL_ADDRESS_TARGET: You specified an invalid email address
+//      for the invited account owner.
+//
 //      * INVALID_ENUM: You specified an invalid value.
 //
 //      * INVALID_ENUM_POLICY_TYPE: You specified an invalid policy type string.
@@ -14064,7 +14265,7 @@ func (c *Organizations) UpdatePolicyRequest(input *UpdatePolicyInput) (req *requ
 //   Some of the reasons in the following list might not be applicable to this
 //   specific API or operation.
 //
-//      * ACCOUNT_CANNOT_LEAVE_ORGANIZAION: You attempted to remove the management
+//      * ACCOUNT_CANNOT_LEAVE_ORGANIZATION: You attempted to remove the management
 //      account from the organization. You can't remove the management account.
 //      Instead, after you remove all member accounts, delete the organization
 //      itself.
@@ -14131,7 +14332,7 @@ func (c *Organizations) UpdatePolicyRequest(input *UpdatePolicyInput) (req *requ
 //      with the same marketplace.
 //
 //      * MASTER_ACCOUNT_MISSING_BUSINESS_LICENSE: Applies only to the AWS Regions
-//      in China. To create an organization, the master must have an valid business
+//      in China. To create an organization, the master must have a valid business
 //      license. For more information, contact customer support.
 //
 //      * MASTER_ACCOUNT_MISSING_CONTACT_INFO: To complete this operation, you
@@ -14211,6 +14412,9 @@ func (c *Organizations) UpdatePolicyRequest(input *UpdatePolicyInput) (req *requ
 //      can't be modified.
 //
 //      * INPUT_REQUIRED: You must include a value for all required parameters.
+//
+//      * INVALID_EMAIL_ADDRESS_TARGET: You specified an invalid email address
+//      for the invited account owner.
 //
 //      * INVALID_ENUM: You specified an invalid value.
 //
@@ -14330,12 +14534,20 @@ type AWSOrganizationsNotInUseException struct {
 	Message_ *string `locationName:"Message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AWSOrganizationsNotInUseException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AWSOrganizationsNotInUseException) GoString() string {
 	return s.String()
 }
@@ -14390,12 +14602,20 @@ type AcceptHandshakeInput struct {
 	HandshakeId *string `type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AcceptHandshakeInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AcceptHandshakeInput) GoString() string {
 	return s.String()
 }
@@ -14426,12 +14646,20 @@ type AcceptHandshakeOutput struct {
 	Handshake *Handshake `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AcceptHandshakeOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AcceptHandshakeOutput) GoString() string {
 	return s.String()
 }
@@ -14454,12 +14682,20 @@ type AccessDeniedException struct {
 	Message_ *string `locationName:"Message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AccessDeniedException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AccessDeniedException) GoString() string {
 	return s.String()
 }
@@ -14514,12 +14750,20 @@ type AccessDeniedForDependencyException struct {
 	Reason *string `type:"string" enum:"AccessDeniedForDependencyExceptionReason"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AccessDeniedForDependencyException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AccessDeniedForDependencyException) GoString() string {
 	return s.String()
 }
@@ -14569,14 +14813,18 @@ type Account struct {
 	// The Amazon Resource Name (ARN) of the account.
 	//
 	// For more information about ARNs in Organizations, see ARN Formats Supported
-	// by Organizations (https://docs.aws.amazon.com/organizations/latest/userguide/orgs_permissions.html#orgs-permissions-arns)
-	// in the AWS Organizations User Guide.
+	// by Organizations (https://docs.aws.amazon.com/service-authorization/latest/reference/list_awsorganizations.html#awsorganizations-resources-for-iam-policies)
+	// in the AWS Service Authorization Reference.
 	Arn *string `type:"string"`
 
 	// The email address associated with the AWS account.
 	//
 	// The regex pattern (http://wikipedia.org/wiki/regex) for this parameter is
 	// a string of characters that represents a standard internet email address.
+	//
+	// Email is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by Account's
+	// String and GoString methods.
 	Email *string `min:"6" type:"string" sensitive:"true"`
 
 	// The unique identifier (ID) of the account.
@@ -14596,18 +14844,30 @@ type Account struct {
 	// The regex pattern (http://wikipedia.org/wiki/regex) that is used to validate
 	// this parameter is a string of any of the characters in the ASCII character
 	// range.
+	//
+	// Name is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by Account's
+	// String and GoString methods.
 	Name *string `min:"1" type:"string" sensitive:"true"`
 
 	// The status of the account in the organization.
 	Status *string `type:"string" enum:"AccountStatus"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s Account) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s Account) GoString() string {
 	return s.String()
 }
@@ -14662,12 +14922,20 @@ type AccountAlreadyRegisteredException struct {
 	Message_ *string `locationName:"Message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AccountAlreadyRegisteredException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AccountAlreadyRegisteredException) GoString() string {
 	return s.String()
 }
@@ -14720,12 +14988,20 @@ type AccountNotFoundException struct {
 	Message_ *string `locationName:"Message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AccountNotFoundException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AccountNotFoundException) GoString() string {
 	return s.String()
 }
@@ -14776,12 +15052,20 @@ type AccountNotRegisteredException struct {
 	Message_ *string `locationName:"Message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AccountNotRegisteredException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AccountNotRegisteredException) GoString() string {
 	return s.String()
 }
@@ -14835,12 +15119,20 @@ type AccountOwnerNotVerifiedException struct {
 	Message_ *string `locationName:"Message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AccountOwnerNotVerifiedException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AccountOwnerNotVerifiedException) GoString() string {
 	return s.String()
 }
@@ -14892,12 +15184,20 @@ type AlreadyInOrganizationException struct {
 	Message_ *string `locationName:"Message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AlreadyInOrganizationException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AlreadyInOrganizationException) GoString() string {
 	return s.String()
 }
@@ -14974,12 +15274,20 @@ type AttachPolicyInput struct {
 	TargetId *string `type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AttachPolicyInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AttachPolicyInput) GoString() string {
 	return s.String()
 }
@@ -15016,12 +15324,20 @@ type AttachPolicyOutput struct {
 	_ struct{} `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AttachPolicyOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AttachPolicyOutput) GoString() string {
 	return s.String()
 }
@@ -15039,12 +15355,20 @@ type CancelHandshakeInput struct {
 	HandshakeId *string `type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CancelHandshakeInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CancelHandshakeInput) GoString() string {
 	return s.String()
 }
@@ -15075,12 +15399,20 @@ type CancelHandshakeOutput struct {
 	Handshake *Handshake `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CancelHandshakeOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CancelHandshakeOutput) GoString() string {
 	return s.String()
 }
@@ -15112,12 +15444,20 @@ type Child struct {
 	Type *string `type:"string" enum:"ChildType"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s Child) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s Child) GoString() string {
 	return s.String()
 }
@@ -15143,12 +15483,20 @@ type ChildNotFoundException struct {
 	Message_ *string `locationName:"Message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ChildNotFoundException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ChildNotFoundException) GoString() string {
 	return s.String()
 }
@@ -15200,12 +15548,20 @@ type ConcurrentModificationException struct {
 	Message_ *string `locationName:"Message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ConcurrentModificationException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ConcurrentModificationException) GoString() string {
 	return s.String()
 }
@@ -15258,7 +15614,7 @@ func (s *ConcurrentModificationException) RequestID() string {
 // Some of the reasons in the following list might not be applicable to this
 // specific API or operation.
 //
-//    * ACCOUNT_CANNOT_LEAVE_ORGANIZAION: You attempted to remove the management
+//    * ACCOUNT_CANNOT_LEAVE_ORGANIZATION: You attempted to remove the management
 //    account from the organization. You can't remove the management account.
 //    Instead, after you remove all member accounts, delete the organization
 //    itself.
@@ -15325,7 +15681,7 @@ func (s *ConcurrentModificationException) RequestID() string {
 //    with the same marketplace.
 //
 //    * MASTER_ACCOUNT_MISSING_BUSINESS_LICENSE: Applies only to the AWS Regions
-//    in China. To create an organization, the master must have an valid business
+//    in China. To create an organization, the master must have a valid business
 //    license. For more information, contact customer support.
 //
 //    * MASTER_ACCOUNT_MISSING_CONTACT_INFO: To complete this operation, you
@@ -15395,12 +15751,20 @@ type ConstraintViolationException struct {
 	Reason *string `type:"string" enum:"ConstraintViolationExceptionReason"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ConstraintViolationException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ConstraintViolationException) GoString() string {
 	return s.String()
 }
@@ -15448,6 +15812,10 @@ type CreateAccountInput struct {
 
 	// The friendly name of the member account.
 	//
+	// AccountName is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by CreateAccountInput's
+	// String and GoString methods.
+	//
 	// AccountName is a required field
 	AccountName *string `min:"1" type:"string" required:"true" sensitive:"true"`
 
@@ -15456,6 +15824,10 @@ type CreateAccountInput struct {
 	// must use a valid email address to complete account creation. You can't access
 	// the root user of the account or remove an account that was created with an
 	// invalid email address.
+	//
+	// Email is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by CreateAccountInput's
+	// String and GoString methods.
 	//
 	// Email is a required field
 	Email *string `min:"6" type:"string" required:"true" sensitive:"true"`
@@ -15510,12 +15882,20 @@ type CreateAccountInput struct {
 	Tags []*Tag `type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateAccountInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateAccountInput) GoString() string {
 	return s.String()
 }
@@ -15596,12 +15976,20 @@ type CreateAccountOutput struct {
 	CreateAccountStatus *CreateAccountStatus `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateAccountOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateAccountOutput) GoString() string {
 	return s.String()
 }
@@ -15625,6 +16013,10 @@ type CreateAccountStatus struct {
 	AccountId *string `type:"string"`
 
 	// The account name given to the account when it was created.
+	//
+	// AccountName is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by CreateAccountStatus's
+	// String and GoString methods.
 	AccountName *string `min:"1" type:"string" sensitive:"true"`
 
 	// The date and time that the account was created and the request completed.
@@ -15632,8 +16024,8 @@ type CreateAccountStatus struct {
 
 	// If the request failed, a description of the reason for the failure.
 	//
-	//    * ACCOUNT_LIMIT_EXCEEDED: The account could not be created because you
-	//    have reached the limit on the number of accounts in your organization.
+	//    * ACCOUNT_LIMIT_EXCEEDED: The account couldn't be created because you
+	//    reached the limit on the number of accounts in your organization.
 	//
 	//    * CONCURRENT_ACCOUNT_MODIFICATION: You already submitted a request with
 	//    the same information.
@@ -15641,9 +16033,16 @@ type CreateAccountStatus struct {
 	//    * EMAIL_ALREADY_EXISTS: The account could not be created because another
 	//    AWS account with that email address already exists.
 	//
+	//    * FAILED_BUSINESS_VALIDATION: The AWS account that owns your organization
+	//    failed to receive business license validation.
+	//
 	//    * GOVCLOUD_ACCOUNT_ALREADY_EXISTS: The account in the AWS GovCloud (US)
 	//    Region could not be created because this Region already includes an account
 	//    with that email address.
+	//
+	//    * IDENTITY_INVALID_BUSINESS_VALIDATION: The AWS account that owns your
+	//    organization can't complete business license validation because it doesn't
+	//    have valid identity data.
 	//
 	//    * INVALID_ADDRESS: The account could not be created because the address
 	//    you provided is not valid.
@@ -15652,13 +16051,20 @@ type CreateAccountStatus struct {
 	//    you provided is not valid.
 	//
 	//    * INTERNAL_FAILURE: The account could not be created because of an internal
-	//    failure. Try again later. If the problem persists, contact Customer Support.
+	//    failure. Try again later. If the problem persists, contact AWS Customer
+	//    Support.
 	//
 	//    * MISSING_BUSINESS_VALIDATION: The AWS account that owns your organization
 	//    has not received Business Validation.
 	//
 	//    * MISSING_PAYMENT_INSTRUMENT: You must configure the management account
 	//    with a valid payment method, such as a credit card.
+	//
+	//    * PENDING_BUSINESS_VALIDATION: The AWS account that owns your organization
+	//    is still in the process of completing business license validation.
+	//
+	//    * UNKNOWN_BUSINESS_VALIDATION: The AWS account that owns your organization
+	//    has an unknown issue with business license validation.
 	FailureReason *string `type:"string" enum:"CreateAccountFailureReason"`
 
 	// If the account was created successfully, the unique identifier (ID) of the
@@ -15676,16 +16082,24 @@ type CreateAccountStatus struct {
 	// The date and time that the request was made for the account creation.
 	RequestedTimestamp *time.Time `type:"timestamp"`
 
-	// The status of the request.
+	// The status of the asynchronous request to create an AWS account.
 	State *string `type:"string" enum:"CreateAccountState"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateAccountStatus) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateAccountStatus) GoString() string {
 	return s.String()
 }
@@ -15747,12 +16161,20 @@ type CreateAccountStatusNotFoundException struct {
 	Message_ *string `locationName:"Message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateAccountStatusNotFoundException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateAccountStatusNotFoundException) GoString() string {
 	return s.String()
 }
@@ -15800,6 +16222,10 @@ type CreateGovCloudAccountInput struct {
 
 	// The friendly name of the member account.
 	//
+	// AccountName is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by CreateGovCloudAccountInput's
+	// String and GoString methods.
+	//
 	// AccountName is a required field
 	AccountName *string `min:"1" type:"string" required:"true" sensitive:"true"`
 
@@ -15811,6 +16237,10 @@ type CreateGovCloudAccountInput struct {
 	// for CreateGovCloudAccount, the request for the email address for the AWS
 	// GovCloud (US) account originates from the commercial Region, not from the
 	// AWS GovCloud (US) Region.
+	//
+	// Email is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by CreateGovCloudAccountInput's
+	// String and GoString methods.
 	//
 	// Email is a required field
 	Email *string `min:"6" type:"string" required:"true" sensitive:"true"`
@@ -15867,12 +16297,20 @@ type CreateGovCloudAccountInput struct {
 	Tags []*Tag `type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateGovCloudAccountInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateGovCloudAccountInput) GoString() string {
 	return s.String()
 }
@@ -15947,12 +16385,20 @@ type CreateGovCloudAccountOutput struct {
 	CreateAccountStatus *CreateAccountStatus `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateGovCloudAccountOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateGovCloudAccountOutput) GoString() string {
 	return s.String()
 }
@@ -15983,12 +16429,20 @@ type CreateOrganizationInput struct {
 	FeatureSet *string `type:"string" enum:"OrganizationFeatureSet"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateOrganizationInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateOrganizationInput) GoString() string {
 	return s.String()
 }
@@ -16006,12 +16460,20 @@ type CreateOrganizationOutput struct {
 	Organization *Organization `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateOrganizationOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateOrganizationOutput) GoString() string {
 	return s.String()
 }
@@ -16058,12 +16520,20 @@ type CreateOrganizationalUnitInput struct {
 	Tags []*Tag `type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateOrganizationalUnitInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateOrganizationalUnitInput) GoString() string {
 	return s.String()
 }
@@ -16122,12 +16592,20 @@ type CreateOrganizationalUnitOutput struct {
 	OrganizationalUnit *OrganizationalUnit `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateOrganizationalUnitOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateOrganizationalUnitOutput) GoString() string {
 	return s.String()
 }
@@ -16185,12 +16663,20 @@ type CreatePolicyInput struct {
 	Type *string `type:"string" required:"true" enum:"PolicyType"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreatePolicyInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreatePolicyInput) GoString() string {
 	return s.String()
 }
@@ -16270,12 +16756,20 @@ type CreatePolicyOutput struct {
 	Policy *Policy `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreatePolicyOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreatePolicyOutput) GoString() string {
 	return s.String()
 }
@@ -16299,12 +16793,20 @@ type DeclineHandshakeInput struct {
 	HandshakeId *string `type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeclineHandshakeInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeclineHandshakeInput) GoString() string {
 	return s.String()
 }
@@ -16336,12 +16838,20 @@ type DeclineHandshakeOutput struct {
 	Handshake *Handshake `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeclineHandshakeOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeclineHandshakeOutput) GoString() string {
 	return s.String()
 }
@@ -16364,6 +16874,10 @@ type DelegatedAdministrator struct {
 
 	// The email address that is associated with the delegated administrator's AWS
 	// account.
+	//
+	// Email is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by DelegatedAdministrator's
+	// String and GoString methods.
 	Email *string `min:"6" type:"string" sensitive:"true"`
 
 	// The unique identifier (ID) of the delegated administrator's account.
@@ -16377,18 +16891,30 @@ type DelegatedAdministrator struct {
 	JoinedTimestamp *time.Time `type:"timestamp"`
 
 	// The friendly name of the delegated administrator's account.
+	//
+	// Name is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by DelegatedAdministrator's
+	// String and GoString methods.
 	Name *string `min:"1" type:"string" sensitive:"true"`
 
 	// The status of the delegated administrator's account in the organization.
 	Status *string `type:"string" enum:"AccountStatus"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DelegatedAdministrator) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DelegatedAdministrator) GoString() string {
 	return s.String()
 }
@@ -16449,17 +16975,25 @@ type DelegatedService struct {
 	// The date that the account became a delegated administrator for this service.
 	DelegationEnabledDate *time.Time `type:"timestamp"`
 
-	// The name of a service that can request an operation for the specified service.
-	// This is typically in the form of a URL, such as: servicename.amazonaws.com.
+	// The name of an AWS service that can request an operation for the specified
+	// service. This is typically in the form of a URL, such as: servicename.amazonaws.com.
 	ServicePrincipal *string `min:"1" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DelegatedService) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DelegatedService) GoString() string {
 	return s.String()
 }
@@ -16480,12 +17014,20 @@ type DeleteOrganizationInput struct {
 	_ struct{} `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteOrganizationInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteOrganizationInput) GoString() string {
 	return s.String()
 }
@@ -16494,12 +17036,20 @@ type DeleteOrganizationOutput struct {
 	_ struct{} `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteOrganizationOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteOrganizationOutput) GoString() string {
 	return s.String()
 }
@@ -16519,12 +17069,20 @@ type DeleteOrganizationalUnitInput struct {
 	OrganizationalUnitId *string `type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteOrganizationalUnitInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteOrganizationalUnitInput) GoString() string {
 	return s.String()
 }
@@ -16552,12 +17110,20 @@ type DeleteOrganizationalUnitOutput struct {
 	_ struct{} `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteOrganizationalUnitOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteOrganizationalUnitOutput) GoString() string {
 	return s.String()
 }
@@ -16576,12 +17142,20 @@ type DeletePolicyInput struct {
 	PolicyId *string `type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeletePolicyInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeletePolicyInput) GoString() string {
 	return s.String()
 }
@@ -16609,12 +17183,20 @@ type DeletePolicyOutput struct {
 	_ struct{} `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeletePolicyOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeletePolicyOutput) GoString() string {
 	return s.String()
 }
@@ -16640,12 +17222,20 @@ type DeregisterDelegatedAdministratorInput struct {
 	ServicePrincipal *string `min:"1" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeregisterDelegatedAdministratorInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeregisterDelegatedAdministratorInput) GoString() string {
 	return s.String()
 }
@@ -16685,12 +17275,20 @@ type DeregisterDelegatedAdministratorOutput struct {
 	_ struct{} `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeregisterDelegatedAdministratorOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeregisterDelegatedAdministratorOutput) GoString() string {
 	return s.String()
 }
@@ -16708,12 +17306,20 @@ type DescribeAccountInput struct {
 	AccountId *string `type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeAccountInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeAccountInput) GoString() string {
 	return s.String()
 }
@@ -16744,12 +17350,20 @@ type DescribeAccountOutput struct {
 	Account *Account `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeAccountOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeAccountOutput) GoString() string {
 	return s.String()
 }
@@ -16775,12 +17389,20 @@ type DescribeCreateAccountStatusInput struct {
 	CreateAccountRequestId *string `type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeCreateAccountStatusInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeCreateAccountStatusInput) GoString() string {
 	return s.String()
 }
@@ -16811,12 +17433,20 @@ type DescribeCreateAccountStatusOutput struct {
 	CreateAccountStatus *CreateAccountStatus `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeCreateAccountStatusOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeCreateAccountStatusOutput) GoString() string {
 	return s.String()
 }
@@ -16848,12 +17478,20 @@ type DescribeEffectivePolicyInput struct {
 	TargetId *string `type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeEffectivePolicyInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeEffectivePolicyInput) GoString() string {
 	return s.String()
 }
@@ -16890,12 +17528,20 @@ type DescribeEffectivePolicyOutput struct {
 	EffectivePolicy *EffectivePolicy `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeEffectivePolicyOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeEffectivePolicyOutput) GoString() string {
 	return s.String()
 }
@@ -16920,12 +17566,20 @@ type DescribeHandshakeInput struct {
 	HandshakeId *string `type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeHandshakeInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeHandshakeInput) GoString() string {
 	return s.String()
 }
@@ -16956,12 +17610,20 @@ type DescribeHandshakeOutput struct {
 	Handshake *Handshake `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeHandshakeOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeHandshakeOutput) GoString() string {
 	return s.String()
 }
@@ -16976,12 +17638,20 @@ type DescribeOrganizationInput struct {
 	_ struct{} `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeOrganizationInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeOrganizationInput) GoString() string {
 	return s.String()
 }
@@ -16998,12 +17668,20 @@ type DescribeOrganizationOutput struct {
 	Organization *Organization `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeOrganizationOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeOrganizationOutput) GoString() string {
 	return s.String()
 }
@@ -17029,12 +17707,20 @@ type DescribeOrganizationalUnitInput struct {
 	OrganizationalUnitId *string `type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeOrganizationalUnitInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeOrganizationalUnitInput) GoString() string {
 	return s.String()
 }
@@ -17065,12 +17751,20 @@ type DescribeOrganizationalUnitOutput struct {
 	OrganizationalUnit *OrganizationalUnit `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeOrganizationalUnitOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeOrganizationalUnitOutput) GoString() string {
 	return s.String()
 }
@@ -17095,12 +17789,20 @@ type DescribePolicyInput struct {
 	PolicyId *string `type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribePolicyInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribePolicyInput) GoString() string {
 	return s.String()
 }
@@ -17131,12 +17833,20 @@ type DescribePolicyOutput struct {
 	Policy *Policy `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribePolicyOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribePolicyOutput) GoString() string {
 	return s.String()
 }
@@ -17156,12 +17866,20 @@ type DestinationParentNotFoundException struct {
 	Message_ *string `locationName:"Message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DestinationParentNotFoundException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DestinationParentNotFoundException) GoString() string {
 	return s.String()
 }
@@ -17238,12 +17956,20 @@ type DetachPolicyInput struct {
 	TargetId *string `type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DetachPolicyInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DetachPolicyInput) GoString() string {
 	return s.String()
 }
@@ -17280,12 +18006,20 @@ type DetachPolicyOutput struct {
 	_ struct{} `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DetachPolicyOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DetachPolicyOutput) GoString() string {
 	return s.String()
 }
@@ -17301,12 +18035,20 @@ type DisableAWSServiceAccessInput struct {
 	ServicePrincipal *string `min:"1" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DisableAWSServiceAccessInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DisableAWSServiceAccessInput) GoString() string {
 	return s.String()
 }
@@ -17337,12 +18079,20 @@ type DisableAWSServiceAccessOutput struct {
 	_ struct{} `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DisableAWSServiceAccessOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DisableAWSServiceAccessOutput) GoString() string {
 	return s.String()
 }
@@ -17374,12 +18124,20 @@ type DisablePolicyTypeInput struct {
 	RootId *string `type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DisablePolicyTypeInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DisablePolicyTypeInput) GoString() string {
 	return s.String()
 }
@@ -17419,12 +18177,20 @@ type DisablePolicyTypeOutput struct {
 	Root *Root `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DisablePolicyTypeOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DisablePolicyTypeOutput) GoString() string {
 	return s.String()
 }
@@ -17443,12 +18209,20 @@ type DuplicateAccountException struct {
 	Message_ *string `locationName:"Message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DuplicateAccountException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DuplicateAccountException) GoString() string {
 	return s.String()
 }
@@ -17503,12 +18277,20 @@ type DuplicateHandshakeException struct {
 	Message_ *string `locationName:"Message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DuplicateHandshakeException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DuplicateHandshakeException) GoString() string {
 	return s.String()
 }
@@ -17559,12 +18341,20 @@ type DuplicateOrganizationalUnitException struct {
 	Message_ *string `locationName:"Message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DuplicateOrganizationalUnitException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DuplicateOrganizationalUnitException) GoString() string {
 	return s.String()
 }
@@ -17615,12 +18405,20 @@ type DuplicatePolicyAttachmentException struct {
 	Message_ *string `locationName:"Message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DuplicatePolicyAttachmentException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DuplicatePolicyAttachmentException) GoString() string {
 	return s.String()
 }
@@ -17671,12 +18469,20 @@ type DuplicatePolicyException struct {
 	Message_ *string `locationName:"Message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DuplicatePolicyException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DuplicatePolicyException) GoString() string {
 	return s.String()
 }
@@ -17738,12 +18544,20 @@ type EffectivePolicy struct {
 	TargetId *string `type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s EffectivePolicy) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s EffectivePolicy) GoString() string {
 	return s.String()
 }
@@ -17783,12 +18597,20 @@ type EffectivePolicyNotFoundException struct {
 	Message_ *string `locationName:"Message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s EffectivePolicyNotFoundException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s EffectivePolicyNotFoundException) GoString() string {
 	return s.String()
 }
@@ -17842,12 +18664,20 @@ type EnableAWSServiceAccessInput struct {
 	ServicePrincipal *string `min:"1" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s EnableAWSServiceAccessInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s EnableAWSServiceAccessInput) GoString() string {
 	return s.String()
 }
@@ -17878,12 +18708,20 @@ type EnableAWSServiceAccessOutput struct {
 	_ struct{} `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s EnableAWSServiceAccessOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s EnableAWSServiceAccessOutput) GoString() string {
 	return s.String()
 }
@@ -17892,12 +18730,20 @@ type EnableAllFeaturesInput struct {
 	_ struct{} `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s EnableAllFeaturesInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s EnableAllFeaturesInput) GoString() string {
 	return s.String()
 }
@@ -17910,12 +18756,20 @@ type EnableAllFeaturesOutput struct {
 	Handshake *Handshake `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s EnableAllFeaturesOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s EnableAllFeaturesOutput) GoString() string {
 	return s.String()
 }
@@ -17953,12 +18807,20 @@ type EnablePolicyTypeInput struct {
 	RootId *string `type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s EnablePolicyTypeInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s EnablePolicyTypeInput) GoString() string {
 	return s.String()
 }
@@ -17998,12 +18860,20 @@ type EnablePolicyTypeOutput struct {
 	Root *Root `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s EnablePolicyTypeOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s EnablePolicyTypeOutput) GoString() string {
 	return s.String()
 }
@@ -18028,12 +18898,20 @@ type EnabledServicePrincipal struct {
 	ServicePrincipal *string `min:"1" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s EnabledServicePrincipal) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s EnabledServicePrincipal) GoString() string {
 	return s.String()
 }
@@ -18061,12 +18939,20 @@ type FinalizingOrganizationException struct {
 	Message_ *string `locationName:"Message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s FinalizingOrganizationException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s FinalizingOrganizationException) GoString() string {
 	return s.String()
 }
@@ -18141,8 +19027,8 @@ type Handshake struct {
 	// The Amazon Resource Name (ARN) of a handshake.
 	//
 	// For more information about ARNs in Organizations, see ARN Formats Supported
-	// by Organizations (https://docs.aws.amazon.com/organizations/latest/userguide/orgs_permissions.html#orgs-permissions-arns)
-	// in the AWS Organizations User Guide.
+	// by Organizations (https://docs.aws.amazon.com/service-authorization/latest/reference/list_awsorganizations.html#awsorganizations-resources-for-iam-policies)
+	// in the AWS Service Authorization Reference.
 	Arn *string `type:"string"`
 
 	// The date and time that the handshake expires. If the recipient of the handshake
@@ -18193,12 +19079,20 @@ type Handshake struct {
 	State *string `type:"string" enum:"HandshakeState"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s Handshake) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s Handshake) GoString() string {
 	return s.String()
 }
@@ -18260,12 +19154,20 @@ type HandshakeAlreadyInStateException struct {
 	Message_ *string `locationName:"Message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s HandshakeAlreadyInStateException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s HandshakeAlreadyInStateException) GoString() string {
 	return s.String()
 }
@@ -18334,6 +19236,10 @@ func (s *HandshakeAlreadyInStateException) RequestID() string {
 //    * ORGANIZATION_ALREADY_HAS_ALL_FEATURES: The handshake request is invalid
 //    because the organization has already enabled all features.
 //
+//    * ORGANIZATION_IS_ALREADY_PENDING_ALL_FEATURES_MIGRATION: The handshake
+//    request is invalid because the organization has already started the process
+//    to enable all features.
+//
 //    * ORGANIZATION_FROM_DIFFERENT_SELLER_OF_RECORD: The request failed because
 //    the account is from a different marketplace than the accounts in the organization.
 //    For example, accounts with India addresses must be associated with the
@@ -18355,12 +19261,20 @@ type HandshakeConstraintViolationException struct {
 	Reason *string `type:"string" enum:"HandshakeConstraintViolationExceptionReason"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s HandshakeConstraintViolationException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s HandshakeConstraintViolationException) GoString() string {
 	return s.String()
 }
@@ -18422,12 +19336,20 @@ type HandshakeFilter struct {
 	ParentHandshakeId *string `type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s HandshakeFilter) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s HandshakeFilter) GoString() string {
 	return s.String()
 }
@@ -18452,12 +19374,20 @@ type HandshakeNotFoundException struct {
 	Message_ *string `locationName:"Message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s HandshakeNotFoundException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s HandshakeNotFoundException) GoString() string {
 	return s.String()
 }
@@ -18509,6 +19439,10 @@ type HandshakeParty struct {
 	// The regex pattern (http://wikipedia.org/wiki/regex) for handshake ID string
 	// requires "h-" followed by from 8 to 32 lowercase letters or digits.
 	//
+	// Id is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by HandshakeParty's
+	// String and GoString methods.
+	//
 	// Id is a required field
 	Id *string `min:"1" type:"string" required:"true" sensitive:"true"`
 
@@ -18518,12 +19452,20 @@ type HandshakeParty struct {
 	Type *string `type:"string" required:"true" enum:"HandshakePartyType"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s HandshakeParty) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s HandshakeParty) GoString() string {
 	return s.String()
 }
@@ -18588,15 +19530,27 @@ type HandshakeResource struct {
 
 	// The information that is passed to the other party in the handshake. The format
 	// of the value string must match the requirements of the specified type.
+	//
+	// Value is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by HandshakeResource's
+	// String and GoString methods.
 	Value *string `type:"string" sensitive:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s HandshakeResource) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s HandshakeResource) GoString() string {
 	return s.String()
 }
@@ -18629,12 +19583,20 @@ type InvalidHandshakeTransitionException struct {
 	Message_ *string `locationName:"Message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s InvalidHandshakeTransitionException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s InvalidHandshakeTransitionException) GoString() string {
 	return s.String()
 }
@@ -18691,6 +19653,9 @@ func (s *InvalidHandshakeTransitionException) RequestID() string {
 //    can't be modified.
 //
 //    * INPUT_REQUIRED: You must include a value for all required parameters.
+//
+//    * INVALID_EMAIL_ADDRESS_TARGET: You specified an invalid email address
+//    for the invited account owner.
 //
 //    * INVALID_ENUM: You specified an invalid value.
 //
@@ -18759,12 +19724,20 @@ type InvalidInputException struct {
 	Reason *string `type:"string" enum:"InvalidInputExceptionReason"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s InvalidInputException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s InvalidInputException) GoString() string {
 	return s.String()
 }
@@ -18812,6 +19785,10 @@ type InviteAccountToOrganizationInput struct {
 
 	// Additional information that you want to include in the generated email to
 	// the recipient account owner.
+	//
+	// Notes is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by InviteAccountToOrganizationInput's
+	// String and GoString methods.
 	Notes *string `type:"string" sensitive:"true"`
 
 	// A list of tags that you want to attach to the account when it becomes a member
@@ -18854,12 +19831,20 @@ type InviteAccountToOrganizationInput struct {
 	Target *HandshakeParty `type:"structure" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s InviteAccountToOrganizationInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s InviteAccountToOrganizationInput) GoString() string {
 	return s.String()
 }
@@ -18918,12 +19903,20 @@ type InviteAccountToOrganizationOutput struct {
 	Handshake *Handshake `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s InviteAccountToOrganizationOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s InviteAccountToOrganizationOutput) GoString() string {
 	return s.String()
 }
@@ -18938,12 +19931,20 @@ type LeaveOrganizationInput struct {
 	_ struct{} `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s LeaveOrganizationInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s LeaveOrganizationInput) GoString() string {
 	return s.String()
 }
@@ -18952,12 +19953,20 @@ type LeaveOrganizationOutput struct {
 	_ struct{} `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s LeaveOrganizationOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s LeaveOrganizationOutput) GoString() string {
 	return s.String()
 }
@@ -18983,12 +19992,20 @@ type ListAWSServiceAccessForOrganizationInput struct {
 	NextToken *string `type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListAWSServiceAccessForOrganizationInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListAWSServiceAccessForOrganizationInput) GoString() string {
 	return s.String()
 }
@@ -19033,12 +20050,20 @@ type ListAWSServiceAccessForOrganizationOutput struct {
 	NextToken *string `type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListAWSServiceAccessForOrganizationOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListAWSServiceAccessForOrganizationOutput) GoString() string {
 	return s.String()
 }
@@ -19082,12 +20107,20 @@ type ListAccountsForParentInput struct {
 	ParentId *string `type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListAccountsForParentInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListAccountsForParentInput) GoString() string {
 	return s.String()
 }
@@ -19139,12 +20172,20 @@ type ListAccountsForParentOutput struct {
 	NextToken *string `type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListAccountsForParentOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListAccountsForParentOutput) GoString() string {
 	return s.String()
 }
@@ -19182,12 +20223,20 @@ type ListAccountsInput struct {
 	NextToken *string `type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListAccountsInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListAccountsInput) GoString() string {
 	return s.String()
 }
@@ -19230,12 +20279,20 @@ type ListAccountsOutput struct {
 	NextToken *string `type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListAccountsOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListAccountsOutput) GoString() string {
 	return s.String()
 }
@@ -19295,12 +20352,20 @@ type ListChildrenInput struct {
 	ParentId *string `type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListChildrenInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListChildrenInput) GoString() string {
 	return s.String()
 }
@@ -19361,12 +20426,20 @@ type ListChildrenOutput struct {
 	NextToken *string `type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListChildrenOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListChildrenOutput) GoString() string {
 	return s.String()
 }
@@ -19408,12 +20481,20 @@ type ListCreateAccountStatusInput struct {
 	States []*string `type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListCreateAccountStatusInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListCreateAccountStatusInput) GoString() string {
 	return s.String()
 }
@@ -19464,12 +20545,20 @@ type ListCreateAccountStatusOutput struct {
 	NextToken *string `type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListCreateAccountStatusOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListCreateAccountStatusOutput) GoString() string {
 	return s.String()
 }
@@ -19514,12 +20603,20 @@ type ListDelegatedAdministratorsInput struct {
 	ServicePrincipal *string `min:"1" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListDelegatedAdministratorsInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListDelegatedAdministratorsInput) GoString() string {
 	return s.String()
 }
@@ -19571,12 +20668,20 @@ type ListDelegatedAdministratorsOutput struct {
 	NextToken *string `type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListDelegatedAdministratorsOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListDelegatedAdministratorsOutput) GoString() string {
 	return s.String()
 }
@@ -19619,12 +20724,20 @@ type ListDelegatedServicesForAccountInput struct {
 	NextToken *string `type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListDelegatedServicesForAccountInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListDelegatedServicesForAccountInput) GoString() string {
 	return s.String()
 }
@@ -19676,12 +20789,20 @@ type ListDelegatedServicesForAccountOutput struct {
 	NextToken *string `type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListDelegatedServicesForAccountOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListDelegatedServicesForAccountOutput) GoString() string {
 	return s.String()
 }
@@ -19727,12 +20848,20 @@ type ListHandshakesForAccountInput struct {
 	NextToken *string `type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListHandshakesForAccountInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListHandshakesForAccountInput) GoString() string {
 	return s.String()
 }
@@ -19782,12 +20911,20 @@ type ListHandshakesForAccountOutput struct {
 	NextToken *string `type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListHandshakesForAccountOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListHandshakesForAccountOutput) GoString() string {
 	return s.String()
 }
@@ -19833,12 +20970,20 @@ type ListHandshakesForOrganizationInput struct {
 	NextToken *string `type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListHandshakesForOrganizationInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListHandshakesForOrganizationInput) GoString() string {
 	return s.String()
 }
@@ -19888,12 +21033,20 @@ type ListHandshakesForOrganizationOutput struct {
 	NextToken *string `type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListHandshakesForOrganizationOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListHandshakesForOrganizationOutput) GoString() string {
 	return s.String()
 }
@@ -19948,12 +21101,20 @@ type ListOrganizationalUnitsForParentInput struct {
 	ParentId *string `type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListOrganizationalUnitsForParentInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListOrganizationalUnitsForParentInput) GoString() string {
 	return s.String()
 }
@@ -20005,12 +21166,20 @@ type ListOrganizationalUnitsForParentOutput struct {
 	OrganizationalUnits []*OrganizationalUnit `type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListOrganizationalUnitsForParentOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListOrganizationalUnitsForParentOutput) GoString() string {
 	return s.String()
 }
@@ -20064,12 +21233,20 @@ type ListParentsInput struct {
 	NextToken *string `type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListParentsInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListParentsInput) GoString() string {
 	return s.String()
 }
@@ -20121,12 +21298,20 @@ type ListParentsOutput struct {
 	Parents []*Parent `type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListParentsOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListParentsOutput) GoString() string {
 	return s.String()
 }
@@ -20197,12 +21382,20 @@ type ListPoliciesForTargetInput struct {
 	TargetId *string `type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListPoliciesForTargetInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListPoliciesForTargetInput) GoString() string {
 	return s.String()
 }
@@ -20263,12 +21456,20 @@ type ListPoliciesForTargetOutput struct {
 	Policies []*PolicySummary `type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListPoliciesForTargetOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListPoliciesForTargetOutput) GoString() string {
 	return s.String()
 }
@@ -20320,12 +21521,20 @@ type ListPoliciesInput struct {
 	NextToken *string `type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListPoliciesInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListPoliciesInput) GoString() string {
 	return s.String()
 }
@@ -20379,12 +21588,20 @@ type ListPoliciesOutput struct {
 	Policies []*PolicySummary `type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListPoliciesOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListPoliciesOutput) GoString() string {
 	return s.String()
 }
@@ -20422,12 +21639,20 @@ type ListRootsInput struct {
 	NextToken *string `type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListRootsInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListRootsInput) GoString() string {
 	return s.String()
 }
@@ -20470,12 +21695,20 @@ type ListRootsOutput struct {
 	Roots []*Root `type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListRootsOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListRootsOutput) GoString() string {
 	return s.String()
 }
@@ -20520,12 +21753,20 @@ type ListTagsForResourceInput struct {
 	ResourceId *string `type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListTagsForResourceInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListTagsForResourceInput) GoString() string {
 	return s.String()
 }
@@ -20568,12 +21809,20 @@ type ListTagsForResourceOutput struct {
 	Tags []*Tag `type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListTagsForResourceOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListTagsForResourceOutput) GoString() string {
 	return s.String()
 }
@@ -20620,12 +21869,20 @@ type ListTargetsForPolicyInput struct {
 	PolicyId *string `type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListTargetsForPolicyInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListTargetsForPolicyInput) GoString() string {
 	return s.String()
 }
@@ -20678,12 +21935,20 @@ type ListTargetsForPolicyOutput struct {
 	Targets []*PolicyTargetSummary `type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListTargetsForPolicyOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListTargetsForPolicyOutput) GoString() string {
 	return s.String()
 }
@@ -20711,12 +21976,20 @@ type MalformedPolicyDocumentException struct {
 	Message_ *string `locationName:"Message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s MalformedPolicyDocumentException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s MalformedPolicyDocumentException) GoString() string {
 	return s.String()
 }
@@ -20769,12 +22042,20 @@ type MasterCannotLeaveOrganizationException struct {
 	Message_ *string `locationName:"Message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s MasterCannotLeaveOrganizationException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s MasterCannotLeaveOrganizationException) GoString() string {
 	return s.String()
 }
@@ -20863,12 +22144,20 @@ type MoveAccountInput struct {
 	SourceParentId *string `type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s MoveAccountInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s MoveAccountInput) GoString() string {
 	return s.String()
 }
@@ -20914,12 +22203,20 @@ type MoveAccountOutput struct {
 	_ struct{} `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s MoveAccountOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s MoveAccountOutput) GoString() string {
 	return s.String()
 }
@@ -20934,8 +22231,8 @@ type Organization struct {
 	// The Amazon Resource Name (ARN) of an organization.
 	//
 	// For more information about ARNs in Organizations, see ARN Formats Supported
-	// by Organizations (https://docs.aws.amazon.com/organizations/latest/userguide/orgs_permissions.html#orgs-permissions-arns)
-	// in the AWS Organizations User Guide.
+	// by Organizations (https://docs.aws.amazon.com/service-authorization/latest/reference/list_awsorganizations.html#awsorganizations-resources-for-iam-policies)
+	// in the AWS Service Authorization Reference.
 	Arn *string `type:"string"`
 
 	//
@@ -20964,12 +22261,16 @@ type Organization struct {
 	// account for the organization.
 	//
 	// For more information about ARNs in Organizations, see ARN Formats Supported
-	// by Organizations (https://docs.aws.amazon.com/organizations/latest/userguide/orgs_permissions.html#orgs-permissions-arns)
-	// in the AWS Organizations User Guide.
+	// by Organizations (https://docs.aws.amazon.com/service-authorization/latest/reference/list_awsorganizations.html#awsorganizations-resources-for-iam-policies)
+	// in the AWS Service Authorization Reference.
 	MasterAccountArn *string `type:"string"`
 
 	// The email address that is associated with the AWS account that is designated
 	// as the management account for the organization.
+	//
+	// MasterAccountEmail is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by Organization's
+	// String and GoString methods.
 	MasterAccountEmail *string `min:"6" type:"string" sensitive:"true"`
 
 	// The unique identifier (ID) of the management account of an organization.
@@ -20979,12 +22280,20 @@ type Organization struct {
 	MasterAccountId *string `type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s Organization) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s Organization) GoString() string {
 	return s.String()
 }
@@ -21041,12 +22350,20 @@ type OrganizationNotEmptyException struct {
 	Message_ *string `locationName:"Message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s OrganizationNotEmptyException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s OrganizationNotEmptyException) GoString() string {
 	return s.String()
 }
@@ -21098,8 +22415,8 @@ type OrganizationalUnit struct {
 	// The Amazon Resource Name (ARN) of this OU.
 	//
 	// For more information about ARNs in Organizations, see ARN Formats Supported
-	// by Organizations (https://docs.aws.amazon.com/organizations/latest/userguide/orgs_permissions.html#orgs-permissions-arns)
-	// in the AWS Organizations User Guide.
+	// by Organizations (https://docs.aws.amazon.com/service-authorization/latest/reference/list_awsorganizations.html#awsorganizations-resources-for-iam-policies)
+	// in the AWS Service Authorization Reference.
 	Arn *string `type:"string"`
 
 	// The unique identifier (ID) associated with this OU.
@@ -21118,12 +22435,20 @@ type OrganizationalUnit struct {
 	Name *string `min:"1" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s OrganizationalUnit) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s OrganizationalUnit) GoString() string {
 	return s.String()
 }
@@ -21155,12 +22480,20 @@ type OrganizationalUnitNotEmptyException struct {
 	Message_ *string `locationName:"Message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s OrganizationalUnitNotEmptyException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s OrganizationalUnitNotEmptyException) GoString() string {
 	return s.String()
 }
@@ -21211,12 +22544,20 @@ type OrganizationalUnitNotFoundException struct {
 	Message_ *string `locationName:"Message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s OrganizationalUnitNotFoundException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s OrganizationalUnitNotFoundException) GoString() string {
 	return s.String()
 }
@@ -21282,12 +22623,20 @@ type Parent struct {
 	Type *string `type:"string" enum:"ParentType"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s Parent) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s Parent) GoString() string {
 	return s.String()
 }
@@ -21312,12 +22661,20 @@ type ParentNotFoundException struct {
 	Message_ *string `locationName:"Message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ParentNotFoundException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ParentNotFoundException) GoString() string {
 	return s.String()
 }
@@ -21373,12 +22730,20 @@ type Policy struct {
 	PolicySummary *PolicySummary `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s Policy) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s Policy) GoString() string {
 	return s.String()
 }
@@ -21404,12 +22769,20 @@ type PolicyChangesInProgressException struct {
 	Message_ *string `locationName:"Message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s PolicyChangesInProgressException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s PolicyChangesInProgressException) GoString() string {
 	return s.String()
 }
@@ -21461,12 +22834,20 @@ type PolicyInUseException struct {
 	Message_ *string `locationName:"Message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s PolicyInUseException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s PolicyInUseException) GoString() string {
 	return s.String()
 }
@@ -21517,12 +22898,20 @@ type PolicyNotAttachedException struct {
 	Message_ *string `locationName:"Message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s PolicyNotAttachedException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s PolicyNotAttachedException) GoString() string {
 	return s.String()
 }
@@ -21573,12 +22962,20 @@ type PolicyNotFoundException struct {
 	Message_ *string `locationName:"Message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s PolicyNotFoundException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s PolicyNotFoundException) GoString() string {
 	return s.String()
 }
@@ -21629,8 +23026,8 @@ type PolicySummary struct {
 	// The Amazon Resource Name (ARN) of the policy.
 	//
 	// For more information about ARNs in Organizations, see ARN Formats Supported
-	// by Organizations (https://docs.aws.amazon.com/organizations/latest/userguide/orgs_permissions.html#orgs-permissions-arns)
-	// in the AWS Organizations User Guide.
+	// by Organizations (https://docs.aws.amazon.com/service-authorization/latest/reference/list_awsorganizations.html#awsorganizations-resources-for-iam-policies)
+	// in the AWS Service Authorization Reference.
 	Arn *string `type:"string"`
 
 	// A boolean value that indicates whether the specified policy is an AWS managed
@@ -21659,12 +23056,20 @@ type PolicySummary struct {
 	Type *string `type:"string" enum:"PolicyType"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s PolicySummary) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s PolicySummary) GoString() string {
 	return s.String()
 }
@@ -21713,8 +23118,8 @@ type PolicyTargetSummary struct {
 	// The Amazon Resource Name (ARN) of the policy target.
 	//
 	// For more information about ARNs in Organizations, see ARN Formats Supported
-	// by Organizations (https://docs.aws.amazon.com/organizations/latest/userguide/orgs_permissions.html#orgs-permissions-arns)
-	// in the AWS Organizations User Guide.
+	// by Organizations (https://docs.aws.amazon.com/service-authorization/latest/reference/list_awsorganizations.html#awsorganizations-resources-for-iam-policies)
+	// in the AWS Service Authorization Reference.
 	Arn *string `type:"string"`
 
 	// The friendly name of the policy target.
@@ -21744,12 +23149,20 @@ type PolicyTargetSummary struct {
 	Type *string `type:"string" enum:"TargetType"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s PolicyTargetSummary) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s PolicyTargetSummary) GoString() string {
 	return s.String()
 }
@@ -21786,12 +23199,20 @@ type PolicyTypeAlreadyEnabledException struct {
 	Message_ *string `locationName:"Message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s PolicyTypeAlreadyEnabledException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s PolicyTypeAlreadyEnabledException) GoString() string {
 	return s.String()
 }
@@ -21846,12 +23267,20 @@ type PolicyTypeNotAvailableForOrganizationException struct {
 	Message_ *string `locationName:"Message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s PolicyTypeNotAvailableForOrganizationException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s PolicyTypeNotAvailableForOrganizationException) GoString() string {
 	return s.String()
 }
@@ -21906,12 +23335,20 @@ type PolicyTypeNotEnabledException struct {
 	Message_ *string `locationName:"Message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s PolicyTypeNotEnabledException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s PolicyTypeNotEnabledException) GoString() string {
 	return s.String()
 }
@@ -21968,12 +23405,20 @@ type PolicyTypeSummary struct {
 	Type *string `type:"string" enum:"PolicyType"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s PolicyTypeSummary) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s PolicyTypeSummary) GoString() string {
 	return s.String()
 }
@@ -22006,12 +23451,20 @@ type RegisterDelegatedAdministratorInput struct {
 	ServicePrincipal *string `min:"1" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s RegisterDelegatedAdministratorInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s RegisterDelegatedAdministratorInput) GoString() string {
 	return s.String()
 }
@@ -22051,12 +23504,20 @@ type RegisterDelegatedAdministratorOutput struct {
 	_ struct{} `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s RegisterDelegatedAdministratorOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s RegisterDelegatedAdministratorOutput) GoString() string {
 	return s.String()
 }
@@ -22074,12 +23535,20 @@ type RemoveAccountFromOrganizationInput struct {
 	AccountId *string `type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s RemoveAccountFromOrganizationInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s RemoveAccountFromOrganizationInput) GoString() string {
 	return s.String()
 }
@@ -22107,12 +23576,20 @@ type RemoveAccountFromOrganizationOutput struct {
 	_ struct{} `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s RemoveAccountFromOrganizationOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s RemoveAccountFromOrganizationOutput) GoString() string {
 	return s.String()
 }
@@ -22126,8 +23603,8 @@ type Root struct {
 	// The Amazon Resource Name (ARN) of the root.
 	//
 	// For more information about ARNs in Organizations, see ARN Formats Supported
-	// by Organizations (https://docs.aws.amazon.com/organizations/latest/userguide/orgs_permissions.html#orgs-permissions-arns)
-	// in the AWS Organizations User Guide.
+	// by Organizations (https://docs.aws.amazon.com/service-authorization/latest/reference/list_awsorganizations.html#awsorganizations-resources-for-iam-policies)
+	// in the AWS Service Authorization Reference.
 	Arn *string `type:"string"`
 
 	// The unique identifier (ID) for the root.
@@ -22153,12 +23630,20 @@ type Root struct {
 	PolicyTypes []*PolicyTypeSummary `type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s Root) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s Root) GoString() string {
 	return s.String()
 }
@@ -22195,12 +23680,20 @@ type RootNotFoundException struct {
 	Message_ *string `locationName:"Message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s RootNotFoundException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s RootNotFoundException) GoString() string {
 	return s.String()
 }
@@ -22252,12 +23745,20 @@ type ServiceException struct {
 	Message_ *string `locationName:"Message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ServiceException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ServiceException) GoString() string {
 	return s.String()
 }
@@ -22308,12 +23809,20 @@ type SourceParentNotFoundException struct {
 	Message_ *string `locationName:"Message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s SourceParentNotFoundException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s SourceParentNotFoundException) GoString() string {
 	return s.String()
 }
@@ -22383,12 +23892,20 @@ type Tag struct {
 	Value *string `type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s Tag) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s Tag) GoString() string {
 	return s.String()
 }
@@ -22458,12 +23975,20 @@ type TagResourceInput struct {
 	Tags []*Tag `type:"list" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s TagResourceInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s TagResourceInput) GoString() string {
 	return s.String()
 }
@@ -22510,12 +24035,20 @@ type TagResourceOutput struct {
 	_ struct{} `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s TagResourceOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s TagResourceOutput) GoString() string {
 	return s.String()
 }
@@ -22528,12 +24061,20 @@ type TargetNotFoundException struct {
 	Message_ *string `locationName:"Message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s TargetNotFoundException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s TargetNotFoundException) GoString() string {
 	return s.String()
 }
@@ -22591,12 +24132,20 @@ type TooManyRequestsException struct {
 	Type *string `type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s TooManyRequestsException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s TooManyRequestsException) GoString() string {
 	return s.String()
 }
@@ -22647,12 +24196,20 @@ type UnsupportedAPIEndpointException struct {
 	Message_ *string `locationName:"Message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UnsupportedAPIEndpointException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UnsupportedAPIEndpointException) GoString() string {
 	return s.String()
 }
@@ -22722,12 +24279,20 @@ type UntagResourceInput struct {
 	TagKeys []*string `type:"list" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UntagResourceInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UntagResourceInput) GoString() string {
 	return s.String()
 }
@@ -22764,12 +24329,20 @@ type UntagResourceOutput struct {
 	_ struct{} `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UntagResourceOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UntagResourceOutput) GoString() string {
 	return s.String()
 }
@@ -22796,12 +24369,20 @@ type UpdateOrganizationalUnitInput struct {
 	OrganizationalUnitId *string `type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpdateOrganizationalUnitInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpdateOrganizationalUnitInput) GoString() string {
 	return s.String()
 }
@@ -22842,12 +24423,20 @@ type UpdateOrganizationalUnitOutput struct {
 	OrganizationalUnit *OrganizationalUnit `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpdateOrganizationalUnitOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpdateOrganizationalUnitOutput) GoString() string {
 	return s.String()
 }
@@ -22887,12 +24476,20 @@ type UpdatePolicyInput struct {
 	PolicyId *string `type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpdatePolicyInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpdatePolicyInput) GoString() string {
 	return s.String()
 }
@@ -22948,12 +24545,20 @@ type UpdatePolicyOutput struct {
 	Policy *Policy `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpdatePolicyOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpdatePolicyOutput) GoString() string {
 	return s.String()
 }
@@ -23193,6 +24798,18 @@ const (
 	// CreateAccountFailureReasonMissingBusinessValidation is a CreateAccountFailureReason enum value
 	CreateAccountFailureReasonMissingBusinessValidation = "MISSING_BUSINESS_VALIDATION"
 
+	// CreateAccountFailureReasonFailedBusinessValidation is a CreateAccountFailureReason enum value
+	CreateAccountFailureReasonFailedBusinessValidation = "FAILED_BUSINESS_VALIDATION"
+
+	// CreateAccountFailureReasonPendingBusinessValidation is a CreateAccountFailureReason enum value
+	CreateAccountFailureReasonPendingBusinessValidation = "PENDING_BUSINESS_VALIDATION"
+
+	// CreateAccountFailureReasonInvalidIdentityForBusinessValidation is a CreateAccountFailureReason enum value
+	CreateAccountFailureReasonInvalidIdentityForBusinessValidation = "INVALID_IDENTITY_FOR_BUSINESS_VALIDATION"
+
+	// CreateAccountFailureReasonUnknownBusinessValidation is a CreateAccountFailureReason enum value
+	CreateAccountFailureReasonUnknownBusinessValidation = "UNKNOWN_BUSINESS_VALIDATION"
+
 	// CreateAccountFailureReasonMissingPaymentInstrument is a CreateAccountFailureReason enum value
 	CreateAccountFailureReasonMissingPaymentInstrument = "MISSING_PAYMENT_INSTRUMENT"
 )
@@ -23208,6 +24825,10 @@ func CreateAccountFailureReason_Values() []string {
 		CreateAccountFailureReasonInternalFailure,
 		CreateAccountFailureReasonGovcloudAccountAlreadyExists,
 		CreateAccountFailureReasonMissingBusinessValidation,
+		CreateAccountFailureReasonFailedBusinessValidation,
+		CreateAccountFailureReasonPendingBusinessValidation,
+		CreateAccountFailureReasonInvalidIdentityForBusinessValidation,
+		CreateAccountFailureReasonUnknownBusinessValidation,
 		CreateAccountFailureReasonMissingPaymentInstrument,
 	}
 }
@@ -23265,6 +24886,9 @@ const (
 	// HandshakeConstraintViolationExceptionReasonOrganizationAlreadyHasAllFeatures is a HandshakeConstraintViolationExceptionReason enum value
 	HandshakeConstraintViolationExceptionReasonOrganizationAlreadyHasAllFeatures = "ORGANIZATION_ALREADY_HAS_ALL_FEATURES"
 
+	// HandshakeConstraintViolationExceptionReasonOrganizationIsAlreadyPendingAllFeaturesMigration is a HandshakeConstraintViolationExceptionReason enum value
+	HandshakeConstraintViolationExceptionReasonOrganizationIsAlreadyPendingAllFeaturesMigration = "ORGANIZATION_IS_ALREADY_PENDING_ALL_FEATURES_MIGRATION"
+
 	// HandshakeConstraintViolationExceptionReasonInviteDisabledDuringEnableAllFeatures is a HandshakeConstraintViolationExceptionReason enum value
 	HandshakeConstraintViolationExceptionReasonInviteDisabledDuringEnableAllFeatures = "INVITE_DISABLED_DURING_ENABLE_ALL_FEATURES"
 
@@ -23285,6 +24909,7 @@ func HandshakeConstraintViolationExceptionReason_Values() []string {
 		HandshakeConstraintViolationExceptionReasonHandshakeRateLimitExceeded,
 		HandshakeConstraintViolationExceptionReasonAlreadyInAnOrganization,
 		HandshakeConstraintViolationExceptionReasonOrganizationAlreadyHasAllFeatures,
+		HandshakeConstraintViolationExceptionReasonOrganizationIsAlreadyPendingAllFeaturesMigration,
 		HandshakeConstraintViolationExceptionReasonInviteDisabledDuringEnableAllFeatures,
 		HandshakeConstraintViolationExceptionReasonPaymentInstrumentRequired,
 		HandshakeConstraintViolationExceptionReasonOrganizationFromDifferentSellerOfRecord,
@@ -23469,6 +25094,9 @@ const (
 
 	// InvalidInputExceptionReasonTargetNotSupported is a InvalidInputExceptionReason enum value
 	InvalidInputExceptionReasonTargetNotSupported = "TARGET_NOT_SUPPORTED"
+
+	// InvalidInputExceptionReasonInvalidEmailAddressTarget is a InvalidInputExceptionReason enum value
+	InvalidInputExceptionReasonInvalidEmailAddressTarget = "INVALID_EMAIL_ADDRESS_TARGET"
 )
 
 // InvalidInputExceptionReason_Values returns all elements of the InvalidInputExceptionReason enum
@@ -23497,6 +25125,7 @@ func InvalidInputExceptionReason_Values() []string {
 		InvalidInputExceptionReasonInvalidSystemTagsParameter,
 		InvalidInputExceptionReasonDuplicateTagKey,
 		InvalidInputExceptionReasonTargetNotSupported,
+		InvalidInputExceptionReasonInvalidEmailAddressTarget,
 	}
 }
 

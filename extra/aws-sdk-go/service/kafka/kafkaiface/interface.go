@@ -181,6 +181,10 @@ type KafkaAPI interface {
 	UpdateBrokerStorageWithContext(aws.Context, *kafka.UpdateBrokerStorageInput, ...request.Option) (*kafka.UpdateBrokerStorageOutput, error)
 	UpdateBrokerStorageRequest(*kafka.UpdateBrokerStorageInput) (*request.Request, *kafka.UpdateBrokerStorageOutput)
 
+	UpdateBrokerType(*kafka.UpdateBrokerTypeInput) (*kafka.UpdateBrokerTypeOutput, error)
+	UpdateBrokerTypeWithContext(aws.Context, *kafka.UpdateBrokerTypeInput, ...request.Option) (*kafka.UpdateBrokerTypeOutput, error)
+	UpdateBrokerTypeRequest(*kafka.UpdateBrokerTypeInput) (*request.Request, *kafka.UpdateBrokerTypeOutput)
+
 	UpdateClusterConfiguration(*kafka.UpdateClusterConfigurationInput) (*kafka.UpdateClusterConfigurationOutput, error)
 	UpdateClusterConfigurationWithContext(aws.Context, *kafka.UpdateClusterConfigurationInput, ...request.Option) (*kafka.UpdateClusterConfigurationOutput, error)
 	UpdateClusterConfigurationRequest(*kafka.UpdateClusterConfigurationInput) (*request.Request, *kafka.UpdateClusterConfigurationOutput)
@@ -196,6 +200,10 @@ type KafkaAPI interface {
 	UpdateMonitoring(*kafka.UpdateMonitoringInput) (*kafka.UpdateMonitoringOutput, error)
 	UpdateMonitoringWithContext(aws.Context, *kafka.UpdateMonitoringInput, ...request.Option) (*kafka.UpdateMonitoringOutput, error)
 	UpdateMonitoringRequest(*kafka.UpdateMonitoringInput) (*request.Request, *kafka.UpdateMonitoringOutput)
+
+	UpdateSecurity(*kafka.UpdateSecurityInput) (*kafka.UpdateSecurityOutput, error)
+	UpdateSecurityWithContext(aws.Context, *kafka.UpdateSecurityInput, ...request.Option) (*kafka.UpdateSecurityOutput, error)
+	UpdateSecurityRequest(*kafka.UpdateSecurityInput) (*request.Request, *kafka.UpdateSecurityOutput)
 }
 
 var _ KafkaAPI = (*kafka.Kafka)(nil)

@@ -8,11 +8,25 @@ import (
 
 const (
 
+	// ErrCodeCodeSigningConfigNotFoundException for service response error code
+	// "CodeSigningConfigNotFoundException".
+	//
+	// The specified code signing configuration does not exist.
+	ErrCodeCodeSigningConfigNotFoundException = "CodeSigningConfigNotFoundException"
+
 	// ErrCodeCodeStorageExceededException for service response error code
 	// "CodeStorageExceededException".
 	//
 	// You have exceeded your maximum total code size per account. Learn more (https://docs.aws.amazon.com/lambda/latest/dg/limits.html)
 	ErrCodeCodeStorageExceededException = "CodeStorageExceededException"
+
+	// ErrCodeCodeVerificationFailedException for service response error code
+	// "CodeVerificationFailedException".
+	//
+	// The code signature failed one or more of the validation checks for signature
+	// mismatch or expiry, and the code signing policy is set to ENFORCE. Lambda
+	// blocks the deployment.
+	ErrCodeCodeVerificationFailedException = "CodeVerificationFailedException"
 
 	// ErrCodeEC2AccessDeniedException for service response error code
 	// "EC2AccessDeniedException".
@@ -23,21 +37,21 @@ const (
 	// ErrCodeEC2ThrottledException for service response error code
 	// "EC2ThrottledException".
 	//
-	// AWS Lambda was throttled by Amazon EC2 during Lambda function initialization
+	// Lambda was throttled by Amazon EC2 during Lambda function initialization
 	// using the execution role provided for the Lambda function.
 	ErrCodeEC2ThrottledException = "EC2ThrottledException"
 
 	// ErrCodeEC2UnexpectedException for service response error code
 	// "EC2UnexpectedException".
 	//
-	// AWS Lambda received an unexpected EC2 client exception while setting up for
-	// the Lambda function.
+	// Lambda received an unexpected EC2 client exception while setting up for the
+	// Lambda function.
 	ErrCodeEC2UnexpectedException = "EC2UnexpectedException"
 
 	// ErrCodeEFSIOException for service response error code
 	// "EFSIOException".
 	//
-	// An error occured when reading from or writing to a connected file system.
+	// An error occurred when reading from or writing to a connected file system.
 	ErrCodeEFSIOException = "EFSIOException"
 
 	// ErrCodeEFSMountConnectivityException for service response error code
@@ -63,10 +77,17 @@ const (
 	// ErrCodeENILimitReachedException for service response error code
 	// "ENILimitReachedException".
 	//
-	// AWS Lambda was not able to create an elastic network interface in the VPC,
-	// specified as part of Lambda function configuration, because the limit for
-	// network interfaces has been reached.
+	// Lambda was not able to create an elastic network interface in the VPC, specified
+	// as part of Lambda function configuration, because the limit for network interfaces
+	// has been reached.
 	ErrCodeENILimitReachedException = "ENILimitReachedException"
+
+	// ErrCodeInvalidCodeSignatureException for service response error code
+	// "InvalidCodeSignatureException".
+	//
+	// The code signature failed the integrity check. Lambda always blocks deployment
+	// if the integrity check fails, even if code signing policy is set to WARN.
+	ErrCodeInvalidCodeSignatureException = "InvalidCodeSignatureException"
 
 	// ErrCodeInvalidParameterValueException for service response error code
 	// "InvalidParameterValueException".
@@ -102,7 +123,7 @@ const (
 	// ErrCodeInvalidZipFileException for service response error code
 	// "InvalidZipFileException".
 	//
-	// AWS Lambda could not unzip the deployment package.
+	// Lambda could not unzip the deployment package.
 	ErrCodeInvalidZipFileException = "InvalidZipFileException"
 
 	// ErrCodeKMSAccessDeniedException for service response error code
@@ -190,13 +211,13 @@ const (
 	// ErrCodeServiceException for service response error code
 	// "ServiceException".
 	//
-	// The AWS Lambda service encountered an internal error.
+	// The Lambda service encountered an internal error.
 	ErrCodeServiceException = "ServiceException"
 
 	// ErrCodeSubnetIPAddressLimitReachedException for service response error code
 	// "SubnetIPAddressLimitReachedException".
 	//
-	// AWS Lambda was not able to set up VPC access for the Lambda function because
+	// Lambda was not able to set up VPC access for the Lambda function because
 	// one or more configured subnets has no available IP addresses.
 	ErrCodeSubnetIPAddressLimitReachedException = "SubnetIPAddressLimitReachedException"
 
@@ -214,7 +235,9 @@ const (
 )
 
 var exceptionFromCode = map[string]func(protocol.ResponseMetadata) error{
+	"CodeSigningConfigNotFoundException":            newErrorCodeSigningConfigNotFoundException,
 	"CodeStorageExceededException":                  newErrorCodeStorageExceededException,
+	"CodeVerificationFailedException":               newErrorCodeVerificationFailedException,
 	"EC2AccessDeniedException":                      newErrorEC2AccessDeniedException,
 	"EC2ThrottledException":                         newErrorEC2ThrottledException,
 	"EC2UnexpectedException":                        newErrorEC2UnexpectedException,
@@ -223,6 +246,7 @@ var exceptionFromCode = map[string]func(protocol.ResponseMetadata) error{
 	"EFSMountFailureException":                      newErrorEFSMountFailureException,
 	"EFSMountTimeoutException":                      newErrorEFSMountTimeoutException,
 	"ENILimitReachedException":                      newErrorENILimitReachedException,
+	"InvalidCodeSignatureException":                 newErrorInvalidCodeSignatureException,
 	"InvalidParameterValueException":                newErrorInvalidParameterValueException,
 	"InvalidRequestContentException":                newErrorInvalidRequestContentException,
 	"InvalidRuntimeException":                       newErrorInvalidRuntimeException,

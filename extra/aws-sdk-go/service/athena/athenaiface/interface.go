@@ -76,6 +76,10 @@ type AthenaAPI interface {
 	CreateNamedQueryWithContext(aws.Context, *athena.CreateNamedQueryInput, ...request.Option) (*athena.CreateNamedQueryOutput, error)
 	CreateNamedQueryRequest(*athena.CreateNamedQueryInput) (*request.Request, *athena.CreateNamedQueryOutput)
 
+	CreatePreparedStatement(*athena.CreatePreparedStatementInput) (*athena.CreatePreparedStatementOutput, error)
+	CreatePreparedStatementWithContext(aws.Context, *athena.CreatePreparedStatementInput, ...request.Option) (*athena.CreatePreparedStatementOutput, error)
+	CreatePreparedStatementRequest(*athena.CreatePreparedStatementInput) (*request.Request, *athena.CreatePreparedStatementOutput)
+
 	CreateWorkGroup(*athena.CreateWorkGroupInput) (*athena.CreateWorkGroupOutput, error)
 	CreateWorkGroupWithContext(aws.Context, *athena.CreateWorkGroupInput, ...request.Option) (*athena.CreateWorkGroupOutput, error)
 	CreateWorkGroupRequest(*athena.CreateWorkGroupInput) (*request.Request, *athena.CreateWorkGroupOutput)
@@ -87,6 +91,10 @@ type AthenaAPI interface {
 	DeleteNamedQuery(*athena.DeleteNamedQueryInput) (*athena.DeleteNamedQueryOutput, error)
 	DeleteNamedQueryWithContext(aws.Context, *athena.DeleteNamedQueryInput, ...request.Option) (*athena.DeleteNamedQueryOutput, error)
 	DeleteNamedQueryRequest(*athena.DeleteNamedQueryInput) (*request.Request, *athena.DeleteNamedQueryOutput)
+
+	DeletePreparedStatement(*athena.DeletePreparedStatementInput) (*athena.DeletePreparedStatementOutput, error)
+	DeletePreparedStatementWithContext(aws.Context, *athena.DeletePreparedStatementInput, ...request.Option) (*athena.DeletePreparedStatementOutput, error)
+	DeletePreparedStatementRequest(*athena.DeletePreparedStatementInput) (*request.Request, *athena.DeletePreparedStatementOutput)
 
 	DeleteWorkGroup(*athena.DeleteWorkGroupInput) (*athena.DeleteWorkGroupOutput, error)
 	DeleteWorkGroupWithContext(aws.Context, *athena.DeleteWorkGroupInput, ...request.Option) (*athena.DeleteWorkGroupOutput, error)
@@ -103,6 +111,10 @@ type AthenaAPI interface {
 	GetNamedQuery(*athena.GetNamedQueryInput) (*athena.GetNamedQueryOutput, error)
 	GetNamedQueryWithContext(aws.Context, *athena.GetNamedQueryInput, ...request.Option) (*athena.GetNamedQueryOutput, error)
 	GetNamedQueryRequest(*athena.GetNamedQueryInput) (*request.Request, *athena.GetNamedQueryOutput)
+
+	GetPreparedStatement(*athena.GetPreparedStatementInput) (*athena.GetPreparedStatementOutput, error)
+	GetPreparedStatementWithContext(aws.Context, *athena.GetPreparedStatementInput, ...request.Option) (*athena.GetPreparedStatementOutput, error)
+	GetPreparedStatementRequest(*athena.GetPreparedStatementInput) (*request.Request, *athena.GetPreparedStatementOutput)
 
 	GetQueryExecution(*athena.GetQueryExecutionInput) (*athena.GetQueryExecutionOutput, error)
 	GetQueryExecutionWithContext(aws.Context, *athena.GetQueryExecutionInput, ...request.Option) (*athena.GetQueryExecutionOutput, error)
@@ -137,12 +149,23 @@ type AthenaAPI interface {
 	ListDatabasesPages(*athena.ListDatabasesInput, func(*athena.ListDatabasesOutput, bool) bool) error
 	ListDatabasesPagesWithContext(aws.Context, *athena.ListDatabasesInput, func(*athena.ListDatabasesOutput, bool) bool, ...request.Option) error
 
+	ListEngineVersions(*athena.ListEngineVersionsInput) (*athena.ListEngineVersionsOutput, error)
+	ListEngineVersionsWithContext(aws.Context, *athena.ListEngineVersionsInput, ...request.Option) (*athena.ListEngineVersionsOutput, error)
+	ListEngineVersionsRequest(*athena.ListEngineVersionsInput) (*request.Request, *athena.ListEngineVersionsOutput)
+
 	ListNamedQueries(*athena.ListNamedQueriesInput) (*athena.ListNamedQueriesOutput, error)
 	ListNamedQueriesWithContext(aws.Context, *athena.ListNamedQueriesInput, ...request.Option) (*athena.ListNamedQueriesOutput, error)
 	ListNamedQueriesRequest(*athena.ListNamedQueriesInput) (*request.Request, *athena.ListNamedQueriesOutput)
 
 	ListNamedQueriesPages(*athena.ListNamedQueriesInput, func(*athena.ListNamedQueriesOutput, bool) bool) error
 	ListNamedQueriesPagesWithContext(aws.Context, *athena.ListNamedQueriesInput, func(*athena.ListNamedQueriesOutput, bool) bool, ...request.Option) error
+
+	ListPreparedStatements(*athena.ListPreparedStatementsInput) (*athena.ListPreparedStatementsOutput, error)
+	ListPreparedStatementsWithContext(aws.Context, *athena.ListPreparedStatementsInput, ...request.Option) (*athena.ListPreparedStatementsOutput, error)
+	ListPreparedStatementsRequest(*athena.ListPreparedStatementsInput) (*request.Request, *athena.ListPreparedStatementsOutput)
+
+	ListPreparedStatementsPages(*athena.ListPreparedStatementsInput, func(*athena.ListPreparedStatementsOutput, bool) bool) error
+	ListPreparedStatementsPagesWithContext(aws.Context, *athena.ListPreparedStatementsInput, func(*athena.ListPreparedStatementsOutput, bool) bool, ...request.Option) error
 
 	ListQueryExecutions(*athena.ListQueryExecutionsInput) (*athena.ListQueryExecutionsOutput, error)
 	ListQueryExecutionsWithContext(aws.Context, *athena.ListQueryExecutionsInput, ...request.Option) (*athena.ListQueryExecutionsOutput, error)
@@ -191,6 +214,10 @@ type AthenaAPI interface {
 	UpdateDataCatalog(*athena.UpdateDataCatalogInput) (*athena.UpdateDataCatalogOutput, error)
 	UpdateDataCatalogWithContext(aws.Context, *athena.UpdateDataCatalogInput, ...request.Option) (*athena.UpdateDataCatalogOutput, error)
 	UpdateDataCatalogRequest(*athena.UpdateDataCatalogInput) (*request.Request, *athena.UpdateDataCatalogOutput)
+
+	UpdatePreparedStatement(*athena.UpdatePreparedStatementInput) (*athena.UpdatePreparedStatementOutput, error)
+	UpdatePreparedStatementWithContext(aws.Context, *athena.UpdatePreparedStatementInput, ...request.Option) (*athena.UpdatePreparedStatementOutput, error)
+	UpdatePreparedStatementRequest(*athena.UpdatePreparedStatementInput) (*request.Request, *athena.UpdatePreparedStatementOutput)
 
 	UpdateWorkGroup(*athena.UpdateWorkGroupInput) (*athena.UpdateWorkGroupOutput, error)
 	UpdateWorkGroupWithContext(aws.Context, *athena.UpdateWorkGroupInput, ...request.Option) (*athena.UpdateWorkGroupOutput, error)

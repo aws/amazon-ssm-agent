@@ -26,7 +26,7 @@ import (
 //    // myFunc uses an SDK service client to make a request to
 //    // Amazon CloudFront.
 //    func myFunc(svc cloudfrontiface.CloudFrontAPI) bool {
-//        // Make svc.CreateCachePolicy request
+//        // Make svc.AssociateAlias request
 //    }
 //
 //    func main() {
@@ -42,7 +42,7 @@ import (
 //    type mockCloudFrontClient struct {
 //        cloudfrontiface.CloudFrontAPI
 //    }
-//    func (m *mockCloudFrontClient) CreateCachePolicy(input *cloudfront.CreateCachePolicyInput) (*cloudfront.CreateCachePolicyOutput, error) {
+//    func (m *mockCloudFrontClient) AssociateAlias(input *cloudfront.AssociateAliasInput) (*cloudfront.AssociateAliasOutput, error) {
 //        // mock response/functionality
 //    }
 //
@@ -60,6 +60,10 @@ import (
 // and waiters. Its suggested to use the pattern above for testing, or using
 // tooling to generate mocks to satisfy the interfaces.
 type CloudFrontAPI interface {
+	AssociateAlias(*cloudfront.AssociateAliasInput) (*cloudfront.AssociateAliasOutput, error)
+	AssociateAliasWithContext(aws.Context, *cloudfront.AssociateAliasInput, ...request.Option) (*cloudfront.AssociateAliasOutput, error)
+	AssociateAliasRequest(*cloudfront.AssociateAliasInput) (*request.Request, *cloudfront.AssociateAliasOutput)
+
 	CreateCachePolicy(*cloudfront.CreateCachePolicyInput) (*cloudfront.CreateCachePolicyOutput, error)
 	CreateCachePolicyWithContext(aws.Context, *cloudfront.CreateCachePolicyInput, ...request.Option) (*cloudfront.CreateCachePolicyOutput, error)
 	CreateCachePolicyRequest(*cloudfront.CreateCachePolicyInput) (*request.Request, *cloudfront.CreateCachePolicyOutput)
@@ -83,6 +87,10 @@ type CloudFrontAPI interface {
 	CreateFieldLevelEncryptionProfile(*cloudfront.CreateFieldLevelEncryptionProfileInput) (*cloudfront.CreateFieldLevelEncryptionProfileOutput, error)
 	CreateFieldLevelEncryptionProfileWithContext(aws.Context, *cloudfront.CreateFieldLevelEncryptionProfileInput, ...request.Option) (*cloudfront.CreateFieldLevelEncryptionProfileOutput, error)
 	CreateFieldLevelEncryptionProfileRequest(*cloudfront.CreateFieldLevelEncryptionProfileInput) (*request.Request, *cloudfront.CreateFieldLevelEncryptionProfileOutput)
+
+	CreateFunction(*cloudfront.CreateFunctionInput) (*cloudfront.CreateFunctionOutput, error)
+	CreateFunctionWithContext(aws.Context, *cloudfront.CreateFunctionInput, ...request.Option) (*cloudfront.CreateFunctionOutput, error)
+	CreateFunctionRequest(*cloudfront.CreateFunctionInput) (*request.Request, *cloudfront.CreateFunctionOutput)
 
 	CreateInvalidation(*cloudfront.CreateInvalidationInput) (*cloudfront.CreateInvalidationOutput, error)
 	CreateInvalidationWithContext(aws.Context, *cloudfront.CreateInvalidationInput, ...request.Option) (*cloudfront.CreateInvalidationOutput, error)
@@ -136,6 +144,10 @@ type CloudFrontAPI interface {
 	DeleteFieldLevelEncryptionProfileWithContext(aws.Context, *cloudfront.DeleteFieldLevelEncryptionProfileInput, ...request.Option) (*cloudfront.DeleteFieldLevelEncryptionProfileOutput, error)
 	DeleteFieldLevelEncryptionProfileRequest(*cloudfront.DeleteFieldLevelEncryptionProfileInput) (*request.Request, *cloudfront.DeleteFieldLevelEncryptionProfileOutput)
 
+	DeleteFunction(*cloudfront.DeleteFunctionInput) (*cloudfront.DeleteFunctionOutput, error)
+	DeleteFunctionWithContext(aws.Context, *cloudfront.DeleteFunctionInput, ...request.Option) (*cloudfront.DeleteFunctionOutput, error)
+	DeleteFunctionRequest(*cloudfront.DeleteFunctionInput) (*request.Request, *cloudfront.DeleteFunctionOutput)
+
 	DeleteKeyGroup(*cloudfront.DeleteKeyGroupInput) (*cloudfront.DeleteKeyGroupOutput, error)
 	DeleteKeyGroupWithContext(aws.Context, *cloudfront.DeleteKeyGroupInput, ...request.Option) (*cloudfront.DeleteKeyGroupOutput, error)
 	DeleteKeyGroupRequest(*cloudfront.DeleteKeyGroupInput) (*request.Request, *cloudfront.DeleteKeyGroupOutput)
@@ -159,6 +171,10 @@ type CloudFrontAPI interface {
 	DeleteStreamingDistribution(*cloudfront.DeleteStreamingDistributionInput) (*cloudfront.DeleteStreamingDistributionOutput, error)
 	DeleteStreamingDistributionWithContext(aws.Context, *cloudfront.DeleteStreamingDistributionInput, ...request.Option) (*cloudfront.DeleteStreamingDistributionOutput, error)
 	DeleteStreamingDistributionRequest(*cloudfront.DeleteStreamingDistributionInput) (*request.Request, *cloudfront.DeleteStreamingDistributionOutput)
+
+	DescribeFunction(*cloudfront.DescribeFunctionInput) (*cloudfront.DescribeFunctionOutput, error)
+	DescribeFunctionWithContext(aws.Context, *cloudfront.DescribeFunctionInput, ...request.Option) (*cloudfront.DescribeFunctionOutput, error)
+	DescribeFunctionRequest(*cloudfront.DescribeFunctionInput) (*request.Request, *cloudfront.DescribeFunctionOutput)
 
 	GetCachePolicy(*cloudfront.GetCachePolicyInput) (*cloudfront.GetCachePolicyOutput, error)
 	GetCachePolicyWithContext(aws.Context, *cloudfront.GetCachePolicyInput, ...request.Option) (*cloudfront.GetCachePolicyOutput, error)
@@ -199,6 +215,10 @@ type CloudFrontAPI interface {
 	GetFieldLevelEncryptionProfileConfig(*cloudfront.GetFieldLevelEncryptionProfileConfigInput) (*cloudfront.GetFieldLevelEncryptionProfileConfigOutput, error)
 	GetFieldLevelEncryptionProfileConfigWithContext(aws.Context, *cloudfront.GetFieldLevelEncryptionProfileConfigInput, ...request.Option) (*cloudfront.GetFieldLevelEncryptionProfileConfigOutput, error)
 	GetFieldLevelEncryptionProfileConfigRequest(*cloudfront.GetFieldLevelEncryptionProfileConfigInput) (*request.Request, *cloudfront.GetFieldLevelEncryptionProfileConfigOutput)
+
+	GetFunction(*cloudfront.GetFunctionInput) (*cloudfront.GetFunctionOutput, error)
+	GetFunctionWithContext(aws.Context, *cloudfront.GetFunctionInput, ...request.Option) (*cloudfront.GetFunctionOutput, error)
+	GetFunctionRequest(*cloudfront.GetFunctionInput) (*request.Request, *cloudfront.GetFunctionOutput)
 
 	GetInvalidation(*cloudfront.GetInvalidationInput) (*cloudfront.GetInvalidationOutput, error)
 	GetInvalidationWithContext(aws.Context, *cloudfront.GetInvalidationInput, ...request.Option) (*cloudfront.GetInvalidationOutput, error)
@@ -255,6 +275,10 @@ type CloudFrontAPI interface {
 	ListCloudFrontOriginAccessIdentitiesPages(*cloudfront.ListCloudFrontOriginAccessIdentitiesInput, func(*cloudfront.ListCloudFrontOriginAccessIdentitiesOutput, bool) bool) error
 	ListCloudFrontOriginAccessIdentitiesPagesWithContext(aws.Context, *cloudfront.ListCloudFrontOriginAccessIdentitiesInput, func(*cloudfront.ListCloudFrontOriginAccessIdentitiesOutput, bool) bool, ...request.Option) error
 
+	ListConflictingAliases(*cloudfront.ListConflictingAliasesInput) (*cloudfront.ListConflictingAliasesOutput, error)
+	ListConflictingAliasesWithContext(aws.Context, *cloudfront.ListConflictingAliasesInput, ...request.Option) (*cloudfront.ListConflictingAliasesOutput, error)
+	ListConflictingAliasesRequest(*cloudfront.ListConflictingAliasesInput) (*request.Request, *cloudfront.ListConflictingAliasesOutput)
+
 	ListDistributions(*cloudfront.ListDistributionsInput) (*cloudfront.ListDistributionsOutput, error)
 	ListDistributionsWithContext(aws.Context, *cloudfront.ListDistributionsInput, ...request.Option) (*cloudfront.ListDistributionsOutput, error)
 	ListDistributionsRequest(*cloudfront.ListDistributionsInput) (*request.Request, *cloudfront.ListDistributionsOutput)
@@ -290,6 +314,10 @@ type CloudFrontAPI interface {
 	ListFieldLevelEncryptionProfilesWithContext(aws.Context, *cloudfront.ListFieldLevelEncryptionProfilesInput, ...request.Option) (*cloudfront.ListFieldLevelEncryptionProfilesOutput, error)
 	ListFieldLevelEncryptionProfilesRequest(*cloudfront.ListFieldLevelEncryptionProfilesInput) (*request.Request, *cloudfront.ListFieldLevelEncryptionProfilesOutput)
 
+	ListFunctions(*cloudfront.ListFunctionsInput) (*cloudfront.ListFunctionsOutput, error)
+	ListFunctionsWithContext(aws.Context, *cloudfront.ListFunctionsInput, ...request.Option) (*cloudfront.ListFunctionsOutput, error)
+	ListFunctionsRequest(*cloudfront.ListFunctionsInput) (*request.Request, *cloudfront.ListFunctionsOutput)
+
 	ListInvalidations(*cloudfront.ListInvalidationsInput) (*cloudfront.ListInvalidationsOutput, error)
 	ListInvalidationsWithContext(aws.Context, *cloudfront.ListInvalidationsInput, ...request.Option) (*cloudfront.ListInvalidationsOutput, error)
 	ListInvalidationsRequest(*cloudfront.ListInvalidationsInput) (*request.Request, *cloudfront.ListInvalidationsOutput)
@@ -324,9 +352,17 @@ type CloudFrontAPI interface {
 	ListTagsForResourceWithContext(aws.Context, *cloudfront.ListTagsForResourceInput, ...request.Option) (*cloudfront.ListTagsForResourceOutput, error)
 	ListTagsForResourceRequest(*cloudfront.ListTagsForResourceInput) (*request.Request, *cloudfront.ListTagsForResourceOutput)
 
+	PublishFunction(*cloudfront.PublishFunctionInput) (*cloudfront.PublishFunctionOutput, error)
+	PublishFunctionWithContext(aws.Context, *cloudfront.PublishFunctionInput, ...request.Option) (*cloudfront.PublishFunctionOutput, error)
+	PublishFunctionRequest(*cloudfront.PublishFunctionInput) (*request.Request, *cloudfront.PublishFunctionOutput)
+
 	TagResource(*cloudfront.TagResourceInput) (*cloudfront.TagResourceOutput, error)
 	TagResourceWithContext(aws.Context, *cloudfront.TagResourceInput, ...request.Option) (*cloudfront.TagResourceOutput, error)
 	TagResourceRequest(*cloudfront.TagResourceInput) (*request.Request, *cloudfront.TagResourceOutput)
+
+	TestFunction(*cloudfront.TestFunctionInput) (*cloudfront.TestFunctionOutput, error)
+	TestFunctionWithContext(aws.Context, *cloudfront.TestFunctionInput, ...request.Option) (*cloudfront.TestFunctionOutput, error)
+	TestFunctionRequest(*cloudfront.TestFunctionInput) (*request.Request, *cloudfront.TestFunctionOutput)
 
 	UntagResource(*cloudfront.UntagResourceInput) (*cloudfront.UntagResourceOutput, error)
 	UntagResourceWithContext(aws.Context, *cloudfront.UntagResourceInput, ...request.Option) (*cloudfront.UntagResourceOutput, error)
@@ -351,6 +387,10 @@ type CloudFrontAPI interface {
 	UpdateFieldLevelEncryptionProfile(*cloudfront.UpdateFieldLevelEncryptionProfileInput) (*cloudfront.UpdateFieldLevelEncryptionProfileOutput, error)
 	UpdateFieldLevelEncryptionProfileWithContext(aws.Context, *cloudfront.UpdateFieldLevelEncryptionProfileInput, ...request.Option) (*cloudfront.UpdateFieldLevelEncryptionProfileOutput, error)
 	UpdateFieldLevelEncryptionProfileRequest(*cloudfront.UpdateFieldLevelEncryptionProfileInput) (*request.Request, *cloudfront.UpdateFieldLevelEncryptionProfileOutput)
+
+	UpdateFunction(*cloudfront.UpdateFunctionInput) (*cloudfront.UpdateFunctionOutput, error)
+	UpdateFunctionWithContext(aws.Context, *cloudfront.UpdateFunctionInput, ...request.Option) (*cloudfront.UpdateFunctionOutput, error)
+	UpdateFunctionRequest(*cloudfront.UpdateFunctionInput) (*request.Request, *cloudfront.UpdateFunctionOutput)
 
 	UpdateKeyGroup(*cloudfront.UpdateKeyGroupInput) (*cloudfront.UpdateKeyGroupOutput, error)
 	UpdateKeyGroupWithContext(aws.Context, *cloudfront.UpdateKeyGroupInput, ...request.Option) (*cloudfront.UpdateKeyGroupOutput, error)

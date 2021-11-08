@@ -32,8 +32,9 @@ const (
 	// ErrCodeImageTooLargeException for service response error code
 	// "ImageTooLargeException".
 	//
-	// The input image size exceeds the allowed limit. For more information, see
-	// Limits in Amazon Rekognition in the Amazon Rekognition Developer Guide.
+	// The input image size exceeds the allowed limit. If you are calling DetectProtectiveEquipment,
+	// the image size or resolution exceeds the allowed limit. For more information,
+	// see Limits in Amazon Rekognition in the Amazon Rekognition Developer Guide.
 	ErrCodeImageTooLargeException = "ImageTooLargeException"
 
 	// ErrCodeInternalServerError for service response error code
@@ -87,7 +88,7 @@ const (
 	// ErrCodeResourceAlreadyExistsException for service response error code
 	// "ResourceAlreadyExistsException".
 	//
-	// A collection with the specified ID already exists.
+	// A resource with the specified ID already exists.
 	ErrCodeResourceAlreadyExistsException = "ResourceAlreadyExistsException"
 
 	// ErrCodeResourceInUseException for service response error code
@@ -99,7 +100,7 @@ const (
 	// ErrCodeResourceNotFoundException for service response error code
 	// "ResourceNotFoundException".
 	//
-	// The collection specified in the request cannot be found.
+	// The resource specified in the request cannot be found.
 	ErrCodeResourceNotFoundException = "ResourceNotFoundException"
 
 	// ErrCodeResourceNotReadyException for service response error code

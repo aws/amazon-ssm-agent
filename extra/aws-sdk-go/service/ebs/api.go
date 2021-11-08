@@ -564,7 +564,7 @@ func (c *EBS) PutSnapshotBlockRequest(input *PutSnapshotBlockInput) (req *reques
 // the existing data is overwritten. The target snapshot must be in the pending
 // state.
 //
-// Data written to a snapshot must be aligned with 512-byte sectors.
+// Data written to a snapshot must be aligned with 512-KiB sectors.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -735,12 +735,20 @@ type AccessDeniedException struct {
 	Reason *string `type:"string" required:"true" enum:"AccessDeniedExceptionReason"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AccessDeniedException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AccessDeniedException) GoString() string {
 	return s.String()
 }
@@ -794,12 +802,20 @@ type Block struct {
 	BlockToken *string `type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s Block) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s Block) GoString() string {
 	return s.String()
 }
@@ -834,12 +850,20 @@ type ChangedBlock struct {
 	SecondBlockToken *string `type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ChangedBlock) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ChangedBlock) GoString() string {
 	return s.String()
 }
@@ -863,7 +887,7 @@ func (s *ChangedBlock) SetSecondBlockToken(v string) *ChangedBlock {
 }
 
 type CompleteSnapshotInput struct {
-	_ struct{} `type:"structure"`
+	_ struct{} `type:"structure" nopayload:"true"`
 
 	// The number of blocks that were written to the snapshot.
 	//
@@ -893,12 +917,20 @@ type CompleteSnapshotInput struct {
 	SnapshotId *string `location:"uri" locationName:"snapshotId" min:"1" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CompleteSnapshotInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CompleteSnapshotInput) GoString() string {
 	return s.String()
 }
@@ -959,12 +991,20 @@ type CompleteSnapshotOutput struct {
 	Status *string `type:"string" enum:"Status"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CompleteSnapshotOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CompleteSnapshotOutput) GoString() string {
 	return s.String()
 }
@@ -985,12 +1025,20 @@ type ConcurrentLimitExceededException struct {
 	Message_ *string `locationName:"Message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ConcurrentLimitExceededException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ConcurrentLimitExceededException) GoString() string {
 	return s.String()
 }
@@ -1041,12 +1089,20 @@ type ConflictException struct {
 	Message_ *string `locationName:"Message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ConflictException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ConflictException) GoString() string {
 	return s.String()
 }
@@ -1090,7 +1146,7 @@ func (s *ConflictException) RequestID() string {
 }
 
 type GetSnapshotBlockInput struct {
-	_ struct{} `type:"structure"`
+	_ struct{} `type:"structure" nopayload:"true"`
 
 	// The block index of the block from which to get data.
 	//
@@ -1114,12 +1170,20 @@ type GetSnapshotBlockInput struct {
 	SnapshotId *string `location:"uri" locationName:"snapshotId" min:"1" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetSnapshotBlockInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetSnapshotBlockInput) GoString() string {
 	return s.String()
 }
@@ -1168,6 +1232,10 @@ type GetSnapshotBlockOutput struct {
 	_ struct{} `type:"structure" payload:"BlockData"`
 
 	// The data content of the block.
+	//
+	// BlockData is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by GetSnapshotBlockOutput's
+	// String and GoString methods.
 	BlockData io.ReadCloser `type:"blob" sensitive:"true"`
 
 	// The checksum generated for the block, which is Base64 encoded.
@@ -1180,12 +1248,20 @@ type GetSnapshotBlockOutput struct {
 	DataLength *int64 `location:"header" locationName:"x-amz-Data-Length" type:"integer"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetSnapshotBlockOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetSnapshotBlockOutput) GoString() string {
 	return s.String()
 }
@@ -1222,12 +1298,20 @@ type InternalServerException struct {
 	Message_ *string `locationName:"Message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s InternalServerException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s InternalServerException) GoString() string {
 	return s.String()
 }
@@ -1271,7 +1355,7 @@ func (s *InternalServerException) RequestID() string {
 }
 
 type ListChangedBlocksInput struct {
-	_ struct{} `type:"structure"`
+	_ struct{} `type:"structure" nopayload:"true"`
 
 	// The ID of the first snapshot to use for the comparison.
 	//
@@ -1300,12 +1384,20 @@ type ListChangedBlocksInput struct {
 	StartingBlockIndex *int64 `location:"querystring" locationName:"startingBlockIndex" type:"integer"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListChangedBlocksInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListChangedBlocksInput) GoString() string {
 	return s.String()
 }
@@ -1365,7 +1457,7 @@ func (s *ListChangedBlocksInput) SetStartingBlockIndex(v int64) *ListChangedBloc
 type ListChangedBlocksOutput struct {
 	_ struct{} `type:"structure"`
 
-	// The size of the block.
+	// The size of the blocks in the snapshot, in bytes.
 	BlockSize *int64 `type:"integer"`
 
 	// An array of objects containing information about the changed blocks.
@@ -1382,12 +1474,20 @@ type ListChangedBlocksOutput struct {
 	VolumeSize *int64 `min:"1" type:"long"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListChangedBlocksOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListChangedBlocksOutput) GoString() string {
 	return s.String()
 }
@@ -1423,7 +1523,7 @@ func (s *ListChangedBlocksOutput) SetVolumeSize(v int64) *ListChangedBlocksOutpu
 }
 
 type ListSnapshotBlocksInput struct {
-	_ struct{} `type:"structure"`
+	_ struct{} `type:"structure" nopayload:"true"`
 
 	// The number of results to return.
 	MaxResults *int64 `location:"querystring" locationName:"maxResults" min:"100" type:"integer"`
@@ -1441,12 +1541,20 @@ type ListSnapshotBlocksInput struct {
 	StartingBlockIndex *int64 `location:"querystring" locationName:"startingBlockIndex" type:"integer"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListSnapshotBlocksInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListSnapshotBlocksInput) GoString() string {
 	return s.String()
 }
@@ -1497,10 +1605,14 @@ func (s *ListSnapshotBlocksInput) SetStartingBlockIndex(v int64) *ListSnapshotBl
 type ListSnapshotBlocksOutput struct {
 	_ struct{} `type:"structure"`
 
-	// The size of the block.
+	// The size of the blocks in the snapshot, in bytes.
 	BlockSize *int64 `type:"integer"`
 
 	// An array of objects containing information about the blocks.
+	//
+	// Blocks is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by ListSnapshotBlocksOutput's
+	// String and GoString methods.
 	Blocks []*Block `type:"list" sensitive:"true"`
 
 	// The time when the BlockToken expires.
@@ -1514,12 +1626,20 @@ type ListSnapshotBlocksOutput struct {
 	VolumeSize *int64 `min:"1" type:"long"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListSnapshotBlocksOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListSnapshotBlocksOutput) GoString() string {
 	return s.String()
 }
@@ -1575,6 +1695,10 @@ type PutSnapshotBlockInput struct {
 	// readers. This will allow the SDK to send the reader's payload as chunked
 	// transfer encoding.
 	//
+	// BlockData is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by PutSnapshotBlockInput's
+	// String and GoString methods.
+	//
 	// BlockData is a required field
 	BlockData io.ReadSeeker `type:"blob" required:"true" sensitive:"true"`
 
@@ -1599,7 +1723,7 @@ type PutSnapshotBlockInput struct {
 	ChecksumAlgorithm *string `location:"header" locationName:"x-amz-Checksum-Algorithm" type:"string" required:"true" enum:"ChecksumAlgorithm"`
 
 	// The size of the data to write to the block, in bytes. Currently, the only
-	// supported size is 524288.
+	// supported size is 524288 bytes.
 	//
 	// Valid values: 524288
 	//
@@ -1615,12 +1739,20 @@ type PutSnapshotBlockInput struct {
 	SnapshotId *string `location:"uri" locationName:"snapshotId" min:"1" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s PutSnapshotBlockInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s PutSnapshotBlockInput) GoString() string {
 	return s.String()
 }
@@ -1699,7 +1831,7 @@ func (s *PutSnapshotBlockInput) SetSnapshotId(v string) *PutSnapshotBlockInput {
 }
 
 type PutSnapshotBlockOutput struct {
-	_ struct{} `type:"structure"`
+	_ struct{} `type:"structure" nopayload:"true"`
 
 	// The SHA256 checksum generated for the block data by Amazon EBS.
 	Checksum *string `location:"header" locationName:"x-amz-Checksum" type:"string"`
@@ -1708,12 +1840,20 @@ type PutSnapshotBlockOutput struct {
 	ChecksumAlgorithm *string `location:"header" locationName:"x-amz-Checksum-Algorithm" type:"string" enum:"ChecksumAlgorithm"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s PutSnapshotBlockOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s PutSnapshotBlockOutput) GoString() string {
 	return s.String()
 }
@@ -1742,12 +1882,20 @@ type RequestThrottledException struct {
 	Reason *string `type:"string" enum:"RequestThrottledExceptionReason"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s RequestThrottledException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s RequestThrottledException) GoString() string {
 	return s.String()
 }
@@ -1801,12 +1949,20 @@ type ResourceNotFoundException struct {
 	Reason *string `type:"string" enum:"ResourceNotFoundExceptionReason"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ResourceNotFoundException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ResourceNotFoundException) GoString() string {
 	return s.String()
 }
@@ -1860,12 +2016,20 @@ type ServiceQuotaExceededException struct {
 	Reason *string `type:"string" enum:"ServiceQuotaExceededExceptionReason"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ServiceQuotaExceededException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ServiceQuotaExceededException) GoString() string {
 	return s.String()
 }
@@ -1918,7 +2082,7 @@ type StartSnapshotInput struct {
 	// the original successful request and they have no additional effect.
 	//
 	// If you do not specify a client token, one is automatically generated by the
-	// AWS SDK.
+	// Amazon Web Services SDK.
 	//
 	// For more information, see Idempotency for StartSnapshot API (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ebs-direct-api-idempotency.html)
 	// in the Amazon Elastic Compute Cloud User Guide.
@@ -1932,11 +2096,11 @@ type StartSnapshotInput struct {
 	//
 	// If you specify a value for ParentSnapshotId, omit this parameter.
 	//
-	// If you specify true, the snapshot is encrypted using the CMK specified using
-	// the KmsKeyArn parameter. If no value is specified for KmsKeyArn, the default
-	// CMK for your account is used. If no default CMK has been specified for your
-	// account, the AWS managed CMK is used. To set a default CMK for your account,
-	// use ModifyEbsDefaultKmsKeyId (https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_ModifyEbsDefaultKmsKeyId.html).
+	// If you specify true, the snapshot is encrypted using the KMS key specified
+	// using the KmsKeyArn parameter. If no value is specified for KmsKeyArn, the
+	// default KMS key for your account is used. If no default KMS key has been
+	// specified for your account, the Amazon Web Services managed KMS key is used.
+	// To set a default KMS key for your account, use ModifyEbsDefaultKmsKeyId (https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_ModifyEbsDefaultKmsKeyId.html).
 	//
 	// If your account is enabled for encryption by default, you cannot set this
 	// parameter to false. In this case, you can omit this parameter.
@@ -1945,14 +2109,18 @@ type StartSnapshotInput struct {
 	// in the Amazon Elastic Compute Cloud User Guide.
 	Encrypted *bool `type:"boolean"`
 
-	// The Amazon Resource Name (ARN) of the AWS Key Management Service (AWS KMS)
-	// customer master key (CMK) to be used to encrypt the snapshot. If you do not
-	// specify a CMK, the default AWS managed CMK is used.
+	// The Amazon Resource Name (ARN) of the Key Management Service (KMS) key to
+	// be used to encrypt the snapshot. If you do not specify a KMS key, the default
+	// Amazon Web Services managed KMS key is used.
 	//
 	// If you specify a ParentSnapshotId, omit this parameter; the snapshot will
-	// be encrypted using the same CMK that was used to encrypt the parent snapshot.
+	// be encrypted using the same KMS key that was used to encrypt the parent snapshot.
 	//
-	// If Encrypted is set to true, you must specify a CMK ARN.
+	// If Encrypted is set to true, you must specify a KMS key ARN.
+	//
+	// KmsKeyArn is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by StartSnapshotInput's
+	// String and GoString methods.
 	KmsKeyArn *string `min:"1" type:"string" sensitive:"true"`
 
 	// The ID of the parent snapshot. If there is no parent snapshot, or if you
@@ -1976,18 +2144,26 @@ type StartSnapshotInput struct {
 	// If no value is specified, the timeout defaults to 60 minutes.
 	Timeout *int64 `min:"10" type:"integer"`
 
-	// The size of the volume, in GiB. The maximum size is 16384 GiB (16 TiB).
+	// The size of the volume, in GiB. The maximum size is 65536 GiB (64 TiB).
 	//
 	// VolumeSize is a required field
 	VolumeSize *int64 `min:"1" type:"long" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s StartSnapshotInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s StartSnapshotInput) GoString() string {
 	return s.String()
 }
@@ -2074,11 +2250,15 @@ type StartSnapshotOutput struct {
 	// The description of the snapshot.
 	Description *string `type:"string"`
 
-	// The Amazon Resource Name (ARN) of the AWS Key Management Service (AWS KMS)
-	// customer master key (CMK) used to encrypt the snapshot.
+	// The Amazon Resource Name (ARN) of the Key Management Service (KMS) key used
+	// to encrypt the snapshot.
+	//
+	// KmsKeyArn is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by StartSnapshotOutput's
+	// String and GoString methods.
 	KmsKeyArn *string `min:"1" type:"string" sensitive:"true"`
 
-	// The AWS account ID of the snapshot owner.
+	// The Amazon Web Services account ID of the snapshot owner.
 	OwnerId *string `min:"1" type:"string"`
 
 	// The ID of the parent snapshot.
@@ -2102,12 +2282,20 @@ type StartSnapshotOutput struct {
 	VolumeSize *int64 `min:"1" type:"long"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s StartSnapshotOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s StartSnapshotOutput) GoString() string {
 	return s.String()
 }
@@ -2183,12 +2371,20 @@ type Tag struct {
 	Value *string `type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s Tag) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s Tag) GoString() string {
 	return s.String()
 }
@@ -2216,12 +2412,20 @@ type ValidationException struct {
 	Reason *string `type:"string" enum:"ValidationExceptionReason"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ValidationException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ValidationException) GoString() string {
 	return s.String()
 }

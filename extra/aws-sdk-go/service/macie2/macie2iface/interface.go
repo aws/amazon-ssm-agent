@@ -135,6 +135,10 @@ type Macie2API interface {
 	DisableOrganizationAdminAccountWithContext(aws.Context, *macie2.DisableOrganizationAdminAccountInput, ...request.Option) (*macie2.DisableOrganizationAdminAccountOutput, error)
 	DisableOrganizationAdminAccountRequest(*macie2.DisableOrganizationAdminAccountInput) (*request.Request, *macie2.DisableOrganizationAdminAccountOutput)
 
+	DisassociateFromAdministratorAccount(*macie2.DisassociateFromAdministratorAccountInput) (*macie2.DisassociateFromAdministratorAccountOutput, error)
+	DisassociateFromAdministratorAccountWithContext(aws.Context, *macie2.DisassociateFromAdministratorAccountInput, ...request.Option) (*macie2.DisassociateFromAdministratorAccountOutput, error)
+	DisassociateFromAdministratorAccountRequest(*macie2.DisassociateFromAdministratorAccountInput) (*request.Request, *macie2.DisassociateFromAdministratorAccountOutput)
+
 	DisassociateFromMasterAccount(*macie2.DisassociateFromMasterAccountInput) (*macie2.DisassociateFromMasterAccountOutput, error)
 	DisassociateFromMasterAccountWithContext(aws.Context, *macie2.DisassociateFromMasterAccountInput, ...request.Option) (*macie2.DisassociateFromMasterAccountOutput, error)
 	DisassociateFromMasterAccountRequest(*macie2.DisassociateFromMasterAccountInput) (*request.Request, *macie2.DisassociateFromMasterAccountOutput)
@@ -150,6 +154,10 @@ type Macie2API interface {
 	EnableOrganizationAdminAccount(*macie2.EnableOrganizationAdminAccountInput) (*macie2.EnableOrganizationAdminAccountOutput, error)
 	EnableOrganizationAdminAccountWithContext(aws.Context, *macie2.EnableOrganizationAdminAccountInput, ...request.Option) (*macie2.EnableOrganizationAdminAccountOutput, error)
 	EnableOrganizationAdminAccountRequest(*macie2.EnableOrganizationAdminAccountInput) (*request.Request, *macie2.EnableOrganizationAdminAccountOutput)
+
+	GetAdministratorAccount(*macie2.GetAdministratorAccountInput) (*macie2.GetAdministratorAccountOutput, error)
+	GetAdministratorAccountWithContext(aws.Context, *macie2.GetAdministratorAccountInput, ...request.Option) (*macie2.GetAdministratorAccountOutput, error)
+	GetAdministratorAccountRequest(*macie2.GetAdministratorAccountInput) (*request.Request, *macie2.GetAdministratorAccountOutput)
 
 	GetBucketStatistics(*macie2.GetBucketStatisticsInput) (*macie2.GetBucketStatisticsOutput, error)
 	GetBucketStatisticsWithContext(aws.Context, *macie2.GetBucketStatisticsInput, ...request.Option) (*macie2.GetBucketStatisticsOutput, error)
@@ -174,6 +182,10 @@ type Macie2API interface {
 	GetFindingsFilter(*macie2.GetFindingsFilterInput) (*macie2.GetFindingsFilterOutput, error)
 	GetFindingsFilterWithContext(aws.Context, *macie2.GetFindingsFilterInput, ...request.Option) (*macie2.GetFindingsFilterOutput, error)
 	GetFindingsFilterRequest(*macie2.GetFindingsFilterInput) (*request.Request, *macie2.GetFindingsFilterOutput)
+
+	GetFindingsPublicationConfiguration(*macie2.GetFindingsPublicationConfigurationInput) (*macie2.GetFindingsPublicationConfigurationOutput, error)
+	GetFindingsPublicationConfigurationWithContext(aws.Context, *macie2.GetFindingsPublicationConfigurationInput, ...request.Option) (*macie2.GetFindingsPublicationConfigurationOutput, error)
+	GetFindingsPublicationConfigurationRequest(*macie2.GetFindingsPublicationConfigurationInput) (*request.Request, *macie2.GetFindingsPublicationConfigurationOutput)
 
 	GetInvitationsCount(*macie2.GetInvitationsCountInput) (*macie2.GetInvitationsCountOutput, error)
 	GetInvitationsCountWithContext(aws.Context, *macie2.GetInvitationsCountInput, ...request.Option) (*macie2.GetInvitationsCountOutput, error)
@@ -237,6 +249,10 @@ type Macie2API interface {
 	ListInvitationsPages(*macie2.ListInvitationsInput, func(*macie2.ListInvitationsOutput, bool) bool) error
 	ListInvitationsPagesWithContext(aws.Context, *macie2.ListInvitationsInput, func(*macie2.ListInvitationsOutput, bool) bool, ...request.Option) error
 
+	ListManagedDataIdentifiers(*macie2.ListManagedDataIdentifiersInput) (*macie2.ListManagedDataIdentifiersOutput, error)
+	ListManagedDataIdentifiersWithContext(aws.Context, *macie2.ListManagedDataIdentifiersInput, ...request.Option) (*macie2.ListManagedDataIdentifiersOutput, error)
+	ListManagedDataIdentifiersRequest(*macie2.ListManagedDataIdentifiersInput) (*request.Request, *macie2.ListManagedDataIdentifiersOutput)
+
 	ListMembers(*macie2.ListMembersInput) (*macie2.ListMembersOutput, error)
 	ListMembersWithContext(aws.Context, *macie2.ListMembersInput, ...request.Option) (*macie2.ListMembersOutput, error)
 	ListMembersRequest(*macie2.ListMembersInput) (*request.Request, *macie2.ListMembersOutput)
@@ -258,6 +274,17 @@ type Macie2API interface {
 	PutClassificationExportConfiguration(*macie2.PutClassificationExportConfigurationInput) (*macie2.PutClassificationExportConfigurationOutput, error)
 	PutClassificationExportConfigurationWithContext(aws.Context, *macie2.PutClassificationExportConfigurationInput, ...request.Option) (*macie2.PutClassificationExportConfigurationOutput, error)
 	PutClassificationExportConfigurationRequest(*macie2.PutClassificationExportConfigurationInput) (*request.Request, *macie2.PutClassificationExportConfigurationOutput)
+
+	PutFindingsPublicationConfiguration(*macie2.PutFindingsPublicationConfigurationInput) (*macie2.PutFindingsPublicationConfigurationOutput, error)
+	PutFindingsPublicationConfigurationWithContext(aws.Context, *macie2.PutFindingsPublicationConfigurationInput, ...request.Option) (*macie2.PutFindingsPublicationConfigurationOutput, error)
+	PutFindingsPublicationConfigurationRequest(*macie2.PutFindingsPublicationConfigurationInput) (*request.Request, *macie2.PutFindingsPublicationConfigurationOutput)
+
+	SearchResources(*macie2.SearchResourcesInput) (*macie2.SearchResourcesOutput, error)
+	SearchResourcesWithContext(aws.Context, *macie2.SearchResourcesInput, ...request.Option) (*macie2.SearchResourcesOutput, error)
+	SearchResourcesRequest(*macie2.SearchResourcesInput) (*request.Request, *macie2.SearchResourcesOutput)
+
+	SearchResourcesPages(*macie2.SearchResourcesInput, func(*macie2.SearchResourcesOutput, bool) bool) error
+	SearchResourcesPagesWithContext(aws.Context, *macie2.SearchResourcesInput, func(*macie2.SearchResourcesOutput, bool) bool, ...request.Option) error
 
 	TagResource(*macie2.TagResourceInput) (*macie2.TagResourceOutput, error)
 	TagResourceWithContext(aws.Context, *macie2.TagResourceInput, ...request.Option) (*macie2.TagResourceOutput, error)

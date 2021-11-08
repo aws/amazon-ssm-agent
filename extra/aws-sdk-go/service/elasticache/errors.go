@@ -119,6 +119,8 @@ const (
 
 	// ErrCodeDefaultUserAssociatedToUserGroupFault for service response error code
 	// "DefaultUserAssociatedToUserGroup".
+	//
+	// The default user assigned to the user group.
 	ErrCodeDefaultUserAssociatedToUserGroupFault = "DefaultUserAssociatedToUserGroup"
 
 	// ErrCodeDefaultUserRequired for service response error code
@@ -136,13 +138,13 @@ const (
 	// ErrCodeGlobalReplicationGroupAlreadyExistsFault for service response error code
 	// "GlobalReplicationGroupAlreadyExistsFault".
 	//
-	// The Global Datastore name already exists.
+	// The Global datastore name already exists.
 	ErrCodeGlobalReplicationGroupAlreadyExistsFault = "GlobalReplicationGroupAlreadyExistsFault"
 
 	// ErrCodeGlobalReplicationGroupNotFoundFault for service response error code
 	// "GlobalReplicationGroupNotFoundFault".
 	//
-	// The Global Datastore does not exist
+	// The Global datastore does not exist
 	ErrCodeGlobalReplicationGroupNotFoundFault = "GlobalReplicationGroupNotFoundFault"
 
 	// ErrCodeInsufficientCacheClusterCapacityFault for service response error code
@@ -181,7 +183,7 @@ const (
 	// ErrCodeInvalidGlobalReplicationGroupStateFault for service response error code
 	// "InvalidGlobalReplicationGroupState".
 	//
-	// The Global Datastore is not available or in primary-only state.
+	// The Global datastore is not available or in primary-only state.
 	ErrCodeInvalidGlobalReplicationGroupStateFault = "InvalidGlobalReplicationGroupState"
 
 	// ErrCodeInvalidKMSKeyFault for service response error code

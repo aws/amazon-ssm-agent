@@ -86,6 +86,27 @@ const (
 	// The maximum size of a profile for field-level encryption was exceeded.
 	ErrCodeFieldLevelEncryptionProfileSizeExceeded = "FieldLevelEncryptionProfileSizeExceeded"
 
+	// ErrCodeFunctionAlreadyExists for service response error code
+	// "FunctionAlreadyExists".
+	//
+	// A function with the same name already exists in this account. To create a
+	// function, you must provide a unique name. To update an existing function,
+	// use UpdateFunction.
+	ErrCodeFunctionAlreadyExists = "FunctionAlreadyExists"
+
+	// ErrCodeFunctionInUse for service response error code
+	// "FunctionInUse".
+	//
+	// Cannot delete the function because it’s attached to one or more cache behaviors.
+	ErrCodeFunctionInUse = "FunctionInUse"
+
+	// ErrCodeFunctionSizeLimitExceeded for service response error code
+	// "FunctionSizeLimitExceeded".
+	//
+	// The function is too large. For more information, see Quotas (https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/cloudfront-limits.html)
+	// (formerly known as limits) in the Amazon CloudFront Developer Guide.
+	ErrCodeFunctionSizeLimitExceeded = "FunctionSizeLimitExceeded"
+
 	// ErrCodeIllegalDelete for service response error code
 	// "IllegalDelete".
 	//
@@ -138,6 +159,12 @@ const (
 	// when expected.
 	ErrCodeInvalidForwardCookies = "InvalidForwardCookies"
 
+	// ErrCodeInvalidFunctionAssociation for service response error code
+	// "InvalidFunctionAssociation".
+	//
+	// A CloudFront function association is invalid.
+	ErrCodeInvalidFunctionAssociation = "InvalidFunctionAssociation"
+
 	// ErrCodeInvalidGeoRestrictionParameter for service response error code
 	// "InvalidGeoRestrictionParameter".
 	//
@@ -159,7 +186,7 @@ const (
 	// ErrCodeInvalidLambdaFunctionAssociation for service response error code
 	// "InvalidLambdaFunctionAssociation".
 	//
-	// The specified Lambda function association is invalid.
+	// The specified Lambda@Edge function association is invalid.
 	ErrCodeInvalidLambdaFunctionAssociation = "InvalidLambdaFunctionAssociation"
 
 	// ErrCodeInvalidLocationCode for service response error code
@@ -255,8 +282,8 @@ const (
 	// "InvalidWebACLId".
 	//
 	// A web ACL ID specified is not valid. To specify a web ACL created using the
-	// latest version of AWS WAF, use the ACL ARN, for example arn:aws:wafv2:us-east-1:123456789012:global/webacl/ExampleWebACL/473e64fd-f30b-4765-81a0-62ad96dd167a.
-	// To specify a web ACL created using AWS WAF Classic, use the ACL ID, for example
+	// latest version of WAF, use the ACL ARN, for example arn:aws:wafv2:us-east-1:123456789012:global/webacl/ExampleWebACL/473e64fd-f30b-4765-81a0-62ad96dd167a.
+	// To specify a web ACL created using WAF Classic, use the ACL ID, for example
 	// 473e64fd-f30b-4765-81a0-62ad96dd167a.
 	ErrCodeInvalidWebACLId = "InvalidWebACLId"
 
@@ -303,6 +330,12 @@ const (
 	//
 	// The specified profile for field-level encryption doesn't exist.
 	ErrCodeNoSuchFieldLevelEncryptionProfile = "NoSuchFieldLevelEncryptionProfile"
+
+	// ErrCodeNoSuchFunctionExists for service response error code
+	// "NoSuchFunctionExists".
+	//
+	// The function does not exist.
+	ErrCodeNoSuchFunctionExists = "NoSuchFunctionExists"
 
 	// ErrCodeNoSuchInvalidation for service response error code
 	// "NoSuchInvalidation".
@@ -378,8 +411,7 @@ const (
 	// ErrCodePreconditionFailed for service response error code
 	// "PreconditionFailed".
 	//
-	// The precondition given in one or more of the request header fields evaluated
-	// to false.
+	// The precondition in one or more of the request fields evaluated to false.
 	ErrCodePreconditionFailed = "PreconditionFailed"
 
 	// ErrCodePublicKeyAlreadyExists for service response error code
@@ -414,6 +446,12 @@ const (
 	// or more cache behaviors.
 	ErrCodeRealtimeLogConfigInUse = "RealtimeLogConfigInUse"
 
+	// ErrCodeRealtimeLogConfigOwnerMismatch for service response error code
+	// "RealtimeLogConfigOwnerMismatch".
+	//
+	// The specified real-time log configuration belongs to a different account.
+	ErrCodeRealtimeLogConfigOwnerMismatch = "RealtimeLogConfigOwnerMismatch"
+
 	// ErrCodeResourceInUse for service response error code
 	// "ResourceInUse".
 	//
@@ -434,6 +472,12 @@ const (
 	// distribution before you can delete it.
 	ErrCodeStreamingDistributionNotDisabled = "StreamingDistributionNotDisabled"
 
+	// ErrCodeTestFunctionFailed for service response error code
+	// "TestFunctionFailed".
+	//
+	// The CloudFront function failed.
+	ErrCodeTestFunctionFailed = "TestFunctionFailed"
+
 	// ErrCodeTooManyCacheBehaviors for service response error code
 	// "TooManyCacheBehaviors".
 	//
@@ -443,8 +487,8 @@ const (
 	// ErrCodeTooManyCachePolicies for service response error code
 	// "TooManyCachePolicies".
 	//
-	// You have reached the maximum number of cache policies for this AWS account.
-	// For more information, see Quotas (https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/cloudfront-limits.html)
+	// You have reached the maximum number of cache policies for this account. For
+	// more information, see Quotas (https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/cloudfront-limits.html)
 	// (formerly known as limits) in the Amazon CloudFront Developer Guide.
 	ErrCodeTooManyCachePolicies = "TooManyCachePolicies"
 
@@ -528,18 +572,26 @@ const (
 	// (formerly known as limits) in the Amazon CloudFront Developer Guide.
 	ErrCodeTooManyDistributionsAssociatedToOriginRequestPolicy = "TooManyDistributionsAssociatedToOriginRequestPolicy"
 
+	// ErrCodeTooManyDistributionsWithFunctionAssociations for service response error code
+	// "TooManyDistributionsWithFunctionAssociations".
+	//
+	// You have reached the maximum number of distributions that are associated
+	// with a CloudFront function. For more information, see Quotas (https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/cloudfront-limits.html)
+	// (formerly known as limits) in the Amazon CloudFront Developer Guide.
+	ErrCodeTooManyDistributionsWithFunctionAssociations = "TooManyDistributionsWithFunctionAssociations"
+
 	// ErrCodeTooManyDistributionsWithLambdaAssociations for service response error code
 	// "TooManyDistributionsWithLambdaAssociations".
 	//
 	// Processing your request would cause the maximum number of distributions with
-	// Lambda function associations per owner to be exceeded.
+	// Lambda@Edge function associations per owner to be exceeded.
 	ErrCodeTooManyDistributionsWithLambdaAssociations = "TooManyDistributionsWithLambdaAssociations"
 
 	// ErrCodeTooManyDistributionsWithSingleFunctionARN for service response error code
 	// "TooManyDistributionsWithSingleFunctionARN".
 	//
 	// The maximum number of distributions have been associated with the specified
-	// Lambda function.
+	// Lambda@Edge function.
 	ErrCodeTooManyDistributionsWithSingleFunctionARN = "TooManyDistributionsWithSingleFunctionARN"
 
 	// ErrCodeTooManyFieldLevelEncryptionConfigs for service response error code
@@ -583,6 +635,22 @@ const (
 	// been created.
 	ErrCodeTooManyFieldLevelEncryptionQueryArgProfiles = "TooManyFieldLevelEncryptionQueryArgProfiles"
 
+	// ErrCodeTooManyFunctionAssociations for service response error code
+	// "TooManyFunctionAssociations".
+	//
+	// You have reached the maximum number of CloudFront function associations for
+	// this distribution. For more information, see Quotas (https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/cloudfront-limits.html)
+	// (formerly known as limits) in the Amazon CloudFront Developer Guide.
+	ErrCodeTooManyFunctionAssociations = "TooManyFunctionAssociations"
+
+	// ErrCodeTooManyFunctions for service response error code
+	// "TooManyFunctions".
+	//
+	// You have reached the maximum number of CloudFront functions for this account.
+	// For more information, see Quotas (https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/cloudfront-limits.html)
+	// (formerly known as limits) in the Amazon CloudFront Developer Guide.
+	ErrCodeTooManyFunctions = "TooManyFunctions"
+
 	// ErrCodeTooManyHeadersInCachePolicy for service response error code
 	// "TooManyHeadersInCachePolicy".
 	//
@@ -615,8 +683,8 @@ const (
 	// ErrCodeTooManyKeyGroups for service response error code
 	// "TooManyKeyGroups".
 	//
-	// You have reached the maximum number of key groups for this AWS account. For
-	// more information, see Quotas (https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/cloudfront-limits.html)
+	// You have reached the maximum number of key groups for this account. For more
+	// information, see Quotas (https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/cloudfront-limits.html)
 	// (formerly known as limits) in the Amazon CloudFront Developer Guide.
 	ErrCodeTooManyKeyGroups = "TooManyKeyGroups"
 
@@ -631,7 +699,7 @@ const (
 	// ErrCodeTooManyLambdaFunctionAssociations for service response error code
 	// "TooManyLambdaFunctionAssociations".
 	//
-	// Your request contains more Lambda function associations than are allowed
+	// Your request contains more Lambda@Edge function associations than are allowed
 	// per distribution.
 	ErrCodeTooManyLambdaFunctionAssociations = "TooManyLambdaFunctionAssociations"
 
@@ -651,8 +719,8 @@ const (
 	// ErrCodeTooManyOriginRequestPolicies for service response error code
 	// "TooManyOriginRequestPolicies".
 	//
-	// You have reached the maximum number of origin request policies for this AWS
-	// account. For more information, see Quotas (https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/cloudfront-limits.html)
+	// You have reached the maximum number of origin request policies for this account.
+	// For more information, see Quotas (https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/cloudfront-limits.html)
 	// (formerly known as limits) in the Amazon CloudFront Developer Guide.
 	ErrCodeTooManyOriginRequestPolicies = "TooManyOriginRequestPolicies"
 
@@ -703,7 +771,7 @@ const (
 	// "TooManyRealtimeLogConfigs".
 	//
 	// You have reached the maximum number of real-time log configurations for this
-	// AWS account. For more information, see Quotas (https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/cloudfront-limits.html)
+	// account. For more information, see Quotas (https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/cloudfront-limits.html)
 	// (formerly known as limits) in the Amazon CloudFront Developer Guide.
 	ErrCodeTooManyRealtimeLogConfigs = "TooManyRealtimeLogConfigs"
 
@@ -737,4 +805,10 @@ const (
 	//
 	// One or more of your trusted signers don't exist.
 	ErrCodeTrustedSignerDoesNotExist = "TrustedSignerDoesNotExist"
+
+	// ErrCodeUnsupportedOperation for service response error code
+	// "UnsupportedOperation".
+	//
+	// This operation is not supported in this region.
+	ErrCodeUnsupportedOperation = "UnsupportedOperation"
 )

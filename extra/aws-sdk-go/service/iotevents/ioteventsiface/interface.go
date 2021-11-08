@@ -26,7 +26,7 @@ import (
 //    // myFunc uses an SDK service client to make a request to
 //    // AWS IoT Events.
 //    func myFunc(svc ioteventsiface.IoTEventsAPI) bool {
-//        // Make svc.CreateDetectorModel request
+//        // Make svc.CreateAlarmModel request
 //    }
 //
 //    func main() {
@@ -42,7 +42,7 @@ import (
 //    type mockIoTEventsClient struct {
 //        ioteventsiface.IoTEventsAPI
 //    }
-//    func (m *mockIoTEventsClient) CreateDetectorModel(input *iotevents.CreateDetectorModelInput) (*iotevents.CreateDetectorModelOutput, error) {
+//    func (m *mockIoTEventsClient) CreateAlarmModel(input *iotevents.CreateAlarmModelInput) (*iotevents.CreateAlarmModelOutput, error) {
 //        // mock response/functionality
 //    }
 //
@@ -60,6 +60,10 @@ import (
 // and waiters. Its suggested to use the pattern above for testing, or using
 // tooling to generate mocks to satisfy the interfaces.
 type IoTEventsAPI interface {
+	CreateAlarmModel(*iotevents.CreateAlarmModelInput) (*iotevents.CreateAlarmModelOutput, error)
+	CreateAlarmModelWithContext(aws.Context, *iotevents.CreateAlarmModelInput, ...request.Option) (*iotevents.CreateAlarmModelOutput, error)
+	CreateAlarmModelRequest(*iotevents.CreateAlarmModelInput) (*request.Request, *iotevents.CreateAlarmModelOutput)
+
 	CreateDetectorModel(*iotevents.CreateDetectorModelInput) (*iotevents.CreateDetectorModelOutput, error)
 	CreateDetectorModelWithContext(aws.Context, *iotevents.CreateDetectorModelInput, ...request.Option) (*iotevents.CreateDetectorModelOutput, error)
 	CreateDetectorModelRequest(*iotevents.CreateDetectorModelInput) (*request.Request, *iotevents.CreateDetectorModelOutput)
@@ -67,6 +71,10 @@ type IoTEventsAPI interface {
 	CreateInput(*iotevents.CreateInputInput) (*iotevents.CreateInputOutput, error)
 	CreateInputWithContext(aws.Context, *iotevents.CreateInputInput, ...request.Option) (*iotevents.CreateInputOutput, error)
 	CreateInputRequest(*iotevents.CreateInputInput) (*request.Request, *iotevents.CreateInputOutput)
+
+	DeleteAlarmModel(*iotevents.DeleteAlarmModelInput) (*iotevents.DeleteAlarmModelOutput, error)
+	DeleteAlarmModelWithContext(aws.Context, *iotevents.DeleteAlarmModelInput, ...request.Option) (*iotevents.DeleteAlarmModelOutput, error)
+	DeleteAlarmModelRequest(*iotevents.DeleteAlarmModelInput) (*request.Request, *iotevents.DeleteAlarmModelOutput)
 
 	DeleteDetectorModel(*iotevents.DeleteDetectorModelInput) (*iotevents.DeleteDetectorModelOutput, error)
 	DeleteDetectorModelWithContext(aws.Context, *iotevents.DeleteDetectorModelInput, ...request.Option) (*iotevents.DeleteDetectorModelOutput, error)
@@ -76,9 +84,17 @@ type IoTEventsAPI interface {
 	DeleteInputWithContext(aws.Context, *iotevents.DeleteInputInput, ...request.Option) (*iotevents.DeleteInputOutput, error)
 	DeleteInputRequest(*iotevents.DeleteInputInput) (*request.Request, *iotevents.DeleteInputOutput)
 
+	DescribeAlarmModel(*iotevents.DescribeAlarmModelInput) (*iotevents.DescribeAlarmModelOutput, error)
+	DescribeAlarmModelWithContext(aws.Context, *iotevents.DescribeAlarmModelInput, ...request.Option) (*iotevents.DescribeAlarmModelOutput, error)
+	DescribeAlarmModelRequest(*iotevents.DescribeAlarmModelInput) (*request.Request, *iotevents.DescribeAlarmModelOutput)
+
 	DescribeDetectorModel(*iotevents.DescribeDetectorModelInput) (*iotevents.DescribeDetectorModelOutput, error)
 	DescribeDetectorModelWithContext(aws.Context, *iotevents.DescribeDetectorModelInput, ...request.Option) (*iotevents.DescribeDetectorModelOutput, error)
 	DescribeDetectorModelRequest(*iotevents.DescribeDetectorModelInput) (*request.Request, *iotevents.DescribeDetectorModelOutput)
+
+	DescribeDetectorModelAnalysis(*iotevents.DescribeDetectorModelAnalysisInput) (*iotevents.DescribeDetectorModelAnalysisOutput, error)
+	DescribeDetectorModelAnalysisWithContext(aws.Context, *iotevents.DescribeDetectorModelAnalysisInput, ...request.Option) (*iotevents.DescribeDetectorModelAnalysisOutput, error)
+	DescribeDetectorModelAnalysisRequest(*iotevents.DescribeDetectorModelAnalysisInput) (*request.Request, *iotevents.DescribeDetectorModelAnalysisOutput)
 
 	DescribeInput(*iotevents.DescribeInputInput) (*iotevents.DescribeInputOutput, error)
 	DescribeInputWithContext(aws.Context, *iotevents.DescribeInputInput, ...request.Option) (*iotevents.DescribeInputOutput, error)
@@ -88,6 +104,18 @@ type IoTEventsAPI interface {
 	DescribeLoggingOptionsWithContext(aws.Context, *iotevents.DescribeLoggingOptionsInput, ...request.Option) (*iotevents.DescribeLoggingOptionsOutput, error)
 	DescribeLoggingOptionsRequest(*iotevents.DescribeLoggingOptionsInput) (*request.Request, *iotevents.DescribeLoggingOptionsOutput)
 
+	GetDetectorModelAnalysisResults(*iotevents.GetDetectorModelAnalysisResultsInput) (*iotevents.GetDetectorModelAnalysisResultsOutput, error)
+	GetDetectorModelAnalysisResultsWithContext(aws.Context, *iotevents.GetDetectorModelAnalysisResultsInput, ...request.Option) (*iotevents.GetDetectorModelAnalysisResultsOutput, error)
+	GetDetectorModelAnalysisResultsRequest(*iotevents.GetDetectorModelAnalysisResultsInput) (*request.Request, *iotevents.GetDetectorModelAnalysisResultsOutput)
+
+	ListAlarmModelVersions(*iotevents.ListAlarmModelVersionsInput) (*iotevents.ListAlarmModelVersionsOutput, error)
+	ListAlarmModelVersionsWithContext(aws.Context, *iotevents.ListAlarmModelVersionsInput, ...request.Option) (*iotevents.ListAlarmModelVersionsOutput, error)
+	ListAlarmModelVersionsRequest(*iotevents.ListAlarmModelVersionsInput) (*request.Request, *iotevents.ListAlarmModelVersionsOutput)
+
+	ListAlarmModels(*iotevents.ListAlarmModelsInput) (*iotevents.ListAlarmModelsOutput, error)
+	ListAlarmModelsWithContext(aws.Context, *iotevents.ListAlarmModelsInput, ...request.Option) (*iotevents.ListAlarmModelsOutput, error)
+	ListAlarmModelsRequest(*iotevents.ListAlarmModelsInput) (*request.Request, *iotevents.ListAlarmModelsOutput)
+
 	ListDetectorModelVersions(*iotevents.ListDetectorModelVersionsInput) (*iotevents.ListDetectorModelVersionsOutput, error)
 	ListDetectorModelVersionsWithContext(aws.Context, *iotevents.ListDetectorModelVersionsInput, ...request.Option) (*iotevents.ListDetectorModelVersionsOutput, error)
 	ListDetectorModelVersionsRequest(*iotevents.ListDetectorModelVersionsInput) (*request.Request, *iotevents.ListDetectorModelVersionsOutput)
@@ -95,6 +123,10 @@ type IoTEventsAPI interface {
 	ListDetectorModels(*iotevents.ListDetectorModelsInput) (*iotevents.ListDetectorModelsOutput, error)
 	ListDetectorModelsWithContext(aws.Context, *iotevents.ListDetectorModelsInput, ...request.Option) (*iotevents.ListDetectorModelsOutput, error)
 	ListDetectorModelsRequest(*iotevents.ListDetectorModelsInput) (*request.Request, *iotevents.ListDetectorModelsOutput)
+
+	ListInputRoutings(*iotevents.ListInputRoutingsInput) (*iotevents.ListInputRoutingsOutput, error)
+	ListInputRoutingsWithContext(aws.Context, *iotevents.ListInputRoutingsInput, ...request.Option) (*iotevents.ListInputRoutingsOutput, error)
+	ListInputRoutingsRequest(*iotevents.ListInputRoutingsInput) (*request.Request, *iotevents.ListInputRoutingsOutput)
 
 	ListInputs(*iotevents.ListInputsInput) (*iotevents.ListInputsOutput, error)
 	ListInputsWithContext(aws.Context, *iotevents.ListInputsInput, ...request.Option) (*iotevents.ListInputsOutput, error)
@@ -108,6 +140,10 @@ type IoTEventsAPI interface {
 	PutLoggingOptionsWithContext(aws.Context, *iotevents.PutLoggingOptionsInput, ...request.Option) (*iotevents.PutLoggingOptionsOutput, error)
 	PutLoggingOptionsRequest(*iotevents.PutLoggingOptionsInput) (*request.Request, *iotevents.PutLoggingOptionsOutput)
 
+	StartDetectorModelAnalysis(*iotevents.StartDetectorModelAnalysisInput) (*iotevents.StartDetectorModelAnalysisOutput, error)
+	StartDetectorModelAnalysisWithContext(aws.Context, *iotevents.StartDetectorModelAnalysisInput, ...request.Option) (*iotevents.StartDetectorModelAnalysisOutput, error)
+	StartDetectorModelAnalysisRequest(*iotevents.StartDetectorModelAnalysisInput) (*request.Request, *iotevents.StartDetectorModelAnalysisOutput)
+
 	TagResource(*iotevents.TagResourceInput) (*iotevents.TagResourceOutput, error)
 	TagResourceWithContext(aws.Context, *iotevents.TagResourceInput, ...request.Option) (*iotevents.TagResourceOutput, error)
 	TagResourceRequest(*iotevents.TagResourceInput) (*request.Request, *iotevents.TagResourceOutput)
@@ -115,6 +151,10 @@ type IoTEventsAPI interface {
 	UntagResource(*iotevents.UntagResourceInput) (*iotevents.UntagResourceOutput, error)
 	UntagResourceWithContext(aws.Context, *iotevents.UntagResourceInput, ...request.Option) (*iotevents.UntagResourceOutput, error)
 	UntagResourceRequest(*iotevents.UntagResourceInput) (*request.Request, *iotevents.UntagResourceOutput)
+
+	UpdateAlarmModel(*iotevents.UpdateAlarmModelInput) (*iotevents.UpdateAlarmModelOutput, error)
+	UpdateAlarmModelWithContext(aws.Context, *iotevents.UpdateAlarmModelInput, ...request.Option) (*iotevents.UpdateAlarmModelOutput, error)
+	UpdateAlarmModelRequest(*iotevents.UpdateAlarmModelInput) (*request.Request, *iotevents.UpdateAlarmModelOutput)
 
 	UpdateDetectorModel(*iotevents.UpdateDetectorModelInput) (*iotevents.UpdateDetectorModelOutput, error)
 	UpdateDetectorModelWithContext(aws.Context, *iotevents.UpdateDetectorModelInput, ...request.Option) (*iotevents.UpdateDetectorModelOutput, error)

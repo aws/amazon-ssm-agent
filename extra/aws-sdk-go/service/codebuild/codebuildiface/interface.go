@@ -138,6 +138,10 @@ type CodeBuildAPI interface {
 	DescribeTestCasesPages(*codebuild.DescribeTestCasesInput, func(*codebuild.DescribeTestCasesOutput, bool) bool) error
 	DescribeTestCasesPagesWithContext(aws.Context, *codebuild.DescribeTestCasesInput, func(*codebuild.DescribeTestCasesOutput, bool) bool, ...request.Option) error
 
+	GetReportGroupTrend(*codebuild.GetReportGroupTrendInput) (*codebuild.GetReportGroupTrendOutput, error)
+	GetReportGroupTrendWithContext(aws.Context, *codebuild.GetReportGroupTrendInput, ...request.Option) (*codebuild.GetReportGroupTrendOutput, error)
+	GetReportGroupTrendRequest(*codebuild.GetReportGroupTrendInput) (*request.Request, *codebuild.GetReportGroupTrendOutput)
+
 	GetResourcePolicy(*codebuild.GetResourcePolicyInput) (*codebuild.GetResourcePolicyOutput, error)
 	GetResourcePolicyWithContext(aws.Context, *codebuild.GetResourcePolicyInput, ...request.Option) (*codebuild.GetResourcePolicyOutput, error)
 	GetResourcePolicyRequest(*codebuild.GetResourcePolicyInput) (*request.Request, *codebuild.GetResourcePolicyOutput)
@@ -259,6 +263,10 @@ type CodeBuildAPI interface {
 	UpdateProject(*codebuild.UpdateProjectInput) (*codebuild.UpdateProjectOutput, error)
 	UpdateProjectWithContext(aws.Context, *codebuild.UpdateProjectInput, ...request.Option) (*codebuild.UpdateProjectOutput, error)
 	UpdateProjectRequest(*codebuild.UpdateProjectInput) (*request.Request, *codebuild.UpdateProjectOutput)
+
+	UpdateProjectVisibility(*codebuild.UpdateProjectVisibilityInput) (*codebuild.UpdateProjectVisibilityOutput, error)
+	UpdateProjectVisibilityWithContext(aws.Context, *codebuild.UpdateProjectVisibilityInput, ...request.Option) (*codebuild.UpdateProjectVisibilityOutput, error)
+	UpdateProjectVisibilityRequest(*codebuild.UpdateProjectVisibilityInput) (*request.Request, *codebuild.UpdateProjectVisibilityOutput)
 
 	UpdateReportGroup(*codebuild.UpdateReportGroupInput) (*codebuild.UpdateReportGroupOutput, error)
 	UpdateReportGroupWithContext(aws.Context, *codebuild.UpdateReportGroupInput, ...request.Option) (*codebuild.UpdateReportGroupOutput, error)

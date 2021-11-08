@@ -62,9 +62,9 @@ func (c *ECS) CreateCapacityProviderRequest(input *CreateCapacityProviderInput) 
 // cluster auto scaling.
 //
 // Only capacity providers using an Auto Scaling group can be created. Amazon
-// ECS tasks on AWS Fargate use the FARGATE and FARGATE_SPOT capacity providers
+// ECS tasks on Fargate use the FARGATE and FARGATE_SPOT capacity providers
 // which are already created and available to all accounts in Regions supported
-// by AWS Fargate.
+// by Fargate.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -168,10 +168,10 @@ func (c *ECS) CreateClusterRequest(input *CreateClusterInput) (req *request.Requ
 //
 // When you call the CreateCluster API operation, Amazon ECS attempts to create
 // the Amazon ECS service-linked role for your account so that required resources
-// in other AWS services can be managed on your behalf. However, if the IAM
-// user that makes the call does not have permissions to create the service-linked
-// role, it is not created. For more information, see Using Service-Linked Roles
-// for Amazon ECS (https://docs.aws.amazon.com/AmazonECS/latest/developerguide/using-service-linked-roles.html)
+// in other Amazon Web Services services can be managed on your behalf. However,
+// if the IAM user that makes the call does not have permissions to create the
+// service-linked role, it is not created. For more information, see Using Service-Linked
+// Roles for Amazon ECS (https://docs.aws.amazon.com/AmazonECS/latest/developerguide/using-service-linked-roles.html)
 // in the Amazon Elastic Container Service Developer Guide.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
@@ -1591,8 +1591,8 @@ func (c *ECS) DescribeContainerInstancesRequest(input *DescribeContainerInstance
 
 // DescribeContainerInstances API operation for Amazon EC2 Container Service.
 //
-// Describes Amazon Elastic Container Service container instances. Returns metadata
-// about registered and remaining resources on each container instance requested.
+// Describes one or more container instances. Returns metadata about each container
+// instance requested.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -2109,6 +2109,105 @@ func (c *ECS) DiscoverPollEndpoint(input *DiscoverPollEndpointInput) (*DiscoverP
 // for more information on using Contexts.
 func (c *ECS) DiscoverPollEndpointWithContext(ctx aws.Context, input *DiscoverPollEndpointInput, opts ...request.Option) (*DiscoverPollEndpointOutput, error) {
 	req, out := c.DiscoverPollEndpointRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opExecuteCommand = "ExecuteCommand"
+
+// ExecuteCommandRequest generates a "aws/request.Request" representing the
+// client's request for the ExecuteCommand operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See ExecuteCommand for more information on using the ExecuteCommand
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the ExecuteCommandRequest method.
+//    req, resp := client.ExecuteCommandRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/ecs-2014-11-13/ExecuteCommand
+func (c *ECS) ExecuteCommandRequest(input *ExecuteCommandInput) (req *request.Request, output *ExecuteCommandOutput) {
+	op := &request.Operation{
+		Name:       opExecuteCommand,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &ExecuteCommandInput{}
+	}
+
+	output = &ExecuteCommandOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// ExecuteCommand API operation for Amazon EC2 Container Service.
+//
+// Runs a command remotely on a container within a task.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon EC2 Container Service's
+// API operation ExecuteCommand for usage and error information.
+//
+// Returned Error Types:
+//   * ServerException
+//   These errors are usually caused by a server issue.
+//
+//   * ClientException
+//   These errors are usually caused by a client action, such as using an action
+//   or resource on behalf of a user that doesn't have permissions to use the
+//   action or resource, or specifying an identifier that is not valid.
+//
+//   * InvalidParameterException
+//   The specified parameter is invalid. Review the available parameters for the
+//   API request.
+//
+//   * AccessDeniedException
+//   You do not have authorization to perform the requested action.
+//
+//   * ClusterNotFoundException
+//   The specified cluster could not be found. You can view your available clusters
+//   with ListClusters. Amazon ECS clusters are Region-specific.
+//
+//   * TargetNotConnectedException
+//   The target container is not properly configured with the execute command
+//   agent or the container is no longer active or running.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/ecs-2014-11-13/ExecuteCommand
+func (c *ECS) ExecuteCommand(input *ExecuteCommandInput) (*ExecuteCommandOutput, error) {
+	req, out := c.ExecuteCommandRequest(input)
+	return out, req.Send()
+}
+
+// ExecuteCommandWithContext is the same as ExecuteCommand with the addition of
+// the ability to pass a context and additional request options.
+//
+// See ExecuteCommand for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *ECS) ExecuteCommandWithContext(ctx aws.Context, input *ExecuteCommandInput, opts ...request.Option) (*ExecuteCommandOutput, error) {
+	req, out := c.ExecuteCommandRequest(input)
 	req.SetContext(ctx)
 	req.ApplyOptions(opts...)
 	return out, req.Send()
@@ -2758,7 +2857,8 @@ func (c *ECS) ListServicesRequest(input *ListServicesInput) (req *request.Reques
 
 // ListServices API operation for Amazon EC2 Container Service.
 //
-// Lists the services that are running in a specified cluster.
+// Returns a list of services. You can filter the results by cluster, launch
+// type, and scheduling strategy.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -3300,9 +3400,9 @@ func (c *ECS) ListTasksRequest(input *ListTasksInput) (req *request.Request, out
 
 // ListTasks API operation for Amazon EC2 Container Service.
 //
-// Returns a list of tasks for a specified cluster. You can filter the results
-// by family name, by a particular container instance, or by the desired status
-// of the task with the family, containerInstance, and desiredStatus parameters.
+// Returns a list of tasks. You can filter the results by cluster, task definition
+// family, container instance, launch type, what IAM principal started the task,
+// or by the desired status of the task.
 //
 // Recently stopped tasks might appear in the returned results. Currently, stopped
 // tasks appear in the returned results for at least one hour.
@@ -3977,9 +4077,9 @@ func (c *ECS) RegisterTaskDefinitionRequest(input *RegisterTaskDefinitionInput) 
 //
 // You can specify an IAM role for your task with the taskRoleArn parameter.
 // When you specify an IAM role for a task, its containers can then use the
-// latest versions of the AWS CLI or SDKs to make API requests to the AWS services
-// that are specified in the IAM policy associated with the role. For more information,
-// see IAM Roles for Tasks (https://docs.aws.amazon.com/AmazonECS/latest/developerguide/task-iam-roles.html)
+// latest versions of the CLI or SDKs to make API requests to the Amazon Web
+// Services services that are specified in the IAM policy associated with the
+// role. For more information, see IAM Roles for Tasks (https://docs.aws.amazon.com/AmazonECS/latest/developerguide/task-iam-roles.html)
 // in the Amazon Elastic Container Service Developer Guide.
 //
 // You can specify a Docker networking mode for the containers in your task
@@ -4145,8 +4245,8 @@ func (c *ECS) RunTaskRequest(input *RunTaskInput) (req *request.Request, output 
 //   You do not have authorization to perform the requested action.
 //
 //   * BlockedException
-//   Your AWS account has been blocked. For more information, contact AWS Support
-//   (http://aws.amazon.com/contact-us/).
+//   Your Amazon Web Services account has been blocked. For more information,
+//   contact Amazon Web Services Support (http://aws.amazon.com/contact-us/).
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/ecs-2014-11-13/RunTask
 func (c *ECS) RunTask(input *RunTaskInput) (*RunTaskOutput, error) {
@@ -4847,6 +4947,186 @@ func (c *ECS) UntagResourceWithContext(ctx aws.Context, input *UntagResourceInpu
 	return out, req.Send()
 }
 
+const opUpdateCapacityProvider = "UpdateCapacityProvider"
+
+// UpdateCapacityProviderRequest generates a "aws/request.Request" representing the
+// client's request for the UpdateCapacityProvider operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See UpdateCapacityProvider for more information on using the UpdateCapacityProvider
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the UpdateCapacityProviderRequest method.
+//    req, resp := client.UpdateCapacityProviderRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/ecs-2014-11-13/UpdateCapacityProvider
+func (c *ECS) UpdateCapacityProviderRequest(input *UpdateCapacityProviderInput) (req *request.Request, output *UpdateCapacityProviderOutput) {
+	op := &request.Operation{
+		Name:       opUpdateCapacityProvider,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &UpdateCapacityProviderInput{}
+	}
+
+	output = &UpdateCapacityProviderOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// UpdateCapacityProvider API operation for Amazon EC2 Container Service.
+//
+// Modifies the parameters for a capacity provider.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon EC2 Container Service's
+// API operation UpdateCapacityProvider for usage and error information.
+//
+// Returned Error Types:
+//   * ServerException
+//   These errors are usually caused by a server issue.
+//
+//   * ClientException
+//   These errors are usually caused by a client action, such as using an action
+//   or resource on behalf of a user that doesn't have permissions to use the
+//   action or resource, or specifying an identifier that is not valid.
+//
+//   * InvalidParameterException
+//   The specified parameter is invalid. Review the available parameters for the
+//   API request.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/ecs-2014-11-13/UpdateCapacityProvider
+func (c *ECS) UpdateCapacityProvider(input *UpdateCapacityProviderInput) (*UpdateCapacityProviderOutput, error) {
+	req, out := c.UpdateCapacityProviderRequest(input)
+	return out, req.Send()
+}
+
+// UpdateCapacityProviderWithContext is the same as UpdateCapacityProvider with the addition of
+// the ability to pass a context and additional request options.
+//
+// See UpdateCapacityProvider for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *ECS) UpdateCapacityProviderWithContext(ctx aws.Context, input *UpdateCapacityProviderInput, opts ...request.Option) (*UpdateCapacityProviderOutput, error) {
+	req, out := c.UpdateCapacityProviderRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opUpdateCluster = "UpdateCluster"
+
+// UpdateClusterRequest generates a "aws/request.Request" representing the
+// client's request for the UpdateCluster operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See UpdateCluster for more information on using the UpdateCluster
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the UpdateClusterRequest method.
+//    req, resp := client.UpdateClusterRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/ecs-2014-11-13/UpdateCluster
+func (c *ECS) UpdateClusterRequest(input *UpdateClusterInput) (req *request.Request, output *UpdateClusterOutput) {
+	op := &request.Operation{
+		Name:       opUpdateCluster,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &UpdateClusterInput{}
+	}
+
+	output = &UpdateClusterOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// UpdateCluster API operation for Amazon EC2 Container Service.
+//
+// Updates the cluster.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon EC2 Container Service's
+// API operation UpdateCluster for usage and error information.
+//
+// Returned Error Types:
+//   * ServerException
+//   These errors are usually caused by a server issue.
+//
+//   * ClientException
+//   These errors are usually caused by a client action, such as using an action
+//   or resource on behalf of a user that doesn't have permissions to use the
+//   action or resource, or specifying an identifier that is not valid.
+//
+//   * ClusterNotFoundException
+//   The specified cluster could not be found. You can view your available clusters
+//   with ListClusters. Amazon ECS clusters are Region-specific.
+//
+//   * InvalidParameterException
+//   The specified parameter is invalid. Review the available parameters for the
+//   API request.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/ecs-2014-11-13/UpdateCluster
+func (c *ECS) UpdateCluster(input *UpdateClusterInput) (*UpdateClusterOutput, error) {
+	req, out := c.UpdateClusterRequest(input)
+	return out, req.Send()
+}
+
+// UpdateClusterWithContext is the same as UpdateCluster with the addition of
+// the ability to pass a context and additional request options.
+//
+// See UpdateCluster for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *ECS) UpdateClusterWithContext(ctx aws.Context, input *UpdateClusterInput, opts ...request.Option) (*UpdateClusterOutput, error) {
+	req, out := c.UpdateClusterRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opUpdateClusterSettings = "UpdateClusterSettings"
 
 // UpdateClusterSettingsRequest generates a "aws/request.Request" representing the
@@ -4989,10 +5269,16 @@ func (c *ECS) UpdateContainerAgentRequest(input *UpdateContainerAgentInput) (req
 // differs depending on whether your container instance was launched with the
 // Amazon ECS-optimized AMI or another operating system.
 //
-// UpdateContainerAgent requires the Amazon ECS-optimized AMI or Amazon Linux
-// with the ecs-init service installed and running. For help updating the Amazon
-// ECS container agent on other operating systems, see Manually Updating the
-// Amazon ECS Container Agent (https://docs.aws.amazon.com/AmazonECS/latest/developerguide/ecs-agent-update.html#manually_update_agent)
+// The UpdateContainerAgent API isn't supported for container instances using
+// the Amazon ECS-optimized Amazon Linux 2 (arm64) AMI. To update the container
+// agent, you can update the ecs-init package which will update the agent. For
+// more information, see Updating the Amazon ECS container agent (https://docs.aws.amazon.com/AmazonECS/latest/developerguide/agent-update-ecs-ami.html)
+// in the Amazon Elastic Container Service Developer Guide.
+//
+// The UpdateContainerAgent API requires an Amazon ECS-optimized AMI or Amazon
+// Linux AMI with the ecs-init service installed and running. For help updating
+// the Amazon ECS container agent on other operating systems, see Manually updating
+// the Amazon ECS container agent (https://docs.aws.amazon.com/AmazonECS/latest/developerguide/ecs-agent-update.html#manually_update_agent)
 // in the Amazon Elastic Container Service Developer Guide.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
@@ -5260,9 +5546,9 @@ func (c *ECS) UpdateServiceRequest(input *UpdateServiceInput) (req *request.Requ
 // the desired count, deployment configuration, task placement constraints and
 // strategies, and health check grace period can be updated using this API.
 // If the network configuration, platform version, or task definition need to
-// be updated, a new AWS CodeDeploy deployment should be created. For more information,
+// be updated, a new CodeDeploy deployment should be created. For more information,
 // see CreateDeployment (https://docs.aws.amazon.com/codedeploy/latest/APIReference/API_CreateDeployment.html)
-// in the AWS CodeDeploy API Reference.
+// in the CodeDeploy API Reference.
 //
 // For services using an external deployment controller, you can update only
 // the desired count, task placement constraints and strategies, and health
@@ -5641,12 +5927,20 @@ type AccessDeniedException struct {
 	Message_ *string `locationName:"message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AccessDeniedException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AccessDeniedException) GoString() string {
 	return s.String()
 }
@@ -5709,12 +6003,20 @@ type Attachment struct {
 	Type *string `locationName:"type" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s Attachment) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s Attachment) GoString() string {
 	return s.String()
 }
@@ -5758,12 +6060,20 @@ type AttachmentStateChange struct {
 	Status *string `locationName:"status" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AttachmentStateChange) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AttachmentStateChange) GoString() string {
 	return s.String()
 }
@@ -5803,8 +6113,9 @@ func (s *AttachmentStateChange) SetStatus(v string) *AttachmentStateChange {
 type Attribute struct {
 	_ struct{} `type:"structure"`
 
-	// The name of the attribute. Up to 128 letters (uppercase and lowercase), numbers,
-	// hyphens, underscores, and periods are allowed.
+	// The name of the attribute. The name must contain between 1 and 128 characters
+	// and name may contain letters (uppercase and lowercase), numbers, hyphens,
+	// underscores, forward slashes, back slashes, or periods.
 	//
 	// Name is a required field
 	Name *string `locationName:"name" type:"string" required:"true"`
@@ -5818,18 +6129,27 @@ type Attribute struct {
 	// ARN.
 	TargetType *string `locationName:"targetType" type:"string" enum:"TargetType"`
 
-	// The value of the attribute. Up to 128 letters (uppercase and lowercase),
-	// numbers, hyphens, underscores, periods, at signs (@), forward slashes, colons,
-	// and spaces are allowed.
+	// The value of the attribute. The value must contain between 1 and 128 characters
+	// and may contain letters (uppercase and lowercase), numbers, hyphens, underscores,
+	// periods, at signs (@), forward slashes, back slashes, colons, or spaces.
+	// The value cannot contain any leading or trailing whitespace.
 	Value *string `locationName:"value" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s Attribute) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s Attribute) GoString() string {
 	return s.String()
 }
@@ -5881,12 +6201,20 @@ type AttributeLimitExceededException struct {
 	Message_ *string `locationName:"message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AttributeLimitExceededException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AttributeLimitExceededException) GoString() string {
 	return s.String()
 }
@@ -5953,19 +6281,27 @@ type AutoScalingGroupProvider struct {
 	// during a scale-in action. The Auto Scaling group and each instance in the
 	// Auto Scaling group must have instance protection from scale-in actions enabled
 	// as well. For more information, see Instance Protection (https://docs.aws.amazon.com/autoscaling/ec2/userguide/as-instance-termination.html#instance-protection)
-	// in the AWS Auto Scaling User Guide.
+	// in the Auto Scaling User Guide.
 	//
 	// When managed termination protection is disabled, your Amazon EC2 instances
 	// are not protected from termination when the Auto Scaling group scales in.
 	ManagedTerminationProtection *string `locationName:"managedTerminationProtection" type:"string" enum:"ManagedTerminationProtection"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AutoScalingGroupProvider) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AutoScalingGroupProvider) GoString() string {
 	return s.String()
 }
@@ -6006,6 +6342,77 @@ func (s *AutoScalingGroupProvider) SetManagedTerminationProtection(v string) *Au
 	return s
 }
 
+// The details of the Auto Scaling group capacity provider to update.
+type AutoScalingGroupProviderUpdate struct {
+	_ struct{} `type:"structure"`
+
+	// The managed scaling settings for the Auto Scaling group capacity provider.
+	ManagedScaling *ManagedScaling `locationName:"managedScaling" type:"structure"`
+
+	// The managed termination protection setting to use for the Auto Scaling group
+	// capacity provider. This determines whether the Auto Scaling group has managed
+	// termination protection.
+	//
+	// When using managed termination protection, managed scaling must also be used
+	// otherwise managed termination protection will not work.
+	//
+	// When managed termination protection is enabled, Amazon ECS prevents the Amazon
+	// EC2 instances in an Auto Scaling group that contain tasks from being terminated
+	// during a scale-in action. The Auto Scaling group and each instance in the
+	// Auto Scaling group must have instance protection from scale-in actions enabled
+	// as well. For more information, see Instance Protection (https://docs.aws.amazon.com/autoscaling/ec2/userguide/as-instance-termination.html#instance-protection)
+	// in the Auto Scaling User Guide.
+	//
+	// When managed termination protection is disabled, your Amazon EC2 instances
+	// are not protected from termination when the Auto Scaling group scales in.
+	ManagedTerminationProtection *string `locationName:"managedTerminationProtection" type:"string" enum:"ManagedTerminationProtection"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s AutoScalingGroupProviderUpdate) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s AutoScalingGroupProviderUpdate) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *AutoScalingGroupProviderUpdate) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "AutoScalingGroupProviderUpdate"}
+	if s.ManagedScaling != nil {
+		if err := s.ManagedScaling.Validate(); err != nil {
+			invalidParams.AddNested("ManagedScaling", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetManagedScaling sets the ManagedScaling field's value.
+func (s *AutoScalingGroupProviderUpdate) SetManagedScaling(v *ManagedScaling) *AutoScalingGroupProviderUpdate {
+	s.ManagedScaling = v
+	return s
+}
+
+// SetManagedTerminationProtection sets the ManagedTerminationProtection field's value.
+func (s *AutoScalingGroupProviderUpdate) SetManagedTerminationProtection(v string) *AutoScalingGroupProviderUpdate {
+	s.ManagedTerminationProtection = &v
+	return s
+}
+
 // An object representing the networking details for a task or service.
 type AwsVpcConfiguration struct {
 	_ struct{} `type:"structure"`
@@ -6014,15 +6421,15 @@ type AwsVpcConfiguration struct {
 	// The default value is DISABLED.
 	AssignPublicIp *string `locationName:"assignPublicIp" type:"string" enum:"AssignPublicIp"`
 
-	// The security groups associated with the task or service. If you do not specify
-	// a security group, the default security group for the VPC is used. There is
-	// a limit of 5 security groups that can be specified per AwsVpcConfiguration.
+	// The IDs of the security groups associated with the task or service. If you
+	// do not specify a security group, the default security group for the VPC is
+	// used. There is a limit of 5 security groups that can be specified per AwsVpcConfiguration.
 	//
 	// All specified security groups must be from the same VPC.
 	SecurityGroups []*string `locationName:"securityGroups" type:"list"`
 
-	// The subnets associated with the task or service. There is a limit of 16 subnets
-	// that can be specified per AwsVpcConfiguration.
+	// The IDs of the subnets associated with the task or service. There is a limit
+	// of 16 subnets that can be specified per AwsVpcConfiguration.
 	//
 	// All specified subnets must be from the same VPC.
 	//
@@ -6030,12 +6437,20 @@ type AwsVpcConfiguration struct {
 	Subnets []*string `locationName:"subnets" type:"list" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AwsVpcConfiguration) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AwsVpcConfiguration) GoString() string {
 	return s.String()
 }
@@ -6071,8 +6486,8 @@ func (s *AwsVpcConfiguration) SetSubnets(v []*string) *AwsVpcConfiguration {
 	return s
 }
 
-// Your AWS account has been blocked. For more information, contact AWS Support
-// (http://aws.amazon.com/contact-us/).
+// Your Amazon Web Services account has been blocked. For more information,
+// contact Amazon Web Services Support (http://aws.amazon.com/contact-us/).
 type BlockedException struct {
 	_            struct{}                  `type:"structure"`
 	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
@@ -6080,12 +6495,20 @@ type BlockedException struct {
 	Message_ *string `locationName:"message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s BlockedException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s BlockedException) GoString() string {
 	return s.String()
 }
@@ -6169,9 +6592,9 @@ type CapacityProvider struct {
 	//    * Tag keys and values are case-sensitive.
 	//
 	//    * Do not use aws:, AWS:, or any upper or lowercase combination of such
-	//    as a prefix for either keys or values as it is reserved for AWS use. You
-	//    cannot edit or delete tag keys or values with this prefix. Tags with this
-	//    prefix do not count against your tags per resource limit.
+	//    as a prefix for either keys or values as it is reserved for Amazon Web
+	//    Services use. You cannot edit or delete tag keys or values with this prefix.
+	//    Tags with this prefix do not count against your tags per resource limit.
 	Tags []*Tag `locationName:"tags" type:"list"`
 
 	// The update status of the capacity provider. The following are the possible
@@ -6197,12 +6620,20 @@ type CapacityProvider struct {
 	UpdateStatusReason *string `locationName:"updateStatusReason" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CapacityProvider) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CapacityProvider) GoString() string {
 	return s.String()
 }
@@ -6249,13 +6680,32 @@ func (s *CapacityProvider) SetUpdateStatusReason(v string) *CapacityProvider {
 	return s
 }
 
-// The details of a capacity provider strategy.
+// The details of a capacity provider strategy. A capacity provider strategy
+// can be set when using the RunTask or CreateCluster APIs or as the default
+// capacity provider strategy for a cluster with the CreateCluster API.
+//
+// Only capacity providers that are already associated with a cluster and have
+// an ACTIVE or UPDATING status can be used in a capacity provider strategy.
+// The PutClusterCapacityProviders API is used to associate a capacity provider
+// with a cluster.
+//
+// If specifying a capacity provider that uses an Auto Scaling group, the capacity
+// provider must already be created. New Auto Scaling group capacity providers
+// can be created with the CreateCapacityProvider API operation.
+//
+// To use a Fargate capacity provider, specify either the FARGATE or FARGATE_SPOT
+// capacity providers. The Fargate capacity providers are available to all accounts
+// and only need to be associated with a cluster to be used in a capacity provider
+// strategy.
+//
+// A capacity provider strategy may contain a maximum of 6 capacity providers.
 type CapacityProviderStrategyItem struct {
 	_ struct{} `type:"structure"`
 
 	// The base value designates how many tasks, at a minimum, to run on the specified
 	// capacity provider. Only one capacity provider in a capacity provider strategy
-	// can have a base defined.
+	// can have a base defined. If no value is specified, the default value of 0
+	// is used.
 	Base *int64 `locationName:"base" type:"integer"`
 
 	// The short name of the capacity provider.
@@ -6264,23 +6714,40 @@ type CapacityProviderStrategyItem struct {
 	CapacityProvider *string `locationName:"capacityProvider" type:"string" required:"true"`
 
 	// The weight value designates the relative percentage of the total number of
-	// tasks launched that should use the specified capacity provider.
+	// tasks launched that should use the specified capacity provider. The weight
+	// value is taken into consideration after the base value, if defined, is satisfied.
 	//
-	// For example, if you have a strategy that contains two capacity providers
-	// and both have a weight of 1, then when the base is satisfied, the tasks will
-	// be split evenly across the two capacity providers. Using that same logic,
-	// if you specify a weight of 1 for capacityProviderA and a weight of 4 for
-	// capacityProviderB, then for every one task that is run using capacityProviderA,
-	// four tasks would use capacityProviderB.
+	// If no weight value is specified, the default value of 0 is used. When multiple
+	// capacity providers are specified within a capacity provider strategy, at
+	// least one of the capacity providers must have a weight value greater than
+	// zero and any capacity providers with a weight of 0 will not be used to place
+	// tasks. If you specify multiple capacity providers in a strategy that all
+	// have a weight of 0, any RunTask or CreateService actions using the capacity
+	// provider strategy will fail.
+	//
+	// An example scenario for using weights is defining a strategy that contains
+	// two capacity providers and both have a weight of 1, then when the base is
+	// satisfied, the tasks will be split evenly across the two capacity providers.
+	// Using that same logic, if you specify a weight of 1 for capacityProviderA
+	// and a weight of 4 for capacityProviderB, then for every one task that is
+	// run using capacityProviderA, four tasks would use capacityProviderB.
 	Weight *int64 `locationName:"weight" type:"integer"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CapacityProviderStrategyItem) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CapacityProviderStrategyItem) GoString() string {
 	return s.String()
 }
@@ -6326,12 +6793,20 @@ type ClientException struct {
 	Message_ *string `locationName:"message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ClientException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ClientException) GoString() string {
 	return s.String()
 }
@@ -6411,13 +6886,16 @@ type Cluster struct {
 	CapacityProviders []*string `locationName:"capacityProviders" type:"list"`
 
 	// The Amazon Resource Name (ARN) that identifies the cluster. The ARN contains
-	// the arn:aws:ecs namespace, followed by the Region of the cluster, the AWS
-	// account ID of the cluster owner, the cluster namespace, and then the cluster
-	// name. For example, arn:aws:ecs:region:012345678910:cluster/test.
+	// the arn:aws:ecs namespace, followed by the Region of the cluster, the Amazon
+	// Web Services account ID of the cluster owner, the cluster namespace, and
+	// then the cluster name. For example, arn:aws:ecs:region:012345678910:cluster/test.
 	ClusterArn *string `locationName:"clusterArn" type:"string"`
 
 	// A user-generated string that you use to identify your cluster.
 	ClusterName *string `locationName:"clusterName" type:"string"`
+
+	// The execute command configuration for the cluster.
+	Configuration *ClusterConfiguration `locationName:"configuration" type:"structure"`
 
 	// The default capacity provider strategy for the cluster. When services or
 	// tasks are run in the cluster with no launch type or capacity provider strategy
@@ -6512,18 +6990,26 @@ type Cluster struct {
 	//    * Tag keys and values are case-sensitive.
 	//
 	//    * Do not use aws:, AWS:, or any upper or lowercase combination of such
-	//    as a prefix for either keys or values as it is reserved for AWS use. You
-	//    cannot edit or delete tag keys or values with this prefix. Tags with this
-	//    prefix do not count against your tags per resource limit.
+	//    as a prefix for either keys or values as it is reserved for Amazon Web
+	//    Services use. You cannot edit or delete tag keys or values with this prefix.
+	//    Tags with this prefix do not count against your tags per resource limit.
 	Tags []*Tag `locationName:"tags" type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s Cluster) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s Cluster) GoString() string {
 	return s.String()
 }
@@ -6561,6 +7047,12 @@ func (s *Cluster) SetClusterArn(v string) *Cluster {
 // SetClusterName sets the ClusterName field's value.
 func (s *Cluster) SetClusterName(v string) *Cluster {
 	s.ClusterName = &v
+	return s
+}
+
+// SetConfiguration sets the Configuration field's value.
+func (s *Cluster) SetConfiguration(v *ClusterConfiguration) *Cluster {
+	s.Configuration = v
 	return s
 }
 
@@ -6612,6 +7104,38 @@ func (s *Cluster) SetTags(v []*Tag) *Cluster {
 	return s
 }
 
+// The execute command configuration for the cluster.
+type ClusterConfiguration struct {
+	_ struct{} `type:"structure"`
+
+	// The details of the execute command configuration.
+	ExecuteCommandConfiguration *ExecuteCommandConfiguration `locationName:"executeCommandConfiguration" type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ClusterConfiguration) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ClusterConfiguration) GoString() string {
+	return s.String()
+}
+
+// SetExecuteCommandConfiguration sets the ExecuteCommandConfiguration field's value.
+func (s *ClusterConfiguration) SetExecuteCommandConfiguration(v *ExecuteCommandConfiguration) *ClusterConfiguration {
+	s.ExecuteCommandConfiguration = v
+	return s
+}
+
 // You cannot delete a cluster that has registered container instances. First,
 // deregister the container instances before you can delete the cluster. For
 // more information, see DeregisterContainerInstance.
@@ -6622,12 +7146,20 @@ type ClusterContainsContainerInstancesException struct {
 	Message_ *string `locationName:"message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ClusterContainsContainerInstancesException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ClusterContainsContainerInstancesException) GoString() string {
 	return s.String()
 }
@@ -6680,12 +7212,20 @@ type ClusterContainsServicesException struct {
 	Message_ *string `locationName:"message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ClusterContainsServicesException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ClusterContainsServicesException) GoString() string {
 	return s.String()
 }
@@ -6736,12 +7276,20 @@ type ClusterContainsTasksException struct {
 	Message_ *string `locationName:"message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ClusterContainsTasksException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ClusterContainsTasksException) GoString() string {
 	return s.String()
 }
@@ -6793,12 +7341,20 @@ type ClusterNotFoundException struct {
 	Message_ *string `locationName:"message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ClusterNotFoundException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ClusterNotFoundException) GoString() string {
 	return s.String()
 }
@@ -6857,12 +7413,20 @@ type ClusterSetting struct {
 	Value *string `locationName:"value" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ClusterSetting) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ClusterSetting) GoString() string {
 	return s.String()
 }
@@ -6914,6 +7478,9 @@ type Container struct {
 	// The last known status of the container.
 	LastStatus *string `locationName:"lastStatus" type:"string"`
 
+	// The details of any Amazon ECS managed agents associated with the container.
+	ManagedAgents []*ManagedAgent `locationName:"managedAgents" type:"list"`
+
 	// The hard limit (in MiB) of memory set for the container.
 	Memory *string `locationName:"memory" type:"string"`
 
@@ -6940,12 +7507,20 @@ type Container struct {
 	TaskArn *string `locationName:"taskArn" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s Container) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s Container) GoString() string {
 	return s.String()
 }
@@ -6995,6 +7570,12 @@ func (s *Container) SetImageDigest(v string) *Container {
 // SetLastStatus sets the LastStatus field's value.
 func (s *Container) SetLastStatus(v string) *Container {
 	s.LastStatus = &v
+	return s
+}
+
+// SetManagedAgents sets the ManagedAgents field's value.
+func (s *Container) SetManagedAgents(v []*ManagedAgent) *Container {
+	s.ManagedAgents = v
 	return s
 }
 
@@ -7054,7 +7635,7 @@ type ContainerDefinition struct {
 	// The command that is passed to the container. This parameter maps to Cmd in
 	// the Create a container (https://docs.docker.com/engine/api/v1.35/#operation/ContainerCreate)
 	// section of the Docker Remote API (https://docs.docker.com/engine/api/v1.35/)
-	// and the COMMAND parameter to docker run (https://docs.docker.com/engine/reference/run/).
+	// and the COMMAND parameter to docker run (https://docs.docker.com/engine/reference/run/#security-configuration).
 	// For more information, see https://docs.docker.com/engine/reference/builder/#cmd
 	// (https://docs.docker.com/engine/reference/builder/#cmd). If there are multiple
 	// arguments, each argument should be a separated string in the array.
@@ -7063,7 +7644,7 @@ type ContainerDefinition struct {
 	// The number of cpu units reserved for the container. This parameter maps to
 	// CpuShares in the Create a container (https://docs.docker.com/engine/api/v1.35/#operation/ContainerCreate)
 	// section of the Docker Remote API (https://docs.docker.com/engine/api/v1.35/)
-	// and the --cpu-shares option to docker run (https://docs.docker.com/engine/reference/run/).
+	// and the --cpu-shares option to docker run (https://docs.docker.com/engine/reference/run/#security-configuration).
 	//
 	// This field is optional for tasks using the Fargate launch type, and the only
 	// requirement is that the total amount of CPU reserved for all containers within
@@ -7104,7 +7685,8 @@ type ContainerDefinition struct {
 	//
 	// On Windows container instances, the CPU limit is enforced as an absolute
 	// limit, or a quota. Windows containers only have access to the specified amount
-	// of CPU that is described in the task definition.
+	// of CPU that is described in the task definition. A null or zero CPU value
+	// is passed to Docker as 0, which Windows interprets as 1% of one CPU.
 	Cpu *int64 `locationName:"cpu" type:"integer"`
 
 	// The dependencies defined for container startup and shutdown. A container
@@ -7138,7 +7720,7 @@ type ContainerDefinition struct {
 	// A list of DNS search domains that are presented to the container. This parameter
 	// maps to DnsSearch in the Create a container (https://docs.docker.com/engine/api/v1.35/#operation/ContainerCreate)
 	// section of the Docker Remote API (https://docs.docker.com/engine/api/v1.35/)
-	// and the --dns-search option to docker run (https://docs.docker.com/engine/reference/run/).
+	// and the --dns-search option to docker run (https://docs.docker.com/engine/reference/run/#security-configuration).
 	//
 	// This parameter is not supported for Windows containers.
 	DnsSearchDomains []*string `locationName:"dnsSearchDomains" type:"list"`
@@ -7146,7 +7728,7 @@ type ContainerDefinition struct {
 	// A list of DNS servers that are presented to the container. This parameter
 	// maps to Dns in the Create a container (https://docs.docker.com/engine/api/v1.35/#operation/ContainerCreate)
 	// section of the Docker Remote API (https://docs.docker.com/engine/api/v1.35/)
-	// and the --dns option to docker run (https://docs.docker.com/engine/reference/run/).
+	// and the --dns option to docker run (https://docs.docker.com/engine/reference/run/#security-configuration).
 	//
 	// This parameter is not supported for Windows containers.
 	DnsServers []*string `locationName:"dnsServers" type:"list"`
@@ -7154,7 +7736,7 @@ type ContainerDefinition struct {
 	// A key/value map of labels to add to the container. This parameter maps to
 	// Labels in the Create a container (https://docs.docker.com/engine/api/v1.35/#operation/ContainerCreate)
 	// section of the Docker Remote API (https://docs.docker.com/engine/api/v1.35/)
-	// and the --label option to docker run (https://docs.docker.com/engine/reference/run/).
+	// and the --label option to docker run (https://docs.docker.com/engine/reference/run/#security-configuration).
 	// This parameter requires version 1.18 of the Docker Remote API or greater
 	// on your container instance. To check the Docker Remote API version on your
 	// container instance, log in to your container instance and run the following
@@ -7172,7 +7754,7 @@ type ContainerDefinition struct {
 	//
 	// This parameter maps to SecurityOpt in the Create a container (https://docs.docker.com/engine/api/v1.35/#operation/ContainerCreate)
 	// section of the Docker Remote API (https://docs.docker.com/engine/api/v1.35/)
-	// and the --security-opt option to docker run (https://docs.docker.com/engine/reference/run/).
+	// and the --security-opt option to docker run (https://docs.docker.com/engine/reference/run/#security-configuration).
 	//
 	// The Amazon ECS container agent running on a container instance must register
 	// with the ECS_SELINUX_CAPABLE=true or ECS_APPARMOR_CAPABLE=true environment
@@ -7180,6 +7762,12 @@ type ContainerDefinition struct {
 	// options. For more information, see Amazon ECS Container Agent Configuration
 	// (https://docs.aws.amazon.com/AmazonECS/latest/developerguide/ecs-agent-config.html)
 	// in the Amazon Elastic Container Service Developer Guide.
+	//
+	// For more information about valid values, see Docker Run Security Configuration
+	// (https://docs.docker.com/engine/reference/run/#security-configuration).
+	//
+	// Valid values: "no-new-privileges" | "apparmor:PROFILE" | "label:value" |
+	// "credentialspec:CredentialSpecFilePath"
 	DockerSecurityOptions []*string `locationName:"dockerSecurityOptions" type:"list"`
 
 	//
@@ -7190,7 +7778,7 @@ type ContainerDefinition struct {
 	// The entry point that is passed to the container. This parameter maps to Entrypoint
 	// in the Create a container (https://docs.docker.com/engine/api/v1.35/#operation/ContainerCreate)
 	// section of the Docker Remote API (https://docs.docker.com/engine/api/v1.35/)
-	// and the --entrypoint option to docker run (https://docs.docker.com/engine/reference/run/).
+	// and the --entrypoint option to docker run (https://docs.docker.com/engine/reference/run/#security-configuration).
 	// For more information, see https://docs.docker.com/engine/reference/builder/#entrypoint
 	// (https://docs.docker.com/engine/reference/builder/#entrypoint).
 	EntryPoint []*string `locationName:"entryPoint" type:"list"`
@@ -7198,14 +7786,14 @@ type ContainerDefinition struct {
 	// The environment variables to pass to a container. This parameter maps to
 	// Env in the Create a container (https://docs.docker.com/engine/api/v1.35/#operation/ContainerCreate)
 	// section of the Docker Remote API (https://docs.docker.com/engine/api/v1.35/)
-	// and the --env option to docker run (https://docs.docker.com/engine/reference/run/).
+	// and the --env option to docker run (https://docs.docker.com/engine/reference/run/#security-configuration).
 	//
 	// We do not recommend using plaintext environment variables for sensitive information,
 	// such as credential data.
 	Environment []*KeyValuePair `locationName:"environment" type:"list"`
 
 	// A list of files containing the environment variables to pass to a container.
-	// This parameter maps to the --env-file option to docker run (https://docs.docker.com/engine/reference/run/).
+	// This parameter maps to the --env-file option to docker run (https://docs.docker.com/engine/reference/run/#security-configuration).
 	//
 	// You can specify up to ten environment files. The file must have a .env file
 	// extension. Each line in an environment file should contain an environment
@@ -7220,9 +7808,6 @@ type ContainerDefinition struct {
 	// to use unique variable names. For more information, see Specifying Environment
 	// Variables (https://docs.aws.amazon.com/AmazonECS/latest/developerguide/taskdef-envfiles.html)
 	// in the Amazon Elastic Container Service Developer Guide.
-	//
-	// This field is not valid for containers in tasks using the Fargate launch
-	// type.
 	EnvironmentFiles []*EnvironmentFile `locationName:"environmentFiles" type:"list"`
 
 	// If the essential parameter of a container is marked as true, and that container
@@ -7243,7 +7828,7 @@ type ContainerDefinition struct {
 	// on the container. This parameter maps to ExtraHosts in the Create a container
 	// (https://docs.docker.com/engine/api/v1.35/#operation/ContainerCreate) section
 	// of the Docker Remote API (https://docs.docker.com/engine/api/v1.35/) and
-	// the --add-host option to docker run (https://docs.docker.com/engine/reference/run/).
+	// the --add-host option to docker run (https://docs.docker.com/engine/reference/run/#security-configuration).
 	//
 	// This parameter is not supported for Windows containers or tasks that use
 	// the awsvpc network mode.
@@ -7259,13 +7844,13 @@ type ContainerDefinition struct {
 	// for the container. This parameter maps to HealthCheck in the Create a container
 	// (https://docs.docker.com/engine/api/v1.35/#operation/ContainerCreate) section
 	// of the Docker Remote API (https://docs.docker.com/engine/api/v1.35/) and
-	// the HEALTHCHECK parameter of docker run (https://docs.docker.com/engine/reference/run/).
+	// the HEALTHCHECK parameter of docker run (https://docs.docker.com/engine/reference/run/#security-configuration).
 	HealthCheck *HealthCheck `locationName:"healthCheck" type:"structure"`
 
 	// The hostname to use for your container. This parameter maps to Hostname in
 	// the Create a container (https://docs.docker.com/engine/api/v1.35/#operation/ContainerCreate)
 	// section of the Docker Remote API (https://docs.docker.com/engine/api/v1.35/)
-	// and the --hostname option to docker run (https://docs.docker.com/engine/reference/run/).
+	// and the --hostname option to docker run (https://docs.docker.com/engine/reference/run/#security-configuration).
 	//
 	// The hostname parameter is not supported if you are using the awsvpc network
 	// mode.
@@ -7279,7 +7864,7 @@ type ContainerDefinition struct {
 	// signs are allowed. This parameter maps to Image in the Create a container
 	// (https://docs.docker.com/engine/api/v1.35/#operation/ContainerCreate) section
 	// of the Docker Remote API (https://docs.docker.com/engine/api/v1.35/) and
-	// the IMAGE parameter of docker run (https://docs.docker.com/engine/reference/run/).
+	// the IMAGE parameter of docker run (https://docs.docker.com/engine/reference/run/#security-configuration).
 	//
 	//    * When a new task starts, the Amazon ECS container agent pulls the latest
 	//    version of the specified image and tag for the container to use. However,
@@ -7305,19 +7890,19 @@ type ContainerDefinition struct {
 	// that require stdin or a tty to be allocated. This parameter maps to OpenStdin
 	// in the Create a container (https://docs.docker.com/engine/api/v1.35/#operation/ContainerCreate)
 	// section of the Docker Remote API (https://docs.docker.com/engine/api/v1.35/)
-	// and the --interactive option to docker run (https://docs.docker.com/engine/reference/run/).
+	// and the --interactive option to docker run (https://docs.docker.com/engine/reference/run/#security-configuration).
 	Interactive *bool `locationName:"interactive" type:"boolean"`
 
 	// The links parameter allows containers to communicate with each other without
 	// the need for port mappings. This parameter is only supported if the network
 	// mode of a task definition is bridge. The name:internalName construct is analogous
 	// to name:alias in Docker links. Up to 255 letters (uppercase and lowercase),
-	// numbers, and hyphens are allowed. For more information about linking Docker
-	// containers, go to Legacy container links (https://docs.docker.com/network/links/)
+	// numbers, underscores, and hyphens are allowed. For more information about
+	// linking Docker containers, go to Legacy container links (https://docs.docker.com/network/links/)
 	// in the Docker documentation. This parameter maps to Links in the Create a
 	// container (https://docs.docker.com/engine/api/v1.35/#operation/ContainerCreate)
 	// section of the Docker Remote API (https://docs.docker.com/engine/api/v1.35/)
-	// and the --link option to docker run (https://docs.docker.com/engine/reference/run/).
+	// and the --link option to docker run (https://docs.docker.com/engine/reference/run/#security-configuration).
 	//
 	// This parameter is not supported for Windows containers.
 	//
@@ -7337,7 +7922,7 @@ type ContainerDefinition struct {
 	//
 	// This parameter maps to LogConfig in the Create a container (https://docs.docker.com/engine/api/v1.35/#operation/ContainerCreate)
 	// section of the Docker Remote API (https://docs.docker.com/engine/api/v1.35/)
-	// and the --log-driver option to docker run (https://docs.docker.com/engine/reference/run/).
+	// and the --log-driver option to docker run (https://docs.docker.com/engine/reference/run/#security-configuration).
 	// By default, containers use the same logging driver that the Docker daemon
 	// uses. However the container may use a different logging driver than the Docker
 	// daemon by specifying a log driver with this parameter in the container definition.
@@ -7370,7 +7955,7 @@ type ContainerDefinition struct {
 	// lower than the task memory value, if one is specified. This parameter maps
 	// to Memory in the Create a container (https://docs.docker.com/engine/api/v1.35/#operation/ContainerCreate)
 	// section of the Docker Remote API (https://docs.docker.com/engine/api/v1.35/)
-	// and the --memory option to docker run (https://docs.docker.com/engine/reference/run/).
+	// and the --memory option to docker run (https://docs.docker.com/engine/reference/run/#security-configuration).
 	//
 	// If using the Fargate launch type, this parameter is optional.
 	//
@@ -7393,7 +7978,7 @@ type ContainerDefinition struct {
 	// whichever comes first. This parameter maps to MemoryReservation in the Create
 	// a container (https://docs.docker.com/engine/api/v1.35/#operation/ContainerCreate)
 	// section of the Docker Remote API (https://docs.docker.com/engine/api/v1.35/)
-	// and the --memory-reservation option to docker run (https://docs.docker.com/engine/reference/run/).
+	// and the --memory-reservation option to docker run (https://docs.docker.com/engine/reference/run/#security-configuration).
 	//
 	// If a task-level memory value is not specified, you must specify a non-zero
 	// integer for one or both of memory or memoryReservation in a container definition.
@@ -7417,7 +8002,7 @@ type ContainerDefinition struct {
 	//
 	// This parameter maps to Volumes in the Create a container (https://docs.docker.com/engine/api/v1.35/#operation/ContainerCreate)
 	// section of the Docker Remote API (https://docs.docker.com/engine/api/v1.35/)
-	// and the --volume option to docker run (https://docs.docker.com/engine/reference/run/).
+	// and the --volume option to docker run (https://docs.docker.com/engine/reference/run/#security-configuration).
 	//
 	// Windows containers can mount whole directories on the same drive as $env:ProgramData.
 	// Windows containers cannot mount directories on a different drive, and mount
@@ -7427,10 +8012,10 @@ type ContainerDefinition struct {
 	// The name of a container. If you are linking multiple containers together
 	// in a task definition, the name of one container can be entered in the links
 	// of another container to connect the containers. Up to 255 letters (uppercase
-	// and lowercase), numbers, and hyphens are allowed. This parameter maps to
-	// name in the Create a container (https://docs.docker.com/engine/api/v1.35/#operation/ContainerCreate)
+	// and lowercase), numbers, underscores, and hyphens are allowed. This parameter
+	// maps to name in the Create a container (https://docs.docker.com/engine/api/v1.35/#operation/ContainerCreate)
 	// section of the Docker Remote API (https://docs.docker.com/engine/api/v1.35/)
-	// and the --name option to docker run (https://docs.docker.com/engine/reference/run/).
+	// and the --name option to docker run (https://docs.docker.com/engine/reference/run/#security-configuration).
 	Name *string `locationName:"name" type:"string"`
 
 	// The list of port mappings for the container. Port mappings allow containers
@@ -7446,7 +8031,7 @@ type ContainerDefinition struct {
 	//
 	// This parameter maps to PortBindings in the Create a container (https://docs.docker.com/engine/api/v1.35/#operation/ContainerCreate)
 	// section of the Docker Remote API (https://docs.docker.com/engine/api/v1.35/)
-	// and the --publish option to docker run (https://docs.docker.com/engine/reference/run/).
+	// and the --publish option to docker run (https://docs.docker.com/engine/reference/run/#security-configuration).
 	// If the network mode of a task definition is set to none, then you can't specify
 	// port mappings. If the network mode of a task definition is set to host, then
 	// host ports must either be undefined or they must match the container port
@@ -7462,23 +8047,22 @@ type ContainerDefinition struct {
 	// the host container instance (similar to the root user). This parameter maps
 	// to Privileged in the Create a container (https://docs.docker.com/engine/api/v1.35/#operation/ContainerCreate)
 	// section of the Docker Remote API (https://docs.docker.com/engine/api/v1.35/)
-	// and the --privileged option to docker run (https://docs.docker.com/engine/reference/run/).
+	// and the --privileged option to docker run (https://docs.docker.com/engine/reference/run/#security-configuration).
 	//
-	// This parameter is not supported for Windows containers or tasks using the
-	// Fargate launch type.
+	// This parameter is not supported for Windows containers or tasks run on Fargate.
 	Privileged *bool `locationName:"privileged" type:"boolean"`
 
 	// When this parameter is true, a TTY is allocated. This parameter maps to Tty
 	// in the Create a container (https://docs.docker.com/engine/api/v1.35/#operation/ContainerCreate)
 	// section of the Docker Remote API (https://docs.docker.com/engine/api/v1.35/)
-	// and the --tty option to docker run (https://docs.docker.com/engine/reference/run/).
+	// and the --tty option to docker run (https://docs.docker.com/engine/reference/run/#security-configuration).
 	PseudoTerminal *bool `locationName:"pseudoTerminal" type:"boolean"`
 
 	// When this parameter is true, the container is given read-only access to its
 	// root file system. This parameter maps to ReadonlyRootfs in the Create a container
 	// (https://docs.docker.com/engine/api/v1.35/#operation/ContainerCreate) section
 	// of the Docker Remote API (https://docs.docker.com/engine/api/v1.35/) and
-	// the --read-only option to docker run (https://docs.docker.com/engine/reference/run/).
+	// the --read-only option to docker run (https://docs.docker.com/engine/reference/run/#security-configuration).
 	//
 	// This parameter is not supported for Windows containers.
 	ReadonlyRootFilesystem *bool `locationName:"readonlyRootFilesystem" type:"boolean"`
@@ -7503,19 +8087,16 @@ type ContainerDefinition struct {
 	// give up and not start. This results in the task transitioning to a STOPPED
 	// state.
 	//
-	// For tasks using the Fargate launch type, this parameter requires that the
-	// task or service uses platform version 1.3.0 or later. If this parameter is
-	// not specified, the default value of 3 minutes is used.
+	// When the ECS_CONTAINER_START_TIMEOUT container agent configuration variable
+	// is used, it is enforced indendently from this start timeout value.
 	//
-	// For tasks using the EC2 launch type, if the startTimeout parameter is not
-	// specified, the value set for the Amazon ECS container agent configuration
-	// variable ECS_CONTAINER_START_TIMEOUT is used by default. If neither the startTimeout
-	// parameter or the ECS_CONTAINER_START_TIMEOUT agent configuration variable
-	// are set, then the default values of 3 minutes for Linux containers and 8
-	// minutes on Windows containers are used. Your container instances require
-	// at least version 1.26.0 of the container agent to enable a container start
-	// timeout value. However, we recommend using the latest container agent version.
-	// For information about checking your agent version and updating to the latest
+	// For tasks using the Fargate launch type, this parameter requires that the
+	// task or service uses platform version 1.3.0 or later.
+	//
+	// For tasks using the EC2 launch type, your container instances require at
+	// least version 1.26.0 of the container agent to enable a container start timeout
+	// value. However, we recommend using the latest container agent version. For
+	// information about checking your agent version and updating to the latest
 	// version, see Updating the Amazon ECS Container Agent (https://docs.aws.amazon.com/AmazonECS/latest/developerguide/ecs-agent-update.html)
 	// in the Amazon Elastic Container Service Developer Guide. If you are using
 	// an Amazon ECS-optimized Linux AMI, your instance needs at least version 1.26.0-1
@@ -7555,7 +8136,7 @@ type ContainerDefinition struct {
 	// A list of namespaced kernel parameters to set in the container. This parameter
 	// maps to Sysctls in the Create a container (https://docs.docker.com/engine/api/v1.35/#operation/ContainerCreate)
 	// section of the Docker Remote API (https://docs.docker.com/engine/api/v1.35/)
-	// and the --sysctl option to docker run (https://docs.docker.com/engine/reference/run/).
+	// and the --sysctl option to docker run (https://docs.docker.com/engine/reference/run/#security-configuration).
 	//
 	// It is not recommended that you specify network-related systemControls parameters
 	// for multiple containers in a single task that also uses either the awsvpc
@@ -7569,23 +8150,34 @@ type ContainerDefinition struct {
 	// in a task definition, it will override the default values set by Docker.
 	// This parameter maps to Ulimits in the Create a container (https://docs.docker.com/engine/api/v1.35/#operation/ContainerCreate)
 	// section of the Docker Remote API (https://docs.docker.com/engine/api/v1.35/)
-	// and the --ulimit option to docker run (https://docs.docker.com/engine/reference/run/).
-	// Valid naming values are displayed in the Ulimit data type. This parameter
-	// requires version 1.18 of the Docker Remote API or greater on your container
-	// instance. To check the Docker Remote API version on your container instance,
-	// log in to your container instance and run the following command: sudo docker
-	// version --format '{{.Server.APIVersion}}'
+	// and the --ulimit option to docker run (https://docs.docker.com/engine/reference/run/#security-configuration).
+	// Valid naming values are displayed in the Ulimit data type.
+	//
+	// Amazon ECS tasks hosted on Fargate use the default resource limit values
+	// set by the operating system with the exception of the nofile resource limit
+	// parameter which Fargate overrides. The nofile resource limit sets a restriction
+	// on the number of open files that a container can use. The default nofile
+	// soft limit is 1024 and hard limit is 4096.
+	//
+	// This parameter requires version 1.18 of the Docker Remote API or greater
+	// on your container instance. To check the Docker Remote API version on your
+	// container instance, log in to your container instance and run the following
+	// command: sudo docker version --format '{{.Server.APIVersion}}'
 	//
 	// This parameter is not supported for Windows containers.
 	Ulimits []*Ulimit `locationName:"ulimits" type:"list"`
 
-	// The user name to use inside the container. This parameter maps to User in
-	// the Create a container (https://docs.docker.com/engine/api/v1.35/#operation/ContainerCreate)
+	// The user to use inside the container. This parameter maps to User in the
+	// Create a container (https://docs.docker.com/engine/api/v1.35/#operation/ContainerCreate)
 	// section of the Docker Remote API (https://docs.docker.com/engine/api/v1.35/)
-	// and the --user option to docker run (https://docs.docker.com/engine/reference/run/).
+	// and the --user option to docker run (https://docs.docker.com/engine/reference/run/#security-configuration).
 	//
-	// You can use the following formats. If specifying a UID or GID, you must specify
-	// it as a positive integer.
+	// When running tasks using the host network mode, you should not run containers
+	// using the root user (UID 0). It is considered best practice to use a non-root
+	// user.
+	//
+	// You can specify the user using the following formats. If specifying a UID
+	// or GID, you must specify it as a positive integer.
 	//
 	//    * user
 	//
@@ -7605,22 +8197,30 @@ type ContainerDefinition struct {
 	// Data volumes to mount from another container. This parameter maps to VolumesFrom
 	// in the Create a container (https://docs.docker.com/engine/api/v1.35/#operation/ContainerCreate)
 	// section of the Docker Remote API (https://docs.docker.com/engine/api/v1.35/)
-	// and the --volumes-from option to docker run (https://docs.docker.com/engine/reference/run/).
+	// and the --volumes-from option to docker run (https://docs.docker.com/engine/reference/run/#security-configuration).
 	VolumesFrom []*VolumeFrom `locationName:"volumesFrom" type:"list"`
 
 	// The working directory in which to run commands inside the container. This
 	// parameter maps to WorkingDir in the Create a container (https://docs.docker.com/engine/api/v1.35/#operation/ContainerCreate)
 	// section of the Docker Remote API (https://docs.docker.com/engine/api/v1.35/)
-	// and the --workdir option to docker run (https://docs.docker.com/engine/reference/run/).
+	// and the --workdir option to docker run (https://docs.docker.com/engine/reference/run/#security-configuration).
 	WorkingDirectory *string `locationName:"workingDirectory" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ContainerDefinition) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ContainerDefinition) GoString() string {
 	return s.String()
 }
@@ -7986,9 +8586,11 @@ type ContainerDependency struct {
 	//    * COMPLETE - This condition validates that a dependent container runs
 	//    to completion (exits) before permitting other containers to start. This
 	//    can be useful for nonessential containers that run a script and then exit.
+	//    This condition cannot be set on an essential container.
 	//
 	//    * SUCCESS - This condition is the same as COMPLETE, but it also requires
-	//    that the container exits with a zero status.
+	//    that the container exits with a zero status. This condition cannot be
+	//    set on an essential container.
 	//
 	//    * HEALTHY - This condition validates that the dependent container passes
 	//    its Docker health check before permitting other containers to start. This
@@ -8004,12 +8606,20 @@ type ContainerDependency struct {
 	ContainerName *string `locationName:"containerName" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ContainerDependency) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ContainerDependency) GoString() string {
 	return s.String()
 }
@@ -8068,11 +8678,13 @@ type ContainerInstance struct {
 
 	// The Amazon Resource Name (ARN) of the container instance. The ARN contains
 	// the arn:aws:ecs namespace, followed by the Region of the container instance,
-	// the AWS account ID of the container instance owner, the container-instance
+	// the Amazon Web Services account ID of the container instance owner, the container-instance
 	// namespace, and then the container instance ID. For example, arn:aws:ecs:region:aws_account_id:container-instance/container_instance_ID.
 	ContainerInstanceArn *string `locationName:"containerInstanceArn" type:"string"`
 
-	// The EC2 instance ID of the container instance.
+	// The ID of the container instance. For Amazon EC2 instances, this value is
+	// the Amazon EC2 instance ID. For external instances, this value is the Amazon
+	// Web Services Systems Manager managed instance ID.
 	Ec2InstanceId *string `locationName:"ec2InstanceId" type:"string"`
 
 	// The number of tasks on the container instance that are in the PENDING status.
@@ -8148,9 +8760,9 @@ type ContainerInstance struct {
 	//    * Tag keys and values are case-sensitive.
 	//
 	//    * Do not use aws:, AWS:, or any upper or lowercase combination of such
-	//    as a prefix for either keys or values as it is reserved for AWS use. You
-	//    cannot edit or delete tag keys or values with this prefix. Tags with this
-	//    prefix do not count against your tags per resource limit.
+	//    as a prefix for either keys or values as it is reserved for Amazon Web
+	//    Services use. You cannot edit or delete tag keys or values with this prefix.
+	//    Tags with this prefix do not count against your tags per resource limit.
 	Tags []*Tag `locationName:"tags" type:"list"`
 
 	// The version counter for the container instance. Every time a container instance
@@ -8167,12 +8779,20 @@ type ContainerInstance struct {
 	VersionInfo *VersionInfo `locationName:"versionInfo" type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ContainerInstance) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ContainerInstance) GoString() string {
 	return s.String()
 }
@@ -8326,12 +8946,20 @@ type ContainerOverride struct {
 	ResourceRequirements []*ResourceRequirement `locationName:"resourceRequirements" type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ContainerOverride) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ContainerOverride) GoString() string {
 	return s.String()
 }
@@ -8441,12 +9069,20 @@ type ContainerStateChange struct {
 	Status *string `locationName:"status" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ContainerStateChange) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ContainerStateChange) GoString() string {
 	return s.String()
 }
@@ -8531,18 +9167,26 @@ type CreateCapacityProviderInput struct {
 	//    * Tag keys and values are case-sensitive.
 	//
 	//    * Do not use aws:, AWS:, or any upper or lowercase combination of such
-	//    as a prefix for either keys or values as it is reserved for AWS use. You
-	//    cannot edit or delete tag keys or values with this prefix. Tags with this
-	//    prefix do not count against your tags per resource limit.
+	//    as a prefix for either keys or values as it is reserved for Amazon Web
+	//    Services use. You cannot edit or delete tag keys or values with this prefix.
+	//    Tags with this prefix do not count against your tags per resource limit.
 	Tags []*Tag `locationName:"tags" type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateCapacityProviderInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateCapacityProviderInput) GoString() string {
 	return s.String()
 }
@@ -8603,12 +9247,20 @@ type CreateCapacityProviderOutput struct {
 	CapacityProvider *CapacityProvider `locationName:"capacityProvider" type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateCapacityProviderOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateCapacityProviderOutput) GoString() string {
 	return s.String()
 }
@@ -8623,15 +9275,19 @@ type CreateClusterInput struct {
 	_ struct{} `type:"structure"`
 
 	// The short name of one or more capacity providers to associate with the cluster.
+	// A capacity provider must be associated with a cluster before it can be included
+	// as part of the default capacity provider strategy of the cluster or used
+	// in a capacity provider strategy when calling the CreateService or RunTask
+	// actions.
 	//
 	// If specifying a capacity provider that uses an Auto Scaling group, the capacity
 	// provider must already be created and not already associated with another
-	// cluster. New capacity providers can be created with the CreateCapacityProvider
-	// API operation.
+	// cluster. New Auto Scaling group capacity providers can be created with the
+	// CreateCapacityProvider API operation.
 	//
-	// To use a AWS Fargate capacity provider, specify either the FARGATE or FARGATE_SPOT
-	// capacity providers. The AWS Fargate capacity providers are available to all
-	// accounts and only need to be associated with a cluster to be used.
+	// To use a Fargate capacity provider, specify either the FARGATE or FARGATE_SPOT
+	// capacity providers. The Fargate capacity providers are available to all accounts
+	// and only need to be associated with a cluster to be used.
 	//
 	// The PutClusterCapacityProviders API operation is used to update the list
 	// of available capacity providers for a cluster after the cluster is created.
@@ -8639,28 +9295,17 @@ type CreateClusterInput struct {
 
 	// The name of your cluster. If you do not specify a name for your cluster,
 	// you create a cluster named default. Up to 255 letters (uppercase and lowercase),
-	// numbers, and hyphens are allowed.
+	// numbers, underscores, and hyphens are allowed.
 	ClusterName *string `locationName:"clusterName" type:"string"`
 
-	// The capacity provider strategy to use by default for the cluster.
-	//
-	// When creating a service or running a task on a cluster, if no capacity provider
-	// or launch type is specified then the default capacity provider strategy for
-	// the cluster is used.
-	//
-	// A capacity provider strategy consists of one or more capacity providers along
-	// with the base and weight to assign to them. A capacity provider must be associated
-	// with the cluster to be used in a capacity provider strategy. The PutClusterCapacityProviders
-	// API is used to associate a capacity provider with a cluster. Only capacity
-	// providers with an ACTIVE or UPDATING status can be used.
-	//
-	// If specifying a capacity provider that uses an Auto Scaling group, the capacity
-	// provider must already be created. New capacity providers can be created with
-	// the CreateCapacityProvider API operation.
-	//
-	// To use a AWS Fargate capacity provider, specify either the FARGATE or FARGATE_SPOT
-	// capacity providers. The AWS Fargate capacity providers are available to all
-	// accounts and only need to be associated with a cluster to be used.
+	// The execute command configuration for the cluster.
+	Configuration *ClusterConfiguration `locationName:"configuration" type:"structure"`
+
+	// The capacity provider strategy to set as the default for the cluster. When
+	// a default capacity provider strategy is set for a cluster, when calling the
+	// RunTask or CreateService APIs with no capacity provider strategy or launch
+	// type specified, the default capacity provider strategy for the cluster is
+	// used.
 	//
 	// If a default capacity provider strategy is not defined for a cluster during
 	// creation, it can be defined later with the PutClusterCapacityProviders API
@@ -8696,18 +9341,26 @@ type CreateClusterInput struct {
 	//    * Tag keys and values are case-sensitive.
 	//
 	//    * Do not use aws:, AWS:, or any upper or lowercase combination of such
-	//    as a prefix for either keys or values as it is reserved for AWS use. You
-	//    cannot edit or delete tag keys or values with this prefix. Tags with this
-	//    prefix do not count against your tags per resource limit.
+	//    as a prefix for either keys or values as it is reserved for Amazon Web
+	//    Services use. You cannot edit or delete tag keys or values with this prefix.
+	//    Tags with this prefix do not count against your tags per resource limit.
 	Tags []*Tag `locationName:"tags" type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateClusterInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateClusterInput) GoString() string {
 	return s.String()
 }
@@ -8754,6 +9407,12 @@ func (s *CreateClusterInput) SetClusterName(v string) *CreateClusterInput {
 	return s
 }
 
+// SetConfiguration sets the Configuration field's value.
+func (s *CreateClusterInput) SetConfiguration(v *ClusterConfiguration) *CreateClusterInput {
+	s.Configuration = v
+	return s
+}
+
 // SetDefaultCapacityProviderStrategy sets the DefaultCapacityProviderStrategy field's value.
 func (s *CreateClusterInput) SetDefaultCapacityProviderStrategy(v []*CapacityProviderStrategyItem) *CreateClusterInput {
 	s.DefaultCapacityProviderStrategy = v
@@ -8779,12 +9438,20 @@ type CreateClusterOutput struct {
 	Cluster *Cluster `locationName:"cluster" type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateClusterOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateClusterOutput) GoString() string {
 	return s.String()
 }
@@ -8800,26 +9467,11 @@ type CreateServiceInput struct {
 
 	// The capacity provider strategy to use for the service.
 	//
-	// A capacity provider strategy consists of one or more capacity providers along
-	// with the base and weight to assign to them. A capacity provider must be associated
-	// with the cluster to be used in a capacity provider strategy. The PutClusterCapacityProviders
-	// API is used to associate a capacity provider with a cluster. Only capacity
-	// providers with an ACTIVE or UPDATING status can be used.
-	//
 	// If a capacityProviderStrategy is specified, the launchType parameter must
 	// be omitted. If no capacityProviderStrategy or launchType is specified, the
 	// defaultCapacityProviderStrategy for the cluster is used.
 	//
-	// If specifying a capacity provider that uses an Auto Scaling group, the capacity
-	// provider must already be created. New capacity providers can be created with
-	// the CreateCapacityProvider API operation.
-	//
-	// To use a AWS Fargate capacity provider, specify either the FARGATE or FARGATE_SPOT
-	// capacity providers. The AWS Fargate capacity providers are available to all
-	// accounts and only need to be associated with a cluster to be used.
-	//
-	// The PutClusterCapacityProviders API operation is used to update the list
-	// of available capacity providers for a cluster after the cluster is created.
+	// A capacity provider strategy may contain a maximum of 6 capacity providers.
 	CapacityProviderStrategy []*CapacityProviderStrategyItem `locationName:"capacityProviderStrategy" type:"list"`
 
 	// Unique, case-sensitive identifier that you provide to ensure the idempotency
@@ -8835,7 +9487,8 @@ type CreateServiceInput struct {
 	// deployment and the ordering of stopping and starting tasks.
 	DeploymentConfiguration *DeploymentConfiguration `locationName:"deploymentConfiguration" type:"structure"`
 
-	// The deployment controller to use for the service.
+	// The deployment controller to use for the service. If no deployment controller
+	// is specified, the default value of ECS is used.
 	DeploymentController *DeploymentController `locationName:"deploymentController" type:"structure"`
 
 	// The number of instantiations of the specified task definition to place and
@@ -8851,6 +9504,11 @@ type CreateServiceInput struct {
 	// in the Amazon Elastic Container Service Developer Guide.
 	EnableECSManagedTags *bool `locationName:"enableECSManagedTags" type:"boolean"`
 
+	// Whether or not the execute command functionality is enabled for the service.
+	// If true, this enables execute command functionality on all containers in
+	// the service tasks.
+	EnableExecuteCommand *bool `locationName:"enableExecuteCommand" type:"boolean"`
+
 	// The period of time, in seconds, that the Amazon ECS service scheduler should
 	// ignore unhealthy Elastic Load Balancing target health checks after a task
 	// has first started. This is only used when your service is configured to use
@@ -8865,12 +9523,26 @@ type CreateServiceInput struct {
 	// come up.
 	HealthCheckGracePeriodSeconds *int64 `locationName:"healthCheckGracePeriodSeconds" type:"integer"`
 
-	// The launch type on which to run your service. For more information, see Amazon
-	// ECS Launch Types (https://docs.aws.amazon.com/AmazonECS/latest/developerguide/launch_types.html)
+	// The infrastructure on which to run your service. For more information, see
+	// Amazon ECS launch types (https://docs.aws.amazon.com/AmazonECS/latest/developerguide/launch_types.html)
 	// in the Amazon Elastic Container Service Developer Guide.
 	//
-	// If a launchType is specified, the capacityProviderStrategy parameter must
-	// be omitted.
+	// The FARGATE launch type runs your tasks on Fargate On-Demand infrastructure.
+	//
+	// Fargate Spot infrastructure is available for use but a capacity provider
+	// strategy must be used. For more information, see Fargate capacity providers
+	// (https://docs.aws.amazon.com/AmazonECS/latest/userguide/fargate-capacity-providers.html)
+	// in the Amazon ECS User Guide for Fargate.
+	//
+	// The EC2 launch type runs your tasks on Amazon EC2 instances registered to
+	// your cluster.
+	//
+	// The EXTERNAL launch type runs your tasks on your on-premise server or virtual
+	// machine (VM) capacity registered to your cluster.
+	//
+	// A service can use either a launch type or a capacity provider strategy. If
+	// a launchType is specified, the capacityProviderStrategy parameter must be
+	// omitted.
 	LaunchType *string `locationName:"launchType" type:"string" enum:"LaunchType"`
 
 	// A load balancer object representing the load balancers to use with your service.
@@ -8878,19 +9550,19 @@ type CreateServiceInput struct {
 	// in the Amazon Elastic Container Service Developer Guide.
 	//
 	// If the service is using the rolling update (ECS) deployment controller and
-	// using either an Application Load Balancer or Network Load Balancer, you can
-	// specify multiple target groups to attach to the service. The service-linked
+	// using either an Application Load Balancer or Network Load Balancer, you must
+	// specify one or more target group ARNs to attach to the service. The service-linked
 	// role is required for services that make use of multiple target groups. For
-	// more information, see Using Service-Linked Roles for Amazon ECS (https://docs.aws.amazon.com/AmazonECS/latest/developerguide/using-service-linked-roles.html)
+	// more information, see Using service-linked roles for Amazon ECS (https://docs.aws.amazon.com/AmazonECS/latest/developerguide/using-service-linked-roles.html)
 	// in the Amazon Elastic Container Service Developer Guide.
 	//
 	// If the service is using the CODE_DEPLOY deployment controller, the service
 	// is required to use either an Application Load Balancer or Network Load Balancer.
-	// When creating an AWS CodeDeploy deployment group, you specify two target
-	// groups (referred to as a targetGroupPair). During a deployment, AWS CodeDeploy
-	// determines which task set in your service has the status PRIMARY and associates
-	// one target group with it, and then associates the other target group with
-	// the replacement task set. The load balancer can also have up to two listeners:
+	// When creating an CodeDeploy deployment group, you specify two target groups
+	// (referred to as a targetGroupPair). During a deployment, CodeDeploy determines
+	// which task set in your service has the status PRIMARY and associates one
+	// target group with it, and then associates the other target group with the
+	// replacement task set. The load balancer can also have up to two listeners:
 	// a required listener for production traffic and an optional listener that
 	// allows you perform validation tests with Lambda functions before routing
 	// production traffic to it.
@@ -8903,15 +9575,16 @@ type CreateServiceInput struct {
 	// For Application Load Balancers and Network Load Balancers, this object must
 	// contain the load balancer target group ARN, the container name (as it appears
 	// in a container definition), and the container port to access from the load
-	// balancer. When a task from this service is placed on a container instance,
-	// the container instance and port combination is registered as a target in
-	// the target group specified here.
+	// balancer. The load balancer name parameter must be omitted. When a task from
+	// this service is placed on a container instance, the container instance and
+	// port combination is registered as a target in the target group specified
+	// here.
 	//
 	// For Classic Load Balancers, this object must contain the load balancer name,
 	// the container name (as it appears in a container definition), and the container
-	// port to access from the load balancer. When a task from this service is placed
-	// on a container instance, the container instance is registered with the load
-	// balancer specified here.
+	// port to access from the load balancer. The target group ARN parameter must
+	// be omitted. When a task from this service is placed on a container instance,
+	// the container instance is registered with the load balancer specified here.
 	//
 	// Services with tasks that use the awsvpc network mode (for example, those
 	// with the Fargate launch type) only support Application Load Balancers and
@@ -8924,7 +9597,7 @@ type CreateServiceInput struct {
 	// The network configuration for the service. This parameter is required for
 	// task definitions that use the awsvpc network mode to receive their own elastic
 	// network interface, and it is not supported for other network modes. For more
-	// information, see Task Networking (https://docs.aws.amazon.com/AmazonECS/latest/developerguide/task-networking.html)
+	// information, see Task networking (https://docs.aws.amazon.com/AmazonECS/latest/developerguide/task-networking.html)
 	// in the Amazon Elastic Container Service Developer Guide.
 	NetworkConfiguration *NetworkConfiguration `locationName:"networkConfiguration" type:"structure"`
 
@@ -8934,21 +9607,21 @@ type CreateServiceInput struct {
 	PlacementConstraints []*PlacementConstraint `locationName:"placementConstraints" type:"list"`
 
 	// The placement strategy objects to use for tasks in your service. You can
-	// specify a maximum of five strategy rules per service.
+	// specify a maximum of 5 strategy rules per service.
 	PlacementStrategy []*PlacementStrategy `locationName:"placementStrategy" type:"list"`
 
 	// The platform version that your tasks in the service are running on. A platform
 	// version is specified only for tasks using the Fargate launch type. If one
 	// isn't specified, the LATEST platform version is used by default. For more
-	// information, see AWS Fargate Platform Versions (https://docs.aws.amazon.com/AmazonECS/latest/developerguide/platform_versions.html)
+	// information, see Fargate platform versions (https://docs.aws.amazon.com/AmazonECS/latest/developerguide/platform_versions.html)
 	// in the Amazon Elastic Container Service Developer Guide.
 	PlatformVersion *string `locationName:"platformVersion" type:"string"`
 
 	// Specifies whether to propagate the tags from the task definition or the service
 	// to the tasks in the service. If no value is specified, the tags are not propagated.
 	// Tags can only be propagated to the tasks within the service during service
-	// creation. To add tags to a task after service creation, use the TagResource
-	// API action.
+	// creation. To add tags to a task after service creation or task creation,
+	// use the TagResource API action.
 	PropagateTags *string `locationName:"propagateTags" type:"string" enum:"PropagateTags"`
 
 	// The name or full Amazon Resource Name (ARN) of the IAM role that allows Amazon
@@ -8964,14 +9637,14 @@ type CreateServiceInput struct {
 	// network mode or if the service is configured to use service discovery, an
 	// external deployment controller, multiple target groups, or Elastic Inference
 	// accelerators in which case you should not specify a role here. For more information,
-	// see Using Service-Linked Roles for Amazon ECS (https://docs.aws.amazon.com/AmazonECS/latest/developerguide/using-service-linked-roles.html)
+	// see Using service-linked roles for Amazon ECS (https://docs.aws.amazon.com/AmazonECS/latest/developerguide/using-service-linked-roles.html)
 	// in the Amazon Elastic Container Service Developer Guide.
 	//
 	// If your specified role has a path other than /, then you must either specify
 	// the full role ARN (this is recommended) or prefix the role name with the
 	// path. For example, if a role with the name bar has a path of /foo/ then you
 	// would specify /foo/bar as the role name. For more information, see Friendly
-	// Names and Paths (https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_identifiers.html#identifiers-friendly-names)
+	// names and paths (https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_identifiers.html#identifiers-friendly-names)
 	// in the IAM User Guide.
 	Role *string `locationName:"role" type:"string"`
 
@@ -8999,19 +9672,18 @@ type CreateServiceInput struct {
 	SchedulingStrategy *string `locationName:"schedulingStrategy" type:"string" enum:"SchedulingStrategy"`
 
 	// The name of your service. Up to 255 letters (uppercase and lowercase), numbers,
-	// and hyphens are allowed. Service names must be unique within a cluster, but
-	// you can have similarly named services in multiple clusters within a Region
-	// or across multiple Regions.
+	// underscores, and hyphens are allowed. Service names must be unique within
+	// a cluster, but you can have similarly named services in multiple clusters
+	// within a Region or across multiple Regions.
 	//
 	// ServiceName is a required field
 	ServiceName *string `locationName:"serviceName" type:"string" required:"true"`
 
-	// The details of the service discovery registries to assign to this service.
-	// For more information, see Service Discovery (https://docs.aws.amazon.com/AmazonECS/latest/developerguide/service-discovery.html).
+	// The details of the service discovery registry to associate with this service.
+	// For more information, see Service discovery (https://docs.aws.amazon.com/AmazonECS/latest/developerguide/service-discovery.html).
 	//
-	// Service discovery is supported for Fargate tasks if you are using platform
-	// version v1.1.0 or later. For more information, see AWS Fargate Platform Versions
-	// (https://docs.aws.amazon.com/AmazonECS/latest/developerguide/platform_versions.html).
+	// Each service may be associated with one service registry. Multiple service
+	// registries per service isn't supported.
 	ServiceRegistries []*ServiceRegistry `locationName:"serviceRegistries" type:"list"`
 
 	// The metadata that you apply to the service to help you categorize and organize
@@ -9037,26 +9709,34 @@ type CreateServiceInput struct {
 	//    * Tag keys and values are case-sensitive.
 	//
 	//    * Do not use aws:, AWS:, or any upper or lowercase combination of such
-	//    as a prefix for either keys or values as it is reserved for AWS use. You
-	//    cannot edit or delete tag keys or values with this prefix. Tags with this
-	//    prefix do not count against your tags per resource limit.
+	//    as a prefix for either keys or values as it is reserved for Amazon Web
+	//    Services use. You cannot edit or delete tag keys or values with this prefix.
+	//    Tags with this prefix do not count against your tags per resource limit.
 	Tags []*Tag `locationName:"tags" type:"list"`
 
 	// The family and revision (family:revision) or full ARN of the task definition
 	// to run in your service. If a revision is not specified, the latest ACTIVE
 	// revision is used.
 	//
-	// A task definition must be specified if the service is using the ECS deployment
-	// controller.
+	// A task definition must be specified if the service is using either the ECS
+	// or CODE_DEPLOY deployment controllers.
 	TaskDefinition *string `locationName:"taskDefinition" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateServiceInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateServiceInput) GoString() string {
 	return s.String()
 }
@@ -9075,6 +9755,11 @@ func (s *CreateServiceInput) Validate() error {
 			if err := v.Validate(); err != nil {
 				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "CapacityProviderStrategy", i), err.(request.ErrInvalidParams))
 			}
+		}
+	}
+	if s.DeploymentConfiguration != nil {
+		if err := s.DeploymentConfiguration.Validate(); err != nil {
+			invalidParams.AddNested("DeploymentConfiguration", err.(request.ErrInvalidParams))
 		}
 	}
 	if s.DeploymentController != nil {
@@ -9143,6 +9828,12 @@ func (s *CreateServiceInput) SetDesiredCount(v int64) *CreateServiceInput {
 // SetEnableECSManagedTags sets the EnableECSManagedTags field's value.
 func (s *CreateServiceInput) SetEnableECSManagedTags(v bool) *CreateServiceInput {
 	s.EnableECSManagedTags = &v
+	return s
+}
+
+// SetEnableExecuteCommand sets the EnableExecuteCommand field's value.
+func (s *CreateServiceInput) SetEnableExecuteCommand(v bool) *CreateServiceInput {
+	s.EnableExecuteCommand = &v
 	return s
 }
 
@@ -9235,6 +9926,9 @@ type CreateServiceOutput struct {
 
 	// The full description of your service following the create call.
 	//
+	// A service will return either a capacityProviderStrategy or launchType parameter,
+	// but not both, depending on which one was specified during creation.
+	//
 	// If a service is using the ECS deployment controller, the deploymentController
 	// and taskSets parameters will not be returned.
 	//
@@ -9244,12 +9938,20 @@ type CreateServiceOutput struct {
 	Service *Service `locationName:"service" type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateServiceOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateServiceOutput) GoString() string {
 	return s.String()
 }
@@ -9279,9 +9981,9 @@ type CreateTaskSetInput struct {
 	// provider must already be created. New capacity providers can be created with
 	// the CreateCapacityProvider API operation.
 	//
-	// To use a AWS Fargate capacity provider, specify either the FARGATE or FARGATE_SPOT
-	// capacity providers. The AWS Fargate capacity providers are available to all
-	// accounts and only need to be associated with a cluster to be used.
+	// To use a Fargate capacity provider, specify either the FARGATE or FARGATE_SPOT
+	// capacity providers. The Fargate capacity providers are available to all accounts
+	// and only need to be associated with a cluster to be used.
 	//
 	// The PutClusterCapacityProviders API operation is used to update the list
 	// of available capacity providers for a cluster after the cluster is created.
@@ -9299,7 +10001,7 @@ type CreateTaskSetInput struct {
 
 	// An optional non-unique tag that identifies this task set in external systems.
 	// If the task set is associated with a service discovery registry, the tasks
-	// in this task set will have the ECS_TASK_SET_EXTERNAL_ID AWS Cloud Map attribute
+	// in this task set will have the ECS_TASK_SET_EXTERNAL_ID Cloud Map attribute
 	// set to the provided value.
 	ExternalId *string `locationName:"externalId" type:"string"`
 
@@ -9316,7 +10018,7 @@ type CreateTaskSetInput struct {
 	// or a Network Load Balancer.
 	LoadBalancers []*LoadBalancer `locationName:"loadBalancers" type:"list"`
 
-	// An object representing the network configuration for a task or service.
+	// An object representing the network configuration for a task set.
 	NetworkConfiguration *NetworkConfiguration `locationName:"networkConfiguration" type:"structure"`
 
 	// The platform version that the tasks in the task set should use. A platform
@@ -9361,9 +10063,9 @@ type CreateTaskSetInput struct {
 	//    * Tag keys and values are case-sensitive.
 	//
 	//    * Do not use aws:, AWS:, or any upper or lowercase combination of such
-	//    as a prefix for either keys or values as it is reserved for AWS use. You
-	//    cannot edit or delete tag keys or values with this prefix. Tags with this
-	//    prefix do not count against your tags per resource limit.
+	//    as a prefix for either keys or values as it is reserved for Amazon Web
+	//    Services use. You cannot edit or delete tag keys or values with this prefix.
+	//    Tags with this prefix do not count against your tags per resource limit.
 	Tags []*Tag `locationName:"tags" type:"list"`
 
 	// The task definition for the tasks in the task set to use.
@@ -9372,12 +10074,20 @@ type CreateTaskSetInput struct {
 	TaskDefinition *string `locationName:"taskDefinition" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateTaskSetInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateTaskSetInput) GoString() string {
 	return s.String()
 }
@@ -9507,19 +10217,27 @@ func (s *CreateTaskSetInput) SetTaskDefinition(v string) *CreateTaskSetInput {
 type CreateTaskSetOutput struct {
 	_ struct{} `type:"structure"`
 
-	// Information about a set of Amazon ECS tasks in either an AWS CodeDeploy or
-	// an EXTERNAL deployment. An Amazon ECS task set includes details such as the
-	// desired number of tasks, how many tasks are running, and whether the task
-	// set serves production traffic.
+	// Information about a set of Amazon ECS tasks in either an CodeDeploy or an
+	// EXTERNAL deployment. A task set includes details such as the desired number
+	// of tasks, how many tasks are running, and whether the task set serves production
+	// traffic.
 	TaskSet *TaskSet `locationName:"taskSet" type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateTaskSetOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateTaskSetOutput) GoString() string {
 	return s.String()
 }
@@ -9551,12 +10269,20 @@ type DeleteAccountSettingInput struct {
 	PrincipalArn *string `locationName:"principalArn" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteAccountSettingInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteAccountSettingInput) GoString() string {
 	return s.String()
 }
@@ -9593,12 +10319,20 @@ type DeleteAccountSettingOutput struct {
 	Setting *Setting `locationName:"setting" type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteAccountSettingOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteAccountSettingOutput) GoString() string {
 	return s.String()
 }
@@ -9626,12 +10360,20 @@ type DeleteAttributesInput struct {
 	Cluster *string `locationName:"cluster" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteAttributesInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteAttributesInput) GoString() string {
 	return s.String()
 }
@@ -9678,12 +10420,20 @@ type DeleteAttributesOutput struct {
 	Attributes []*Attribute `locationName:"attributes" type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteAttributesOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteAttributesOutput) GoString() string {
 	return s.String()
 }
@@ -9704,12 +10454,20 @@ type DeleteCapacityProviderInput struct {
 	CapacityProvider *string `locationName:"capacityProvider" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteCapacityProviderInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteCapacityProviderInput) GoString() string {
 	return s.String()
 }
@@ -9736,16 +10494,24 @@ func (s *DeleteCapacityProviderInput) SetCapacityProvider(v string) *DeleteCapac
 type DeleteCapacityProviderOutput struct {
 	_ struct{} `type:"structure"`
 
-	// The details of a capacity provider.
+	// The details of the capacity provider.
 	CapacityProvider *CapacityProvider `locationName:"capacityProvider" type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteCapacityProviderOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteCapacityProviderOutput) GoString() string {
 	return s.String()
 }
@@ -9765,12 +10531,20 @@ type DeleteClusterInput struct {
 	Cluster *string `locationName:"cluster" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteClusterInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteClusterInput) GoString() string {
 	return s.String()
 }
@@ -9801,12 +10575,20 @@ type DeleteClusterOutput struct {
 	Cluster *Cluster `locationName:"cluster" type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteClusterOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteClusterOutput) GoString() string {
 	return s.String()
 }
@@ -9836,12 +10618,20 @@ type DeleteServiceInput struct {
 	Service *string `locationName:"service" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteServiceInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteServiceInput) GoString() string {
 	return s.String()
 }
@@ -9884,12 +10674,20 @@ type DeleteServiceOutput struct {
 	Service *Service `locationName:"service" type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteServiceOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteServiceOutput) GoString() string {
 	return s.String()
 }
@@ -9925,12 +10723,20 @@ type DeleteTaskSetInput struct {
 	TaskSet *string `locationName:"taskSet" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteTaskSetInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteTaskSetInput) GoString() string {
 	return s.String()
 }
@@ -9981,19 +10787,24 @@ func (s *DeleteTaskSetInput) SetTaskSet(v string) *DeleteTaskSetInput {
 type DeleteTaskSetOutput struct {
 	_ struct{} `type:"structure"`
 
-	// Information about a set of Amazon ECS tasks in either an AWS CodeDeploy or
-	// an EXTERNAL deployment. An Amazon ECS task set includes details such as the
-	// desired number of tasks, how many tasks are running, and whether the task
-	// set serves production traffic.
+	// Details about the task set.
 	TaskSet *TaskSet `locationName:"taskSet" type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteTaskSetOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteTaskSetOutput) GoString() string {
 	return s.String()
 }
@@ -10019,6 +10830,15 @@ type Deployment struct {
 	// to deploy or maintain.
 	DesiredCount *int64 `locationName:"desiredCount" type:"integer"`
 
+	// The number of consecutively failed tasks in the deployment. A task is considered
+	// a failure if the service scheduler can't launch the task, the task doesn't
+	// transition to a RUNNING state, or if it fails any of its defined health checks
+	// and is stopped.
+	//
+	// Once a service deployment has one or more successfully running tasks, the
+	// failed task count resets to zero and stops being evaluated.
+	FailedTasks *int64 `locationName:"failedTasks" type:"integer"`
+
 	// The ID of the deployment.
 	Id *string `locationName:"id" type:"string"`
 
@@ -10037,9 +10857,24 @@ type Deployment struct {
 	// The platform version on which your tasks in the service are running. A platform
 	// version is only specified for tasks using the Fargate launch type. If one
 	// is not specified, the LATEST platform version is used by default. For more
-	// information, see AWS Fargate Platform Versions (https://docs.aws.amazon.com/AmazonECS/latest/developerguide/platform_versions.html)
+	// information, see Fargate Platform Versions (https://docs.aws.amazon.com/AmazonECS/latest/developerguide/platform_versions.html)
 	// in the Amazon Elastic Container Service Developer Guide.
 	PlatformVersion *string `locationName:"platformVersion" type:"string"`
+
+	//
+	// The rolloutState of a service is only returned for services that use the
+	// rolling update (ECS) deployment type that are not behind a Classic Load Balancer.
+	//
+	// The rollout state of the deployment. When a service deployment is started,
+	// it begins in an IN_PROGRESS state. When the service reaches a steady state,
+	// the deployment will transition to a COMPLETED state. If the service fails
+	// to reach a steady state and circuit breaker is enabled, the deployment will
+	// transition to a FAILED state. A deployment in FAILED state will launch no
+	// new tasks. For more information, see DeploymentCircuitBreaker.
+	RolloutState *string `locationName:"rolloutState" type:"string" enum:"DeploymentRolloutState"`
+
+	// A description of the rollout state of a deployment.
+	RolloutStateReason *string `locationName:"rolloutStateReason" type:"string"`
 
 	// The number of tasks in the deployment that are in the RUNNING status.
 	RunningCount *int64 `locationName:"runningCount" type:"integer"`
@@ -10068,12 +10903,20 @@ type Deployment struct {
 	UpdatedAt *time.Time `locationName:"updatedAt" type:"timestamp"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s Deployment) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s Deployment) GoString() string {
 	return s.String()
 }
@@ -10093,6 +10936,12 @@ func (s *Deployment) SetCreatedAt(v time.Time) *Deployment {
 // SetDesiredCount sets the DesiredCount field's value.
 func (s *Deployment) SetDesiredCount(v int64) *Deployment {
 	s.DesiredCount = &v
+	return s
+}
+
+// SetFailedTasks sets the FailedTasks field's value.
+func (s *Deployment) SetFailedTasks(v int64) *Deployment {
+	s.FailedTasks = &v
 	return s
 }
 
@@ -10126,6 +10975,18 @@ func (s *Deployment) SetPlatformVersion(v string) *Deployment {
 	return s
 }
 
+// SetRolloutState sets the RolloutState field's value.
+func (s *Deployment) SetRolloutState(v string) *Deployment {
+	s.RolloutState = &v
+	return s
+}
+
+// SetRolloutStateReason sets the RolloutStateReason field's value.
+func (s *Deployment) SetRolloutStateReason(v string) *Deployment {
+	s.RolloutStateReason = &v
+	return s
+}
+
 // SetRunningCount sets the RunningCount field's value.
 func (s *Deployment) SetRunningCount(v int64) *Deployment {
 	s.RunningCount = &v
@@ -10150,10 +11011,93 @@ func (s *Deployment) SetUpdatedAt(v time.Time) *Deployment {
 	return s
 }
 
+//
+// The deployment circuit breaker can only be used for services using the rolling
+// update (ECS) deployment type that are not behind a Classic Load Balancer.
+//
+// The deployment circuit breaker determines whether a service deployment will
+// fail if the service can't reach a steady state. If enabled, a service deployment
+// will transition to a failed state and stop launching new tasks. You can also
+// enable Amazon ECS to roll back your service to the last completed deployment
+// after a failure. For more information, see Rolling update (https://docs.aws.amazon.com/AmazonECS/latest/developerguide/deployment-type-ecs.html)
+// in the Amazon Elastic Container Service Developer Guide.
+type DeploymentCircuitBreaker struct {
+	_ struct{} `type:"structure"`
+
+	// Whether to enable the deployment circuit breaker logic for the service.
+	//
+	// Enable is a required field
+	Enable *bool `locationName:"enable" type:"boolean" required:"true"`
+
+	// Whether to enable Amazon ECS to roll back the service if a service deployment
+	// fails. If rollback is enabled, when a service deployment fails, the service
+	// is rolled back to the last deployment that completed successfully.
+	//
+	// Rollback is a required field
+	Rollback *bool `locationName:"rollback" type:"boolean" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeploymentCircuitBreaker) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeploymentCircuitBreaker) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DeploymentCircuitBreaker) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DeploymentCircuitBreaker"}
+	if s.Enable == nil {
+		invalidParams.Add(request.NewErrParamRequired("Enable"))
+	}
+	if s.Rollback == nil {
+		invalidParams.Add(request.NewErrParamRequired("Rollback"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetEnable sets the Enable field's value.
+func (s *DeploymentCircuitBreaker) SetEnable(v bool) *DeploymentCircuitBreaker {
+	s.Enable = &v
+	return s
+}
+
+// SetRollback sets the Rollback field's value.
+func (s *DeploymentCircuitBreaker) SetRollback(v bool) *DeploymentCircuitBreaker {
+	s.Rollback = &v
+	return s
+}
+
 // Optional deployment parameters that control how many tasks run during a deployment
 // and the ordering of stopping and starting tasks.
 type DeploymentConfiguration struct {
 	_ struct{} `type:"structure"`
+
+	//
+	// The deployment circuit breaker can only be used for services using the rolling
+	// update (ECS) deployment type.
+	//
+	// The deployment circuit breaker determines whether a service deployment will
+	// fail if the service can't reach a steady state. If deployment circuit breaker
+	// is enabled, a service deployment will transition to a failed state and stop
+	// launching new tasks. If rollback is enabled, when a service deployment fails,
+	// the service is rolled back to the last deployment that completed successfully.
+	DeploymentCircuitBreaker *DeploymentCircuitBreaker `locationName:"deploymentCircuitBreaker" type:"structure"`
 
 	// If a service is using the rolling update (ECS) deployment type, the maximum
 	// percent parameter represents an upper limit on the number of tasks in a service
@@ -10201,14 +11145,43 @@ type DeploymentConfiguration struct {
 	MinimumHealthyPercent *int64 `locationName:"minimumHealthyPercent" type:"integer"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeploymentConfiguration) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeploymentConfiguration) GoString() string {
 	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DeploymentConfiguration) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DeploymentConfiguration"}
+	if s.DeploymentCircuitBreaker != nil {
+		if err := s.DeploymentCircuitBreaker.Validate(); err != nil {
+			invalidParams.AddNested("DeploymentCircuitBreaker", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetDeploymentCircuitBreaker sets the DeploymentCircuitBreaker field's value.
+func (s *DeploymentConfiguration) SetDeploymentCircuitBreaker(v *DeploymentCircuitBreaker) *DeploymentConfiguration {
+	s.DeploymentCircuitBreaker = v
+	return s
 }
 
 // SetMaximumPercent sets the MaximumPercent field's value.
@@ -10244,7 +11217,7 @@ type DeploymentController struct {
 	// CODE_DEPLOY
 	//
 	// The blue/green (CODE_DEPLOY) deployment type uses the blue/green deployment
-	// model powered by AWS CodeDeploy, which allows you to verify a new deployment
+	// model powered by CodeDeploy, which allows you to verify a new deployment
 	// of a service before sending production traffic to it.
 	//
 	// EXTERNAL
@@ -10257,12 +11230,20 @@ type DeploymentController struct {
 	Type *string `locationName:"type" type:"string" required:"true" enum:"DeploymentControllerType"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeploymentController) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeploymentController) GoString() string {
 	return s.String()
 }
@@ -10296,9 +11277,9 @@ type DeregisterContainerInstanceInput struct {
 
 	// The container instance ID or full ARN of the container instance to deregister.
 	// The ARN contains the arn:aws:ecs namespace, followed by the Region of the
-	// container instance, the AWS account ID of the container instance owner, the
-	// container-instance namespace, and then the container instance ID. For example,
-	// arn:aws:ecs:region:aws_account_id:container-instance/container_instance_ID.
+	// container instance, the Amazon Web Services account ID of the container instance
+	// owner, the container-instance namespace, and then the container instance
+	// ID. For example, arn:aws:ecs:region:aws_account_id:container-instance/container_instance_ID.
 	//
 	// ContainerInstance is a required field
 	ContainerInstance *string `locationName:"containerInstance" type:"string" required:"true"`
@@ -10318,12 +11299,20 @@ type DeregisterContainerInstanceInput struct {
 	Force *bool `locationName:"force" type:"boolean"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeregisterContainerInstanceInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeregisterContainerInstanceInput) GoString() string {
 	return s.String()
 }
@@ -10366,12 +11355,20 @@ type DeregisterContainerInstanceOutput struct {
 	ContainerInstance *ContainerInstance `locationName:"containerInstance" type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeregisterContainerInstanceOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeregisterContainerInstanceOutput) GoString() string {
 	return s.String()
 }
@@ -10392,12 +11389,20 @@ type DeregisterTaskDefinitionInput struct {
 	TaskDefinition *string `locationName:"taskDefinition" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeregisterTaskDefinitionInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeregisterTaskDefinitionInput) GoString() string {
 	return s.String()
 }
@@ -10428,12 +11433,20 @@ type DeregisterTaskDefinitionOutput struct {
 	TaskDefinition *TaskDefinition `locationName:"taskDefinition" type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeregisterTaskDefinitionOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeregisterTaskDefinitionOutput) GoString() string {
 	return s.String()
 }
@@ -10475,12 +11488,20 @@ type DescribeCapacityProvidersInput struct {
 	NextToken *string `locationName:"nextToken" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeCapacityProvidersInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeCapacityProvidersInput) GoString() string {
 	return s.String()
 }
@@ -10525,12 +11546,20 @@ type DescribeCapacityProvidersOutput struct {
 	NextToken *string `locationName:"nextToken" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeCapacityProvidersOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeCapacityProvidersOutput) GoString() string {
 	return s.String()
 }
@@ -10560,43 +11589,37 @@ type DescribeClustersInput struct {
 	// entries. If you do not specify a cluster, the default cluster is assumed.
 	Clusters []*string `locationName:"clusters" type:"list"`
 
-	// Whether to include additional information about your clusters in the response.
-	// If this field is omitted, the attachments, statistics, and tags are not included.
+	// Whether to include additional information about the clusters in the response.
+	// If this field is omitted, this information isn't included.
 	//
 	// If ATTACHMENTS is specified, the attachments for the container instances
 	// or tasks within the cluster are included.
 	//
 	// If SETTINGS is specified, the settings for the cluster are included.
 	//
-	// If STATISTICS is specified, the following additional information, separated
-	// by launch type, is included:
+	// If CONFIGURATIONS is specified, the configuration for the cluster is included.
 	//
-	//    * runningEC2TasksCount
-	//
-	//    * runningFargateTasksCount
-	//
-	//    * pendingEC2TasksCount
-	//
-	//    * pendingFargateTasksCount
-	//
-	//    * activeEC2ServiceCount
-	//
-	//    * activeFargateServiceCount
-	//
-	//    * drainingEC2ServiceCount
-	//
-	//    * drainingFargateServiceCount
+	// If STATISTICS is specified, the task and service count is included, separated
+	// by launch type.
 	//
 	// If TAGS is specified, the metadata tags associated with the cluster are included.
 	Include []*string `locationName:"include" type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeClustersInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeClustersInput) GoString() string {
 	return s.String()
 }
@@ -10623,12 +11646,20 @@ type DescribeClustersOutput struct {
 	Failures []*Failure `locationName:"failures" type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeClustersOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeClustersOutput) GoString() string {
 	return s.String()
 }
@@ -10667,12 +11698,20 @@ type DescribeContainerInstancesInput struct {
 	Include []*string `locationName:"include" type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeContainerInstancesInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeContainerInstancesInput) GoString() string {
 	return s.String()
 }
@@ -10718,12 +11757,20 @@ type DescribeContainerInstancesOutput struct {
 	Failures []*Failure `locationName:"failures" type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeContainerInstancesOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeContainerInstancesOutput) GoString() string {
 	return s.String()
 }
@@ -10761,12 +11808,20 @@ type DescribeServicesInput struct {
 	Services []*string `locationName:"services" type:"list" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeServicesInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeServicesInput) GoString() string {
 	return s.String()
 }
@@ -10812,12 +11867,20 @@ type DescribeServicesOutput struct {
 	Services []*Service `locationName:"services" type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeServicesOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeServicesOutput) GoString() string {
 	return s.String()
 }
@@ -10850,12 +11913,20 @@ type DescribeTaskDefinitionInput struct {
 	TaskDefinition *string `locationName:"taskDefinition" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeTaskDefinitionInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeTaskDefinitionInput) GoString() string {
 	return s.String()
 }
@@ -10911,21 +11982,29 @@ type DescribeTaskDefinitionOutput struct {
 	//    * Tag keys and values are case-sensitive.
 	//
 	//    * Do not use aws:, AWS:, or any upper or lowercase combination of such
-	//    as a prefix for either keys or values as it is reserved for AWS use. You
-	//    cannot edit or delete tag keys or values with this prefix. Tags with this
-	//    prefix do not count against your tags per resource limit.
+	//    as a prefix for either keys or values as it is reserved for Amazon Web
+	//    Services use. You cannot edit or delete tag keys or values with this prefix.
+	//    Tags with this prefix do not count against your tags per resource limit.
 	Tags []*Tag `locationName:"tags" type:"list"`
 
 	// The full task definition description.
 	TaskDefinition *TaskDefinition `locationName:"taskDefinition" type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeTaskDefinitionOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeTaskDefinitionOutput) GoString() string {
 	return s.String()
 }
@@ -10966,12 +12045,20 @@ type DescribeTaskSetsInput struct {
 	TaskSets []*string `locationName:"taskSets" type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeTaskSetsInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeTaskSetsInput) GoString() string {
 	return s.String()
 }
@@ -11026,12 +12113,20 @@ type DescribeTaskSetsOutput struct {
 	TaskSets []*TaskSet `locationName:"taskSets" type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeTaskSetsOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeTaskSetsOutput) GoString() string {
 	return s.String()
 }
@@ -11068,12 +12163,20 @@ type DescribeTasksInput struct {
 	Tasks []*string `locationName:"tasks" type:"list" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeTasksInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeTasksInput) GoString() string {
 	return s.String()
 }
@@ -11119,12 +12222,20 @@ type DescribeTasksOutput struct {
 	Tasks []*Task `locationName:"tasks" type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeTasksOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeTasksOutput) GoString() string {
 	return s.String()
 }
@@ -11158,12 +12269,20 @@ type Device struct {
 	Permissions []*string `locationName:"permissions" type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s Device) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s Device) GoString() string {
 	return s.String()
 }
@@ -11208,17 +12327,26 @@ type DiscoverPollEndpointInput struct {
 
 	// The container instance ID or full ARN of the container instance. The ARN
 	// contains the arn:aws:ecs namespace, followed by the Region of the container
-	// instance, the AWS account ID of the container instance owner, the container-instance
-	// namespace, and then the container instance ID. For example, arn:aws:ecs:region:aws_account_id:container-instance/container_instance_ID.
+	// instance, the Amazon Web Services account ID of the container instance owner,
+	// the container-instance namespace, and then the container instance ID. For
+	// example, arn:aws:ecs:region:aws_account_id:container-instance/container_instance_ID.
 	ContainerInstance *string `locationName:"containerInstance" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DiscoverPollEndpointInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DiscoverPollEndpointInput) GoString() string {
 	return s.String()
 }
@@ -11245,12 +12373,20 @@ type DiscoverPollEndpointOutput struct {
 	TelemetryEndpoint *string `locationName:"telemetryEndpoint" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DiscoverPollEndpointOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DiscoverPollEndpointOutput) GoString() string {
 	return s.String()
 }
@@ -11310,12 +12446,20 @@ type DockerVolumeConfiguration struct {
 	Scope *string `locationName:"scope" type:"string" enum:"Scope"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DockerVolumeConfiguration) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DockerVolumeConfiguration) GoString() string {
 	return s.String()
 }
@@ -11355,10 +12499,11 @@ type EFSAuthorizationConfig struct {
 	_ struct{} `type:"structure"`
 
 	// The Amazon EFS access point ID to use. If an access point is specified, the
-	// root directory value specified in the EFSVolumeConfiguration will be relative
-	// to the directory set for the access point. If an access point is used, transit
-	// encryption must be enabled in the EFSVolumeConfiguration. For more information,
-	// see Working with Amazon EFS Access Points (https://docs.aws.amazon.com/efs/latest/ug/efs-access-points.html)
+	// root directory value specified in the EFSVolumeConfiguration must either
+	// be omitted or set to / which will enforce the path set on the EFS access
+	// point. If an access point is used, transit encryption must be enabled in
+	// the EFSVolumeConfiguration. For more information, see Working with Amazon
+	// EFS Access Points (https://docs.aws.amazon.com/efs/latest/ug/efs-access-points.html)
 	// in the Amazon Elastic File System User Guide.
 	AccessPointId *string `locationName:"accessPointId" type:"string"`
 
@@ -11371,12 +12516,20 @@ type EFSAuthorizationConfig struct {
 	Iam *string `locationName:"iam" type:"string" enum:"EFSAuthorizationConfigIAM"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s EFSAuthorizationConfig) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s EFSAuthorizationConfig) GoString() string {
 	return s.String()
 }
@@ -11412,6 +12565,10 @@ type EFSVolumeConfiguration struct {
 	// inside the host. If this parameter is omitted, the root of the Amazon EFS
 	// volume will be used. Specifying / will have the same effect as omitting this
 	// parameter.
+	//
+	// If an EFS access point is specified in the authorizationConfig, the root
+	// directory parameter must either be omitted or set to / which will enforce
+	// the path set on the EFS access point.
 	RootDirectory *string `locationName:"rootDirectory" type:"string"`
 
 	// Whether or not to enable encryption for Amazon EFS data in transit between
@@ -11430,12 +12587,20 @@ type EFSVolumeConfiguration struct {
 	TransitEncryptionPort *int64 `locationName:"transitEncryptionPort" type:"integer"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s EFSVolumeConfiguration) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s EFSVolumeConfiguration) GoString() string {
 	return s.String()
 }
@@ -11494,12 +12659,12 @@ func (s *EFSVolumeConfiguration) SetTransitEncryptionPort(v int64) *EFSVolumeCon
 // in a container definition, they take precedence over the variables contained
 // within an environment file. If multiple environment files are specified that
 // contain the same variable, they are processed from the top down. It is recommended
-// to use unique variable names. For more information, see Specifying Environment
-// Variables (https://docs.aws.amazon.com/AmazonECS/latest/developerguide/taskdef-envfiles.html)
+// to use unique variable names. For more information, see Specifying environment
+// variables (https://docs.aws.amazon.com/AmazonECS/latest/developerguide/taskdef-envfiles.html)
 // in the Amazon Elastic Container Service Developer Guide.
 //
-// This field is not valid for containers in tasks using the Fargate launch
-// type.
+// This field is only valid for containers in Fargate tasks that use platform
+// version 1.4.0 or later.
 type EnvironmentFile struct {
 	_ struct{} `type:"structure"`
 
@@ -11515,12 +12680,20 @@ type EnvironmentFile struct {
 	Value *string `locationName:"value" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s EnvironmentFile) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s EnvironmentFile) GoString() string {
 	return s.String()
 }
@@ -11553,7 +12726,532 @@ func (s *EnvironmentFile) SetValue(v string) *EnvironmentFile {
 	return s
 }
 
-// A failed resource.
+// The amount of ephemeral storage to allocate for the task. This parameter
+// is used to expand the total amount of ephemeral storage available, beyond
+// the default amount, for tasks hosted on Fargate. For more information, see
+// Fargate task storage (https://docs.aws.amazon.com/AmazonECS/latest/userguide/using_data_volumes.html)
+// in the Amazon ECS User Guide for Fargate.
+//
+// This parameter is only supported for tasks hosted on Fargate using platform
+// version 1.4.0 or later.
+type EphemeralStorage struct {
+	_ struct{} `type:"structure"`
+
+	// The total amount, in GiB, of ephemeral storage to set for the task. The minimum
+	// supported value is 21 GiB and the maximum supported value is 200 GiB.
+	//
+	// SizeInGiB is a required field
+	SizeInGiB *int64 `locationName:"sizeInGiB" type:"integer" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s EphemeralStorage) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s EphemeralStorage) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *EphemeralStorage) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "EphemeralStorage"}
+	if s.SizeInGiB == nil {
+		invalidParams.Add(request.NewErrParamRequired("SizeInGiB"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetSizeInGiB sets the SizeInGiB field's value.
+func (s *EphemeralStorage) SetSizeInGiB(v int64) *EphemeralStorage {
+	s.SizeInGiB = &v
+	return s
+}
+
+// The details of the execute command configuration.
+type ExecuteCommandConfiguration struct {
+	_ struct{} `type:"structure"`
+
+	// Specify an Key Management Service key ID to encrypt the data between the
+	// local client and the container.
+	KmsKeyId *string `locationName:"kmsKeyId" type:"string"`
+
+	// The log configuration for the results of the execute command actions. The
+	// logs can be sent to CloudWatch Logs or an Amazon S3 bucket. When logging=OVERRIDE
+	// is specified, a logConfiguration must be provided.
+	LogConfiguration *ExecuteCommandLogConfiguration `locationName:"logConfiguration" type:"structure"`
+
+	// The log setting to use for redirecting logs for your execute command results.
+	// The following log settings are available.
+	//
+	//    * NONE: The execute command session is not logged.
+	//
+	//    * DEFAULT: The awslogs configuration in the task definition is used. If
+	//    no logging parameter is specified, it defaults to this value. If no awslogs
+	//    log driver is configured in the task definition, the output won't be logged.
+	//
+	//    * OVERRIDE: Specify the logging details as a part of logConfiguration.
+	//    If the OVERRIDE logging option is specified, the logConfiguration is required.
+	Logging *string `locationName:"logging" type:"string" enum:"ExecuteCommandLogging"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ExecuteCommandConfiguration) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ExecuteCommandConfiguration) GoString() string {
+	return s.String()
+}
+
+// SetKmsKeyId sets the KmsKeyId field's value.
+func (s *ExecuteCommandConfiguration) SetKmsKeyId(v string) *ExecuteCommandConfiguration {
+	s.KmsKeyId = &v
+	return s
+}
+
+// SetLogConfiguration sets the LogConfiguration field's value.
+func (s *ExecuteCommandConfiguration) SetLogConfiguration(v *ExecuteCommandLogConfiguration) *ExecuteCommandConfiguration {
+	s.LogConfiguration = v
+	return s
+}
+
+// SetLogging sets the Logging field's value.
+func (s *ExecuteCommandConfiguration) SetLogging(v string) *ExecuteCommandConfiguration {
+	s.Logging = &v
+	return s
+}
+
+type ExecuteCommandInput struct {
+	_ struct{} `type:"structure"`
+
+	// The Amazon Resource Name (ARN) or short name of the cluster the task is running
+	// in. If you do not specify a cluster, the default cluster is assumed.
+	Cluster *string `locationName:"cluster" type:"string"`
+
+	// The command to run on the container.
+	//
+	// Command is a required field
+	Command *string `locationName:"command" type:"string" required:"true"`
+
+	// The name of the container to execute the command on. A container name only
+	// needs to be specified for tasks containing multiple containers.
+	Container *string `locationName:"container" type:"string"`
+
+	// Use this flag to run your command in interactive mode.
+	//
+	// Interactive is a required field
+	Interactive *bool `locationName:"interactive" type:"boolean" required:"true"`
+
+	// The Amazon Resource Name (ARN) or ID of the task the container is part of.
+	//
+	// Task is a required field
+	Task *string `locationName:"task" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ExecuteCommandInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ExecuteCommandInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ExecuteCommandInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ExecuteCommandInput"}
+	if s.Command == nil {
+		invalidParams.Add(request.NewErrParamRequired("Command"))
+	}
+	if s.Interactive == nil {
+		invalidParams.Add(request.NewErrParamRequired("Interactive"))
+	}
+	if s.Task == nil {
+		invalidParams.Add(request.NewErrParamRequired("Task"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetCluster sets the Cluster field's value.
+func (s *ExecuteCommandInput) SetCluster(v string) *ExecuteCommandInput {
+	s.Cluster = &v
+	return s
+}
+
+// SetCommand sets the Command field's value.
+func (s *ExecuteCommandInput) SetCommand(v string) *ExecuteCommandInput {
+	s.Command = &v
+	return s
+}
+
+// SetContainer sets the Container field's value.
+func (s *ExecuteCommandInput) SetContainer(v string) *ExecuteCommandInput {
+	s.Container = &v
+	return s
+}
+
+// SetInteractive sets the Interactive field's value.
+func (s *ExecuteCommandInput) SetInteractive(v bool) *ExecuteCommandInput {
+	s.Interactive = &v
+	return s
+}
+
+// SetTask sets the Task field's value.
+func (s *ExecuteCommandInput) SetTask(v string) *ExecuteCommandInput {
+	s.Task = &v
+	return s
+}
+
+// The log configuration for the results of the execute command actions. The
+// logs can be sent to CloudWatch Logs or an Amazon S3 bucket.
+type ExecuteCommandLogConfiguration struct {
+	_ struct{} `type:"structure"`
+
+	// Whether or not to enable encryption on the CloudWatch logs. If not specified,
+	// encryption will be disabled.
+	CloudWatchEncryptionEnabled *bool `locationName:"cloudWatchEncryptionEnabled" type:"boolean"`
+
+	// The name of the CloudWatch log group to send logs to.
+	//
+	// The CloudWatch log group must already be created.
+	CloudWatchLogGroupName *string `locationName:"cloudWatchLogGroupName" type:"string"`
+
+	// The name of the S3 bucket to send logs to.
+	//
+	// The S3 bucket must already be created.
+	S3BucketName *string `locationName:"s3BucketName" type:"string"`
+
+	// Whether or not to enable encryption on the CloudWatch logs. If not specified,
+	// encryption will be disabled.
+	S3EncryptionEnabled *bool `locationName:"s3EncryptionEnabled" type:"boolean"`
+
+	// An optional folder in the S3 bucket to place logs in.
+	S3KeyPrefix *string `locationName:"s3KeyPrefix" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ExecuteCommandLogConfiguration) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ExecuteCommandLogConfiguration) GoString() string {
+	return s.String()
+}
+
+// SetCloudWatchEncryptionEnabled sets the CloudWatchEncryptionEnabled field's value.
+func (s *ExecuteCommandLogConfiguration) SetCloudWatchEncryptionEnabled(v bool) *ExecuteCommandLogConfiguration {
+	s.CloudWatchEncryptionEnabled = &v
+	return s
+}
+
+// SetCloudWatchLogGroupName sets the CloudWatchLogGroupName field's value.
+func (s *ExecuteCommandLogConfiguration) SetCloudWatchLogGroupName(v string) *ExecuteCommandLogConfiguration {
+	s.CloudWatchLogGroupName = &v
+	return s
+}
+
+// SetS3BucketName sets the S3BucketName field's value.
+func (s *ExecuteCommandLogConfiguration) SetS3BucketName(v string) *ExecuteCommandLogConfiguration {
+	s.S3BucketName = &v
+	return s
+}
+
+// SetS3EncryptionEnabled sets the S3EncryptionEnabled field's value.
+func (s *ExecuteCommandLogConfiguration) SetS3EncryptionEnabled(v bool) *ExecuteCommandLogConfiguration {
+	s.S3EncryptionEnabled = &v
+	return s
+}
+
+// SetS3KeyPrefix sets the S3KeyPrefix field's value.
+func (s *ExecuteCommandLogConfiguration) SetS3KeyPrefix(v string) *ExecuteCommandLogConfiguration {
+	s.S3KeyPrefix = &v
+	return s
+}
+
+type ExecuteCommandOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The Amazon Resource Name (ARN) of the cluster.
+	ClusterArn *string `locationName:"clusterArn" type:"string"`
+
+	// The Amazon Resource Name (ARN) of the container.
+	ContainerArn *string `locationName:"containerArn" type:"string"`
+
+	// The name of the container.
+	ContainerName *string `locationName:"containerName" type:"string"`
+
+	// Whether or not the execute command session is running in interactive mode.
+	// Amazon ECS only supports initiating interactive sessions, so you must specify
+	// true for this value.
+	Interactive *bool `locationName:"interactive" type:"boolean"`
+
+	// The details of the SSM session that was created for this instance of execute-command.
+	Session *Session `locationName:"session" type:"structure"`
+
+	// The Amazon Resource Name (ARN) of the task.
+	TaskArn *string `locationName:"taskArn" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ExecuteCommandOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ExecuteCommandOutput) GoString() string {
+	return s.String()
+}
+
+// SetClusterArn sets the ClusterArn field's value.
+func (s *ExecuteCommandOutput) SetClusterArn(v string) *ExecuteCommandOutput {
+	s.ClusterArn = &v
+	return s
+}
+
+// SetContainerArn sets the ContainerArn field's value.
+func (s *ExecuteCommandOutput) SetContainerArn(v string) *ExecuteCommandOutput {
+	s.ContainerArn = &v
+	return s
+}
+
+// SetContainerName sets the ContainerName field's value.
+func (s *ExecuteCommandOutput) SetContainerName(v string) *ExecuteCommandOutput {
+	s.ContainerName = &v
+	return s
+}
+
+// SetInteractive sets the Interactive field's value.
+func (s *ExecuteCommandOutput) SetInteractive(v bool) *ExecuteCommandOutput {
+	s.Interactive = &v
+	return s
+}
+
+// SetSession sets the Session field's value.
+func (s *ExecuteCommandOutput) SetSession(v *Session) *ExecuteCommandOutput {
+	s.Session = v
+	return s
+}
+
+// SetTaskArn sets the TaskArn field's value.
+func (s *ExecuteCommandOutput) SetTaskArn(v string) *ExecuteCommandOutput {
+	s.TaskArn = &v
+	return s
+}
+
+// The authorization configuration details for Amazon FSx for Windows File Server
+// file system. See FSxWindowsFileServerVolumeConfiguration (https://docs.aws.amazon.com/AmazonECS/latest/APIReference/API_FSxWindowsFileServerVolumeConfiguration.html)
+// in the Amazon Elastic Container Service API Reference.
+//
+// For more information and the input format, see Amazon FSx for Windows File
+// Server Volumes (https://docs.aws.amazon.com/AmazonECS/latest/developerguide/wfsx-volumes.html)
+// in the Amazon Elastic Container Service Developer Guide.
+type FSxWindowsFileServerAuthorizationConfig struct {
+	_ struct{} `type:"structure"`
+
+	// The authorization credential option to use. The authorization credential
+	// options can be provided using either the Amazon Resource Name (ARN) of an
+	// Secrets Manager secret or SSM Parameter Store parameter. The ARNs refer to
+	// the stored credentials.
+	//
+	// CredentialsParameter is a required field
+	CredentialsParameter *string `locationName:"credentialsParameter" type:"string" required:"true"`
+
+	// A fully qualified domain name hosted by an Directory Service (https://docs.aws.amazon.com/directoryservice/latest/admin-guide/directory_microsoft_ad.html)
+	// Managed Microsoft AD (Active Directory) or self-hosted AD on Amazon EC2.
+	//
+	// Domain is a required field
+	Domain *string `locationName:"domain" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s FSxWindowsFileServerAuthorizationConfig) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s FSxWindowsFileServerAuthorizationConfig) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *FSxWindowsFileServerAuthorizationConfig) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "FSxWindowsFileServerAuthorizationConfig"}
+	if s.CredentialsParameter == nil {
+		invalidParams.Add(request.NewErrParamRequired("CredentialsParameter"))
+	}
+	if s.Domain == nil {
+		invalidParams.Add(request.NewErrParamRequired("Domain"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetCredentialsParameter sets the CredentialsParameter field's value.
+func (s *FSxWindowsFileServerAuthorizationConfig) SetCredentialsParameter(v string) *FSxWindowsFileServerAuthorizationConfig {
+	s.CredentialsParameter = &v
+	return s
+}
+
+// SetDomain sets the Domain field's value.
+func (s *FSxWindowsFileServerAuthorizationConfig) SetDomain(v string) *FSxWindowsFileServerAuthorizationConfig {
+	s.Domain = &v
+	return s
+}
+
+// This parameter is specified when you are using Amazon FSx for Windows File
+// Server (https://docs.aws.amazon.com/fsx/latest/WindowsGuide/what-is.html)
+// file system for task storage.
+//
+// For more information and the input format, see Amazon FSx for Windows File
+// Server Volumes (https://docs.aws.amazon.com/AmazonECS/latest/developerguide/wfsx-volumes.html)
+// in the Amazon Elastic Container Service Developer Guide.
+type FSxWindowsFileServerVolumeConfiguration struct {
+	_ struct{} `type:"structure"`
+
+	// The authorization configuration details for the Amazon FSx for Windows File
+	// Server file system.
+	//
+	// AuthorizationConfig is a required field
+	AuthorizationConfig *FSxWindowsFileServerAuthorizationConfig `locationName:"authorizationConfig" type:"structure" required:"true"`
+
+	// The Amazon FSx for Windows File Server file system ID to use.
+	//
+	// FileSystemId is a required field
+	FileSystemId *string `locationName:"fileSystemId" type:"string" required:"true"`
+
+	// The directory within the Amazon FSx for Windows File Server file system to
+	// mount as the root directory inside the host.
+	//
+	// RootDirectory is a required field
+	RootDirectory *string `locationName:"rootDirectory" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s FSxWindowsFileServerVolumeConfiguration) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s FSxWindowsFileServerVolumeConfiguration) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *FSxWindowsFileServerVolumeConfiguration) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "FSxWindowsFileServerVolumeConfiguration"}
+	if s.AuthorizationConfig == nil {
+		invalidParams.Add(request.NewErrParamRequired("AuthorizationConfig"))
+	}
+	if s.FileSystemId == nil {
+		invalidParams.Add(request.NewErrParamRequired("FileSystemId"))
+	}
+	if s.RootDirectory == nil {
+		invalidParams.Add(request.NewErrParamRequired("RootDirectory"))
+	}
+	if s.AuthorizationConfig != nil {
+		if err := s.AuthorizationConfig.Validate(); err != nil {
+			invalidParams.AddNested("AuthorizationConfig", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetAuthorizationConfig sets the AuthorizationConfig field's value.
+func (s *FSxWindowsFileServerVolumeConfiguration) SetAuthorizationConfig(v *FSxWindowsFileServerAuthorizationConfig) *FSxWindowsFileServerVolumeConfiguration {
+	s.AuthorizationConfig = v
+	return s
+}
+
+// SetFileSystemId sets the FileSystemId field's value.
+func (s *FSxWindowsFileServerVolumeConfiguration) SetFileSystemId(v string) *FSxWindowsFileServerVolumeConfiguration {
+	s.FileSystemId = &v
+	return s
+}
+
+// SetRootDirectory sets the RootDirectory field's value.
+func (s *FSxWindowsFileServerVolumeConfiguration) SetRootDirectory(v string) *FSxWindowsFileServerVolumeConfiguration {
+	s.RootDirectory = &v
+	return s
+}
+
+// A failed resource. For a list of common causes, see API failure reasons (https://docs.aws.amazon.com/AmazonECS/latest/developerguide/api_failures_messages.html)
+// in the Amazon Elastic Container Service Developer Guide.
 type Failure struct {
 	_ struct{} `type:"structure"`
 
@@ -11567,12 +13265,20 @@ type Failure struct {
 	Reason *string `locationName:"reason" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s Failure) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s Failure) GoString() string {
 	return s.String()
 }
@@ -11609,6 +13315,8 @@ type FirelensConfiguration struct {
 	// For more information, see Creating a Task Definition that Uses a FireLens
 	// Configuration (https://docs.aws.amazon.com/AmazonECS/latest/developerguide/using_firelens.html#firelens-taskdef)
 	// in the Amazon Elastic Container Service Developer Guide.
+	//
+	// Tasks hosted on Fargate only support the file configuration file type.
 	Options map[string]*string `locationName:"options" type:"map"`
 
 	// The log router to use. The valid values are fluentd or fluentbit.
@@ -11617,12 +13325,20 @@ type FirelensConfiguration struct {
 	Type *string `locationName:"type" type:"string" required:"true" enum:"FirelensConfigurationType"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s FirelensConfiguration) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s FirelensConfiguration) GoString() string {
 	return s.String()
 }
@@ -11694,8 +13410,8 @@ func (s *FirelensConfiguration) SetType(v string) *FirelensConfiguration {
 //    Container Agent (https://docs.aws.amazon.com/AmazonECS/latest/developerguide/ecs-agent-update.html).
 //
 //    * Container health checks are supported for Fargate tasks if you are using
-//    platform version 1.1.0 or greater. For more information, see AWS Fargate
-//    Platform Versions (https://docs.aws.amazon.com/AmazonECS/latest/developerguide/platform_versions.html).
+//    platform version 1.1.0 or greater. For more information, see Fargate Platform
+//    Versions (https://docs.aws.amazon.com/AmazonECS/latest/developerguide/platform_versions.html).
 //
 //    * Container health checks are not supported for tasks that are part of
 //    a service that is configured to use a Classic Load Balancer.
@@ -11705,9 +13421,18 @@ type HealthCheck struct {
 	// A string array representing the command that the container runs to determine
 	// if it is healthy. The string array must start with CMD to execute the command
 	// arguments directly, or CMD-SHELL to run the command with the container's
-	// default shell. For example:
+	// default shell.
+	//
+	// When you use the Amazon Web Services Management Console JSON panel, the Command
+	// Line Interface, or the APIs, you should enclose the list of commands in brackets,
+	// as shown below.
 	//
 	// [ "CMD-SHELL", "curl -f http://localhost/ || exit 1" ]
+	//
+	// You do not need to include the brackets when you use the Amazon Web Services
+	// Management Consoleas shown below.
+	//
+	// "CMD-SHELL", "curl -f http://localhost/ || exit 1"
 	//
 	// An exit code of 0 indicates success, and non-zero exit code indicates failure.
 	// For more information, see HealthCheck in the Create a container (https://docs.docker.com/engine/api/v1.35/#operation/ContainerCreate)
@@ -11741,12 +13466,20 @@ type HealthCheck struct {
 	Timeout *int64 `locationName:"timeout" type:"integer"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s HealthCheck) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s HealthCheck) GoString() string {
 	return s.String()
 }
@@ -11810,12 +13543,20 @@ type HostEntry struct {
 	IpAddress *string `locationName:"ipAddress" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s HostEntry) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s HostEntry) GoString() string {
 	return s.String()
 }
@@ -11866,12 +13607,20 @@ type HostVolumeProperties struct {
 	SourcePath *string `locationName:"sourcePath" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s HostVolumeProperties) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s HostVolumeProperties) GoString() string {
 	return s.String()
 }
@@ -11883,7 +13632,7 @@ func (s *HostVolumeProperties) SetSourcePath(v string) *HostVolumeProperties {
 }
 
 // Details on a Elastic Inference accelerator. For more information, see Working
-// with Amazon Elastic Inference on Amazon ECS (https://docs.aws.amazon.com/AmazonECS/latest/developerguide/ecs-eia.html)
+// with Amazon Elastic Inference on Amazon ECS (https://docs.aws.amazon.com/AmazonECS/latest/developerguide/ecs-inference.html)
 // in the Amazon Elastic Container Service Developer Guide.
 type InferenceAccelerator struct {
 	_ struct{} `type:"structure"`
@@ -11900,12 +13649,20 @@ type InferenceAccelerator struct {
 	DeviceType *string `locationName:"deviceType" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s InferenceAccelerator) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s InferenceAccelerator) GoString() string {
 	return s.String()
 }
@@ -11941,7 +13698,7 @@ func (s *InferenceAccelerator) SetDeviceType(v string) *InferenceAccelerator {
 // Details on an Elastic Inference accelerator task override. This parameter
 // is used to override the Elastic Inference accelerator specified in the task
 // definition. For more information, see Working with Amazon Elastic Inference
-// on Amazon ECS (https://docs.aws.amazon.com/AmazonECS/latest/developerguide/ecs-eia.html)
+// on Amazon ECS (https://docs.aws.amazon.com/AmazonECS/latest/developerguide/ecs-inference.html)
 // in the Amazon Elastic Container Service Developer Guide.
 type InferenceAcceleratorOverride struct {
 	_ struct{} `type:"structure"`
@@ -11954,12 +13711,20 @@ type InferenceAcceleratorOverride struct {
 	DeviceType *string `locationName:"deviceType" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s InferenceAcceleratorOverride) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s InferenceAcceleratorOverride) GoString() string {
 	return s.String()
 }
@@ -11985,12 +13750,20 @@ type InvalidParameterException struct {
 	Message_ *string `locationName:"message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s InvalidParameterException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s InvalidParameterException) GoString() string {
 	return s.String()
 }
@@ -12047,11 +13820,9 @@ type KernelCapabilities struct {
 	// configuration provided by Docker. This parameter maps to CapAdd in the Create
 	// a container (https://docs.docker.com/engine/api/v1.35/#operation/ContainerCreate)
 	// section of the Docker Remote API (https://docs.docker.com/engine/api/v1.35/)
-	// and the --cap-add option to docker run (https://docs.docker.com/engine/reference/run/).
+	// and the --cap-add option to docker run (https://docs.docker.com/engine/reference/run/#security-configuration).
 	//
-	// The SYS_PTRACE capability is supported for tasks that use the Fargate launch
-	// type if they are also using platform version 1.4.0. The other capabilities
-	// are not supported for any platform versions.
+	// Tasks launched on Fargate only support adding the SYS_PTRACE kernel capability.
 	//
 	// Valid values: "ALL" | "AUDIT_CONTROL" | "AUDIT_WRITE" | "BLOCK_SUSPEND" |
 	// "CHOWN" | "DAC_OVERRIDE" | "DAC_READ_SEARCH" | "FOWNER" | "FSETID" | "IPC_LOCK"
@@ -12067,7 +13838,7 @@ type KernelCapabilities struct {
 	// default configuration provided by Docker. This parameter maps to CapDrop
 	// in the Create a container (https://docs.docker.com/engine/api/v1.35/#operation/ContainerCreate)
 	// section of the Docker Remote API (https://docs.docker.com/engine/api/v1.35/)
-	// and the --cap-drop option to docker run (https://docs.docker.com/engine/reference/run/).
+	// and the --cap-drop option to docker run (https://docs.docker.com/engine/reference/run/#security-configuration).
 	//
 	// Valid values: "ALL" | "AUDIT_CONTROL" | "AUDIT_WRITE" | "BLOCK_SUSPEND" |
 	// "CHOWN" | "DAC_OVERRIDE" | "DAC_READ_SEARCH" | "FOWNER" | "FSETID" | "IPC_LOCK"
@@ -12080,12 +13851,20 @@ type KernelCapabilities struct {
 	Drop []*string `locationName:"drop" type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s KernelCapabilities) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s KernelCapabilities) GoString() string {
 	return s.String()
 }
@@ -12115,12 +13894,20 @@ type KeyValuePair struct {
 	Value *string `locationName:"value" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s KeyValuePair) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s KeyValuePair) GoString() string {
 	return s.String()
 }
@@ -12145,12 +13932,20 @@ type LimitExceededException struct {
 	Message_ *string `locationName:"message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s LimitExceededException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s LimitExceededException) GoString() string {
 	return s.String()
 }
@@ -12208,14 +14003,14 @@ type LinuxParameters struct {
 	// Any host devices to expose to the container. This parameter maps to Devices
 	// in the Create a container (https://docs.docker.com/engine/api/v1.35/#operation/ContainerCreate)
 	// section of the Docker Remote API (https://docs.docker.com/engine/api/v1.35/)
-	// and the --device option to docker run (https://docs.docker.com/engine/reference/run/).
+	// and the --device option to docker run (https://docs.docker.com/engine/reference/run/#security-configuration).
 	//
 	// If you are using tasks that use the Fargate launch type, the devices parameter
 	// is not supported.
 	Devices []*Device `locationName:"devices" type:"list"`
 
 	// Run an init process inside the container that forwards signals and reaps
-	// processes. This parameter maps to the --init option to docker run (https://docs.docker.com/engine/reference/run/).
+	// processes. This parameter maps to the --init option to docker run (https://docs.docker.com/engine/reference/run/#security-configuration).
 	// This parameter requires version 1.25 of the Docker Remote API or greater
 	// on your container instance. To check the Docker Remote API version on your
 	// container instance, log in to your container instance and run the following
@@ -12223,7 +14018,7 @@ type LinuxParameters struct {
 	InitProcessEnabled *bool `locationName:"initProcessEnabled" type:"boolean"`
 
 	// The total amount of swap memory (in MiB) a container can use. This parameter
-	// will be translated to the --memory-swap option to docker run (https://docs.docker.com/engine/reference/run/)
+	// will be translated to the --memory-swap option to docker run (https://docs.docker.com/engine/reference/run/#security-configuration)
 	// where the value would be the sum of the container memory plus the maxSwap
 	// value.
 	//
@@ -12238,7 +14033,7 @@ type LinuxParameters struct {
 	MaxSwap *int64 `locationName:"maxSwap" type:"integer"`
 
 	// The value for the size (in MiB) of the /dev/shm volume. This parameter maps
-	// to the --shm-size option to docker run (https://docs.docker.com/engine/reference/run/).
+	// to the --shm-size option to docker run (https://docs.docker.com/engine/reference/run/#security-configuration).
 	//
 	// If you are using tasks that use the Fargate launch type, the sharedMemorySize
 	// parameter is not supported.
@@ -12250,26 +14045,34 @@ type LinuxParameters struct {
 	// Accepted values are whole numbers between 0 and 100. If the swappiness parameter
 	// is not specified, a default value of 60 is used. If a value is not specified
 	// for maxSwap then this parameter is ignored. This parameter maps to the --memory-swappiness
-	// option to docker run (https://docs.docker.com/engine/reference/run/).
+	// option to docker run (https://docs.docker.com/engine/reference/run/#security-configuration).
 	//
 	// If you are using tasks that use the Fargate launch type, the swappiness parameter
 	// is not supported.
 	Swappiness *int64 `locationName:"swappiness" type:"integer"`
 
 	// The container path, mount options, and size (in MiB) of the tmpfs mount.
-	// This parameter maps to the --tmpfs option to docker run (https://docs.docker.com/engine/reference/run/).
+	// This parameter maps to the --tmpfs option to docker run (https://docs.docker.com/engine/reference/run/#security-configuration).
 	//
 	// If you are using tasks that use the Fargate launch type, the tmpfs parameter
 	// is not supported.
 	Tmpfs []*Tmpfs `locationName:"tmpfs" type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s LinuxParameters) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s LinuxParameters) GoString() string {
 	return s.String()
 }
@@ -12379,6 +14182,9 @@ type ListAccountSettingsInput struct {
 	// The ARN of the principal, which can be an IAM user, IAM role, or the root
 	// user. If this field is omitted, the account settings are listed only for
 	// the authenticated user.
+	//
+	// Federated users assume the account setting of the root user and can't have
+	// explicit account settings set for them.
 	PrincipalArn *string `locationName:"principalArn" type:"string"`
 
 	// The value of the account settings with which to filter results. You must
@@ -12386,12 +14192,20 @@ type ListAccountSettingsInput struct {
 	Value *string `locationName:"value" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListAccountSettingsInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListAccountSettingsInput) GoString() string {
 	return s.String()
 }
@@ -12445,12 +14259,20 @@ type ListAccountSettingsOutput struct {
 	Settings []*Setting `locationName:"settings" type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListAccountSettingsOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListAccountSettingsOutput) GoString() string {
 	return s.String()
 }
@@ -12505,12 +14327,20 @@ type ListAttributesInput struct {
 	TargetType *string `locationName:"targetType" type:"string" required:"true" enum:"TargetType"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListAttributesInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListAttributesInput) GoString() string {
 	return s.String()
 }
@@ -12577,12 +14407,20 @@ type ListAttributesOutput struct {
 	NextToken *string `locationName:"nextToken" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListAttributesOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListAttributesOutput) GoString() string {
 	return s.String()
 }
@@ -12621,12 +14459,20 @@ type ListClustersInput struct {
 	NextToken *string `locationName:"nextToken" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListClustersInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListClustersInput) GoString() string {
 	return s.String()
 }
@@ -12657,12 +14503,20 @@ type ListClustersOutput struct {
 	NextToken *string `locationName:"nextToken" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListClustersOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListClustersOutput) GoString() string {
 	return s.String()
 }
@@ -12720,12 +14574,20 @@ type ListContainerInstancesInput struct {
 	Status *string `locationName:"status" type:"string" enum:"ContainerInstanceStatus"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListContainerInstancesInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListContainerInstancesInput) GoString() string {
 	return s.String()
 }
@@ -12774,12 +14636,20 @@ type ListContainerInstancesOutput struct {
 	NextToken *string `locationName:"nextToken" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListContainerInstancesOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListContainerInstancesOutput) GoString() string {
 	return s.String()
 }
@@ -12799,12 +14669,12 @@ func (s *ListContainerInstancesOutput) SetNextToken(v string) *ListContainerInst
 type ListServicesInput struct {
 	_ struct{} `type:"structure"`
 
-	// The short name or full Amazon Resource Name (ARN) of the cluster that hosts
-	// the services to list. If you do not specify a cluster, the default cluster
-	// is assumed.
+	// The short name or full Amazon Resource Name (ARN) of the cluster to use when
+	// filtering the ListServices results. If you do not specify a cluster, the
+	// default cluster is assumed.
 	Cluster *string `locationName:"cluster" type:"string"`
 
-	// The launch type for the services to list.
+	// The launch type to use when filtering the ListServices results.
 	LaunchType *string `locationName:"launchType" type:"string" enum:"LaunchType"`
 
 	// The maximum number of service results returned by ListServices in paginated
@@ -12825,16 +14695,24 @@ type ListServicesInput struct {
 	// retrieve the next items in a list and not for other programmatic purposes.
 	NextToken *string `locationName:"nextToken" type:"string"`
 
-	// The scheduling strategy for services to list.
+	// The scheduling strategy to use when filtering the ListServices results.
 	SchedulingStrategy *string `locationName:"schedulingStrategy" type:"string" enum:"SchedulingStrategy"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListServicesInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListServicesInput) GoString() string {
 	return s.String()
 }
@@ -12883,12 +14761,20 @@ type ListServicesOutput struct {
 	ServiceArns []*string `locationName:"serviceArns" type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListServicesOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListServicesOutput) GoString() string {
 	return s.String()
 }
@@ -12916,12 +14802,20 @@ type ListTagsForResourceInput struct {
 	ResourceArn *string `locationName:"resourceArn" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListTagsForResourceInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListTagsForResourceInput) GoString() string {
 	return s.String()
 }
@@ -12952,12 +14846,20 @@ type ListTagsForResourceOutput struct {
 	Tags []*Tag `locationName:"tags" type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListTagsForResourceOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListTagsForResourceOutput) GoString() string {
 	return s.String()
 }
@@ -13005,12 +14907,20 @@ type ListTaskDefinitionFamiliesInput struct {
 	Status *string `locationName:"status" type:"string" enum:"TaskDefinitionFamilyStatus"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListTaskDefinitionFamiliesInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListTaskDefinitionFamiliesInput) GoString() string {
 	return s.String()
 }
@@ -13053,12 +14963,20 @@ type ListTaskDefinitionFamiliesOutput struct {
 	NextToken *string `locationName:"nextToken" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListTaskDefinitionFamiliesOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListTaskDefinitionFamiliesOutput) GoString() string {
 	return s.String()
 }
@@ -13117,12 +15035,20 @@ type ListTaskDefinitionsInput struct {
 	Status *string `locationName:"status" type:"string" enum:"TaskDefinitionStatus"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListTaskDefinitionsInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListTaskDefinitionsInput) GoString() string {
 	return s.String()
 }
@@ -13171,12 +15097,20 @@ type ListTaskDefinitionsOutput struct {
 	TaskDefinitionArns []*string `locationName:"taskDefinitionArns" type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListTaskDefinitionsOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListTaskDefinitionsOutput) GoString() string {
 	return s.String()
 }
@@ -13196,17 +15130,17 @@ func (s *ListTaskDefinitionsOutput) SetTaskDefinitionArns(v []*string) *ListTask
 type ListTasksInput struct {
 	_ struct{} `type:"structure"`
 
-	// The short name or full Amazon Resource Name (ARN) of the cluster that hosts
-	// the tasks to list. If you do not specify a cluster, the default cluster is
-	// assumed.
+	// The short name or full Amazon Resource Name (ARN) of the cluster to use when
+	// filtering the ListTasks results. If you do not specify a cluster, the default
+	// cluster is assumed.
 	Cluster *string `locationName:"cluster" type:"string"`
 
-	// The container instance ID or full ARN of the container instance with which
-	// to filter the ListTasks results. Specifying a containerInstance limits the
+	// The container instance ID or full ARN of the container instance to use when
+	// filtering the ListTasks results. Specifying a containerInstance limits the
 	// results to tasks that belong to that container instance.
 	ContainerInstance *string `locationName:"containerInstance" type:"string"`
 
-	// The task desired status with which to filter the ListTasks results. Specifying
+	// The task desired status to use when filtering the ListTasks results. Specifying
 	// a desiredStatus of STOPPED limits the results to tasks that Amazon ECS has
 	// set the desired status to STOPPED. This can be useful for debugging tasks
 	// that are not starting properly or have died or finished. The default status
@@ -13218,11 +15152,12 @@ type ListTasksInput struct {
 	// a task to that value (only a task's lastStatus may have a value of PENDING).
 	DesiredStatus *string `locationName:"desiredStatus" type:"string" enum:"DesiredStatus"`
 
-	// The name of the family with which to filter the ListTasks results. Specifying
-	// a family limits the results to tasks that belong to that family.
+	// The name of the task definition family to use when filtering the ListTasks
+	// results. Specifying a family limits the results to tasks that belong to that
+	// family.
 	Family *string `locationName:"family" type:"string"`
 
-	// The launch type for services to list.
+	// The launch type to use when filtering the ListTasks results.
 	LaunchType *string `locationName:"launchType" type:"string" enum:"LaunchType"`
 
 	// The maximum number of task results returned by ListTasks in paginated output.
@@ -13243,7 +15178,7 @@ type ListTasksInput struct {
 	// retrieve the next items in a list and not for other programmatic purposes.
 	NextToken *string `locationName:"nextToken" type:"string"`
 
-	// The name of the service with which to filter the ListTasks results. Specifying
+	// The name of the service to use when filtering the ListTasks results. Specifying
 	// a serviceName limits the results to tasks that belong to that service.
 	ServiceName *string `locationName:"serviceName" type:"string"`
 
@@ -13252,12 +15187,20 @@ type ListTasksInput struct {
 	StartedBy *string `locationName:"startedBy" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListTasksInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListTasksInput) GoString() string {
 	return s.String()
 }
@@ -13329,12 +15272,20 @@ type ListTasksOutput struct {
 	TaskArns []*string `locationName:"taskArns" type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListTasksOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListTasksOutput) GoString() string {
 	return s.String()
 }
@@ -13402,12 +15353,20 @@ type LoadBalancer struct {
 	TargetGroupArn *string `locationName:"targetGroupArn" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s LoadBalancer) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s LoadBalancer) GoString() string {
 	return s.String()
 }
@@ -13436,18 +15395,16 @@ func (s *LoadBalancer) SetTargetGroupArn(v string) *LoadBalancer {
 	return s
 }
 
-// The log configuration specification for the container.
-//
-// This parameter maps to LogConfig in the Create a container (https://docs.docker.com/engine/api/v1.35/#operation/ContainerCreate)
+// The log configuration for the container. This parameter maps to LogConfig
+// in the Create a container (https://docs.docker.com/engine/api/v1.35/#operation/ContainerCreate)
 // section of the Docker Remote API (https://docs.docker.com/engine/api/v1.35/)
 // and the --log-driver option to docker run (https://docs.docker.com/engine/reference/commandline/run/).
+//
 // By default, containers use the same logging driver that the Docker daemon
 // uses; however the container may use a different logging driver than the Docker
-// daemon by specifying a log driver with this parameter in the container definition.
-// To use a different logging driver for a container, the log system must be
-// configured properly on the container instance (or on a different log server
-// for remote logging options). For more information on the options for different
-// supported log drivers, see Configure logging drivers (https://docs.docker.com/engine/admin/logging/overview/)
+// daemon by specifying a log driver configuration in the container definition.
+// For more information on the options for different supported log drivers,
+// see Configure logging drivers (https://docs.docker.com/engine/admin/logging/overview/)
 // in the Docker documentation.
 //
 // The following should be noted when specifying a log configuration for your
@@ -13461,38 +15418,35 @@ func (s *LoadBalancer) SetTargetGroupArn(v string) *LoadBalancer {
 //    * This parameter requires version 1.18 of the Docker Remote API or greater
 //    on your container instance.
 //
-//    * For tasks using the EC2 launch type, the Amazon ECS container agent
-//    running on a container instance must register the logging drivers available
-//    on that instance with the ECS_AVAILABLE_LOGGING_DRIVERS environment variable
-//    before containers placed on that instance can use these log configuration
-//    options. For more information, see Amazon ECS Container Agent Configuration
-//    (https://docs.aws.amazon.com/AmazonECS/latest/developerguide/ecs-agent-config.html)
+//    * For tasks hosted on Amazon EC2 instances, the Amazon ECS container agent
+//    must register the available logging drivers with the ECS_AVAILABLE_LOGGING_DRIVERS
+//    environment variable before containers placed on that instance can use
+//    these log configuration options. For more information, see Amazon ECS
+//    container agent configuration (https://docs.aws.amazon.com/AmazonECS/latest/developerguide/ecs-agent-config.html)
 //    in the Amazon Elastic Container Service Developer Guide.
 //
-//    * For tasks using the Fargate launch type, because you do not have access
-//    to the underlying infrastructure your tasks are hosted on, any additional
-//    software needed will have to be installed outside of the task. For example,
-//    the Fluentd output aggregators or a remote host running Logstash to send
-//    Gelf logs to.
+//    * For tasks on Fargate, because you do not have access to the underlying
+//    infrastructure your tasks are hosted on, any additional software needed
+//    will have to be installed outside of the task. For example, the Fluentd
+//    output aggregators or a remote host running Logstash to send Gelf logs
+//    to.
 type LogConfiguration struct {
 	_ struct{} `type:"structure"`
 
-	// The log driver to use for the container. The valid values listed earlier
-	// are log drivers that the Amazon ECS container agent can communicate with
-	// by default.
+	// The log driver to use for the container.
 	//
-	// For tasks using the Fargate launch type, the supported log drivers are awslogs,
-	// splunk, and awsfirelens.
+	// For tasks on Fargate, the supported log drivers are awslogs, splunk, and
+	// awsfirelens.
 	//
-	// For tasks using the EC2 launch type, the supported log drivers are awslogs,
+	// For tasks hosted on Amazon EC2 instances, the supported log drivers are awslogs,
 	// fluentd, gelf, json-file, journald, logentries,syslog, splunk, and awsfirelens.
 	//
 	// For more information about using the awslogs log driver, see Using the awslogs
-	// Log Driver (https://docs.aws.amazon.com/AmazonECS/latest/developerguide/using_awslogs.html)
+	// log driver (https://docs.aws.amazon.com/AmazonECS/latest/developerguide/using_awslogs.html)
 	// in the Amazon Elastic Container Service Developer Guide.
 	//
-	// For more information about using the awsfirelens log driver, see Custom Log
-	// Routing (https://docs.aws.amazon.com/AmazonECS/latest/developerguide/using_firelens.html)
+	// For more information about using the awsfirelens log driver, see Custom log
+	// routing (https://docs.aws.amazon.com/AmazonECS/latest/developerguide/using_firelens.html)
 	// in the Amazon Elastic Container Service Developer Guide.
 	//
 	// If you have a custom driver that is not listed, you can fork the Amazon ECS
@@ -13517,12 +15471,20 @@ type LogConfiguration struct {
 	SecretOptions []*Secret `locationName:"secretOptions" type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s LogConfiguration) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s LogConfiguration) GoString() string {
 	return s.String()
 }
@@ -13568,6 +15530,150 @@ func (s *LogConfiguration) SetSecretOptions(v []*Secret) *LogConfiguration {
 	return s
 }
 
+// Details about the managed agent status for the container.
+type ManagedAgent struct {
+	_ struct{} `type:"structure"`
+
+	// The Unix timestamp for when the managed agent was last started.
+	LastStartedAt *time.Time `locationName:"lastStartedAt" type:"timestamp"`
+
+	// The last known status of the managed agent.
+	LastStatus *string `locationName:"lastStatus" type:"string"`
+
+	// The name of the managed agent. When the execute command feature is enabled,
+	// the managed agent name is ExecuteCommandAgent.
+	Name *string `locationName:"name" type:"string" enum:"ManagedAgentName"`
+
+	// The reason for why the managed agent is in the state it is in.
+	Reason *string `locationName:"reason" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ManagedAgent) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ManagedAgent) GoString() string {
+	return s.String()
+}
+
+// SetLastStartedAt sets the LastStartedAt field's value.
+func (s *ManagedAgent) SetLastStartedAt(v time.Time) *ManagedAgent {
+	s.LastStartedAt = &v
+	return s
+}
+
+// SetLastStatus sets the LastStatus field's value.
+func (s *ManagedAgent) SetLastStatus(v string) *ManagedAgent {
+	s.LastStatus = &v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *ManagedAgent) SetName(v string) *ManagedAgent {
+	s.Name = &v
+	return s
+}
+
+// SetReason sets the Reason field's value.
+func (s *ManagedAgent) SetReason(v string) *ManagedAgent {
+	s.Reason = &v
+	return s
+}
+
+// An object representing a change in state for a managed agent.
+type ManagedAgentStateChange struct {
+	_ struct{} `type:"structure"`
+
+	// The name of the container associated with the managed agent.
+	//
+	// ContainerName is a required field
+	ContainerName *string `locationName:"containerName" type:"string" required:"true"`
+
+	// The name of the managed agent.
+	//
+	// ManagedAgentName is a required field
+	ManagedAgentName *string `locationName:"managedAgentName" type:"string" required:"true" enum:"ManagedAgentName"`
+
+	// The reason for the status of the managed agent.
+	Reason *string `locationName:"reason" type:"string"`
+
+	// The status of the managed agent.
+	//
+	// Status is a required field
+	Status *string `locationName:"status" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ManagedAgentStateChange) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ManagedAgentStateChange) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ManagedAgentStateChange) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ManagedAgentStateChange"}
+	if s.ContainerName == nil {
+		invalidParams.Add(request.NewErrParamRequired("ContainerName"))
+	}
+	if s.ManagedAgentName == nil {
+		invalidParams.Add(request.NewErrParamRequired("ManagedAgentName"))
+	}
+	if s.Status == nil {
+		invalidParams.Add(request.NewErrParamRequired("Status"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetContainerName sets the ContainerName field's value.
+func (s *ManagedAgentStateChange) SetContainerName(v string) *ManagedAgentStateChange {
+	s.ContainerName = &v
+	return s
+}
+
+// SetManagedAgentName sets the ManagedAgentName field's value.
+func (s *ManagedAgentStateChange) SetManagedAgentName(v string) *ManagedAgentStateChange {
+	s.ManagedAgentName = &v
+	return s
+}
+
+// SetReason sets the Reason field's value.
+func (s *ManagedAgentStateChange) SetReason(v string) *ManagedAgentStateChange {
+	s.Reason = &v
+	return s
+}
+
+// SetStatus sets the Status field's value.
+func (s *ManagedAgentStateChange) SetStatus(v string) *ManagedAgentStateChange {
+	s.Status = &v
+	return s
+}
+
 // The managed scaling settings for the Auto Scaling group capacity provider.
 //
 // When managed scaling is enabled, Amazon ECS manages the scale-in and scale-out
@@ -13581,6 +15687,11 @@ func (s *LogConfiguration) SetSecretOptions(v []*Secret) *LogConfiguration {
 // Scaling group.
 type ManagedScaling struct {
 	_ struct{} `type:"structure"`
+
+	// The period of time, in seconds, after a newly launched Amazon EC2 instance
+	// can contribute to CloudWatch metrics for Auto Scaling group. If this parameter
+	// is omitted, the default value of 300 seconds is used.
+	InstanceWarmupPeriod *int64 `locationName:"instanceWarmupPeriod" type:"integer"`
 
 	// The maximum number of container instances that Amazon ECS will scale in or
 	// scale out at one time. If this parameter is omitted, the default value of
@@ -13602,12 +15713,20 @@ type ManagedScaling struct {
 	TargetCapacity *int64 `locationName:"targetCapacity" min:"1" type:"integer"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ManagedScaling) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ManagedScaling) GoString() string {
 	return s.String()
 }
@@ -13629,6 +15748,12 @@ func (s *ManagedScaling) Validate() error {
 		return invalidParams
 	}
 	return nil
+}
+
+// SetInstanceWarmupPeriod sets the InstanceWarmupPeriod field's value.
+func (s *ManagedScaling) SetInstanceWarmupPeriod(v int64) *ManagedScaling {
+	s.InstanceWarmupPeriod = &v
+	return s
 }
 
 // SetMaximumScalingStepSize sets the MaximumScalingStepSize field's value.
@@ -13666,12 +15791,20 @@ type MissingVersionException struct {
 	Message_ *string `locationName:"message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s MissingVersionException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s MissingVersionException) GoString() string {
 	return s.String()
 }
@@ -13731,12 +15864,20 @@ type MountPoint struct {
 	SourceVolume *string `locationName:"sourceVolume" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s MountPoint) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s MountPoint) GoString() string {
 	return s.String()
 }
@@ -13779,12 +15920,20 @@ type NetworkBinding struct {
 	Protocol *string `locationName:"protocol" type:"string" enum:"TransportProtocol"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s NetworkBinding) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s NetworkBinding) GoString() string {
 	return s.String()
 }
@@ -13823,12 +15972,20 @@ type NetworkConfiguration struct {
 	AwsvpcConfiguration *AwsVpcConfiguration `locationName:"awsvpcConfiguration" type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s NetworkConfiguration) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s NetworkConfiguration) GoString() string {
 	return s.String()
 }
@@ -13869,12 +16026,20 @@ type NetworkInterface struct {
 	PrivateIpv4Address *string `locationName:"privateIpv4Address" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s NetworkInterface) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s NetworkInterface) GoString() string {
 	return s.String()
 }
@@ -13907,12 +16072,20 @@ type NoUpdateAvailableException struct {
 	Message_ *string `locationName:"message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s NoUpdateAvailableException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s NoUpdateAvailableException) GoString() string {
 	return s.String()
 }
@@ -13964,9 +16137,10 @@ func (s *NoUpdateAvailableException) RequestID() string {
 type PlacementConstraint struct {
 	_ struct{} `type:"structure"`
 
-	// A cluster query language expression to apply to the constraint. You cannot
-	// specify an expression if the constraint type is distinctInstance. For more
-	// information, see Cluster Query Language (https://docs.aws.amazon.com/AmazonECS/latest/developerguide/cluster-query-language.html)
+	// A cluster query language expression to apply to the constraint. The expression
+	// can have a maximum length of 2000 characters. You can't specify an expression
+	// if the constraint type is distinctInstance. For more information, see Cluster
+	// query language (https://docs.aws.amazon.com/AmazonECS/latest/developerguide/cluster-query-language.html)
 	// in the Amazon Elastic Container Service Developer Guide.
 	Expression *string `locationName:"expression" type:"string"`
 
@@ -13976,12 +16150,20 @@ type PlacementConstraint struct {
 	Type *string `locationName:"type" type:"string" enum:"PlacementConstraintType"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s PlacementConstraint) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s PlacementConstraint) GoString() string {
 	return s.String()
 }
@@ -14022,12 +16204,20 @@ type PlacementStrategy struct {
 	Type *string `locationName:"type" type:"string" enum:"PlacementStrategyType"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s PlacementStrategy) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s PlacementStrategy) GoString() string {
 	return s.String()
 }
@@ -14063,12 +16253,20 @@ type PlatformDevice struct {
 	Type *string `locationName:"type" type:"string" required:"true" enum:"PlatformDeviceType"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s PlatformDevice) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s PlatformDevice) GoString() string {
 	return s.String()
 }
@@ -14110,12 +16308,20 @@ type PlatformTaskDefinitionIncompatibilityException struct {
 	Message_ *string `locationName:"message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s PlatformTaskDefinitionIncompatibilityException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s PlatformTaskDefinitionIncompatibilityException) GoString() string {
 	return s.String()
 }
@@ -14166,12 +16372,20 @@ type PlatformUnknownException struct {
 	Message_ *string `locationName:"message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s PlatformUnknownException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s PlatformUnknownException) GoString() string {
 	return s.String()
 }
@@ -14222,6 +16436,9 @@ func (s *PlatformUnknownException) RequestID() string {
 // exposed ports should be specified using containerPort. The hostPort can be
 // left blank or it must be the same value as the containerPort.
 //
+// You cannot expose the same container port for multiple protocols. An error
+// will be returned if this is attempted
+//
 // After a task reaches the RUNNING status, manual and automatic host and container
 // port assignments are visible in the networkBindings section of DescribeTasks
 // API responses.
@@ -14239,9 +16456,6 @@ type PortMapping struct {
 	// receives a host port in the ephemeral port range. For more information, see
 	// hostPort. Port mappings that are automatically assigned in this way do not
 	// count toward the 100 reserved ports limit of a container instance.
-	//
-	// You cannot expose the same container port for multiple protocols. An error
-	// will be returned if this is attempted.
 	ContainerPort *int64 `locationName:"containerPort" type:"integer"`
 
 	// The port number on the container instance to reserve for your container.
@@ -14280,12 +16494,20 @@ type PortMapping struct {
 	Protocol *string `locationName:"protocol" type:"string" enum:"TransportProtocol"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s PortMapping) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s PortMapping) GoString() string {
 	return s.String()
 }
@@ -14316,10 +16538,6 @@ func (s *PortMapping) SetProtocol(v string) *PortMapping {
 // are launched from the Amazon ECS-optimized AMI version 20190301 or later,
 // then they contain the required versions of the container agent and ecs-init.
 // For more information, see Amazon ECS-optimized Linux AMI (https://docs.aws.amazon.com/AmazonECS/latest/developerguide/ecs-optimized_AMI.html)
-// in the Amazon Elastic Container Service Developer Guide.
-//
-// For tasks using the Fargate launch type, the task or service requires platform
-// version 1.3.0 or later.
 type ProxyConfiguration struct {
 	_ struct{} `type:"structure"`
 
@@ -14363,12 +16581,20 @@ type ProxyConfiguration struct {
 	Type *string `locationName:"type" type:"string" enum:"ProxyConfigurationType"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ProxyConfiguration) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ProxyConfiguration) GoString() string {
 	return s.String()
 }
@@ -14426,12 +16652,20 @@ type PutAccountSettingDefaultInput struct {
 	Value *string `locationName:"value" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s PutAccountSettingDefaultInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s PutAccountSettingDefaultInput) GoString() string {
 	return s.String()
 }
@@ -14467,16 +16701,24 @@ func (s *PutAccountSettingDefaultInput) SetValue(v string) *PutAccountSettingDef
 type PutAccountSettingDefaultOutput struct {
 	_ struct{} `type:"structure"`
 
-	// The current account setting for a resource.
+	// The current setting for a resource.
 	Setting *Setting `locationName:"setting" type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s PutAccountSettingDefaultOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s PutAccountSettingDefaultOutput) GoString() string {
 	return s.String()
 }
@@ -14508,6 +16750,9 @@ type PutAccountSettingInput struct {
 	// IAM users, IAM roles, and the root user of the account unless an IAM user
 	// or role explicitly overrides these settings. If this field is omitted, the
 	// setting is changed only for the authenticated user.
+	//
+	// Federated users assume the account setting of the root user and can't have
+	// explicit account settings set for them.
 	PrincipalArn *string `locationName:"principalArn" type:"string"`
 
 	// The account setting value for the specified principal ARN. Accepted values
@@ -14517,12 +16762,20 @@ type PutAccountSettingInput struct {
 	Value *string `locationName:"value" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s PutAccountSettingInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s PutAccountSettingInput) GoString() string {
 	return s.String()
 }
@@ -14568,12 +16821,20 @@ type PutAccountSettingOutput struct {
 	Setting *Setting `locationName:"setting" type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s PutAccountSettingOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s PutAccountSettingOutput) GoString() string {
 	return s.String()
 }
@@ -14600,12 +16861,20 @@ type PutAttributesInput struct {
 	Cluster *string `locationName:"cluster" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s PutAttributesInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s PutAttributesInput) GoString() string {
 	return s.String()
 }
@@ -14652,12 +16921,20 @@ type PutAttributesOutput struct {
 	Attributes []*Attribute `locationName:"attributes" type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s PutAttributesOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s PutAttributesOutput) GoString() string {
 	return s.String()
 }
@@ -14677,9 +16954,9 @@ type PutClusterCapacityProvidersInput struct {
 	// provider must already be created. New capacity providers can be created with
 	// the CreateCapacityProvider API operation.
 	//
-	// To use a AWS Fargate capacity provider, specify either the FARGATE or FARGATE_SPOT
-	// capacity providers. The AWS Fargate capacity providers are available to all
-	// accounts and only need to be associated with a cluster to be used.
+	// To use a Fargate capacity provider, specify either the FARGATE or FARGATE_SPOT
+	// capacity providers. The Fargate capacity providers are available to all accounts
+	// and only need to be associated with a cluster to be used.
 	//
 	// CapacityProviders is a required field
 	CapacityProviders []*string `locationName:"capacityProviders" type:"list" required:"true"`
@@ -14707,20 +16984,28 @@ type PutClusterCapacityProvidersInput struct {
 	// provider must already be created. New capacity providers can be created with
 	// the CreateCapacityProvider API operation.
 	//
-	// To use a AWS Fargate capacity provider, specify either the FARGATE or FARGATE_SPOT
-	// capacity providers. The AWS Fargate capacity providers are available to all
-	// accounts and only need to be associated with a cluster to be used.
+	// To use a Fargate capacity provider, specify either the FARGATE or FARGATE_SPOT
+	// capacity providers. The Fargate capacity providers are available to all accounts
+	// and only need to be associated with a cluster to be used.
 	//
 	// DefaultCapacityProviderStrategy is a required field
 	DefaultCapacityProviderStrategy []*CapacityProviderStrategyItem `locationName:"defaultCapacityProviderStrategy" type:"list" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s PutClusterCapacityProvidersInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s PutClusterCapacityProvidersInput) GoString() string {
 	return s.String()
 }
@@ -14775,19 +17060,24 @@ func (s *PutClusterCapacityProvidersInput) SetDefaultCapacityProviderStrategy(v 
 type PutClusterCapacityProvidersOutput struct {
 	_ struct{} `type:"structure"`
 
-	// A regional grouping of one or more container instances on which you can run
-	// task requests. Each account receives a default cluster the first time you
-	// use the Amazon ECS service, but you may also create other clusters. Clusters
-	// may contain more than one instance type simultaneously.
+	// Details about the cluster.
 	Cluster *Cluster `locationName:"cluster" type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s PutClusterCapacityProvidersOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s PutClusterCapacityProvidersOutput) GoString() string {
 	return s.String()
 }
@@ -14848,9 +17138,9 @@ type RegisterContainerInstanceInput struct {
 	//    * Tag keys and values are case-sensitive.
 	//
 	//    * Do not use aws:, AWS:, or any upper or lowercase combination of such
-	//    as a prefix for either keys or values as it is reserved for AWS use. You
-	//    cannot edit or delete tag keys or values with this prefix. Tags with this
-	//    prefix do not count against your tags per resource limit.
+	//    as a prefix for either keys or values as it is reserved for Amazon Web
+	//    Services use. You cannot edit or delete tag keys or values with this prefix.
+	//    Tags with this prefix do not count against your tags per resource limit.
 	Tags []*Tag `locationName:"tags" type:"list"`
 
 	// The resources available on the instance.
@@ -14861,12 +17151,20 @@ type RegisterContainerInstanceInput struct {
 	VersionInfo *VersionInfo `locationName:"versionInfo" type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s RegisterContainerInstanceInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s RegisterContainerInstanceInput) GoString() string {
 	return s.String()
 }
@@ -14972,12 +17270,20 @@ type RegisterContainerInstanceOutput struct {
 	ContainerInstance *ContainerInstance `locationName:"containerInstance" type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s RegisterContainerInstanceOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s RegisterContainerInstanceOutput) GoString() string {
 	return s.String()
 }
@@ -15028,17 +17334,28 @@ type RegisterTaskDefinitionInput struct {
 	//    (30 GB) in increments of 1024 (1 GB)
 	Cpu *string `locationName:"cpu" type:"string"`
 
+	// The amount of ephemeral storage to allocate for the task. This parameter
+	// is used to expand the total amount of ephemeral storage available, beyond
+	// the default amount, for tasks hosted on Fargate. For more information, see
+	// Fargate task storage (https://docs.aws.amazon.com/AmazonECS/latest/userguide/using_data_volumes.html)
+	// in the Amazon ECS User Guide for Fargate.
+	//
+	// This parameter is only supported for tasks hosted on Fargate using platform
+	// version 1.4.0 or later.
+	EphemeralStorage *EphemeralStorage `locationName:"ephemeralStorage" type:"structure"`
+
 	// The Amazon Resource Name (ARN) of the task execution role that grants the
-	// Amazon ECS container agent permission to make AWS API calls on your behalf.
-	// The task execution IAM role is required depending on the requirements of
-	// your task. For more information, see Amazon ECS task execution IAM role (https://docs.aws.amazon.com/AmazonECS/latest/developerguide/task_execution_IAM_role.html)
+	// Amazon ECS container agent permission to make Amazon Web Services API calls
+	// on your behalf. The task execution IAM role is required depending on the
+	// requirements of your task. For more information, see Amazon ECS task execution
+	// IAM role (https://docs.aws.amazon.com/AmazonECS/latest/developerguide/task_execution_IAM_role.html)
 	// in the Amazon Elastic Container Service Developer Guide.
 	ExecutionRoleArn *string `locationName:"executionRoleArn" type:"string"`
 
 	// You must specify a family for a task definition, which allows you to track
 	// multiple versions of the same task definition. The family is used as a name
 	// for your task definition. Up to 255 letters (uppercase and lowercase), numbers,
-	// and hyphens are allowed.
+	// underscores, and hyphens are allowed.
 	//
 	// Family is a required field
 	Family *string `locationName:"family" type:"string" required:"true"`
@@ -15073,8 +17390,7 @@ type RegisterTaskDefinitionInput struct {
 	//    * For tasks that use the task IPC mode, IPC namespace related systemControls
 	//    will apply to all containers within a task.
 	//
-	// This parameter is not supported for Windows containers or tasks using the
-	// Fargate launch type.
+	// This parameter is not supported for Windows containers or tasks run on Fargate.
 	IpcMode *string `locationName:"ipcMode" type:"string" enum:"IpcMode"`
 
 	// The amount of memory (in MiB) used by the task. It can be expressed as an
@@ -15108,19 +17424,25 @@ type RegisterTaskDefinitionInput struct {
 	Memory *string `locationName:"memory" type:"string"`
 
 	// The Docker networking mode to use for the containers in the task. The valid
-	// values are none, bridge, awsvpc, and host. The default Docker network mode
-	// is bridge. If you are using the Fargate launch type, the awsvpc network mode
-	// is required. If you are using the EC2 launch type, any network mode can be
-	// used. If the network mode is set to none, you cannot specify port mappings
-	// in your container definitions, and the tasks containers do not have external
-	// connectivity. The host and awsvpc network modes offer the highest networking
-	// performance for containers because they use the EC2 network stack instead
-	// of the virtualized network stack provided by the bridge mode.
+	// values are none, bridge, awsvpc, and host. If no network mode is specified,
+	// the default is bridge.
+	//
+	// For Amazon ECS tasks on Fargate, the awsvpc network mode is required. For
+	// Amazon ECS tasks on Amazon EC2 Linux instances, any network mode can be used.
+	// For Amazon ECS tasks on Amazon EC2 Windows instances, <default> or awsvpc
+	// can be used. If the network mode is set to none, you cannot specify port
+	// mappings in your container definitions, and the tasks containers do not have
+	// external connectivity. The host and awsvpc network modes offer the highest
+	// networking performance for containers because they use the EC2 network stack
+	// instead of the virtualized network stack provided by the bridge mode.
 	//
 	// With the host and awsvpc network modes, exposed container ports are mapped
 	// directly to the corresponding host port (for the host network mode) or the
 	// attached elastic network interface port (for the awsvpc network mode), so
 	// you cannot take advantage of dynamic host port mappings.
+	//
+	// When using the host network mode, you should not run containers using the
+	// root user (UID 0). It is considered best practice to use a non-root user.
 	//
 	// If the network mode is awsvpc, the task is allocated an elastic network interface,
 	// and you must specify a NetworkConfiguration value when you create a service
@@ -15128,17 +17450,8 @@ type RegisterTaskDefinitionInput struct {
 	// (https://docs.aws.amazon.com/AmazonECS/latest/developerguide/task-networking.html)
 	// in the Amazon Elastic Container Service Developer Guide.
 	//
-	// Currently, only Amazon ECS-optimized AMIs, other Amazon Linux variants with
-	// the ecs-init package, or AWS Fargate infrastructure support the awsvpc network
-	// mode.
-	//
 	// If the network mode is host, you cannot run multiple instantiations of the
 	// same task on a single container instance when port mappings are used.
-	//
-	// Docker for Windows uses different network modes than Docker for Linux. When
-	// you register a task definition with Windows containers, you must not specify
-	// a network mode. If you use the console to register a task definition with
-	// Windows containers, you must choose the <default> network mode object.
 	//
 	// For more information, see Network settings (https://docs.docker.com/engine/reference/run/#network-settings)
 	// in the Docker run reference.
@@ -15157,8 +17470,7 @@ type RegisterTaskDefinitionInput struct {
 	// undesired process namespace expose. For more information, see Docker security
 	// (https://docs.docker.com/engine/security/security/).
 	//
-	// This parameter is not supported for Windows containers or tasks using the
-	// Fargate launch type.
+	// This parameter is not supported for Windows containers or tasks run on Fargate.
 	PidMode *string `locationName:"pidMode" type:"string" enum:"PidMode"`
 
 	// An array of placement constraint objects to use for the task. You can specify
@@ -15168,20 +17480,20 @@ type RegisterTaskDefinitionInput struct {
 
 	// The configuration details for the App Mesh proxy.
 	//
-	// For tasks using the EC2 launch type, the container instances require at least
-	// version 1.26.0 of the container agent and at least version 1.26.0-1 of the
-	// ecs-init package to enable a proxy configuration. If your container instances
-	// are launched from the Amazon ECS-optimized AMI version 20190301 or later,
-	// then they contain the required versions of the container agent and ecs-init.
-	// For more information, see Amazon ECS-optimized Linux AMI (https://docs.aws.amazon.com/AmazonECS/latest/developerguide/ecs-optimized_AMI.html)
+	// For tasks hosted on Amazon EC2 instances, the container instances require
+	// at least version 1.26.0 of the container agent and at least version 1.26.0-1
+	// of the ecs-init package to enable a proxy configuration. If your container
+	// instances are launched from the Amazon ECS-optimized AMI version 20190301
+	// or later, then they contain the required versions of the container agent
+	// and ecs-init. For more information, see Amazon ECS-optimized AMI versions
+	// (https://docs.aws.amazon.com/AmazonECS/latest/developerguide/ecs-ami-versions.html)
 	// in the Amazon Elastic Container Service Developer Guide.
-	//
-	// For tasks using the Fargate launch type, the task or service requires platform
-	// version 1.3.0 or later.
 	ProxyConfiguration *ProxyConfiguration `locationName:"proxyConfiguration" type:"structure"`
 
-	// The launch type required by the task. If no value is specified, it defaults
-	// to EC2.
+	// The task launch type that Amazon ECS should validate the task definition
+	// against. A client exception is returned if the task definition doesn't validate
+	// against the compatibilities specified. If no value is specified, the parameter
+	// is omitted from the response.
 	RequiresCompatibilities []*string `locationName:"requiresCompatibilities" type:"list"`
 
 	// The metadata that you apply to the task definition to help you categorize
@@ -15207,9 +17519,9 @@ type RegisterTaskDefinitionInput struct {
 	//    * Tag keys and values are case-sensitive.
 	//
 	//    * Do not use aws:, AWS:, or any upper or lowercase combination of such
-	//    as a prefix for either keys or values as it is reserved for AWS use. You
-	//    cannot edit or delete tag keys or values with this prefix. Tags with this
-	//    prefix do not count against your tags per resource limit.
+	//    as a prefix for either keys or values as it is reserved for Amazon Web
+	//    Services use. You cannot edit or delete tag keys or values with this prefix.
+	//    Tags with this prefix do not count against your tags per resource limit.
 	Tags []*Tag `locationName:"tags" type:"list"`
 
 	// The short name or full Amazon Resource Name (ARN) of the IAM role that containers
@@ -15224,12 +17536,20 @@ type RegisterTaskDefinitionInput struct {
 	Volumes []*Volume `locationName:"volumes" type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s RegisterTaskDefinitionInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s RegisterTaskDefinitionInput) GoString() string {
 	return s.String()
 }
@@ -15251,6 +17571,11 @@ func (s *RegisterTaskDefinitionInput) Validate() error {
 			if err := v.Validate(); err != nil {
 				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "ContainerDefinitions", i), err.(request.ErrInvalidParams))
 			}
+		}
+	}
+	if s.EphemeralStorage != nil {
+		if err := s.EphemeralStorage.Validate(); err != nil {
+			invalidParams.AddNested("EphemeralStorage", err.(request.ErrInvalidParams))
 		}
 	}
 	if s.InferenceAccelerators != nil {
@@ -15304,6 +17629,12 @@ func (s *RegisterTaskDefinitionInput) SetContainerDefinitions(v []*ContainerDefi
 // SetCpu sets the Cpu field's value.
 func (s *RegisterTaskDefinitionInput) SetCpu(v string) *RegisterTaskDefinitionInput {
 	s.Cpu = &v
+	return s
+}
+
+// SetEphemeralStorage sets the EphemeralStorage field's value.
+func (s *RegisterTaskDefinitionInput) SetEphemeralStorage(v *EphemeralStorage) *RegisterTaskDefinitionInput {
+	s.EphemeralStorage = v
 	return s
 }
 
@@ -15395,12 +17726,20 @@ type RegisterTaskDefinitionOutput struct {
 	TaskDefinition *TaskDefinition `locationName:"taskDefinition" type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s RegisterTaskDefinitionOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s RegisterTaskDefinitionOutput) GoString() string {
 	return s.String()
 }
@@ -15424,21 +17763,30 @@ type RepositoryCredentials struct {
 	// The Amazon Resource Name (ARN) of the secret containing the private repository
 	// credentials.
 	//
-	// When you are using the Amazon ECS API, AWS CLI, or AWS SDK, if the secret
-	// exists in the same Region as the task that you are launching then you can
-	// use either the full ARN or the name of the secret. When you are using the
-	// AWS Management Console, you must specify the full ARN of the secret.
+	// When you are using the Amazon ECS API, CLI, or Amazon Web Services SDK, if
+	// the secret exists in the same Region as the task that you are launching then
+	// you can use either the full ARN or the name of the secret. When you are using
+	// the Amazon Web Services Management Console, you must specify the full ARN
+	// of the secret.
 	//
 	// CredentialsParameter is a required field
 	CredentialsParameter *string `locationName:"credentialsParameter" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s RepositoryCredentials) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s RepositoryCredentials) GoString() string {
 	return s.String()
 }
@@ -15489,12 +17837,20 @@ type Resource struct {
 	Type *string `locationName:"type" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s Resource) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s Resource) GoString() string {
 	return s.String()
 }
@@ -15543,12 +17899,20 @@ type ResourceInUseException struct {
 	Message_ *string `locationName:"message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ResourceInUseException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ResourceInUseException) GoString() string {
 	return s.String()
 }
@@ -15599,12 +17963,20 @@ type ResourceNotFoundException struct {
 	Message_ *string `locationName:"message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ResourceNotFoundException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ResourceNotFoundException) GoString() string {
 	return s.String()
 }
@@ -15650,7 +18022,7 @@ func (s *ResourceNotFoundException) RequestID() string {
 // The type and amount of a resource to assign to a container. The supported
 // resource types are GPUs and Elastic Inference accelerators. For more information,
 // see Working with GPUs on Amazon ECS (https://docs.aws.amazon.com/AmazonECS/latest/developerguide/ecs-gpu.html)
-// or Working with Amazon Elastic Inference on Amazon ECS (https://docs.aws.amazon.com/AmazonECS/latest/developerguide/ecs-eia.html)
+// or Working with Amazon Elastic Inference on Amazon ECS (https://docs.aws.amazon.com/AmazonECS/latest/developerguide/ecs-inference.html)
 // in the Amazon Elastic Container Service Developer Guide
 type ResourceRequirement struct {
 	_ struct{} `type:"structure"`
@@ -15675,12 +18047,20 @@ type ResourceRequirement struct {
 	Value *string `locationName:"value" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ResourceRequirement) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ResourceRequirement) GoString() string {
 	return s.String()
 }
@@ -15718,26 +18098,14 @@ type RunTaskInput struct {
 
 	// The capacity provider strategy to use for the task.
 	//
-	// A capacity provider strategy consists of one or more capacity providers along
-	// with the base and weight to assign to them. A capacity provider must be associated
-	// with the cluster to be used in a capacity provider strategy. The PutClusterCapacityProviders
-	// API is used to associate a capacity provider with a cluster. Only capacity
-	// providers with an ACTIVE or UPDATING status can be used.
-	//
 	// If a capacityProviderStrategy is specified, the launchType parameter must
 	// be omitted. If no capacityProviderStrategy or launchType is specified, the
 	// defaultCapacityProviderStrategy for the cluster is used.
 	//
-	// If specifying a capacity provider that uses an Auto Scaling group, the capacity
-	// provider must already be created. New capacity providers can be created with
-	// the CreateCapacityProvider API operation.
+	// When you use cluster auto scaling, you must specify capacityProviderStrategy
+	// and not launchType.
 	//
-	// To use a AWS Fargate capacity provider, specify either the FARGATE or FARGATE_SPOT
-	// capacity providers. The AWS Fargate capacity providers are available to all
-	// accounts and only need to be associated with a cluster to be used.
-	//
-	// The PutClusterCapacityProviders API operation is used to update the list
-	// of available capacity providers for a cluster after the cluster is created.
+	// A capacity provider strategy may contain a maximum of 6 capacity providers.
 	CapacityProviderStrategy []*CapacityProviderStrategyItem `locationName:"capacityProviderStrategy" type:"list"`
 
 	// The short name or full Amazon Resource Name (ARN) of the cluster on which
@@ -15754,22 +18122,43 @@ type RunTaskInput struct {
 	// in the Amazon Elastic Container Service Developer Guide.
 	EnableECSManagedTags *bool `locationName:"enableECSManagedTags" type:"boolean"`
 
+	// Whether or not to enable the execute command functionality for the containers
+	// in this task. If true, this enables execute command functionality on all
+	// containers in the task.
+	EnableExecuteCommand *bool `locationName:"enableExecuteCommand" type:"boolean"`
+
 	// The name of the task group to associate with the task. The default value
 	// is the family name of the task definition (for example, family:my-family-name).
 	Group *string `locationName:"group" type:"string"`
 
-	// The launch type on which to run your task. For more information, see Amazon
-	// ECS Launch Types (https://docs.aws.amazon.com/AmazonECS/latest/developerguide/launch_types.html)
+	// The infrastructure on which to run your standalone task. For more information,
+	// see Amazon ECS launch types (https://docs.aws.amazon.com/AmazonECS/latest/developerguide/launch_types.html)
 	// in the Amazon Elastic Container Service Developer Guide.
 	//
-	// If a launchType is specified, the capacityProviderStrategy parameter must
-	// be omitted.
+	// The FARGATE launch type runs your tasks on Fargate On-Demand infrastructure.
+	//
+	// Fargate Spot infrastructure is available for use but a capacity provider
+	// strategy must be used. For more information, see Fargate capacity providers
+	// (https://docs.aws.amazon.com/AmazonECS/latest/userguide/fargate-capacity-providers.html)
+	// in the Amazon ECS User Guide for Fargate.
+	//
+	// The EC2 launch type runs your tasks on Amazon EC2 instances registered to
+	// your cluster.
+	//
+	// The EXTERNAL launch type runs your tasks on your on-premise server or virtual
+	// machine (VM) capacity registered to your cluster.
+	//
+	// A task can use either a launch type or a capacity provider strategy. If a
+	// launchType is specified, the capacityProviderStrategy parameter must be omitted.
+	//
+	// When you use cluster auto scaling, you must specify capacityProviderStrategy
+	// and not launchType.
 	LaunchType *string `locationName:"launchType" type:"string" enum:"LaunchType"`
 
 	// The network configuration for the task. This parameter is required for task
 	// definitions that use the awsvpc network mode to receive their own elastic
 	// network interface, and it is not supported for other network modes. For more
-	// information, see Task Networking (https://docs.aws.amazon.com/AmazonECS/latest/developerguide/task-networking.html)
+	// information, see Task networking (https://docs.aws.amazon.com/AmazonECS/latest/developerguide/task-networking.html)
 	// in the Amazon Elastic Container Service Developer Guide.
 	NetworkConfiguration *NetworkConfiguration `locationName:"networkConfiguration" type:"structure"`
 
@@ -15791,13 +18180,13 @@ type RunTaskInput struct {
 	PlacementConstraints []*PlacementConstraint `locationName:"placementConstraints" type:"list"`
 
 	// The placement strategy objects to use for the task. You can specify a maximum
-	// of five strategy rules per task.
+	// of 5 strategy rules per task.
 	PlacementStrategy []*PlacementStrategy `locationName:"placementStrategy" type:"list"`
 
-	// The platform version the task should run. A platform version is only specified
-	// for tasks using the Fargate launch type. If one is not specified, the LATEST
-	// platform version is used by default. For more information, see AWS Fargate
-	// Platform Versions (https://docs.aws.amazon.com/AmazonECS/latest/developerguide/platform_versions.html)
+	// The platform version the task should use. A platform version is only specified
+	// for tasks hosted on Fargate. If one is not specified, the LATEST platform
+	// version is used by default. For more information, see Fargate platform versions
+	// (https://docs.aws.amazon.com/AmazonECS/latest/developerguide/platform_versions.html)
 	// in the Amazon Elastic Container Service Developer Guide.
 	PlatformVersion *string `locationName:"platformVersion" type:"string"`
 
@@ -15810,7 +18199,8 @@ type RunTaskInput struct {
 	// a task.
 	PropagateTags *string `locationName:"propagateTags" type:"string" enum:"PropagateTags"`
 
-	// The reference ID to use for the task.
+	// The reference ID to use for the task. The reference ID can have a maximum
+	// length of 1024 characters.
 	ReferenceId *string `locationName:"referenceId" type:"string"`
 
 	// An optional tag specified when a task is started. For example, if you automatically
@@ -15847,24 +18237,37 @@ type RunTaskInput struct {
 	//    * Tag keys and values are case-sensitive.
 	//
 	//    * Do not use aws:, AWS:, or any upper or lowercase combination of such
-	//    as a prefix for either keys or values as it is reserved for AWS use. You
-	//    cannot edit or delete tag keys or values with this prefix. Tags with this
-	//    prefix do not count against your tags per resource limit.
+	//    as a prefix for either keys or values as it is reserved for Amazon Web
+	//    Services use. You cannot edit or delete tag keys or values with this prefix.
+	//    Tags with this prefix do not count against your tags per resource limit.
 	Tags []*Tag `locationName:"tags" type:"list"`
 
 	// The family and revision (family:revision) or full ARN of the task definition
 	// to run. If a revision is not specified, the latest ACTIVE revision is used.
 	//
+	// The full ARN value must match the value that you specified ias the Resource
+	// of the IAM principal's permissions policy. For example, if the Resource is
+	// arn:aws:ecs:us-east-1:111122223333:task-definition/TaskFamilyName:*, the
+	// taskDefinition ARN value must be arn:aws:ecs:us-east-1:111122223333:task-definition/TaskFamilyName.
+	//
 	// TaskDefinition is a required field
 	TaskDefinition *string `locationName:"taskDefinition" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s RunTaskInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s RunTaskInput) GoString() string {
 	return s.String()
 }
@@ -15933,6 +18336,12 @@ func (s *RunTaskInput) SetCount(v int64) *RunTaskInput {
 // SetEnableECSManagedTags sets the EnableECSManagedTags field's value.
 func (s *RunTaskInput) SetEnableECSManagedTags(v bool) *RunTaskInput {
 	s.EnableECSManagedTags = &v
+	return s
+}
+
+// SetEnableExecuteCommand sets the EnableExecuteCommand field's value.
+func (s *RunTaskInput) SetEnableExecuteCommand(v bool) *RunTaskInput {
+	s.EnableExecuteCommand = &v
 	return s
 }
 
@@ -16019,12 +18428,20 @@ type RunTaskOutput struct {
 	Tasks []*Task `locationName:"tasks" type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s RunTaskOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s RunTaskOutput) GoString() string {
 	return s.String()
 }
@@ -16054,12 +18471,20 @@ type Scale struct {
 	Value *float64 `locationName:"value" type:"double"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s Scale) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s Scale) GoString() string {
 	return s.String()
 }
@@ -16096,24 +18521,32 @@ type Secret struct {
 	Name *string `locationName:"name" type:"string" required:"true"`
 
 	// The secret to expose to the container. The supported values are either the
-	// full ARN of the AWS Secrets Manager secret or the full ARN of the parameter
-	// in the AWS Systems Manager Parameter Store.
+	// full ARN of the Secrets Manager secret or the full ARN of the parameter in
+	// the SSM Parameter Store.
 	//
-	// If the AWS Systems Manager Parameter Store parameter exists in the same Region
-	// as the task you are launching, then you can use either the full ARN or name
-	// of the parameter. If the parameter exists in a different Region, then the
-	// full ARN must be specified.
+	// If the SSM Parameter Store parameter exists in the same Region as the task
+	// you are launching, then you can use either the full ARN or name of the parameter.
+	// If the parameter exists in a different Region, then the full ARN must be
+	// specified.
 	//
 	// ValueFrom is a required field
 	ValueFrom *string `locationName:"valueFrom" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s Secret) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s Secret) GoString() string {
 	return s.String()
 }
@@ -16154,12 +18587,20 @@ type ServerException struct {
 	Message_ *string `locationName:"message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ServerException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ServerException) GoString() string {
 	return s.String()
 }
@@ -16206,7 +18647,8 @@ func (s *ServerException) RequestID() string {
 type Service struct {
 	_ struct{} `type:"structure"`
 
-	// The capacity provider strategy associated with the service.
+	// The capacity provider strategy the service is using. When using the DescribeServices
+	// API, this field is omitted if the service was created using a launch type.
 	CapacityProviderStrategy []*CapacityProviderStrategyItem `locationName:"capacityProviderStrategy" type:"list"`
 
 	// The Amazon Resource Name (ARN) of the cluster that hosts the service.
@@ -16240,6 +18682,11 @@ type Service struct {
 	// in the Amazon Elastic Container Service Developer Guide.
 	EnableECSManagedTags *bool `locationName:"enableECSManagedTags" type:"boolean"`
 
+	// Whether or not the execute command functionality is enabled for the service.
+	// If true, the execute command functionality is enabled for all containers
+	// in tasks as part of the service.
+	EnableExecuteCommand *bool `locationName:"enableExecuteCommand" type:"boolean"`
+
 	// The event stream for your service. A maximum of 100 of the latest events
 	// are displayed.
 	Events []*ServiceEvent `locationName:"events" type:"list"`
@@ -16249,10 +18696,9 @@ type Service struct {
 	// started.
 	HealthCheckGracePeriodSeconds *int64 `locationName:"healthCheckGracePeriodSeconds" type:"integer"`
 
-	// The launch type on which your service is running. If no value is specified,
-	// it will default to EC2. Valid values include EC2 and FARGATE. For more information,
-	// see Amazon ECS Launch Types (https://docs.aws.amazon.com/AmazonECS/latest/developerguide/launch_types.html)
-	// in the Amazon Elastic Container Service Developer Guide.
+	// The launch type the service is using. When using the DescribeServices API,
+	// this field is omitted if the service was created using a capacity provider
+	// strategy.
 	LaunchType *string `locationName:"launchType" type:"string" enum:"LaunchType"`
 
 	// A list of Elastic Load Balancing load balancer objects, containing the load
@@ -16274,9 +18720,9 @@ type Service struct {
 	PlacementStrategy []*PlacementStrategy `locationName:"placementStrategy" type:"list"`
 
 	// The platform version on which to run your service. A platform version is
-	// only specified for tasks using the Fargate launch type. If one is not specified,
-	// the LATEST platform version is used by default. For more information, see
-	// AWS Fargate Platform Versions (https://docs.aws.amazon.com/AmazonECS/latest/developerguide/platform_versions.html)
+	// only specified for tasks hosted on Fargate. If one is not specified, the
+	// LATEST platform version is used by default. For more information, see Fargate
+	// Platform Versions (https://docs.aws.amazon.com/AmazonECS/latest/developerguide/platform_versions.html)
 	// in the Amazon Elastic Container Service Developer Guide.
 	PlatformVersion *string `locationName:"platformVersion" type:"string"`
 
@@ -16311,14 +18757,15 @@ type Service struct {
 	SchedulingStrategy *string `locationName:"schedulingStrategy" type:"string" enum:"SchedulingStrategy"`
 
 	// The ARN that identifies the service. The ARN contains the arn:aws:ecs namespace,
-	// followed by the Region of the service, the AWS account ID of the service
-	// owner, the service namespace, and then the service name. For example, arn:aws:ecs:region:012345678910:service/my-service.
+	// followed by the Region of the service, the Amazon Web Services account ID
+	// of the service owner, the service namespace, and then the service name. For
+	// example, arn:aws:ecs:region:012345678910:service/my-service.
 	ServiceArn *string `locationName:"serviceArn" type:"string"`
 
 	// The name of your service. Up to 255 letters (uppercase and lowercase), numbers,
-	// and hyphens are allowed. Service names must be unique within a cluster, but
-	// you can have similarly named services in multiple clusters within a Region
-	// or across multiple Regions.
+	// underscores, and hyphens are allowed. Service names must be unique within
+	// a cluster, but you can have similarly named services in multiple clusters
+	// within a Region or across multiple Regions.
 	ServiceName *string `locationName:"serviceName" type:"string"`
 
 	// The details of the service discovery registries to assign to this service.
@@ -16351,9 +18798,9 @@ type Service struct {
 	//    * Tag keys and values are case-sensitive.
 	//
 	//    * Do not use aws:, AWS:, or any upper or lowercase combination of such
-	//    as a prefix for either keys or values as it is reserved for AWS use. You
-	//    cannot edit or delete tag keys or values with this prefix. Tags with this
-	//    prefix do not count against your tags per resource limit.
+	//    as a prefix for either keys or values as it is reserved for Amazon Web
+	//    Services use. You cannot edit or delete tag keys or values with this prefix.
+	//    Tags with this prefix do not count against your tags per resource limit.
 	Tags []*Tag `locationName:"tags" type:"list"`
 
 	// The task definition to use for tasks in the service. This value is specified
@@ -16361,19 +18808,27 @@ type Service struct {
 	// UpdateService.
 	TaskDefinition *string `locationName:"taskDefinition" type:"string"`
 
-	// Information about a set of Amazon ECS tasks in either an AWS CodeDeploy or
-	// an EXTERNAL deployment. An Amazon ECS task set includes details such as the
+	// Information about a set of Amazon ECS tasks in either an CodeDeploy or an
+	// EXTERNAL deployment. An Amazon ECS task set includes details such as the
 	// desired number of tasks, how many tasks are running, and whether the task
 	// set serves production traffic.
 	TaskSets []*TaskSet `locationName:"taskSets" type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s Service) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s Service) GoString() string {
 	return s.String()
 }
@@ -16429,6 +18884,12 @@ func (s *Service) SetDesiredCount(v int64) *Service {
 // SetEnableECSManagedTags sets the EnableECSManagedTags field's value.
 func (s *Service) SetEnableECSManagedTags(v bool) *Service {
 	s.EnableECSManagedTags = &v
+	return s
+}
+
+// SetEnableExecuteCommand sets the EnableExecuteCommand field's value.
+func (s *Service) SetEnableExecuteCommand(v bool) *Service {
+	s.EnableExecuteCommand = &v
 	return s
 }
 
@@ -16566,12 +19027,20 @@ type ServiceEvent struct {
 	Message *string `locationName:"message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ServiceEvent) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ServiceEvent) GoString() string {
 	return s.String()
 }
@@ -16603,12 +19072,20 @@ type ServiceNotActiveException struct {
 	Message_ *string `locationName:"message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ServiceNotActiveException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ServiceNotActiveException) GoString() string {
 	return s.String()
 }
@@ -16660,12 +19137,20 @@ type ServiceNotFoundException struct {
 	Message_ *string `locationName:"message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ServiceNotFoundException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ServiceNotFoundException) GoString() string {
 	return s.String()
 }
@@ -16736,17 +19221,24 @@ type ServiceRegistry struct {
 	Port *int64 `locationName:"port" type:"integer"`
 
 	// The Amazon Resource Name (ARN) of the service registry. The currently supported
-	// service registry is AWS Cloud Map. For more information, see CreateService
-	// (https://docs.aws.amazon.com/cloud-map/latest/api/API_CreateService.html).
+	// service registry is Cloud Map. For more information, see CreateService (https://docs.aws.amazon.com/cloud-map/latest/api/API_CreateService.html).
 	RegistryArn *string `locationName:"registryArn" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ServiceRegistry) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ServiceRegistry) GoString() string {
 	return s.String()
 }
@@ -16775,6 +19267,62 @@ func (s *ServiceRegistry) SetRegistryArn(v string) *ServiceRegistry {
 	return s
 }
 
+// The details of the execute command session.
+type Session struct {
+	_ struct{} `type:"structure"`
+
+	// The ID of the execute command session.
+	SessionId *string `locationName:"sessionId" type:"string"`
+
+	// A URL back to managed agent on the container that the SSM Session Manager
+	// client uses to send commands and receive output from the container.
+	StreamUrl *string `locationName:"streamUrl" type:"string"`
+
+	// An encrypted token value containing session and caller information. Used
+	// to authenticate the connection to the container.
+	//
+	// TokenValue is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by Session's
+	// String and GoString methods.
+	TokenValue *string `locationName:"tokenValue" type:"string" sensitive:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s Session) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s Session) GoString() string {
+	return s.String()
+}
+
+// SetSessionId sets the SessionId field's value.
+func (s *Session) SetSessionId(v string) *Session {
+	s.SessionId = &v
+	return s
+}
+
+// SetStreamUrl sets the StreamUrl field's value.
+func (s *Session) SetStreamUrl(v string) *Session {
+	s.StreamUrl = &v
+	return s
+}
+
+// SetTokenValue sets the TokenValue field's value.
+func (s *Session) SetTokenValue(v string) *Session {
+	s.TokenValue = &v
+	return s
+}
+
 // The current account setting for a resource.
 type Setting struct {
 	_ struct{} `type:"structure"`
@@ -16790,12 +19338,20 @@ type Setting struct {
 	Value *string `locationName:"value" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s Setting) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s Setting) GoString() string {
 	return s.String()
 }
@@ -16837,6 +19393,11 @@ type StartTaskInput struct {
 	// information, see Tagging Your Amazon ECS Resources (https://docs.aws.amazon.com/AmazonECS/latest/developerguide/ecs-using-tags.html)
 	// in the Amazon Elastic Container Service Developer Guide.
 	EnableECSManagedTags *bool `locationName:"enableECSManagedTags" type:"boolean"`
+
+	// Whether or not the execute command functionality is enabled for the task.
+	// If true, this enables execute command functionality on all containers in
+	// the task.
+	EnableExecuteCommand *bool `locationName:"enableExecuteCommand" type:"boolean"`
 
 	// The name of the task group to associate with the task. The default value
 	// is the family name of the task definition (for example, family:my-family-name).
@@ -16899,9 +19460,9 @@ type StartTaskInput struct {
 	//    * Tag keys and values are case-sensitive.
 	//
 	//    * Do not use aws:, AWS:, or any upper or lowercase combination of such
-	//    as a prefix for either keys or values as it is reserved for AWS use. You
-	//    cannot edit or delete tag keys or values with this prefix. Tags with this
-	//    prefix do not count against your tags per resource limit.
+	//    as a prefix for either keys or values as it is reserved for Amazon Web
+	//    Services use. You cannot edit or delete tag keys or values with this prefix.
+	//    Tags with this prefix do not count against your tags per resource limit.
 	Tags []*Tag `locationName:"tags" type:"list"`
 
 	// The family and revision (family:revision) or full ARN of the task definition
@@ -16911,12 +19472,20 @@ type StartTaskInput struct {
 	TaskDefinition *string `locationName:"taskDefinition" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s StartTaskInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s StartTaskInput) GoString() string {
 	return s.String()
 }
@@ -16972,6 +19541,12 @@ func (s *StartTaskInput) SetContainerInstances(v []*string) *StartTaskInput {
 // SetEnableECSManagedTags sets the EnableECSManagedTags field's value.
 func (s *StartTaskInput) SetEnableECSManagedTags(v bool) *StartTaskInput {
 	s.EnableECSManagedTags = &v
+	return s
+}
+
+// SetEnableExecuteCommand sets the EnableExecuteCommand field's value.
+func (s *StartTaskInput) SetEnableExecuteCommand(v bool) *StartTaskInput {
+	s.EnableExecuteCommand = &v
 	return s
 }
 
@@ -17034,12 +19609,20 @@ type StartTaskOutput struct {
 	Tasks []*Task `locationName:"tasks" type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s StartTaskOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s StartTaskOutput) GoString() string {
 	return s.String()
 }
@@ -17076,12 +19659,20 @@ type StopTaskInput struct {
 	Task *string `locationName:"task" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s StopTaskInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s StopTaskInput) GoString() string {
 	return s.String()
 }
@@ -17124,12 +19715,20 @@ type StopTaskOutput struct {
 	Task *Task `locationName:"task" type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s StopTaskOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s StopTaskOutput) GoString() string {
 	return s.String()
 }
@@ -17153,12 +19752,20 @@ type SubmitAttachmentStateChangesInput struct {
 	Cluster *string `locationName:"cluster" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s SubmitAttachmentStateChangesInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s SubmitAttachmentStateChangesInput) GoString() string {
 	return s.String()
 }
@@ -17205,12 +19812,20 @@ type SubmitAttachmentStateChangesOutput struct {
 	Acknowledgment *string `locationName:"acknowledgment" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s SubmitAttachmentStateChangesOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s SubmitAttachmentStateChangesOutput) GoString() string {
 	return s.String()
 }
@@ -17250,12 +19865,20 @@ type SubmitContainerStateChangeInput struct {
 	Task *string `locationName:"task" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s SubmitContainerStateChangeInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s SubmitContainerStateChangeInput) GoString() string {
 	return s.String()
 }
@@ -17315,12 +19938,20 @@ type SubmitContainerStateChangeOutput struct {
 	Acknowledgment *string `locationName:"acknowledgment" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s SubmitContainerStateChangeOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s SubmitContainerStateChangeOutput) GoString() string {
 	return s.String()
 }
@@ -17347,6 +19978,9 @@ type SubmitTaskStateChangeInput struct {
 	// The Unix timestamp for when the task execution stopped.
 	ExecutionStoppedAt *time.Time `locationName:"executionStoppedAt" type:"timestamp"`
 
+	// The details for the managed agent associated with the task.
+	ManagedAgents []*ManagedAgentStateChange `locationName:"managedAgents" type:"list"`
+
 	// The Unix timestamp for when the container image pull began.
 	PullStartedAt *time.Time `locationName:"pullStartedAt" type:"timestamp"`
 
@@ -17363,12 +19997,20 @@ type SubmitTaskStateChangeInput struct {
 	Task *string `locationName:"task" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s SubmitTaskStateChangeInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s SubmitTaskStateChangeInput) GoString() string {
 	return s.String()
 }
@@ -17383,6 +20025,16 @@ func (s *SubmitTaskStateChangeInput) Validate() error {
 			}
 			if err := v.Validate(); err != nil {
 				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "Attachments", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+	if s.ManagedAgents != nil {
+		for i, v := range s.ManagedAgents {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "ManagedAgents", i), err.(request.ErrInvalidParams))
 			}
 		}
 	}
@@ -17414,6 +20066,12 @@ func (s *SubmitTaskStateChangeInput) SetContainers(v []*ContainerStateChange) *S
 // SetExecutionStoppedAt sets the ExecutionStoppedAt field's value.
 func (s *SubmitTaskStateChangeInput) SetExecutionStoppedAt(v time.Time) *SubmitTaskStateChangeInput {
 	s.ExecutionStoppedAt = &v
+	return s
+}
+
+// SetManagedAgents sets the ManagedAgents field's value.
+func (s *SubmitTaskStateChangeInput) SetManagedAgents(v []*ManagedAgentStateChange) *SubmitTaskStateChangeInput {
+	s.ManagedAgents = v
 	return s
 }
 
@@ -17454,12 +20112,20 @@ type SubmitTaskStateChangeOutput struct {
 	Acknowledgment *string `locationName:"acknowledgment" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s SubmitTaskStateChangeOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s SubmitTaskStateChangeOutput) GoString() string {
 	return s.String()
 }
@@ -17473,7 +20139,7 @@ func (s *SubmitTaskStateChangeOutput) SetAcknowledgment(v string) *SubmitTaskSta
 // A list of namespaced kernel parameters to set in the container. This parameter
 // maps to Sysctls in the Create a container (https://docs.docker.com/engine/api/v1.35/#operation/ContainerCreate)
 // section of the Docker Remote API (https://docs.docker.com/engine/api/v1.35/)
-// and the --sysctl option to docker run (https://docs.docker.com/engine/reference/run/).
+// and the --sysctl option to docker run (https://docs.docker.com/engine/reference/run/#security-configuration).
 //
 // It is not recommended that you specify network-related systemControls parameters
 // for multiple containers in a single task that also uses either the awsvpc
@@ -17497,12 +20163,20 @@ type SystemControl struct {
 	Value *string `locationName:"value" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s SystemControl) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s SystemControl) GoString() string {
 	return s.String()
 }
@@ -17542,9 +20216,9 @@ func (s *SystemControl) SetValue(v string) *SystemControl {
 //    * Tag keys and values are case-sensitive.
 //
 //    * Do not use aws:, AWS:, or any upper or lowercase combination of such
-//    as a prefix for either keys or values as it is reserved for AWS use. You
-//    cannot edit or delete tag keys or values with this prefix. Tags with this
-//    prefix do not count against your tags per resource limit.
+//    as a prefix for either keys or values as it is reserved for Amazon Web
+//    Services use. You cannot edit or delete tag keys or values with this prefix.
+//    Tags with this prefix do not count against your tags per resource limit.
 type Tag struct {
 	_ struct{} `type:"structure"`
 
@@ -17557,12 +20231,20 @@ type Tag struct {
 	Value *string `locationName:"value" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s Tag) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s Tag) GoString() string {
 	return s.String()
 }
@@ -17623,20 +20305,28 @@ type TagResourceInput struct {
 	//    * Tag keys and values are case-sensitive.
 	//
 	//    * Do not use aws:, AWS:, or any upper or lowercase combination of such
-	//    as a prefix for either keys or values as it is reserved for AWS use. You
-	//    cannot edit or delete tag keys or values with this prefix. Tags with this
-	//    prefix do not count against your tags per resource limit.
+	//    as a prefix for either keys or values as it is reserved for Amazon Web
+	//    Services use. You cannot edit or delete tag keys or values with this prefix.
+	//    Tags with this prefix do not count against your tags per resource limit.
 	//
 	// Tags is a required field
 	Tags []*Tag `locationName:"tags" type:"list" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s TagResourceInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s TagResourceInput) GoString() string {
 	return s.String()
 }
@@ -17683,14 +20373,87 @@ type TagResourceOutput struct {
 	_ struct{} `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s TagResourceOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s TagResourceOutput) GoString() string {
 	return s.String()
+}
+
+// The target container is not properly configured with the execute command
+// agent or the container is no longer active or running.
+type TargetNotConnectedException struct {
+	_            struct{}                  `type:"structure"`
+	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
+
+	Message_ *string `locationName:"message" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s TargetNotConnectedException) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s TargetNotConnectedException) GoString() string {
+	return s.String()
+}
+
+func newErrorTargetNotConnectedException(v protocol.ResponseMetadata) error {
+	return &TargetNotConnectedException{
+		RespMetadata: v,
+	}
+}
+
+// Code returns the exception type name.
+func (s *TargetNotConnectedException) Code() string {
+	return "TargetNotConnectedException"
+}
+
+// Message returns the exception's message.
+func (s *TargetNotConnectedException) Message() string {
+	if s.Message_ != nil {
+		return *s.Message_
+	}
+	return ""
+}
+
+// OrigErr always returns nil, satisfies awserr.Error interface.
+func (s *TargetNotConnectedException) OrigErr() error {
+	return nil
+}
+
+func (s *TargetNotConnectedException) Error() string {
+	return fmt.Sprintf("%s: %s", s.Code(), s.Message())
+}
+
+// Status code returns the HTTP status code for the request's response error.
+func (s *TargetNotConnectedException) StatusCode() int {
+	return s.RespMetadata.StatusCode
+}
+
+// RequestID returns the service's response RequestID for request.
+func (s *TargetNotConnectedException) RequestID() string {
+	return s.RespMetadata.RequestID
 }
 
 // The specified target could not be found. You can view your available container
@@ -17703,12 +20466,20 @@ type TargetNotFoundException struct {
 	Message_ *string `locationName:"message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s TargetNotFoundException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s TargetNotFoundException) GoString() string {
 	return s.String()
 }
@@ -17820,6 +20591,14 @@ type Task struct {
 	// (https://docs.aws.amazon.com/AmazonECS/latest/developerguide/task-lifecycle.html).
 	DesiredStatus *string `locationName:"desiredStatus" type:"string"`
 
+	// Whether or not execute command functionality is enabled for this task. If
+	// true, this enables execute command functionality on all containers in the
+	// task.
+	EnableExecuteCommand *bool `locationName:"enableExecuteCommand" type:"boolean"`
+
+	// The ephemeral storage settings for the task.
+	EphemeralStorage *EphemeralStorage `locationName:"ephemeralStorage" type:"structure"`
+
 	// The Unix timestamp for when the task execution stopped.
 	ExecutionStoppedAt *time.Time `locationName:"executionStoppedAt" type:"timestamp"`
 
@@ -17846,8 +20625,8 @@ type Task struct {
 	// (https://docs.aws.amazon.com/AmazonECS/latest/developerguide/task-lifecycle.html).
 	LastStatus *string `locationName:"lastStatus" type:"string"`
 
-	// The launch type on which your task is running. For more information, see
-	// Amazon ECS Launch Types (https://docs.aws.amazon.com/AmazonECS/latest/developerguide/launch_types.html)
+	// The infrastructure on which your task is running. For more information, see
+	// Amazon ECS launch types (https://docs.aws.amazon.com/AmazonECS/latest/developerguide/launch_types.html)
 	// in the Amazon Elastic Container Service Developer Guide.
 	LaunchType *string `locationName:"launchType" type:"string" enum:"LaunchType"`
 
@@ -17885,7 +20664,7 @@ type Task struct {
 	// The platform version on which your task is running. A platform version is
 	// only specified for tasks using the Fargate launch type. If one is not specified,
 	// the LATEST platform version is used by default. For more information, see
-	// AWS Fargate Platform Versions (https://docs.aws.amazon.com/AmazonECS/latest/developerguide/platform_versions.html)
+	// Fargate Platform Versions (https://docs.aws.amazon.com/AmazonECS/latest/developerguide/platform_versions.html)
 	// in the Amazon Elastic Container Service Developer Guide.
 	PlatformVersion *string `locationName:"platformVersion" type:"string"`
 
@@ -17942,9 +20721,9 @@ type Task struct {
 	//    * Tag keys and values are case-sensitive.
 	//
 	//    * Do not use aws:, AWS:, or any upper or lowercase combination of such
-	//    as a prefix for either keys or values as it is reserved for AWS use. You
-	//    cannot edit or delete tag keys or values with this prefix. Tags with this
-	//    prefix do not count against your tags per resource limit.
+	//    as a prefix for either keys or values as it is reserved for Amazon Web
+	//    Services use. You cannot edit or delete tag keys or values with this prefix.
+	//    Tags with this prefix do not count against your tags per resource limit.
 	Tags []*Tag `locationName:"tags" type:"list"`
 
 	// The Amazon Resource Name (ARN) of the task.
@@ -17962,12 +20741,20 @@ type Task struct {
 	Version *int64 `locationName:"version" type:"long"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s Task) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s Task) GoString() string {
 	return s.String()
 }
@@ -18041,6 +20828,18 @@ func (s *Task) SetCreatedAt(v time.Time) *Task {
 // SetDesiredStatus sets the DesiredStatus field's value.
 func (s *Task) SetDesiredStatus(v string) *Task {
 	s.DesiredStatus = &v
+	return s
+}
+
+// SetEnableExecuteCommand sets the EnableExecuteCommand field's value.
+func (s *Task) SetEnableExecuteCommand(v bool) *Task {
+	s.EnableExecuteCommand = &v
+	return s
+}
+
+// SetEphemeralStorage sets the EphemeralStorage field's value.
+func (s *Task) SetEphemeralStorage(v *EphemeralStorage) *Task {
+	s.EphemeralStorage = v
 	return s
 }
 
@@ -18178,8 +20977,8 @@ func (s *Task) SetVersion(v int64) *Task {
 type TaskDefinition struct {
 	_ struct{} `type:"structure"`
 
-	// The launch type to use with your task. For more information, see Amazon ECS
-	// Launch Types (https://docs.aws.amazon.com/AmazonECS/latest/developerguide/launch_types.html)
+	// The task launch types the task definition validated against during task definition
+	// registration. For more information, see Amazon ECS launch types (https://docs.aws.amazon.com/AmazonECS/latest/developerguide/launch_types.html)
 	// in the Amazon Elastic Container Service Developer Guide.
 	Compatibilities []*string `locationName:"compatibilities" type:"list"`
 
@@ -18211,10 +21010,17 @@ type TaskDefinition struct {
 	//    (30 GB) in increments of 1024 (1 GB)
 	Cpu *string `locationName:"cpu" type:"string"`
 
+	// The Unix timestamp for when the task definition was deregistered.
+	DeregisteredAt *time.Time `locationName:"deregisteredAt" type:"timestamp"`
+
+	// The ephemeral storage settings to use for tasks run with the task definition.
+	EphemeralStorage *EphemeralStorage `locationName:"ephemeralStorage" type:"structure"`
+
 	// The Amazon Resource Name (ARN) of the task execution role that grants the
-	// Amazon ECS container agent permission to make AWS API calls on your behalf.
-	// The task execution IAM role is required depending on the requirements of
-	// your task. For more information, see Amazon ECS task execution IAM role (https://docs.aws.amazon.com/AmazonECS/latest/developerguide/task_execution_IAM_role.html)
+	// Amazon ECS container agent permission to make Amazon Web Services API calls
+	// on your behalf. The task execution IAM role is required depending on the
+	// requirements of your task. For more information, see Amazon ECS task execution
+	// IAM role (https://docs.aws.amazon.com/AmazonECS/latest/developerguide/task_execution_IAM_role.html)
 	// in the Amazon Elastic Container Service Developer Guide.
 	ExecutionRoleArn *string `locationName:"executionRoleArn" type:"string"`
 
@@ -18258,18 +21064,19 @@ type TaskDefinition struct {
 	//    * For tasks that use the task IPC mode, IPC namespace related systemControls
 	//    will apply to all containers within a task.
 	//
-	// This parameter is not supported for Windows containers or tasks using the
-	// Fargate launch type.
+	// This parameter is not supported for Windows containers or tasks run on Fargate.
 	IpcMode *string `locationName:"ipcMode" type:"string" enum:"IpcMode"`
 
 	// The amount (in MiB) of memory used by the task.
 	//
-	// If using the EC2 launch type, this field is optional and any value can be
-	// used. If a task-level memory value is specified then the container-level
-	// memory value is optional.
+	// If your tasks will be run on Amazon EC2 instances, you must specify either
+	// a task-level memory value or a container-level memory value. This field is
+	// optional and any value can be used. If a task-level memory value is specified
+	// then the container-level memory value is optional. For more information regarding
+	// container-level memory and memory reservation, see ContainerDefinition (https://docs.aws.amazon.com/AmazonECS/latest/APIReference/API_ContainerDefinition.html).
 	//
-	// If using the Fargate launch type, this field is required and you must use
-	// one of the following values, which determines your range of valid values
+	// If your tasks will be run on Fargate, this field is required and you must
+	// use one of the following values, which determines your range of valid values
 	// for the cpu parameter:
 	//
 	//    * 512 (0.5 GB), 1024 (1 GB), 2048 (2 GB) - Available cpu values: 256 (.25
@@ -18289,19 +21096,25 @@ type TaskDefinition struct {
 	Memory *string `locationName:"memory" type:"string"`
 
 	// The Docker networking mode to use for the containers in the task. The valid
-	// values are none, bridge, awsvpc, and host. The default Docker network mode
-	// is bridge. If you are using the Fargate launch type, the awsvpc network mode
-	// is required. If you are using the EC2 launch type, any network mode can be
-	// used. If the network mode is set to none, you cannot specify port mappings
-	// in your container definitions, and the tasks containers do not have external
-	// connectivity. The host and awsvpc network modes offer the highest networking
-	// performance for containers because they use the EC2 network stack instead
-	// of the virtualized network stack provided by the bridge mode.
+	// values are none, bridge, awsvpc, and host. If no network mode is specified,
+	// the default is bridge.
+	//
+	// For Amazon ECS tasks on Fargate, the awsvpc network mode is required. For
+	// Amazon ECS tasks on Amazon EC2 Linux instances, any network mode can be used.
+	// For Amazon ECS tasks on Amazon EC2 Windows instances, <default> or awsvpc
+	// can be used. If the network mode is set to none, you cannot specify port
+	// mappings in your container definitions, and the tasks containers do not have
+	// external connectivity. The host and awsvpc network modes offer the highest
+	// networking performance for containers because they use the EC2 network stack
+	// instead of the virtualized network stack provided by the bridge mode.
 	//
 	// With the host and awsvpc network modes, exposed container ports are mapped
 	// directly to the corresponding host port (for the host network mode) or the
 	// attached elastic network interface port (for the awsvpc network mode), so
 	// you cannot take advantage of dynamic host port mappings.
+	//
+	// When using the host network mode, you should not run containers using the
+	// root user (UID 0). It is considered best practice to use a non-root user.
 	//
 	// If the network mode is awsvpc, the task is allocated an elastic network interface,
 	// and you must specify a NetworkConfiguration value when you create a service
@@ -18309,17 +21122,8 @@ type TaskDefinition struct {
 	// (https://docs.aws.amazon.com/AmazonECS/latest/developerguide/task-networking.html)
 	// in the Amazon Elastic Container Service Developer Guide.
 	//
-	// Currently, only Amazon ECS-optimized AMIs, other Amazon Linux variants with
-	// the ecs-init package, or AWS Fargate infrastructure support the awsvpc network
-	// mode.
-	//
 	// If the network mode is host, you cannot run multiple instantiations of the
 	// same task on a single container instance when port mappings are used.
-	//
-	// Docker for Windows uses different network modes than Docker for Linux. When
-	// you register a task definition with Windows containers, you must not specify
-	// a network mode. If you use the console to register a task definition with
-	// Windows containers, you must choose the <default> network mode object.
 	//
 	// For more information, see Network settings (https://docs.docker.com/engine/reference/run/#network-settings)
 	// in the Docker run reference.
@@ -18338,12 +21142,12 @@ type TaskDefinition struct {
 	// undesired process namespace expose. For more information, see Docker security
 	// (https://docs.docker.com/engine/security/security/).
 	//
-	// This parameter is not supported for Windows containers or tasks using the
-	// Fargate launch type.
+	// This parameter is not supported for Windows containers or tasks run on Fargate.
 	PidMode *string `locationName:"pidMode" type:"string" enum:"PidMode"`
 
-	// An array of placement constraint objects to use for tasks. This field is
-	// not valid if you are using the Fargate launch type for your task.
+	// An array of placement constraint objects to use for tasks.
+	//
+	// This parameter is not supported for tasks run on Fargate.
 	PlacementConstraints []*TaskDefinitionPlacementConstraint `locationName:"placementConstraints" type:"list"`
 
 	// The configuration details for the App Mesh proxy.
@@ -18357,12 +21161,26 @@ type TaskDefinition struct {
 	// in the Amazon Elastic Container Service Developer Guide.
 	ProxyConfiguration *ProxyConfiguration `locationName:"proxyConfiguration" type:"structure"`
 
-	// The container instance attributes required by your task. This field is not
-	// valid if you are using the Fargate launch type for your task.
+	// The Unix timestamp for when the task definition was registered.
+	RegisteredAt *time.Time `locationName:"registeredAt" type:"timestamp"`
+
+	// The principal that registered the task definition.
+	RegisteredBy *string `locationName:"registeredBy" type:"string"`
+
+	// The container instance attributes required by your task. When an Amazon EC2
+	// instance is registered to your cluster, the Amazon ECS container agent assigns
+	// some standard attributes to the instance. You can apply custom attributes,
+	// specified as key-value pairs using the Amazon ECS console or the PutAttributes
+	// API. These attributes are used when considering task placement for tasks
+	// hosted on Amazon EC2 instances. For more information, see Attributes (https://docs.aws.amazon.com/AmazonECS/latest/developerguide/task-placement-constraints.html#attributes)
+	// in the Amazon Elastic Container Service Developer Guide.
+	//
+	// This parameter is not supported for tasks run on Fargate.
 	RequiresAttributes []*Attribute `locationName:"requiresAttributes" type:"list"`
 
-	// The launch type the task requires. If no value is specified, it will default
-	// to EC2. Valid values include EC2 and FARGATE.
+	// The task launch types the task definition was validated against. To determine
+	// which task launch types the task definition is validated for, see the TaskDefinition$compatibilities
+	// parameter.
 	RequiresCompatibilities []*string `locationName:"requiresCompatibilities" type:"list"`
 
 	// The revision of the task in a particular family. The revision is a version
@@ -18379,36 +21197,41 @@ type TaskDefinition struct {
 	// The full Amazon Resource Name (ARN) of the task definition.
 	TaskDefinitionArn *string `locationName:"taskDefinitionArn" type:"string"`
 
-	// The short name or full Amazon Resource Name (ARN) of the AWS Identity and
-	// Access Management (IAM) role that grants containers in the task permission
-	// to call AWS APIs on your behalf. For more information, see Amazon ECS Task
+	// The short name or full Amazon Resource Name (ARN) of the Identity and Access
+	// Management role that grants containers in the task permission to call Amazon
+	// Web Services APIs on your behalf. For more information, see Amazon ECS Task
 	// Role (https://docs.aws.amazon.com/AmazonECS/latest/developerguide/task-iam-roles.html)
 	// in the Amazon Elastic Container Service Developer Guide.
 	//
 	// IAM roles for tasks on Windows require that the -EnableTaskIAMRole option
 	// is set when you launch the Amazon ECS-optimized Windows AMI. Your containers
 	// must also run some configuration code in order to take advantage of the feature.
-	// For more information, see Windows IAM Roles for Tasks (https://docs.aws.amazon.com/AmazonECS/latest/developerguide/windows_task_IAM_roles.html)
+	// For more information, see Windows IAM roles for tasks (https://docs.aws.amazon.com/AmazonECS/latest/developerguide/windows_task_IAM_roles.html)
 	// in the Amazon Elastic Container Service Developer Guide.
 	TaskRoleArn *string `locationName:"taskRoleArn" type:"string"`
 
-	// The list of volume definitions for the task.
-	//
-	// If your tasks are using the Fargate launch type, the host and sourcePath
-	// parameters are not supported.
-	//
-	// For more information about volume definition parameters and defaults, see
-	// Amazon ECS Task Definitions (https://docs.aws.amazon.com/AmazonECS/latest/developerguide/task_definitions.html)
+	// The list of data volume definitions for the task. For more information, see
+	// Using data volumes in tasks (https://docs.aws.amazon.com/AmazonECS/latest/developerguide/using_data_volumes.html)
 	// in the Amazon Elastic Container Service Developer Guide.
+	//
+	// The host and sourcePath parameters are not supported for tasks run on Fargate.
 	Volumes []*Volume `locationName:"volumes" type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s TaskDefinition) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s TaskDefinition) GoString() string {
 	return s.String()
 }
@@ -18428,6 +21251,18 @@ func (s *TaskDefinition) SetContainerDefinitions(v []*ContainerDefinition) *Task
 // SetCpu sets the Cpu field's value.
 func (s *TaskDefinition) SetCpu(v string) *TaskDefinition {
 	s.Cpu = &v
+	return s
+}
+
+// SetDeregisteredAt sets the DeregisteredAt field's value.
+func (s *TaskDefinition) SetDeregisteredAt(v time.Time) *TaskDefinition {
+	s.DeregisteredAt = &v
+	return s
+}
+
+// SetEphemeralStorage sets the EphemeralStorage field's value.
+func (s *TaskDefinition) SetEphemeralStorage(v *EphemeralStorage) *TaskDefinition {
+	s.EphemeralStorage = v
 	return s
 }
 
@@ -18485,6 +21320,18 @@ func (s *TaskDefinition) SetProxyConfiguration(v *ProxyConfiguration) *TaskDefin
 	return s
 }
 
+// SetRegisteredAt sets the RegisteredAt field's value.
+func (s *TaskDefinition) SetRegisteredAt(v time.Time) *TaskDefinition {
+	s.RegisteredAt = &v
+	return s
+}
+
+// SetRegisteredBy sets the RegisteredBy field's value.
+func (s *TaskDefinition) SetRegisteredBy(v string) *TaskDefinition {
+	s.RegisteredBy = &v
+	return s
+}
+
 // SetRequiresAttributes sets the RequiresAttributes field's value.
 func (s *TaskDefinition) SetRequiresAttributes(v []*Attribute) *TaskDefinition {
 	s.RequiresAttributes = v
@@ -18528,16 +21375,15 @@ func (s *TaskDefinition) SetVolumes(v []*Volume) *TaskDefinition {
 }
 
 // An object representing a constraint on task placement in the task definition.
-// For more information, see Task Placement Constraints (https://docs.aws.amazon.com/AmazonECS/latest/developerguide/task-placement-constraints.html)
+// For more information, see Task placement constraints (https://docs.aws.amazon.com/AmazonECS/latest/developerguide/task-placement-constraints.html)
 // in the Amazon Elastic Container Service Developer Guide.
 //
-// If you are using the Fargate launch type, task placement constraints are
-// not supported.
+// Task placement constraints are not supported for tasks run on Fargate.
 type TaskDefinitionPlacementConstraint struct {
 	_ struct{} `type:"structure"`
 
 	// A cluster query language expression to apply to the constraint. For more
-	// information, see Cluster Query Language (https://docs.aws.amazon.com/AmazonECS/latest/developerguide/cluster-query-language.html)
+	// information, see Cluster query language (https://docs.aws.amazon.com/AmazonECS/latest/developerguide/cluster-query-language.html)
 	// in the Amazon Elastic Container Service Developer Guide.
 	Expression *string `locationName:"expression" type:"string"`
 
@@ -18546,12 +21392,20 @@ type TaskDefinitionPlacementConstraint struct {
 	Type *string `locationName:"type" type:"string" enum:"TaskDefinitionPlacementConstraintType"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s TaskDefinitionPlacementConstraint) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s TaskDefinitionPlacementConstraint) GoString() string {
 	return s.String()
 }
@@ -18578,8 +21432,15 @@ type TaskOverride struct {
 	// The cpu override for the task.
 	Cpu *string `locationName:"cpu" type:"string"`
 
+	// The ephemeral storage setting override for the task.
+	//
+	// This parameter is only supported for tasks hosted on Fargate using platform
+	// version 1.4.0 or later.
+	EphemeralStorage *EphemeralStorage `locationName:"ephemeralStorage" type:"structure"`
+
 	// The Amazon Resource Name (ARN) of the task execution IAM role override for
-	// the task.
+	// the task. For more information, see Amazon ECS task execution IAM role (https://docs.aws.amazon.com/AmazonECS/latest/developerguide/task_execution_IAM_role.html)
+	// in the Amazon Elastic Container Service Developer Guide.
 	ExecutionRoleArn *string `locationName:"executionRoleArn" type:"string"`
 
 	// The Elastic Inference accelerator override for the task.
@@ -18590,16 +21451,26 @@ type TaskOverride struct {
 
 	// The Amazon Resource Name (ARN) of the IAM role that containers in this task
 	// can assume. All containers in this task are granted the permissions that
-	// are specified in this role.
+	// are specified in this role. For more information, see IAM Role for Tasks
+	// (https://docs.aws.amazon.com/AmazonECS/latest/developerguide/task-iam-roles.html)
+	// in the Amazon Elastic Container Service Developer Guide.
 	TaskRoleArn *string `locationName:"taskRoleArn" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s TaskOverride) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s TaskOverride) GoString() string {
 	return s.String()
 }
@@ -18615,6 +21486,11 @@ func (s *TaskOverride) Validate() error {
 			if err := v.Validate(); err != nil {
 				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "ContainerOverrides", i), err.(request.ErrInvalidParams))
 			}
+		}
+	}
+	if s.EphemeralStorage != nil {
+		if err := s.EphemeralStorage.Validate(); err != nil {
+			invalidParams.AddNested("EphemeralStorage", err.(request.ErrInvalidParams))
 		}
 	}
 
@@ -18633,6 +21509,12 @@ func (s *TaskOverride) SetContainerOverrides(v []*ContainerOverride) *TaskOverri
 // SetCpu sets the Cpu field's value.
 func (s *TaskOverride) SetCpu(v string) *TaskOverride {
 	s.Cpu = &v
+	return s
+}
+
+// SetEphemeralStorage sets the EphemeralStorage field's value.
+func (s *TaskOverride) SetEphemeralStorage(v *EphemeralStorage) *TaskOverride {
+	s.EphemeralStorage = v
 	return s
 }
 
@@ -18660,8 +21542,8 @@ func (s *TaskOverride) SetTaskRoleArn(v string) *TaskOverride {
 	return s
 }
 
-// Information about a set of Amazon ECS tasks in either an AWS CodeDeploy or
-// an EXTERNAL deployment. An Amazon ECS task set includes details such as the
+// Information about a set of Amazon ECS tasks in either an CodeDeploy or an
+// EXTERNAL deployment. An Amazon ECS task set includes details such as the
 // desired number of tasks, how many tasks are running, and whether the task
 // set serves production traffic.
 type TaskSet struct {
@@ -18685,19 +21567,19 @@ type TaskSet struct {
 
 	// The external ID associated with the task set.
 	//
-	// If a task set is created by an AWS CodeDeploy deployment, the externalId
-	// parameter contains the AWS CodeDeploy deployment ID.
+	// If a task set is created by an CodeDeploy deployment, the externalId parameter
+	// contains the CodeDeploy deployment ID.
 	//
 	// If a task set is created for an external deployment and is associated with
 	// a service discovery registry, the externalId parameter contains the ECS_TASK_SET_EXTERNAL_ID
-	// AWS Cloud Map attribute.
+	// Cloud Map attribute.
 	ExternalId *string `locationName:"externalId" type:"string"`
 
 	// The ID of the task set.
 	Id *string `locationName:"id" type:"string"`
 
 	// The launch type the tasks in the task set are using. For more information,
-	// see Amazon ECS Launch Types (https://docs.aws.amazon.com/AmazonECS/latest/developerguide/launch_types.html)
+	// see Amazon ECS launch types (https://docs.aws.amazon.com/AmazonECS/latest/developerguide/launch_types.html)
 	// in the Amazon Elastic Container Service Developer Guide.
 	LaunchType *string `locationName:"launchType" type:"string" enum:"LaunchType"`
 
@@ -18713,10 +21595,9 @@ type TaskSet struct {
 	// time or when it is restarted after being in the STOPPED state.
 	PendingCount *int64 `locationName:"pendingCount" type:"integer"`
 
-	// The platform version on which the tasks in the task set are running. A platform
-	// version is only specified for tasks using the Fargate launch type. If one
-	// is not specified, the LATEST platform version is used by default. For more
-	// information, see AWS Fargate Platform Versions (https://docs.aws.amazon.com/AmazonECS/latest/developerguide/platform_versions.html)
+	// The Fargate platform version on which the tasks in the task set are running.
+	// A platform version is only specified for tasks run on Fargate. For more information,
+	// see Fargate platform versions (https://docs.aws.amazon.com/AmazonECS/latest/developerguide/platform_versions.html)
 	// in the Amazon Elastic Container Service Developer Guide.
 	PlatformVersion *string `locationName:"platformVersion" type:"string"`
 
@@ -18732,7 +21613,7 @@ type TaskSet struct {
 	ServiceArn *string `locationName:"serviceArn" type:"string"`
 
 	// The details of the service discovery registries to assign to this task set.
-	// For more information, see Service Discovery (https://docs.aws.amazon.com/AmazonECS/latest/developerguide/service-discovery.html).
+	// For more information, see Service discovery (https://docs.aws.amazon.com/AmazonECS/latest/developerguide/service-discovery.html).
 	ServiceRegistries []*ServiceRegistry `locationName:"serviceRegistries" type:"list"`
 
 	// The stability status, which indicates whether the task set has reached a
@@ -18755,8 +21636,8 @@ type TaskSet struct {
 	StabilityStatusAt *time.Time `locationName:"stabilityStatusAt" type:"timestamp"`
 
 	// The tag specified when a task set is started. If the task set is created
-	// by an AWS CodeDeploy deployment, the startedBy parameter is CODE_DEPLOY.
-	// For a task set created for an external deployment, the startedBy field isn't
+	// by an CodeDeploy deployment, the startedBy parameter is CODE_DEPLOY. For
+	// a task set created for an external deployment, the startedBy field isn't
 	// used.
 	StartedBy *string `locationName:"startedBy" type:"string"`
 
@@ -18799,9 +21680,9 @@ type TaskSet struct {
 	//    * Tag keys and values are case-sensitive.
 	//
 	//    * Do not use aws:, AWS:, or any upper or lowercase combination of such
-	//    as a prefix for either keys or values as it is reserved for AWS use. You
-	//    cannot edit or delete tag keys or values with this prefix. Tags with this
-	//    prefix do not count against your tags per resource limit.
+	//    as a prefix for either keys or values as it is reserved for Amazon Web
+	//    Services use. You cannot edit or delete tag keys or values with this prefix.
+	//    Tags with this prefix do not count against your tags per resource limit.
 	Tags []*Tag `locationName:"tags" type:"list"`
 
 	// The task definition the task set is using.
@@ -18814,12 +21695,20 @@ type TaskSet struct {
 	UpdatedAt *time.Time `locationName:"updatedAt" type:"timestamp"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s TaskSet) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s TaskSet) GoString() string {
 	return s.String()
 }
@@ -18972,12 +21861,20 @@ type TaskSetNotFoundException struct {
 	Message_ *string `locationName:"message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s TaskSetNotFoundException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s TaskSetNotFoundException) GoString() string {
 	return s.String()
 }
@@ -19039,18 +21936,26 @@ type Tmpfs struct {
 	// | "mode" | "uid" | "gid" | "nr_inodes" | "nr_blocks" | "mpol"
 	MountOptions []*string `locationName:"mountOptions" type:"list"`
 
-	// The size (in MiB) of the tmpfs volume.
+	// The maximum size (in MiB) of the tmpfs volume.
 	//
 	// Size is a required field
 	Size *int64 `locationName:"size" type:"integer" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s Tmpfs) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s Tmpfs) GoString() string {
 	return s.String()
 }
@@ -19090,6 +21995,12 @@ func (s *Tmpfs) SetSize(v int64) *Tmpfs {
 }
 
 // The ulimit settings to pass to the container.
+//
+// Amazon ECS tasks hosted on Fargate use the default resource limit values
+// set by the operating system with the exception of the nofile resource limit
+// parameter which Fargate overrides. The nofile resource limit sets a restriction
+// on the number of open files that a container can use. The default nofile
+// soft limit is 1024 and hard limit is 4096.
 type Ulimit struct {
 	_ struct{} `type:"structure"`
 
@@ -19109,12 +22020,20 @@ type Ulimit struct {
 	SoftLimit *int64 `locationName:"softLimit" type:"integer" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s Ulimit) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s Ulimit) GoString() string {
 	return s.String()
 }
@@ -19164,12 +22083,20 @@ type UnsupportedFeatureException struct {
 	Message_ *string `locationName:"message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UnsupportedFeatureException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UnsupportedFeatureException) GoString() string {
 	return s.String()
 }
@@ -19228,12 +22155,20 @@ type UntagResourceInput struct {
 	TagKeys []*string `locationName:"tagKeys" type:"list" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UntagResourceInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UntagResourceInput) GoString() string {
 	return s.String()
 }
@@ -19270,14 +22205,214 @@ type UntagResourceOutput struct {
 	_ struct{} `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UntagResourceOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UntagResourceOutput) GoString() string {
 	return s.String()
+}
+
+type UpdateCapacityProviderInput struct {
+	_ struct{} `type:"structure"`
+
+	// An object representing the parameters to update for the Auto Scaling group
+	// capacity provider.
+	//
+	// AutoScalingGroupProvider is a required field
+	AutoScalingGroupProvider *AutoScalingGroupProviderUpdate `locationName:"autoScalingGroupProvider" type:"structure" required:"true"`
+
+	// The name of the capacity provider to update.
+	//
+	// Name is a required field
+	Name *string `locationName:"name" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdateCapacityProviderInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdateCapacityProviderInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *UpdateCapacityProviderInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "UpdateCapacityProviderInput"}
+	if s.AutoScalingGroupProvider == nil {
+		invalidParams.Add(request.NewErrParamRequired("AutoScalingGroupProvider"))
+	}
+	if s.Name == nil {
+		invalidParams.Add(request.NewErrParamRequired("Name"))
+	}
+	if s.AutoScalingGroupProvider != nil {
+		if err := s.AutoScalingGroupProvider.Validate(); err != nil {
+			invalidParams.AddNested("AutoScalingGroupProvider", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetAutoScalingGroupProvider sets the AutoScalingGroupProvider field's value.
+func (s *UpdateCapacityProviderInput) SetAutoScalingGroupProvider(v *AutoScalingGroupProviderUpdate) *UpdateCapacityProviderInput {
+	s.AutoScalingGroupProvider = v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *UpdateCapacityProviderInput) SetName(v string) *UpdateCapacityProviderInput {
+	s.Name = &v
+	return s
+}
+
+type UpdateCapacityProviderOutput struct {
+	_ struct{} `type:"structure"`
+
+	// Details about the capacity provider.
+	CapacityProvider *CapacityProvider `locationName:"capacityProvider" type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdateCapacityProviderOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdateCapacityProviderOutput) GoString() string {
+	return s.String()
+}
+
+// SetCapacityProvider sets the CapacityProvider field's value.
+func (s *UpdateCapacityProviderOutput) SetCapacityProvider(v *CapacityProvider) *UpdateCapacityProviderOutput {
+	s.CapacityProvider = v
+	return s
+}
+
+type UpdateClusterInput struct {
+	_ struct{} `type:"structure"`
+
+	// The name of the cluster to modify the settings for.
+	//
+	// Cluster is a required field
+	Cluster *string `locationName:"cluster" type:"string" required:"true"`
+
+	// The execute command configuration for the cluster.
+	Configuration *ClusterConfiguration `locationName:"configuration" type:"structure"`
+
+	// The cluster settings for your cluster.
+	Settings []*ClusterSetting `locationName:"settings" type:"list"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdateClusterInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdateClusterInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *UpdateClusterInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "UpdateClusterInput"}
+	if s.Cluster == nil {
+		invalidParams.Add(request.NewErrParamRequired("Cluster"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetCluster sets the Cluster field's value.
+func (s *UpdateClusterInput) SetCluster(v string) *UpdateClusterInput {
+	s.Cluster = &v
+	return s
+}
+
+// SetConfiguration sets the Configuration field's value.
+func (s *UpdateClusterInput) SetConfiguration(v *ClusterConfiguration) *UpdateClusterInput {
+	s.Configuration = v
+	return s
+}
+
+// SetSettings sets the Settings field's value.
+func (s *UpdateClusterInput) SetSettings(v []*ClusterSetting) *UpdateClusterInput {
+	s.Settings = v
+	return s
+}
+
+type UpdateClusterOutput struct {
+	_ struct{} `type:"structure"`
+
+	// Details about the cluster.
+	Cluster *Cluster `locationName:"cluster" type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdateClusterOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdateClusterOutput) GoString() string {
+	return s.String()
+}
+
+// SetCluster sets the Cluster field's value.
+func (s *UpdateClusterOutput) SetCluster(v *Cluster) *UpdateClusterOutput {
+	s.Cluster = v
+	return s
 }
 
 type UpdateClusterSettingsInput struct {
@@ -19297,12 +22432,20 @@ type UpdateClusterSettingsInput struct {
 	Settings []*ClusterSetting `locationName:"settings" type:"list" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpdateClusterSettingsInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpdateClusterSettingsInput) GoString() string {
 	return s.String()
 }
@@ -19338,19 +22481,24 @@ func (s *UpdateClusterSettingsInput) SetSettings(v []*ClusterSetting) *UpdateClu
 type UpdateClusterSettingsOutput struct {
 	_ struct{} `type:"structure"`
 
-	// A regional grouping of one or more container instances on which you can run
-	// task requests. Each account receives a default cluster the first time you
-	// use the Amazon ECS service, but you may also create other clusters. Clusters
-	// may contain more than one instance type simultaneously.
+	// Details about the cluster
 	Cluster *Cluster `locationName:"cluster" type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpdateClusterSettingsOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpdateClusterSettingsOutput) GoString() string {
 	return s.String()
 }
@@ -19376,12 +22524,20 @@ type UpdateContainerAgentInput struct {
 	ContainerInstance *string `locationName:"containerInstance" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpdateContainerAgentInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpdateContainerAgentInput) GoString() string {
 	return s.String()
 }
@@ -19418,12 +22574,20 @@ type UpdateContainerAgentOutput struct {
 	ContainerInstance *ContainerInstance `locationName:"containerInstance" type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpdateContainerAgentOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpdateContainerAgentOutput) GoString() string {
 	return s.String()
 }
@@ -19458,12 +22622,20 @@ type UpdateContainerInstancesStateInput struct {
 	Status *string `locationName:"status" type:"string" required:"true" enum:"ContainerInstanceStatus"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpdateContainerInstancesStateInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpdateContainerInstancesStateInput) GoString() string {
 	return s.String()
 }
@@ -19512,12 +22684,20 @@ type UpdateContainerInstancesStateOutput struct {
 	Failures []*Failure `locationName:"failures" type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpdateContainerInstancesStateOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpdateContainerInstancesStateOutput) GoString() string {
 	return s.String()
 }
@@ -19546,12 +22726,20 @@ type UpdateInProgressException struct {
 	Message_ *string `locationName:"message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpdateInProgressException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpdateInProgressException) GoString() string {
 	return s.String()
 }
@@ -19616,9 +22804,9 @@ type UpdateServiceInput struct {
 	// provider must already be created. New capacity providers can be created with
 	// the CreateCapacityProvider API operation.
 	//
-	// To use a AWS Fargate capacity provider, specify either the FARGATE or FARGATE_SPOT
-	// capacity providers. The AWS Fargate capacity providers are available to all
-	// accounts and only need to be associated with a cluster to be used.
+	// To use a Fargate capacity provider, specify either the FARGATE or FARGATE_SPOT
+	// capacity providers. The Fargate capacity providers are available to all accounts
+	// and only need to be associated with a cluster to be used.
 	//
 	// The PutClusterCapacityProviders API operation is used to update the list
 	// of available capacity providers for a cluster after the cluster is created.
@@ -19636,6 +22824,12 @@ type UpdateServiceInput struct {
 	// The number of instantiations of the task to place and keep running in your
 	// service.
 	DesiredCount *int64 `locationName:"desiredCount" type:"integer"`
+
+	// If true, this enables execute command functionality on all task containers.
+	//
+	// If you do not want to override the value that was set when the service was
+	// created, you can set this to null when performing this action.
+	EnableExecuteCommand *bool `locationName:"enableExecuteCommand" type:"boolean"`
 
 	// Whether to force a new deployment of the service. Deployments are not forced
 	// by default. You can use this option to trigger a new deployment with no service
@@ -19655,7 +22849,7 @@ type UpdateServiceInput struct {
 	// and stopping them before they have time to come up.
 	HealthCheckGracePeriodSeconds *int64 `locationName:"healthCheckGracePeriodSeconds" type:"integer"`
 
-	// An object representing the network configuration for a task or service.
+	// An object representing the network configuration for the service.
 	NetworkConfiguration *NetworkConfiguration `locationName:"networkConfiguration" type:"structure"`
 
 	// An array of task placement constraint objects to update the service to use.
@@ -19680,7 +22874,7 @@ type UpdateServiceInput struct {
 	// The platform version on which your tasks in the service are running. A platform
 	// version is only specified for tasks using the Fargate launch type. If a platform
 	// version is not specified, the LATEST platform version is used by default.
-	// For more information, see AWS Fargate Platform Versions (https://docs.aws.amazon.com/AmazonECS/latest/developerguide/platform_versions.html)
+	// For more information, see Fargate Platform Versions (https://docs.aws.amazon.com/AmazonECS/latest/developerguide/platform_versions.html)
 	// in the Amazon Elastic Container Service Developer Guide.
 	PlatformVersion *string `locationName:"platformVersion" type:"string"`
 
@@ -19697,12 +22891,20 @@ type UpdateServiceInput struct {
 	TaskDefinition *string `locationName:"taskDefinition" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpdateServiceInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpdateServiceInput) GoString() string {
 	return s.String()
 }
@@ -19721,6 +22923,11 @@ func (s *UpdateServiceInput) Validate() error {
 			if err := v.Validate(); err != nil {
 				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "CapacityProviderStrategy", i), err.(request.ErrInvalidParams))
 			}
+		}
+	}
+	if s.DeploymentConfiguration != nil {
+		if err := s.DeploymentConfiguration.Validate(); err != nil {
+			invalidParams.AddNested("DeploymentConfiguration", err.(request.ErrInvalidParams))
 		}
 	}
 	if s.NetworkConfiguration != nil {
@@ -19756,6 +22963,12 @@ func (s *UpdateServiceInput) SetDeploymentConfiguration(v *DeploymentConfigurati
 // SetDesiredCount sets the DesiredCount field's value.
 func (s *UpdateServiceInput) SetDesiredCount(v int64) *UpdateServiceInput {
 	s.DesiredCount = &v
+	return s
+}
+
+// SetEnableExecuteCommand sets the EnableExecuteCommand field's value.
+func (s *UpdateServiceInput) SetEnableExecuteCommand(v bool) *UpdateServiceInput {
+	s.EnableExecuteCommand = &v
 	return s
 }
 
@@ -19814,12 +23027,20 @@ type UpdateServiceOutput struct {
 	Service *Service `locationName:"service" type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpdateServiceOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpdateServiceOutput) GoString() string {
 	return s.String()
 }
@@ -19852,12 +23073,20 @@ type UpdateServicePrimaryTaskSetInput struct {
 	Service *string `locationName:"service" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpdateServicePrimaryTaskSetInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpdateServicePrimaryTaskSetInput) GoString() string {
 	return s.String()
 }
@@ -19902,19 +23131,24 @@ func (s *UpdateServicePrimaryTaskSetInput) SetService(v string) *UpdateServicePr
 type UpdateServicePrimaryTaskSetOutput struct {
 	_ struct{} `type:"structure"`
 
-	// Information about a set of Amazon ECS tasks in either an AWS CodeDeploy or
-	// an EXTERNAL deployment. An Amazon ECS task set includes details such as the
-	// desired number of tasks, how many tasks are running, and whether the task
-	// set serves production traffic.
+	// Details about the task set.
 	TaskSet *TaskSet `locationName:"taskSet" type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpdateServicePrimaryTaskSetOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpdateServicePrimaryTaskSetOutput) GoString() string {
 	return s.String()
 }
@@ -19952,12 +23186,20 @@ type UpdateTaskSetInput struct {
 	TaskSet *string `locationName:"taskSet" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpdateTaskSetInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpdateTaskSetInput) GoString() string {
 	return s.String()
 }
@@ -20011,19 +23253,24 @@ func (s *UpdateTaskSetInput) SetTaskSet(v string) *UpdateTaskSetInput {
 type UpdateTaskSetOutput struct {
 	_ struct{} `type:"structure"`
 
-	// Information about a set of Amazon ECS tasks in either an AWS CodeDeploy or
-	// an EXTERNAL deployment. An Amazon ECS task set includes details such as the
-	// desired number of tasks, how many tasks are running, and whether the task
-	// set serves production traffic.
+	// Details about the task set.
 	TaskSet *TaskSet `locationName:"taskSet" type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpdateTaskSetOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpdateTaskSetOutput) GoString() string {
 	return s.String()
 }
@@ -20050,12 +23297,20 @@ type VersionInfo struct {
 	DockerVersion *string `locationName:"dockerVersion" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s VersionInfo) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s VersionInfo) GoString() string {
 	return s.String()
 }
@@ -20078,23 +23333,31 @@ func (s *VersionInfo) SetDockerVersion(v string) *VersionInfo {
 	return s
 }
 
-// A data volume used in a task definition. For tasks that use Amazon Elastic
-// File System (Amazon EFS) file storage, specify an efsVolumeConfiguration.
-// For tasks that use a Docker volume, specify a DockerVolumeConfiguration.
-// For tasks that use a bind mount host volume, specify a host and optional
-// sourcePath. For more information, see Using Data Volumes in Tasks (https://docs.aws.amazon.com/AmazonECS/latest/developerguide/using_data_volumes.html).
+// A data volume used in a task definition. For tasks that use the Amazon Elastic
+// File System (Amazon EFS), specify an efsVolumeConfiguration. For Windows
+// tasks that use Amazon FSx for Windows File Server file system, specify a
+// fsxWindowsFileServerVolumeConfiguration. For tasks that use a Docker volume,
+// specify a DockerVolumeConfiguration. For tasks that use a bind mount host
+// volume, specify a host and optional sourcePath. For more information, see
+// Using Data Volumes in Tasks (https://docs.aws.amazon.com/AmazonECS/latest/developerguide/using_data_volumes.html).
 type Volume struct {
 	_ struct{} `type:"structure"`
 
-	// This parameter is specified when you are using Docker volumes. Docker volumes
-	// are only supported when you are using the EC2 launch type. Windows containers
-	// only support the use of the local driver. To use bind mounts, specify the
-	// host parameter instead.
+	// This parameter is specified when you are using Docker volumes.
+	//
+	// Windows containers only support the use of the local driver. To use bind
+	// mounts, specify the host parameter instead.
+	//
+	// Docker volumes are not supported by tasks run on Fargate.
 	DockerVolumeConfiguration *DockerVolumeConfiguration `locationName:"dockerVolumeConfiguration" type:"structure"`
 
 	// This parameter is specified when you are using an Amazon Elastic File System
 	// file system for task storage.
 	EfsVolumeConfiguration *EFSVolumeConfiguration `locationName:"efsVolumeConfiguration" type:"structure"`
+
+	// This parameter is specified when you are using Amazon FSx for Windows File
+	// Server file system for task storage.
+	FsxWindowsFileServerVolumeConfiguration *FSxWindowsFileServerVolumeConfiguration `locationName:"fsxWindowsFileServerVolumeConfiguration" type:"structure"`
 
 	// This parameter is specified when you are using bind mount host volumes. The
 	// contents of the host parameter determine whether your bind mount host volume
@@ -20110,17 +23373,25 @@ type Volume struct {
 	Host *HostVolumeProperties `locationName:"host" type:"structure"`
 
 	// The name of the volume. Up to 255 letters (uppercase and lowercase), numbers,
-	// and hyphens are allowed. This name is referenced in the sourceVolume parameter
-	// of container definition mountPoints.
+	// underscores, and hyphens are allowed. This name is referenced in the sourceVolume
+	// parameter of container definition mountPoints.
 	Name *string `locationName:"name" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s Volume) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s Volume) GoString() string {
 	return s.String()
 }
@@ -20131,6 +23402,11 @@ func (s *Volume) Validate() error {
 	if s.EfsVolumeConfiguration != nil {
 		if err := s.EfsVolumeConfiguration.Validate(); err != nil {
 			invalidParams.AddNested("EfsVolumeConfiguration", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.FsxWindowsFileServerVolumeConfiguration != nil {
+		if err := s.FsxWindowsFileServerVolumeConfiguration.Validate(); err != nil {
+			invalidParams.AddNested("FsxWindowsFileServerVolumeConfiguration", err.(request.ErrInvalidParams))
 		}
 	}
 
@@ -20149,6 +23425,12 @@ func (s *Volume) SetDockerVolumeConfiguration(v *DockerVolumeConfiguration) *Vol
 // SetEfsVolumeConfiguration sets the EfsVolumeConfiguration field's value.
 func (s *Volume) SetEfsVolumeConfiguration(v *EFSVolumeConfiguration) *Volume {
 	s.EfsVolumeConfiguration = v
+	return s
+}
+
+// SetFsxWindowsFileServerVolumeConfiguration sets the FsxWindowsFileServerVolumeConfiguration field's value.
+func (s *Volume) SetFsxWindowsFileServerVolumeConfiguration(v *FSxWindowsFileServerVolumeConfiguration) *Volume {
+	s.FsxWindowsFileServerVolumeConfiguration = v
 	return s
 }
 
@@ -20178,12 +23460,20 @@ type VolumeFrom struct {
 	SourceContainer *string `locationName:"sourceContainer" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s VolumeFrom) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s VolumeFrom) GoString() string {
 	return s.String()
 }
@@ -20285,6 +23575,15 @@ const (
 
 	// CapacityProviderUpdateStatusDeleteFailed is a CapacityProviderUpdateStatus enum value
 	CapacityProviderUpdateStatusDeleteFailed = "DELETE_FAILED"
+
+	// CapacityProviderUpdateStatusUpdateInProgress is a CapacityProviderUpdateStatus enum value
+	CapacityProviderUpdateStatusUpdateInProgress = "UPDATE_IN_PROGRESS"
+
+	// CapacityProviderUpdateStatusUpdateComplete is a CapacityProviderUpdateStatus enum value
+	CapacityProviderUpdateStatusUpdateComplete = "UPDATE_COMPLETE"
+
+	// CapacityProviderUpdateStatusUpdateFailed is a CapacityProviderUpdateStatus enum value
+	CapacityProviderUpdateStatusUpdateFailed = "UPDATE_FAILED"
 )
 
 // CapacityProviderUpdateStatus_Values returns all elements of the CapacityProviderUpdateStatus enum
@@ -20293,12 +23592,18 @@ func CapacityProviderUpdateStatus_Values() []string {
 		CapacityProviderUpdateStatusDeleteInProgress,
 		CapacityProviderUpdateStatusDeleteComplete,
 		CapacityProviderUpdateStatusDeleteFailed,
+		CapacityProviderUpdateStatusUpdateInProgress,
+		CapacityProviderUpdateStatusUpdateComplete,
+		CapacityProviderUpdateStatusUpdateFailed,
 	}
 }
 
 const (
 	// ClusterFieldAttachments is a ClusterField enum value
 	ClusterFieldAttachments = "ATTACHMENTS"
+
+	// ClusterFieldConfigurations is a ClusterField enum value
+	ClusterFieldConfigurations = "CONFIGURATIONS"
 
 	// ClusterFieldSettings is a ClusterField enum value
 	ClusterFieldSettings = "SETTINGS"
@@ -20314,6 +23619,7 @@ const (
 func ClusterField_Values() []string {
 	return []string{
 		ClusterFieldAttachments,
+		ClusterFieldConfigurations,
 		ClusterFieldSettings,
 		ClusterFieldStatistics,
 		ClusterFieldTags,
@@ -20338,6 +23644,9 @@ const (
 
 	// CompatibilityFargate is a Compatibility enum value
 	CompatibilityFargate = "FARGATE"
+
+	// CompatibilityExternal is a Compatibility enum value
+	CompatibilityExternal = "EXTERNAL"
 )
 
 // Compatibility_Values returns all elements of the Compatibility enum
@@ -20345,6 +23654,7 @@ func Compatibility_Values() []string {
 	return []string{
 		CompatibilityEc2,
 		CompatibilityFargate,
+		CompatibilityExternal,
 	}
 }
 
@@ -20449,6 +23759,26 @@ func DeploymentControllerType_Values() []string {
 }
 
 const (
+	// DeploymentRolloutStateCompleted is a DeploymentRolloutState enum value
+	DeploymentRolloutStateCompleted = "COMPLETED"
+
+	// DeploymentRolloutStateFailed is a DeploymentRolloutState enum value
+	DeploymentRolloutStateFailed = "FAILED"
+
+	// DeploymentRolloutStateInProgress is a DeploymentRolloutState enum value
+	DeploymentRolloutStateInProgress = "IN_PROGRESS"
+)
+
+// DeploymentRolloutState_Values returns all elements of the DeploymentRolloutState enum
+func DeploymentRolloutState_Values() []string {
+	return []string{
+		DeploymentRolloutStateCompleted,
+		DeploymentRolloutStateFailed,
+		DeploymentRolloutStateInProgress,
+	}
+}
+
+const (
 	// DesiredStatusRunning is a DesiredStatus enum value
 	DesiredStatusRunning = "RUNNING"
 
@@ -20533,6 +23863,26 @@ func EnvironmentFileType_Values() []string {
 }
 
 const (
+	// ExecuteCommandLoggingNone is a ExecuteCommandLogging enum value
+	ExecuteCommandLoggingNone = "NONE"
+
+	// ExecuteCommandLoggingDefault is a ExecuteCommandLogging enum value
+	ExecuteCommandLoggingDefault = "DEFAULT"
+
+	// ExecuteCommandLoggingOverride is a ExecuteCommandLogging enum value
+	ExecuteCommandLoggingOverride = "OVERRIDE"
+)
+
+// ExecuteCommandLogging_Values returns all elements of the ExecuteCommandLogging enum
+func ExecuteCommandLogging_Values() []string {
+	return []string{
+		ExecuteCommandLoggingNone,
+		ExecuteCommandLoggingDefault,
+		ExecuteCommandLoggingOverride,
+	}
+}
+
+const (
 	// FirelensConfigurationTypeFluentd is a FirelensConfigurationType enum value
 	FirelensConfigurationTypeFluentd = "fluentd"
 
@@ -20594,6 +23944,9 @@ const (
 
 	// LaunchTypeFargate is a LaunchType enum value
 	LaunchTypeFargate = "FARGATE"
+
+	// LaunchTypeExternal is a LaunchType enum value
+	LaunchTypeExternal = "EXTERNAL"
 )
 
 // LaunchType_Values returns all elements of the LaunchType enum
@@ -20601,6 +23954,7 @@ func LaunchType_Values() []string {
 	return []string{
 		LaunchTypeEc2,
 		LaunchTypeFargate,
+		LaunchTypeExternal,
 	}
 }
 
@@ -20641,6 +23995,18 @@ func LogDriver_Values() []string {
 		LogDriverAwslogs,
 		LogDriverSplunk,
 		LogDriverAwsfirelens,
+	}
+}
+
+const (
+	// ManagedAgentNameExecuteCommandAgent is a ManagedAgentName enum value
+	ManagedAgentNameExecuteCommandAgent = "ExecuteCommandAgent"
+)
+
+// ManagedAgentName_Values returns all elements of the ManagedAgentName enum
+func ManagedAgentName_Values() []string {
+	return []string{
+		ManagedAgentNameExecuteCommandAgent,
 	}
 }
 

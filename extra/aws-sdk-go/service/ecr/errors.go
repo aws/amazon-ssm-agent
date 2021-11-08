@@ -125,7 +125,7 @@ const (
 	// "LimitExceededException".
 	//
 	// The operation did not succeed because it would have exceeded a service limit
-	// for your account. For more information, see Amazon ECR Service Quotas (https://docs.aws.amazon.com/AmazonECR/latest/userguide/service-quotas.html)
+	// for your account. For more information, see Amazon ECR service quotas (https://docs.aws.amazon.com/AmazonECR/latest/userguide/service-quotas.html)
 	// in the Amazon Elastic Container Registry User Guide.
 	ErrCodeLimitExceededException = "LimitExceededException"
 
@@ -134,6 +134,12 @@ const (
 	//
 	// The manifest list is referencing an image that does not exist.
 	ErrCodeReferencedImagesNotFoundException = "ReferencedImagesNotFoundException"
+
+	// ErrCodeRegistryPolicyNotFoundException for service response error code
+	// "RegistryPolicyNotFoundException".
+	//
+	// The registry doesn't have an associated registry policy.
+	ErrCodeRegistryPolicyNotFoundException = "RegistryPolicyNotFoundException"
 
 	// ErrCodeRepositoryAlreadyExistsException for service response error code
 	// "RepositoryAlreadyExistsException".
@@ -194,6 +200,12 @@ const (
 	// The upload could not be found, or the specified upload ID is not valid for
 	// this repository.
 	ErrCodeUploadNotFoundException = "UploadNotFoundException"
+
+	// ErrCodeValidationException for service response error code
+	// "ValidationException".
+	//
+	// There was an exception validating this request.
+	ErrCodeValidationException = "ValidationException"
 )
 
 var exceptionFromCode = map[string]func(protocol.ResponseMetadata) error{
@@ -216,6 +228,7 @@ var exceptionFromCode = map[string]func(protocol.ResponseMetadata) error{
 	"LifecyclePolicyPreviewNotFoundException":   newErrorLifecyclePolicyPreviewNotFoundException,
 	"LimitExceededException":                    newErrorLimitExceededException,
 	"ReferencedImagesNotFoundException":         newErrorReferencedImagesNotFoundException,
+	"RegistryPolicyNotFoundException":           newErrorRegistryPolicyNotFoundException,
 	"RepositoryAlreadyExistsException":          newErrorRepositoryAlreadyExistsException,
 	"RepositoryNotEmptyException":               newErrorRepositoryNotEmptyException,
 	"RepositoryNotFoundException":               newErrorRepositoryNotFoundException,
@@ -225,4 +238,5 @@ var exceptionFromCode = map[string]func(protocol.ResponseMetadata) error{
 	"TooManyTagsException":                      newErrorTooManyTagsException,
 	"UnsupportedImageTypeException":             newErrorUnsupportedImageTypeException,
 	"UploadNotFoundException":                   newErrorUploadNotFoundException,
+	"ValidationException":                       newErrorValidationException,
 }

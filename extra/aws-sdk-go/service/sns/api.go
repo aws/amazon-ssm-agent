@@ -4,6 +4,7 @@ package sns
 
 import (
 	"fmt"
+	"time"
 
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/awsutil"
@@ -58,7 +59,7 @@ func (c *SNS) AddPermissionRequest(input *AddPermissionInput) (req *request.Requ
 // AddPermission API operation for Amazon Simple Notification Service.
 //
 // Adds a statement to a topic's access control policy, granting access for
-// the specified AWS accounts to the specified actions.
+// the specified accounts to the specified actions.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -270,9 +271,9 @@ func (c *SNS) ConfirmSubscriptionRequest(input *ConfirmSubscriptionInput) (req *
 //   Indicates that the user has been denied access to the requested resource.
 //
 //   * ErrCodeFilterPolicyLimitExceededException "FilterPolicyLimitExceeded"
-//   Indicates that the number of filter polices in your AWS account exceeds the
-//   limit. To add more filter polices, submit an SNS Limit Increase case in the
-//   AWS Support Center.
+//   Indicates that the number of filter polices in your account exceeds the limit.
+//   To add more filter polices, submit an SNS Limit Increase case in the Amazon
+//   Web Services Support Center.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/sns-2010-03-31/ConfirmSubscription
 func (c *SNS) ConfirmSubscription(input *ConfirmSubscriptionInput) (*ConfirmSubscriptionOutput, error) {
@@ -508,6 +509,114 @@ func (c *SNS) CreatePlatformEndpointWithContext(ctx aws.Context, input *CreatePl
 	return out, req.Send()
 }
 
+const opCreateSMSSandboxPhoneNumber = "CreateSMSSandboxPhoneNumber"
+
+// CreateSMSSandboxPhoneNumberRequest generates a "aws/request.Request" representing the
+// client's request for the CreateSMSSandboxPhoneNumber operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See CreateSMSSandboxPhoneNumber for more information on using the CreateSMSSandboxPhoneNumber
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the CreateSMSSandboxPhoneNumberRequest method.
+//    req, resp := client.CreateSMSSandboxPhoneNumberRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/sns-2010-03-31/CreateSMSSandboxPhoneNumber
+func (c *SNS) CreateSMSSandboxPhoneNumberRequest(input *CreateSMSSandboxPhoneNumberInput) (req *request.Request, output *CreateSMSSandboxPhoneNumberOutput) {
+	op := &request.Operation{
+		Name:       opCreateSMSSandboxPhoneNumber,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &CreateSMSSandboxPhoneNumberInput{}
+	}
+
+	output = &CreateSMSSandboxPhoneNumberOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(query.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
+	return
+}
+
+// CreateSMSSandboxPhoneNumber API operation for Amazon Simple Notification Service.
+//
+// Adds a destination phone number to an account in the SMS sandbox and sends
+// a one-time password (OTP) to that phone number.
+//
+// When you start using Amazon SNS to send SMS messages, your account is in
+// the SMS sandbox. The SMS sandbox provides a safe environment for you to try
+// Amazon SNS features without risking your reputation as an SMS sender. While
+// your account is in the SMS sandbox, you can use all of the features of Amazon
+// SNS. However, you can send SMS messages only to verified destination phone
+// numbers. For more information, including how to move out of the sandbox to
+// send messages without restrictions, see SMS sandbox (https://docs.aws.amazon.com/sns/latest/dg/sns-sms-sandbox.html)
+// in the Amazon SNS Developer Guide.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Simple Notification Service's
+// API operation CreateSMSSandboxPhoneNumber for usage and error information.
+//
+// Returned Error Codes:
+//   * ErrCodeAuthorizationErrorException "AuthorizationError"
+//   Indicates that the user has been denied access to the requested resource.
+//
+//   * ErrCodeInternalErrorException "InternalError"
+//   Indicates an internal service error.
+//
+//   * ErrCodeInvalidParameterException "InvalidParameter"
+//   Indicates that a request parameter does not comply with the associated constraints.
+//
+//   * ErrCodeOptedOutException "OptedOut"
+//   Indicates that the specified phone number opted out of receiving SMS messages
+//   from your account. You can't send SMS messages to phone numbers that opt
+//   out.
+//
+//   * ErrCodeUserErrorException "UserError"
+//   Indicates that a request parameter does not comply with the associated constraints.
+//
+//   * ErrCodeThrottledException "Throttled"
+//   Indicates that the rate at which requests have been submitted for this action
+//   exceeds the limit for your account.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/sns-2010-03-31/CreateSMSSandboxPhoneNumber
+func (c *SNS) CreateSMSSandboxPhoneNumber(input *CreateSMSSandboxPhoneNumberInput) (*CreateSMSSandboxPhoneNumberOutput, error) {
+	req, out := c.CreateSMSSandboxPhoneNumberRequest(input)
+	return out, req.Send()
+}
+
+// CreateSMSSandboxPhoneNumberWithContext is the same as CreateSMSSandboxPhoneNumber with the addition of
+// the ability to pass a context and additional request options.
+//
+// See CreateSMSSandboxPhoneNumber for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *SNS) CreateSMSSandboxPhoneNumberWithContext(ctx aws.Context, input *CreateSMSSandboxPhoneNumberInput, opts ...request.Option) (*CreateSMSSandboxPhoneNumberOutput, error) {
+	req, out := c.CreateSMSSandboxPhoneNumberRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opCreateTopic = "CreateTopic"
 
 // CreateTopicRequest generates a "aws/request.Request" representing the
@@ -554,9 +663,10 @@ func (c *SNS) CreateTopicRequest(input *CreateTopicInput) (req *request.Request,
 //
 // Creates a topic to which notifications can be published. Users can create
 // at most 100,000 standard topics (at most 1,000 FIFO topics). For more information,
-// see https://aws.amazon.com/sns (http://aws.amazon.com/sns/). This action
-// is idempotent, so if the requester already owns a topic with the specified
-// name, that topic's ARN is returned without creating a new topic.
+// see Creating an Amazon SNS topic (https://docs.aws.amazon.com/sns/latest/dg/sns-create-topic.html)
+// in the Amazon SNS Developer Guide. This action is idempotent, so if the requester
+// already owns a topic with the specified name, that topic's ARN is returned
+// without creating a new topic.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -793,6 +903,112 @@ func (c *SNS) DeletePlatformApplication(input *DeletePlatformApplicationInput) (
 // for more information on using Contexts.
 func (c *SNS) DeletePlatformApplicationWithContext(ctx aws.Context, input *DeletePlatformApplicationInput, opts ...request.Option) (*DeletePlatformApplicationOutput, error) {
 	req, out := c.DeletePlatformApplicationRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opDeleteSMSSandboxPhoneNumber = "DeleteSMSSandboxPhoneNumber"
+
+// DeleteSMSSandboxPhoneNumberRequest generates a "aws/request.Request" representing the
+// client's request for the DeleteSMSSandboxPhoneNumber operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See DeleteSMSSandboxPhoneNumber for more information on using the DeleteSMSSandboxPhoneNumber
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the DeleteSMSSandboxPhoneNumberRequest method.
+//    req, resp := client.DeleteSMSSandboxPhoneNumberRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/sns-2010-03-31/DeleteSMSSandboxPhoneNumber
+func (c *SNS) DeleteSMSSandboxPhoneNumberRequest(input *DeleteSMSSandboxPhoneNumberInput) (req *request.Request, output *DeleteSMSSandboxPhoneNumberOutput) {
+	op := &request.Operation{
+		Name:       opDeleteSMSSandboxPhoneNumber,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &DeleteSMSSandboxPhoneNumberInput{}
+	}
+
+	output = &DeleteSMSSandboxPhoneNumberOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(query.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
+	return
+}
+
+// DeleteSMSSandboxPhoneNumber API operation for Amazon Simple Notification Service.
+//
+// Deletes an account's verified or pending phone number from the SMS sandbox.
+//
+// When you start using Amazon SNS to send SMS messages, your account is in
+// the SMS sandbox. The SMS sandbox provides a safe environment for you to try
+// Amazon SNS features without risking your reputation as an SMS sender. While
+// your account is in the SMS sandbox, you can use all of the features of Amazon
+// SNS. However, you can send SMS messages only to verified destination phone
+// numbers. For more information, including how to move out of the sandbox to
+// send messages without restrictions, see SMS sandbox (https://docs.aws.amazon.com/sns/latest/dg/sns-sms-sandbox.html)
+// in the Amazon SNS Developer Guide.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Simple Notification Service's
+// API operation DeleteSMSSandboxPhoneNumber for usage and error information.
+//
+// Returned Error Codes:
+//   * ErrCodeAuthorizationErrorException "AuthorizationError"
+//   Indicates that the user has been denied access to the requested resource.
+//
+//   * ErrCodeInternalErrorException "InternalError"
+//   Indicates an internal service error.
+//
+//   * ErrCodeInvalidParameterException "InvalidParameter"
+//   Indicates that a request parameter does not comply with the associated constraints.
+//
+//   * ErrCodeResourceNotFoundException "ResourceNotFound"
+//   Can’t perform the action on the specified resource. Make sure that the
+//   resource exists.
+//
+//   * ErrCodeUserErrorException "UserError"
+//   Indicates that a request parameter does not comply with the associated constraints.
+//
+//   * ErrCodeThrottledException "Throttled"
+//   Indicates that the rate at which requests have been submitted for this action
+//   exceeds the limit for your account.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/sns-2010-03-31/DeleteSMSSandboxPhoneNumber
+func (c *SNS) DeleteSMSSandboxPhoneNumber(input *DeleteSMSSandboxPhoneNumberInput) (*DeleteSMSSandboxPhoneNumberOutput, error) {
+	req, out := c.DeleteSMSSandboxPhoneNumberRequest(input)
+	return out, req.Send()
+}
+
+// DeleteSMSSandboxPhoneNumberWithContext is the same as DeleteSMSSandboxPhoneNumber with the addition of
+// the ability to pass a context and additional request options.
+//
+// See DeleteSMSSandboxPhoneNumber for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *SNS) DeleteSMSSandboxPhoneNumberWithContext(ctx aws.Context, input *DeleteSMSSandboxPhoneNumberInput, opts ...request.Option) (*DeleteSMSSandboxPhoneNumberOutput, error) {
+	req, out := c.DeleteSMSSandboxPhoneNumberRequest(input)
 	req.SetContext(ctx)
 	req.ApplyOptions(opts...)
 	return out, req.Send()
@@ -1173,6 +1389,101 @@ func (c *SNS) GetSMSAttributesWithContext(ctx aws.Context, input *GetSMSAttribut
 	return out, req.Send()
 }
 
+const opGetSMSSandboxAccountStatus = "GetSMSSandboxAccountStatus"
+
+// GetSMSSandboxAccountStatusRequest generates a "aws/request.Request" representing the
+// client's request for the GetSMSSandboxAccountStatus operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See GetSMSSandboxAccountStatus for more information on using the GetSMSSandboxAccountStatus
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the GetSMSSandboxAccountStatusRequest method.
+//    req, resp := client.GetSMSSandboxAccountStatusRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/sns-2010-03-31/GetSMSSandboxAccountStatus
+func (c *SNS) GetSMSSandboxAccountStatusRequest(input *GetSMSSandboxAccountStatusInput) (req *request.Request, output *GetSMSSandboxAccountStatusOutput) {
+	op := &request.Operation{
+		Name:       opGetSMSSandboxAccountStatus,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &GetSMSSandboxAccountStatusInput{}
+	}
+
+	output = &GetSMSSandboxAccountStatusOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// GetSMSSandboxAccountStatus API operation for Amazon Simple Notification Service.
+//
+// Retrieves the SMS sandbox status for the calling account in the target Region.
+//
+// When you start using Amazon SNS to send SMS messages, your account is in
+// the SMS sandbox. The SMS sandbox provides a safe environment for you to try
+// Amazon SNS features without risking your reputation as an SMS sender. While
+// your account is in the SMS sandbox, you can use all of the features of Amazon
+// SNS. However, you can send SMS messages only to verified destination phone
+// numbers. For more information, including how to move out of the sandbox to
+// send messages without restrictions, see SMS sandbox (https://docs.aws.amazon.com/sns/latest/dg/sns-sms-sandbox.html)
+// in the Amazon SNS Developer Guide.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Simple Notification Service's
+// API operation GetSMSSandboxAccountStatus for usage and error information.
+//
+// Returned Error Codes:
+//   * ErrCodeAuthorizationErrorException "AuthorizationError"
+//   Indicates that the user has been denied access to the requested resource.
+//
+//   * ErrCodeInternalErrorException "InternalError"
+//   Indicates an internal service error.
+//
+//   * ErrCodeThrottledException "Throttled"
+//   Indicates that the rate at which requests have been submitted for this action
+//   exceeds the limit for your account.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/sns-2010-03-31/GetSMSSandboxAccountStatus
+func (c *SNS) GetSMSSandboxAccountStatus(input *GetSMSSandboxAccountStatusInput) (*GetSMSSandboxAccountStatusOutput, error) {
+	req, out := c.GetSMSSandboxAccountStatusRequest(input)
+	return out, req.Send()
+}
+
+// GetSMSSandboxAccountStatusWithContext is the same as GetSMSSandboxAccountStatus with the addition of
+// the ability to pass a context and additional request options.
+//
+// See GetSMSSandboxAccountStatus for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *SNS) GetSMSSandboxAccountStatusWithContext(ctx aws.Context, input *GetSMSSandboxAccountStatusInput, opts ...request.Option) (*GetSMSSandboxAccountStatusOutput, error) {
+	req, out := c.GetSMSSandboxAccountStatusRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opGetSubscriptionAttributes = "GetSubscriptionAttributes"
 
 // GetSubscriptionAttributesRequest generates a "aws/request.Request" representing the
@@ -1510,6 +1821,158 @@ func (c *SNS) ListEndpointsByPlatformApplicationPagesWithContext(ctx aws.Context
 	return p.Err()
 }
 
+const opListOriginationNumbers = "ListOriginationNumbers"
+
+// ListOriginationNumbersRequest generates a "aws/request.Request" representing the
+// client's request for the ListOriginationNumbers operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See ListOriginationNumbers for more information on using the ListOriginationNumbers
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the ListOriginationNumbersRequest method.
+//    req, resp := client.ListOriginationNumbersRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/sns-2010-03-31/ListOriginationNumbers
+func (c *SNS) ListOriginationNumbersRequest(input *ListOriginationNumbersInput) (req *request.Request, output *ListOriginationNumbersOutput) {
+	op := &request.Operation{
+		Name:       opListOriginationNumbers,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+		Paginator: &request.Paginator{
+			InputTokens:     []string{"NextToken"},
+			OutputTokens:    []string{"NextToken"},
+			LimitToken:      "MaxResults",
+			TruncationToken: "",
+		},
+	}
+
+	if input == nil {
+		input = &ListOriginationNumbersInput{}
+	}
+
+	output = &ListOriginationNumbersOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// ListOriginationNumbers API operation for Amazon Simple Notification Service.
+//
+// Lists the calling account's dedicated origination numbers and their metadata.
+// For more information about origination numbers, see Origination numbers (https://docs.aws.amazon.com/sns/latest/dg/channels-sms-originating-identities-origination-numbers.html)
+// in the Amazon SNS Developer Guide.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Simple Notification Service's
+// API operation ListOriginationNumbers for usage and error information.
+//
+// Returned Error Codes:
+//   * ErrCodeInternalErrorException "InternalError"
+//   Indicates an internal service error.
+//
+//   * ErrCodeAuthorizationErrorException "AuthorizationError"
+//   Indicates that the user has been denied access to the requested resource.
+//
+//   * ErrCodeThrottledException "Throttled"
+//   Indicates that the rate at which requests have been submitted for this action
+//   exceeds the limit for your account.
+//
+//   * ErrCodeInvalidParameterException "InvalidParameter"
+//   Indicates that a request parameter does not comply with the associated constraints.
+//
+//   * ErrCodeValidationException "ValidationException"
+//   Indicates that a parameter in the request is invalid.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/sns-2010-03-31/ListOriginationNumbers
+func (c *SNS) ListOriginationNumbers(input *ListOriginationNumbersInput) (*ListOriginationNumbersOutput, error) {
+	req, out := c.ListOriginationNumbersRequest(input)
+	return out, req.Send()
+}
+
+// ListOriginationNumbersWithContext is the same as ListOriginationNumbers with the addition of
+// the ability to pass a context and additional request options.
+//
+// See ListOriginationNumbers for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *SNS) ListOriginationNumbersWithContext(ctx aws.Context, input *ListOriginationNumbersInput, opts ...request.Option) (*ListOriginationNumbersOutput, error) {
+	req, out := c.ListOriginationNumbersRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+// ListOriginationNumbersPages iterates over the pages of a ListOriginationNumbers operation,
+// calling the "fn" function with the response data for each page. To stop
+// iterating, return false from the fn function.
+//
+// See ListOriginationNumbers method for more information on how to use this operation.
+//
+// Note: This operation can generate multiple requests to a service.
+//
+//    // Example iterating over at most 3 pages of a ListOriginationNumbers operation.
+//    pageNum := 0
+//    err := client.ListOriginationNumbersPages(params,
+//        func(page *sns.ListOriginationNumbersOutput, lastPage bool) bool {
+//            pageNum++
+//            fmt.Println(page)
+//            return pageNum <= 3
+//        })
+//
+func (c *SNS) ListOriginationNumbersPages(input *ListOriginationNumbersInput, fn func(*ListOriginationNumbersOutput, bool) bool) error {
+	return c.ListOriginationNumbersPagesWithContext(aws.BackgroundContext(), input, fn)
+}
+
+// ListOriginationNumbersPagesWithContext same as ListOriginationNumbersPages except
+// it takes a Context and allows setting request options on the pages.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *SNS) ListOriginationNumbersPagesWithContext(ctx aws.Context, input *ListOriginationNumbersInput, fn func(*ListOriginationNumbersOutput, bool) bool, opts ...request.Option) error {
+	p := request.Pagination{
+		NewRequest: func() (*request.Request, error) {
+			var inCpy *ListOriginationNumbersInput
+			if input != nil {
+				tmp := *input
+				inCpy = &tmp
+			}
+			req, _ := c.ListOriginationNumbersRequest(inCpy)
+			req.SetContext(ctx)
+			req.ApplyOptions(opts...)
+			return req, nil
+		},
+	}
+
+	for p.Next() {
+		if !fn(p.Page().(*ListOriginationNumbersOutput), !p.HasNextPage()) {
+			break
+		}
+	}
+
+	return p.Err()
+}
+
 const opListPhoneNumbersOptedOut = "ListPhoneNumbersOptedOut"
 
 // ListPhoneNumbersOptedOutRequest generates a "aws/request.Request" representing the
@@ -1541,6 +2004,12 @@ func (c *SNS) ListPhoneNumbersOptedOutRequest(input *ListPhoneNumbersOptedOutInp
 		Name:       opListPhoneNumbersOptedOut,
 		HTTPMethod: "POST",
 		HTTPPath:   "/",
+		Paginator: &request.Paginator{
+			InputTokens:     []string{"nextToken"},
+			OutputTokens:    []string{"nextToken"},
+			LimitToken:      "",
+			TruncationToken: "",
+		},
 	}
 
 	if input == nil {
@@ -1605,6 +2074,58 @@ func (c *SNS) ListPhoneNumbersOptedOutWithContext(ctx aws.Context, input *ListPh
 	req.SetContext(ctx)
 	req.ApplyOptions(opts...)
 	return out, req.Send()
+}
+
+// ListPhoneNumbersOptedOutPages iterates over the pages of a ListPhoneNumbersOptedOut operation,
+// calling the "fn" function with the response data for each page. To stop
+// iterating, return false from the fn function.
+//
+// See ListPhoneNumbersOptedOut method for more information on how to use this operation.
+//
+// Note: This operation can generate multiple requests to a service.
+//
+//    // Example iterating over at most 3 pages of a ListPhoneNumbersOptedOut operation.
+//    pageNum := 0
+//    err := client.ListPhoneNumbersOptedOutPages(params,
+//        func(page *sns.ListPhoneNumbersOptedOutOutput, lastPage bool) bool {
+//            pageNum++
+//            fmt.Println(page)
+//            return pageNum <= 3
+//        })
+//
+func (c *SNS) ListPhoneNumbersOptedOutPages(input *ListPhoneNumbersOptedOutInput, fn func(*ListPhoneNumbersOptedOutOutput, bool) bool) error {
+	return c.ListPhoneNumbersOptedOutPagesWithContext(aws.BackgroundContext(), input, fn)
+}
+
+// ListPhoneNumbersOptedOutPagesWithContext same as ListPhoneNumbersOptedOutPages except
+// it takes a Context and allows setting request options on the pages.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *SNS) ListPhoneNumbersOptedOutPagesWithContext(ctx aws.Context, input *ListPhoneNumbersOptedOutInput, fn func(*ListPhoneNumbersOptedOutOutput, bool) bool, opts ...request.Option) error {
+	p := request.Pagination{
+		NewRequest: func() (*request.Request, error) {
+			var inCpy *ListPhoneNumbersOptedOutInput
+			if input != nil {
+				tmp := *input
+				inCpy = &tmp
+			}
+			req, _ := c.ListPhoneNumbersOptedOutRequest(inCpy)
+			req.SetContext(ctx)
+			req.ApplyOptions(opts...)
+			return req, nil
+		},
+	}
+
+	for p.Next() {
+		if !fn(p.Page().(*ListPhoneNumbersOptedOutOutput), !p.HasNextPage()) {
+			break
+		}
+	}
+
+	return p.Err()
 }
 
 const opListPlatformApplications = "ListPlatformApplications"
@@ -1752,6 +2273,167 @@ func (c *SNS) ListPlatformApplicationsPagesWithContext(ctx aws.Context, input *L
 
 	for p.Next() {
 		if !fn(p.Page().(*ListPlatformApplicationsOutput), !p.HasNextPage()) {
+			break
+		}
+	}
+
+	return p.Err()
+}
+
+const opListSMSSandboxPhoneNumbers = "ListSMSSandboxPhoneNumbers"
+
+// ListSMSSandboxPhoneNumbersRequest generates a "aws/request.Request" representing the
+// client's request for the ListSMSSandboxPhoneNumbers operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See ListSMSSandboxPhoneNumbers for more information on using the ListSMSSandboxPhoneNumbers
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the ListSMSSandboxPhoneNumbersRequest method.
+//    req, resp := client.ListSMSSandboxPhoneNumbersRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/sns-2010-03-31/ListSMSSandboxPhoneNumbers
+func (c *SNS) ListSMSSandboxPhoneNumbersRequest(input *ListSMSSandboxPhoneNumbersInput) (req *request.Request, output *ListSMSSandboxPhoneNumbersOutput) {
+	op := &request.Operation{
+		Name:       opListSMSSandboxPhoneNumbers,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+		Paginator: &request.Paginator{
+			InputTokens:     []string{"NextToken"},
+			OutputTokens:    []string{"NextToken"},
+			LimitToken:      "MaxResults",
+			TruncationToken: "",
+		},
+	}
+
+	if input == nil {
+		input = &ListSMSSandboxPhoneNumbersInput{}
+	}
+
+	output = &ListSMSSandboxPhoneNumbersOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// ListSMSSandboxPhoneNumbers API operation for Amazon Simple Notification Service.
+//
+// Lists the calling account's current verified and pending destination phone
+// numbers in the SMS sandbox.
+//
+// When you start using Amazon SNS to send SMS messages, your account is in
+// the SMS sandbox. The SMS sandbox provides a safe environment for you to try
+// Amazon SNS features without risking your reputation as an SMS sender. While
+// your account is in the SMS sandbox, you can use all of the features of Amazon
+// SNS. However, you can send SMS messages only to verified destination phone
+// numbers. For more information, including how to move out of the sandbox to
+// send messages without restrictions, see SMS sandbox (https://docs.aws.amazon.com/sns/latest/dg/sns-sms-sandbox.html)
+// in the Amazon SNS Developer Guide.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Simple Notification Service's
+// API operation ListSMSSandboxPhoneNumbers for usage and error information.
+//
+// Returned Error Codes:
+//   * ErrCodeAuthorizationErrorException "AuthorizationError"
+//   Indicates that the user has been denied access to the requested resource.
+//
+//   * ErrCodeInternalErrorException "InternalError"
+//   Indicates an internal service error.
+//
+//   * ErrCodeInvalidParameterException "InvalidParameter"
+//   Indicates that a request parameter does not comply with the associated constraints.
+//
+//   * ErrCodeResourceNotFoundException "ResourceNotFound"
+//   Can’t perform the action on the specified resource. Make sure that the
+//   resource exists.
+//
+//   * ErrCodeThrottledException "Throttled"
+//   Indicates that the rate at which requests have been submitted for this action
+//   exceeds the limit for your account.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/sns-2010-03-31/ListSMSSandboxPhoneNumbers
+func (c *SNS) ListSMSSandboxPhoneNumbers(input *ListSMSSandboxPhoneNumbersInput) (*ListSMSSandboxPhoneNumbersOutput, error) {
+	req, out := c.ListSMSSandboxPhoneNumbersRequest(input)
+	return out, req.Send()
+}
+
+// ListSMSSandboxPhoneNumbersWithContext is the same as ListSMSSandboxPhoneNumbers with the addition of
+// the ability to pass a context and additional request options.
+//
+// See ListSMSSandboxPhoneNumbers for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *SNS) ListSMSSandboxPhoneNumbersWithContext(ctx aws.Context, input *ListSMSSandboxPhoneNumbersInput, opts ...request.Option) (*ListSMSSandboxPhoneNumbersOutput, error) {
+	req, out := c.ListSMSSandboxPhoneNumbersRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+// ListSMSSandboxPhoneNumbersPages iterates over the pages of a ListSMSSandboxPhoneNumbers operation,
+// calling the "fn" function with the response data for each page. To stop
+// iterating, return false from the fn function.
+//
+// See ListSMSSandboxPhoneNumbers method for more information on how to use this operation.
+//
+// Note: This operation can generate multiple requests to a service.
+//
+//    // Example iterating over at most 3 pages of a ListSMSSandboxPhoneNumbers operation.
+//    pageNum := 0
+//    err := client.ListSMSSandboxPhoneNumbersPages(params,
+//        func(page *sns.ListSMSSandboxPhoneNumbersOutput, lastPage bool) bool {
+//            pageNum++
+//            fmt.Println(page)
+//            return pageNum <= 3
+//        })
+//
+func (c *SNS) ListSMSSandboxPhoneNumbersPages(input *ListSMSSandboxPhoneNumbersInput, fn func(*ListSMSSandboxPhoneNumbersOutput, bool) bool) error {
+	return c.ListSMSSandboxPhoneNumbersPagesWithContext(aws.BackgroundContext(), input, fn)
+}
+
+// ListSMSSandboxPhoneNumbersPagesWithContext same as ListSMSSandboxPhoneNumbersPages except
+// it takes a Context and allows setting request options on the pages.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *SNS) ListSMSSandboxPhoneNumbersPagesWithContext(ctx aws.Context, input *ListSMSSandboxPhoneNumbersInput, fn func(*ListSMSSandboxPhoneNumbersOutput, bool) bool, opts ...request.Option) error {
+	p := request.Pagination{
+		NewRequest: func() (*request.Request, error) {
+			var inCpy *ListSMSSandboxPhoneNumbersInput
+			if input != nil {
+				tmp := *input
+				inCpy = &tmp
+			}
+			req, _ := c.ListSMSSandboxPhoneNumbersRequest(inCpy)
+			req.SetContext(ctx)
+			req.ApplyOptions(opts...)
+			return req, nil
+		},
+	}
+
+	for p.Next() {
+		if !fn(p.Page().(*ListSMSSandboxPhoneNumbersOutput), !p.HasNextPage()) {
 			break
 		}
 	}
@@ -2115,7 +2797,8 @@ func (c *SNS) ListTagsForResourceRequest(input *ListTagsForResourceInput) (req *
 //
 // Returned Error Codes:
 //   * ErrCodeResourceNotFoundException "ResourceNotFound"
-//   Can't tag resource. Verify that the topic exists.
+//   Can’t perform the action on the specified resource. Make sure that the
+//   resource exists.
 //
 //   * ErrCodeTagPolicyException "TagPolicy"
 //   The request doesn't comply with the IAM tag policy. Correct your request
@@ -2456,7 +3139,7 @@ func (c *SNS) PublishRequest(input *PublishInput) (req *request.Request, output 
 // For more information about formatting messages, see Send Custom Platform-Specific
 // Payloads in Messages to Mobile Devices (https://docs.aws.amazon.com/sns/latest/dg/mobile-push-send-custommessage.html).
 //
-// You can publish messages only to topics and endpoints in the same AWS Region.
+// You can publish messages only to topics and endpoints in the same Region.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -2495,19 +3178,19 @@ func (c *SNS) PublishRequest(input *PublishInput) (req *request.Request, output 
 //   The request was rejected because the state of the specified resource isn't
 //   valid for this request. For more information, see How Key State Affects Use
 //   of a Customer Master Key (https://docs.aws.amazon.com/kms/latest/developerguide/key-state.html)
-//   in the AWS Key Management Service Developer Guide.
+//   in the Key Management Service Developer Guide.
 //
 //   * ErrCodeKMSNotFoundException "KMSNotFound"
 //   The request was rejected because the specified entity or resource can't be
 //   found.
 //
 //   * ErrCodeKMSOptInRequired "KMSOptInRequired"
-//   The AWS access key ID needs a subscription for the service.
+//   The Amazon Web Services access key ID needs a subscription for the service.
 //
 //   * ErrCodeKMSThrottlingException "KMSThrottling"
 //   The request was denied due to request throttling. For more information about
 //   throttling, see Limits (https://docs.aws.amazon.com/kms/latest/developerguide/limits.html#requests-per-second)
-//   in the AWS Key Management Service Developer Guide.
+//   in the Key Management Service Developer Guide.
 //
 //   * ErrCodeKMSAccessDeniedException "KMSAccessDenied"
 //   The ciphertext references a key that doesn't exist or that you don't have
@@ -2865,6 +3548,9 @@ func (c *SNS) SetSMSAttributesRequest(input *SetSMSAttributesInput) (req *reques
 // information, see Publishing to a mobile phone (https://docs.aws.amazon.com/sns/latest/dg/sms_publish-to-phone.html)
 // in the Amazon SNS Developer Guide.
 //
+// To use this operation, you must grant the Amazon SNS service principal (sns.amazonaws.com)
+// permission to perform the s3:ListBucket action.
+//
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
 // the error.
@@ -2968,9 +3654,9 @@ func (c *SNS) SetSubscriptionAttributesRequest(input *SetSubscriptionAttributesI
 //   Indicates that a request parameter does not comply with the associated constraints.
 //
 //   * ErrCodeFilterPolicyLimitExceededException "FilterPolicyLimitExceeded"
-//   Indicates that the number of filter polices in your AWS account exceeds the
-//   limit. To add more filter polices, submit an SNS Limit Increase case in the
-//   AWS Support Center.
+//   Indicates that the number of filter polices in your account exceeds the limit.
+//   To add more filter polices, submit an SNS Limit Increase case in the Amazon
+//   Web Services Support Center.
 //
 //   * ErrCodeInternalErrorException "InternalError"
 //   Indicates an internal service error.
@@ -3141,8 +3827,8 @@ func (c *SNS) SubscribeRequest(input *SubscribeInput) (req *request.Request, out
 // Subscribe API operation for Amazon Simple Notification Service.
 //
 // Subscribes an endpoint to an Amazon SNS topic. If the endpoint type is HTTP/S
-// or email, or if the endpoint and the topic are not in the same AWS account,
-// the endpoint owner must the ConfirmSubscription action to confirm the subscription.
+// or email, or if the endpoint and the topic are not in the same account, the
+// endpoint owner must run the ConfirmSubscription action to confirm the subscription.
 //
 // You call the ConfirmSubscription action with the token from the subscription
 // response. Confirmation tokens are valid for three days.
@@ -3161,9 +3847,9 @@ func (c *SNS) SubscribeRequest(input *SubscribeInput) (req *request.Request, out
 //   Indicates that the customer already owns the maximum allowed number of subscriptions.
 //
 //   * ErrCodeFilterPolicyLimitExceededException "FilterPolicyLimitExceeded"
-//   Indicates that the number of filter polices in your AWS account exceeds the
-//   limit. To add more filter polices, submit an SNS Limit Increase case in the
-//   AWS Support Center.
+//   Indicates that the number of filter polices in your account exceeds the limit.
+//   To add more filter polices, submit an SNS Limit Increase case in the Amazon
+//   Web Services Support Center.
 //
 //   * ErrCodeInvalidParameterException "InvalidParameter"
 //   Indicates that a request parameter does not comply with the associated constraints.
@@ -3264,9 +3950,9 @@ func (c *SNS) TagResourceRequest(input *TagResourceInput) (req *request.Request,
 //    * A new tag with a key identical to that of an existing tag overwrites
 //    the existing tag.
 //
-//    * Tagging actions are limited to 10 TPS per AWS account, per AWS region.
-//    If your application requires a higher throughput, file a technical support
-//    request (https://console.aws.amazon.com/support/home#/case/create?issueType=technical).
+//    * Tagging actions are limited to 10 TPS per account, per Region. If your
+//    application requires a higher throughput, file a technical support request
+//    (https://console.aws.amazon.com/support/home#/case/create?issueType=technical).
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -3277,7 +3963,8 @@ func (c *SNS) TagResourceRequest(input *TagResourceInput) (req *request.Request,
 //
 // Returned Error Codes:
 //   * ErrCodeResourceNotFoundException "ResourceNotFound"
-//   Can't tag resource. Verify that the topic exists.
+//   Can’t perform the action on the specified resource. Make sure that the
+//   resource exists.
 //
 //   * ErrCodeTagLimitExceededException "TagLimitExceeded"
 //   Can't add more than 50 tags to a topic.
@@ -3369,10 +4056,11 @@ func (c *SNS) UnsubscribeRequest(input *UnsubscribeInput) (req *request.Request,
 //
 // Deletes a subscription. If the subscription requires authentication for deletion,
 // only the owner of the subscription or the topic's owner can unsubscribe,
-// and an AWS signature is required. If the Unsubscribe call does not require
-// authentication and the requester is not the subscription owner, a final cancellation
-// message is delivered to the endpoint, so that the endpoint owner can easily
-// resubscribe to the topic if the Unsubscribe request was unintended.
+// and an Amazon Web Services signature is required. If the Unsubscribe call
+// does not require authentication and the requester is not the subscription
+// owner, a final cancellation message is delivered to the endpoint, so that
+// the endpoint owner can easily resubscribe to the topic if the Unsubscribe
+// request was unintended.
 //
 // This action is throttled at 100 transactions per second (TPS).
 //
@@ -3480,7 +4168,8 @@ func (c *SNS) UntagResourceRequest(input *UntagResourceInput) (req *request.Requ
 //
 // Returned Error Codes:
 //   * ErrCodeResourceNotFoundException "ResourceNotFound"
-//   Can't tag resource. Verify that the topic exists.
+//   Can’t perform the action on the specified resource. Make sure that the
+//   resource exists.
 //
 //   * ErrCodeTagLimitExceededException "TagLimitExceeded"
 //   Can't add more than 50 tags to a topic.
@@ -3525,12 +4214,119 @@ func (c *SNS) UntagResourceWithContext(ctx aws.Context, input *UntagResourceInpu
 	return out, req.Send()
 }
 
+const opVerifySMSSandboxPhoneNumber = "VerifySMSSandboxPhoneNumber"
+
+// VerifySMSSandboxPhoneNumberRequest generates a "aws/request.Request" representing the
+// client's request for the VerifySMSSandboxPhoneNumber operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See VerifySMSSandboxPhoneNumber for more information on using the VerifySMSSandboxPhoneNumber
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the VerifySMSSandboxPhoneNumberRequest method.
+//    req, resp := client.VerifySMSSandboxPhoneNumberRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/sns-2010-03-31/VerifySMSSandboxPhoneNumber
+func (c *SNS) VerifySMSSandboxPhoneNumberRequest(input *VerifySMSSandboxPhoneNumberInput) (req *request.Request, output *VerifySMSSandboxPhoneNumberOutput) {
+	op := &request.Operation{
+		Name:       opVerifySMSSandboxPhoneNumber,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &VerifySMSSandboxPhoneNumberInput{}
+	}
+
+	output = &VerifySMSSandboxPhoneNumberOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(query.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
+	return
+}
+
+// VerifySMSSandboxPhoneNumber API operation for Amazon Simple Notification Service.
+//
+// Verifies a destination phone number with a one-time password (OTP) for the
+// calling account.
+//
+// When you start using Amazon SNS to send SMS messages, your account is in
+// the SMS sandbox. The SMS sandbox provides a safe environment for you to try
+// Amazon SNS features without risking your reputation as an SMS sender. While
+// your account is in the SMS sandbox, you can use all of the features of Amazon
+// SNS. However, you can send SMS messages only to verified destination phone
+// numbers. For more information, including how to move out of the sandbox to
+// send messages without restrictions, see SMS sandbox (https://docs.aws.amazon.com/sns/latest/dg/sns-sms-sandbox.html)
+// in the Amazon SNS Developer Guide.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Simple Notification Service's
+// API operation VerifySMSSandboxPhoneNumber for usage and error information.
+//
+// Returned Error Codes:
+//   * ErrCodeAuthorizationErrorException "AuthorizationError"
+//   Indicates that the user has been denied access to the requested resource.
+//
+//   * ErrCodeInternalErrorException "InternalError"
+//   Indicates an internal service error.
+//
+//   * ErrCodeInvalidParameterException "InvalidParameter"
+//   Indicates that a request parameter does not comply with the associated constraints.
+//
+//   * ErrCodeResourceNotFoundException "ResourceNotFound"
+//   Can’t perform the action on the specified resource. Make sure that the
+//   resource exists.
+//
+//   * ErrCodeVerificationException "VerificationException"
+//   Indicates that the one-time password (OTP) used for verification is invalid.
+//
+//   * ErrCodeThrottledException "Throttled"
+//   Indicates that the rate at which requests have been submitted for this action
+//   exceeds the limit for your account.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/sns-2010-03-31/VerifySMSSandboxPhoneNumber
+func (c *SNS) VerifySMSSandboxPhoneNumber(input *VerifySMSSandboxPhoneNumberInput) (*VerifySMSSandboxPhoneNumberOutput, error) {
+	req, out := c.VerifySMSSandboxPhoneNumberRequest(input)
+	return out, req.Send()
+}
+
+// VerifySMSSandboxPhoneNumberWithContext is the same as VerifySMSSandboxPhoneNumber with the addition of
+// the ability to pass a context and additional request options.
+//
+// See VerifySMSSandboxPhoneNumber for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *SNS) VerifySMSSandboxPhoneNumberWithContext(ctx aws.Context, input *VerifySMSSandboxPhoneNumberInput, opts ...request.Option) (*VerifySMSSandboxPhoneNumberOutput, error) {
+	req, out := c.VerifySMSSandboxPhoneNumberRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 type AddPermissionInput struct {
 	_ struct{} `type:"structure"`
 
-	// The AWS account IDs of the users (principals) who will be given access to
-	// the specified actions. The users must have AWS accounts, but do not need
-	// to be signed up for this service.
+	// The account IDs of the users (principals) who will be given access to the
+	// specified actions. The users must have account, but do not need to be signed
+	// up for this service.
 	//
 	// AWSAccountId is a required field
 	AWSAccountId []*string `type:"list" required:"true"`
@@ -3553,12 +4349,20 @@ type AddPermissionInput struct {
 	TopicArn *string `type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AddPermissionInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AddPermissionInput) GoString() string {
 	return s.String()
 }
@@ -3613,12 +4417,20 @@ type AddPermissionOutput struct {
 	_ struct{} `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AddPermissionOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AddPermissionOutput) GoString() string {
 	return s.String()
 }
@@ -3633,12 +4445,20 @@ type CheckIfPhoneNumberIsOptedOutInput struct {
 	PhoneNumber *string `locationName:"phoneNumber" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CheckIfPhoneNumberIsOptedOutInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CheckIfPhoneNumberIsOptedOutInput) GoString() string {
 	return s.String()
 }
@@ -3676,12 +4496,20 @@ type CheckIfPhoneNumberIsOptedOutOutput struct {
 	IsOptedOut *bool `locationName:"isOptedOut" type:"boolean"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CheckIfPhoneNumberIsOptedOutOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CheckIfPhoneNumberIsOptedOutOutput) GoString() string {
 	return s.String()
 }
@@ -3697,9 +4525,9 @@ type ConfirmSubscriptionInput struct {
 	_ struct{} `type:"structure"`
 
 	// Disallows unauthenticated unsubscribes of the subscription. If the value
-	// of this parameter is true and the request has an AWS signature, then only
-	// the topic owner and the subscription owner can unsubscribe the endpoint.
-	// The unsubscribe action requires AWS authentication.
+	// of this parameter is true and the request has an Amazon Web Services signature,
+	// then only the topic owner and the subscription owner can unsubscribe the
+	// endpoint. The unsubscribe action requires Amazon Web Services authentication.
 	AuthenticateOnUnsubscribe *string `type:"string"`
 
 	// Short-lived token sent to an endpoint during the Subscribe action.
@@ -3713,12 +4541,20 @@ type ConfirmSubscriptionInput struct {
 	TopicArn *string `type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ConfirmSubscriptionInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ConfirmSubscriptionInput) GoString() string {
 	return s.String()
 }
@@ -3765,12 +4601,20 @@ type ConfirmSubscriptionOutput struct {
 	SubscriptionArn *string `type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ConfirmSubscriptionOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ConfirmSubscriptionOutput) GoString() string {
 	return s.String()
 }
@@ -3785,7 +4629,7 @@ func (s *ConfirmSubscriptionOutput) SetSubscriptionArn(v string) *ConfirmSubscri
 type CreatePlatformApplicationInput struct {
 	_ struct{} `type:"structure"`
 
-	// For a list of attributes, see SetPlatformApplicationAttributes (https://docs.aws.amazon.com/sns/latest/api/API_SetPlatformApplicationAttributes.html)
+	// For a list of attributes, see SetPlatformApplicationAttributes (https://docs.aws.amazon.com/sns/latest/api/API_SetPlatformApplicationAttributes.html).
 	//
 	// Attributes is a required field
 	Attributes map[string]*string `type:"map" required:"true"`
@@ -3805,12 +4649,20 @@ type CreatePlatformApplicationInput struct {
 	Platform *string `type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreatePlatformApplicationInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreatePlatformApplicationInput) GoString() string {
 	return s.String()
 }
@@ -3860,12 +4712,20 @@ type CreatePlatformApplicationOutput struct {
 	PlatformApplicationArn *string `type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreatePlatformApplicationOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreatePlatformApplicationOutput) GoString() string {
 	return s.String()
 }
@@ -3904,12 +4764,20 @@ type CreatePlatformEndpointInput struct {
 	Token *string `type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreatePlatformEndpointInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreatePlatformEndpointInput) GoString() string {
 	return s.String()
 }
@@ -3962,12 +4830,20 @@ type CreatePlatformEndpointOutput struct {
 	EndpointArn *string `type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreatePlatformEndpointOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreatePlatformEndpointOutput) GoString() string {
 	return s.String()
 }
@@ -3976,6 +4852,85 @@ func (s CreatePlatformEndpointOutput) GoString() string {
 func (s *CreatePlatformEndpointOutput) SetEndpointArn(v string) *CreatePlatformEndpointOutput {
 	s.EndpointArn = &v
 	return s
+}
+
+type CreateSMSSandboxPhoneNumberInput struct {
+	_ struct{} `type:"structure"`
+
+	// The language to use for sending the OTP. The default value is en-US.
+	LanguageCode *string `type:"string" enum:"LanguageCodeString"`
+
+	// The destination phone number to verify. On verification, Amazon SNS adds
+	// this phone number to the list of verified phone numbers that you can send
+	// SMS messages to.
+	//
+	// PhoneNumber is a required field
+	PhoneNumber *string `type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateSMSSandboxPhoneNumberInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateSMSSandboxPhoneNumberInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *CreateSMSSandboxPhoneNumberInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "CreateSMSSandboxPhoneNumberInput"}
+	if s.PhoneNumber == nil {
+		invalidParams.Add(request.NewErrParamRequired("PhoneNumber"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetLanguageCode sets the LanguageCode field's value.
+func (s *CreateSMSSandboxPhoneNumberInput) SetLanguageCode(v string) *CreateSMSSandboxPhoneNumberInput {
+	s.LanguageCode = &v
+	return s
+}
+
+// SetPhoneNumber sets the PhoneNumber field's value.
+func (s *CreateSMSSandboxPhoneNumberInput) SetPhoneNumber(v string) *CreateSMSSandboxPhoneNumberInput {
+	s.PhoneNumber = &v
+	return s
+}
+
+type CreateSMSSandboxPhoneNumberOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateSMSSandboxPhoneNumberOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateSMSSandboxPhoneNumberOutput) GoString() string {
+	return s.String()
 }
 
 // Input for CreateTopic action.
@@ -3997,12 +4952,13 @@ type CreateTopicInput struct {
 	//    * Policy – The policy that defines who can access your topic. By default,
 	//    only the topic owner can publish or subscribe to the topic.
 	//
-	// The following attribute applies only to server-side-encryption (https://docs.aws.amazon.com/sns/latest/dg/sns-server-side-encryption.html):
+	// The following attribute applies only to server-side encryption (https://docs.aws.amazon.com/sns/latest/dg/sns-server-side-encryption.html):
 	//
-	//    * KmsMasterKeyId – The ID of an AWS-managed customer master key (CMK)
-	//    for Amazon SNS or a custom CMK. For more information, see Key Terms (https://docs.aws.amazon.com/sns/latest/dg/sns-server-side-encryption.html#sse-key-terms).
+	//    * KmsMasterKeyId – The ID of an Amazon Web Services managed customer
+	//    master key (CMK) for Amazon SNS or a custom CMK. For more information,
+	//    see Key Terms (https://docs.aws.amazon.com/sns/latest/dg/sns-server-side-encryption.html#sse-key-terms).
 	//    For more examples, see KeyId (https://docs.aws.amazon.com/kms/latest/APIReference/API_DescribeKey.html#API_DescribeKey_RequestParameters)
-	//    in the AWS Key Management Service API Reference.
+	//    in the Key Management Service API Reference.
 	//
 	// The following attributes apply only to FIFO topics (https://docs.aws.amazon.com/sns/latest/dg/sns-fifo-topics.html):
 	//
@@ -4015,7 +4971,7 @@ type CreateTopicInput struct {
 	//    action. When you set ContentBasedDeduplication to true, Amazon SNS uses
 	//    a SHA-256 hash to generate the MessageDeduplicationId using the body of
 	//    the message (but not the attributes of the message). (Optional) To override
-	//    the generated value, you can specify a value for the the MessageDeduplicationId
+	//    the generated value, you can specify a value for the MessageDeduplicationId
 	//    parameter for the Publish action.
 	Attributes map[string]*string `type:"map"`
 
@@ -4037,12 +4993,20 @@ type CreateTopicInput struct {
 	Tags []*Tag `type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateTopicInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateTopicInput) GoString() string {
 	return s.String()
 }
@@ -4096,12 +5060,20 @@ type CreateTopicOutput struct {
 	TopicArn *string `type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateTopicOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateTopicOutput) GoString() string {
 	return s.String()
 }
@@ -4122,12 +5094,20 @@ type DeleteEndpointInput struct {
 	EndpointArn *string `type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteEndpointInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteEndpointInput) GoString() string {
 	return s.String()
 }
@@ -4155,12 +5135,20 @@ type DeleteEndpointOutput struct {
 	_ struct{} `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteEndpointOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteEndpointOutput) GoString() string {
 	return s.String()
 }
@@ -4175,12 +5163,20 @@ type DeletePlatformApplicationInput struct {
 	PlatformApplicationArn *string `type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeletePlatformApplicationInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeletePlatformApplicationInput) GoString() string {
 	return s.String()
 }
@@ -4208,13 +5204,89 @@ type DeletePlatformApplicationOutput struct {
 	_ struct{} `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeletePlatformApplicationOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeletePlatformApplicationOutput) GoString() string {
+	return s.String()
+}
+
+type DeleteSMSSandboxPhoneNumberInput struct {
+	_ struct{} `type:"structure"`
+
+	// The destination phone number to delete.
+	//
+	// PhoneNumber is a required field
+	PhoneNumber *string `type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeleteSMSSandboxPhoneNumberInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeleteSMSSandboxPhoneNumberInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DeleteSMSSandboxPhoneNumberInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DeleteSMSSandboxPhoneNumberInput"}
+	if s.PhoneNumber == nil {
+		invalidParams.Add(request.NewErrParamRequired("PhoneNumber"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetPhoneNumber sets the PhoneNumber field's value.
+func (s *DeleteSMSSandboxPhoneNumberInput) SetPhoneNumber(v string) *DeleteSMSSandboxPhoneNumberInput {
+	s.PhoneNumber = &v
+	return s
+}
+
+type DeleteSMSSandboxPhoneNumberOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeleteSMSSandboxPhoneNumberOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeleteSMSSandboxPhoneNumberOutput) GoString() string {
 	return s.String()
 }
 
@@ -4227,12 +5299,20 @@ type DeleteTopicInput struct {
 	TopicArn *string `type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteTopicInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteTopicInput) GoString() string {
 	return s.String()
 }
@@ -4260,12 +5340,20 @@ type DeleteTopicOutput struct {
 	_ struct{} `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteTopicOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteTopicOutput) GoString() string {
 	return s.String()
 }
@@ -4281,12 +5369,20 @@ type Endpoint struct {
 	EndpointArn *string `type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s Endpoint) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s Endpoint) GoString() string {
 	return s.String()
 }
@@ -4313,12 +5409,20 @@ type GetEndpointAttributesInput struct {
 	EndpointArn *string `type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetEndpointAttributesInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetEndpointAttributesInput) GoString() string {
 	return s.String()
 }
@@ -4364,12 +5468,20 @@ type GetEndpointAttributesOutput struct {
 	Attributes map[string]*string `type:"map"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetEndpointAttributesOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetEndpointAttributesOutput) GoString() string {
 	return s.String()
 }
@@ -4390,12 +5502,20 @@ type GetPlatformApplicationAttributesInput struct {
 	PlatformApplicationArn *string `type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetPlatformApplicationAttributesInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetPlatformApplicationAttributesInput) GoString() string {
 	return s.String()
 }
@@ -4440,12 +5560,20 @@ type GetPlatformApplicationAttributesOutput struct {
 	Attributes map[string]*string `type:"map"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetPlatformApplicationAttributesOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetPlatformApplicationAttributesOutput) GoString() string {
 	return s.String()
 }
@@ -4469,12 +5597,20 @@ type GetSMSAttributesInput struct {
 	Attributes []*string `locationName:"attributes" type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetSMSAttributesInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetSMSAttributesInput) GoString() string {
 	return s.String()
 }
@@ -4493,12 +5629,20 @@ type GetSMSAttributesOutput struct {
 	Attributes map[string]*string `locationName:"attributes" type:"map"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetSMSAttributesOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetSMSAttributesOutput) GoString() string {
 	return s.String()
 }
@@ -4506,6 +5650,61 @@ func (s GetSMSAttributesOutput) GoString() string {
 // SetAttributes sets the Attributes field's value.
 func (s *GetSMSAttributesOutput) SetAttributes(v map[string]*string) *GetSMSAttributesOutput {
 	s.Attributes = v
+	return s
+}
+
+type GetSMSSandboxAccountStatusInput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetSMSSandboxAccountStatusInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetSMSSandboxAccountStatusInput) GoString() string {
+	return s.String()
+}
+
+type GetSMSSandboxAccountStatusOutput struct {
+	_ struct{} `type:"structure"`
+
+	// Indicates whether the calling account is in the SMS sandbox.
+	//
+	// IsInSandbox is a required field
+	IsInSandbox *bool `type:"boolean" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetSMSSandboxAccountStatusOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetSMSSandboxAccountStatusOutput) GoString() string {
+	return s.String()
+}
+
+// SetIsInSandbox sets the IsInSandbox field's value.
+func (s *GetSMSSandboxAccountStatusOutput) SetIsInSandbox(v bool) *GetSMSSandboxAccountStatusOutput {
+	s.IsInSandbox = &v
 	return s
 }
 
@@ -4519,12 +5718,20 @@ type GetSubscriptionAttributesInput struct {
 	SubscriptionArn *string `type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetSubscriptionAttributesInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetSubscriptionAttributesInput) GoString() string {
 	return s.String()
 }
@@ -4569,7 +5776,7 @@ type GetSubscriptionAttributesOutput struct {
 	//    For more information, see Amazon SNS Message Filtering (https://docs.aws.amazon.com/sns/latest/dg/sns-message-filtering.html)
 	//    in the Amazon SNS Developer Guide.
 	//
-	//    * Owner – The AWS account ID of the subscription's owner.
+	//    * Owner – The account ID of the subscription's owner.
 	//
 	//    * PendingConfirmation – true if the subscription hasn't been confirmed.
 	//    To confirm a pending subscription, call the ConfirmSubscription action
@@ -4589,15 +5796,34 @@ type GetSubscriptionAttributesOutput struct {
 	//    * SubscriptionArn – The subscription's ARN.
 	//
 	//    * TopicArn – The topic ARN that the subscription is associated with.
+	//
+	// The following attribute applies only to Amazon Kinesis Data Firehose delivery
+	// stream subscriptions:
+	//
+	//    * SubscriptionRoleArn – The ARN of the IAM role that has the following:
+	//    Permission to write to the Kinesis Data Firehose delivery stream Amazon
+	//    SNS listed as a trusted entity Specifying a valid ARN for this attribute
+	//    is required for Kinesis Data Firehose delivery stream subscriptions. For
+	//    more information, see Fanout to Kinesis Data Firehose delivery streams
+	//    (https://docs.aws.amazon.com/sns/latest/dg/sns-firehose-as-subscriber.html)
+	//    in the Amazon SNS Developer Guide.
 	Attributes map[string]*string `type:"map"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetSubscriptionAttributesOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetSubscriptionAttributesOutput) GoString() string {
 	return s.String()
 }
@@ -4618,12 +5844,20 @@ type GetTopicAttributesInput struct {
 	TopicArn *string `type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetTopicAttributesInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetTopicAttributesInput) GoString() string {
 	return s.String()
 }
@@ -4658,7 +5892,7 @@ type GetTopicAttributesOutput struct {
 	//    * DisplayName – The human-readable name used in the From field for notifications
 	//    to email and email-json endpoints.
 	//
-	//    * Owner – The AWS account ID of the topic's owner.
+	//    * Owner – The account ID of the topic's owner.
 	//
 	//    * Policy – The JSON serialization of the topic's access control policy.
 	//
@@ -4678,10 +5912,11 @@ type GetTopicAttributesOutput struct {
 	//
 	// The following attribute applies only to server-side-encryption (https://docs.aws.amazon.com/sns/latest/dg/sns-server-side-encryption.html):
 	//
-	//    * KmsMasterKeyId - The ID of an AWS-managed customer master key (CMK)
-	//    for Amazon SNS or a custom CMK. For more information, see Key Terms (https://docs.aws.amazon.com/sns/latest/dg/sns-server-side-encryption.html#sse-key-terms).
+	//    * KmsMasterKeyId - The ID of an Amazon Web Services managed customer master
+	//    key (CMK) for Amazon SNS or a custom CMK. For more information, see Key
+	//    Terms (https://docs.aws.amazon.com/sns/latest/dg/sns-server-side-encryption.html#sse-key-terms).
 	//    For more examples, see KeyId (https://docs.aws.amazon.com/kms/latest/APIReference/API_DescribeKey.html#API_DescribeKey_RequestParameters)
-	//    in the AWS Key Management Service API Reference.
+	//    in the Key Management Service API Reference.
 	//
 	// The following attributes apply only to FIFO topics (https://docs.aws.amazon.com/sns/latest/dg/sns-fifo-topics.html):
 	//
@@ -4694,17 +5929,25 @@ type GetTopicAttributesOutput struct {
 	//    action. When you set ContentBasedDeduplication to true, Amazon SNS uses
 	//    a SHA-256 hash to generate the MessageDeduplicationId using the body of
 	//    the message (but not the attributes of the message). (Optional) To override
-	//    the generated value, you can specify a value for the the MessageDeduplicationId
+	//    the generated value, you can specify a value for the MessageDeduplicationId
 	//    parameter for the Publish action.
 	Attributes map[string]*string `type:"map"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetTopicAttributesOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetTopicAttributesOutput) GoString() string {
 	return s.String()
 }
@@ -4730,12 +5973,20 @@ type ListEndpointsByPlatformApplicationInput struct {
 	PlatformApplicationArn *string `type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListEndpointsByPlatformApplicationInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListEndpointsByPlatformApplicationInput) GoString() string {
 	return s.String()
 }
@@ -4777,12 +6028,20 @@ type ListEndpointsByPlatformApplicationOutput struct {
 	NextToken *string `type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListEndpointsByPlatformApplicationOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListEndpointsByPlatformApplicationOutput) GoString() string {
 	return s.String()
 }
@@ -4799,6 +6058,100 @@ func (s *ListEndpointsByPlatformApplicationOutput) SetNextToken(v string) *ListE
 	return s
 }
 
+type ListOriginationNumbersInput struct {
+	_ struct{} `type:"structure"`
+
+	// The maximum number of origination numbers to return.
+	MaxResults *int64 `min:"1" type:"integer"`
+
+	// Token that the previous ListOriginationNumbers request returns.
+	NextToken *string `type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListOriginationNumbersInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListOriginationNumbersInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ListOriginationNumbersInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ListOriginationNumbersInput"}
+	if s.MaxResults != nil && *s.MaxResults < 1 {
+		invalidParams.Add(request.NewErrParamMinValue("MaxResults", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetMaxResults sets the MaxResults field's value.
+func (s *ListOriginationNumbersInput) SetMaxResults(v int64) *ListOriginationNumbersInput {
+	s.MaxResults = &v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListOriginationNumbersInput) SetNextToken(v string) *ListOriginationNumbersInput {
+	s.NextToken = &v
+	return s
+}
+
+type ListOriginationNumbersOutput struct {
+	_ struct{} `type:"structure"`
+
+	// A NextToken string is returned when you call the ListOriginationNumbers operation
+	// if additional pages of records are available.
+	NextToken *string `type:"string"`
+
+	// A list of the calling account's verified and pending origination numbers.
+	PhoneNumbers []*PhoneNumberInformation `type:"list"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListOriginationNumbersOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListOriginationNumbersOutput) GoString() string {
+	return s.String()
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListOriginationNumbersOutput) SetNextToken(v string) *ListOriginationNumbersOutput {
+	s.NextToken = &v
+	return s
+}
+
+// SetPhoneNumbers sets the PhoneNumbers field's value.
+func (s *ListOriginationNumbersOutput) SetPhoneNumbers(v []*PhoneNumberInformation) *ListOriginationNumbersOutput {
+	s.PhoneNumbers = v
+	return s
+}
+
 // The input for the ListPhoneNumbersOptedOut action.
 type ListPhoneNumbersOptedOutInput struct {
 	_ struct{} `type:"structure"`
@@ -4809,12 +6162,20 @@ type ListPhoneNumbersOptedOutInput struct {
 	NextToken *string `locationName:"nextToken" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListPhoneNumbersOptedOutInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListPhoneNumbersOptedOutInput) GoString() string {
 	return s.String()
 }
@@ -4838,12 +6199,20 @@ type ListPhoneNumbersOptedOutOutput struct {
 	PhoneNumbers []*string `locationName:"phoneNumbers" type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListPhoneNumbersOptedOutOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListPhoneNumbersOptedOutOutput) GoString() string {
 	return s.String()
 }
@@ -4869,12 +6238,20 @@ type ListPlatformApplicationsInput struct {
 	NextToken *string `type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListPlatformApplicationsInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListPlatformApplicationsInput) GoString() string {
 	return s.String()
 }
@@ -4897,12 +6274,20 @@ type ListPlatformApplicationsOutput struct {
 	PlatformApplications []*PlatformApplication `type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListPlatformApplicationsOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListPlatformApplicationsOutput) GoString() string {
 	return s.String()
 }
@@ -4919,6 +6304,102 @@ func (s *ListPlatformApplicationsOutput) SetPlatformApplications(v []*PlatformAp
 	return s
 }
 
+type ListSMSSandboxPhoneNumbersInput struct {
+	_ struct{} `type:"structure"`
+
+	// The maximum number of phone numbers to return.
+	MaxResults *int64 `min:"1" type:"integer"`
+
+	// Token that the previous ListSMSSandboxPhoneNumbersInput request returns.
+	NextToken *string `type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListSMSSandboxPhoneNumbersInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListSMSSandboxPhoneNumbersInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ListSMSSandboxPhoneNumbersInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ListSMSSandboxPhoneNumbersInput"}
+	if s.MaxResults != nil && *s.MaxResults < 1 {
+		invalidParams.Add(request.NewErrParamMinValue("MaxResults", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetMaxResults sets the MaxResults field's value.
+func (s *ListSMSSandboxPhoneNumbersInput) SetMaxResults(v int64) *ListSMSSandboxPhoneNumbersInput {
+	s.MaxResults = &v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListSMSSandboxPhoneNumbersInput) SetNextToken(v string) *ListSMSSandboxPhoneNumbersInput {
+	s.NextToken = &v
+	return s
+}
+
+type ListSMSSandboxPhoneNumbersOutput struct {
+	_ struct{} `type:"structure"`
+
+	// A NextToken string is returned when you call the ListSMSSandboxPhoneNumbersInput
+	// operation if additional pages of records are available.
+	NextToken *string `type:"string"`
+
+	// A list of the calling account's pending and verified phone numbers.
+	//
+	// PhoneNumbers is a required field
+	PhoneNumbers []*SMSSandboxPhoneNumber `type:"list" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListSMSSandboxPhoneNumbersOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListSMSSandboxPhoneNumbersOutput) GoString() string {
+	return s.String()
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListSMSSandboxPhoneNumbersOutput) SetNextToken(v string) *ListSMSSandboxPhoneNumbersOutput {
+	s.NextToken = &v
+	return s
+}
+
+// SetPhoneNumbers sets the PhoneNumbers field's value.
+func (s *ListSMSSandboxPhoneNumbersOutput) SetPhoneNumbers(v []*SMSSandboxPhoneNumber) *ListSMSSandboxPhoneNumbersOutput {
+	s.PhoneNumbers = v
+	return s
+}
+
 // Input for ListSubscriptionsByTopic action.
 type ListSubscriptionsByTopicInput struct {
 	_ struct{} `type:"structure"`
@@ -4932,12 +6413,20 @@ type ListSubscriptionsByTopicInput struct {
 	TopicArn *string `type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListSubscriptionsByTopicInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListSubscriptionsByTopicInput) GoString() string {
 	return s.String()
 }
@@ -4979,12 +6468,20 @@ type ListSubscriptionsByTopicOutput struct {
 	Subscriptions []*Subscription `type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListSubscriptionsByTopicOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListSubscriptionsByTopicOutput) GoString() string {
 	return s.String()
 }
@@ -5009,12 +6506,20 @@ type ListSubscriptionsInput struct {
 	NextToken *string `type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListSubscriptionsInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListSubscriptionsInput) GoString() string {
 	return s.String()
 }
@@ -5037,12 +6542,20 @@ type ListSubscriptionsOutput struct {
 	Subscriptions []*Subscription `type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListSubscriptionsOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListSubscriptionsOutput) GoString() string {
 	return s.String()
 }
@@ -5068,12 +6581,20 @@ type ListTagsForResourceInput struct {
 	ResourceArn *string `min:"1" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListTagsForResourceInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListTagsForResourceInput) GoString() string {
 	return s.String()
 }
@@ -5107,12 +6628,20 @@ type ListTagsForResourceOutput struct {
 	Tags []*Tag `type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListTagsForResourceOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListTagsForResourceOutput) GoString() string {
 	return s.String()
 }
@@ -5130,12 +6659,20 @@ type ListTopicsInput struct {
 	NextToken *string `type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListTopicsInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListTopicsInput) GoString() string {
 	return s.String()
 }
@@ -5158,12 +6695,20 @@ type ListTopicsOutput struct {
 	Topics []*Topic `type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListTopicsOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListTopicsOutput) GoString() string {
 	return s.String()
 }
@@ -5196,7 +6741,6 @@ type MessageAttributeValue struct {
 
 	// Binary type attributes can store any binary data, for example, compressed
 	// data, encrypted data, or images.
-	//
 	// BinaryValue is automatically base64 encoded/decoded by the SDK.
 	BinaryValue []byte `type:"blob"`
 
@@ -5212,12 +6756,20 @@ type MessageAttributeValue struct {
 	StringValue *string `type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s MessageAttributeValue) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s MessageAttributeValue) GoString() string {
 	return s.String()
 }
@@ -5257,18 +6809,26 @@ func (s *MessageAttributeValue) SetStringValue(v string) *MessageAttributeValue 
 type OptInPhoneNumberInput struct {
 	_ struct{} `type:"structure"`
 
-	// The phone number to opt in.
+	// The phone number to opt in. Use E.164 format.
 	//
 	// PhoneNumber is a required field
 	PhoneNumber *string `locationName:"phoneNumber" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s OptInPhoneNumberInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s OptInPhoneNumberInput) GoString() string {
 	return s.String()
 }
@@ -5297,14 +6857,99 @@ type OptInPhoneNumberOutput struct {
 	_ struct{} `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s OptInPhoneNumberOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s OptInPhoneNumberOutput) GoString() string {
 	return s.String()
+}
+
+// A list of phone numbers and their metadata.
+type PhoneNumberInformation struct {
+	_ struct{} `type:"structure"`
+
+	// The date and time when the phone number was created.
+	CreatedAt *time.Time `type:"timestamp"`
+
+	// The two-character code for the country or region, in ISO 3166-1 alpha-2 format.
+	Iso2CountryCode *string `type:"string"`
+
+	// The capabilities of each phone number.
+	NumberCapabilities []*string `type:"list"`
+
+	// The phone number.
+	PhoneNumber *string `type:"string"`
+
+	// The list of supported routes.
+	RouteType *string `type:"string" enum:"RouteType"`
+
+	// The status of the phone number.
+	Status *string `type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s PhoneNumberInformation) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s PhoneNumberInformation) GoString() string {
+	return s.String()
+}
+
+// SetCreatedAt sets the CreatedAt field's value.
+func (s *PhoneNumberInformation) SetCreatedAt(v time.Time) *PhoneNumberInformation {
+	s.CreatedAt = &v
+	return s
+}
+
+// SetIso2CountryCode sets the Iso2CountryCode field's value.
+func (s *PhoneNumberInformation) SetIso2CountryCode(v string) *PhoneNumberInformation {
+	s.Iso2CountryCode = &v
+	return s
+}
+
+// SetNumberCapabilities sets the NumberCapabilities field's value.
+func (s *PhoneNumberInformation) SetNumberCapabilities(v []*string) *PhoneNumberInformation {
+	s.NumberCapabilities = v
+	return s
+}
+
+// SetPhoneNumber sets the PhoneNumber field's value.
+func (s *PhoneNumberInformation) SetPhoneNumber(v string) *PhoneNumberInformation {
+	s.PhoneNumber = &v
+	return s
+}
+
+// SetRouteType sets the RouteType field's value.
+func (s *PhoneNumberInformation) SetRouteType(v string) *PhoneNumberInformation {
+	s.RouteType = &v
+	return s
+}
+
+// SetStatus sets the Status field's value.
+func (s *PhoneNumberInformation) SetStatus(v string) *PhoneNumberInformation {
+	s.Status = &v
+	return s
 }
 
 // Platform application object.
@@ -5318,12 +6963,20 @@ type PlatformApplication struct {
 	PlatformApplicationArn *string `type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s PlatformApplication) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s PlatformApplication) GoString() string {
 	return s.String()
 }
@@ -5462,12 +7115,20 @@ type PublishInput struct {
 	TopicArn *string `type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s PublishInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s PublishInput) GoString() string {
 	return s.String()
 }
@@ -5566,12 +7227,20 @@ type PublishOutput struct {
 	SequenceNumber *string `type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s PublishOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s PublishOutput) GoString() string {
 	return s.String()
 }
@@ -5603,12 +7272,20 @@ type RemovePermissionInput struct {
 	TopicArn *string `type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s RemovePermissionInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s RemovePermissionInput) GoString() string {
 	return s.String()
 }
@@ -5645,14 +7322,72 @@ type RemovePermissionOutput struct {
 	_ struct{} `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s RemovePermissionOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s RemovePermissionOutput) GoString() string {
 	return s.String()
+}
+
+// A verified or pending destination phone number in the SMS sandbox.
+//
+// When you start using Amazon SNS to send SMS messages, your account is in
+// the SMS sandbox. The SMS sandbox provides a safe environment for you to try
+// Amazon SNS features without risking your reputation as an SMS sender. While
+// your account is in the SMS sandbox, you can use all of the features of Amazon
+// SNS. However, you can send SMS messages only to verified destination phone
+// numbers. For more information, including how to move out of the sandbox to
+// send messages without restrictions, see SMS sandbox (https://docs.aws.amazon.com/sns/latest/dg/sns-sms-sandbox.html)
+// in the Amazon SNS Developer Guide.
+type SMSSandboxPhoneNumber struct {
+	_ struct{} `type:"structure"`
+
+	// The destination phone number.
+	PhoneNumber *string `type:"string"`
+
+	// The destination phone number's verification status.
+	Status *string `type:"string" enum:"SMSSandboxPhoneNumberVerificationStatus"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s SMSSandboxPhoneNumber) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s SMSSandboxPhoneNumber) GoString() string {
+	return s.String()
+}
+
+// SetPhoneNumber sets the PhoneNumber field's value.
+func (s *SMSSandboxPhoneNumber) SetPhoneNumber(v string) *SMSSandboxPhoneNumber {
+	s.PhoneNumber = &v
+	return s
+}
+
+// SetStatus sets the Status field's value.
+func (s *SMSSandboxPhoneNumber) SetStatus(v string) *SMSSandboxPhoneNumber {
+	s.Status = &v
+	return s
 }
 
 // Input for SetEndpointAttributes action.
@@ -5683,12 +7418,20 @@ type SetEndpointAttributesInput struct {
 	EndpointArn *string `type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s SetEndpointAttributesInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s SetEndpointAttributesInput) GoString() string {
 	return s.String()
 }
@@ -5725,12 +7468,20 @@ type SetEndpointAttributesOutput struct {
 	_ struct{} `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s SetEndpointAttributesOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s SetEndpointAttributesOutput) GoString() string {
 	return s.String()
 }
@@ -5783,12 +7534,20 @@ type SetPlatformApplicationAttributesInput struct {
 	PlatformApplicationArn *string `type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s SetPlatformApplicationAttributesInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s SetPlatformApplicationAttributesInput) GoString() string {
 	return s.String()
 }
@@ -5825,12 +7584,20 @@ type SetPlatformApplicationAttributesOutput struct {
 	_ struct{} `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s SetPlatformApplicationAttributesOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s SetPlatformApplicationAttributesOutput) GoString() string {
 	return s.String()
 }
@@ -5907,7 +7674,7 @@ type SetSMSAttributesInput struct {
 	//    * Total number of parts
 	//
 	// To receive the report, the bucket must have a policy that allows the Amazon
-	// SNS service principle to perform the s3:PutObject and s3:GetBucketLocation
+	// SNS service principal to perform the s3:PutObject and s3:GetBucketLocation
 	// actions.
 	//
 	// For an example bucket policy and usage report, see Monitoring SMS Activity
@@ -5918,12 +7685,20 @@ type SetSMSAttributesInput struct {
 	Attributes map[string]*string `locationName:"attributes" type:"map" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s SetSMSAttributesInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s SetSMSAttributesInput) GoString() string {
 	return s.String()
 }
@@ -5952,12 +7727,20 @@ type SetSMSAttributesOutput struct {
 	_ struct{} `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s SetSMSAttributesOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s SetSMSAttributesOutput) GoString() string {
 	return s.String()
 }
@@ -5969,7 +7752,7 @@ type SetSubscriptionAttributesInput struct {
 	// A map of attributes with their corresponding values.
 	//
 	// The following lists the names, descriptions, and values of the special request
-	// parameters that the SetTopicAttributes action uses:
+	// parameters that this action uses:
 	//
 	//    * DeliveryPolicy – The policy that defines how Amazon SNS retries failed
 	//    deliveries to HTTP/S endpoints.
@@ -5990,6 +7773,17 @@ type SetSubscriptionAttributesInput struct {
 	//    endpoint becomes unavailable) are held in the dead-letter queue for further
 	//    analysis or reprocessing.
 	//
+	// The following attribute applies only to Amazon Kinesis Data Firehose delivery
+	// stream subscriptions:
+	//
+	//    * SubscriptionRoleArn – The ARN of the IAM role that has the following:
+	//    Permission to write to the Kinesis Data Firehose delivery stream Amazon
+	//    SNS listed as a trusted entity Specifying a valid ARN for this attribute
+	//    is required for Kinesis Data Firehose delivery stream subscriptions. For
+	//    more information, see Fanout to Kinesis Data Firehose delivery streams
+	//    (https://docs.aws.amazon.com/sns/latest/dg/sns-firehose-as-subscriber.html)
+	//    in the Amazon SNS Developer Guide.
+	//
 	// AttributeName is a required field
 	AttributeName *string `type:"string" required:"true"`
 
@@ -6002,12 +7796,20 @@ type SetSubscriptionAttributesInput struct {
 	SubscriptionArn *string `type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s SetSubscriptionAttributesInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s SetSubscriptionAttributesInput) GoString() string {
 	return s.String()
 }
@@ -6050,12 +7852,20 @@ type SetSubscriptionAttributesOutput struct {
 	_ struct{} `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s SetSubscriptionAttributesOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s SetSubscriptionAttributesOutput) GoString() string {
 	return s.String()
 }
@@ -6079,10 +7889,11 @@ type SetTopicAttributesInput struct {
 	//
 	// The following attribute applies only to server-side-encryption (https://docs.aws.amazon.com/sns/latest/dg/sns-server-side-encryption.html):
 	//
-	//    * KmsMasterKeyId – The ID of an AWS-managed customer master key (CMK)
-	//    for Amazon SNS or a custom CMK. For more information, see Key Terms (https://docs.aws.amazon.com/sns/latest/dg/sns-server-side-encryption.html#sse-key-terms).
+	//    * KmsMasterKeyId – The ID of an Amazon Web Services managed customer
+	//    master key (CMK) for Amazon SNS or a custom CMK. For more information,
+	//    see Key Terms (https://docs.aws.amazon.com/sns/latest/dg/sns-server-side-encryption.html#sse-key-terms).
 	//    For more examples, see KeyId (https://docs.aws.amazon.com/kms/latest/APIReference/API_DescribeKey.html#API_DescribeKey_RequestParameters)
-	//    in the AWS Key Management Service API Reference.
+	//    in the Key Management Service API Reference.
 	//
 	// The following attribute applies only to FIFO topics (https://docs.aws.amazon.com/sns/latest/dg/sns-fifo-topics.html):
 	//
@@ -6093,7 +7904,7 @@ type SetTopicAttributesInput struct {
 	//    action. When you set ContentBasedDeduplication to true, Amazon SNS uses
 	//    a SHA-256 hash to generate the MessageDeduplicationId using the body of
 	//    the message (but not the attributes of the message). (Optional) To override
-	//    the generated value, you can specify a value for the the MessageDeduplicationId
+	//    the generated value, you can specify a value for the MessageDeduplicationId
 	//    parameter for the Publish action.
 	//
 	// AttributeName is a required field
@@ -6108,12 +7919,20 @@ type SetTopicAttributesInput struct {
 	TopicArn *string `type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s SetTopicAttributesInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s SetTopicAttributesInput) GoString() string {
 	return s.String()
 }
@@ -6156,12 +7975,20 @@ type SetTopicAttributesOutput struct {
 	_ struct{} `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s SetTopicAttributesOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s SetTopicAttributesOutput) GoString() string {
 	return s.String()
 }
@@ -6173,7 +8000,7 @@ type SubscribeInput struct {
 	// A map of attributes with their corresponding values.
 	//
 	// The following lists the names, descriptions, and values of the special request
-	// parameters that the SetTopicAttributes action uses:
+	// parameters that the Subscribe action uses:
 	//
 	//    * DeliveryPolicy – The policy that defines how Amazon SNS retries failed
 	//    deliveries to HTTP/S endpoints.
@@ -6193,33 +8020,46 @@ type SubscribeInput struct {
 	//    or server errors (for example, when the service that powers the subscribed
 	//    endpoint becomes unavailable) are held in the dead-letter queue for further
 	//    analysis or reprocessing.
+	//
+	// The following attribute applies only to Amazon Kinesis Data Firehose delivery
+	// stream subscriptions:
+	//
+	//    * SubscriptionRoleArn – The ARN of the IAM role that has the following:
+	//    Permission to write to the Kinesis Data Firehose delivery stream Amazon
+	//    SNS listed as a trusted entity Specifying a valid ARN for this attribute
+	//    is required for Kinesis Data Firehose delivery stream subscriptions. For
+	//    more information, see Fanout to Kinesis Data Firehose delivery streams
+	//    (https://docs.aws.amazon.com/sns/latest/dg/sns-firehose-as-subscriber.html)
+	//    in the Amazon SNS Developer Guide.
 	Attributes map[string]*string `type:"map"`
 
 	// The endpoint that you want to receive notifications. Endpoints vary by protocol:
 	//
 	//    * For the http protocol, the (public) endpoint is a URL beginning with
-	//    http://
+	//    http://.
 	//
 	//    * For the https protocol, the (public) endpoint is a URL beginning with
-	//    https://
+	//    https://.
 	//
-	//    * For the email protocol, the endpoint is an email address
+	//    * For the email protocol, the endpoint is an email address.
 	//
-	//    * For the email-json protocol, the endpoint is an email address
+	//    * For the email-json protocol, the endpoint is an email address.
 	//
 	//    * For the sms protocol, the endpoint is a phone number of an SMS-enabled
-	//    device
+	//    device.
 	//
-	//    * For the sqs protocol, the endpoint is the ARN of an Amazon SQS queue
+	//    * For the sqs protocol, the endpoint is the ARN of an Amazon SQS queue.
 	//
 	//    * For the application protocol, the endpoint is the EndpointArn of a mobile
 	//    app and device.
 	//
-	//    * For the lambda protocol, the endpoint is the ARN of an Amazon Lambda
-	//    function.
+	//    * For the lambda protocol, the endpoint is the ARN of an Lambda function.
+	//
+	//    * For the firehose protocol, the endpoint is the ARN of an Amazon Kinesis
+	//    Data Firehose delivery stream.
 	Endpoint *string `type:"string"`
 
-	// The protocol you want to use. Supported protocols include:
+	// The protocol that you want to use. Supported protocols include:
 	//
 	//    * http – delivery of JSON-encoded message via HTTP POST
 	//
@@ -6234,9 +8074,12 @@ type SubscribeInput struct {
 	//    * sqs – delivery of JSON-encoded message to an Amazon SQS queue
 	//
 	//    * application – delivery of JSON-encoded message to an EndpointArn for
-	//    a mobile app and device.
+	//    a mobile app and device
 	//
-	//    * lambda – delivery of JSON-encoded message to an Amazon Lambda function.
+	//    * lambda – delivery of JSON-encoded message to an Lambda function
+	//
+	//    * firehose – delivery of JSON-encoded message to an Amazon Kinesis Data
+	//    Firehose delivery stream.
 	//
 	// Protocol is a required field
 	Protocol *string `type:"string" required:"true"`
@@ -6260,12 +8103,20 @@ type SubscribeInput struct {
 	TopicArn *string `type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s SubscribeInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s SubscribeInput) GoString() string {
 	return s.String()
 }
@@ -6327,12 +8178,20 @@ type SubscribeOutput struct {
 	SubscriptionArn *string `type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s SubscribeOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s SubscribeOutput) GoString() string {
 	return s.String()
 }
@@ -6363,12 +8222,20 @@ type Subscription struct {
 	TopicArn *string `type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s Subscription) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s Subscription) GoString() string {
 	return s.String()
 }
@@ -6418,12 +8285,20 @@ type Tag struct {
 	Value *string `type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s Tag) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s Tag) GoString() string {
 	return s.String()
 }
@@ -6474,12 +8349,20 @@ type TagResourceInput struct {
 	Tags []*Tag `type:"list" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s TagResourceInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s TagResourceInput) GoString() string {
 	return s.String()
 }
@@ -6529,12 +8412,20 @@ type TagResourceOutput struct {
 	_ struct{} `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s TagResourceOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s TagResourceOutput) GoString() string {
 	return s.String()
 }
@@ -6548,12 +8439,20 @@ type Topic struct {
 	TopicArn *string `type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s Topic) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s Topic) GoString() string {
 	return s.String()
 }
@@ -6574,12 +8473,20 @@ type UnsubscribeInput struct {
 	SubscriptionArn *string `type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UnsubscribeInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UnsubscribeInput) GoString() string {
 	return s.String()
 }
@@ -6607,12 +8514,20 @@ type UnsubscribeOutput struct {
 	_ struct{} `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UnsubscribeOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UnsubscribeOutput) GoString() string {
 	return s.String()
 }
@@ -6631,12 +8546,20 @@ type UntagResourceInput struct {
 	TagKeys []*string `type:"list" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UntagResourceInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UntagResourceInput) GoString() string {
 	return s.String()
 }
@@ -6676,12 +8599,232 @@ type UntagResourceOutput struct {
 	_ struct{} `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UntagResourceOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UntagResourceOutput) GoString() string {
 	return s.String()
+}
+
+type VerifySMSSandboxPhoneNumberInput struct {
+	_ struct{} `type:"structure"`
+
+	// The OTP sent to the destination number from the CreateSMSSandBoxPhoneNumber
+	// call.
+	//
+	// OneTimePassword is a required field
+	OneTimePassword *string `min:"5" type:"string" required:"true"`
+
+	// The destination phone number to verify.
+	//
+	// PhoneNumber is a required field
+	PhoneNumber *string `type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s VerifySMSSandboxPhoneNumberInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s VerifySMSSandboxPhoneNumberInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *VerifySMSSandboxPhoneNumberInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "VerifySMSSandboxPhoneNumberInput"}
+	if s.OneTimePassword == nil {
+		invalidParams.Add(request.NewErrParamRequired("OneTimePassword"))
+	}
+	if s.OneTimePassword != nil && len(*s.OneTimePassword) < 5 {
+		invalidParams.Add(request.NewErrParamMinLen("OneTimePassword", 5))
+	}
+	if s.PhoneNumber == nil {
+		invalidParams.Add(request.NewErrParamRequired("PhoneNumber"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetOneTimePassword sets the OneTimePassword field's value.
+func (s *VerifySMSSandboxPhoneNumberInput) SetOneTimePassword(v string) *VerifySMSSandboxPhoneNumberInput {
+	s.OneTimePassword = &v
+	return s
+}
+
+// SetPhoneNumber sets the PhoneNumber field's value.
+func (s *VerifySMSSandboxPhoneNumberInput) SetPhoneNumber(v string) *VerifySMSSandboxPhoneNumberInput {
+	s.PhoneNumber = &v
+	return s
+}
+
+// The destination phone number's verification status.
+type VerifySMSSandboxPhoneNumberOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s VerifySMSSandboxPhoneNumberOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s VerifySMSSandboxPhoneNumberOutput) GoString() string {
+	return s.String()
+}
+
+// Supported language code for sending OTP message
+const (
+	// LanguageCodeStringEnUs is a LanguageCodeString enum value
+	LanguageCodeStringEnUs = "en-US"
+
+	// LanguageCodeStringEnGb is a LanguageCodeString enum value
+	LanguageCodeStringEnGb = "en-GB"
+
+	// LanguageCodeStringEs419 is a LanguageCodeString enum value
+	LanguageCodeStringEs419 = "es-419"
+
+	// LanguageCodeStringEsEs is a LanguageCodeString enum value
+	LanguageCodeStringEsEs = "es-ES"
+
+	// LanguageCodeStringDeDe is a LanguageCodeString enum value
+	LanguageCodeStringDeDe = "de-DE"
+
+	// LanguageCodeStringFrCa is a LanguageCodeString enum value
+	LanguageCodeStringFrCa = "fr-CA"
+
+	// LanguageCodeStringFrFr is a LanguageCodeString enum value
+	LanguageCodeStringFrFr = "fr-FR"
+
+	// LanguageCodeStringItIt is a LanguageCodeString enum value
+	LanguageCodeStringItIt = "it-IT"
+
+	// LanguageCodeStringJaJp is a LanguageCodeString enum value
+	LanguageCodeStringJaJp = "ja-JP"
+
+	// LanguageCodeStringPtBr is a LanguageCodeString enum value
+	LanguageCodeStringPtBr = "pt-BR"
+
+	// LanguageCodeStringKrKr is a LanguageCodeString enum value
+	LanguageCodeStringKrKr = "kr-KR"
+
+	// LanguageCodeStringZhCn is a LanguageCodeString enum value
+	LanguageCodeStringZhCn = "zh-CN"
+
+	// LanguageCodeStringZhTw is a LanguageCodeString enum value
+	LanguageCodeStringZhTw = "zh-TW"
+)
+
+// LanguageCodeString_Values returns all elements of the LanguageCodeString enum
+func LanguageCodeString_Values() []string {
+	return []string{
+		LanguageCodeStringEnUs,
+		LanguageCodeStringEnGb,
+		LanguageCodeStringEs419,
+		LanguageCodeStringEsEs,
+		LanguageCodeStringDeDe,
+		LanguageCodeStringFrCa,
+		LanguageCodeStringFrFr,
+		LanguageCodeStringItIt,
+		LanguageCodeStringJaJp,
+		LanguageCodeStringPtBr,
+		LanguageCodeStringKrKr,
+		LanguageCodeStringZhCn,
+		LanguageCodeStringZhTw,
+	}
+}
+
+// Enum listing out all supported number capabilities.
+const (
+	// NumberCapabilitySms is a NumberCapability enum value
+	NumberCapabilitySms = "SMS"
+
+	// NumberCapabilityMms is a NumberCapability enum value
+	NumberCapabilityMms = "MMS"
+
+	// NumberCapabilityVoice is a NumberCapability enum value
+	NumberCapabilityVoice = "VOICE"
+)
+
+// NumberCapability_Values returns all elements of the NumberCapability enum
+func NumberCapability_Values() []string {
+	return []string{
+		NumberCapabilitySms,
+		NumberCapabilityMms,
+		NumberCapabilityVoice,
+	}
+}
+
+// Enum listing out all supported route types. The following enum values are
+// supported. 1. Transactional : Non-marketing traffic 2. Promotional : Marketing
+// 3. Premium : Premium routes for OTP delivery to the carriers
+const (
+	// RouteTypeTransactional is a RouteType enum value
+	RouteTypeTransactional = "Transactional"
+
+	// RouteTypePromotional is a RouteType enum value
+	RouteTypePromotional = "Promotional"
+
+	// RouteTypePremium is a RouteType enum value
+	RouteTypePremium = "Premium"
+)
+
+// RouteType_Values returns all elements of the RouteType enum
+func RouteType_Values() []string {
+	return []string{
+		RouteTypeTransactional,
+		RouteTypePromotional,
+		RouteTypePremium,
+	}
+}
+
+// Enum listing out all supported destination phone number verification statuses.
+// The following enum values are supported. 1. PENDING : The destination phone
+// number is pending verification. 2. VERIFIED : The destination phone number
+// is verified.
+const (
+	// SMSSandboxPhoneNumberVerificationStatusPending is a SMSSandboxPhoneNumberVerificationStatus enum value
+	SMSSandboxPhoneNumberVerificationStatusPending = "Pending"
+
+	// SMSSandboxPhoneNumberVerificationStatusVerified is a SMSSandboxPhoneNumberVerificationStatus enum value
+	SMSSandboxPhoneNumberVerificationStatusVerified = "Verified"
+)
+
+// SMSSandboxPhoneNumberVerificationStatus_Values returns all elements of the SMSSandboxPhoneNumberVerificationStatus enum
+func SMSSandboxPhoneNumberVerificationStatus_Values() []string {
+	return []string{
+		SMSSandboxPhoneNumberVerificationStatusPending,
+		SMSSandboxPhoneNumberVerificationStatusVerified,
+	}
 }

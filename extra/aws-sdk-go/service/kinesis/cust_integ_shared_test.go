@@ -1,4 +1,5 @@
-// +build integration
+//go:build integration && go1.15
+// +build integration,go1.15
 
 package kinesis_test
 

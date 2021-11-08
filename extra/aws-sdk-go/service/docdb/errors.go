@@ -144,6 +144,32 @@ const (
 	// The upgrade failed because a resource that the depends on can't be modified.
 	ErrCodeDBUpgradeDependencyFailureFault = "DBUpgradeDependencyFailure"
 
+	// ErrCodeEventSubscriptionQuotaExceededFault for service response error code
+	// "EventSubscriptionQuotaExceeded".
+	//
+	// You have reached the maximum number of event subscriptions.
+	ErrCodeEventSubscriptionQuotaExceededFault = "EventSubscriptionQuotaExceeded"
+
+	// ErrCodeGlobalClusterAlreadyExistsFault for service response error code
+	// "GlobalClusterAlreadyExistsFault".
+	//
+	// The GlobalClusterIdentifier already exists. Choose a new global cluster identifier
+	// (unique name) to create a new global cluster.
+	ErrCodeGlobalClusterAlreadyExistsFault = "GlobalClusterAlreadyExistsFault"
+
+	// ErrCodeGlobalClusterNotFoundFault for service response error code
+	// "GlobalClusterNotFoundFault".
+	//
+	// The GlobalClusterIdentifier doesn't refer to an existing global cluster.
+	ErrCodeGlobalClusterNotFoundFault = "GlobalClusterNotFoundFault"
+
+	// ErrCodeGlobalClusterQuotaExceededFault for service response error code
+	// "GlobalClusterQuotaExceededFault".
+	//
+	// The number of global clusters for this account is already at the maximum
+	// allowed.
+	ErrCodeGlobalClusterQuotaExceededFault = "GlobalClusterQuotaExceededFault"
+
 	// ErrCodeInstanceQuotaExceededFault for service response error code
 	// "InstanceQuotaExceeded".
 	//
@@ -221,6 +247,19 @@ const (
 	// The subnet isn't in the available state.
 	ErrCodeInvalidDBSubnetStateFault = "InvalidDBSubnetStateFault"
 
+	// ErrCodeInvalidEventSubscriptionStateFault for service response error code
+	// "InvalidEventSubscriptionState".
+	//
+	// Someone else might be modifying a subscription. Wait a few seconds, and try
+	// again.
+	ErrCodeInvalidEventSubscriptionStateFault = "InvalidEventSubscriptionState"
+
+	// ErrCodeInvalidGlobalClusterStateFault for service response error code
+	// "InvalidGlobalClusterStateFault".
+	//
+	// The requested operation can't be performed while the cluster is in this state.
+	ErrCodeInvalidGlobalClusterStateFault = "InvalidGlobalClusterStateFault"
+
 	// ErrCodeInvalidRestoreFault for service response error code
 	// "InvalidRestoreFault".
 	//
@@ -245,7 +284,7 @@ const (
 	// ErrCodeKMSKeyNotAccessibleFault for service response error code
 	// "KMSKeyNotAccessibleFault".
 	//
-	// An error occurred when accessing an AWS KMS key.
+	// An error occurred when accessing an KMS key.
 	ErrCodeKMSKeyNotAccessibleFault = "KMSKeyNotAccessibleFault"
 
 	// ErrCodeResourceNotFoundFault for service response error code
@@ -253,6 +292,25 @@ const (
 	//
 	// The specified resource ID was not found.
 	ErrCodeResourceNotFoundFault = "ResourceNotFoundFault"
+
+	// ErrCodeSNSInvalidTopicFault for service response error code
+	// "SNSInvalidTopic".
+	//
+	// Amazon SNS has responded that there is a problem with the specified topic.
+	ErrCodeSNSInvalidTopicFault = "SNSInvalidTopic"
+
+	// ErrCodeSNSNoAuthorizationFault for service response error code
+	// "SNSNoAuthorization".
+	//
+	// You do not have permission to publish to the SNS topic Amazon Resource Name
+	// (ARN).
+	ErrCodeSNSNoAuthorizationFault = "SNSNoAuthorization"
+
+	// ErrCodeSNSTopicArnNotFoundFault for service response error code
+	// "SNSTopicArnNotFound".
+	//
+	// The SNS topic Amazon Resource Name (ARN) does not exist.
+	ErrCodeSNSTopicArnNotFoundFault = "SNSTopicArnNotFound"
 
 	// ErrCodeSharedSnapshotQuotaExceededFault for service response error code
 	// "SharedSnapshotQuotaExceeded".
@@ -266,6 +324,12 @@ const (
 	//
 	// The request would cause you to exceed the allowed number of snapshots.
 	ErrCodeSnapshotQuotaExceededFault = "SnapshotQuotaExceeded"
+
+	// ErrCodeSourceNotFoundFault for service response error code
+	// "SourceNotFound".
+	//
+	// The requested source could not be found.
+	ErrCodeSourceNotFoundFault = "SourceNotFound"
 
 	// ErrCodeStorageQuotaExceededFault for service response error code
 	// "StorageQuotaExceeded".
@@ -285,4 +349,22 @@ const (
 	//
 	// The subnet is already in use in the Availability Zone.
 	ErrCodeSubnetAlreadyInUse = "SubnetAlreadyInUse"
+
+	// ErrCodeSubscriptionAlreadyExistFault for service response error code
+	// "SubscriptionAlreadyExist".
+	//
+	// The provided subscription name already exists.
+	ErrCodeSubscriptionAlreadyExistFault = "SubscriptionAlreadyExist"
+
+	// ErrCodeSubscriptionCategoryNotFoundFault for service response error code
+	// "SubscriptionCategoryNotFound".
+	//
+	// The provided category does not exist.
+	ErrCodeSubscriptionCategoryNotFoundFault = "SubscriptionCategoryNotFound"
+
+	// ErrCodeSubscriptionNotFoundFault for service response error code
+	// "SubscriptionNotFound".
+	//
+	// The subscription name does not exist.
+	ErrCodeSubscriptionNotFoundFault = "SubscriptionNotFound"
 )

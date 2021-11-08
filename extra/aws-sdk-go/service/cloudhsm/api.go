@@ -57,12 +57,12 @@ func (c *CloudHSM) AddTagsToResourceRequest(input *AddTagsToResourceInput) (req 
 //
 // This is documentation for AWS CloudHSM Classic. For more information, see
 // AWS CloudHSM Classic FAQs (http://aws.amazon.com/cloudhsm/faqs-classic/),
-// the AWS CloudHSM Classic User Guide (http://docs.aws.amazon.com/cloudhsm/classic/userguide/),
-// and the AWS CloudHSM Classic API Reference (http://docs.aws.amazon.com/cloudhsm/classic/APIReference/).
+// the AWS CloudHSM Classic User Guide (https://docs.aws.amazon.com/cloudhsm/classic/userguide/),
+// and the AWS CloudHSM Classic API Reference (https://docs.aws.amazon.com/cloudhsm/classic/APIReference/).
 //
 // For information about the current version of AWS CloudHSM, see AWS CloudHSM
-// (http://aws.amazon.com/cloudhsm/), the AWS CloudHSM User Guide (http://docs.aws.amazon.com/cloudhsm/latest/userguide/),
-// and the AWS CloudHSM API Reference (http://docs.aws.amazon.com/cloudhsm/latest/APIReference/).
+// (http://aws.amazon.com/cloudhsm/), the AWS CloudHSM User Guide (https://docs.aws.amazon.com/cloudhsm/latest/userguide/),
+// and the AWS CloudHSM API Reference (https://docs.aws.amazon.com/cloudhsm/latest/APIReference/).
 //
 // Adds or overwrites one or more tags for the specified AWS CloudHSM resource.
 //
@@ -153,12 +153,12 @@ func (c *CloudHSM) CreateHapgRequest(input *CreateHapgInput) (req *request.Reque
 //
 // This is documentation for AWS CloudHSM Classic. For more information, see
 // AWS CloudHSM Classic FAQs (http://aws.amazon.com/cloudhsm/faqs-classic/),
-// the AWS CloudHSM Classic User Guide (http://docs.aws.amazon.com/cloudhsm/classic/userguide/),
-// and the AWS CloudHSM Classic API Reference (http://docs.aws.amazon.com/cloudhsm/classic/APIReference/).
+// the AWS CloudHSM Classic User Guide (https://docs.aws.amazon.com/cloudhsm/classic/userguide/),
+// and the AWS CloudHSM Classic API Reference (https://docs.aws.amazon.com/cloudhsm/classic/APIReference/).
 //
 // For information about the current version of AWS CloudHSM, see AWS CloudHSM
-// (http://aws.amazon.com/cloudhsm/), the AWS CloudHSM User Guide (http://docs.aws.amazon.com/cloudhsm/latest/userguide/),
-// and the AWS CloudHSM API Reference (http://docs.aws.amazon.com/cloudhsm/latest/APIReference/).
+// (http://aws.amazon.com/cloudhsm/), the AWS CloudHSM User Guide (https://docs.aws.amazon.com/cloudhsm/latest/userguide/),
+// and the AWS CloudHSM API Reference (https://docs.aws.amazon.com/cloudhsm/latest/APIReference/).
 //
 // Creates a high-availability partition group. A high-availability partition
 // group is a group of partitions that spans multiple physical HSMs.
@@ -248,12 +248,12 @@ func (c *CloudHSM) CreateHsmRequest(input *CreateHsmInput) (req *request.Request
 //
 // This is documentation for AWS CloudHSM Classic. For more information, see
 // AWS CloudHSM Classic FAQs (http://aws.amazon.com/cloudhsm/faqs-classic/),
-// the AWS CloudHSM Classic User Guide (http://docs.aws.amazon.com/cloudhsm/classic/userguide/),
-// and the AWS CloudHSM Classic API Reference (http://docs.aws.amazon.com/cloudhsm/classic/APIReference/).
+// the AWS CloudHSM Classic User Guide (https://docs.aws.amazon.com/cloudhsm/classic/userguide/),
+// and the AWS CloudHSM Classic API Reference (https://docs.aws.amazon.com/cloudhsm/classic/APIReference/).
 //
 // For information about the current version of AWS CloudHSM, see AWS CloudHSM
-// (http://aws.amazon.com/cloudhsm/), the AWS CloudHSM User Guide (http://docs.aws.amazon.com/cloudhsm/latest/userguide/),
-// and the AWS CloudHSM API Reference (http://docs.aws.amazon.com/cloudhsm/latest/APIReference/).
+// (http://aws.amazon.com/cloudhsm/), the AWS CloudHSM User Guide (https://docs.aws.amazon.com/cloudhsm/latest/userguide/),
+// and the AWS CloudHSM API Reference (https://docs.aws.amazon.com/cloudhsm/latest/APIReference/).
 //
 // Creates an uninitialized HSM instance.
 //
@@ -352,12 +352,12 @@ func (c *CloudHSM) CreateLunaClientRequest(input *CreateLunaClientInput) (req *r
 //
 // This is documentation for AWS CloudHSM Classic. For more information, see
 // AWS CloudHSM Classic FAQs (http://aws.amazon.com/cloudhsm/faqs-classic/),
-// the AWS CloudHSM Classic User Guide (http://docs.aws.amazon.com/cloudhsm/classic/userguide/),
-// and the AWS CloudHSM Classic API Reference (http://docs.aws.amazon.com/cloudhsm/classic/APIReference/).
+// the AWS CloudHSM Classic User Guide (https://docs.aws.amazon.com/cloudhsm/classic/userguide/),
+// and the AWS CloudHSM Classic API Reference (https://docs.aws.amazon.com/cloudhsm/classic/APIReference/).
 //
 // For information about the current version of AWS CloudHSM, see AWS CloudHSM
-// (http://aws.amazon.com/cloudhsm/), the AWS CloudHSM User Guide (http://docs.aws.amazon.com/cloudhsm/latest/userguide/),
-// and the AWS CloudHSM API Reference (http://docs.aws.amazon.com/cloudhsm/latest/APIReference/).
+// (http://aws.amazon.com/cloudhsm/), the AWS CloudHSM User Guide (https://docs.aws.amazon.com/cloudhsm/latest/userguide/),
+// and the AWS CloudHSM API Reference (https://docs.aws.amazon.com/cloudhsm/latest/APIReference/).
 //
 // Creates an HSM client.
 //
@@ -446,12 +446,12 @@ func (c *CloudHSM) DeleteHapgRequest(input *DeleteHapgInput) (req *request.Reque
 //
 // This is documentation for AWS CloudHSM Classic. For more information, see
 // AWS CloudHSM Classic FAQs (http://aws.amazon.com/cloudhsm/faqs-classic/),
-// the AWS CloudHSM Classic User Guide (http://docs.aws.amazon.com/cloudhsm/classic/userguide/),
-// and the AWS CloudHSM Classic API Reference (http://docs.aws.amazon.com/cloudhsm/classic/APIReference/).
+// the AWS CloudHSM Classic User Guide (https://docs.aws.amazon.com/cloudhsm/classic/userguide/),
+// and the AWS CloudHSM Classic API Reference (https://docs.aws.amazon.com/cloudhsm/classic/APIReference/).
 //
 // For information about the current version of AWS CloudHSM, see AWS CloudHSM
-// (http://aws.amazon.com/cloudhsm/), the AWS CloudHSM User Guide (http://docs.aws.amazon.com/cloudhsm/latest/userguide/),
-// and the AWS CloudHSM API Reference (http://docs.aws.amazon.com/cloudhsm/latest/APIReference/).
+// (http://aws.amazon.com/cloudhsm/), the AWS CloudHSM User Guide (https://docs.aws.amazon.com/cloudhsm/latest/userguide/),
+// and the AWS CloudHSM API Reference (https://docs.aws.amazon.com/cloudhsm/latest/APIReference/).
 //
 // Deletes a high-availability partition group.
 //
@@ -540,12 +540,12 @@ func (c *CloudHSM) DeleteHsmRequest(input *DeleteHsmInput) (req *request.Request
 //
 // This is documentation for AWS CloudHSM Classic. For more information, see
 // AWS CloudHSM Classic FAQs (http://aws.amazon.com/cloudhsm/faqs-classic/),
-// the AWS CloudHSM Classic User Guide (http://docs.aws.amazon.com/cloudhsm/classic/userguide/),
-// and the AWS CloudHSM Classic API Reference (http://docs.aws.amazon.com/cloudhsm/classic/APIReference/).
+// the AWS CloudHSM Classic User Guide (https://docs.aws.amazon.com/cloudhsm/classic/userguide/),
+// and the AWS CloudHSM Classic API Reference (https://docs.aws.amazon.com/cloudhsm/classic/APIReference/).
 //
 // For information about the current version of AWS CloudHSM, see AWS CloudHSM
-// (http://aws.amazon.com/cloudhsm/), the AWS CloudHSM User Guide (http://docs.aws.amazon.com/cloudhsm/latest/userguide/),
-// and the AWS CloudHSM API Reference (http://docs.aws.amazon.com/cloudhsm/latest/APIReference/).
+// (http://aws.amazon.com/cloudhsm/), the AWS CloudHSM User Guide (https://docs.aws.amazon.com/cloudhsm/latest/userguide/),
+// and the AWS CloudHSM API Reference (https://docs.aws.amazon.com/cloudhsm/latest/APIReference/).
 //
 // Deletes an HSM. After completion, this operation cannot be undone and your
 // key material cannot be recovered.
@@ -635,12 +635,12 @@ func (c *CloudHSM) DeleteLunaClientRequest(input *DeleteLunaClientInput) (req *r
 //
 // This is documentation for AWS CloudHSM Classic. For more information, see
 // AWS CloudHSM Classic FAQs (http://aws.amazon.com/cloudhsm/faqs-classic/),
-// the AWS CloudHSM Classic User Guide (http://docs.aws.amazon.com/cloudhsm/classic/userguide/),
-// and the AWS CloudHSM Classic API Reference (http://docs.aws.amazon.com/cloudhsm/classic/APIReference/).
+// the AWS CloudHSM Classic User Guide (https://docs.aws.amazon.com/cloudhsm/classic/userguide/),
+// and the AWS CloudHSM Classic API Reference (https://docs.aws.amazon.com/cloudhsm/classic/APIReference/).
 //
 // For information about the current version of AWS CloudHSM, see AWS CloudHSM
-// (http://aws.amazon.com/cloudhsm/), the AWS CloudHSM User Guide (http://docs.aws.amazon.com/cloudhsm/latest/userguide/),
-// and the AWS CloudHSM API Reference (http://docs.aws.amazon.com/cloudhsm/latest/APIReference/).
+// (http://aws.amazon.com/cloudhsm/), the AWS CloudHSM User Guide (https://docs.aws.amazon.com/cloudhsm/latest/userguide/),
+// and the AWS CloudHSM API Reference (https://docs.aws.amazon.com/cloudhsm/latest/APIReference/).
 //
 // Deletes a client.
 //
@@ -729,12 +729,12 @@ func (c *CloudHSM) DescribeHapgRequest(input *DescribeHapgInput) (req *request.R
 //
 // This is documentation for AWS CloudHSM Classic. For more information, see
 // AWS CloudHSM Classic FAQs (http://aws.amazon.com/cloudhsm/faqs-classic/),
-// the AWS CloudHSM Classic User Guide (http://docs.aws.amazon.com/cloudhsm/classic/userguide/),
-// and the AWS CloudHSM Classic API Reference (http://docs.aws.amazon.com/cloudhsm/classic/APIReference/).
+// the AWS CloudHSM Classic User Guide (https://docs.aws.amazon.com/cloudhsm/classic/userguide/),
+// and the AWS CloudHSM Classic API Reference (https://docs.aws.amazon.com/cloudhsm/classic/APIReference/).
 //
 // For information about the current version of AWS CloudHSM, see AWS CloudHSM
-// (http://aws.amazon.com/cloudhsm/), the AWS CloudHSM User Guide (http://docs.aws.amazon.com/cloudhsm/latest/userguide/),
-// and the AWS CloudHSM API Reference (http://docs.aws.amazon.com/cloudhsm/latest/APIReference/).
+// (http://aws.amazon.com/cloudhsm/), the AWS CloudHSM User Guide (https://docs.aws.amazon.com/cloudhsm/latest/userguide/),
+// and the AWS CloudHSM API Reference (https://docs.aws.amazon.com/cloudhsm/latest/APIReference/).
 //
 // Retrieves information about a high-availability partition group.
 //
@@ -823,12 +823,12 @@ func (c *CloudHSM) DescribeHsmRequest(input *DescribeHsmInput) (req *request.Req
 //
 // This is documentation for AWS CloudHSM Classic. For more information, see
 // AWS CloudHSM Classic FAQs (http://aws.amazon.com/cloudhsm/faqs-classic/),
-// the AWS CloudHSM Classic User Guide (http://docs.aws.amazon.com/cloudhsm/classic/userguide/),
-// and the AWS CloudHSM Classic API Reference (http://docs.aws.amazon.com/cloudhsm/classic/APIReference/).
+// the AWS CloudHSM Classic User Guide (https://docs.aws.amazon.com/cloudhsm/classic/userguide/),
+// and the AWS CloudHSM Classic API Reference (https://docs.aws.amazon.com/cloudhsm/classic/APIReference/).
 //
 // For information about the current version of AWS CloudHSM, see AWS CloudHSM
-// (http://aws.amazon.com/cloudhsm/), the AWS CloudHSM User Guide (http://docs.aws.amazon.com/cloudhsm/latest/userguide/),
-// and the AWS CloudHSM API Reference (http://docs.aws.amazon.com/cloudhsm/latest/APIReference/).
+// (http://aws.amazon.com/cloudhsm/), the AWS CloudHSM User Guide (https://docs.aws.amazon.com/cloudhsm/latest/userguide/),
+// and the AWS CloudHSM API Reference (https://docs.aws.amazon.com/cloudhsm/latest/APIReference/).
 //
 // Retrieves information about an HSM. You can identify the HSM by its ARN or
 // its serial number.
@@ -918,12 +918,12 @@ func (c *CloudHSM) DescribeLunaClientRequest(input *DescribeLunaClientInput) (re
 //
 // This is documentation for AWS CloudHSM Classic. For more information, see
 // AWS CloudHSM Classic FAQs (http://aws.amazon.com/cloudhsm/faqs-classic/),
-// the AWS CloudHSM Classic User Guide (http://docs.aws.amazon.com/cloudhsm/classic/userguide/),
-// and the AWS CloudHSM Classic API Reference (http://docs.aws.amazon.com/cloudhsm/classic/APIReference/).
+// the AWS CloudHSM Classic User Guide (https://docs.aws.amazon.com/cloudhsm/classic/userguide/),
+// and the AWS CloudHSM Classic API Reference (https://docs.aws.amazon.com/cloudhsm/classic/APIReference/).
 //
 // For information about the current version of AWS CloudHSM, see AWS CloudHSM
-// (http://aws.amazon.com/cloudhsm/), the AWS CloudHSM User Guide (http://docs.aws.amazon.com/cloudhsm/latest/userguide/),
-// and the AWS CloudHSM API Reference (http://docs.aws.amazon.com/cloudhsm/latest/APIReference/).
+// (http://aws.amazon.com/cloudhsm/), the AWS CloudHSM User Guide (https://docs.aws.amazon.com/cloudhsm/latest/userguide/),
+// and the AWS CloudHSM API Reference (https://docs.aws.amazon.com/cloudhsm/latest/APIReference/).
 //
 // Retrieves information about an HSM client.
 //
@@ -1012,12 +1012,12 @@ func (c *CloudHSM) GetConfigRequest(input *GetConfigInput) (req *request.Request
 //
 // This is documentation for AWS CloudHSM Classic. For more information, see
 // AWS CloudHSM Classic FAQs (http://aws.amazon.com/cloudhsm/faqs-classic/),
-// the AWS CloudHSM Classic User Guide (http://docs.aws.amazon.com/cloudhsm/classic/userguide/),
-// and the AWS CloudHSM Classic API Reference (http://docs.aws.amazon.com/cloudhsm/classic/APIReference/).
+// the AWS CloudHSM Classic User Guide (https://docs.aws.amazon.com/cloudhsm/classic/userguide/),
+// and the AWS CloudHSM Classic API Reference (https://docs.aws.amazon.com/cloudhsm/classic/APIReference/).
 //
 // For information about the current version of AWS CloudHSM, see AWS CloudHSM
-// (http://aws.amazon.com/cloudhsm/), the AWS CloudHSM User Guide (http://docs.aws.amazon.com/cloudhsm/latest/userguide/),
-// and the AWS CloudHSM API Reference (http://docs.aws.amazon.com/cloudhsm/latest/APIReference/).
+// (http://aws.amazon.com/cloudhsm/), the AWS CloudHSM User Guide (https://docs.aws.amazon.com/cloudhsm/latest/userguide/),
+// and the AWS CloudHSM API Reference (https://docs.aws.amazon.com/cloudhsm/latest/APIReference/).
 //
 // Gets the configuration files necessary to connect to all high availability
 // partition groups the client is associated with.
@@ -1107,12 +1107,12 @@ func (c *CloudHSM) ListAvailableZonesRequest(input *ListAvailableZonesInput) (re
 //
 // This is documentation for AWS CloudHSM Classic. For more information, see
 // AWS CloudHSM Classic FAQs (http://aws.amazon.com/cloudhsm/faqs-classic/),
-// the AWS CloudHSM Classic User Guide (http://docs.aws.amazon.com/cloudhsm/classic/userguide/),
-// and the AWS CloudHSM Classic API Reference (http://docs.aws.amazon.com/cloudhsm/classic/APIReference/).
+// the AWS CloudHSM Classic User Guide (https://docs.aws.amazon.com/cloudhsm/classic/userguide/),
+// and the AWS CloudHSM Classic API Reference (https://docs.aws.amazon.com/cloudhsm/classic/APIReference/).
 //
 // For information about the current version of AWS CloudHSM, see AWS CloudHSM
-// (http://aws.amazon.com/cloudhsm/), the AWS CloudHSM User Guide (http://docs.aws.amazon.com/cloudhsm/latest/userguide/),
-// and the AWS CloudHSM API Reference (http://docs.aws.amazon.com/cloudhsm/latest/APIReference/).
+// (http://aws.amazon.com/cloudhsm/), the AWS CloudHSM User Guide (https://docs.aws.amazon.com/cloudhsm/latest/userguide/),
+// and the AWS CloudHSM API Reference (https://docs.aws.amazon.com/cloudhsm/latest/APIReference/).
 //
 // Lists the Availability Zones that have available AWS CloudHSM capacity.
 //
@@ -1201,12 +1201,12 @@ func (c *CloudHSM) ListHapgsRequest(input *ListHapgsInput) (req *request.Request
 //
 // This is documentation for AWS CloudHSM Classic. For more information, see
 // AWS CloudHSM Classic FAQs (http://aws.amazon.com/cloudhsm/faqs-classic/),
-// the AWS CloudHSM Classic User Guide (http://docs.aws.amazon.com/cloudhsm/classic/userguide/),
-// and the AWS CloudHSM Classic API Reference (http://docs.aws.amazon.com/cloudhsm/classic/APIReference/).
+// the AWS CloudHSM Classic User Guide (https://docs.aws.amazon.com/cloudhsm/classic/userguide/),
+// and the AWS CloudHSM Classic API Reference (https://docs.aws.amazon.com/cloudhsm/classic/APIReference/).
 //
 // For information about the current version of AWS CloudHSM, see AWS CloudHSM
-// (http://aws.amazon.com/cloudhsm/), the AWS CloudHSM User Guide (http://docs.aws.amazon.com/cloudhsm/latest/userguide/),
-// and the AWS CloudHSM API Reference (http://docs.aws.amazon.com/cloudhsm/latest/APIReference/).
+// (http://aws.amazon.com/cloudhsm/), the AWS CloudHSM User Guide (https://docs.aws.amazon.com/cloudhsm/latest/userguide/),
+// and the AWS CloudHSM API Reference (https://docs.aws.amazon.com/cloudhsm/latest/APIReference/).
 //
 // Lists the high-availability partition groups for the account.
 //
@@ -1300,12 +1300,12 @@ func (c *CloudHSM) ListHsmsRequest(input *ListHsmsInput) (req *request.Request, 
 //
 // This is documentation for AWS CloudHSM Classic. For more information, see
 // AWS CloudHSM Classic FAQs (http://aws.amazon.com/cloudhsm/faqs-classic/),
-// the AWS CloudHSM Classic User Guide (http://docs.aws.amazon.com/cloudhsm/classic/userguide/),
-// and the AWS CloudHSM Classic API Reference (http://docs.aws.amazon.com/cloudhsm/classic/APIReference/).
+// the AWS CloudHSM Classic User Guide (https://docs.aws.amazon.com/cloudhsm/classic/userguide/),
+// and the AWS CloudHSM Classic API Reference (https://docs.aws.amazon.com/cloudhsm/classic/APIReference/).
 //
 // For information about the current version of AWS CloudHSM, see AWS CloudHSM
-// (http://aws.amazon.com/cloudhsm/), the AWS CloudHSM User Guide (http://docs.aws.amazon.com/cloudhsm/latest/userguide/),
-// and the AWS CloudHSM API Reference (http://docs.aws.amazon.com/cloudhsm/latest/APIReference/).
+// (http://aws.amazon.com/cloudhsm/), the AWS CloudHSM User Guide (https://docs.aws.amazon.com/cloudhsm/latest/userguide/),
+// and the AWS CloudHSM API Reference (https://docs.aws.amazon.com/cloudhsm/latest/APIReference/).
 //
 // Retrieves the identifiers of all of the HSMs provisioned for the current
 // customer.
@@ -1400,12 +1400,12 @@ func (c *CloudHSM) ListLunaClientsRequest(input *ListLunaClientsInput) (req *req
 //
 // This is documentation for AWS CloudHSM Classic. For more information, see
 // AWS CloudHSM Classic FAQs (http://aws.amazon.com/cloudhsm/faqs-classic/),
-// the AWS CloudHSM Classic User Guide (http://docs.aws.amazon.com/cloudhsm/classic/userguide/),
-// and the AWS CloudHSM Classic API Reference (http://docs.aws.amazon.com/cloudhsm/classic/APIReference/).
+// the AWS CloudHSM Classic User Guide (https://docs.aws.amazon.com/cloudhsm/classic/userguide/),
+// and the AWS CloudHSM Classic API Reference (https://docs.aws.amazon.com/cloudhsm/classic/APIReference/).
 //
 // For information about the current version of AWS CloudHSM, see AWS CloudHSM
-// (http://aws.amazon.com/cloudhsm/), the AWS CloudHSM User Guide (http://docs.aws.amazon.com/cloudhsm/latest/userguide/),
-// and the AWS CloudHSM API Reference (http://docs.aws.amazon.com/cloudhsm/latest/APIReference/).
+// (http://aws.amazon.com/cloudhsm/), the AWS CloudHSM User Guide (https://docs.aws.amazon.com/cloudhsm/latest/userguide/),
+// and the AWS CloudHSM API Reference (https://docs.aws.amazon.com/cloudhsm/latest/APIReference/).
 //
 // Lists all of the clients.
 //
@@ -1499,12 +1499,12 @@ func (c *CloudHSM) ListTagsForResourceRequest(input *ListTagsForResourceInput) (
 //
 // This is documentation for AWS CloudHSM Classic. For more information, see
 // AWS CloudHSM Classic FAQs (http://aws.amazon.com/cloudhsm/faqs-classic/),
-// the AWS CloudHSM Classic User Guide (http://docs.aws.amazon.com/cloudhsm/classic/userguide/),
-// and the AWS CloudHSM Classic API Reference (http://docs.aws.amazon.com/cloudhsm/classic/APIReference/).
+// the AWS CloudHSM Classic User Guide (https://docs.aws.amazon.com/cloudhsm/classic/userguide/),
+// and the AWS CloudHSM Classic API Reference (https://docs.aws.amazon.com/cloudhsm/classic/APIReference/).
 //
 // For information about the current version of AWS CloudHSM, see AWS CloudHSM
-// (http://aws.amazon.com/cloudhsm/), the AWS CloudHSM User Guide (http://docs.aws.amazon.com/cloudhsm/latest/userguide/),
-// and the AWS CloudHSM API Reference (http://docs.aws.amazon.com/cloudhsm/latest/APIReference/).
+// (http://aws.amazon.com/cloudhsm/), the AWS CloudHSM User Guide (https://docs.aws.amazon.com/cloudhsm/latest/userguide/),
+// and the AWS CloudHSM API Reference (https://docs.aws.amazon.com/cloudhsm/latest/APIReference/).
 //
 // Returns a list of all tags for the specified AWS CloudHSM resource.
 //
@@ -1593,12 +1593,12 @@ func (c *CloudHSM) ModifyHapgRequest(input *ModifyHapgInput) (req *request.Reque
 //
 // This is documentation for AWS CloudHSM Classic. For more information, see
 // AWS CloudHSM Classic FAQs (http://aws.amazon.com/cloudhsm/faqs-classic/),
-// the AWS CloudHSM Classic User Guide (http://docs.aws.amazon.com/cloudhsm/classic/userguide/),
-// and the AWS CloudHSM Classic API Reference (http://docs.aws.amazon.com/cloudhsm/classic/APIReference/).
+// the AWS CloudHSM Classic User Guide (https://docs.aws.amazon.com/cloudhsm/classic/userguide/),
+// and the AWS CloudHSM Classic API Reference (https://docs.aws.amazon.com/cloudhsm/classic/APIReference/).
 //
 // For information about the current version of AWS CloudHSM, see AWS CloudHSM
-// (http://aws.amazon.com/cloudhsm/), the AWS CloudHSM User Guide (http://docs.aws.amazon.com/cloudhsm/latest/userguide/),
-// and the AWS CloudHSM API Reference (http://docs.aws.amazon.com/cloudhsm/latest/APIReference/).
+// (http://aws.amazon.com/cloudhsm/), the AWS CloudHSM User Guide (https://docs.aws.amazon.com/cloudhsm/latest/userguide/),
+// and the AWS CloudHSM API Reference (https://docs.aws.amazon.com/cloudhsm/latest/APIReference/).
 //
 // Modifies an existing high-availability partition group.
 //
@@ -1687,12 +1687,12 @@ func (c *CloudHSM) ModifyHsmRequest(input *ModifyHsmInput) (req *request.Request
 //
 // This is documentation for AWS CloudHSM Classic. For more information, see
 // AWS CloudHSM Classic FAQs (http://aws.amazon.com/cloudhsm/faqs-classic/),
-// the AWS CloudHSM Classic User Guide (http://docs.aws.amazon.com/cloudhsm/classic/userguide/),
-// and the AWS CloudHSM Classic API Reference (http://docs.aws.amazon.com/cloudhsm/classic/APIReference/).
+// the AWS CloudHSM Classic User Guide (https://docs.aws.amazon.com/cloudhsm/classic/userguide/),
+// and the AWS CloudHSM Classic API Reference (https://docs.aws.amazon.com/cloudhsm/classic/APIReference/).
 //
 // For information about the current version of AWS CloudHSM, see AWS CloudHSM
-// (http://aws.amazon.com/cloudhsm/), the AWS CloudHSM User Guide (http://docs.aws.amazon.com/cloudhsm/latest/userguide/),
-// and the AWS CloudHSM API Reference (http://docs.aws.amazon.com/cloudhsm/latest/APIReference/).
+// (http://aws.amazon.com/cloudhsm/), the AWS CloudHSM User Guide (https://docs.aws.amazon.com/cloudhsm/latest/userguide/),
+// and the AWS CloudHSM API Reference (https://docs.aws.amazon.com/cloudhsm/latest/APIReference/).
 //
 // Modifies an HSM.
 //
@@ -1787,12 +1787,12 @@ func (c *CloudHSM) ModifyLunaClientRequest(input *ModifyLunaClientInput) (req *r
 //
 // This is documentation for AWS CloudHSM Classic. For more information, see
 // AWS CloudHSM Classic FAQs (http://aws.amazon.com/cloudhsm/faqs-classic/),
-// the AWS CloudHSM Classic User Guide (http://docs.aws.amazon.com/cloudhsm/classic/userguide/),
-// and the AWS CloudHSM Classic API Reference (http://docs.aws.amazon.com/cloudhsm/classic/APIReference/).
+// the AWS CloudHSM Classic User Guide (https://docs.aws.amazon.com/cloudhsm/classic/userguide/),
+// and the AWS CloudHSM Classic API Reference (https://docs.aws.amazon.com/cloudhsm/classic/APIReference/).
 //
 // For information about the current version of AWS CloudHSM, see AWS CloudHSM
-// (http://aws.amazon.com/cloudhsm/), the AWS CloudHSM User Guide (http://docs.aws.amazon.com/cloudhsm/latest/userguide/),
-// and the AWS CloudHSM API Reference (http://docs.aws.amazon.com/cloudhsm/latest/APIReference/).
+// (http://aws.amazon.com/cloudhsm/), the AWS CloudHSM User Guide (https://docs.aws.amazon.com/cloudhsm/latest/userguide/),
+// and the AWS CloudHSM API Reference (https://docs.aws.amazon.com/cloudhsm/latest/APIReference/).
 //
 // Modifies the certificate used by the client.
 //
@@ -1878,12 +1878,12 @@ func (c *CloudHSM) RemoveTagsFromResourceRequest(input *RemoveTagsFromResourceIn
 //
 // This is documentation for AWS CloudHSM Classic. For more information, see
 // AWS CloudHSM Classic FAQs (http://aws.amazon.com/cloudhsm/faqs-classic/),
-// the AWS CloudHSM Classic User Guide (http://docs.aws.amazon.com/cloudhsm/classic/userguide/),
-// and the AWS CloudHSM Classic API Reference (http://docs.aws.amazon.com/cloudhsm/classic/APIReference/).
+// the AWS CloudHSM Classic User Guide (https://docs.aws.amazon.com/cloudhsm/classic/userguide/),
+// and the AWS CloudHSM Classic API Reference (https://docs.aws.amazon.com/cloudhsm/classic/APIReference/).
 //
 // For information about the current version of AWS CloudHSM, see AWS CloudHSM
-// (http://aws.amazon.com/cloudhsm/), the AWS CloudHSM User Guide (http://docs.aws.amazon.com/cloudhsm/latest/userguide/),
-// and the AWS CloudHSM API Reference (http://docs.aws.amazon.com/cloudhsm/latest/APIReference/).
+// (http://aws.amazon.com/cloudhsm/), the AWS CloudHSM User Guide (https://docs.aws.amazon.com/cloudhsm/latest/userguide/),
+// and the AWS CloudHSM API Reference (https://docs.aws.amazon.com/cloudhsm/latest/APIReference/).
 //
 // Removes one or more tags from the specified AWS CloudHSM resource.
 //
@@ -1943,12 +1943,20 @@ type AddTagsToResourceInput struct {
 	TagList []*Tag `type:"list" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AddTagsToResourceInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AddTagsToResourceInput) GoString() string {
 	return s.String()
 }
@@ -2000,12 +2008,20 @@ type AddTagsToResourceOutput struct {
 	Status *string `type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AddTagsToResourceOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AddTagsToResourceOutput) GoString() string {
 	return s.String()
 }
@@ -2024,12 +2040,20 @@ type CloudHsmInternalException struct {
 	Message_ *string `locationName:"message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CloudHsmInternalException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CloudHsmInternalException) GoString() string {
 	return s.String()
 }
@@ -2084,12 +2108,20 @@ type CloudHsmServiceException struct {
 	Retryable *bool `locationName:"retryable" type:"boolean"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CloudHsmServiceException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CloudHsmServiceException) GoString() string {
 	return s.String()
 }
@@ -2142,12 +2174,20 @@ type CreateHapgInput struct {
 	Label *string `type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateHapgInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateHapgInput) GoString() string {
 	return s.String()
 }
@@ -2179,12 +2219,20 @@ type CreateHapgOutput struct {
 	HapgArn *string `type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateHapgOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateHapgOutput) GoString() string {
 	return s.String()
 }
@@ -2197,36 +2245,36 @@ func (s *CreateHapgOutput) SetHapgArn(v string) *CreateHapgOutput {
 
 // Contains the inputs for the CreateHsm operation.
 type CreateHsmInput struct {
-	_ struct{} `locationName:"CreateHsmRequest" type:"structure"`
+	_ struct{} `type:"structure"`
 
 	// A user-defined token to ensure idempotence. Subsequent calls to this operation
 	// with the same token will be ignored.
-	ClientToken *string `locationName:"ClientToken" type:"string"`
+	ClientToken *string `type:"string"`
 
 	// The IP address to assign to the HSM's ENI.
 	//
 	// If an IP address is not specified, an IP address will be randomly chosen
 	// from the CIDR range of the subnet.
-	EniIp *string `locationName:"EniIp" type:"string"`
+	EniIp *string `type:"string"`
 
 	// The external ID from IamRoleArn, if present.
-	ExternalId *string `locationName:"ExternalId" type:"string"`
+	ExternalId *string `type:"string"`
 
 	// The ARN of an IAM role to enable the AWS CloudHSM service to allocate an
 	// ENI on your behalf.
 	//
 	// IamRoleArn is a required field
-	IamRoleArn *string `locationName:"IamRoleArn" type:"string" required:"true"`
+	IamRoleArn *string `type:"string" required:"true"`
 
 	// The SSH public key to install on the HSM.
 	//
 	// SshKey is a required field
-	SshKey *string `locationName:"SshKey" type:"string" required:"true"`
+	SshKey *string `type:"string" required:"true"`
 
 	// The identifier of the subnet in your VPC in which to place the HSM.
 	//
 	// SubnetId is a required field
-	SubnetId *string `locationName:"SubnetId" type:"string" required:"true"`
+	SubnetId *string `type:"string" required:"true"`
 
 	// Specifies the type of subscription for the HSM.
 	//
@@ -2235,19 +2283,27 @@ type CreateHsmInput struct {
 	//    * TRIAL - The HSM is being used in a product trial.
 	//
 	// SubscriptionType is a required field
-	SubscriptionType *string `locationName:"SubscriptionType" type:"string" required:"true" enum:"SubscriptionType"`
+	SubscriptionType *string `type:"string" required:"true" enum:"SubscriptionType"`
 
 	// The IP address for the syslog monitoring server. The AWS CloudHSM service
 	// only supports one syslog monitoring server.
-	SyslogIp *string `locationName:"SyslogIp" type:"string"`
+	SyslogIp *string `type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateHsmInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateHsmInput) GoString() string {
 	return s.String()
 }
@@ -2330,12 +2386,20 @@ type CreateHsmOutput struct {
 	HsmArn *string `type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateHsmOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateHsmOutput) GoString() string {
 	return s.String()
 }
@@ -2360,12 +2424,20 @@ type CreateLunaClientInput struct {
 	Label *string `type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateLunaClientInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateLunaClientInput) GoString() string {
 	return s.String()
 }
@@ -2406,12 +2478,20 @@ type CreateLunaClientOutput struct {
 	ClientArn *string `type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateLunaClientOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateLunaClientOutput) GoString() string {
 	return s.String()
 }
@@ -2432,12 +2512,20 @@ type DeleteHapgInput struct {
 	HapgArn *string `type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteHapgInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteHapgInput) GoString() string {
 	return s.String()
 }
@@ -2471,12 +2559,20 @@ type DeleteHapgOutput struct {
 	Status *string `type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteHapgOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteHapgOutput) GoString() string {
 	return s.String()
 }
@@ -2489,20 +2585,28 @@ func (s *DeleteHapgOutput) SetStatus(v string) *DeleteHapgOutput {
 
 // Contains the inputs for the DeleteHsm operation.
 type DeleteHsmInput struct {
-	_ struct{} `locationName:"DeleteHsmRequest" type:"structure"`
+	_ struct{} `type:"structure"`
 
 	// The ARN of the HSM to delete.
 	//
 	// HsmArn is a required field
-	HsmArn *string `locationName:"HsmArn" type:"string" required:"true"`
+	HsmArn *string `type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteHsmInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteHsmInput) GoString() string {
 	return s.String()
 }
@@ -2536,12 +2640,20 @@ type DeleteHsmOutput struct {
 	Status *string `type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteHsmOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteHsmOutput) GoString() string {
 	return s.String()
 }
@@ -2561,12 +2673,20 @@ type DeleteLunaClientInput struct {
 	ClientArn *string `type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteLunaClientInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteLunaClientInput) GoString() string {
 	return s.String()
 }
@@ -2599,12 +2719,20 @@ type DeleteLunaClientOutput struct {
 	Status *string `type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteLunaClientOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteLunaClientOutput) GoString() string {
 	return s.String()
 }
@@ -2625,12 +2753,20 @@ type DescribeHapgInput struct {
 	HapgArn *string `type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeHapgInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeHapgInput) GoString() string {
 	return s.String()
 }
@@ -2687,12 +2823,20 @@ type DescribeHapgOutput struct {
 	State *string `type:"string" enum:"CloudHsmObjectState"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeHapgOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeHapgOutput) GoString() string {
 	return s.String()
 }
@@ -2764,12 +2908,20 @@ type DescribeHsmInput struct {
 	HsmSerialNumber *string `type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeHsmInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeHsmInput) GoString() string {
 	return s.String()
 }
@@ -2858,12 +3010,20 @@ type DescribeHsmOutput struct {
 	VpcId *string `type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeHsmOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeHsmOutput) GoString() string {
 	return s.String()
 }
@@ -3004,12 +3164,20 @@ type DescribeLunaClientInput struct {
 	ClientArn *string `type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeLunaClientInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeLunaClientInput) GoString() string {
 	return s.String()
 }
@@ -3045,12 +3213,20 @@ type DescribeLunaClientOutput struct {
 	LastModifiedTimestamp *string `type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeLunaClientOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeLunaClientOutput) GoString() string {
 	return s.String()
 }
@@ -3105,12 +3281,20 @@ type GetConfigInput struct {
 	HapgList []*string `type:"list" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetConfigInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetConfigInput) GoString() string {
 	return s.String()
 }
@@ -3165,12 +3349,20 @@ type GetConfigOutput struct {
 	ConfigType *string `type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetConfigOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetConfigOutput) GoString() string {
 	return s.String()
 }
@@ -3201,12 +3393,20 @@ type InvalidRequestException struct {
 	Message_ *string `locationName:"message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s InvalidRequestException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s InvalidRequestException) GoString() string {
 	return s.String()
 }
@@ -3254,12 +3454,20 @@ type ListAvailableZonesInput struct {
 	_ struct{} `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListAvailableZonesInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListAvailableZonesInput) GoString() string {
 	return s.String()
 }
@@ -3271,12 +3479,20 @@ type ListAvailableZonesOutput struct {
 	AZList []*string `type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListAvailableZonesOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListAvailableZonesOutput) GoString() string {
 	return s.String()
 }
@@ -3295,12 +3511,20 @@ type ListHapgsInput struct {
 	NextToken *string `type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListHapgsInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListHapgsInput) GoString() string {
 	return s.String()
 }
@@ -3324,12 +3548,20 @@ type ListHapgsOutput struct {
 	NextToken *string `type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListHapgsOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListHapgsOutput) GoString() string {
 	return s.String()
 }
@@ -3354,12 +3586,20 @@ type ListHsmsInput struct {
 	NextToken *string `type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListHsmsInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListHsmsInput) GoString() string {
 	return s.String()
 }
@@ -3382,12 +3622,20 @@ type ListHsmsOutput struct {
 	NextToken *string `type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListHsmsOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListHsmsOutput) GoString() string {
 	return s.String()
 }
@@ -3412,12 +3660,20 @@ type ListLunaClientsInput struct {
 	NextToken *string `type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListLunaClientsInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListLunaClientsInput) GoString() string {
 	return s.String()
 }
@@ -3441,12 +3697,20 @@ type ListLunaClientsOutput struct {
 	NextToken *string `type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListLunaClientsOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListLunaClientsOutput) GoString() string {
 	return s.String()
 }
@@ -3472,12 +3736,20 @@ type ListTagsForResourceInput struct {
 	ResourceArn *string `type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListTagsForResourceInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListTagsForResourceInput) GoString() string {
 	return s.String()
 }
@@ -3510,12 +3782,20 @@ type ListTagsForResourceOutput struct {
 	TagList []*Tag `type:"list" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListTagsForResourceOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListTagsForResourceOutput) GoString() string {
 	return s.String()
 }
@@ -3542,12 +3822,20 @@ type ModifyHapgInput struct {
 	PartitionSerialList []*string `type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ModifyHapgInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ModifyHapgInput) GoString() string {
 	return s.String()
 }
@@ -3590,12 +3878,20 @@ type ModifyHapgOutput struct {
 	HapgArn *string `type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ModifyHapgOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ModifyHapgOutput) GoString() string {
 	return s.String()
 }
@@ -3608,41 +3904,49 @@ func (s *ModifyHapgOutput) SetHapgArn(v string) *ModifyHapgOutput {
 
 // Contains the inputs for the ModifyHsm operation.
 type ModifyHsmInput struct {
-	_ struct{} `locationName:"ModifyHsmRequest" type:"structure"`
+	_ struct{} `type:"structure"`
 
 	// The new IP address for the elastic network interface (ENI) attached to the
 	// HSM.
 	//
 	// If the HSM is moved to a different subnet, and an IP address is not specified,
 	// an IP address will be randomly chosen from the CIDR range of the new subnet.
-	EniIp *string `locationName:"EniIp" type:"string"`
+	EniIp *string `type:"string"`
 
 	// The new external ID.
-	ExternalId *string `locationName:"ExternalId" type:"string"`
+	ExternalId *string `type:"string"`
 
 	// The ARN of the HSM to modify.
 	//
 	// HsmArn is a required field
-	HsmArn *string `locationName:"HsmArn" type:"string" required:"true"`
+	HsmArn *string `type:"string" required:"true"`
 
 	// The new IAM role ARN.
-	IamRoleArn *string `locationName:"IamRoleArn" type:"string"`
+	IamRoleArn *string `type:"string"`
 
 	// The new identifier of the subnet that the HSM is in. The new subnet must
 	// be in the same Availability Zone as the current subnet.
-	SubnetId *string `locationName:"SubnetId" type:"string"`
+	SubnetId *string `type:"string"`
 
 	// The new IP address for the syslog monitoring server. The AWS CloudHSM service
 	// only supports one syslog monitoring server.
-	SyslogIp *string `locationName:"SyslogIp" type:"string"`
+	SyslogIp *string `type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ModifyHsmInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ModifyHsmInput) GoString() string {
 	return s.String()
 }
@@ -3704,12 +4008,20 @@ type ModifyHsmOutput struct {
 	HsmArn *string `type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ModifyHsmOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ModifyHsmOutput) GoString() string {
 	return s.String()
 }
@@ -3734,12 +4046,20 @@ type ModifyLunaClientInput struct {
 	ClientArn *string `type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ModifyLunaClientInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ModifyLunaClientInput) GoString() string {
 	return s.String()
 }
@@ -3782,12 +4102,20 @@ type ModifyLunaClientOutput struct {
 	ClientArn *string `type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ModifyLunaClientOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ModifyLunaClientOutput) GoString() string {
 	return s.String()
 }
@@ -3815,12 +4143,20 @@ type RemoveTagsFromResourceInput struct {
 	TagKeyList []*string `type:"list" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s RemoveTagsFromResourceInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s RemoveTagsFromResourceInput) GoString() string {
 	return s.String()
 }
@@ -3862,12 +4198,20 @@ type RemoveTagsFromResourceOutput struct {
 	Status *string `type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s RemoveTagsFromResourceOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s RemoveTagsFromResourceOutput) GoString() string {
 	return s.String()
 }
@@ -3894,12 +4238,20 @@ type Tag struct {
 	Value *string `type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s Tag) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s Tag) GoString() string {
 	return s.String()
 }

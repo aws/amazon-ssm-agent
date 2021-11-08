@@ -80,7 +80,7 @@ const (
 	// "InvalidLambdaResponseException".
 	//
 	// This exception is thrown when the Amazon Cognito service encounters an invalid
-	// AWS Lambda response.
+	// Lambda response.
 	ErrCodeInvalidLambdaResponseException = "InvalidLambdaResponseException"
 
 	// ErrCodeInvalidOAuthFlowException for service response error code
@@ -128,8 +128,8 @@ const (
 	// ErrCodeLimitExceededException for service response error code
 	// "LimitExceededException".
 	//
-	// This exception is thrown when a user exceeds the limit for a requested AWS
-	// resource.
+	// This exception is thrown when a user exceeds the limit for a requested Amazon
+	// Web Services resource.
 	ErrCodeLimitExceededException = "LimitExceededException"
 
 	// ErrCodeMFAMethodNotFoundException for service response error code
@@ -191,11 +191,18 @@ const (
 	// operation.
 	ErrCodeTooManyRequestsException = "TooManyRequestsException"
 
+	// ErrCodeUnauthorizedException for service response error code
+	// "UnauthorizedException".
+	//
+	// This exception is thrown when the request is not authorized. This can happen
+	// due to an invalid access token in the request.
+	ErrCodeUnauthorizedException = "UnauthorizedException"
+
 	// ErrCodeUnexpectedLambdaException for service response error code
 	// "UnexpectedLambdaException".
 	//
 	// This exception is thrown when the Amazon Cognito service encounters an unexpected
-	// exception with the AWS Lambda service.
+	// exception with the Lambda service.
 	ErrCodeUnexpectedLambdaException = "UnexpectedLambdaException"
 
 	// ErrCodeUnsupportedIdentityProviderException for service response error code
@@ -203,6 +210,19 @@ const (
 	//
 	// This exception is thrown when the specified identifier is not supported.
 	ErrCodeUnsupportedIdentityProviderException = "UnsupportedIdentityProviderException"
+
+	// ErrCodeUnsupportedOperationException for service response error code
+	// "UnsupportedOperationException".
+	//
+	// This exception is thrown when you attempt to perform an operation that is
+	// not enabled for the user pool client.
+	ErrCodeUnsupportedOperationException = "UnsupportedOperationException"
+
+	// ErrCodeUnsupportedTokenTypeException for service response error code
+	// "UnsupportedTokenTypeException".
+	//
+	// This exception is thrown when an unsupported token is passed to an operation.
+	ErrCodeUnsupportedTokenTypeException = "UnsupportedTokenTypeException"
 
 	// ErrCodeUnsupportedUserStateException for service response error code
 	// "UnsupportedUserStateException".
@@ -221,7 +241,7 @@ const (
 	// "UserLambdaValidationException".
 	//
 	// This exception is thrown when the Amazon Cognito service encounters a user
-	// validation exception with the AWS Lambda service.
+	// validation exception with the Lambda service.
 	ErrCodeUserLambdaValidationException = "UserLambdaValidationException"
 
 	// ErrCodeUserNotConfirmedException for service response error code
@@ -284,8 +304,11 @@ var exceptionFromCode = map[string]func(protocol.ResponseMetadata) error{
 	"SoftwareTokenMFANotFoundException":        newErrorSoftwareTokenMFANotFoundException,
 	"TooManyFailedAttemptsException":           newErrorTooManyFailedAttemptsException,
 	"TooManyRequestsException":                 newErrorTooManyRequestsException,
+	"UnauthorizedException":                    newErrorUnauthorizedException,
 	"UnexpectedLambdaException":                newErrorUnexpectedLambdaException,
 	"UnsupportedIdentityProviderException":     newErrorUnsupportedIdentityProviderException,
+	"UnsupportedOperationException":            newErrorUnsupportedOperationException,
+	"UnsupportedTokenTypeException":            newErrorUnsupportedTokenTypeException,
 	"UnsupportedUserStateException":            newErrorUnsupportedUserStateException,
 	"UserImportInProgressException":            newErrorUserImportInProgressException,
 	"UserLambdaValidationException":            newErrorUserLambdaValidationException,

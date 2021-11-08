@@ -4,6 +4,7 @@ package outposts
 
 import (
 	"fmt"
+	"time"
 
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/awsutil"
@@ -11,6 +12,100 @@ import (
 	"github.com/aws/aws-sdk-go/private/protocol"
 	"github.com/aws/aws-sdk-go/private/protocol/restjson"
 )
+
+const opCreateOrder = "CreateOrder"
+
+// CreateOrderRequest generates a "aws/request.Request" representing the
+// client's request for the CreateOrder operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See CreateOrder for more information on using the CreateOrder
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the CreateOrderRequest method.
+//    req, resp := client.CreateOrderRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/outposts-2019-12-03/CreateOrder
+func (c *Outposts) CreateOrderRequest(input *CreateOrderInput) (req *request.Request, output *CreateOrderOutput) {
+	op := &request.Operation{
+		Name:       opCreateOrder,
+		HTTPMethod: "POST",
+		HTTPPath:   "/orders",
+	}
+
+	if input == nil {
+		input = &CreateOrderInput{}
+	}
+
+	output = &CreateOrderOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// CreateOrder API operation for AWS Outposts.
+//
+// Creates an order for an Outpost.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Outposts's
+// API operation CreateOrder for usage and error information.
+//
+// Returned Error Types:
+//   * ValidationException
+//   A parameter is not valid.
+//
+//   * ConflictException
+//   Updating or deleting this resource can cause an inconsistent state.
+//
+//   * AccessDeniedException
+//   You do not have permission to perform this operation.
+//
+//   * NotFoundException
+//   The specified request is not valid.
+//
+//   * InternalServerException
+//   An internal error has occurred.
+//
+//   * ServiceQuotaExceededException
+//   You have exceeded a service quota.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/outposts-2019-12-03/CreateOrder
+func (c *Outposts) CreateOrder(input *CreateOrderInput) (*CreateOrderOutput, error) {
+	req, out := c.CreateOrderRequest(input)
+	return out, req.Send()
+}
+
+// CreateOrderWithContext is the same as CreateOrder with the addition of
+// the ability to pass a context and additional request options.
+//
+// See CreateOrder for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Outposts) CreateOrderWithContext(ctx aws.Context, input *CreateOrderInput, opts ...request.Option) (*CreateOrderOutput, error) {
+	req, out := c.CreateOrderRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
 
 const opCreateOutpost = "CreateOutpost"
 
@@ -58,6 +153,8 @@ func (c *Outposts) CreateOutpostRequest(input *CreateOutpostInput) (req *request
 //
 // Creates an Outpost.
 //
+// You can specify AvailabilityZone or AvailabilityZoneId.
+//
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
 // the error.
@@ -68,6 +165,9 @@ func (c *Outposts) CreateOutpostRequest(input *CreateOutpostInput) (req *request
 // Returned Error Types:
 //   * ValidationException
 //   A parameter is not valid.
+//
+//   * ConflictException
+//   Updating or deleting this resource can cause an inconsistent state.
 //
 //   * NotFoundException
 //   The specified request is not valid.
@@ -161,6 +261,9 @@ func (c *Outposts) DeleteOutpostRequest(input *DeleteOutpostInput) (req *request
 //   * ValidationException
 //   A parameter is not valid.
 //
+//   * ConflictException
+//   Updating or deleting this resource can cause an inconsistent state.
+//
 //   * NotFoundException
 //   The specified request is not valid.
 //
@@ -249,6 +352,9 @@ func (c *Outposts) DeleteSiteRequest(input *DeleteSiteInput) (req *request.Reque
 // Returned Error Types:
 //   * ValidationException
 //   A parameter is not valid.
+//
+//   * ConflictException
+//   Updating or deleting this resource can cause an inconsistent state.
 //
 //   * NotFoundException
 //   The specified request is not valid.
@@ -507,7 +613,12 @@ func (c *Outposts) ListOutpostsRequest(input *ListOutpostsInput) (req *request.R
 
 // ListOutposts API operation for AWS Outposts.
 //
-// List the Outposts for your AWS account.
+// Create a list of the Outposts for your AWS account. Add filters to your request
+// to return a more specific list of results. Use filters to match an Outpost
+// lifecycle status, Availibility Zone (us-east-1a), and AZ ID (use1-az1).
+//
+// If you specify multiple filters, the filters are joined with an AND, and
+// the request returns only results that match all of the specified filters.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -743,6 +854,263 @@ func (c *Outposts) ListSitesPagesWithContext(ctx aws.Context, input *ListSitesIn
 	return p.Err()
 }
 
+const opListTagsForResource = "ListTagsForResource"
+
+// ListTagsForResourceRequest generates a "aws/request.Request" representing the
+// client's request for the ListTagsForResource operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See ListTagsForResource for more information on using the ListTagsForResource
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the ListTagsForResourceRequest method.
+//    req, resp := client.ListTagsForResourceRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/outposts-2019-12-03/ListTagsForResource
+func (c *Outposts) ListTagsForResourceRequest(input *ListTagsForResourceInput) (req *request.Request, output *ListTagsForResourceOutput) {
+	op := &request.Operation{
+		Name:       opListTagsForResource,
+		HTTPMethod: "GET",
+		HTTPPath:   "/tags/{ResourceArn}",
+	}
+
+	if input == nil {
+		input = &ListTagsForResourceInput{}
+	}
+
+	output = &ListTagsForResourceOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// ListTagsForResource API operation for AWS Outposts.
+//
+// Lists the tags for the specified resource.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Outposts's
+// API operation ListTagsForResource for usage and error information.
+//
+// Returned Error Types:
+//   * InternalServerException
+//   An internal error has occurred.
+//
+//   * ValidationException
+//   A parameter is not valid.
+//
+//   * NotFoundException
+//   The specified request is not valid.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/outposts-2019-12-03/ListTagsForResource
+func (c *Outposts) ListTagsForResource(input *ListTagsForResourceInput) (*ListTagsForResourceOutput, error) {
+	req, out := c.ListTagsForResourceRequest(input)
+	return out, req.Send()
+}
+
+// ListTagsForResourceWithContext is the same as ListTagsForResource with the addition of
+// the ability to pass a context and additional request options.
+//
+// See ListTagsForResource for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Outposts) ListTagsForResourceWithContext(ctx aws.Context, input *ListTagsForResourceInput, opts ...request.Option) (*ListTagsForResourceOutput, error) {
+	req, out := c.ListTagsForResourceRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opTagResource = "TagResource"
+
+// TagResourceRequest generates a "aws/request.Request" representing the
+// client's request for the TagResource operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See TagResource for more information on using the TagResource
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the TagResourceRequest method.
+//    req, resp := client.TagResourceRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/outposts-2019-12-03/TagResource
+func (c *Outposts) TagResourceRequest(input *TagResourceInput) (req *request.Request, output *TagResourceOutput) {
+	op := &request.Operation{
+		Name:       opTagResource,
+		HTTPMethod: "POST",
+		HTTPPath:   "/tags/{ResourceArn}",
+	}
+
+	if input == nil {
+		input = &TagResourceInput{}
+	}
+
+	output = &TagResourceOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(restjson.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
+	return
+}
+
+// TagResource API operation for AWS Outposts.
+//
+// Adds tags to the specified resource.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Outposts's
+// API operation TagResource for usage and error information.
+//
+// Returned Error Types:
+//   * InternalServerException
+//   An internal error has occurred.
+//
+//   * ValidationException
+//   A parameter is not valid.
+//
+//   * NotFoundException
+//   The specified request is not valid.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/outposts-2019-12-03/TagResource
+func (c *Outposts) TagResource(input *TagResourceInput) (*TagResourceOutput, error) {
+	req, out := c.TagResourceRequest(input)
+	return out, req.Send()
+}
+
+// TagResourceWithContext is the same as TagResource with the addition of
+// the ability to pass a context and additional request options.
+//
+// See TagResource for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Outposts) TagResourceWithContext(ctx aws.Context, input *TagResourceInput, opts ...request.Option) (*TagResourceOutput, error) {
+	req, out := c.TagResourceRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opUntagResource = "UntagResource"
+
+// UntagResourceRequest generates a "aws/request.Request" representing the
+// client's request for the UntagResource operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See UntagResource for more information on using the UntagResource
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the UntagResourceRequest method.
+//    req, resp := client.UntagResourceRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/outposts-2019-12-03/UntagResource
+func (c *Outposts) UntagResourceRequest(input *UntagResourceInput) (req *request.Request, output *UntagResourceOutput) {
+	op := &request.Operation{
+		Name:       opUntagResource,
+		HTTPMethod: "DELETE",
+		HTTPPath:   "/tags/{ResourceArn}",
+	}
+
+	if input == nil {
+		input = &UntagResourceInput{}
+	}
+
+	output = &UntagResourceOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(restjson.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
+	return
+}
+
+// UntagResource API operation for AWS Outposts.
+//
+// Removes tags from the specified resource.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Outposts's
+// API operation UntagResource for usage and error information.
+//
+// Returned Error Types:
+//   * InternalServerException
+//   An internal error has occurred.
+//
+//   * ValidationException
+//   A parameter is not valid.
+//
+//   * NotFoundException
+//   The specified request is not valid.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/outposts-2019-12-03/UntagResource
+func (c *Outposts) UntagResource(input *UntagResourceInput) (*UntagResourceOutput, error) {
+	req, out := c.UntagResourceRequest(input)
+	return out, req.Send()
+}
+
+// UntagResourceWithContext is the same as UntagResource with the addition of
+// the ability to pass a context and additional request options.
+//
+// See UntagResource for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Outposts) UntagResourceWithContext(ctx aws.Context, input *UntagResourceInput, opts ...request.Option) (*UntagResourceOutput, error) {
+	req, out := c.UntagResourceRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 // You do not have permission to perform this operation.
 type AccessDeniedException struct {
 	_            struct{}                  `type:"structure"`
@@ -751,12 +1119,20 @@ type AccessDeniedException struct {
 	Message_ *string `locationName:"Message" min:"1" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AccessDeniedException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AccessDeniedException) GoString() string {
 	return s.String()
 }
@@ -799,37 +1175,246 @@ func (s *AccessDeniedException) RequestID() string {
 	return s.RespMetadata.RequestID
 }
 
+// Updating or deleting this resource can cause an inconsistent state.
+type ConflictException struct {
+	_            struct{}                  `type:"structure"`
+	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
+
+	Message_ *string `locationName:"Message" min:"1" type:"string"`
+
+	// The ID of the resource causing the conflict.
+	ResourceId *string `min:"1" type:"string"`
+
+	// The type of the resource causing the conflict.
+	ResourceType *string `type:"string" enum:"ResourceType"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ConflictException) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ConflictException) GoString() string {
+	return s.String()
+}
+
+func newErrorConflictException(v protocol.ResponseMetadata) error {
+	return &ConflictException{
+		RespMetadata: v,
+	}
+}
+
+// Code returns the exception type name.
+func (s *ConflictException) Code() string {
+	return "ConflictException"
+}
+
+// Message returns the exception's message.
+func (s *ConflictException) Message() string {
+	if s.Message_ != nil {
+		return *s.Message_
+	}
+	return ""
+}
+
+// OrigErr always returns nil, satisfies awserr.Error interface.
+func (s *ConflictException) OrigErr() error {
+	return nil
+}
+
+func (s *ConflictException) Error() string {
+	return fmt.Sprintf("%s: %s\n%s", s.Code(), s.Message(), s.String())
+}
+
+// Status code returns the HTTP status code for the request's response error.
+func (s *ConflictException) StatusCode() int {
+	return s.RespMetadata.StatusCode
+}
+
+// RequestID returns the service's response RequestID for request.
+func (s *ConflictException) RequestID() string {
+	return s.RespMetadata.RequestID
+}
+
+type CreateOrderInput struct {
+	_ struct{} `type:"structure"`
+
+	// The line items that make up the order.
+	//
+	// LineItems is a required field
+	LineItems []*LineItemRequest `min:"1" type:"list" required:"true"`
+
+	// The ID or the Amazon Resource Name (ARN) of the Outpost.
+	//
+	// OutpostIdentifier is a required field
+	OutpostIdentifier *string `min:"1" type:"string" required:"true"`
+
+	// The payment option for the order.
+	//
+	// PaymentOption is a required field
+	PaymentOption *string `type:"string" required:"true" enum:"PaymentOption"`
+
+	// The payment terms for the order.
+	PaymentTerm *string `type:"string" enum:"PaymentTerm"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateOrderInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateOrderInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *CreateOrderInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "CreateOrderInput"}
+	if s.LineItems == nil {
+		invalidParams.Add(request.NewErrParamRequired("LineItems"))
+	}
+	if s.LineItems != nil && len(s.LineItems) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("LineItems", 1))
+	}
+	if s.OutpostIdentifier == nil {
+		invalidParams.Add(request.NewErrParamRequired("OutpostIdentifier"))
+	}
+	if s.OutpostIdentifier != nil && len(*s.OutpostIdentifier) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("OutpostIdentifier", 1))
+	}
+	if s.PaymentOption == nil {
+		invalidParams.Add(request.NewErrParamRequired("PaymentOption"))
+	}
+	if s.LineItems != nil {
+		for i, v := range s.LineItems {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "LineItems", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetLineItems sets the LineItems field's value.
+func (s *CreateOrderInput) SetLineItems(v []*LineItemRequest) *CreateOrderInput {
+	s.LineItems = v
+	return s
+}
+
+// SetOutpostIdentifier sets the OutpostIdentifier field's value.
+func (s *CreateOrderInput) SetOutpostIdentifier(v string) *CreateOrderInput {
+	s.OutpostIdentifier = &v
+	return s
+}
+
+// SetPaymentOption sets the PaymentOption field's value.
+func (s *CreateOrderInput) SetPaymentOption(v string) *CreateOrderInput {
+	s.PaymentOption = &v
+	return s
+}
+
+// SetPaymentTerm sets the PaymentTerm field's value.
+func (s *CreateOrderInput) SetPaymentTerm(v string) *CreateOrderInput {
+	s.PaymentTerm = &v
+	return s
+}
+
+type CreateOrderOutput struct {
+	_ struct{} `type:"structure"`
+
+	// Information about this order.
+	Order *Order `type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateOrderOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateOrderOutput) GoString() string {
+	return s.String()
+}
+
+// SetOrder sets the Order field's value.
+func (s *CreateOrderOutput) SetOrder(v *Order) *CreateOrderOutput {
+	s.Order = v
+	return s
+}
+
 type CreateOutpostInput struct {
 	_ struct{} `type:"structure"`
 
 	// The Availability Zone.
-	//
-	// You must specify AvailabilityZone or AvailabilityZoneId.
 	AvailabilityZone *string `min:"1" type:"string"`
 
 	// The ID of the Availability Zone.
-	//
-	// You must specify AvailabilityZone or AvailabilityZoneId.
 	AvailabilityZoneId *string `min:"1" type:"string"`
 
-	// The Outpost description.
-	Description *string `min:"1" type:"string"`
+	// The description of the Outpost.
+	Description *string `type:"string"`
 
 	// The name of the Outpost.
-	Name *string `min:"1" type:"string"`
+	//
+	// Name is a required field
+	Name *string `min:"1" type:"string" required:"true"`
 
 	// The ID of the site.
 	//
 	// SiteId is a required field
 	SiteId *string `min:"1" type:"string" required:"true"`
+
+	// The tags to apply to the Outpost.
+	Tags map[string]*string `min:"1" type:"map"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateOutpostInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateOutpostInput) GoString() string {
 	return s.String()
 }
@@ -843,8 +1428,8 @@ func (s *CreateOutpostInput) Validate() error {
 	if s.AvailabilityZoneId != nil && len(*s.AvailabilityZoneId) < 1 {
 		invalidParams.Add(request.NewErrParamMinLen("AvailabilityZoneId", 1))
 	}
-	if s.Description != nil && len(*s.Description) < 1 {
-		invalidParams.Add(request.NewErrParamMinLen("Description", 1))
+	if s.Name == nil {
+		invalidParams.Add(request.NewErrParamRequired("Name"))
 	}
 	if s.Name != nil && len(*s.Name) < 1 {
 		invalidParams.Add(request.NewErrParamMinLen("Name", 1))
@@ -854,6 +1439,9 @@ func (s *CreateOutpostInput) Validate() error {
 	}
 	if s.SiteId != nil && len(*s.SiteId) < 1 {
 		invalidParams.Add(request.NewErrParamMinLen("SiteId", 1))
+	}
+	if s.Tags != nil && len(s.Tags) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Tags", 1))
 	}
 
 	if invalidParams.Len() > 0 {
@@ -892,6 +1480,12 @@ func (s *CreateOutpostInput) SetSiteId(v string) *CreateOutpostInput {
 	return s
 }
 
+// SetTags sets the Tags field's value.
+func (s *CreateOutpostInput) SetTags(v map[string]*string) *CreateOutpostInput {
+	s.Tags = v
+	return s
+}
+
 type CreateOutpostOutput struct {
 	_ struct{} `type:"structure"`
 
@@ -899,12 +1493,20 @@ type CreateOutpostOutput struct {
 	Outpost *Outpost `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateOutpostOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateOutpostOutput) GoString() string {
 	return s.String()
 }
@@ -916,7 +1518,7 @@ func (s *CreateOutpostOutput) SetOutpost(v *Outpost) *CreateOutpostOutput {
 }
 
 type DeleteOutpostInput struct {
-	_ struct{} `type:"structure"`
+	_ struct{} `type:"structure" nopayload:"true"`
 
 	// The ID of the Outpost.
 	//
@@ -924,12 +1526,20 @@ type DeleteOutpostInput struct {
 	OutpostId *string `location:"uri" locationName:"OutpostId" min:"1" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteOutpostInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteOutpostInput) GoString() string {
 	return s.String()
 }
@@ -957,21 +1567,29 @@ func (s *DeleteOutpostInput) SetOutpostId(v string) *DeleteOutpostInput {
 }
 
 type DeleteOutpostOutput struct {
-	_ struct{} `type:"structure"`
+	_ struct{} `type:"structure" nopayload:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteOutpostOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteOutpostOutput) GoString() string {
 	return s.String()
 }
 
 type DeleteSiteInput struct {
-	_ struct{} `type:"structure"`
+	_ struct{} `type:"structure" nopayload:"true"`
 
 	// The ID of the site.
 	//
@@ -979,12 +1597,20 @@ type DeleteSiteInput struct {
 	SiteId *string `location:"uri" locationName:"SiteId" min:"1" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteSiteInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteSiteInput) GoString() string {
 	return s.String()
 }
@@ -1012,21 +1638,29 @@ func (s *DeleteSiteInput) SetSiteId(v string) *DeleteSiteInput {
 }
 
 type DeleteSiteOutput struct {
-	_ struct{} `type:"structure"`
+	_ struct{} `type:"structure" nopayload:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteSiteOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteSiteOutput) GoString() string {
 	return s.String()
 }
 
 type GetOutpostInput struct {
-	_ struct{} `type:"structure"`
+	_ struct{} `type:"structure" nopayload:"true"`
 
 	// The ID of the Outpost.
 	//
@@ -1034,12 +1668,20 @@ type GetOutpostInput struct {
 	OutpostId *string `location:"uri" locationName:"OutpostId" min:"1" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetOutpostInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetOutpostInput) GoString() string {
 	return s.String()
 }
@@ -1067,7 +1709,7 @@ func (s *GetOutpostInput) SetOutpostId(v string) *GetOutpostInput {
 }
 
 type GetOutpostInstanceTypesInput struct {
-	_ struct{} `type:"structure"`
+	_ struct{} `type:"structure" nopayload:"true"`
 
 	// The maximum page size.
 	MaxResults *int64 `location:"querystring" locationName:"MaxResults" min:"1" type:"integer"`
@@ -1081,12 +1723,20 @@ type GetOutpostInstanceTypesInput struct {
 	OutpostId *string `location:"uri" locationName:"OutpostId" min:"1" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetOutpostInstanceTypesInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetOutpostInstanceTypesInput) GoString() string {
 	return s.String()
 }
@@ -1147,12 +1797,20 @@ type GetOutpostInstanceTypesOutput struct {
 	OutpostId *string `min:"1" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetOutpostInstanceTypesOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetOutpostInstanceTypesOutput) GoString() string {
 	return s.String()
 }
@@ -1188,12 +1846,20 @@ type GetOutpostOutput struct {
 	Outpost *Outpost `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetOutpostOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetOutpostOutput) GoString() string {
 	return s.String()
 }
@@ -1212,12 +1878,20 @@ type InstanceTypeItem struct {
 	InstanceType *string `type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s InstanceTypeItem) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s InstanceTypeItem) GoString() string {
 	return s.String()
 }
@@ -1236,12 +1910,20 @@ type InternalServerException struct {
 	Message_ *string `locationName:"Message" min:"1" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s InternalServerException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s InternalServerException) GoString() string {
 	return s.String()
 }
@@ -1284,8 +1966,145 @@ func (s *InternalServerException) RequestID() string {
 	return s.RespMetadata.RequestID
 }
 
-type ListOutpostsInput struct {
+// Information about a line item.
+type LineItem struct {
 	_ struct{} `type:"structure"`
+
+	// The ID of the catalog item.
+	CatalogItemId *string `min:"1" type:"string"`
+
+	// The ID of the line item.
+	LineItemId *string `type:"string"`
+
+	// The quantity of the line item.
+	Quantity *int64 `min:"1" type:"integer"`
+
+	// The status of the line item.
+	Status *string `min:"1" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s LineItem) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s LineItem) GoString() string {
+	return s.String()
+}
+
+// SetCatalogItemId sets the CatalogItemId field's value.
+func (s *LineItem) SetCatalogItemId(v string) *LineItem {
+	s.CatalogItemId = &v
+	return s
+}
+
+// SetLineItemId sets the LineItemId field's value.
+func (s *LineItem) SetLineItemId(v string) *LineItem {
+	s.LineItemId = &v
+	return s
+}
+
+// SetQuantity sets the Quantity field's value.
+func (s *LineItem) SetQuantity(v int64) *LineItem {
+	s.Quantity = &v
+	return s
+}
+
+// SetStatus sets the Status field's value.
+func (s *LineItem) SetStatus(v string) *LineItem {
+	s.Status = &v
+	return s
+}
+
+// Information about a line item request.
+type LineItemRequest struct {
+	_ struct{} `type:"structure"`
+
+	// The ID of the catalog item.
+	CatalogItemId *string `min:"1" type:"string"`
+
+	// The quantity of a line item request.
+	Quantity *int64 `min:"1" type:"integer"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s LineItemRequest) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s LineItemRequest) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *LineItemRequest) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "LineItemRequest"}
+	if s.CatalogItemId != nil && len(*s.CatalogItemId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("CatalogItemId", 1))
+	}
+	if s.Quantity != nil && *s.Quantity < 1 {
+		invalidParams.Add(request.NewErrParamMinValue("Quantity", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetCatalogItemId sets the CatalogItemId field's value.
+func (s *LineItemRequest) SetCatalogItemId(v string) *LineItemRequest {
+	s.CatalogItemId = &v
+	return s
+}
+
+// SetQuantity sets the Quantity field's value.
+func (s *LineItemRequest) SetQuantity(v int64) *LineItemRequest {
+	s.Quantity = &v
+	return s
+}
+
+type ListOutpostsInput struct {
+	_ struct{} `type:"structure" nopayload:"true"`
+
+	// A filter for the Availibility Zone (us-east-1a) of the Outpost.
+	//
+	// Filter values are case sensitive. If you specify multiple values for a filter,
+	// the values are joined with an OR, and the request returns all results that
+	// match any of the specified values.
+	AvailabilityZoneFilter []*string `location:"querystring" locationName:"AvailabilityZoneFilter" min:"1" type:"list"`
+
+	// A filter for the AZ IDs (use1-az1) of the Outpost.
+	//
+	// Filter values are case sensitive. If you specify multiple values for a filter,
+	// the values are joined with an OR, and the request returns all results that
+	// match any of the specified values.
+	AvailabilityZoneIdFilter []*string `location:"querystring" locationName:"AvailabilityZoneIdFilter" min:"1" type:"list"`
+
+	// A filter for the lifecycle status of the Outpost.
+	//
+	// Filter values are case sensitive. If you specify multiple values for a filter,
+	// the values are joined with an OR, and the request returns all results that
+	// match any of the specified values.
+	LifeCycleStatusFilter []*string `location:"querystring" locationName:"LifeCycleStatusFilter" min:"1" type:"list"`
 
 	// The maximum page size.
 	MaxResults *int64 `location:"querystring" locationName:"MaxResults" min:"1" type:"integer"`
@@ -1294,12 +2113,20 @@ type ListOutpostsInput struct {
 	NextToken *string `location:"querystring" locationName:"NextToken" min:"1" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListOutpostsInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListOutpostsInput) GoString() string {
 	return s.String()
 }
@@ -1307,6 +2134,15 @@ func (s ListOutpostsInput) GoString() string {
 // Validate inspects the fields of the type to determine if they are valid.
 func (s *ListOutpostsInput) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "ListOutpostsInput"}
+	if s.AvailabilityZoneFilter != nil && len(s.AvailabilityZoneFilter) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("AvailabilityZoneFilter", 1))
+	}
+	if s.AvailabilityZoneIdFilter != nil && len(s.AvailabilityZoneIdFilter) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("AvailabilityZoneIdFilter", 1))
+	}
+	if s.LifeCycleStatusFilter != nil && len(s.LifeCycleStatusFilter) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("LifeCycleStatusFilter", 1))
+	}
 	if s.MaxResults != nil && *s.MaxResults < 1 {
 		invalidParams.Add(request.NewErrParamMinValue("MaxResults", 1))
 	}
@@ -1318,6 +2154,24 @@ func (s *ListOutpostsInput) Validate() error {
 		return invalidParams
 	}
 	return nil
+}
+
+// SetAvailabilityZoneFilter sets the AvailabilityZoneFilter field's value.
+func (s *ListOutpostsInput) SetAvailabilityZoneFilter(v []*string) *ListOutpostsInput {
+	s.AvailabilityZoneFilter = v
+	return s
+}
+
+// SetAvailabilityZoneIdFilter sets the AvailabilityZoneIdFilter field's value.
+func (s *ListOutpostsInput) SetAvailabilityZoneIdFilter(v []*string) *ListOutpostsInput {
+	s.AvailabilityZoneIdFilter = v
+	return s
+}
+
+// SetLifeCycleStatusFilter sets the LifeCycleStatusFilter field's value.
+func (s *ListOutpostsInput) SetLifeCycleStatusFilter(v []*string) *ListOutpostsInput {
+	s.LifeCycleStatusFilter = v
+	return s
 }
 
 // SetMaxResults sets the MaxResults field's value.
@@ -1342,12 +2196,20 @@ type ListOutpostsOutput struct {
 	Outposts []*Outpost `type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListOutpostsOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListOutpostsOutput) GoString() string {
 	return s.String()
 }
@@ -1365,7 +2227,7 @@ func (s *ListOutpostsOutput) SetOutposts(v []*Outpost) *ListOutpostsOutput {
 }
 
 type ListSitesInput struct {
-	_ struct{} `type:"structure"`
+	_ struct{} `type:"structure" nopayload:"true"`
 
 	// The maximum page size.
 	MaxResults *int64 `location:"querystring" locationName:"MaxResults" min:"1" type:"integer"`
@@ -1374,12 +2236,20 @@ type ListSitesInput struct {
 	NextToken *string `location:"querystring" locationName:"NextToken" min:"1" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListSitesInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListSitesInput) GoString() string {
 	return s.String()
 }
@@ -1422,12 +2292,20 @@ type ListSitesOutput struct {
 	Sites []*Site `type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListSitesOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListSitesOutput) GoString() string {
 	return s.String()
 }
@@ -1444,6 +2322,86 @@ func (s *ListSitesOutput) SetSites(v []*Site) *ListSitesOutput {
 	return s
 }
 
+type ListTagsForResourceInput struct {
+	_ struct{} `type:"structure" nopayload:"true"`
+
+	// The Amazon Resource Name (ARN) of the resource.
+	//
+	// ResourceArn is a required field
+	ResourceArn *string `location:"uri" locationName:"ResourceArn" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListTagsForResourceInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListTagsForResourceInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ListTagsForResourceInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ListTagsForResourceInput"}
+	if s.ResourceArn == nil {
+		invalidParams.Add(request.NewErrParamRequired("ResourceArn"))
+	}
+	if s.ResourceArn != nil && len(*s.ResourceArn) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ResourceArn", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetResourceArn sets the ResourceArn field's value.
+func (s *ListTagsForResourceInput) SetResourceArn(v string) *ListTagsForResourceInput {
+	s.ResourceArn = &v
+	return s
+}
+
+type ListTagsForResourceOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The resource tags.
+	Tags map[string]*string `min:"1" type:"map"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListTagsForResourceOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListTagsForResourceOutput) GoString() string {
+	return s.String()
+}
+
+// SetTags sets the Tags field's value.
+func (s *ListTagsForResourceOutput) SetTags(v map[string]*string) *ListTagsForResourceOutput {
+	s.Tags = v
+	return s
+}
+
 // The specified request is not valid.
 type NotFoundException struct {
 	_            struct{}                  `type:"structure"`
@@ -1452,12 +2410,20 @@ type NotFoundException struct {
 	Message_ *string `locationName:"Message" min:"1" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s NotFoundException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s NotFoundException) GoString() string {
 	return s.String()
 }
@@ -1500,25 +2466,107 @@ func (s *NotFoundException) RequestID() string {
 	return s.RespMetadata.RequestID
 }
 
+// Information about an order.
+type Order struct {
+	_ struct{} `type:"structure"`
+
+	// The line items for the order
+	LineItems []*LineItem `type:"list"`
+
+	// The fulfillment date of the order.
+	OrderFulfilledDate *time.Time `type:"timestamp"`
+
+	// The ID of the order.
+	OrderId *string `min:"1" type:"string"`
+
+	// The submission date for the order.
+	OrderSubmissionDate *time.Time `type:"timestamp"`
+
+	// The ID of the Outpost.
+	OutpostId *string `min:"1" type:"string"`
+
+	// The payment option for the order.
+	PaymentOption *string `type:"string" enum:"PaymentOption"`
+
+	// The status of the order
+	Status *string `type:"string" enum:"OrderStatus"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s Order) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s Order) GoString() string {
+	return s.String()
+}
+
+// SetLineItems sets the LineItems field's value.
+func (s *Order) SetLineItems(v []*LineItem) *Order {
+	s.LineItems = v
+	return s
+}
+
+// SetOrderFulfilledDate sets the OrderFulfilledDate field's value.
+func (s *Order) SetOrderFulfilledDate(v time.Time) *Order {
+	s.OrderFulfilledDate = &v
+	return s
+}
+
+// SetOrderId sets the OrderId field's value.
+func (s *Order) SetOrderId(v string) *Order {
+	s.OrderId = &v
+	return s
+}
+
+// SetOrderSubmissionDate sets the OrderSubmissionDate field's value.
+func (s *Order) SetOrderSubmissionDate(v time.Time) *Order {
+	s.OrderSubmissionDate = &v
+	return s
+}
+
+// SetOutpostId sets the OutpostId field's value.
+func (s *Order) SetOutpostId(v string) *Order {
+	s.OutpostId = &v
+	return s
+}
+
+// SetPaymentOption sets the PaymentOption field's value.
+func (s *Order) SetPaymentOption(v string) *Order {
+	s.PaymentOption = &v
+	return s
+}
+
+// SetStatus sets the Status field's value.
+func (s *Order) SetStatus(v string) *Order {
+	s.Status = &v
+	return s
+}
+
 // Information about an Outpost.
 type Outpost struct {
 	_ struct{} `type:"structure"`
 
 	// The Availability Zone.
-	//
-	// You must specify AvailabilityZone or AvailabilityZoneId.
 	AvailabilityZone *string `min:"1" type:"string"`
 
 	// The ID of the Availability Zone.
-	//
-	// You must specify AvailabilityZone or AvailabilityZoneId.
 	AvailabilityZoneId *string `min:"1" type:"string"`
 
-	// The Outpost description.
-	Description *string `min:"1" type:"string"`
+	// The description of the Outpost.
+	Description *string `type:"string"`
 
 	// The life cycle status.
-	LifeCycleStatus *string `type:"string"`
+	LifeCycleStatus *string `min:"1" type:"string"`
 
 	// The name of the Outpost.
 	Name *string `min:"1" type:"string"`
@@ -1532,16 +2580,30 @@ type Outpost struct {
 	// The AWS account ID of the Outpost owner.
 	OwnerId *string `min:"12" type:"string"`
 
+	// The Amazon Resource Name (ARN) of the site.
+	SiteArn *string `min:"1" type:"string"`
+
 	// The ID of the site.
 	SiteId *string `min:"1" type:"string"`
+
+	// The Outpost tags.
+	Tags map[string]*string `min:"1" type:"map"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s Outpost) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s Outpost) GoString() string {
 	return s.String()
 }
@@ -1594,9 +2656,21 @@ func (s *Outpost) SetOwnerId(v string) *Outpost {
 	return s
 }
 
+// SetSiteArn sets the SiteArn field's value.
+func (s *Outpost) SetSiteArn(v string) *Outpost {
+	s.SiteArn = &v
+	return s
+}
+
 // SetSiteId sets the SiteId field's value.
 func (s *Outpost) SetSiteId(v string) *Outpost {
 	s.SiteId = &v
+	return s
+}
+
+// SetTags sets the Tags field's value.
+func (s *Outpost) SetTags(v map[string]*string) *Outpost {
+	s.Tags = v
 	return s
 }
 
@@ -1608,12 +2682,20 @@ type ServiceQuotaExceededException struct {
 	Message_ *string `locationName:"Message" min:"1" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ServiceQuotaExceededException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ServiceQuotaExceededException) GoString() string {
 	return s.String()
 }
@@ -1669,16 +2751,30 @@ type Site struct {
 	// The name of the site.
 	Name *string `min:"1" type:"string"`
 
+	// The Amazon Resource Name (ARN) of the site.
+	SiteArn *string `min:"1" type:"string"`
+
 	// The ID of the site.
 	SiteId *string `min:"1" type:"string"`
+
+	// The site tags.
+	Tags map[string]*string `min:"1" type:"map"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s Site) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s Site) GoString() string {
 	return s.String()
 }
@@ -1701,10 +2797,198 @@ func (s *Site) SetName(v string) *Site {
 	return s
 }
 
+// SetSiteArn sets the SiteArn field's value.
+func (s *Site) SetSiteArn(v string) *Site {
+	s.SiteArn = &v
+	return s
+}
+
 // SetSiteId sets the SiteId field's value.
 func (s *Site) SetSiteId(v string) *Site {
 	s.SiteId = &v
 	return s
+}
+
+// SetTags sets the Tags field's value.
+func (s *Site) SetTags(v map[string]*string) *Site {
+	s.Tags = v
+	return s
+}
+
+type TagResourceInput struct {
+	_ struct{} `type:"structure"`
+
+	// The Amazon Resource Name (ARN) of the resource.
+	//
+	// ResourceArn is a required field
+	ResourceArn *string `location:"uri" locationName:"ResourceArn" type:"string" required:"true"`
+
+	// The tags to add to the resource.
+	//
+	// Tags is a required field
+	Tags map[string]*string `min:"1" type:"map" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s TagResourceInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s TagResourceInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *TagResourceInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "TagResourceInput"}
+	if s.ResourceArn == nil {
+		invalidParams.Add(request.NewErrParamRequired("ResourceArn"))
+	}
+	if s.ResourceArn != nil && len(*s.ResourceArn) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ResourceArn", 1))
+	}
+	if s.Tags == nil {
+		invalidParams.Add(request.NewErrParamRequired("Tags"))
+	}
+	if s.Tags != nil && len(s.Tags) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Tags", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetResourceArn sets the ResourceArn field's value.
+func (s *TagResourceInput) SetResourceArn(v string) *TagResourceInput {
+	s.ResourceArn = &v
+	return s
+}
+
+// SetTags sets the Tags field's value.
+func (s *TagResourceInput) SetTags(v map[string]*string) *TagResourceInput {
+	s.Tags = v
+	return s
+}
+
+type TagResourceOutput struct {
+	_ struct{} `type:"structure" nopayload:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s TagResourceOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s TagResourceOutput) GoString() string {
+	return s.String()
+}
+
+type UntagResourceInput struct {
+	_ struct{} `type:"structure" nopayload:"true"`
+
+	// The Amazon Resource Name (ARN) of the resource.
+	//
+	// ResourceArn is a required field
+	ResourceArn *string `location:"uri" locationName:"ResourceArn" type:"string" required:"true"`
+
+	// The tag keys.
+	//
+	// TagKeys is a required field
+	TagKeys []*string `location:"querystring" locationName:"tagKeys" min:"1" type:"list" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UntagResourceInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UntagResourceInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *UntagResourceInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "UntagResourceInput"}
+	if s.ResourceArn == nil {
+		invalidParams.Add(request.NewErrParamRequired("ResourceArn"))
+	}
+	if s.ResourceArn != nil && len(*s.ResourceArn) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ResourceArn", 1))
+	}
+	if s.TagKeys == nil {
+		invalidParams.Add(request.NewErrParamRequired("TagKeys"))
+	}
+	if s.TagKeys != nil && len(s.TagKeys) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("TagKeys", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetResourceArn sets the ResourceArn field's value.
+func (s *UntagResourceInput) SetResourceArn(v string) *UntagResourceInput {
+	s.ResourceArn = &v
+	return s
+}
+
+// SetTagKeys sets the TagKeys field's value.
+func (s *UntagResourceInput) SetTagKeys(v []*string) *UntagResourceInput {
+	s.TagKeys = v
+	return s
+}
+
+type UntagResourceOutput struct {
+	_ struct{} `type:"structure" nopayload:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UntagResourceOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UntagResourceOutput) GoString() string {
+	return s.String()
 }
 
 // A parameter is not valid.
@@ -1715,12 +2999,20 @@ type ValidationException struct {
 	Message_ *string `locationName:"Message" min:"1" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ValidationException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ValidationException) GoString() string {
 	return s.String()
 }
@@ -1761,4 +3053,80 @@ func (s *ValidationException) StatusCode() int {
 // RequestID returns the service's response RequestID for request.
 func (s *ValidationException) RequestID() string {
 	return s.RespMetadata.RequestID
+}
+
+const (
+	// OrderStatusReceived is a OrderStatus enum value
+	OrderStatusReceived = "RECEIVED"
+
+	// OrderStatusPending is a OrderStatus enum value
+	OrderStatusPending = "PENDING"
+
+	// OrderStatusProcessing is a OrderStatus enum value
+	OrderStatusProcessing = "PROCESSING"
+
+	// OrderStatusInstalling is a OrderStatus enum value
+	OrderStatusInstalling = "INSTALLING"
+
+	// OrderStatusFulfilled is a OrderStatus enum value
+	OrderStatusFulfilled = "FULFILLED"
+
+	// OrderStatusCancelled is a OrderStatus enum value
+	OrderStatusCancelled = "CANCELLED"
+)
+
+// OrderStatus_Values returns all elements of the OrderStatus enum
+func OrderStatus_Values() []string {
+	return []string{
+		OrderStatusReceived,
+		OrderStatusPending,
+		OrderStatusProcessing,
+		OrderStatusInstalling,
+		OrderStatusFulfilled,
+		OrderStatusCancelled,
+	}
+}
+
+const (
+	// PaymentOptionAllUpfront is a PaymentOption enum value
+	PaymentOptionAllUpfront = "ALL_UPFRONT"
+
+	// PaymentOptionNoUpfront is a PaymentOption enum value
+	PaymentOptionNoUpfront = "NO_UPFRONT"
+
+	// PaymentOptionPartialUpfront is a PaymentOption enum value
+	PaymentOptionPartialUpfront = "PARTIAL_UPFRONT"
+)
+
+// PaymentOption_Values returns all elements of the PaymentOption enum
+func PaymentOption_Values() []string {
+	return []string{
+		PaymentOptionAllUpfront,
+		PaymentOptionNoUpfront,
+		PaymentOptionPartialUpfront,
+	}
+}
+
+const (
+	// PaymentTermThreeYears is a PaymentTerm enum value
+	PaymentTermThreeYears = "THREE_YEARS"
+)
+
+// PaymentTerm_Values returns all elements of the PaymentTerm enum
+func PaymentTerm_Values() []string {
+	return []string{
+		PaymentTermThreeYears,
+	}
+}
+
+const (
+	// ResourceTypeOutpost is a ResourceType enum value
+	ResourceTypeOutpost = "OUTPOST"
+)
+
+// ResourceType_Values returns all elements of the ResourceType enum
+func ResourceType_Values() []string {
+	return []string{
+		ResourceTypeOutpost,
+	}
 }

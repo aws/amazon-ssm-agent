@@ -11,8 +11,8 @@ const (
 	// ErrCodeConflictException for service response error code
 	// "ConflictException".
 	//
-	// There was a conflict when you attempted to modify an experiment, trial, or
-	// trial component.
+	// There was a conflict when you attempted to modify a SageMaker entity such
+	// as an Experiment or Artifact.
 	ErrCodeConflictException = "ConflictException"
 
 	// ErrCodeResourceInUse for service response error code

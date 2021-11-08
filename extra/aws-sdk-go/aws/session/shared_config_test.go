@@ -1,3 +1,4 @@
+//go:build go1.7
 // +build go1.7
 
 package session
@@ -30,19 +31,23 @@ func TestLoadSharedConfig(t *testing.T) {
 		{
 			Filenames: []string{"file_not_exists"},
 			Profile:   "default",
-			Expected:  sharedConfig{},
+			Expected: sharedConfig{
+				Profile: "default",
+			},
 		},
 		{
 			Filenames: []string{testConfigFilename},
 			Expected: sharedConfig{
-				Region: "default_region",
+				Profile: "default",
+				Region:  "default_region",
 			},
 		},
 		{
 			Filenames: []string{testConfigOtherFilename, testConfigFilename},
 			Profile:   "config_file_load_order",
 			Expected: sharedConfig{
-				Region: "shared_config_region",
+				Profile: "config_file_load_order",
+				Region:  "shared_config_region",
 				Creds: credentials.Value{
 					AccessKeyID:     "shared_config_akid",
 					SecretAccessKey: "shared_config_secret",
@@ -54,7 +59,8 @@ func TestLoadSharedConfig(t *testing.T) {
 			Filenames: []string{testConfigFilename, testConfigOtherFilename},
 			Profile:   "config_file_load_order",
 			Expected: sharedConfig{
-				Region: "shared_config_other_region",
+				Profile: "config_file_load_order",
+				Region:  "shared_config_other_region",
 				Creds: credentials.Value{
 					AccessKeyID:     "shared_config_other_akid",
 					SecretAccessKey: "shared_config_other_secret",
@@ -66,9 +72,11 @@ func TestLoadSharedConfig(t *testing.T) {
 			Filenames: []string{testConfigOtherFilename, testConfigFilename},
 			Profile:   "assume_role",
 			Expected: sharedConfig{
+				Profile:           "assume_role",
 				RoleARN:           "assume_role_role_arn",
 				SourceProfileName: "complete_creds",
 				SourceProfile: &sharedConfig{
+					Profile: "complete_creds",
 					Creds: credentials.Value{
 						AccessKeyID:     "complete_creds_akid",
 						SecretAccessKey: "complete_creds_secret",
@@ -81,6 +89,7 @@ func TestLoadSharedConfig(t *testing.T) {
 			Filenames: []string{testConfigOtherFilename, testConfigFilename},
 			Profile:   "assume_role_invalid_source_profile",
 			Expected: sharedConfig{
+				Profile:           "assume_role_invalid_source_profile",
 				RoleARN:           "assume_role_invalid_source_profile_role_arn",
 				SourceProfileName: "profile_not_exists",
 			},
@@ -93,11 +102,13 @@ func TestLoadSharedConfig(t *testing.T) {
 			Filenames: []string{testConfigOtherFilename, testConfigFilename},
 			Profile:   "assume_role_w_creds",
 			Expected: sharedConfig{
+				Profile:           "assume_role_w_creds",
 				RoleARN:           "assume_role_w_creds_role_arn",
 				ExternalID:        "1234",
 				RoleSessionName:   "assume_role_w_creds_session_name",
 				SourceProfileName: "assume_role_w_creds",
 				SourceProfile: &sharedConfig{
+					Profile: "assume_role_w_creds",
 					Creds: credentials.Value{
 						AccessKeyID:     "assume_role_w_creds_akid",
 						SecretAccessKey: "assume_role_w_creds_secret",
@@ -110,6 +121,7 @@ func TestLoadSharedConfig(t *testing.T) {
 			Filenames: []string{testConfigOtherFilename, testConfigFilename},
 			Profile:   "assume_role_wo_creds",
 			Expected: sharedConfig{
+				Profile:           "assume_role_wo_creds",
 				RoleARN:           "assume_role_wo_creds_role_arn",
 				SourceProfileName: "assume_role_wo_creds",
 			},
@@ -127,6 +139,7 @@ func TestLoadSharedConfig(t *testing.T) {
 			Filenames: []string{testConfigOtherFilename, testConfigFilename},
 			Profile:   "assume_role_with_credential_source",
 			Expected: sharedConfig{
+				Profile:          "assume_role_with_credential_source",
 				RoleARN:          "assume_role_with_credential_source_role_arn",
 				CredentialSource: credSourceEc2Metadata,
 			},
@@ -135,12 +148,15 @@ func TestLoadSharedConfig(t *testing.T) {
 			Filenames: []string{testConfigOtherFilename, testConfigFilename},
 			Profile:   "multiple_assume_role",
 			Expected: sharedConfig{
+				Profile:           "multiple_assume_role",
 				RoleARN:           "multiple_assume_role_role_arn",
 				SourceProfileName: "assume_role",
 				SourceProfile: &sharedConfig{
+					Profile:           "assume_role",
 					RoleARN:           "assume_role_role_arn",
 					SourceProfileName: "complete_creds",
 					SourceProfile: &sharedConfig{
+						Profile: "complete_creds",
 						Creds: credentials.Value{
 							AccessKeyID:     "complete_creds_akid",
 							SecretAccessKey: "complete_creds_secret",
@@ -154,9 +170,11 @@ func TestLoadSharedConfig(t *testing.T) {
 			Filenames: []string{testConfigOtherFilename, testConfigFilename},
 			Profile:   "multiple_assume_role_with_credential_source",
 			Expected: sharedConfig{
+				Profile:           "multiple_assume_role_with_credential_source",
 				RoleARN:           "multiple_assume_role_with_credential_source_role_arn",
 				SourceProfileName: "assume_role_with_credential_source",
 				SourceProfile: &sharedConfig{
+					Profile:          "assume_role_with_credential_source",
 					RoleARN:          "assume_role_with_credential_source_role_arn",
 					CredentialSource: credSourceEc2Metadata,
 				},
@@ -166,12 +184,15 @@ func TestLoadSharedConfig(t *testing.T) {
 			Filenames: []string{testConfigOtherFilename, testConfigFilename},
 			Profile:   "multiple_assume_role_with_credential_source2",
 			Expected: sharedConfig{
+				Profile:           "multiple_assume_role_with_credential_source2",
 				RoleARN:           "multiple_assume_role_with_credential_source2_role_arn",
 				SourceProfileName: "multiple_assume_role_with_credential_source",
 				SourceProfile: &sharedConfig{
+					Profile:           "multiple_assume_role_with_credential_source",
 					RoleARN:           "multiple_assume_role_with_credential_source_role_arn",
 					SourceProfileName: "assume_role_with_credential_source",
 					SourceProfile: &sharedConfig{
+						Profile:          "assume_role_with_credential_source",
 						RoleARN:          "assume_role_with_credential_source_role_arn",
 						CredentialSource: credSourceEc2Metadata,
 					},
@@ -182,6 +203,7 @@ func TestLoadSharedConfig(t *testing.T) {
 			Filenames: []string{testConfigFilename},
 			Profile:   "with_sts_regional",
 			Expected: sharedConfig{
+				Profile:             "with_sts_regional",
 				STSRegionalEndpoint: endpoints.RegionalSTSEndpoint,
 			},
 		},
@@ -189,7 +211,129 @@ func TestLoadSharedConfig(t *testing.T) {
 			Filenames: []string{testConfigFilename},
 			Profile:   "with_s3_us_east_1_regional",
 			Expected: sharedConfig{
+				Profile:                   "with_s3_us_east_1_regional",
 				S3UsEast1RegionalEndpoint: endpoints.RegionalS3UsEast1Endpoint,
+			},
+		},
+		{
+			Filenames: []string{testConfigFilename},
+			Profile:   "sso_creds",
+			Expected: sharedConfig{
+				Profile:      "sso_creds",
+				SSOAccountID: "012345678901",
+				SSORegion:    "us-west-2",
+				SSORoleName:  "TestRole",
+				SSOStartURL:  "https://127.0.0.1/start",
+			},
+		},
+		{
+			Filenames: []string{testConfigFilename},
+			Profile:   "source_sso_creds",
+			Expected: sharedConfig{
+				Profile:           "source_sso_creds",
+				RoleARN:           "source_sso_creds_arn",
+				SourceProfileName: "sso_creds",
+				SourceProfile: &sharedConfig{
+					Profile:      "sso_creds",
+					SSOAccountID: "012345678901",
+					SSORegion:    "us-west-2",
+					SSORoleName:  "TestRole",
+					SSOStartURL:  "https://127.0.0.1/start",
+				},
+			},
+		},
+		{
+			Filenames: []string{testConfigFilename},
+			Profile:   "sso_and_static",
+			Expected: sharedConfig{
+				Profile: "sso_and_static",
+				Creds: credentials.Value{
+					AccessKeyID:     "sso_and_static_akid",
+					SecretAccessKey: "sso_and_static_secret",
+					SessionToken:    "sso_and_static_token",
+					ProviderName:    fmt.Sprintf("SharedConfigCredentials: %s", testConfigFilename),
+				},
+				SSOAccountID: "012345678901",
+				SSORegion:    "us-west-2",
+				SSORoleName:  "TestRole",
+				SSOStartURL:  "https://THIS_SHOULD_NOT_BE_IN_TESTDATA_CACHE/start",
+			},
+		},
+		{
+			Filenames: []string{testConfigFilename},
+			Profile:   "source_sso_and_assume",
+			Expected: sharedConfig{
+				Profile:           "source_sso_and_assume",
+				RoleARN:           "source_sso_and_assume_arn",
+				SourceProfileName: "sso_and_assume",
+				SourceProfile: &sharedConfig{
+					Profile:           "sso_and_assume",
+					RoleARN:           "sso_with_assume_role_arn",
+					SourceProfileName: "multiple_assume_role_with_credential_source",
+					SourceProfile: &sharedConfig{
+						Profile:           "multiple_assume_role_with_credential_source",
+						RoleARN:           "multiple_assume_role_with_credential_source_role_arn",
+						SourceProfileName: "assume_role_with_credential_source",
+						SourceProfile: &sharedConfig{
+							Profile:          "assume_role_with_credential_source",
+							RoleARN:          "assume_role_with_credential_source_role_arn",
+							CredentialSource: credSourceEc2Metadata,
+						},
+					},
+				},
+			},
+		},
+		{
+			Filenames: []string{testConfigFilename},
+			Profile:   "sso_mixed_credproc",
+			Expected: sharedConfig{
+				Profile:           "sso_mixed_credproc",
+				SSOAccountID:      "012345678901",
+				SSORegion:         "us-west-2",
+				SSORoleName:       "TestRole",
+				SSOStartURL:       "https://127.0.0.1/start",
+				CredentialProcess: "/path/to/process",
+			},
+		},
+		{
+			Filenames: []string{testConfigFilename},
+			Profile:   "EC2MetadataServiceEndpoint",
+			Expected: sharedConfig{
+				Profile:         "EC2MetadataServiceEndpoint",
+				EC2IMDSEndpoint: "http://endpoint.localhost",
+			},
+		},
+		{
+			Filenames: []string{testConfigFilename},
+			Profile:   "EC2MetadataServiceEndpointModeIPv6",
+			Expected: sharedConfig{
+				Profile:             "EC2MetadataServiceEndpointModeIPv6",
+				EC2IMDSEndpointMode: endpoints.EC2IMDSEndpointModeStateIPv6,
+			},
+		},
+		{
+			Filenames: []string{testConfigFilename},
+			Profile:   "EC2MetadataServiceEndpointModeIPv4",
+			Expected: sharedConfig{
+				Profile:             "EC2MetadataServiceEndpointModeIPv4",
+				EC2IMDSEndpointMode: endpoints.EC2IMDSEndpointModeStateIPv4,
+			},
+		},
+		{
+			Filenames: []string{testConfigFilename},
+			Profile:   "EC2MetadataServiceEndpointModeUnknown",
+			Expected: sharedConfig{
+				Profile: "EC2MetadataServiceEndpointModeUnknown",
+			},
+			Err: fmt.Errorf("failed to load ec2_metadata_service_endpoint_mode from shared config"),
+		},
+		{
+			Filenames: []string{testConfigFilename},
+			Profile:   "EC2MetadataServiceEndpointAndModeMixed",
+			Expected: sharedConfig{
+				Profile:             "EC2MetadataServiceEndpointAndModeMixed",
+				EC2IMDSEndpoint:     "http://endpoint.localhost",
+				EC2IMDSEndpointMode: endpoints.EC2IMDSEndpointModeStateIPv6,
 			},
 		},
 	}

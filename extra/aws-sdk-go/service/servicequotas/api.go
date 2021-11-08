@@ -58,12 +58,10 @@ func (c *ServiceQuotas) AssociateServiceQuotaTemplateRequest(input *AssociateSer
 
 // AssociateServiceQuotaTemplate API operation for Service Quotas.
 //
-// Associates the Service Quotas template with your organization so that when
-// new accounts are created in your organization, the template submits increase
-// requests for the specified service quotas. Use the Service Quotas template
-// to request an increase for any adjustable quota value. After you define the
-// Service Quotas template, use this operation to associate, or enable, the
-// template.
+// Associates your quota request template with your organization. When a new
+// account is created in your organization, the quota increase requests in the
+// template are automatically applied to the account. You can add a quota increase
+// request for any adjustable quota to your template.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -77,7 +75,7 @@ func (c *ServiceQuotas) AssociateServiceQuotaTemplateRequest(input *AssociateSer
 //   You can't perform this action because a dependency does not have access.
 //
 //   * AccessDeniedException
-//   You do not have sufficient access to perform this action.
+//   You do not have sufficient permission to perform this action.
 //
 //   * ServiceException
 //   Something went wrong.
@@ -88,15 +86,13 @@ func (c *ServiceQuotas) AssociateServiceQuotaTemplateRequest(input *AssociateSer
 //
 //   * AWSServiceAccessNotEnabledException
 //   The action you attempted is not allowed unless Service Access with Service
-//   Quotas is enabled in your organization. To enable, call AssociateServiceQuotaTemplate.
+//   Quotas is enabled in your organization.
 //
 //   * OrganizationNotInAllFeaturesModeException
-//   The organization that your account belongs to, is not in All Features mode.
-//   To enable all features mode, see EnableAllFeatures (https://docs.aws.amazon.com/organizations/latest/APIReference/API_EnableAllFeatures.html).
+//   The organization that your account belongs to is not in All Features mode.
 //
 //   * TemplatesNotAvailableInRegionException
-//   The Service Quotas template is not available in the Region where you are
-//   making the request. Please make the request in us-east-1.
+//   The Service Quotas template is not available in this AWS Region.
 //
 //   * NoAvailableOrganizationException
 //   The account making this call is not a member of an organization.
@@ -168,7 +164,8 @@ func (c *ServiceQuotas) DeleteServiceQuotaIncreaseRequestFromTemplateRequest(inp
 
 // DeleteServiceQuotaIncreaseRequestFromTemplate API operation for Service Quotas.
 //
-// Removes a service quota increase request from the Service Quotas template.
+// Deletes the quota increase request for the specified quota from your quota
+// request template.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -179,7 +176,7 @@ func (c *ServiceQuotas) DeleteServiceQuotaIncreaseRequestFromTemplateRequest(inp
 //
 // Returned Error Types:
 //   * AccessDeniedException
-//   You do not have sufficient access to perform this action.
+//   You do not have sufficient permission to perform this action.
 //
 //   * ServiceException
 //   Something went wrong.
@@ -199,11 +196,10 @@ func (c *ServiceQuotas) DeleteServiceQuotaIncreaseRequestFromTemplateRequest(inp
 //
 //   * AWSServiceAccessNotEnabledException
 //   The action you attempted is not allowed unless Service Access with Service
-//   Quotas is enabled in your organization. To enable, call AssociateServiceQuotaTemplate.
+//   Quotas is enabled in your organization.
 //
 //   * TemplatesNotAvailableInRegionException
-//   The Service Quotas template is not available in the Region where you are
-//   making the request. Please make the request in us-east-1.
+//   The Service Quotas template is not available in this AWS Region.
 //
 //   * NoAvailableOrganizationException
 //   The account making this call is not a member of an organization.
@@ -275,15 +271,10 @@ func (c *ServiceQuotas) DisassociateServiceQuotaTemplateRequest(input *Disassoci
 
 // DisassociateServiceQuotaTemplate API operation for Service Quotas.
 //
-// Disables the Service Quotas template. Once the template is disabled, it does
-// not request quota increases for new accounts in your organization. Disabling
-// the quota template does not apply the quota increase requests from the template.
-//
-// Related operations
-//
-//    * To enable the quota template, call AssociateServiceQuotaTemplate.
-//
-//    * To delete a specific service quota from the template, use DeleteServiceQuotaIncreaseRequestFromTemplate.
+// Disables your quota request template. After a template is disabled, the quota
+// increase requests in the template are not applied to new accounts in your
+// organization. Disabling a quota request template does not apply its quota
+// increase requests.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -299,10 +290,8 @@ func (c *ServiceQuotas) DisassociateServiceQuotaTemplateRequest(input *Disassoci
 //   * ServiceQuotaTemplateNotInUseException
 //   The quota request template is not associated with your organization.
 //
-//   To use the template, call AssociateServiceQuotaTemplate.
-//
 //   * AccessDeniedException
-//   You do not have sufficient access to perform this action.
+//   You do not have sufficient permission to perform this action.
 //
 //   * ServiceException
 //   Something went wrong.
@@ -313,11 +302,10 @@ func (c *ServiceQuotas) DisassociateServiceQuotaTemplateRequest(input *Disassoci
 //
 //   * AWSServiceAccessNotEnabledException
 //   The action you attempted is not allowed unless Service Access with Service
-//   Quotas is enabled in your organization. To enable, call AssociateServiceQuotaTemplate.
+//   Quotas is enabled in your organization.
 //
 //   * TemplatesNotAvailableInRegionException
-//   The Service Quotas template is not available in the Region where you are
-//   making the request. Please make the request in us-east-1.
+//   The Service Quotas template is not available in this AWS Region.
 //
 //   * NoAvailableOrganizationException
 //   The account making this call is not a member of an organization.
@@ -388,8 +376,8 @@ func (c *ServiceQuotas) GetAWSDefaultServiceQuotaRequest(input *GetAWSDefaultSer
 
 // GetAWSDefaultServiceQuota API operation for Service Quotas.
 //
-// Retrieves the default service quotas values. The Value returned for each
-// quota is the AWS default value, even if the quotas have been increased..
+// Retrieves the default value for the specified quota. The default value does
+// not reflect any quota increases.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -400,7 +388,7 @@ func (c *ServiceQuotas) GetAWSDefaultServiceQuotaRequest(input *GetAWSDefaultSer
 //
 // Returned Error Types:
 //   * AccessDeniedException
-//   You do not have sufficient access to perform this action.
+//   You do not have sufficient permission to perform this action.
 //
 //   * NoSuchResourceException
 //   The specified resource does not exist.
@@ -481,9 +469,7 @@ func (c *ServiceQuotas) GetAssociationForServiceQuotaTemplateRequest(input *GetA
 
 // GetAssociationForServiceQuotaTemplate API operation for Service Quotas.
 //
-// Retrieves the ServiceQuotaTemplateAssociationStatus value from the service.
-// Use this action to determine if the Service Quota template is associated,
-// or enabled.
+// Retrieves the status of the association for the quota request template.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -499,10 +485,8 @@ func (c *ServiceQuotas) GetAssociationForServiceQuotaTemplateRequest(input *GetA
 //   * ServiceQuotaTemplateNotInUseException
 //   The quota request template is not associated with your organization.
 //
-//   To use the template, call AssociateServiceQuotaTemplate.
-//
 //   * AccessDeniedException
-//   You do not have sufficient access to perform this action.
+//   You do not have sufficient permission to perform this action.
 //
 //   * ServiceException
 //   Something went wrong.
@@ -513,11 +497,10 @@ func (c *ServiceQuotas) GetAssociationForServiceQuotaTemplateRequest(input *GetA
 //
 //   * AWSServiceAccessNotEnabledException
 //   The action you attempted is not allowed unless Service Access with Service
-//   Quotas is enabled in your organization. To enable, call AssociateServiceQuotaTemplate.
+//   Quotas is enabled in your organization.
 //
 //   * TemplatesNotAvailableInRegionException
-//   The Service Quotas template is not available in the Region where you are
-//   making the request. Please make the request in us-east-1.
+//   The Service Quotas template is not available in this AWS Region.
 //
 //   * NoAvailableOrganizationException
 //   The account making this call is not a member of an organization.
@@ -588,7 +571,7 @@ func (c *ServiceQuotas) GetRequestedServiceQuotaChangeRequest(input *GetRequeste
 
 // GetRequestedServiceQuotaChange API operation for Service Quotas.
 //
-// Retrieves the details for a particular increase request.
+// Retrieves information about the specified quota increase request.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -599,7 +582,7 @@ func (c *ServiceQuotas) GetRequestedServiceQuotaChangeRequest(input *GetRequeste
 //
 // Returned Error Types:
 //   * AccessDeniedException
-//   You do not have sufficient access to perform this action.
+//   You do not have sufficient permission to perform this action.
 //
 //   * NoSuchResourceException
 //   The specified resource does not exist.
@@ -680,10 +663,9 @@ func (c *ServiceQuotas) GetServiceQuotaRequest(input *GetServiceQuotaInput) (req
 
 // GetServiceQuota API operation for Service Quotas.
 //
-// Returns the details for the specified service quota. This operation provides
-// a different Value than the GetAWSDefaultServiceQuota operation. This operation
-// returns the applied value for each quota. GetAWSDefaultServiceQuota returns
-// the default AWS value for each quota.
+// Retrieves the applied quota value for the specified quota. For some quotas,
+// only the default values are available. If the applied quota value is not
+// available for a quota, the quota is not retrieved.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -694,7 +676,7 @@ func (c *ServiceQuotas) GetServiceQuotaRequest(input *GetServiceQuotaInput) (req
 //
 // Returned Error Types:
 //   * AccessDeniedException
-//   You do not have sufficient access to perform this action.
+//   You do not have sufficient permission to perform this action.
 //
 //   * NoSuchResourceException
 //   The specified resource does not exist.
@@ -775,7 +757,8 @@ func (c *ServiceQuotas) GetServiceQuotaIncreaseRequestFromTemplateRequest(input 
 
 // GetServiceQuotaIncreaseRequestFromTemplate API operation for Service Quotas.
 //
-// Returns the details of the service quota increase request in your template.
+// Retrieves information about the specified quota increase request in your
+// quota request template.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -786,7 +769,7 @@ func (c *ServiceQuotas) GetServiceQuotaIncreaseRequestFromTemplateRequest(input 
 //
 // Returned Error Types:
 //   * AccessDeniedException
-//   You do not have sufficient access to perform this action.
+//   You do not have sufficient permission to perform this action.
 //
 //   * DependencyAccessDeniedException
 //   You can't perform this action because a dependency does not have access.
@@ -806,11 +789,10 @@ func (c *ServiceQuotas) GetServiceQuotaIncreaseRequestFromTemplateRequest(input 
 //
 //   * AWSServiceAccessNotEnabledException
 //   The action you attempted is not allowed unless Service Access with Service
-//   Quotas is enabled in your organization. To enable, call AssociateServiceQuotaTemplate.
+//   Quotas is enabled in your organization.
 //
 //   * TemplatesNotAvailableInRegionException
-//   The Service Quotas template is not available in the Region where you are
-//   making the request. Please make the request in us-east-1.
+//   The Service Quotas template is not available in this AWS Region.
 //
 //   * NoAvailableOrganizationException
 //   The account making this call is not a member of an organization.
@@ -887,18 +869,8 @@ func (c *ServiceQuotas) ListAWSDefaultServiceQuotasRequest(input *ListAWSDefault
 
 // ListAWSDefaultServiceQuotas API operation for Service Quotas.
 //
-// Lists all default service quotas for the specified AWS service or all AWS
-// services. ListAWSDefaultServiceQuotas is similar to ListServiceQuotas except
-// for the Value object. The Value object returned by ListAWSDefaultServiceQuotas
-// is the default value assigned by AWS. This request returns a list of all
-// service quotas for the specified service. The listing of each you'll see
-// the default values are the values that AWS provides for the quotas.
-//
-// Always check the NextToken response parameter when calling any of the List*
-// operations. These operations can return an unexpected list of results, even
-// when there are more results available. When this happens, the NextToken response
-// parameter contains a value to pass the next call to the same API to request
-// the next part of the list.
+// Lists the default values for the quotas for the specified AWS service. A
+// default value does not reflect any quota increases.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -909,7 +881,7 @@ func (c *ServiceQuotas) ListAWSDefaultServiceQuotasRequest(input *ListAWSDefault
 //
 // Returned Error Types:
 //   * AccessDeniedException
-//   You do not have sufficient access to perform this action.
+//   You do not have sufficient permission to perform this action.
 //
 //   * NoSuchResourceException
 //   The specified resource does not exist.
@@ -1051,7 +1023,7 @@ func (c *ServiceQuotas) ListRequestedServiceQuotaChangeHistoryRequest(input *Lis
 
 // ListRequestedServiceQuotaChangeHistory API operation for Service Quotas.
 //
-// Requests a list of the changes to quotas for a service.
+// Retrieves the quota increase requests for the specified service.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -1062,7 +1034,7 @@ func (c *ServiceQuotas) ListRequestedServiceQuotaChangeHistoryRequest(input *Lis
 //
 // Returned Error Types:
 //   * AccessDeniedException
-//   You do not have sufficient access to perform this action.
+//   You do not have sufficient permission to perform this action.
 //
 //   * NoSuchResourceException
 //   The specified resource does not exist.
@@ -1204,10 +1176,7 @@ func (c *ServiceQuotas) ListRequestedServiceQuotaChangeHistoryByQuotaRequest(inp
 
 // ListRequestedServiceQuotaChangeHistoryByQuota API operation for Service Quotas.
 //
-// Requests a list of the changes to specific service quotas. This command provides
-// additional granularity over the ListRequestedServiceQuotaChangeHistory command.
-// Once a quota change request has reached CASE_CLOSED, APPROVED, or DENIED,
-// the history has been kept for 90 days.
+// Retrieves the quota increase requests for the specified quota.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -1218,7 +1187,7 @@ func (c *ServiceQuotas) ListRequestedServiceQuotaChangeHistoryByQuotaRequest(inp
 //
 // Returned Error Types:
 //   * AccessDeniedException
-//   You do not have sufficient access to perform this action.
+//   You do not have sufficient permission to perform this action.
 //
 //   * NoSuchResourceException
 //   The specified resource does not exist.
@@ -1360,7 +1329,7 @@ func (c *ServiceQuotas) ListServiceQuotaIncreaseRequestsInTemplateRequest(input 
 
 // ListServiceQuotaIncreaseRequestsInTemplate API operation for Service Quotas.
 //
-// Returns a list of the quota increase requests in the template.
+// Lists the quota increase requests in the specified quota request template.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -1371,7 +1340,7 @@ func (c *ServiceQuotas) ListServiceQuotaIncreaseRequestsInTemplateRequest(input 
 //
 // Returned Error Types:
 //   * AccessDeniedException
-//   You do not have sufficient access to perform this action.
+//   You do not have sufficient permission to perform this action.
 //
 //   * DependencyAccessDeniedException
 //   You can't perform this action because a dependency does not have access.
@@ -1388,11 +1357,10 @@ func (c *ServiceQuotas) ListServiceQuotaIncreaseRequestsInTemplateRequest(input 
 //
 //   * AWSServiceAccessNotEnabledException
 //   The action you attempted is not allowed unless Service Access with Service
-//   Quotas is enabled in your organization. To enable, call AssociateServiceQuotaTemplate.
+//   Quotas is enabled in your organization.
 //
 //   * TemplatesNotAvailableInRegionException
-//   The Service Quotas template is not available in the Region where you are
-//   making the request. Please make the request in us-east-1.
+//   The Service Quotas template is not available in this AWS Region.
 //
 //   * NoAvailableOrganizationException
 //   The account making this call is not a member of an organization.
@@ -1521,15 +1489,9 @@ func (c *ServiceQuotas) ListServiceQuotasRequest(input *ListServiceQuotasInput) 
 
 // ListServiceQuotas API operation for Service Quotas.
 //
-// Lists all service quotas for the specified AWS service. This request returns
-// a list of the service quotas for the specified service. you'll see the default
-// values are the values that AWS provides for the quotas.
-//
-// Always check the NextToken response parameter when calling any of the List*
-// operations. These operations can return an unexpected list of results, even
-// when there are more results available. When this happens, the NextToken response
-// parameter contains a value to pass the next call to the same API to request
-// the next part of the list.
+// Lists the applied quota values for the specified AWS service. For some quotas,
+// only the default values are available. If the applied quota value is not
+// available for a quota, the quota is not retrieved.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -1540,7 +1502,7 @@ func (c *ServiceQuotas) ListServiceQuotasRequest(input *ListServiceQuotasInput) 
 //
 // Returned Error Types:
 //   * AccessDeniedException
-//   You do not have sufficient access to perform this action.
+//   You do not have sufficient permission to perform this action.
 //
 //   * NoSuchResourceException
 //   The specified resource does not exist.
@@ -1682,9 +1644,7 @@ func (c *ServiceQuotas) ListServicesRequest(input *ListServicesInput) (req *requ
 
 // ListServices API operation for Service Quotas.
 //
-// Lists the AWS services available in Service Quotas. Not all AWS services
-// are available in Service Quotas. To list the see the list of the service
-// quotas for a specific service, use ListServiceQuotas.
+// Lists the names and codes for the services integrated with Service Quotas.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -1695,7 +1655,7 @@ func (c *ServiceQuotas) ListServicesRequest(input *ListServicesInput) (req *requ
 //
 // Returned Error Types:
 //   * AccessDeniedException
-//   You do not have sufficient access to perform this action.
+//   You do not have sufficient permission to perform this action.
 //
 //   * IllegalArgumentException
 //   Invalid input was provided.
@@ -1784,6 +1744,98 @@ func (c *ServiceQuotas) ListServicesPagesWithContext(ctx aws.Context, input *Lis
 	return p.Err()
 }
 
+const opListTagsForResource = "ListTagsForResource"
+
+// ListTagsForResourceRequest generates a "aws/request.Request" representing the
+// client's request for the ListTagsForResource operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See ListTagsForResource for more information on using the ListTagsForResource
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the ListTagsForResourceRequest method.
+//    req, resp := client.ListTagsForResourceRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/service-quotas-2019-06-24/ListTagsForResource
+func (c *ServiceQuotas) ListTagsForResourceRequest(input *ListTagsForResourceInput) (req *request.Request, output *ListTagsForResourceOutput) {
+	op := &request.Operation{
+		Name:       opListTagsForResource,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &ListTagsForResourceInput{}
+	}
+
+	output = &ListTagsForResourceOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// ListTagsForResource API operation for Service Quotas.
+//
+// Returns a list of the tags assigned to the specified applied quota.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Service Quotas's
+// API operation ListTagsForResource for usage and error information.
+//
+// Returned Error Types:
+//   * TooManyRequestsException
+//   Due to throttling, the request was denied. Slow down the rate of request
+//   calls, or request an increase for this quota.
+//
+//   * NoSuchResourceException
+//   The specified resource does not exist.
+//
+//   * IllegalArgumentException
+//   Invalid input was provided.
+//
+//   * AccessDeniedException
+//   You do not have sufficient permission to perform this action.
+//
+//   * ServiceException
+//   Something went wrong.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/service-quotas-2019-06-24/ListTagsForResource
+func (c *ServiceQuotas) ListTagsForResource(input *ListTagsForResourceInput) (*ListTagsForResourceOutput, error) {
+	req, out := c.ListTagsForResourceRequest(input)
+	return out, req.Send()
+}
+
+// ListTagsForResourceWithContext is the same as ListTagsForResource with the addition of
+// the ability to pass a context and additional request options.
+//
+// See ListTagsForResource for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *ServiceQuotas) ListTagsForResourceWithContext(ctx aws.Context, input *ListTagsForResourceInput, opts ...request.Option) (*ListTagsForResourceOutput, error) {
+	req, out := c.ListTagsForResourceRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opPutServiceQuotaIncreaseRequestIntoTemplate = "PutServiceQuotaIncreaseRequestIntoTemplate"
 
 // PutServiceQuotaIncreaseRequestIntoTemplateRequest generates a "aws/request.Request" representing the
@@ -1828,10 +1880,7 @@ func (c *ServiceQuotas) PutServiceQuotaIncreaseRequestIntoTemplateRequest(input 
 
 // PutServiceQuotaIncreaseRequestIntoTemplate API operation for Service Quotas.
 //
-// Defines and adds a quota to the service quota template. To add a quota to
-// the template, you must provide the ServiceCode, QuotaCode, AwsRegion, and
-// DesiredValue. Once you add a quota to the template, use ListServiceQuotaIncreaseRequestsInTemplate
-// to see the list of quotas in the template.
+// Adds a quota increase request to your quota request template.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -1842,7 +1891,7 @@ func (c *ServiceQuotas) PutServiceQuotaIncreaseRequestIntoTemplateRequest(input 
 //
 // Returned Error Types:
 //   * AccessDeniedException
-//   You do not have sufficient access to perform this action.
+//   You do not have sufficient permission to perform this action.
 //
 //   * DependencyAccessDeniedException
 //   You can't perform this action because a dependency does not have access.
@@ -1867,11 +1916,10 @@ func (c *ServiceQuotas) PutServiceQuotaIncreaseRequestIntoTemplateRequest(input 
 //
 //   * AWSServiceAccessNotEnabledException
 //   The action you attempted is not allowed unless Service Access with Service
-//   Quotas is enabled in your organization. To enable, call AssociateServiceQuotaTemplate.
+//   Quotas is enabled in your organization.
 //
 //   * TemplatesNotAvailableInRegionException
-//   The Service Quotas template is not available in the Region where you are
-//   making the request. Please make the request in us-east-1.
+//   The Service Quotas template is not available in this AWS Region.
 //
 //   * NoAvailableOrganizationException
 //   The account making this call is not a member of an organization.
@@ -1942,8 +1990,7 @@ func (c *ServiceQuotas) RequestServiceQuotaIncreaseRequest(input *RequestService
 
 // RequestServiceQuotaIncrease API operation for Service Quotas.
 //
-// Retrieves the details of a service quota increase request. The response to
-// this command provides the details in the RequestedServiceQuotaChange object.
+// Submits a quota increase request for the specified quota.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -1965,7 +2012,7 @@ func (c *ServiceQuotas) RequestServiceQuotaIncreaseRequest(input *RequestService
 //   The specified resource already exists.
 //
 //   * AccessDeniedException
-//   You do not have sufficient access to perform this action.
+//   You do not have sufficient permission to perform this action.
 //
 //   * NoSuchResourceException
 //   The specified resource does not exist.
@@ -1974,7 +2021,7 @@ func (c *ServiceQuotas) RequestServiceQuotaIncreaseRequest(input *RequestService
 //   Invalid input was provided.
 //
 //   * InvalidResourceStateException
-//   Invalid input was provided for the .
+//   The resource is in an invalid state.
 //
 //   * ServiceException
 //   Something went wrong.
@@ -2005,8 +2052,204 @@ func (c *ServiceQuotas) RequestServiceQuotaIncreaseWithContext(ctx aws.Context, 
 	return out, req.Send()
 }
 
+const opTagResource = "TagResource"
+
+// TagResourceRequest generates a "aws/request.Request" representing the
+// client's request for the TagResource operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See TagResource for more information on using the TagResource
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the TagResourceRequest method.
+//    req, resp := client.TagResourceRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/service-quotas-2019-06-24/TagResource
+func (c *ServiceQuotas) TagResourceRequest(input *TagResourceInput) (req *request.Request, output *TagResourceOutput) {
+	op := &request.Operation{
+		Name:       opTagResource,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &TagResourceInput{}
+	}
+
+	output = &TagResourceOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
+	return
+}
+
+// TagResource API operation for Service Quotas.
+//
+// Adds tags to the specified applied quota. You can include one or more tags
+// to add to the quota.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Service Quotas's
+// API operation TagResource for usage and error information.
+//
+// Returned Error Types:
+//   * TooManyRequestsException
+//   Due to throttling, the request was denied. Slow down the rate of request
+//   calls, or request an increase for this quota.
+//
+//   * NoSuchResourceException
+//   The specified resource does not exist.
+//
+//   * TooManyTagsException
+//   You've exceeded the number of tags allowed for a resource. For more information,
+//   see Tag restrictions (https://docs.aws.amazon.com/servicequotas/latest/userguide/sq-tagging.html#sq-tagging-restrictions)
+//   in the Service Quotas User Guide.
+//
+//   * TagPolicyViolationException
+//   The specified tag is a reserved word and cannot be used.
+//
+//   * IllegalArgumentException
+//   Invalid input was provided.
+//
+//   * AccessDeniedException
+//   You do not have sufficient permission to perform this action.
+//
+//   * ServiceException
+//   Something went wrong.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/service-quotas-2019-06-24/TagResource
+func (c *ServiceQuotas) TagResource(input *TagResourceInput) (*TagResourceOutput, error) {
+	req, out := c.TagResourceRequest(input)
+	return out, req.Send()
+}
+
+// TagResourceWithContext is the same as TagResource with the addition of
+// the ability to pass a context and additional request options.
+//
+// See TagResource for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *ServiceQuotas) TagResourceWithContext(ctx aws.Context, input *TagResourceInput, opts ...request.Option) (*TagResourceOutput, error) {
+	req, out := c.TagResourceRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opUntagResource = "UntagResource"
+
+// UntagResourceRequest generates a "aws/request.Request" representing the
+// client's request for the UntagResource operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See UntagResource for more information on using the UntagResource
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the UntagResourceRequest method.
+//    req, resp := client.UntagResourceRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/service-quotas-2019-06-24/UntagResource
+func (c *ServiceQuotas) UntagResourceRequest(input *UntagResourceInput) (req *request.Request, output *UntagResourceOutput) {
+	op := &request.Operation{
+		Name:       opUntagResource,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &UntagResourceInput{}
+	}
+
+	output = &UntagResourceOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
+	return
+}
+
+// UntagResource API operation for Service Quotas.
+//
+// Removes tags from the specified applied quota. You can specify one or more
+// tags to remove.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Service Quotas's
+// API operation UntagResource for usage and error information.
+//
+// Returned Error Types:
+//   * TooManyRequestsException
+//   Due to throttling, the request was denied. Slow down the rate of request
+//   calls, or request an increase for this quota.
+//
+//   * NoSuchResourceException
+//   The specified resource does not exist.
+//
+//   * IllegalArgumentException
+//   Invalid input was provided.
+//
+//   * AccessDeniedException
+//   You do not have sufficient permission to perform this action.
+//
+//   * ServiceException
+//   Something went wrong.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/service-quotas-2019-06-24/UntagResource
+func (c *ServiceQuotas) UntagResource(input *UntagResourceInput) (*UntagResourceOutput, error) {
+	req, out := c.UntagResourceRequest(input)
+	return out, req.Send()
+}
+
+// UntagResourceWithContext is the same as UntagResource with the addition of
+// the ability to pass a context and additional request options.
+//
+// See UntagResource for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *ServiceQuotas) UntagResourceWithContext(ctx aws.Context, input *UntagResourceInput, opts ...request.Option) (*UntagResourceOutput, error) {
+	req, out := c.UntagResourceRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 // The action you attempted is not allowed unless Service Access with Service
-// Quotas is enabled in your organization. To enable, call AssociateServiceQuotaTemplate.
+// Quotas is enabled in your organization.
 type AWSServiceAccessNotEnabledException struct {
 	_            struct{}                  `type:"structure"`
 	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
@@ -2014,12 +2257,20 @@ type AWSServiceAccessNotEnabledException struct {
 	Message_ *string `locationName:"Message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AWSServiceAccessNotEnabledException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AWSServiceAccessNotEnabledException) GoString() string {
 	return s.String()
 }
@@ -2062,7 +2313,7 @@ func (s *AWSServiceAccessNotEnabledException) RequestID() string {
 	return s.RespMetadata.RequestID
 }
 
-// You do not have sufficient access to perform this action.
+// You do not have sufficient permission to perform this action.
 type AccessDeniedException struct {
 	_            struct{}                  `type:"structure"`
 	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
@@ -2070,12 +2321,20 @@ type AccessDeniedException struct {
 	Message_ *string `locationName:"Message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AccessDeniedException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AccessDeniedException) GoString() string {
 	return s.String()
 }
@@ -2122,12 +2381,20 @@ type AssociateServiceQuotaTemplateInput struct {
 	_ struct{} `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AssociateServiceQuotaTemplateInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AssociateServiceQuotaTemplateInput) GoString() string {
 	return s.String()
 }
@@ -2136,12 +2403,20 @@ type AssociateServiceQuotaTemplateOutput struct {
 	_ struct{} `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AssociateServiceQuotaTemplateOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AssociateServiceQuotaTemplateOutput) GoString() string {
 	return s.String()
 }
@@ -2149,28 +2424,36 @@ func (s AssociateServiceQuotaTemplateOutput) GoString() string {
 type DeleteServiceQuotaIncreaseRequestFromTemplateInput struct {
 	_ struct{} `type:"structure"`
 
-	// Specifies the AWS Region for the quota that you want to delete.
+	// The AWS Region.
 	//
 	// AwsRegion is a required field
 	AwsRegion *string `min:"1" type:"string" required:"true"`
 
-	// Specifies the code for the quota that you want to delete.
+	// The quota identifier.
 	//
 	// QuotaCode is a required field
 	QuotaCode *string `min:"1" type:"string" required:"true"`
 
-	// Specifies the code for the service that you want to delete.
+	// The service identifier.
 	//
 	// ServiceCode is a required field
 	ServiceCode *string `min:"1" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteServiceQuotaIncreaseRequestFromTemplateInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteServiceQuotaIncreaseRequestFromTemplateInput) GoString() string {
 	return s.String()
 }
@@ -2225,12 +2508,20 @@ type DeleteServiceQuotaIncreaseRequestFromTemplateOutput struct {
 	_ struct{} `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteServiceQuotaIncreaseRequestFromTemplateOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteServiceQuotaIncreaseRequestFromTemplateOutput) GoString() string {
 	return s.String()
 }
@@ -2243,12 +2534,20 @@ type DependencyAccessDeniedException struct {
 	Message_ *string `locationName:"Message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DependencyAccessDeniedException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DependencyAccessDeniedException) GoString() string {
 	return s.String()
 }
@@ -2295,12 +2594,20 @@ type DisassociateServiceQuotaTemplateInput struct {
 	_ struct{} `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DisassociateServiceQuotaTemplateInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DisassociateServiceQuotaTemplateInput) GoString() string {
 	return s.String()
 }
@@ -2309,46 +2616,59 @@ type DisassociateServiceQuotaTemplateOutput struct {
 	_ struct{} `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DisassociateServiceQuotaTemplateOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DisassociateServiceQuotaTemplateOutput) GoString() string {
 	return s.String()
 }
 
-// Returns an error that explains why the action did not succeed.
+// An error that explains why an action did not succeed.
 type ErrorReason struct {
 	_ struct{} `type:"structure"`
 
-	// Service Quotas returns the following error values.
+	// Service Quotas returns the following error values:
 	//
-	// DEPENDENCY_ACCESS_DENIED_ERROR is returned when the caller does not have
-	// permission to call the service or service quota. To resolve the error, you
-	// need permission to access the service or service quota.
+	//    * DEPENDENCY_ACCESS_DENIED_ERROR - The caller does not have the required
+	//    permissions to complete the action. To resolve the error, you must have
+	//    permission to access the service or quota.
 	//
-	// DEPENDENCY_THROTTLING_ERROR is returned when the service being called is
-	// throttling Service Quotas.
+	//    * DEPENDENCY_THROTTLING_ERROR - The service is throttling Service Quotas.
 	//
-	// DEPENDENCY_SERVICE_ERROR is returned when the service being called has availability
-	// issues.
+	//    * DEPENDENCY_SERVICE_ERROR - The service is not available.
 	//
-	// SERVICE_QUOTA_NOT_AVAILABLE_ERROR is returned when there was an error in
-	// Service Quotas.
+	//    * SERVICE_QUOTA_NOT_AVAILABLE_ERROR - There was an error in Service Quotas.
 	ErrorCode *string `type:"string" enum:"ErrorCode"`
 
-	// The error message that provides more detail.
+	// The error message.
 	ErrorMessage *string `type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ErrorReason) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ErrorReason) GoString() string {
 	return s.String()
 }
@@ -2368,23 +2688,31 @@ func (s *ErrorReason) SetErrorMessage(v string) *ErrorReason {
 type GetAWSDefaultServiceQuotaInput struct {
 	_ struct{} `type:"structure"`
 
-	// Identifies the service quota you want to select.
+	// The quota identifier.
 	//
 	// QuotaCode is a required field
 	QuotaCode *string `min:"1" type:"string" required:"true"`
 
-	// Specifies the service that you want to use.
+	// The service identifier.
 	//
 	// ServiceCode is a required field
 	ServiceCode *string `min:"1" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetAWSDefaultServiceQuotaInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetAWSDefaultServiceQuotaInput) GoString() string {
 	return s.String()
 }
@@ -2426,16 +2754,24 @@ func (s *GetAWSDefaultServiceQuotaInput) SetServiceCode(v string) *GetAWSDefault
 type GetAWSDefaultServiceQuotaOutput struct {
 	_ struct{} `type:"structure"`
 
-	// Returns the ServiceQuota object which contains all values for a quota.
+	// Information about the quota.
 	Quota *ServiceQuota `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetAWSDefaultServiceQuotaOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetAWSDefaultServiceQuotaOutput) GoString() string {
 	return s.String()
 }
@@ -2450,12 +2786,20 @@ type GetAssociationForServiceQuotaTemplateInput struct {
 	_ struct{} `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetAssociationForServiceQuotaTemplateInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetAssociationForServiceQuotaTemplateInput) GoString() string {
 	return s.String()
 }
@@ -2463,18 +2807,25 @@ func (s GetAssociationForServiceQuotaTemplateInput) GoString() string {
 type GetAssociationForServiceQuotaTemplateOutput struct {
 	_ struct{} `type:"structure"`
 
-	// Specifies whether the template is ASSOCIATED or DISASSOCIATED. If the template
-	// is ASSOCIATED, then it requests service quota increases for all new accounts
-	// created in your organization.
+	// The association status. If the status is ASSOCIATED, the quota increase requests
+	// in the template are automatically applied to new accounts in your organization.
 	ServiceQuotaTemplateAssociationStatus *string `type:"string" enum:"ServiceQuotaTemplateAssociationStatus"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetAssociationForServiceQuotaTemplateOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetAssociationForServiceQuotaTemplateOutput) GoString() string {
 	return s.String()
 }
@@ -2488,18 +2839,26 @@ func (s *GetAssociationForServiceQuotaTemplateOutput) SetServiceQuotaTemplateAss
 type GetRequestedServiceQuotaChangeInput struct {
 	_ struct{} `type:"structure"`
 
-	// Identifies the quota increase request.
+	// The ID of the quota increase request.
 	//
 	// RequestId is a required field
 	RequestId *string `min:"1" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetRequestedServiceQuotaChangeInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetRequestedServiceQuotaChangeInput) GoString() string {
 	return s.String()
 }
@@ -2529,17 +2888,24 @@ func (s *GetRequestedServiceQuotaChangeInput) SetRequestId(v string) *GetRequest
 type GetRequestedServiceQuotaChangeOutput struct {
 	_ struct{} `type:"structure"`
 
-	// Returns the RequestedServiceQuotaChange object for the specific increase
-	// request.
+	// Information about the quota increase request.
 	RequestedQuota *RequestedServiceQuotaChange `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetRequestedServiceQuotaChangeOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetRequestedServiceQuotaChangeOutput) GoString() string {
 	return s.String()
 }
@@ -2553,28 +2919,36 @@ func (s *GetRequestedServiceQuotaChangeOutput) SetRequestedQuota(v *RequestedSer
 type GetServiceQuotaIncreaseRequestFromTemplateInput struct {
 	_ struct{} `type:"structure"`
 
-	// Specifies the AWS Region for the quota that you want to use.
+	// The AWS Region.
 	//
 	// AwsRegion is a required field
 	AwsRegion *string `min:"1" type:"string" required:"true"`
 
-	// Specifies the quota you want.
+	// The quota identifier.
 	//
 	// QuotaCode is a required field
 	QuotaCode *string `min:"1" type:"string" required:"true"`
 
-	// Specifies the service that you want to use.
+	// The service identifier.
 	//
 	// ServiceCode is a required field
 	ServiceCode *string `min:"1" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetServiceQuotaIncreaseRequestFromTemplateInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetServiceQuotaIncreaseRequestFromTemplateInput) GoString() string {
 	return s.String()
 }
@@ -2628,16 +3002,24 @@ func (s *GetServiceQuotaIncreaseRequestFromTemplateInput) SetServiceCode(v strin
 type GetServiceQuotaIncreaseRequestFromTemplateOutput struct {
 	_ struct{} `type:"structure"`
 
-	// This object contains the details about the quota increase request.
+	// Information about the quota increase request.
 	ServiceQuotaIncreaseRequestInTemplate *ServiceQuotaIncreaseRequestInTemplate `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetServiceQuotaIncreaseRequestFromTemplateOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetServiceQuotaIncreaseRequestFromTemplateOutput) GoString() string {
 	return s.String()
 }
@@ -2651,23 +3033,31 @@ func (s *GetServiceQuotaIncreaseRequestFromTemplateOutput) SetServiceQuotaIncrea
 type GetServiceQuotaInput struct {
 	_ struct{} `type:"structure"`
 
-	// Identifies the service quota you want to select.
+	// The quota identifier.
 	//
 	// QuotaCode is a required field
 	QuotaCode *string `min:"1" type:"string" required:"true"`
 
-	// Specifies the service that you want to use.
+	// The service identifier.
 	//
 	// ServiceCode is a required field
 	ServiceCode *string `min:"1" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetServiceQuotaInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetServiceQuotaInput) GoString() string {
 	return s.String()
 }
@@ -2709,16 +3099,24 @@ func (s *GetServiceQuotaInput) SetServiceCode(v string) *GetServiceQuotaInput {
 type GetServiceQuotaOutput struct {
 	_ struct{} `type:"structure"`
 
-	// Returns the ServiceQuota object which contains all values for a quota.
+	// Information about the quota.
 	Quota *ServiceQuota `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetServiceQuotaOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetServiceQuotaOutput) GoString() string {
 	return s.String()
 }
@@ -2737,12 +3135,20 @@ type IllegalArgumentException struct {
 	Message_ *string `locationName:"Message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s IllegalArgumentException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s IllegalArgumentException) GoString() string {
 	return s.String()
 }
@@ -2793,12 +3199,20 @@ type InvalidPaginationTokenException struct {
 	Message_ *string `locationName:"Message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s InvalidPaginationTokenException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s InvalidPaginationTokenException) GoString() string {
 	return s.String()
 }
@@ -2841,7 +3255,7 @@ func (s *InvalidPaginationTokenException) RequestID() string {
 	return s.RespMetadata.RequestID
 }
 
-// Invalid input was provided for the .
+// The resource is in an invalid state.
 type InvalidResourceStateException struct {
 	_            struct{}                  `type:"structure"`
 	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
@@ -2849,12 +3263,20 @@ type InvalidResourceStateException struct {
 	Message_ *string `locationName:"Message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s InvalidResourceStateException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s InvalidResourceStateException) GoString() string {
 	return s.String()
 }
@@ -2900,38 +3322,34 @@ func (s *InvalidResourceStateException) RequestID() string {
 type ListAWSDefaultServiceQuotasInput struct {
 	_ struct{} `type:"structure"`
 
-	// (Optional) Limits the number of results that you want to include in the response.
-	// If you don't include this parameter, the response defaults to a value that's
-	// specific to the operation. If additional items exist beyond the specified
-	// maximum, the NextToken element is present and has a value (isn't null). Include
-	// that value as the NextToken request parameter in the call to the operation
-	// to get the next part of the results. You should check NextToken after every
-	// operation to ensure that you receive all of the results.
+	// The maximum number of results to return with a single call. To retrieve the
+	// remaining results, if any, make another call with the token returned from
+	// this call.
 	MaxResults *int64 `min:"1" type:"integer"`
 
-	// (Optional) Use this parameter in a request if you receive a NextToken response
-	// in a previous request that indicates that there's more output available.
-	// In a subsequent call, set it to the value of the previous call's NextToken
-	// response to indicate where the output should continue from. If additional
-	// items exist beyond the specified maximum, the NextToken element is present
-	// and has a value (isn't null). Include that value as the NextToken request
-	// parameter in the call to the operation to get the next part of the results.
-	// You should check NextToken after every operation to ensure that you receive
-	// all of the results.
+	// The token for the next page of results.
 	NextToken *string `type:"string"`
 
-	// Specifies the service that you want to use.
+	// The service identifier.
 	//
 	// ServiceCode is a required field
 	ServiceCode *string `min:"1" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListAWSDefaultServiceQuotasInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListAWSDefaultServiceQuotasInput) GoString() string {
 	return s.String()
 }
@@ -2976,22 +3394,28 @@ func (s *ListAWSDefaultServiceQuotasInput) SetServiceCode(v string) *ListAWSDefa
 type ListAWSDefaultServiceQuotasOutput struct {
 	_ struct{} `type:"structure"`
 
-	// (Optional) Use this parameter in a request if you receive a NextToken response
-	// in a previous request that indicates that there's more output available.
-	// In a subsequent call, set it to the value of the previous call's NextToken
-	// response to indicate where the output should continue from.
+	// The token to use to retrieve the next page of results. This value is null
+	// when there are no more results to return.
 	NextToken *string `type:"string"`
 
-	// A list of the quotas in the account with the AWS default values.
+	// Information about the quotas.
 	Quotas []*ServiceQuota `type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListAWSDefaultServiceQuotasOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListAWSDefaultServiceQuotasOutput) GoString() string {
 	return s.String()
 }
@@ -3011,41 +3435,42 @@ func (s *ListAWSDefaultServiceQuotasOutput) SetQuotas(v []*ServiceQuota) *ListAW
 type ListRequestedServiceQuotaChangeHistoryByQuotaInput struct {
 	_ struct{} `type:"structure"`
 
-	// (Optional) Limits the number of results that you want to include in the response.
-	// If you don't include this parameter, the response defaults to a value that's
-	// specific to the operation. If additional items exist beyond the specified
-	// maximum, the NextToken element is present and has a value (isn't null). Include
-	// that value as the NextToken request parameter in the call to the operation
-	// to get the next part of the results. You should check NextToken after every
-	// operation to ensure that you receive all of the results.
+	// The maximum number of results to return with a single call. To retrieve the
+	// remaining results, if any, make another call with the token returned from
+	// this call.
 	MaxResults *int64 `min:"1" type:"integer"`
 
-	// (Optional) Use this parameter in a request if you receive a NextToken response
-	// in a previous request that indicates that there's more output available.
-	// In a subsequent call, set it to the value of the previous call's NextToken
-	// response to indicate where the output should continue from.
+	// The token for the next page of results.
 	NextToken *string `type:"string"`
 
-	// Specifies the service quota that you want to use
+	// The quota identifier.
 	//
 	// QuotaCode is a required field
 	QuotaCode *string `min:"1" type:"string" required:"true"`
 
-	// Specifies the service that you want to use.
+	// The service identifier.
 	//
 	// ServiceCode is a required field
 	ServiceCode *string `min:"1" type:"string" required:"true"`
 
-	// Specifies the status value of the quota increase request.
+	// The status value of the quota increase request.
 	Status *string `type:"string" enum:"RequestStatus"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListRequestedServiceQuotaChangeHistoryByQuotaInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListRequestedServiceQuotaChangeHistoryByQuotaInput) GoString() string {
 	return s.String()
 }
@@ -3108,25 +3533,28 @@ func (s *ListRequestedServiceQuotaChangeHistoryByQuotaInput) SetStatus(v string)
 type ListRequestedServiceQuotaChangeHistoryByQuotaOutput struct {
 	_ struct{} `type:"structure"`
 
-	// If present in the response, this value indicates there's more output available
-	// that what's included in the current response. This can occur even when the
-	// response includes no values at all, such as when you ask for a filtered view
-	// of a very long list. Use this value in the NextToken request parameter in
-	// a subsequent call to the operation to continue processing and get the next
-	// part of the output. You should repeat this until the NextToken response element
-	// comes back empty (as null).
+	// The token to use to retrieve the next page of results. This value is null
+	// when there are no more results to return.
 	NextToken *string `type:"string"`
 
-	// Returns a list of service quota requests.
+	// Information about the quota increase requests.
 	RequestedQuotas []*RequestedServiceQuotaChange `type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListRequestedServiceQuotaChangeHistoryByQuotaOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListRequestedServiceQuotaChangeHistoryByQuotaOutput) GoString() string {
 	return s.String()
 }
@@ -3146,34 +3574,35 @@ func (s *ListRequestedServiceQuotaChangeHistoryByQuotaOutput) SetRequestedQuotas
 type ListRequestedServiceQuotaChangeHistoryInput struct {
 	_ struct{} `type:"structure"`
 
-	// (Optional) Limits the number of results that you want to include in the response.
-	// If you don't include this parameter, the response defaults to a value that's
-	// specific to the operation. If additional items exist beyond the specified
-	// maximum, the NextToken element is present and has a value (isn't null). Include
-	// that value as the NextToken request parameter in the call to the operation
-	// to get the next part of the results. You should check NextToken after every
-	// operation to ensure that you receive all of the results.
+	// The maximum number of results to return with a single call. To retrieve the
+	// remaining results, if any, make another call with the token returned from
+	// this call.
 	MaxResults *int64 `min:"1" type:"integer"`
 
-	// (Optional) Use this parameter in a request if you receive a NextToken response
-	// in a previous request that indicates that there's more output available.
-	// In a subsequent call, set it to the value of the previous call's NextToken
-	// response to indicate where the output should continue from.
+	// The token for the next page of results.
 	NextToken *string `type:"string"`
 
-	// Specifies the service that you want to use.
+	// The service identifier.
 	ServiceCode *string `min:"1" type:"string"`
 
-	// Specifies the status value of the quota increase request.
+	// The status of the quota increase request.
 	Status *string `type:"string" enum:"RequestStatus"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListRequestedServiceQuotaChangeHistoryInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListRequestedServiceQuotaChangeHistoryInput) GoString() string {
 	return s.String()
 }
@@ -3221,25 +3650,28 @@ func (s *ListRequestedServiceQuotaChangeHistoryInput) SetStatus(v string) *ListR
 type ListRequestedServiceQuotaChangeHistoryOutput struct {
 	_ struct{} `type:"structure"`
 
-	// If present in the response, this value indicates there's more output available
-	// that what's included in the current response. This can occur even when the
-	// response includes no values at all, such as when you ask for a filtered view
-	// of a very long list. Use this value in the NextToken request parameter in
-	// a subsequent call to the operation to continue processing and get the next
-	// part of the output. You should repeat this until the NextToken response element
-	// comes back empty (as null).
+	// The token to use to retrieve the next page of results. This value is null
+	// when there are no more results to return.
 	NextToken *string `type:"string"`
 
-	// Returns a list of service quota requests.
+	// Information about the quota increase requests.
 	RequestedQuotas []*RequestedServiceQuotaChange `type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListRequestedServiceQuotaChangeHistoryOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListRequestedServiceQuotaChangeHistoryOutput) GoString() string {
 	return s.String()
 }
@@ -3259,35 +3691,35 @@ func (s *ListRequestedServiceQuotaChangeHistoryOutput) SetRequestedQuotas(v []*R
 type ListServiceQuotaIncreaseRequestsInTemplateInput struct {
 	_ struct{} `type:"structure"`
 
-	// Specifies the AWS Region for the quota that you want to use.
+	// The AWS Region.
 	AwsRegion *string `min:"1" type:"string"`
 
-	// (Optional) Limits the number of results that you want to include in the response.
-	// If you don't include this parameter, the response defaults to a value that's
-	// specific to the operation. If additional items exist beyond the specified
-	// maximum, the NextToken element is present and has a value (isn't null). Include
-	// that value as the NextToken request parameter in the call to the operation
-	// to get the next part of the results. You should check NextToken after every
-	// operation to ensure that you receive all of the results.
+	// The maximum number of results to return with a single call. To retrieve the
+	// remaining results, if any, make another call with the token returned from
+	// this call.
 	MaxResults *int64 `min:"1" type:"integer"`
 
-	// (Optional) Use this parameter in a request if you receive a NextToken response
-	// in a previous request that indicates that there's more output available.
-	// In a subsequent call, set it to the value of the previous call's NextToken
-	// response to indicate where the output should continue from.
+	// The token for the next page of results.
 	NextToken *string `type:"string"`
 
-	// The identifier for a service. When performing an operation, use the ServiceCode
-	// to specify a particular service.
+	// The service identifier.
 	ServiceCode *string `min:"1" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListServiceQuotaIncreaseRequestsInTemplateInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListServiceQuotaIncreaseRequestsInTemplateInput) GoString() string {
 	return s.String()
 }
@@ -3338,25 +3770,28 @@ func (s *ListServiceQuotaIncreaseRequestsInTemplateInput) SetServiceCode(v strin
 type ListServiceQuotaIncreaseRequestsInTemplateOutput struct {
 	_ struct{} `type:"structure"`
 
-	// If present in the response, this value indicates there's more output available
-	// that what's included in the current response. This can occur even when the
-	// response includes no values at all, such as when you ask for a filtered view
-	// of a very long list. Use this value in the NextToken request parameter in
-	// a subsequent call to the operation to continue processing and get the next
-	// part of the output. You should repeat this until the NextToken response element
-	// comes back empty (as null).
+	// The token to use to retrieve the next page of results. This value is null
+	// when there are no more results to return.
 	NextToken *string `type:"string"`
 
-	// Returns the list of values of the quota increase request in the template.
+	// Information about the quota increase requests.
 	ServiceQuotaIncreaseRequestInTemplateList []*ServiceQuotaIncreaseRequestInTemplate `type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListServiceQuotaIncreaseRequestsInTemplateOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListServiceQuotaIncreaseRequestsInTemplateOutput) GoString() string {
 	return s.String()
 }
@@ -3376,34 +3811,34 @@ func (s *ListServiceQuotaIncreaseRequestsInTemplateOutput) SetServiceQuotaIncrea
 type ListServiceQuotasInput struct {
 	_ struct{} `type:"structure"`
 
-	// (Optional) Limits the number of results that you want to include in the response.
-	// If you don't include this parameter, the response defaults to a value that's
-	// specific to the operation. If additional items exist beyond the specified
-	// maximum, the NextToken element is present and has a value (isn't null). Include
-	// that value as the NextToken request parameter in the call to the operation
-	// to get the next part of the results. You should check NextToken after every
-	// operation to ensure that you receive all of the results.
+	// The maximum number of results to return with a single call. To retrieve the
+	// remaining results, if any, make another call with the token returned from
+	// this call.
 	MaxResults *int64 `min:"1" type:"integer"`
 
-	// (Optional) Use this parameter in a request if you receive a NextToken response
-	// in a previous request that indicates that there's more output available.
-	// In a subsequent call, set it to the value of the previous call's NextToken
-	// response to indicate where the output should continue from.
+	// The token for the next page of results.
 	NextToken *string `type:"string"`
 
-	// The identifier for a service. When performing an operation, use the ServiceCode
-	// to specify a particular service.
+	// The service identifier.
 	//
 	// ServiceCode is a required field
 	ServiceCode *string `min:"1" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListServiceQuotasInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListServiceQuotasInput) GoString() string {
 	return s.String()
 }
@@ -3448,26 +3883,28 @@ func (s *ListServiceQuotasInput) SetServiceCode(v string) *ListServiceQuotasInpu
 type ListServiceQuotasOutput struct {
 	_ struct{} `type:"structure"`
 
-	// If present in the response, this value indicates there's more output available
-	// that what's included in the current response. This can occur even when the
-	// response includes no values at all, such as when you ask for a filtered view
-	// of a very long list. Use this value in the NextToken request parameter in
-	// a subsequent call to the operation to continue processing and get the next
-	// part of the output. You should repeat this until the NextToken response element
-	// comes back empty (as null).
+	// The token to use to retrieve the next page of results. This value is null
+	// when there are no more results to return.
 	NextToken *string `type:"string"`
 
-	// The response information for a quota lists all attribute information for
-	// the quota.
+	// Information about the quotas.
 	Quotas []*ServiceQuota `type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListServiceQuotasOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListServiceQuotasOutput) GoString() string {
 	return s.String()
 }
@@ -3487,28 +3924,29 @@ func (s *ListServiceQuotasOutput) SetQuotas(v []*ServiceQuota) *ListServiceQuota
 type ListServicesInput struct {
 	_ struct{} `type:"structure"`
 
-	// (Optional) Limits the number of results that you want to include in the response.
-	// If you don't include this parameter, the response defaults to a value that's
-	// specific to the operation. If additional items exist beyond the specified
-	// maximum, the NextToken element is present and has a value (isn't null). Include
-	// that value as the NextToken request parameter in the call to the operation
-	// to get the next part of the results. You should check NextToken after every
-	// operation to ensure that you receive all of the results.
+	// The maximum number of results to return with a single call. To retrieve the
+	// remaining results, if any, make another call with the token returned from
+	// this call.
 	MaxResults *int64 `min:"1" type:"integer"`
 
-	// (Optional) Use this parameter in a request if you receive a NextToken response
-	// in a previous request that indicates that there's more output available.
-	// In a subsequent call, set it to the value of the previous call's NextToken
-	// response to indicate where the output should continue from.
+	// The token for the next page of results.
 	NextToken *string `type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListServicesInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListServicesInput) GoString() string {
 	return s.String()
 }
@@ -3541,25 +3979,28 @@ func (s *ListServicesInput) SetNextToken(v string) *ListServicesInput {
 type ListServicesOutput struct {
 	_ struct{} `type:"structure"`
 
-	// If present in the response, this value indicates there's more output available
-	// that what's included in the current response. This can occur even when the
-	// response includes no values at all, such as when you ask for a filtered view
-	// of a very long list. Use this value in the NextToken request parameter in
-	// a subsequent call to the operation to continue processing and get the next
-	// part of the output. You should repeat this until the NextToken response element
-	// comes back empty (as null).
+	// The token to use to retrieve the next page of results. This value is null
+	// when there are no more results to return.
 	NextToken *string `type:"string"`
 
-	// Returns a list of services.
+	// Information about the services.
 	Services []*ServiceInfo `type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListServicesOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListServicesOutput) GoString() string {
 	return s.String()
 }
@@ -3576,38 +4017,122 @@ func (s *ListServicesOutput) SetServices(v []*ServiceInfo) *ListServicesOutput {
 	return s
 }
 
-// A structure that uses CloudWatch metrics to gather data about the service
-// quota.
+type ListTagsForResourceInput struct {
+	_ struct{} `type:"structure"`
+
+	// The Amazon Resource Name (ARN) for the applied quota for which you want to
+	// list tags. You can get this information by using the Service Quotas console,
+	// or by listing the quotas using the list-service-quotas (https://docs.aws.amazon.com/cli/latest/reference/service-quotas/list-service-quotas.html)
+	// AWS CLI command or the ListServiceQuotas (https://docs.aws.amazon.com/servicequotas/2019-06-24/apireference/API_ListServiceQuotas.html)
+	// AWS API operation.
+	//
+	// ResourceARN is a required field
+	ResourceARN *string `min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListTagsForResourceInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListTagsForResourceInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ListTagsForResourceInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ListTagsForResourceInput"}
+	if s.ResourceARN == nil {
+		invalidParams.Add(request.NewErrParamRequired("ResourceARN"))
+	}
+	if s.ResourceARN != nil && len(*s.ResourceARN) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ResourceARN", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetResourceARN sets the ResourceARN field's value.
+func (s *ListTagsForResourceInput) SetResourceARN(v string) *ListTagsForResourceInput {
+	s.ResourceARN = &v
+	return s
+}
+
+type ListTagsForResourceOutput struct {
+	_ struct{} `type:"structure"`
+
+	// A complex data type that contains zero or more tag elements.
+	Tags []*Tag `type:"list"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListTagsForResourceOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListTagsForResourceOutput) GoString() string {
+	return s.String()
+}
+
+// SetTags sets the Tags field's value.
+func (s *ListTagsForResourceOutput) SetTags(v []*Tag) *ListTagsForResourceOutput {
+	s.Tags = v
+	return s
+}
+
+// Information about the CloudWatch metric that reflects quota usage.
 type MetricInfo struct {
 	_ struct{} `type:"structure"`
 
-	// A dimension is a name/value pair that is part of the identity of a metric.
-	// Every metric has specific characteristics that describe it, and you can think
-	// of dimensions as categories for those characteristics. These dimensions are
-	// part of the CloudWatch Metric Identity that measures usage against a particular
-	// service quota.
+	// The metric dimension. This is a name/value pair that is part of the identity
+	// of a metric.
 	MetricDimensions map[string]*string `type:"map"`
 
-	// The name of the CloudWatch metric that measures usage of a service quota.
-	// This is a required field.
+	// The name of the metric.
 	MetricName *string `type:"string"`
 
-	// The namespace of the metric. The namespace is a container for CloudWatch
-	// metrics. You can specify a name for the namespace when you create a metric.
+	// The namespace of the metric.
 	MetricNamespace *string `type:"string"`
 
-	// Statistics are metric data aggregations over specified periods of time. This
-	// is the recommended statistic to use when comparing usage in the CloudWatch
-	// Metric against your Service Quota.
+	// The metric statistic that we recommend you use when determining quota usage.
 	MetricStatisticRecommendation *string `min:"1" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s MetricInfo) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s MetricInfo) GoString() string {
 	return s.String()
 }
@@ -3644,12 +4169,20 @@ type NoAvailableOrganizationException struct {
 	Message_ *string `locationName:"Message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s NoAvailableOrganizationException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s NoAvailableOrganizationException) GoString() string {
 	return s.String()
 }
@@ -3700,12 +4233,20 @@ type NoSuchResourceException struct {
 	Message_ *string `locationName:"Message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s NoSuchResourceException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s NoSuchResourceException) GoString() string {
 	return s.String()
 }
@@ -3748,8 +4289,7 @@ func (s *NoSuchResourceException) RequestID() string {
 	return s.RespMetadata.RequestID
 }
 
-// The organization that your account belongs to, is not in All Features mode.
-// To enable all features mode, see EnableAllFeatures (https://docs.aws.amazon.com/organizations/latest/APIReference/API_EnableAllFeatures.html).
+// The organization that your account belongs to is not in All Features mode.
 type OrganizationNotInAllFeaturesModeException struct {
 	_            struct{}                  `type:"structure"`
 	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
@@ -3757,12 +4297,20 @@ type OrganizationNotInAllFeaturesModeException struct {
 	Message_ *string `locationName:"Message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s OrganizationNotInAllFeaturesModeException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s OrganizationNotInAllFeaturesModeException) GoString() string {
 	return s.String()
 }
@@ -3808,33 +4356,41 @@ func (s *OrganizationNotInAllFeaturesModeException) RequestID() string {
 type PutServiceQuotaIncreaseRequestIntoTemplateInput struct {
 	_ struct{} `type:"structure"`
 
-	// Specifies the AWS Region for the quota.
+	// The AWS Region.
 	//
 	// AwsRegion is a required field
 	AwsRegion *string `min:"1" type:"string" required:"true"`
 
-	// Specifies the new, increased value for the quota.
+	// The new, increased value for the quota.
 	//
 	// DesiredValue is a required field
 	DesiredValue *float64 `type:"double" required:"true"`
 
-	// Specifies the service quota that you want to use.
+	// The quota identifier.
 	//
 	// QuotaCode is a required field
 	QuotaCode *string `min:"1" type:"string" required:"true"`
 
-	// Specifies the service that you want to use.
+	// The service identifier.
 	//
 	// ServiceCode is a required field
 	ServiceCode *string `min:"1" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s PutServiceQuotaIncreaseRequestIntoTemplateInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s PutServiceQuotaIncreaseRequestIntoTemplateInput) GoString() string {
 	return s.String()
 }
@@ -3897,16 +4453,24 @@ func (s *PutServiceQuotaIncreaseRequestIntoTemplateInput) SetServiceCode(v strin
 type PutServiceQuotaIncreaseRequestIntoTemplateOutput struct {
 	_ struct{} `type:"structure"`
 
-	// A structure that contains information about one service quota increase request.
+	// Information about the quota increase request.
 	ServiceQuotaIncreaseRequestInTemplate *ServiceQuotaIncreaseRequestInTemplate `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s PutServiceQuotaIncreaseRequestIntoTemplateOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s PutServiceQuotaIncreaseRequestIntoTemplateOutput) GoString() string {
 	return s.String()
 }
@@ -3927,12 +4491,20 @@ type QuotaExceededException struct {
 	Message_ *string `locationName:"Message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s QuotaExceededException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s QuotaExceededException) GoString() string {
 	return s.String()
 }
@@ -3975,23 +4547,31 @@ func (s *QuotaExceededException) RequestID() string {
 	return s.RespMetadata.RequestID
 }
 
-// A structure that contains information about the quota period.
+// Information about the quota period.
 type QuotaPeriod struct {
 	_ struct{} `type:"structure"`
 
-	// The time unit of a period.
+	// The time unit.
 	PeriodUnit *string `type:"string" enum:"PeriodUnit"`
 
-	// The value of a period.
+	// The value.
 	PeriodValue *int64 `type:"integer"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s QuotaPeriod) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s QuotaPeriod) GoString() string {
 	return s.String()
 }
@@ -4011,28 +4591,36 @@ func (s *QuotaPeriod) SetPeriodValue(v int64) *QuotaPeriod {
 type RequestServiceQuotaIncreaseInput struct {
 	_ struct{} `type:"structure"`
 
-	// Specifies the value submitted in the service quota increase request.
+	// The new, increased value for the quota.
 	//
 	// DesiredValue is a required field
 	DesiredValue *float64 `type:"double" required:"true"`
 
-	// Specifies the service quota that you want to use.
+	// The quota identifier.
 	//
 	// QuotaCode is a required field
 	QuotaCode *string `min:"1" type:"string" required:"true"`
 
-	// Specifies the service that you want to use.
+	// The service identifier.
 	//
 	// ServiceCode is a required field
 	ServiceCode *string `min:"1" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s RequestServiceQuotaIncreaseInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s RequestServiceQuotaIncreaseInput) GoString() string {
 	return s.String()
 }
@@ -4083,16 +4671,24 @@ func (s *RequestServiceQuotaIncreaseInput) SetServiceCode(v string) *RequestServ
 type RequestServiceQuotaIncreaseOutput struct {
 	_ struct{} `type:"structure"`
 
-	// Returns a list of service quota requests.
+	// Information about the quota increase request.
 	RequestedQuota *RequestedServiceQuotaChange `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s RequestServiceQuotaIncreaseOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s RequestServiceQuotaIncreaseOutput) GoString() string {
 	return s.String()
 }
@@ -4103,61 +4699,68 @@ func (s *RequestServiceQuotaIncreaseOutput) SetRequestedQuota(v *RequestedServic
 	return s
 }
 
-// A structure that contains information about a requested change for a quota.
+// Information about a quota increase request.
 type RequestedServiceQuotaChange struct {
 	_ struct{} `type:"structure"`
 
-	// The case Id for the service quota increase request.
+	// The case ID.
 	CaseId *string `type:"string"`
 
-	// The date and time when the service quota increase request was received and
-	// the case Id was created.
+	// The date and time when the quota increase request was received and the case
+	// ID was created.
 	Created *time.Time `type:"timestamp"`
 
-	// New increased value for the service quota.
+	// The new, increased value for the quota.
 	DesiredValue *float64 `type:"double"`
 
-	// Identifies if the quota is global.
+	// Indicates whether the quota is global.
 	GlobalQuota *bool `type:"boolean"`
 
-	// The unique identifier of a requested service quota change.
+	// The unique identifier.
 	Id *string `min:"1" type:"string"`
 
-	// The date and time of the most recent change in the service quota increase
-	// request.
+	// The date and time of the most recent change.
 	LastUpdated *time.Time `type:"timestamp"`
 
-	// The Amazon Resource Name (ARN) of the service quota.
+	// The Amazon Resource Name (ARN) of the quota.
 	QuotaArn *string `type:"string"`
 
-	// Specifies the service quota that you want to use.
+	// The quota identifier.
 	QuotaCode *string `min:"1" type:"string"`
 
-	// Name of the service quota.
+	// The quota name.
 	QuotaName *string `type:"string"`
 
-	// The IAM identity who submitted the service quota increase request.
+	// The IAM identity of the requester.
 	Requester *string `type:"string"`
 
-	// Specifies the service that you want to use.
+	// The service identifier.
 	ServiceCode *string `min:"1" type:"string"`
 
-	// The name of the AWS service specified in the increase request.
+	// The service name.
 	ServiceName *string `type:"string"`
 
-	// State of the service quota increase request.
+	// The state of the quota increase request.
 	Status *string `type:"string" enum:"RequestStatus"`
 
-	// Specifies the unit used for the quota.
+	// The unit of measurement.
 	Unit *string `type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s RequestedServiceQuotaChange) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s RequestedServiceQuotaChange) GoString() string {
 	return s.String()
 }
@@ -4254,12 +4857,20 @@ type ResourceAlreadyExistsException struct {
 	Message_ *string `locationName:"Message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ResourceAlreadyExistsException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ResourceAlreadyExistsException) GoString() string {
 	return s.String()
 }
@@ -4310,12 +4921,20 @@ type ServiceException struct {
 	Message_ *string `locationName:"Message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ServiceException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ServiceException) GoString() string {
 	return s.String()
 }
@@ -4358,25 +4977,31 @@ func (s *ServiceException) RequestID() string {
 	return s.RespMetadata.RequestID
 }
 
-// A structure that contains the ServiceName and ServiceCode. It does not include
-// all details of the service quota. To get those values, use the ListServiceQuotas
-// operation.
+// Information about a service.
 type ServiceInfo struct {
 	_ struct{} `type:"structure"`
 
-	// Specifies the service that you want to use.
+	// The service identifier.
 	ServiceCode *string `min:"1" type:"string"`
 
-	// The name of the AWS service specified in the increase request.
+	// The service name.
 	ServiceName *string `type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ServiceInfo) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ServiceInfo) GoString() string {
 	return s.String()
 }
@@ -4393,54 +5018,61 @@ func (s *ServiceInfo) SetServiceName(v string) *ServiceInfo {
 	return s
 }
 
-// A structure that contains the full set of details that define the service
-// quota.
+// Information about a quota.
 type ServiceQuota struct {
 	_ struct{} `type:"structure"`
 
-	// Specifies if the quota value can be increased.
+	// Indicates whether the quota value can be increased.
 	Adjustable *bool `type:"boolean"`
 
-	// Specifies the ErrorCode and ErrorMessage when success isn't achieved.
+	// The error code and error reason.
 	ErrorReason *ErrorReason `type:"structure"`
 
-	// Specifies if the quota is global.
+	// Indicates whether the quota is global.
 	GlobalQuota *bool `type:"boolean"`
 
-	// Identifies the unit and value of how time is measured.
+	// The period of time.
 	Period *QuotaPeriod `type:"structure"`
 
-	// The Amazon Resource Name (ARN) of the service quota.
+	// The Amazon Resource Name (ARN) of the quota.
 	QuotaArn *string `type:"string"`
 
-	// The code identifier for the service quota specified.
+	// The quota identifier.
 	QuotaCode *string `min:"1" type:"string"`
 
-	// The name identifier of the service quota.
+	// The quota name.
 	QuotaName *string `type:"string"`
 
-	// Specifies the service that you want to use.
+	// The service identifier.
 	ServiceCode *string `min:"1" type:"string"`
 
-	// The name of the AWS service specified in the increase request.
+	// The service name.
 	ServiceName *string `type:"string"`
 
-	// The unit of measurement for the value of the service quota.
+	// The unit of measurement.
 	Unit *string `type:"string"`
 
-	// Specifies the details about the measurement.
+	// Information about the measurement.
 	UsageMetric *MetricInfo `type:"structure"`
 
-	// The value of service quota.
+	// The quota value.
 	Value *float64 `type:"double"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ServiceQuota) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ServiceQuota) GoString() string {
 	return s.String()
 }
@@ -4517,42 +5149,49 @@ func (s *ServiceQuota) SetValue(v float64) *ServiceQuota {
 	return s
 }
 
-// A structure that contains information about one service quota increase request.
+// Information about a quota increase request.
 type ServiceQuotaIncreaseRequestInTemplate struct {
 	_ struct{} `type:"structure"`
 
-	// The AWS Region where the increase request occurs.
+	// The AWS Region.
 	AwsRegion *string `min:"1" type:"string"`
 
-	// Identifies the new, increased value of the service quota in the increase
-	// request.
+	// The new, increased value of the quota.
 	DesiredValue *float64 `type:"double"`
 
-	// Specifies if the quota is a global quota.
+	// Indicates whether the quota is global.
 	GlobalQuota *bool `type:"boolean"`
 
-	// The code identifier for the service quota specified in the increase request.
+	// The quota identifier.
 	QuotaCode *string `min:"1" type:"string"`
 
-	// The name of the service quota in the increase request.
+	// The quota name.
 	QuotaName *string `type:"string"`
 
-	// The code identifier for the AWS service specified in the increase request.
+	// The service identifier.
 	ServiceCode *string `min:"1" type:"string"`
 
-	// The name of the AWS service specified in the increase request.
+	// The service name.
 	ServiceName *string `type:"string"`
 
-	// The unit of measure for the increase request.
+	// The unit of measurement.
 	Unit *string `type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ServiceQuotaIncreaseRequestInTemplate) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ServiceQuotaIncreaseRequestInTemplate) GoString() string {
 	return s.String()
 }
@@ -4606,8 +5245,6 @@ func (s *ServiceQuotaIncreaseRequestInTemplate) SetUnit(v string) *ServiceQuotaI
 }
 
 // The quota request template is not associated with your organization.
-//
-// To use the template, call AssociateServiceQuotaTemplate.
 type ServiceQuotaTemplateNotInUseException struct {
 	_            struct{}                  `type:"structure"`
 	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
@@ -4615,12 +5252,20 @@ type ServiceQuotaTemplateNotInUseException struct {
 	Message_ *string `locationName:"Message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ServiceQuotaTemplateNotInUseException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ServiceQuotaTemplateNotInUseException) GoString() string {
 	return s.String()
 }
@@ -4663,8 +5308,241 @@ func (s *ServiceQuotaTemplateNotInUseException) RequestID() string {
 	return s.RespMetadata.RequestID
 }
 
-// The Service Quotas template is not available in the Region where you are
-// making the request. Please make the request in us-east-1.
+// A complex data type that contains a tag key and tag value.
+type Tag struct {
+	_ struct{} `type:"structure"`
+
+	// A string that contains a tag key. The string length should be between 1 and
+	// 128 characters. Valid characters include a-z, A-Z, 0-9, space, and the special
+	// characters _ - . : / = + @.
+	//
+	// Key is a required field
+	Key *string `min:"1" type:"string" required:"true"`
+
+	// A string that contains an optional tag value. The string length should be
+	// between 0 and 256 characters. Valid characters include a-z, A-Z, 0-9, space,
+	// and the special characters _ - . : / = + @.
+	//
+	// Value is a required field
+	Value *string `type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s Tag) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s Tag) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *Tag) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "Tag"}
+	if s.Key == nil {
+		invalidParams.Add(request.NewErrParamRequired("Key"))
+	}
+	if s.Key != nil && len(*s.Key) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Key", 1))
+	}
+	if s.Value == nil {
+		invalidParams.Add(request.NewErrParamRequired("Value"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetKey sets the Key field's value.
+func (s *Tag) SetKey(v string) *Tag {
+	s.Key = &v
+	return s
+}
+
+// SetValue sets the Value field's value.
+func (s *Tag) SetValue(v string) *Tag {
+	s.Value = &v
+	return s
+}
+
+// The specified tag is a reserved word and cannot be used.
+type TagPolicyViolationException struct {
+	_            struct{}                  `type:"structure"`
+	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
+
+	Message_ *string `locationName:"Message" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s TagPolicyViolationException) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s TagPolicyViolationException) GoString() string {
+	return s.String()
+}
+
+func newErrorTagPolicyViolationException(v protocol.ResponseMetadata) error {
+	return &TagPolicyViolationException{
+		RespMetadata: v,
+	}
+}
+
+// Code returns the exception type name.
+func (s *TagPolicyViolationException) Code() string {
+	return "TagPolicyViolationException"
+}
+
+// Message returns the exception's message.
+func (s *TagPolicyViolationException) Message() string {
+	if s.Message_ != nil {
+		return *s.Message_
+	}
+	return ""
+}
+
+// OrigErr always returns nil, satisfies awserr.Error interface.
+func (s *TagPolicyViolationException) OrigErr() error {
+	return nil
+}
+
+func (s *TagPolicyViolationException) Error() string {
+	return fmt.Sprintf("%s: %s", s.Code(), s.Message())
+}
+
+// Status code returns the HTTP status code for the request's response error.
+func (s *TagPolicyViolationException) StatusCode() int {
+	return s.RespMetadata.StatusCode
+}
+
+// RequestID returns the service's response RequestID for request.
+func (s *TagPolicyViolationException) RequestID() string {
+	return s.RespMetadata.RequestID
+}
+
+type TagResourceInput struct {
+	_ struct{} `type:"structure"`
+
+	// The Amazon Resource Name (ARN) for the applied quota. You can get this information
+	// by using the Service Quotas console, or by listing the quotas using the list-service-quotas
+	// (https://docs.aws.amazon.com/cli/latest/reference/service-quotas/list-service-quotas.html)
+	// AWS CLI command or the ListServiceQuotas (https://docs.aws.amazon.com/servicequotas/2019-06-24/apireference/API_ListServiceQuotas.html)
+	// AWS API operation.
+	//
+	// ResourceARN is a required field
+	ResourceARN *string `min:"1" type:"string" required:"true"`
+
+	// The tags that you want to add to the resource.
+	//
+	// Tags is a required field
+	Tags []*Tag `min:"1" type:"list" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s TagResourceInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s TagResourceInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *TagResourceInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "TagResourceInput"}
+	if s.ResourceARN == nil {
+		invalidParams.Add(request.NewErrParamRequired("ResourceARN"))
+	}
+	if s.ResourceARN != nil && len(*s.ResourceARN) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ResourceARN", 1))
+	}
+	if s.Tags == nil {
+		invalidParams.Add(request.NewErrParamRequired("Tags"))
+	}
+	if s.Tags != nil && len(s.Tags) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Tags", 1))
+	}
+	if s.Tags != nil {
+		for i, v := range s.Tags {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "Tags", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetResourceARN sets the ResourceARN field's value.
+func (s *TagResourceInput) SetResourceARN(v string) *TagResourceInput {
+	s.ResourceARN = &v
+	return s
+}
+
+// SetTags sets the Tags field's value.
+func (s *TagResourceInput) SetTags(v []*Tag) *TagResourceInput {
+	s.Tags = v
+	return s
+}
+
+type TagResourceOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s TagResourceOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s TagResourceOutput) GoString() string {
+	return s.String()
+}
+
+// The Service Quotas template is not available in this AWS Region.
 type TemplatesNotAvailableInRegionException struct {
 	_            struct{}                  `type:"structure"`
 	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
@@ -4672,12 +5550,20 @@ type TemplatesNotAvailableInRegionException struct {
 	Message_ *string `locationName:"Message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s TemplatesNotAvailableInRegionException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s TemplatesNotAvailableInRegionException) GoString() string {
 	return s.String()
 }
@@ -4729,12 +5615,20 @@ type TooManyRequestsException struct {
 	Message_ *string `locationName:"Message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s TooManyRequestsException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s TooManyRequestsException) GoString() string {
 	return s.String()
 }
@@ -4775,6 +5669,161 @@ func (s *TooManyRequestsException) StatusCode() int {
 // RequestID returns the service's response RequestID for request.
 func (s *TooManyRequestsException) RequestID() string {
 	return s.RespMetadata.RequestID
+}
+
+// You've exceeded the number of tags allowed for a resource. For more information,
+// see Tag restrictions (https://docs.aws.amazon.com/servicequotas/latest/userguide/sq-tagging.html#sq-tagging-restrictions)
+// in the Service Quotas User Guide.
+type TooManyTagsException struct {
+	_            struct{}                  `type:"structure"`
+	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
+
+	Message_ *string `locationName:"Message" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s TooManyTagsException) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s TooManyTagsException) GoString() string {
+	return s.String()
+}
+
+func newErrorTooManyTagsException(v protocol.ResponseMetadata) error {
+	return &TooManyTagsException{
+		RespMetadata: v,
+	}
+}
+
+// Code returns the exception type name.
+func (s *TooManyTagsException) Code() string {
+	return "TooManyTagsException"
+}
+
+// Message returns the exception's message.
+func (s *TooManyTagsException) Message() string {
+	if s.Message_ != nil {
+		return *s.Message_
+	}
+	return ""
+}
+
+// OrigErr always returns nil, satisfies awserr.Error interface.
+func (s *TooManyTagsException) OrigErr() error {
+	return nil
+}
+
+func (s *TooManyTagsException) Error() string {
+	return fmt.Sprintf("%s: %s", s.Code(), s.Message())
+}
+
+// Status code returns the HTTP status code for the request's response error.
+func (s *TooManyTagsException) StatusCode() int {
+	return s.RespMetadata.StatusCode
+}
+
+// RequestID returns the service's response RequestID for request.
+func (s *TooManyTagsException) RequestID() string {
+	return s.RespMetadata.RequestID
+}
+
+type UntagResourceInput struct {
+	_ struct{} `type:"structure"`
+
+	// The Amazon Resource Name (ARN) for the applied quota that you want to untag.
+	// You can get this information by using the Service Quotas console, or by listing
+	// the quotas using the list-service-quotas (https://docs.aws.amazon.com/cli/latest/reference/service-quotas/list-service-quotas.html)
+	// AWS CLI command or the ListServiceQuotas (https://docs.aws.amazon.com/servicequotas/2019-06-24/apireference/API_ListServiceQuotas.html)
+	// AWS API operation.
+	//
+	// ResourceARN is a required field
+	ResourceARN *string `min:"1" type:"string" required:"true"`
+
+	// The keys of the tags that you want to remove from the resource.
+	//
+	// TagKeys is a required field
+	TagKeys []*string `type:"list" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UntagResourceInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UntagResourceInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *UntagResourceInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "UntagResourceInput"}
+	if s.ResourceARN == nil {
+		invalidParams.Add(request.NewErrParamRequired("ResourceARN"))
+	}
+	if s.ResourceARN != nil && len(*s.ResourceARN) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ResourceARN", 1))
+	}
+	if s.TagKeys == nil {
+		invalidParams.Add(request.NewErrParamRequired("TagKeys"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetResourceARN sets the ResourceARN field's value.
+func (s *UntagResourceInput) SetResourceARN(v string) *UntagResourceInput {
+	s.ResourceARN = &v
+	return s
+}
+
+// SetTagKeys sets the TagKeys field's value.
+func (s *UntagResourceInput) SetTagKeys(v []*string) *UntagResourceInput {
+	s.TagKeys = v
+	return s
+}
+
+type UntagResourceOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UntagResourceOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UntagResourceOutput) GoString() string {
+	return s.String()
 }
 
 const (

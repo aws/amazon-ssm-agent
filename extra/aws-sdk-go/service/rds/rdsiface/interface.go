@@ -148,6 +148,10 @@ type RDSAPI interface {
 	CreateDBProxyWithContext(aws.Context, *rds.CreateDBProxyInput, ...request.Option) (*rds.CreateDBProxyOutput, error)
 	CreateDBProxyRequest(*rds.CreateDBProxyInput) (*request.Request, *rds.CreateDBProxyOutput)
 
+	CreateDBProxyEndpoint(*rds.CreateDBProxyEndpointInput) (*rds.CreateDBProxyEndpointOutput, error)
+	CreateDBProxyEndpointWithContext(aws.Context, *rds.CreateDBProxyEndpointInput, ...request.Option) (*rds.CreateDBProxyEndpointOutput, error)
+	CreateDBProxyEndpointRequest(*rds.CreateDBProxyEndpointInput) (*request.Request, *rds.CreateDBProxyEndpointOutput)
+
 	CreateDBSecurityGroup(*rds.CreateDBSecurityGroupInput) (*rds.CreateDBSecurityGroupOutput, error)
 	CreateDBSecurityGroupWithContext(aws.Context, *rds.CreateDBSecurityGroupInput, ...request.Option) (*rds.CreateDBSecurityGroupOutput, error)
 	CreateDBSecurityGroupRequest(*rds.CreateDBSecurityGroupInput) (*request.Request, *rds.CreateDBSecurityGroupOutput)
@@ -207,6 +211,10 @@ type RDSAPI interface {
 	DeleteDBProxy(*rds.DeleteDBProxyInput) (*rds.DeleteDBProxyOutput, error)
 	DeleteDBProxyWithContext(aws.Context, *rds.DeleteDBProxyInput, ...request.Option) (*rds.DeleteDBProxyOutput, error)
 	DeleteDBProxyRequest(*rds.DeleteDBProxyInput) (*request.Request, *rds.DeleteDBProxyOutput)
+
+	DeleteDBProxyEndpoint(*rds.DeleteDBProxyEndpointInput) (*rds.DeleteDBProxyEndpointOutput, error)
+	DeleteDBProxyEndpointWithContext(aws.Context, *rds.DeleteDBProxyEndpointInput, ...request.Option) (*rds.DeleteDBProxyEndpointOutput, error)
+	DeleteDBProxyEndpointRequest(*rds.DeleteDBProxyEndpointInput) (*request.Request, *rds.DeleteDBProxyEndpointOutput)
 
 	DeleteDBSecurityGroup(*rds.DeleteDBSecurityGroupInput) (*rds.DeleteDBSecurityGroupOutput, error)
 	DeleteDBSecurityGroupWithContext(aws.Context, *rds.DeleteDBSecurityGroupInput, ...request.Option) (*rds.DeleteDBSecurityGroupOutput, error)
@@ -352,6 +360,13 @@ type RDSAPI interface {
 
 	DescribeDBProxiesPages(*rds.DescribeDBProxiesInput, func(*rds.DescribeDBProxiesOutput, bool) bool) error
 	DescribeDBProxiesPagesWithContext(aws.Context, *rds.DescribeDBProxiesInput, func(*rds.DescribeDBProxiesOutput, bool) bool, ...request.Option) error
+
+	DescribeDBProxyEndpoints(*rds.DescribeDBProxyEndpointsInput) (*rds.DescribeDBProxyEndpointsOutput, error)
+	DescribeDBProxyEndpointsWithContext(aws.Context, *rds.DescribeDBProxyEndpointsInput, ...request.Option) (*rds.DescribeDBProxyEndpointsOutput, error)
+	DescribeDBProxyEndpointsRequest(*rds.DescribeDBProxyEndpointsInput) (*request.Request, *rds.DescribeDBProxyEndpointsOutput)
+
+	DescribeDBProxyEndpointsPages(*rds.DescribeDBProxyEndpointsInput, func(*rds.DescribeDBProxyEndpointsOutput, bool) bool) error
+	DescribeDBProxyEndpointsPagesWithContext(aws.Context, *rds.DescribeDBProxyEndpointsInput, func(*rds.DescribeDBProxyEndpointsOutput, bool) bool, ...request.Option) error
 
 	DescribeDBProxyTargetGroups(*rds.DescribeDBProxyTargetGroupsInput) (*rds.DescribeDBProxyTargetGroupsOutput, error)
 	DescribeDBProxyTargetGroupsWithContext(aws.Context, *rds.DescribeDBProxyTargetGroupsInput, ...request.Option) (*rds.DescribeDBProxyTargetGroupsOutput, error)
@@ -506,6 +521,10 @@ type RDSAPI interface {
 	FailoverDBClusterWithContext(aws.Context, *rds.FailoverDBClusterInput, ...request.Option) (*rds.FailoverDBClusterOutput, error)
 	FailoverDBClusterRequest(*rds.FailoverDBClusterInput) (*request.Request, *rds.FailoverDBClusterOutput)
 
+	FailoverGlobalCluster(*rds.FailoverGlobalClusterInput) (*rds.FailoverGlobalClusterOutput, error)
+	FailoverGlobalClusterWithContext(aws.Context, *rds.FailoverGlobalClusterInput, ...request.Option) (*rds.FailoverGlobalClusterOutput, error)
+	FailoverGlobalClusterRequest(*rds.FailoverGlobalClusterInput) (*request.Request, *rds.FailoverGlobalClusterOutput)
+
 	ImportInstallationMedia(*rds.ImportInstallationMediaInput) (*rds.ImportInstallationMediaOutput, error)
 	ImportInstallationMediaWithContext(aws.Context, *rds.ImportInstallationMediaInput, ...request.Option) (*rds.ImportInstallationMediaOutput, error)
 	ImportInstallationMediaRequest(*rds.ImportInstallationMediaInput) (*request.Request, *rds.ImportInstallationMediaOutput)
@@ -549,6 +568,10 @@ type RDSAPI interface {
 	ModifyDBProxy(*rds.ModifyDBProxyInput) (*rds.ModifyDBProxyOutput, error)
 	ModifyDBProxyWithContext(aws.Context, *rds.ModifyDBProxyInput, ...request.Option) (*rds.ModifyDBProxyOutput, error)
 	ModifyDBProxyRequest(*rds.ModifyDBProxyInput) (*request.Request, *rds.ModifyDBProxyOutput)
+
+	ModifyDBProxyEndpoint(*rds.ModifyDBProxyEndpointInput) (*rds.ModifyDBProxyEndpointOutput, error)
+	ModifyDBProxyEndpointWithContext(aws.Context, *rds.ModifyDBProxyEndpointInput, ...request.Option) (*rds.ModifyDBProxyEndpointOutput, error)
+	ModifyDBProxyEndpointRequest(*rds.ModifyDBProxyEndpointInput) (*request.Request, *rds.ModifyDBProxyEndpointOutput)
 
 	ModifyDBProxyTargetGroup(*rds.ModifyDBProxyTargetGroupInput) (*rds.ModifyDBProxyTargetGroupOutput, error)
 	ModifyDBProxyTargetGroupWithContext(aws.Context, *rds.ModifyDBProxyTargetGroupInput, ...request.Option) (*rds.ModifyDBProxyTargetGroupOutput, error)
@@ -666,6 +689,10 @@ type RDSAPI interface {
 	StartDBInstanceWithContext(aws.Context, *rds.StartDBInstanceInput, ...request.Option) (*rds.StartDBInstanceOutput, error)
 	StartDBInstanceRequest(*rds.StartDBInstanceInput) (*request.Request, *rds.StartDBInstanceOutput)
 
+	StartDBInstanceAutomatedBackupsReplication(*rds.StartDBInstanceAutomatedBackupsReplicationInput) (*rds.StartDBInstanceAutomatedBackupsReplicationOutput, error)
+	StartDBInstanceAutomatedBackupsReplicationWithContext(aws.Context, *rds.StartDBInstanceAutomatedBackupsReplicationInput, ...request.Option) (*rds.StartDBInstanceAutomatedBackupsReplicationOutput, error)
+	StartDBInstanceAutomatedBackupsReplicationRequest(*rds.StartDBInstanceAutomatedBackupsReplicationInput) (*request.Request, *rds.StartDBInstanceAutomatedBackupsReplicationOutput)
+
 	StartExportTask(*rds.StartExportTaskInput) (*rds.StartExportTaskOutput, error)
 	StartExportTaskWithContext(aws.Context, *rds.StartExportTaskInput, ...request.Option) (*rds.StartExportTaskOutput, error)
 	StartExportTaskRequest(*rds.StartExportTaskInput) (*request.Request, *rds.StartExportTaskOutput)
@@ -681,6 +708,10 @@ type RDSAPI interface {
 	StopDBInstance(*rds.StopDBInstanceInput) (*rds.StopDBInstanceOutput, error)
 	StopDBInstanceWithContext(aws.Context, *rds.StopDBInstanceInput, ...request.Option) (*rds.StopDBInstanceOutput, error)
 	StopDBInstanceRequest(*rds.StopDBInstanceInput) (*request.Request, *rds.StopDBInstanceOutput)
+
+	StopDBInstanceAutomatedBackupsReplication(*rds.StopDBInstanceAutomatedBackupsReplicationInput) (*rds.StopDBInstanceAutomatedBackupsReplicationOutput, error)
+	StopDBInstanceAutomatedBackupsReplicationWithContext(aws.Context, *rds.StopDBInstanceAutomatedBackupsReplicationInput, ...request.Option) (*rds.StopDBInstanceAutomatedBackupsReplicationOutput, error)
+	StopDBInstanceAutomatedBackupsReplicationRequest(*rds.StopDBInstanceAutomatedBackupsReplicationInput) (*request.Request, *rds.StopDBInstanceAutomatedBackupsReplicationOutput)
 
 	WaitUntilDBClusterSnapshotAvailable(*rds.DescribeDBClusterSnapshotsInput) error
 	WaitUntilDBClusterSnapshotAvailableWithContext(aws.Context, *rds.DescribeDBClusterSnapshotsInput, ...request.WaiterOption) error

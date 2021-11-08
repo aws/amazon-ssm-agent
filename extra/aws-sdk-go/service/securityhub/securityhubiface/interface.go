@@ -26,7 +26,7 @@ import (
 //    // myFunc uses an SDK service client to make a request to
 //    // AWS SecurityHub.
 //    func myFunc(svc securityhubiface.SecurityHubAPI) bool {
-//        // Make svc.AcceptInvitation request
+//        // Make svc.AcceptAdministratorInvitation request
 //    }
 //
 //    func main() {
@@ -42,7 +42,7 @@ import (
 //    type mockSecurityHubClient struct {
 //        securityhubiface.SecurityHubAPI
 //    }
-//    func (m *mockSecurityHubClient) AcceptInvitation(input *securityhub.AcceptInvitationInput) (*securityhub.AcceptInvitationOutput, error) {
+//    func (m *mockSecurityHubClient) AcceptAdministratorInvitation(input *securityhub.AcceptAdministratorInvitationInput) (*securityhub.AcceptAdministratorInvitationOutput, error) {
 //        // mock response/functionality
 //    }
 //
@@ -60,6 +60,10 @@ import (
 // and waiters. Its suggested to use the pattern above for testing, or using
 // tooling to generate mocks to satisfy the interfaces.
 type SecurityHubAPI interface {
+	AcceptAdministratorInvitation(*securityhub.AcceptAdministratorInvitationInput) (*securityhub.AcceptAdministratorInvitationOutput, error)
+	AcceptAdministratorInvitationWithContext(aws.Context, *securityhub.AcceptAdministratorInvitationInput, ...request.Option) (*securityhub.AcceptAdministratorInvitationOutput, error)
+	AcceptAdministratorInvitationRequest(*securityhub.AcceptAdministratorInvitationInput) (*request.Request, *securityhub.AcceptAdministratorInvitationOutput)
+
 	AcceptInvitation(*securityhub.AcceptInvitationInput) (*securityhub.AcceptInvitationOutput, error)
 	AcceptInvitationWithContext(aws.Context, *securityhub.AcceptInvitationInput, ...request.Option) (*securityhub.AcceptInvitationOutput, error)
 	AcceptInvitationRequest(*securityhub.AcceptInvitationInput) (*request.Request, *securityhub.AcceptInvitationOutput)
@@ -123,6 +127,10 @@ type SecurityHubAPI interface {
 	DescribeHubWithContext(aws.Context, *securityhub.DescribeHubInput, ...request.Option) (*securityhub.DescribeHubOutput, error)
 	DescribeHubRequest(*securityhub.DescribeHubInput) (*request.Request, *securityhub.DescribeHubOutput)
 
+	DescribeOrganizationConfiguration(*securityhub.DescribeOrganizationConfigurationInput) (*securityhub.DescribeOrganizationConfigurationOutput, error)
+	DescribeOrganizationConfigurationWithContext(aws.Context, *securityhub.DescribeOrganizationConfigurationInput, ...request.Option) (*securityhub.DescribeOrganizationConfigurationOutput, error)
+	DescribeOrganizationConfigurationRequest(*securityhub.DescribeOrganizationConfigurationInput) (*request.Request, *securityhub.DescribeOrganizationConfigurationOutput)
+
 	DescribeProducts(*securityhub.DescribeProductsInput) (*securityhub.DescribeProductsOutput, error)
 	DescribeProductsWithContext(aws.Context, *securityhub.DescribeProductsInput, ...request.Option) (*securityhub.DescribeProductsOutput, error)
 	DescribeProductsRequest(*securityhub.DescribeProductsInput) (*request.Request, *securityhub.DescribeProductsOutput)
@@ -148,9 +156,17 @@ type SecurityHubAPI interface {
 	DisableImportFindingsForProductWithContext(aws.Context, *securityhub.DisableImportFindingsForProductInput, ...request.Option) (*securityhub.DisableImportFindingsForProductOutput, error)
 	DisableImportFindingsForProductRequest(*securityhub.DisableImportFindingsForProductInput) (*request.Request, *securityhub.DisableImportFindingsForProductOutput)
 
+	DisableOrganizationAdminAccount(*securityhub.DisableOrganizationAdminAccountInput) (*securityhub.DisableOrganizationAdminAccountOutput, error)
+	DisableOrganizationAdminAccountWithContext(aws.Context, *securityhub.DisableOrganizationAdminAccountInput, ...request.Option) (*securityhub.DisableOrganizationAdminAccountOutput, error)
+	DisableOrganizationAdminAccountRequest(*securityhub.DisableOrganizationAdminAccountInput) (*request.Request, *securityhub.DisableOrganizationAdminAccountOutput)
+
 	DisableSecurityHub(*securityhub.DisableSecurityHubInput) (*securityhub.DisableSecurityHubOutput, error)
 	DisableSecurityHubWithContext(aws.Context, *securityhub.DisableSecurityHubInput, ...request.Option) (*securityhub.DisableSecurityHubOutput, error)
 	DisableSecurityHubRequest(*securityhub.DisableSecurityHubInput) (*request.Request, *securityhub.DisableSecurityHubOutput)
+
+	DisassociateFromAdministratorAccount(*securityhub.DisassociateFromAdministratorAccountInput) (*securityhub.DisassociateFromAdministratorAccountOutput, error)
+	DisassociateFromAdministratorAccountWithContext(aws.Context, *securityhub.DisassociateFromAdministratorAccountInput, ...request.Option) (*securityhub.DisassociateFromAdministratorAccountOutput, error)
+	DisassociateFromAdministratorAccountRequest(*securityhub.DisassociateFromAdministratorAccountInput) (*request.Request, *securityhub.DisassociateFromAdministratorAccountOutput)
 
 	DisassociateFromMasterAccount(*securityhub.DisassociateFromMasterAccountInput) (*securityhub.DisassociateFromMasterAccountOutput, error)
 	DisassociateFromMasterAccountWithContext(aws.Context, *securityhub.DisassociateFromMasterAccountInput, ...request.Option) (*securityhub.DisassociateFromMasterAccountOutput, error)
@@ -164,9 +180,17 @@ type SecurityHubAPI interface {
 	EnableImportFindingsForProductWithContext(aws.Context, *securityhub.EnableImportFindingsForProductInput, ...request.Option) (*securityhub.EnableImportFindingsForProductOutput, error)
 	EnableImportFindingsForProductRequest(*securityhub.EnableImportFindingsForProductInput) (*request.Request, *securityhub.EnableImportFindingsForProductOutput)
 
+	EnableOrganizationAdminAccount(*securityhub.EnableOrganizationAdminAccountInput) (*securityhub.EnableOrganizationAdminAccountOutput, error)
+	EnableOrganizationAdminAccountWithContext(aws.Context, *securityhub.EnableOrganizationAdminAccountInput, ...request.Option) (*securityhub.EnableOrganizationAdminAccountOutput, error)
+	EnableOrganizationAdminAccountRequest(*securityhub.EnableOrganizationAdminAccountInput) (*request.Request, *securityhub.EnableOrganizationAdminAccountOutput)
+
 	EnableSecurityHub(*securityhub.EnableSecurityHubInput) (*securityhub.EnableSecurityHubOutput, error)
 	EnableSecurityHubWithContext(aws.Context, *securityhub.EnableSecurityHubInput, ...request.Option) (*securityhub.EnableSecurityHubOutput, error)
 	EnableSecurityHubRequest(*securityhub.EnableSecurityHubInput) (*request.Request, *securityhub.EnableSecurityHubOutput)
+
+	GetAdministratorAccount(*securityhub.GetAdministratorAccountInput) (*securityhub.GetAdministratorAccountOutput, error)
+	GetAdministratorAccountWithContext(aws.Context, *securityhub.GetAdministratorAccountInput, ...request.Option) (*securityhub.GetAdministratorAccountOutput, error)
+	GetAdministratorAccountRequest(*securityhub.GetAdministratorAccountInput) (*request.Request, *securityhub.GetAdministratorAccountOutput)
 
 	GetEnabledStandards(*securityhub.GetEnabledStandardsInput) (*securityhub.GetEnabledStandardsOutput, error)
 	GetEnabledStandardsWithContext(aws.Context, *securityhub.GetEnabledStandardsInput, ...request.Option) (*securityhub.GetEnabledStandardsOutput, error)
@@ -230,6 +254,13 @@ type SecurityHubAPI interface {
 	ListMembersPages(*securityhub.ListMembersInput, func(*securityhub.ListMembersOutput, bool) bool) error
 	ListMembersPagesWithContext(aws.Context, *securityhub.ListMembersInput, func(*securityhub.ListMembersOutput, bool) bool, ...request.Option) error
 
+	ListOrganizationAdminAccounts(*securityhub.ListOrganizationAdminAccountsInput) (*securityhub.ListOrganizationAdminAccountsOutput, error)
+	ListOrganizationAdminAccountsWithContext(aws.Context, *securityhub.ListOrganizationAdminAccountsInput, ...request.Option) (*securityhub.ListOrganizationAdminAccountsOutput, error)
+	ListOrganizationAdminAccountsRequest(*securityhub.ListOrganizationAdminAccountsInput) (*request.Request, *securityhub.ListOrganizationAdminAccountsOutput)
+
+	ListOrganizationAdminAccountsPages(*securityhub.ListOrganizationAdminAccountsInput, func(*securityhub.ListOrganizationAdminAccountsOutput, bool) bool) error
+	ListOrganizationAdminAccountsPagesWithContext(aws.Context, *securityhub.ListOrganizationAdminAccountsInput, func(*securityhub.ListOrganizationAdminAccountsOutput, bool) bool, ...request.Option) error
+
 	ListTagsForResource(*securityhub.ListTagsForResourceInput) (*securityhub.ListTagsForResourceOutput, error)
 	ListTagsForResourceWithContext(aws.Context, *securityhub.ListTagsForResourceInput, ...request.Option) (*securityhub.ListTagsForResourceOutput, error)
 	ListTagsForResourceRequest(*securityhub.ListTagsForResourceInput) (*request.Request, *securityhub.ListTagsForResourceOutput)
@@ -253,6 +284,10 @@ type SecurityHubAPI interface {
 	UpdateInsight(*securityhub.UpdateInsightInput) (*securityhub.UpdateInsightOutput, error)
 	UpdateInsightWithContext(aws.Context, *securityhub.UpdateInsightInput, ...request.Option) (*securityhub.UpdateInsightOutput, error)
 	UpdateInsightRequest(*securityhub.UpdateInsightInput) (*request.Request, *securityhub.UpdateInsightOutput)
+
+	UpdateOrganizationConfiguration(*securityhub.UpdateOrganizationConfigurationInput) (*securityhub.UpdateOrganizationConfigurationOutput, error)
+	UpdateOrganizationConfigurationWithContext(aws.Context, *securityhub.UpdateOrganizationConfigurationInput, ...request.Option) (*securityhub.UpdateOrganizationConfigurationOutput, error)
+	UpdateOrganizationConfigurationRequest(*securityhub.UpdateOrganizationConfigurationInput) (*request.Request, *securityhub.UpdateOrganizationConfigurationOutput)
 
 	UpdateSecurityHubConfiguration(*securityhub.UpdateSecurityHubConfigurationInput) (*securityhub.UpdateSecurityHubConfigurationOutput, error)
 	UpdateSecurityHubConfigurationWithContext(aws.Context, *securityhub.UpdateSecurityHubConfigurationInput, ...request.Option) (*securityhub.UpdateSecurityHubConfigurationOutput, error)

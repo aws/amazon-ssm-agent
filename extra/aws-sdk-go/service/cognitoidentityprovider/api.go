@@ -281,11 +281,11 @@ func (c *CognitoIdentityProvider) AdminConfirmSignUpRequest(input *AdminConfirmS
 //
 //   * UnexpectedLambdaException
 //   This exception is thrown when the Amazon Cognito service encounters an unexpected
-//   exception with the AWS Lambda service.
+//   exception with the Lambda service.
 //
 //   * UserLambdaValidationException
 //   This exception is thrown when the Amazon Cognito service encounters a user
-//   validation exception with the AWS Lambda service.
+//   validation exception with the Lambda service.
 //
 //   * NotAuthorizedException
 //   This exception is thrown when a user is not authorized.
@@ -296,15 +296,15 @@ func (c *CognitoIdentityProvider) AdminConfirmSignUpRequest(input *AdminConfirmS
 //
 //   * InvalidLambdaResponseException
 //   This exception is thrown when the Amazon Cognito service encounters an invalid
-//   AWS Lambda response.
+//   Lambda response.
 //
 //   * TooManyRequestsException
 //   This exception is thrown when the user has made too many requests for a given
 //   operation.
 //
 //   * LimitExceededException
-//   This exception is thrown when a user exceeds the limit for a requested AWS
-//   resource.
+//   This exception is thrown when a user exceeds the limit for a requested Amazon
+//   Web Services resource.
 //
 //   * UserNotFoundException
 //   This exception is thrown when a user is not found.
@@ -383,6 +383,24 @@ func (c *CognitoIdentityProvider) AdminCreateUserRequest(input *AdminCreateUserI
 // If MessageAction is not set, the default is to send a welcome message via
 // email or phone (SMS).
 //
+// This action might generate an SMS text message. Starting June 1, 2021, U.S.
+// telecom carriers require that you register an origination phone number before
+// you can send SMS messages to U.S. phone numbers. If you use SMS text messages
+// in Amazon Cognito, you must register a phone number with Amazon Pinpoint
+// (https://console.aws.amazon.com/pinpoint/home/). Cognito will use the the
+// registered number automatically. Otherwise, Cognito users that must receive
+// SMS messages might be unable to sign up, activate their accounts, or sign
+// in.
+//
+// If you have never used SMS text messages with Amazon Cognito or any other
+// Amazon Web Service, Amazon SNS might place your account in SMS sandbox. In
+// sandbox mode (https://docs.aws.amazon.com/sns/latest/dg/sns-sms-sandbox.html)
+// , you’ll have limitations, such as sending messages to only verified phone
+// numbers. After testing in the sandbox environment, you can move out of the
+// SMS sandbox and into production. For more information, see SMS message settings
+// for Cognito User Pools (https://docs.aws.amazon.com/cognito/latest/developerguide/cognito-user-identity-pools-sms-userpool-settings.html)
+// in the Amazon Cognito Developer Guide.
+//
 // This message is based on a template that you configured in your call to create
 // or update a user pool. This template includes your custom sign-up instructions
 // and placeholders for user name and temporary password.
@@ -427,15 +445,15 @@ func (c *CognitoIdentityProvider) AdminCreateUserRequest(input *AdminCreateUserI
 //
 //   * UnexpectedLambdaException
 //   This exception is thrown when the Amazon Cognito service encounters an unexpected
-//   exception with the AWS Lambda service.
+//   exception with the Lambda service.
 //
 //   * UserLambdaValidationException
 //   This exception is thrown when the Amazon Cognito service encounters a user
-//   validation exception with the AWS Lambda service.
+//   validation exception with the Lambda service.
 //
 //   * InvalidLambdaResponseException
 //   This exception is thrown when the Amazon Cognito service encounters an invalid
-//   AWS Lambda response.
+//   Lambda response.
 //
 //   * PreconditionNotMetException
 //   This exception is thrown when a precondition is not met.
@@ -1367,6 +1385,24 @@ func (c *CognitoIdentityProvider) AdminInitiateAuthRequest(input *AdminInitiateA
 //
 // Initiates the authentication flow, as an administrator.
 //
+// This action might generate an SMS text message. Starting June 1, 2021, U.S.
+// telecom carriers require that you register an origination phone number before
+// you can send SMS messages to U.S. phone numbers. If you use SMS text messages
+// in Amazon Cognito, you must register a phone number with Amazon Pinpoint
+// (https://console.aws.amazon.com/pinpoint/home/). Cognito will use the the
+// registered number automatically. Otherwise, Cognito users that must receive
+// SMS messages might be unable to sign up, activate their accounts, or sign
+// in.
+//
+// If you have never used SMS text messages with Amazon Cognito or any other
+// Amazon Web Service, Amazon SNS might place your account in SMS sandbox. In
+// sandbox mode (https://docs.aws.amazon.com/sns/latest/dg/sns-sms-sandbox.html)
+// , you’ll have limitations, such as sending messages to only verified phone
+// numbers. After testing in the sandbox environment, you can move out of the
+// SMS sandbox and into production. For more information, see SMS message settings
+// for Cognito User Pools (https://docs.aws.amazon.com/cognito/latest/developerguide/cognito-user-identity-pools-sms-userpool-settings.html)
+// in the Amazon Cognito Developer Guide.
+//
 // Calling this action requires developer credentials.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
@@ -1397,18 +1433,18 @@ func (c *CognitoIdentityProvider) AdminInitiateAuthRequest(input *AdminInitiateA
 //
 //   * UnexpectedLambdaException
 //   This exception is thrown when the Amazon Cognito service encounters an unexpected
-//   exception with the AWS Lambda service.
+//   exception with the Lambda service.
 //
 //   * InvalidUserPoolConfigurationException
 //   This exception is thrown when the user pool configuration is invalid.
 //
 //   * UserLambdaValidationException
 //   This exception is thrown when the Amazon Cognito service encounters a user
-//   validation exception with the AWS Lambda service.
+//   validation exception with the Lambda service.
 //
 //   * InvalidLambdaResponseException
 //   This exception is thrown when the Amazon Cognito service encounters an invalid
-//   AWS Lambda response.
+//   Lambda response.
 //
 //   * MFAMethodNotFoundException
 //   This exception is thrown when Amazon Cognito cannot find a multi-factor authentication
@@ -1553,8 +1589,8 @@ func (c *CognitoIdentityProvider) AdminLinkProviderForUserRequest(input *AdminLi
 //   already exists.
 //
 //   * LimitExceededException
-//   This exception is thrown when a user exceeds the limit for a requested AWS
-//   resource.
+//   This exception is thrown when a user exceeds the limit for a requested Amazon
+//   Web Services resource.
 //
 //   * InternalErrorException
 //   This exception is thrown when Amazon Cognito encounters an internal error.
@@ -2154,6 +2190,24 @@ func (c *CognitoIdentityProvider) AdminResetUserPasswordRequest(input *AdminRese
 // also result in sending a message to the end user with the code to change
 // their password.
 //
+// This action might generate an SMS text message. Starting June 1, 2021, U.S.
+// telecom carriers require that you register an origination phone number before
+// you can send SMS messages to U.S. phone numbers. If you use SMS text messages
+// in Amazon Cognito, you must register a phone number with Amazon Pinpoint
+// (https://console.aws.amazon.com/pinpoint/home/). Cognito will use the the
+// registered number automatically. Otherwise, Cognito users that must receive
+// SMS messages might be unable to sign up, activate their accounts, or sign
+// in.
+//
+// If you have never used SMS text messages with Amazon Cognito or any other
+// Amazon Web Service, Amazon SNS might place your account in SMS sandbox. In
+// sandbox mode (https://docs.aws.amazon.com/sns/latest/dg/sns-sms-sandbox.html)
+// , you’ll have limitations, such as sending messages to only verified phone
+// numbers. After testing in the sandbox environment, you can move out of the
+// SMS sandbox and into production. For more information, see SMS message settings
+// for Cognito User Pools (https://docs.aws.amazon.com/cognito/latest/developerguide/cognito-user-identity-pools-sms-userpool-settings.html)
+// in the Amazon Cognito Developer Guide.
+//
 // Calling this action requires developer credentials.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
@@ -2174,26 +2228,26 @@ func (c *CognitoIdentityProvider) AdminResetUserPasswordRequest(input *AdminRese
 //
 //   * UnexpectedLambdaException
 //   This exception is thrown when the Amazon Cognito service encounters an unexpected
-//   exception with the AWS Lambda service.
+//   exception with the Lambda service.
 //
 //   * UserLambdaValidationException
 //   This exception is thrown when the Amazon Cognito service encounters a user
-//   validation exception with the AWS Lambda service.
+//   validation exception with the Lambda service.
 //
 //   * NotAuthorizedException
 //   This exception is thrown when a user is not authorized.
 //
 //   * InvalidLambdaResponseException
 //   This exception is thrown when the Amazon Cognito service encounters an invalid
-//   AWS Lambda response.
+//   Lambda response.
 //
 //   * TooManyRequestsException
 //   This exception is thrown when the user has made too many requests for a given
 //   operation.
 //
 //   * LimitExceededException
-//   This exception is thrown when a user exceeds the limit for a requested AWS
-//   resource.
+//   This exception is thrown when a user exceeds the limit for a requested Amazon
+//   Web Services resource.
 //
 //   * UserNotFoundException
 //   This exception is thrown when a user is not found.
@@ -2283,6 +2337,24 @@ func (c *CognitoIdentityProvider) AdminRespondToAuthChallengeRequest(input *Admi
 //
 // Responds to an authentication challenge, as an administrator.
 //
+// This action might generate an SMS text message. Starting June 1, 2021, U.S.
+// telecom carriers require that you register an origination phone number before
+// you can send SMS messages to U.S. phone numbers. If you use SMS text messages
+// in Amazon Cognito, you must register a phone number with Amazon Pinpoint
+// (https://console.aws.amazon.com/pinpoint/home/). Cognito will use the the
+// registered number automatically. Otherwise, Cognito users that must receive
+// SMS messages might be unable to sign up, activate their accounts, or sign
+// in.
+//
+// If you have never used SMS text messages with Amazon Cognito or any other
+// Amazon Web Service, Amazon SNS might place your account in SMS sandbox. In
+// sandbox mode (https://docs.aws.amazon.com/sns/latest/dg/sns-sms-sandbox.html)
+// , you’ll have limitations, such as sending messages to only verified phone
+// numbers. After testing in the sandbox environment, you can move out of the
+// SMS sandbox and into production. For more information, see SMS message settings
+// for Cognito User Pools (https://docs.aws.amazon.com/cognito/latest/developerguide/cognito-user-identity-pools-sms-userpool-settings.html)
+// in the Amazon Cognito Developer Guide.
+//
 // Calling this action requires developer credentials.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
@@ -2313,7 +2385,7 @@ func (c *CognitoIdentityProvider) AdminRespondToAuthChallengeRequest(input *Admi
 //
 //   * UnexpectedLambdaException
 //   This exception is thrown when the Amazon Cognito service encounters an unexpected
-//   exception with the AWS Lambda service.
+//   exception with the Lambda service.
 //
 //   * InvalidPasswordException
 //   This exception is thrown when the Amazon Cognito service encounters an invalid
@@ -2321,11 +2393,11 @@ func (c *CognitoIdentityProvider) AdminRespondToAuthChallengeRequest(input *Admi
 //
 //   * UserLambdaValidationException
 //   This exception is thrown when the Amazon Cognito service encounters a user
-//   validation exception with the AWS Lambda service.
+//   validation exception with the Lambda service.
 //
 //   * InvalidLambdaResponseException
 //   This exception is thrown when the Amazon Cognito service encounters an invalid
-//   AWS Lambda response.
+//   Lambda response.
 //
 //   * TooManyRequestsException
 //   This exception is thrown when the user has made too many requests for a given
@@ -2967,6 +3039,24 @@ func (c *CognitoIdentityProvider) AdminUpdateUserAttributesRequest(input *AdminU
 // In addition to updating user attributes, this API can also be used to mark
 // phone and email as verified.
 //
+// This action might generate an SMS text message. Starting June 1, 2021, U.S.
+// telecom carriers require that you register an origination phone number before
+// you can send SMS messages to U.S. phone numbers. If you use SMS text messages
+// in Amazon Cognito, you must register a phone number with Amazon Pinpoint
+// (https://console.aws.amazon.com/pinpoint/home/). Cognito will use the the
+// registered number automatically. Otherwise, Cognito users that must receive
+// SMS messages might be unable to sign up, activate their accounts, or sign
+// in.
+//
+// If you have never used SMS text messages with Amazon Cognito or any other
+// Amazon Web Service, Amazon SNS might place your account in SMS sandbox. In
+// sandbox mode (https://docs.aws.amazon.com/sns/latest/dg/sns-sms-sandbox.html)
+// , you’ll have limitations, such as sending messages to only verified phone
+// numbers. After testing in the sandbox environment, you can move out of the
+// SMS sandbox and into production. For more information, see SMS message settings
+// for Cognito User Pools (https://docs.aws.amazon.com/cognito/latest/developerguide/cognito-user-identity-pools-sms-userpool-settings.html)
+// in the Amazon Cognito Developer Guide.
+//
 // Calling this action requires developer credentials.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
@@ -2987,15 +3077,15 @@ func (c *CognitoIdentityProvider) AdminUpdateUserAttributesRequest(input *AdminU
 //
 //   * UnexpectedLambdaException
 //   This exception is thrown when the Amazon Cognito service encounters an unexpected
-//   exception with the AWS Lambda service.
+//   exception with the Lambda service.
 //
 //   * UserLambdaValidationException
 //   This exception is thrown when the Amazon Cognito service encounters a user
-//   validation exception with the AWS Lambda service.
+//   validation exception with the Lambda service.
 //
 //   * InvalidLambdaResponseException
 //   This exception is thrown when the Amazon Cognito service encounters an invalid
-//   AWS Lambda response.
+//   Lambda response.
 //
 //   * AliasExistsException
 //   This exception is thrown when a user tries to confirm the account with an
@@ -3202,6 +3292,13 @@ func (c *CognitoIdentityProvider) AssociateSoftwareTokenRequest(input *Associate
 // Returns a unique generated shared secret key code for the user account. The
 // request takes an access token or a session string, but not both.
 //
+// Calling AssociateSoftwareToken immediately disassociates the existing software
+// token from the user account. If the user doesn't subsequently verify the
+// software token, their account is essentially set up to authenticate without
+// MFA. If MFA config is set to Optional at the user pool level, the user can
+// then login without MFA. However, if MFA is set to Required for the user pool,
+// the user will be asked to setup a new software token MFA during sign in.
+//
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
 // the error.
@@ -3329,8 +3426,8 @@ func (c *CognitoIdentityProvider) ChangePasswordRequest(input *ChangePasswordInp
 //   operation.
 //
 //   * LimitExceededException
-//   This exception is thrown when a user exceeds the limit for a requested AWS
-//   resource.
+//   This exception is thrown when a user exceeds the limit for a requested Amazon
+//   Web Services resource.
 //
 //   * PasswordResetRequiredException
 //   This exception is thrown when a password reset is required.
@@ -3438,7 +3535,7 @@ func (c *CognitoIdentityProvider) ConfirmDeviceRequest(input *ConfirmDeviceInput
 //
 //   * InvalidLambdaResponseException
 //   This exception is thrown when the Amazon Cognito service encounters an invalid
-//   AWS Lambda response.
+//   Lambda response.
 //
 //   * UsernameExistsException
 //   This exception is thrown when Amazon Cognito encounters a user name that
@@ -3547,11 +3644,11 @@ func (c *CognitoIdentityProvider) ConfirmForgotPasswordRequest(input *ConfirmFor
 //
 //   * UnexpectedLambdaException
 //   This exception is thrown when the Amazon Cognito service encounters an unexpected
-//   exception with the AWS Lambda service.
+//   exception with the Lambda service.
 //
 //   * UserLambdaValidationException
 //   This exception is thrown when the Amazon Cognito service encounters a user
-//   validation exception with the AWS Lambda service.
+//   validation exception with the Lambda service.
 //
 //   * InvalidParameterException
 //   This exception is thrown when the Amazon Cognito service encounters an invalid
@@ -3577,15 +3674,15 @@ func (c *CognitoIdentityProvider) ConfirmForgotPasswordRequest(input *ConfirmFor
 //
 //   * InvalidLambdaResponseException
 //   This exception is thrown when the Amazon Cognito service encounters an invalid
-//   AWS Lambda response.
+//   Lambda response.
 //
 //   * TooManyRequestsException
 //   This exception is thrown when the user has made too many requests for a given
 //   operation.
 //
 //   * LimitExceededException
-//   This exception is thrown when a user exceeds the limit for a requested AWS
-//   resource.
+//   This exception is thrown when a user exceeds the limit for a requested Amazon
+//   Web Services resource.
 //
 //   * UserNotFoundException
 //   This exception is thrown when a user is not found.
@@ -3685,11 +3782,11 @@ func (c *CognitoIdentityProvider) ConfirmSignUpRequest(input *ConfirmSignUpInput
 //
 //   * UnexpectedLambdaException
 //   This exception is thrown when the Amazon Cognito service encounters an unexpected
-//   exception with the AWS Lambda service.
+//   exception with the Lambda service.
 //
 //   * UserLambdaValidationException
 //   This exception is thrown when the Amazon Cognito service encounters a user
-//   validation exception with the AWS Lambda service.
+//   validation exception with the Lambda service.
 //
 //   * NotAuthorizedException
 //   This exception is thrown when a user is not authorized.
@@ -3707,7 +3804,7 @@ func (c *CognitoIdentityProvider) ConfirmSignUpRequest(input *ConfirmSignUpInput
 //
 //   * InvalidLambdaResponseException
 //   This exception is thrown when the Amazon Cognito service encounters an invalid
-//   AWS Lambda response.
+//   Lambda response.
 //
 //   * AliasExistsException
 //   This exception is thrown when a user tries to confirm the account with an
@@ -3720,8 +3817,8 @@ func (c *CognitoIdentityProvider) ConfirmSignUpRequest(input *ConfirmSignUpInput
 //   operation.
 //
 //   * LimitExceededException
-//   This exception is thrown when a user exceeds the limit for a requested AWS
-//   resource.
+//   This exception is thrown when a user exceeds the limit for a requested Amazon
+//   Web Services resource.
 //
 //   * UserNotFoundException
 //   This exception is thrown when a user is not found.
@@ -3824,8 +3921,8 @@ func (c *CognitoIdentityProvider) CreateGroupRequest(input *CreateGroupInput) (r
 //   operation.
 //
 //   * LimitExceededException
-//   This exception is thrown when a user exceeds the limit for a requested AWS
-//   resource.
+//   This exception is thrown when a user exceeds the limit for a requested Amazon
+//   Web Services resource.
 //
 //   * NotAuthorizedException
 //   This exception is thrown when a user is not authorized.
@@ -3929,8 +4026,8 @@ func (c *CognitoIdentityProvider) CreateIdentityProviderRequest(input *CreateIde
 //   operation.
 //
 //   * LimitExceededException
-//   This exception is thrown when a user exceeds the limit for a requested AWS
-//   resource.
+//   This exception is thrown when a user exceeds the limit for a requested Amazon
+//   Web Services resource.
 //
 //   * InternalErrorException
 //   This exception is thrown when Amazon Cognito encounters an internal error.
@@ -4027,8 +4124,8 @@ func (c *CognitoIdentityProvider) CreateResourceServerRequest(input *CreateResou
 //   operation.
 //
 //   * LimitExceededException
-//   This exception is thrown when a user exceeds the limit for a requested AWS
-//   resource.
+//   This exception is thrown when a user exceeds the limit for a requested Amazon
+//   Web Services resource.
 //
 //   * InternalErrorException
 //   This exception is thrown when Amazon Cognito encounters an internal error.
@@ -4128,8 +4225,8 @@ func (c *CognitoIdentityProvider) CreateUserImportJobRequest(input *CreateUserIm
 //   This exception is thrown when a user is not authorized.
 //
 //   * LimitExceededException
-//   This exception is thrown when a user exceeds the limit for a requested AWS
-//   resource.
+//   This exception is thrown when a user exceeds the limit for a requested Amazon
+//   Web Services resource.
 //
 //   * InternalErrorException
 //   This exception is thrown when Amazon Cognito encounters an internal error.
@@ -4203,6 +4300,24 @@ func (c *CognitoIdentityProvider) CreateUserPoolRequest(input *CreateUserPoolInp
 // Creates a new Amazon Cognito user pool and sets the password policy for the
 // pool.
 //
+// This action might generate an SMS text message. Starting June 1, 2021, U.S.
+// telecom carriers require that you register an origination phone number before
+// you can send SMS messages to U.S. phone numbers. If you use SMS text messages
+// in Amazon Cognito, you must register a phone number with Amazon Pinpoint
+// (https://console.aws.amazon.com/pinpoint/home/). Cognito will use the the
+// registered number automatically. Otherwise, Cognito users that must receive
+// SMS messages might be unable to sign up, activate their accounts, or sign
+// in.
+//
+// If you have never used SMS text messages with Amazon Cognito or any other
+// Amazon Web Service, Amazon SNS might place your account in SMS sandbox. In
+// sandbox mode (https://docs.aws.amazon.com/sns/latest/dg/sns-sms-sandbox.html)
+// , you’ll have limitations, such as sending messages to only verified phone
+// numbers. After testing in the sandbox environment, you can move out of the
+// SMS sandbox and into production. For more information, see SMS message settings
+// for Cognito User Pools (https://docs.aws.amazon.com/cognito/latest/developerguide/cognito-user-identity-pools-sms-userpool-settings.html)
+// in the Amazon Cognito Developer Guide.
+//
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
 // the error.
@@ -4220,8 +4335,8 @@ func (c *CognitoIdentityProvider) CreateUserPoolRequest(input *CreateUserPoolInp
 //   operation.
 //
 //   * LimitExceededException
-//   This exception is thrown when a user exceeds the limit for a requested AWS
-//   resource.
+//   This exception is thrown when a user exceeds the limit for a requested Amazon
+//   Web Services resource.
 //
 //   * InvalidSmsRoleAccessPolicyException
 //   This exception is returned when the role provided for SMS configuration does
@@ -4314,6 +4429,9 @@ func (c *CognitoIdentityProvider) CreateUserPoolClientRequest(input *CreateUserP
 //
 // Creates the user pool client.
 //
+// When you create a new user pool client, token revocation is automatically
+// enabled. For more information about revoking tokens, see RevokeToken (https://docs.aws.amazon.com/cognito-user-identity-pools/latest/APIReference/API_RevokeToken.html).
+//
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
 // the error.
@@ -4335,8 +4453,8 @@ func (c *CognitoIdentityProvider) CreateUserPoolClientRequest(input *CreateUserP
 //   operation.
 //
 //   * LimitExceededException
-//   This exception is thrown when a user exceeds the limit for a requested AWS
-//   resource.
+//   This exception is thrown when a user exceeds the limit for a requested Amazon
+//   Web Services resource.
 //
 //   * NotAuthorizedException
 //   This exception is thrown when a user is not authorized.
@@ -4438,8 +4556,8 @@ func (c *CognitoIdentityProvider) CreateUserPoolDomainRequest(input *CreateUserP
 //   requested resource.
 //
 //   * LimitExceededException
-//   This exception is thrown when a user exceeds the limit for a requested AWS
-//   resource.
+//   This exception is thrown when a user exceeds the limit for a requested Amazon
+//   Web Services resource.
 //
 //   * InternalErrorException
 //   This exception is thrown when Amazon Cognito encounters an internal error.
@@ -4511,7 +4629,7 @@ func (c *CognitoIdentityProvider) DeleteGroupRequest(input *DeleteGroupInput) (r
 
 // DeleteGroup API operation for Amazon Cognito Identity Provider.
 //
-// Deletes a group. Currently only groups with no members can be deleted.
+// Deletes a group.
 //
 // Calling this action requires developer credentials.
 //
@@ -6075,6 +6193,24 @@ func (c *CognitoIdentityProvider) ForgotPasswordRequest(input *ForgotPasswordInp
 // the confirmation code for resetting the password, call ConfirmForgotPassword
 // (https://docs.aws.amazon.com/cognito-user-identity-pools/latest/APIReference/API_ConfirmForgotPassword.html).
 //
+// This action might generate an SMS text message. Starting June 1, 2021, U.S.
+// telecom carriers require that you register an origination phone number before
+// you can send SMS messages to U.S. phone numbers. If you use SMS text messages
+// in Amazon Cognito, you must register a phone number with Amazon Pinpoint
+// (https://console.aws.amazon.com/pinpoint/home/). Cognito will use the the
+// registered number automatically. Otherwise, Cognito users that must receive
+// SMS messages might be unable to sign up, activate their accounts, or sign
+// in.
+//
+// If you have never used SMS text messages with Amazon Cognito or any other
+// Amazon Web Service, Amazon SNS might place your account in SMS sandbox. In
+// sandbox mode (https://docs.aws.amazon.com/sns/latest/dg/sns-sms-sandbox.html)
+// , you’ll have limitations, such as sending messages to only verified phone
+// numbers. After testing in the sandbox environment, you can move out of the
+// SMS sandbox and into production. For more information, see SMS message settings
+// for Cognito User Pools (https://docs.aws.amazon.com/cognito/latest/developerguide/cognito-user-identity-pools-sms-userpool-settings.html)
+// in the Amazon Cognito Developer Guide.
+//
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
 // the error.
@@ -6093,26 +6229,26 @@ func (c *CognitoIdentityProvider) ForgotPasswordRequest(input *ForgotPasswordInp
 //
 //   * UnexpectedLambdaException
 //   This exception is thrown when the Amazon Cognito service encounters an unexpected
-//   exception with the AWS Lambda service.
+//   exception with the Lambda service.
 //
 //   * UserLambdaValidationException
 //   This exception is thrown when the Amazon Cognito service encounters a user
-//   validation exception with the AWS Lambda service.
+//   validation exception with the Lambda service.
 //
 //   * NotAuthorizedException
 //   This exception is thrown when a user is not authorized.
 //
 //   * InvalidLambdaResponseException
 //   This exception is thrown when the Amazon Cognito service encounters an invalid
-//   AWS Lambda response.
+//   Lambda response.
 //
 //   * TooManyRequestsException
 //   This exception is thrown when the user has made too many requests for a given
 //   operation.
 //
 //   * LimitExceededException
-//   This exception is thrown when a user exceeds the limit for a requested AWS
-//   resource.
+//   This exception is thrown when a user exceeds the limit for a requested Amazon
+//   Web Services resource.
 //
 //   * InvalidSmsRoleAccessPolicyException
 //   This exception is returned when the role provided for SMS configuration does
@@ -6888,6 +7024,24 @@ func (c *CognitoIdentityProvider) GetUserAttributeVerificationCodeRequest(input 
 //
 // Gets the user attribute verification code for the specified attribute name.
 //
+// This action might generate an SMS text message. Starting June 1, 2021, U.S.
+// telecom carriers require that you register an origination phone number before
+// you can send SMS messages to U.S. phone numbers. If you use SMS text messages
+// in Amazon Cognito, you must register a phone number with Amazon Pinpoint
+// (https://console.aws.amazon.com/pinpoint/home/). Cognito will use the the
+// registered number automatically. Otherwise, Cognito users that must receive
+// SMS messages might be unable to sign up, activate their accounts, or sign
+// in.
+//
+// If you have never used SMS text messages with Amazon Cognito or any other
+// Amazon Web Service, Amazon SNS might place your account in SMS sandbox. In
+// sandbox mode (https://docs.aws.amazon.com/sns/latest/dg/sns-sms-sandbox.html)
+// , you’ll have limitations, such as sending messages to only verified phone
+// numbers. After testing in the sandbox environment, you can move out of the
+// SMS sandbox and into production. For more information, see SMS message settings
+// for Cognito User Pools (https://docs.aws.amazon.com/cognito/latest/developerguide/cognito-user-identity-pools-sms-userpool-settings.html)
+// in the Amazon Cognito Developer Guide.
+//
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
 // the error.
@@ -6913,15 +7067,15 @@ func (c *CognitoIdentityProvider) GetUserAttributeVerificationCodeRequest(input 
 //
 //   * UnexpectedLambdaException
 //   This exception is thrown when the Amazon Cognito service encounters an unexpected
-//   exception with the AWS Lambda service.
+//   exception with the Lambda service.
 //
 //   * UserLambdaValidationException
 //   This exception is thrown when the Amazon Cognito service encounters a user
-//   validation exception with the AWS Lambda service.
+//   validation exception with the Lambda service.
 //
 //   * InvalidLambdaResponseException
 //   This exception is thrown when the Amazon Cognito service encounters an invalid
-//   AWS Lambda response.
+//   Lambda response.
 //
 //   * InvalidSmsRoleAccessPolicyException
 //   This exception is returned when the role provided for SMS configuration does
@@ -6941,8 +7095,8 @@ func (c *CognitoIdentityProvider) GetUserAttributeVerificationCodeRequest(input 
 //   This exception is thrown when a verification code fails to deliver successfully.
 //
 //   * LimitExceededException
-//   This exception is thrown when a user exceeds the limit for a requested AWS
-//   resource.
+//   This exception is thrown when a user exceeds the limit for a requested Amazon
+//   Web Services resource.
 //
 //   * PasswordResetRequiredException
 //   This exception is thrown when a password reset is required.
@@ -7222,6 +7376,24 @@ func (c *CognitoIdentityProvider) InitiateAuthRequest(input *InitiateAuthInput) 
 //
 // Initiates the authentication flow.
 //
+// This action might generate an SMS text message. Starting June 1, 2021, U.S.
+// telecom carriers require that you register an origination phone number before
+// you can send SMS messages to U.S. phone numbers. If you use SMS text messages
+// in Amazon Cognito, you must register a phone number with Amazon Pinpoint
+// (https://console.aws.amazon.com/pinpoint/home/). Cognito will use the the
+// registered number automatically. Otherwise, Cognito users that must receive
+// SMS messages might be unable to sign up, activate their accounts, or sign
+// in.
+//
+// If you have never used SMS text messages with Amazon Cognito or any other
+// Amazon Web Service, Amazon SNS might place your account in SMS sandbox. In
+// sandbox mode (https://docs.aws.amazon.com/sns/latest/dg/sns-sms-sandbox.html)
+// , you’ll have limitations, such as sending messages to only verified phone
+// numbers. After testing in the sandbox environment, you can move out of the
+// SMS sandbox and into production. For more information, see SMS message settings
+// for Cognito User Pools (https://docs.aws.amazon.com/cognito/latest/developerguide/cognito-user-identity-pools-sms-userpool-settings.html)
+// in the Amazon Cognito Developer Guide.
+//
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
 // the error.
@@ -7247,18 +7419,18 @@ func (c *CognitoIdentityProvider) InitiateAuthRequest(input *InitiateAuthInput) 
 //
 //   * UnexpectedLambdaException
 //   This exception is thrown when the Amazon Cognito service encounters an unexpected
-//   exception with the AWS Lambda service.
+//   exception with the Lambda service.
 //
 //   * InvalidUserPoolConfigurationException
 //   This exception is thrown when the user pool configuration is invalid.
 //
 //   * UserLambdaValidationException
 //   This exception is thrown when the Amazon Cognito service encounters a user
-//   validation exception with the AWS Lambda service.
+//   validation exception with the Lambda service.
 //
 //   * InvalidLambdaResponseException
 //   This exception is thrown when the Amazon Cognito service encounters an invalid
-//   AWS Lambda response.
+//   Lambda response.
 //
 //   * PasswordResetRequiredException
 //   This exception is thrown when a password reset is required.
@@ -8264,7 +8436,7 @@ func (c *CognitoIdentityProvider) ListUserPoolsRequest(input *ListUserPoolsInput
 
 // ListUserPools API operation for Amazon Cognito Identity Provider.
 //
-// Lists the user pools associated with an AWS account.
+// Lists the user pools associated with an account.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -8716,6 +8888,24 @@ func (c *CognitoIdentityProvider) ResendConfirmationCodeRequest(input *ResendCon
 // Resends the confirmation (for confirmation of registration) to a specific
 // user in the user pool.
 //
+// This action might generate an SMS text message. Starting June 1, 2021, U.S.
+// telecom carriers require that you register an origination phone number before
+// you can send SMS messages to U.S. phone numbers. If you use SMS text messages
+// in Amazon Cognito, you must register a phone number with Amazon Pinpoint
+// (https://console.aws.amazon.com/pinpoint/home/). Cognito will use the the
+// registered number automatically. Otherwise, Cognito users that must receive
+// SMS messages might be unable to sign up, activate their accounts, or sign
+// in.
+//
+// If you have never used SMS text messages with Amazon Cognito or any other
+// Amazon Web Service, Amazon SNS might place your account in SMS sandbox. In
+// sandbox mode (https://docs.aws.amazon.com/sns/latest/dg/sns-sms-sandbox.html)
+// , you’ll have limitations, such as sending messages to only verified phone
+// numbers. After testing in the sandbox environment, you can move out of the
+// SMS sandbox and into production. For more information, see SMS message settings
+// for Cognito User Pools (https://docs.aws.amazon.com/cognito/latest/developerguide/cognito-user-identity-pools-sms-userpool-settings.html)
+// in the Amazon Cognito Developer Guide.
+//
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
 // the error.
@@ -8734,26 +8924,26 @@ func (c *CognitoIdentityProvider) ResendConfirmationCodeRequest(input *ResendCon
 //
 //   * UnexpectedLambdaException
 //   This exception is thrown when the Amazon Cognito service encounters an unexpected
-//   exception with the AWS Lambda service.
+//   exception with the Lambda service.
 //
 //   * UserLambdaValidationException
 //   This exception is thrown when the Amazon Cognito service encounters a user
-//   validation exception with the AWS Lambda service.
+//   validation exception with the Lambda service.
 //
 //   * NotAuthorizedException
 //   This exception is thrown when a user is not authorized.
 //
 //   * InvalidLambdaResponseException
 //   This exception is thrown when the Amazon Cognito service encounters an invalid
-//   AWS Lambda response.
+//   Lambda response.
 //
 //   * TooManyRequestsException
 //   This exception is thrown when the user has made too many requests for a given
 //   operation.
 //
 //   * LimitExceededException
-//   This exception is thrown when a user exceeds the limit for a requested AWS
-//   resource.
+//   This exception is thrown when a user exceeds the limit for a requested Amazon
+//   Web Services resource.
 //
 //   * InvalidSmsRoleAccessPolicyException
 //   This exception is returned when the role provided for SMS configuration does
@@ -8847,6 +9037,24 @@ func (c *CognitoIdentityProvider) RespondToAuthChallengeRequest(input *RespondTo
 //
 // Responds to the authentication challenge.
 //
+// This action might generate an SMS text message. Starting June 1, 2021, U.S.
+// telecom carriers require that you register an origination phone number before
+// you can send SMS messages to U.S. phone numbers. If you use SMS text messages
+// in Amazon Cognito, you must register a phone number with Amazon Pinpoint
+// (https://console.aws.amazon.com/pinpoint/home/). Cognito will use the the
+// registered number automatically. Otherwise, Cognito users that must receive
+// SMS messages might be unable to sign up, activate their accounts, or sign
+// in.
+//
+// If you have never used SMS text messages with Amazon Cognito or any other
+// Amazon Web Service, Amazon SNS might place your account in SMS sandbox. In
+// sandbox mode (https://docs.aws.amazon.com/sns/latest/dg/sns-sms-sandbox.html)
+// , you’ll have limitations, such as sending messages to only verified phone
+// numbers. After testing in the sandbox environment, you can move out of the
+// SMS sandbox and into production. For more information, see SMS message settings
+// for Cognito User Pools (https://docs.aws.amazon.com/cognito/latest/developerguide/cognito-user-identity-pools-sms-userpool-settings.html)
+// in the Amazon Cognito Developer Guide.
+//
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
 // the error.
@@ -8875,11 +9083,11 @@ func (c *CognitoIdentityProvider) RespondToAuthChallengeRequest(input *RespondTo
 //
 //   * UnexpectedLambdaException
 //   This exception is thrown when the Amazon Cognito service encounters an unexpected
-//   exception with the AWS Lambda service.
+//   exception with the Lambda service.
 //
 //   * UserLambdaValidationException
 //   This exception is thrown when the Amazon Cognito service encounters a user
-//   validation exception with the AWS Lambda service.
+//   validation exception with the Lambda service.
 //
 //   * InvalidPasswordException
 //   This exception is thrown when the Amazon Cognito service encounters an invalid
@@ -8887,7 +9095,7 @@ func (c *CognitoIdentityProvider) RespondToAuthChallengeRequest(input *RespondTo
 //
 //   * InvalidLambdaResponseException
 //   This exception is thrown when the Amazon Cognito service encounters an invalid
-//   AWS Lambda response.
+//   Lambda response.
 //
 //   * TooManyRequestsException
 //   This exception is thrown when the user has made too many requests for a given
@@ -8949,6 +9157,107 @@ func (c *CognitoIdentityProvider) RespondToAuthChallenge(input *RespondToAuthCha
 // for more information on using Contexts.
 func (c *CognitoIdentityProvider) RespondToAuthChallengeWithContext(ctx aws.Context, input *RespondToAuthChallengeInput, opts ...request.Option) (*RespondToAuthChallengeOutput, error) {
 	req, out := c.RespondToAuthChallengeRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opRevokeToken = "RevokeToken"
+
+// RevokeTokenRequest generates a "aws/request.Request" representing the
+// client's request for the RevokeToken operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See RevokeToken for more information on using the RevokeToken
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the RevokeTokenRequest method.
+//    req, resp := client.RevokeTokenRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/cognito-idp-2016-04-18/RevokeToken
+func (c *CognitoIdentityProvider) RevokeTokenRequest(input *RevokeTokenInput) (req *request.Request, output *RevokeTokenOutput) {
+	op := &request.Operation{
+		Name:       opRevokeToken,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &RevokeTokenInput{}
+	}
+
+	output = &RevokeTokenOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
+	return
+}
+
+// RevokeToken API operation for Amazon Cognito Identity Provider.
+//
+// Revokes all of the access tokens generated by the specified refresh token.
+// After the token is revoked, you can not use the revoked token to access Cognito
+// authenticated APIs.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Cognito Identity Provider's
+// API operation RevokeToken for usage and error information.
+//
+// Returned Error Types:
+//   * TooManyRequestsException
+//   This exception is thrown when the user has made too many requests for a given
+//   operation.
+//
+//   * InternalErrorException
+//   This exception is thrown when Amazon Cognito encounters an internal error.
+//
+//   * UnauthorizedException
+//   This exception is thrown when the request is not authorized. This can happen
+//   due to an invalid access token in the request.
+//
+//   * InvalidParameterException
+//   This exception is thrown when the Amazon Cognito service encounters an invalid
+//   parameter.
+//
+//   * UnsupportedOperationException
+//   This exception is thrown when you attempt to perform an operation that is
+//   not enabled for the user pool client.
+//
+//   * UnsupportedTokenTypeException
+//   This exception is thrown when an unsupported token is passed to an operation.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/cognito-idp-2016-04-18/RevokeToken
+func (c *CognitoIdentityProvider) RevokeToken(input *RevokeTokenInput) (*RevokeTokenOutput, error) {
+	req, out := c.RevokeTokenRequest(input)
+	return out, req.Send()
+}
+
+// RevokeTokenWithContext is the same as RevokeToken with the addition of
+// the ability to pass a context and additional request options.
+//
+// See RevokeToken for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *CognitoIdentityProvider) RevokeTokenWithContext(ctx aws.Context, input *RevokeTokenInput, opts ...request.Option) (*RevokeTokenOutput, error) {
+	req, out := c.RevokeTokenRequest(input)
 	req.SetContext(ctx)
 	req.ApplyOptions(opts...)
 	return out, req.Send()
@@ -9217,7 +9526,11 @@ func (c *CognitoIdentityProvider) SetUserMFAPreferenceRequest(input *SetUserMFAP
 // be set as preferred. The preferred MFA factor will be used to authenticate
 // a user if multiple factors are enabled. If multiple options are enabled and
 // no preference is set, a challenge to choose an MFA option will be returned
-// during sign in.
+// during sign in. If an MFA type is enabled for a user, the user will be prompted
+// for MFA during all sign in attempts, unless device tracking is turned on
+// and the device has been trusted. If you would like MFA to be applied selectively
+// based on the assessed risk level of sign in attempts, disable MFA for users
+// and turn on Adaptive Authentication for the user pool.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -9317,6 +9630,24 @@ func (c *CognitoIdentityProvider) SetUserPoolMfaConfigRequest(input *SetUserPool
 // SetUserPoolMfaConfig API operation for Amazon Cognito Identity Provider.
 //
 // Set the user pool multi-factor authentication (MFA) configuration.
+//
+// This action might generate an SMS text message. Starting June 1, 2021, U.S.
+// telecom carriers require that you register an origination phone number before
+// you can send SMS messages to U.S. phone numbers. If you use SMS text messages
+// in Amazon Cognito, you must register a phone number with Amazon Pinpoint
+// (https://console.aws.amazon.com/pinpoint/home/). Cognito will use the the
+// registered number automatically. Otherwise, Cognito users that must receive
+// SMS messages might be unable to sign up, activate their accounts, or sign
+// in.
+//
+// If you have never used SMS text messages with Amazon Cognito or any other
+// Amazon Web Service, Amazon SNS might place your account in SMS sandbox. In
+// sandbox mode (https://docs.aws.amazon.com/sns/latest/dg/sns-sms-sandbox.html)
+// , you’ll have limitations, such as sending messages to only verified phone
+// numbers. After testing in the sandbox environment, you can move out of the
+// SMS sandbox and into production. For more information, see SMS message settings
+// for Cognito User Pools (https://docs.aws.amazon.com/cognito/latest/developerguide/cognito-user-identity-pools-sms-userpool-settings.html)
+// in the Amazon Cognito Developer Guide.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -9528,6 +9859,24 @@ func (c *CognitoIdentityProvider) SignUpRequest(input *SignUpInput) (req *reques
 // Registers the user in the specified user pool and creates a user name, password,
 // and user attributes.
 //
+// This action might generate an SMS text message. Starting June 1, 2021, U.S.
+// telecom carriers require that you register an origination phone number before
+// you can send SMS messages to U.S. phone numbers. If you use SMS text messages
+// in Amazon Cognito, you must register a phone number with Amazon Pinpoint
+// (https://console.aws.amazon.com/pinpoint/home/). Cognito will use the the
+// registered number automatically. Otherwise, Cognito users that must receive
+// SMS messages might be unable to sign up, activate their accounts, or sign
+// in.
+//
+// If you have never used SMS text messages with Amazon Cognito or any other
+// Amazon Web Service, Amazon SNS might place your account in SMS sandbox. In
+// sandbox mode (https://docs.aws.amazon.com/sns/latest/dg/sns-sms-sandbox.html)
+// , you’ll have limitations, such as sending messages to only verified phone
+// numbers. After testing in the sandbox environment, you can move out of the
+// SMS sandbox and into production. For more information, see SMS message settings
+// for Cognito User Pools (https://docs.aws.amazon.com/cognito/latest/developerguide/cognito-user-identity-pools-sms-userpool-settings.html)
+// in the Amazon Cognito Developer Guide.
+//
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
 // the error.
@@ -9546,11 +9895,11 @@ func (c *CognitoIdentityProvider) SignUpRequest(input *SignUpInput) (req *reques
 //
 //   * UnexpectedLambdaException
 //   This exception is thrown when the Amazon Cognito service encounters an unexpected
-//   exception with the AWS Lambda service.
+//   exception with the Lambda service.
 //
 //   * UserLambdaValidationException
 //   This exception is thrown when the Amazon Cognito service encounters a user
-//   validation exception with the AWS Lambda service.
+//   validation exception with the Lambda service.
 //
 //   * NotAuthorizedException
 //   This exception is thrown when a user is not authorized.
@@ -9561,7 +9910,7 @@ func (c *CognitoIdentityProvider) SignUpRequest(input *SignUpInput) (req *reques
 //
 //   * InvalidLambdaResponseException
 //   This exception is thrown when the Amazon Cognito service encounters an invalid
-//   AWS Lambda response.
+//   Lambda response.
 //
 //   * UsernameExistsException
 //   This exception is thrown when Amazon Cognito encounters a user name that
@@ -10273,9 +10622,6 @@ func (c *CognitoIdentityProvider) UpdateGroupRequest(input *UpdateGroupInput) (r
 //
 // Calling this action requires developer credentials.
 //
-// If you don't provide a value for an attribute, it will be set to the default
-// value.
-//
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
 // the error.
@@ -10565,6 +10911,24 @@ func (c *CognitoIdentityProvider) UpdateUserAttributesRequest(input *UpdateUserA
 //
 // Allows a user to update a specific attribute (one at a time).
 //
+// This action might generate an SMS text message. Starting June 1, 2021, U.S.
+// telecom carriers require that you register an origination phone number before
+// you can send SMS messages to U.S. phone numbers. If you use SMS text messages
+// in Amazon Cognito, you must register a phone number with Amazon Pinpoint
+// (https://console.aws.amazon.com/pinpoint/home/). Cognito will use the the
+// registered number automatically. Otherwise, Cognito users that must receive
+// SMS messages might be unable to sign up, activate their accounts, or sign
+// in.
+//
+// If you have never used SMS text messages with Amazon Cognito or any other
+// Amazon Web Service, Amazon SNS might place your account in SMS sandbox. In
+// sandbox mode (https://docs.aws.amazon.com/sns/latest/dg/sns-sms-sandbox.html)
+// , you’ll have limitations, such as sending messages to only verified phone
+// numbers. After testing in the sandbox environment, you can move out of the
+// SMS sandbox and into production. For more information, see SMS message settings
+// for Cognito User Pools (https://docs.aws.amazon.com/cognito/latest/developerguide/cognito-user-identity-pools-sms-userpool-settings.html)
+// in the Amazon Cognito Developer Guide.
+//
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
 // the error.
@@ -10593,15 +10957,15 @@ func (c *CognitoIdentityProvider) UpdateUserAttributesRequest(input *UpdateUserA
 //
 //   * UnexpectedLambdaException
 //   This exception is thrown when the Amazon Cognito service encounters an unexpected
-//   exception with the AWS Lambda service.
+//   exception with the Lambda service.
 //
 //   * UserLambdaValidationException
 //   This exception is thrown when the Amazon Cognito service encounters a user
-//   validation exception with the AWS Lambda service.
+//   validation exception with the Lambda service.
 //
 //   * InvalidLambdaResponseException
 //   This exception is thrown when the Amazon Cognito service encounters an invalid
-//   AWS Lambda response.
+//   Lambda response.
 //
 //   * TooManyRequestsException
 //   This exception is thrown when the user has made too many requests for a given
@@ -10711,9 +11075,26 @@ func (c *CognitoIdentityProvider) UpdateUserPoolRequest(input *UpdateUserPoolInp
 //
 // Updates the specified user pool with the specified attributes. You can get
 // a list of the current user pool settings using DescribeUserPool (https://docs.aws.amazon.com/cognito-user-identity-pools/latest/APIReference/API_DescribeUserPool.html).
-//
 // If you don't provide a value for an attribute, it will be set to the default
 // value.
+//
+// This action might generate an SMS text message. Starting June 1, 2021, U.S.
+// telecom carriers require that you register an origination phone number before
+// you can send SMS messages to U.S. phone numbers. If you use SMS text messages
+// in Amazon Cognito, you must register a phone number with Amazon Pinpoint
+// (https://console.aws.amazon.com/pinpoint/home/). Cognito will use the the
+// registered number automatically. Otherwise, Cognito users that must receive
+// SMS messages might be unable to sign up, activate their accounts, or sign
+// in.
+//
+// If you have never used SMS text messages with Amazon Cognito or any other
+// Amazon Web Service, Amazon SNS might place your account in SMS sandbox. In
+// sandbox mode (https://docs.aws.amazon.com/sns/latest/dg/sns-sms-sandbox.html)
+// , you’ll have limitations, such as sending messages to only verified phone
+// numbers. After testing in the sandbox environment, you can move out of the
+// SMS sandbox and into production. For more information, see SMS message settings
+// for Cognito User Pools (https://docs.aws.amazon.com/cognito/latest/developerguide/cognito-user-identity-pools-sms-userpool-settings.html)
+// in the Amazon Cognito Developer Guide.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -10838,6 +11219,9 @@ func (c *CognitoIdentityProvider) UpdateUserPoolClientRequest(input *UpdateUserP
 // If you don't provide a value for an attribute, it will be set to the default
 // value.
 //
+// You can also use this operation to enable token revocation for user pool
+// clients. For more information about revoking tokens, see RevokeToken (https://docs.aws.amazon.com/cognito-user-identity-pools/latest/APIReference/API_RevokeToken.html).
+//
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
 // the error.
@@ -10948,7 +11332,7 @@ func (c *CognitoIdentityProvider) UpdateUserPoolDomainRequest(input *UpdateUserP
 //
 // A custom domain is used to host the Amazon Cognito hosted UI, which provides
 // sign-up and sign-in pages for your application. When you set up a custom
-// domain, you provide a certificate that you manage with AWS Certificate Manager
+// domain, you provide a certificate that you manage with Certificate Manager
 // (ACM). When necessary, you can use this operation to change the certificate
 // that you applied to your custom domain.
 //
@@ -10961,7 +11345,7 @@ func (c *CognitoIdentityProvider) UpdateUserPoolDomainRequest(input *UpdateUserP
 // domain, you must provide this ARN to Amazon Cognito.
 //
 // When you add your new certificate in ACM, you must choose US East (N. Virginia)
-// as the AWS Region.
+// as the Region.
 //
 // After you submit your request, Amazon Cognito requires up to 1 hour to distribute
 // your new certificate to your custom domain.
@@ -11219,8 +11603,8 @@ func (c *CognitoIdentityProvider) VerifyUserAttributeRequest(input *VerifyUserAt
 //   operation.
 //
 //   * LimitExceededException
-//   This exception is thrown when a user exceeds the limit for a requested AWS
-//   resource.
+//   This exception is thrown when a user exceeds the limit for a requested Amazon
+//   Web Services resource.
 //
 //   * PasswordResetRequiredException
 //   This exception is thrown when a password reset is required.
@@ -11264,12 +11648,20 @@ type AccountRecoverySettingType struct {
 	RecoveryMechanisms []*RecoveryOptionType `min:"1" type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AccountRecoverySettingType) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AccountRecoverySettingType) GoString() string {
 	return s.String()
 }
@@ -11328,12 +11720,20 @@ type AccountTakeoverActionType struct {
 	Notify *bool `type:"boolean" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AccountTakeoverActionType) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AccountTakeoverActionType) GoString() string {
 	return s.String()
 }
@@ -11380,12 +11780,20 @@ type AccountTakeoverActionsType struct {
 	MediumAction *AccountTakeoverActionType `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AccountTakeoverActionsType) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AccountTakeoverActionsType) GoString() string {
 	return s.String()
 }
@@ -11447,12 +11855,20 @@ type AccountTakeoverRiskConfigurationType struct {
 	NotifyConfiguration *NotifyConfigurationType `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AccountTakeoverRiskConfigurationType) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AccountTakeoverRiskConfigurationType) GoString() string {
 	return s.String()
 }
@@ -11507,12 +11923,20 @@ type AddCustomAttributesInput struct {
 	UserPoolId *string `min:"1" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AddCustomAttributesInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AddCustomAttributesInput) GoString() string {
 	return s.String()
 }
@@ -11566,12 +11990,20 @@ type AddCustomAttributesOutput struct {
 	_ struct{} `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AddCustomAttributesOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AddCustomAttributesOutput) GoString() string {
 	return s.String()
 }
@@ -11591,16 +12023,28 @@ type AdminAddUserToGroupInput struct {
 
 	// The username for the user.
 	//
+	// Username is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by AdminAddUserToGroupInput's
+	// String and GoString methods.
+	//
 	// Username is a required field
 	Username *string `min:"1" type:"string" required:"true" sensitive:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AdminAddUserToGroupInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AdminAddUserToGroupInput) GoString() string {
 	return s.String()
 }
@@ -11655,12 +12099,20 @@ type AdminAddUserToGroupOutput struct {
 	_ struct{} `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AdminAddUserToGroupOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AdminAddUserToGroupOutput) GoString() string {
 	return s.String()
 }
@@ -11673,13 +12125,13 @@ type AdminConfirmSignUpInput struct {
 	// workflows that this action triggers.
 	//
 	// If your user pool configuration includes triggers, the AdminConfirmSignUp
-	// API action invokes the AWS Lambda function that is specified for the post
-	// confirmation trigger. When Amazon Cognito invokes this function, it passes
-	// a JSON payload, which the function receives as input. In this payload, the
-	// clientMetadata attribute provides the data that you assigned to the ClientMetadata
-	// parameter in your AdminConfirmSignUp request. In your function code in AWS
-	// Lambda, you can process the ClientMetadata value to enhance your workflow
-	// for your specific needs.
+	// API action invokes the Lambda function that is specified for the post confirmation
+	// trigger. When Amazon Cognito invokes this function, it passes a JSON payload,
+	// which the function receives as input. In this payload, the clientMetadata
+	// attribute provides the data that you assigned to the ClientMetadata parameter
+	// in your AdminConfirmSignUp request. In your function code in Lambda, you
+	// can process the ClientMetadata value to enhance your workflow for your specific
+	// needs.
 	//
 	// For more information, see Customizing User Pool Workflows with Lambda Triggers
 	// (https://docs.aws.amazon.com/cognito/latest/developerguide/cognito-user-identity-pools-working-with-aws-lambda-triggers.html)
@@ -11689,9 +12141,9 @@ type AdminConfirmSignUpInput struct {
 	// parameter:
 	//
 	//    * Amazon Cognito does not store the ClientMetadata value. This data is
-	//    available only to AWS Lambda triggers that are assigned to a user pool
-	//    to support custom workflows. If your user pool configuration does not
-	//    include triggers, the ClientMetadata parameter serves no purpose.
+	//    available only to Lambda triggers that are assigned to a user pool to
+	//    support custom workflows. If your user pool configuration does not include
+	//    triggers, the ClientMetadata parameter serves no purpose.
 	//
 	//    * Amazon Cognito does not validate the ClientMetadata value.
 	//
@@ -11706,16 +12158,28 @@ type AdminConfirmSignUpInput struct {
 
 	// The user name for which you want to confirm user registration.
 	//
+	// Username is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by AdminConfirmSignUpInput's
+	// String and GoString methods.
+	//
 	// Username is a required field
 	Username *string `min:"1" type:"string" required:"true" sensitive:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AdminConfirmSignUpInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AdminConfirmSignUpInput) GoString() string {
 	return s.String()
 }
@@ -11765,12 +12229,20 @@ type AdminConfirmSignUpOutput struct {
 	_ struct{} `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AdminConfirmSignUpOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AdminConfirmSignUpOutput) GoString() string {
 	return s.String()
 }
@@ -11799,12 +12271,20 @@ type AdminCreateUserConfigType struct {
 	UnusedAccountValidityDays *int64 `type:"integer"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AdminCreateUserConfigType) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AdminCreateUserConfigType) GoString() string {
 	return s.String()
 }
@@ -11849,13 +12329,13 @@ type AdminCreateUserInput struct {
 	// A map of custom key-value pairs that you can provide as input for any custom
 	// workflows that this action triggers.
 	//
-	// You create custom workflows by assigning AWS Lambda functions to user pool
-	// triggers. When you use the AdminCreateUser API action, Amazon Cognito invokes
-	// the function that is assigned to the pre sign-up trigger. When Amazon Cognito
-	// invokes this function, it passes a JSON payload, which the function receives
-	// as input. This payload contains a clientMetadata attribute, which provides
-	// the data that you assigned to the ClientMetadata parameter in your AdminCreateUser
-	// request. In your function code in AWS Lambda, you can process the clientMetadata
+	// You create custom workflows by assigning Lambda functions to user pool triggers.
+	// When you use the AdminCreateUser API action, Amazon Cognito invokes the function
+	// that is assigned to the pre sign-up trigger. When Amazon Cognito invokes
+	// this function, it passes a JSON payload, which the function receives as input.
+	// This payload contains a clientMetadata attribute, which provides the data
+	// that you assigned to the ClientMetadata parameter in your AdminCreateUser
+	// request. In your function code in Lambda, you can process the clientMetadata
 	// value to enhance your workflow for your specific needs.
 	//
 	// For more information, see Customizing User Pool Workflows with Lambda Triggers
@@ -11866,9 +12346,9 @@ type AdminCreateUserInput struct {
 	// parameter:
 	//
 	//    * Amazon Cognito does not store the ClientMetadata value. This data is
-	//    available only to AWS Lambda triggers that are assigned to a user pool
-	//    to support custom workflows. If your user pool configuration does not
-	//    include triggers, the ClientMetadata parameter serves no purpose.
+	//    available only to Lambda triggers that are assigned to a user pool to
+	//    support custom workflows. If your user pool configuration does not include
+	//    triggers, the ClientMetadata parameter serves no purpose.
 	//
 	//    * Amazon Cognito does not validate the ClientMetadata value.
 	//
@@ -11913,6 +12393,10 @@ type AdminCreateUserInput struct {
 	// limit that you specified when you created the user pool. To reset the account
 	// after that time limit, you must call AdminCreateUser again, specifying "RESEND"
 	// for the MessageAction parameter.
+	//
+	// TemporaryPassword is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by AdminCreateUserInput's
+	// String and GoString methods.
 	TemporaryPassword *string `min:"6" type:"string" sensitive:"true"`
 
 	// An array of name-value pairs that contain user attributes and attribute values
@@ -11954,6 +12438,10 @@ type AdminCreateUserInput struct {
 	// UTF-8 string between 1 and 128 characters. After the user is created, the
 	// username cannot be changed.
 	//
+	// Username is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by AdminCreateUserInput's
+	// String and GoString methods.
+	//
 	// Username is a required field
 	Username *string `min:"1" type:"string" required:"true" sensitive:"true"`
 
@@ -11972,12 +12460,20 @@ type AdminCreateUserInput struct {
 	ValidationData []*AttributeType `type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AdminCreateUserInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AdminCreateUserInput) GoString() string {
 	return s.String()
 }
@@ -12089,12 +12585,20 @@ type AdminCreateUserOutput struct {
 	User *UserType `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AdminCreateUserOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AdminCreateUserOutput) GoString() string {
 	return s.String()
 }
@@ -12124,16 +12628,28 @@ type AdminDeleteUserAttributesInput struct {
 
 	// The user name of the user from which you would like to delete attributes.
 	//
+	// Username is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by AdminDeleteUserAttributesInput's
+	// String and GoString methods.
+	//
 	// Username is a required field
 	Username *string `min:"1" type:"string" required:"true" sensitive:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AdminDeleteUserAttributesInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AdminDeleteUserAttributesInput) GoString() string {
 	return s.String()
 }
@@ -12187,12 +12703,20 @@ type AdminDeleteUserAttributesOutput struct {
 	_ struct{} `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AdminDeleteUserAttributesOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AdminDeleteUserAttributesOutput) GoString() string {
 	return s.String()
 }
@@ -12208,16 +12732,28 @@ type AdminDeleteUserInput struct {
 
 	// The user name of the user you wish to delete.
 	//
+	// Username is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by AdminDeleteUserInput's
+	// String and GoString methods.
+	//
 	// Username is a required field
 	Username *string `min:"1" type:"string" required:"true" sensitive:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AdminDeleteUserInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AdminDeleteUserInput) GoString() string {
 	return s.String()
 }
@@ -12260,12 +12796,20 @@ type AdminDeleteUserOutput struct {
 	_ struct{} `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AdminDeleteUserOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AdminDeleteUserOutput) GoString() string {
 	return s.String()
 }
@@ -12284,12 +12828,20 @@ type AdminDisableProviderForUserInput struct {
 	UserPoolId *string `type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AdminDisableProviderForUserInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AdminDisableProviderForUserInput) GoString() string {
 	return s.String()
 }
@@ -12331,17 +12883,25 @@ type AdminDisableProviderForUserOutput struct {
 	_ struct{} `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AdminDisableProviderForUserOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AdminDisableProviderForUserOutput) GoString() string {
 	return s.String()
 }
 
-// Represents the request to disable any user as an administrator.
+// Represents the request to disable the user as an administrator.
 type AdminDisableUserInput struct {
 	_ struct{} `type:"structure"`
 
@@ -12352,16 +12912,28 @@ type AdminDisableUserInput struct {
 
 	// The user name of the user you wish to disable.
 	//
+	// Username is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by AdminDisableUserInput's
+	// String and GoString methods.
+	//
 	// Username is a required field
 	Username *string `min:"1" type:"string" required:"true" sensitive:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AdminDisableUserInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AdminDisableUserInput) GoString() string {
 	return s.String()
 }
@@ -12406,12 +12978,20 @@ type AdminDisableUserOutput struct {
 	_ struct{} `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AdminDisableUserOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AdminDisableUserOutput) GoString() string {
 	return s.String()
 }
@@ -12427,16 +13007,28 @@ type AdminEnableUserInput struct {
 
 	// The user name of the user you wish to enable.
 	//
+	// Username is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by AdminEnableUserInput's
+	// String and GoString methods.
+	//
 	// Username is a required field
 	Username *string `min:"1" type:"string" required:"true" sensitive:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AdminEnableUserInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AdminEnableUserInput) GoString() string {
 	return s.String()
 }
@@ -12481,12 +13073,20 @@ type AdminEnableUserOutput struct {
 	_ struct{} `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AdminEnableUserOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AdminEnableUserOutput) GoString() string {
 	return s.String()
 }
@@ -12507,16 +13107,28 @@ type AdminForgetDeviceInput struct {
 
 	// The user name.
 	//
+	// Username is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by AdminForgetDeviceInput's
+	// String and GoString methods.
+	//
 	// Username is a required field
 	Username *string `min:"1" type:"string" required:"true" sensitive:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AdminForgetDeviceInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AdminForgetDeviceInput) GoString() string {
 	return s.String()
 }
@@ -12571,12 +13183,20 @@ type AdminForgetDeviceOutput struct {
 	_ struct{} `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AdminForgetDeviceOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AdminForgetDeviceOutput) GoString() string {
 	return s.String()
 }
@@ -12597,16 +13217,28 @@ type AdminGetDeviceInput struct {
 
 	// The user name.
 	//
+	// Username is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by AdminGetDeviceInput's
+	// String and GoString methods.
+	//
 	// Username is a required field
 	Username *string `min:"1" type:"string" required:"true" sensitive:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AdminGetDeviceInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AdminGetDeviceInput) GoString() string {
 	return s.String()
 }
@@ -12667,12 +13299,20 @@ type AdminGetDeviceOutput struct {
 	Device *DeviceType `type:"structure" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AdminGetDeviceOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AdminGetDeviceOutput) GoString() string {
 	return s.String()
 }
@@ -12695,16 +13335,28 @@ type AdminGetUserInput struct {
 
 	// The user name of the user you wish to retrieve.
 	//
+	// Username is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by AdminGetUserInput's
+	// String and GoString methods.
+	//
 	// Username is a required field
 	Username *string `min:"1" type:"string" required:"true" sensitive:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AdminGetUserInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AdminGetUserInput) GoString() string {
 	return s.String()
 }
@@ -12795,16 +13447,28 @@ type AdminGetUserOutput struct {
 
 	// The user name of the user about whom you are receiving information.
 	//
+	// Username is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by AdminGetUserOutput's
+	// String and GoString methods.
+	//
 	// Username is a required field
 	Username *string `min:"1" type:"string" required:"true" sensitive:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AdminGetUserOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AdminGetUserOutput) GoString() string {
 	return s.String()
 }
@@ -12926,9 +13590,17 @@ type AdminInitiateAuthInput struct {
 	//    configured with client secret), DEVICE_KEY. To start the authentication
 	//    flow with password verification, include ChallengeName: SRP_A and SRP_A:
 	//    (The SRP_A Value).
+	//
+	// AuthParameters is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by AdminInitiateAuthInput's
+	// String and GoString methods.
 	AuthParameters map[string]*string `type:"map" sensitive:"true"`
 
 	// The app client ID.
+	//
+	// ClientId is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by AdminInitiateAuthInput's
+	// String and GoString methods.
 	//
 	// ClientId is a required field
 	ClientId *string `min:"1" type:"string" required:"true" sensitive:"true"`
@@ -12936,9 +13608,9 @@ type AdminInitiateAuthInput struct {
 	// A map of custom key-value pairs that you can provide as input for certain
 	// custom workflows that this action triggers.
 	//
-	// You create custom workflows by assigning AWS Lambda functions to user pool
-	// triggers. When you use the AdminInitiateAuth API action, Amazon Cognito invokes
-	// the AWS Lambda functions that are specified for various triggers. The ClientMetadata
+	// You create custom workflows by assigning Lambda functions to user pool triggers.
+	// When you use the AdminInitiateAuth API action, Amazon Cognito invokes the
+	// Lambda functions that are specified for various triggers. The ClientMetadata
 	// value is passed as input to the functions for only the following triggers:
 	//
 	//    * Pre signup
@@ -12951,7 +13623,7 @@ type AdminInitiateAuthInput struct {
 	// JSON payload, which the function receives as input. This payload contains
 	// a validationData attribute, which provides the data that you assigned to
 	// the ClientMetadata parameter in your AdminInitiateAuth request. In your function
-	// code in AWS Lambda, you can process the validationData value to enhance your
+	// code in Lambda, you can process the validationData value to enhance your
 	// workflow for your specific needs.
 	//
 	// When you use the AdminInitiateAuth API action, Amazon Cognito also invokes
@@ -12978,9 +13650,9 @@ type AdminInitiateAuthInput struct {
 	// parameter:
 	//
 	//    * Amazon Cognito does not store the ClientMetadata value. This data is
-	//    available only to AWS Lambda triggers that are assigned to a user pool
-	//    to support custom workflows. If your user pool configuration does not
-	//    include triggers, the ClientMetadata parameter serves no purpose.
+	//    available only to Lambda triggers that are assigned to a user pool to
+	//    support custom workflows. If your user pool configuration does not include
+	//    triggers, the ClientMetadata parameter serves no purpose.
 	//
 	//    * Amazon Cognito does not validate the ClientMetadata value.
 	//
@@ -12999,12 +13671,20 @@ type AdminInitiateAuthInput struct {
 	UserPoolId *string `min:"1" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AdminInitiateAuthInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AdminInitiateAuthInput) GoString() string {
 	return s.String()
 }
@@ -13123,9 +13803,18 @@ type AdminInitiateAuthOutput struct {
 	//    USERNAME and PASSWORD directly. An app client must be enabled to use this
 	//    flow.
 	//
-	//    * NEW_PASSWORD_REQUIRED: For users which are required to change their
-	//    passwords after successful first login. This challenge should be passed
-	//    with NEW_PASSWORD and any other required attributes.
+	//    * NEW_PASSWORD_REQUIRED: For users who are required to change their passwords
+	//    after successful first login. This challenge should be passed with NEW_PASSWORD
+	//    and any other required attributes.
+	//
+	//    * MFA_SETUP: For users who are required to setup an MFA factor before
+	//    they can sign-in. The MFA types enabled for the user pool will be listed
+	//    in the challenge parameters MFA_CAN_SETUP value. To setup software token
+	//    MFA, use the session returned here from InitiateAuth as an input to AssociateSoftwareToken,
+	//    and use the session returned by VerifySoftwareToken as an input to RespondToAuthChallenge
+	//    with challenge name MFA_SETUP to complete sign-in. To setup SMS MFA, users
+	//    will need help from an administrator to add a phone number to their account
+	//    and then call InitiateAuth again to restart sign-in.
 	ChallengeName *string `type:"string" enum:"ChallengeNameType"`
 
 	// The challenge parameters. These are returned to you in the AdminInitiateAuth
@@ -13148,12 +13837,20 @@ type AdminInitiateAuthOutput struct {
 	Session *string `min:"20" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AdminInitiateAuthOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AdminInitiateAuthOutput) GoString() string {
 	return s.String()
 }
@@ -13231,12 +13928,20 @@ type AdminLinkProviderForUserInput struct {
 	UserPoolId *string `type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AdminLinkProviderForUserInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AdminLinkProviderForUserInput) GoString() string {
 	return s.String()
 }
@@ -13292,12 +13997,20 @@ type AdminLinkProviderForUserOutput struct {
 	_ struct{} `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AdminLinkProviderForUserOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AdminLinkProviderForUserOutput) GoString() string {
 	return s.String()
 }
@@ -13319,16 +14032,28 @@ type AdminListDevicesInput struct {
 
 	// The user name.
 	//
+	// Username is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by AdminListDevicesInput's
+	// String and GoString methods.
+	//
 	// Username is a required field
 	Username *string `min:"1" type:"string" required:"true" sensitive:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AdminListDevicesInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AdminListDevicesInput) GoString() string {
 	return s.String()
 }
@@ -13393,12 +14118,20 @@ type AdminListDevicesOutput struct {
 	PaginationToken *string `min:"1" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AdminListDevicesOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AdminListDevicesOutput) GoString() string {
 	return s.String()
 }
@@ -13432,16 +14165,28 @@ type AdminListGroupsForUserInput struct {
 
 	// The username for the user.
 	//
+	// Username is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by AdminListGroupsForUserInput's
+	// String and GoString methods.
+	//
 	// Username is a required field
 	Username *string `min:"1" type:"string" required:"true" sensitive:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AdminListGroupsForUserInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AdminListGroupsForUserInput) GoString() string {
 	return s.String()
 }
@@ -13506,12 +14251,20 @@ type AdminListGroupsForUserOutput struct {
 	NextToken *string `min:"1" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AdminListGroupsForUserOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AdminListGroupsForUserOutput) GoString() string {
 	return s.String()
 }
@@ -13544,16 +14297,28 @@ type AdminListUserAuthEventsInput struct {
 
 	// The user pool username or an alias.
 	//
+	// Username is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by AdminListUserAuthEventsInput's
+	// String and GoString methods.
+	//
 	// Username is a required field
 	Username *string `min:"1" type:"string" required:"true" sensitive:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AdminListUserAuthEventsInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AdminListUserAuthEventsInput) GoString() string {
 	return s.String()
 }
@@ -13618,12 +14383,20 @@ type AdminListUserAuthEventsOutput struct {
 	NextToken *string `min:"1" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AdminListUserAuthEventsOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AdminListUserAuthEventsOutput) GoString() string {
 	return s.String()
 }
@@ -13655,16 +14428,28 @@ type AdminRemoveUserFromGroupInput struct {
 
 	// The username for the user.
 	//
+	// Username is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by AdminRemoveUserFromGroupInput's
+	// String and GoString methods.
+	//
 	// Username is a required field
 	Username *string `min:"1" type:"string" required:"true" sensitive:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AdminRemoveUserFromGroupInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AdminRemoveUserFromGroupInput) GoString() string {
 	return s.String()
 }
@@ -13719,12 +14504,20 @@ type AdminRemoveUserFromGroupOutput struct {
 	_ struct{} `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AdminRemoveUserFromGroupOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AdminRemoveUserFromGroupOutput) GoString() string {
 	return s.String()
 }
@@ -13736,15 +14529,15 @@ type AdminResetUserPasswordInput struct {
 	// A map of custom key-value pairs that you can provide as input for any custom
 	// workflows that this action triggers.
 	//
-	// You create custom workflows by assigning AWS Lambda functions to user pool
-	// triggers. When you use the AdminResetUserPassword API action, Amazon Cognito
-	// invokes the function that is assigned to the custom message trigger. When
-	// Amazon Cognito invokes this function, it passes a JSON payload, which the
-	// function receives as input. This payload contains a clientMetadata attribute,
-	// which provides the data that you assigned to the ClientMetadata parameter
-	// in your AdminResetUserPassword request. In your function code in AWS Lambda,
-	// you can process the clientMetadata value to enhance your workflow for your
-	// specific needs.
+	// You create custom workflows by assigning Lambda functions to user pool triggers.
+	// When you use the AdminResetUserPassword API action, Amazon Cognito invokes
+	// the function that is assigned to the custom message trigger. When Amazon
+	// Cognito invokes this function, it passes a JSON payload, which the function
+	// receives as input. This payload contains a clientMetadata attribute, which
+	// provides the data that you assigned to the ClientMetadata parameter in your
+	// AdminResetUserPassword request. In your function code in Lambda, you can
+	// process the clientMetadata value to enhance your workflow for your specific
+	// needs.
 	//
 	// For more information, see Customizing User Pool Workflows with Lambda Triggers
 	// (https://docs.aws.amazon.com/cognito/latest/developerguide/cognito-user-identity-pools-working-with-aws-lambda-triggers.html)
@@ -13754,9 +14547,9 @@ type AdminResetUserPasswordInput struct {
 	// parameter:
 	//
 	//    * Amazon Cognito does not store the ClientMetadata value. This data is
-	//    available only to AWS Lambda triggers that are assigned to a user pool
-	//    to support custom workflows. If your user pool configuration does not
-	//    include triggers, the ClientMetadata parameter serves no purpose.
+	//    available only to Lambda triggers that are assigned to a user pool to
+	//    support custom workflows. If your user pool configuration does not include
+	//    triggers, the ClientMetadata parameter serves no purpose.
 	//
 	//    * Amazon Cognito does not validate the ClientMetadata value.
 	//
@@ -13771,16 +14564,28 @@ type AdminResetUserPasswordInput struct {
 
 	// The user name of the user whose password you wish to reset.
 	//
+	// Username is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by AdminResetUserPasswordInput's
+	// String and GoString methods.
+	//
 	// Username is a required field
 	Username *string `min:"1" type:"string" required:"true" sensitive:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AdminResetUserPasswordInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AdminResetUserPasswordInput) GoString() string {
 	return s.String()
 }
@@ -13830,12 +14635,20 @@ type AdminResetUserPasswordOutput struct {
 	_ struct{} `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AdminResetUserPasswordOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AdminResetUserPasswordOutput) GoString() string {
 	return s.String()
 }
@@ -13869,6 +14682,9 @@ type AdminRespondToAuthChallengeInput struct {
 	//    * NEW_PASSWORD_REQUIRED: NEW_PASSWORD, any other required attributes,
 	//    USERNAME, SECRET_HASH (if app client is configured with client secret).
 	//
+	//    * MFA_SETUP requires USERNAME, plus you need to use the session value
+	//    returned by VerifySoftwareToken in the Session parameter.
+	//
 	// The value of the USERNAME attribute must be the user's actual username, not
 	// an alias (such as email address or phone number). To make this easier, the
 	// AdminInitiateAuth response includes the actual username value in the USERNAMEUSER_ID_FOR_SRP
@@ -13877,23 +14693,27 @@ type AdminRespondToAuthChallengeInput struct {
 
 	// The app client ID.
 	//
+	// ClientId is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by AdminRespondToAuthChallengeInput's
+	// String and GoString methods.
+	//
 	// ClientId is a required field
 	ClientId *string `min:"1" type:"string" required:"true" sensitive:"true"`
 
 	// A map of custom key-value pairs that you can provide as input for any custom
 	// workflows that this action triggers.
 	//
-	// You create custom workflows by assigning AWS Lambda functions to user pool
-	// triggers. When you use the AdminRespondToAuthChallenge API action, Amazon
-	// Cognito invokes any functions that are assigned to the following triggers:
-	// pre sign-up, custom message, post authentication, user migration, pre token
-	// generation, define auth challenge, create auth challenge, and verify auth
-	// challenge response. When Amazon Cognito invokes any of these functions, it
-	// passes a JSON payload, which the function receives as input. This payload
-	// contains a clientMetadata attribute, which provides the data that you assigned
-	// to the ClientMetadata parameter in your AdminRespondToAuthChallenge request.
-	// In your function code in AWS Lambda, you can process the clientMetadata value
-	// to enhance your workflow for your specific needs.
+	// You create custom workflows by assigning Lambda functions to user pool triggers.
+	// When you use the AdminRespondToAuthChallenge API action, Amazon Cognito invokes
+	// any functions that are assigned to the following triggers: pre sign-up, custom
+	// message, post authentication, user migration, pre token generation, define
+	// auth challenge, create auth challenge, and verify auth challenge response.
+	// When Amazon Cognito invokes any of these functions, it passes a JSON payload,
+	// which the function receives as input. This payload contains a clientMetadata
+	// attribute, which provides the data that you assigned to the ClientMetadata
+	// parameter in your AdminRespondToAuthChallenge request. In your function code
+	// in Lambda, you can process the clientMetadata value to enhance your workflow
+	// for your specific needs.
 	//
 	// For more information, see Customizing User Pool Workflows with Lambda Triggers
 	// (https://docs.aws.amazon.com/cognito/latest/developerguide/cognito-user-identity-pools-working-with-aws-lambda-triggers.html)
@@ -13903,9 +14723,9 @@ type AdminRespondToAuthChallengeInput struct {
 	// parameter:
 	//
 	//    * Amazon Cognito does not store the ClientMetadata value. This data is
-	//    available only to AWS Lambda triggers that are assigned to a user pool
-	//    to support custom workflows. If your user pool configuration does not
-	//    include triggers, the ClientMetadata parameter serves no purpose.
+	//    available only to Lambda triggers that are assigned to a user pool to
+	//    support custom workflows. If your user pool configuration does not include
+	//    triggers, the ClientMetadata parameter serves no purpose.
 	//
 	//    * Amazon Cognito does not validate the ClientMetadata value.
 	//
@@ -13931,12 +14751,20 @@ type AdminRespondToAuthChallengeInput struct {
 	UserPoolId *string `min:"1" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AdminRespondToAuthChallengeInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AdminRespondToAuthChallengeInput) GoString() string {
 	return s.String()
 }
@@ -14042,12 +14870,20 @@ type AdminRespondToAuthChallengeOutput struct {
 	Session *string `min:"20" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AdminRespondToAuthChallengeOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AdminRespondToAuthChallengeOutput) GoString() string {
 	return s.String()
 }
@@ -14092,16 +14928,28 @@ type AdminSetUserMFAPreferenceInput struct {
 
 	// The user pool username or alias.
 	//
+	// Username is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by AdminSetUserMFAPreferenceInput's
+	// String and GoString methods.
+	//
 	// Username is a required field
 	Username *string `min:"1" type:"string" required:"true" sensitive:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AdminSetUserMFAPreferenceInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AdminSetUserMFAPreferenceInput) GoString() string {
 	return s.String()
 }
@@ -14156,12 +15004,20 @@ type AdminSetUserMFAPreferenceOutput struct {
 	_ struct{} `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AdminSetUserMFAPreferenceOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AdminSetUserMFAPreferenceOutput) GoString() string {
 	return s.String()
 }
@@ -14170,6 +15026,10 @@ type AdminSetUserPasswordInput struct {
 	_ struct{} `type:"structure"`
 
 	// The password for the user.
+	//
+	// Password is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by AdminSetUserPasswordInput's
+	// String and GoString methods.
 	//
 	// Password is a required field
 	Password *string `min:"6" type:"string" required:"true" sensitive:"true"`
@@ -14184,16 +15044,28 @@ type AdminSetUserPasswordInput struct {
 
 	// The user name of the user whose password you wish to set.
 	//
+	// Username is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by AdminSetUserPasswordInput's
+	// String and GoString methods.
+	//
 	// Username is a required field
 	Username *string `min:"1" type:"string" required:"true" sensitive:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AdminSetUserPasswordInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AdminSetUserPasswordInput) GoString() string {
 	return s.String()
 }
@@ -14254,12 +15126,20 @@ type AdminSetUserPasswordOutput struct {
 	_ struct{} `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AdminSetUserPasswordOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AdminSetUserPasswordOutput) GoString() string {
 	return s.String()
 }
@@ -14283,16 +15163,28 @@ type AdminSetUserSettingsInput struct {
 
 	// The user name of the user that you are setting options for.
 	//
+	// Username is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by AdminSetUserSettingsInput's
+	// String and GoString methods.
+	//
 	// Username is a required field
 	Username *string `min:"1" type:"string" required:"true" sensitive:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AdminSetUserSettingsInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AdminSetUserSettingsInput) GoString() string {
 	return s.String()
 }
@@ -14355,12 +15247,20 @@ type AdminSetUserSettingsOutput struct {
 	_ struct{} `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AdminSetUserSettingsOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AdminSetUserSettingsOutput) GoString() string {
 	return s.String()
 }
@@ -14385,16 +15285,28 @@ type AdminUpdateAuthEventFeedbackInput struct {
 
 	// The user pool username.
 	//
+	// Username is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by AdminUpdateAuthEventFeedbackInput's
+	// String and GoString methods.
+	//
 	// Username is a required field
 	Username *string `min:"1" type:"string" required:"true" sensitive:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AdminUpdateAuthEventFeedbackInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AdminUpdateAuthEventFeedbackInput) GoString() string {
 	return s.String()
 }
@@ -14458,12 +15370,20 @@ type AdminUpdateAuthEventFeedbackOutput struct {
 	_ struct{} `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AdminUpdateAuthEventFeedbackOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AdminUpdateAuthEventFeedbackOutput) GoString() string {
 	return s.String()
 }
@@ -14487,16 +15407,28 @@ type AdminUpdateDeviceStatusInput struct {
 
 	// The user name.
 	//
+	// Username is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by AdminUpdateDeviceStatusInput's
+	// String and GoString methods.
+	//
 	// Username is a required field
 	Username *string `min:"1" type:"string" required:"true" sensitive:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AdminUpdateDeviceStatusInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AdminUpdateDeviceStatusInput) GoString() string {
 	return s.String()
 }
@@ -14558,12 +15490,20 @@ type AdminUpdateDeviceStatusOutput struct {
 	_ struct{} `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AdminUpdateDeviceStatusOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AdminUpdateDeviceStatusOutput) GoString() string {
 	return s.String()
 }
@@ -14575,15 +15515,15 @@ type AdminUpdateUserAttributesInput struct {
 	// A map of custom key-value pairs that you can provide as input for any custom
 	// workflows that this action triggers.
 	//
-	// You create custom workflows by assigning AWS Lambda functions to user pool
-	// triggers. When you use the AdminUpdateUserAttributes API action, Amazon Cognito
-	// invokes the function that is assigned to the custom message trigger. When
-	// Amazon Cognito invokes this function, it passes a JSON payload, which the
-	// function receives as input. This payload contains a clientMetadata attribute,
-	// which provides the data that you assigned to the ClientMetadata parameter
-	// in your AdminUpdateUserAttributes request. In your function code in AWS Lambda,
-	// you can process the clientMetadata value to enhance your workflow for your
-	// specific needs.
+	// You create custom workflows by assigning Lambda functions to user pool triggers.
+	// When you use the AdminUpdateUserAttributes API action, Amazon Cognito invokes
+	// the function that is assigned to the custom message trigger. When Amazon
+	// Cognito invokes this function, it passes a JSON payload, which the function
+	// receives as input. This payload contains a clientMetadata attribute, which
+	// provides the data that you assigned to the ClientMetadata parameter in your
+	// AdminUpdateUserAttributes request. In your function code in Lambda, you can
+	// process the clientMetadata value to enhance your workflow for your specific
+	// needs.
 	//
 	// For more information, see Customizing User Pool Workflows with Lambda Triggers
 	// (https://docs.aws.amazon.com/cognito/latest/developerguide/cognito-user-identity-pools-working-with-aws-lambda-triggers.html)
@@ -14593,9 +15533,9 @@ type AdminUpdateUserAttributesInput struct {
 	// parameter:
 	//
 	//    * Amazon Cognito does not store the ClientMetadata value. This data is
-	//    available only to AWS Lambda triggers that are assigned to a user pool
-	//    to support custom workflows. If your user pool configuration does not
-	//    include triggers, the ClientMetadata parameter serves no purpose.
+	//    available only to Lambda triggers that are assigned to a user pool to
+	//    support custom workflows. If your user pool configuration does not include
+	//    triggers, the ClientMetadata parameter serves no purpose.
 	//
 	//    * Amazon Cognito does not validate the ClientMetadata value.
 	//
@@ -14618,16 +15558,28 @@ type AdminUpdateUserAttributesInput struct {
 
 	// The user name of the user for whom you want to update user attributes.
 	//
+	// Username is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by AdminUpdateUserAttributesInput's
+	// String and GoString methods.
+	//
 	// Username is a required field
 	Username *string `min:"1" type:"string" required:"true" sensitive:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AdminUpdateUserAttributesInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AdminUpdateUserAttributesInput) GoString() string {
 	return s.String()
 }
@@ -14697,12 +15649,20 @@ type AdminUpdateUserAttributesOutput struct {
 	_ struct{} `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AdminUpdateUserAttributesOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AdminUpdateUserAttributesOutput) GoString() string {
 	return s.String()
 }
@@ -14718,16 +15678,28 @@ type AdminUserGlobalSignOutInput struct {
 
 	// The user name.
 	//
+	// Username is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by AdminUserGlobalSignOutInput's
+	// String and GoString methods.
+	//
 	// Username is a required field
 	Username *string `min:"1" type:"string" required:"true" sensitive:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AdminUserGlobalSignOutInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AdminUserGlobalSignOutInput) GoString() string {
 	return s.String()
 }
@@ -14771,12 +15743,20 @@ type AdminUserGlobalSignOutOutput struct {
 	_ struct{} `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AdminUserGlobalSignOutOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AdminUserGlobalSignOutOutput) GoString() string {
 	return s.String()
 }
@@ -14793,12 +15773,20 @@ type AliasExistsException struct {
 	Message_ *string `locationName:"message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AliasExistsException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AliasExistsException) GoString() string {
 	return s.String()
 }
@@ -14872,12 +15860,20 @@ type AnalyticsConfigurationType struct {
 	UserDataShared *bool `type:"boolean"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AnalyticsConfigurationType) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AnalyticsConfigurationType) GoString() string {
 	return s.String()
 }
@@ -14943,12 +15939,20 @@ type AnalyticsMetadataType struct {
 	AnalyticsEndpointId *string `type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AnalyticsMetadataType) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AnalyticsMetadataType) GoString() string {
 	return s.String()
 }
@@ -14963,6 +15967,10 @@ type AssociateSoftwareTokenInput struct {
 	_ struct{} `type:"structure"`
 
 	// The access token.
+	//
+	// AccessToken is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by AssociateSoftwareTokenInput's
+	// String and GoString methods.
 	AccessToken *string `type:"string" sensitive:"true"`
 
 	// The session which should be passed both ways in challenge-response calls
@@ -14971,12 +15979,20 @@ type AssociateSoftwareTokenInput struct {
 	Session *string `min:"20" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AssociateSoftwareTokenInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AssociateSoftwareTokenInput) GoString() string {
 	return s.String()
 }
@@ -15011,6 +16027,10 @@ type AssociateSoftwareTokenOutput struct {
 
 	// A unique generated shared secret code that is used in the TOTP algorithm
 	// to generate a one time code.
+	//
+	// SecretCode is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by AssociateSoftwareTokenOutput's
+	// String and GoString methods.
 	SecretCode *string `min:"16" type:"string" sensitive:"true"`
 
 	// The session which should be passed both ways in challenge-response calls
@@ -15019,12 +16039,20 @@ type AssociateSoftwareTokenOutput struct {
 	Session *string `min:"20" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AssociateSoftwareTokenOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AssociateSoftwareTokenOutput) GoString() string {
 	return s.String()
 }
@@ -15051,15 +16079,27 @@ type AttributeType struct {
 	Name *string `min:"1" type:"string" required:"true"`
 
 	// The value of the attribute.
+	//
+	// Value is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by AttributeType's
+	// String and GoString methods.
 	Value *string `type:"string" sensitive:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AttributeType) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AttributeType) GoString() string {
 	return s.String()
 }
@@ -15123,12 +16163,20 @@ type AuthEventType struct {
 	EventType *string `type:"string" enum:"EventType"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AuthEventType) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AuthEventType) GoString() string {
 	return s.String()
 }
@@ -15186,30 +16234,50 @@ type AuthenticationResultType struct {
 	_ struct{} `type:"structure"`
 
 	// The access token.
+	//
+	// AccessToken is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by AuthenticationResultType's
+	// String and GoString methods.
 	AccessToken *string `type:"string" sensitive:"true"`
 
 	// The expiration period of the authentication result in seconds.
 	ExpiresIn *int64 `type:"integer"`
 
 	// The ID token.
+	//
+	// IdToken is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by AuthenticationResultType's
+	// String and GoString methods.
 	IdToken *string `type:"string" sensitive:"true"`
 
 	// The new device metadata from an authentication result.
 	NewDeviceMetadata *NewDeviceMetadataType `type:"structure"`
 
 	// The refresh token.
+	//
+	// RefreshToken is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by AuthenticationResultType's
+	// String and GoString methods.
 	RefreshToken *string `type:"string" sensitive:"true"`
 
 	// The token type.
 	TokenType *string `type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AuthenticationResultType) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AuthenticationResultType) GoString() string {
 	return s.String()
 }
@@ -15261,12 +16329,20 @@ type ChallengeResponseType struct {
 	ChallengeResponse *string `type:"string" enum:"ChallengeResponse"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ChallengeResponseType) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ChallengeResponseType) GoString() string {
 	return s.String()
 }
@@ -15289,26 +16365,46 @@ type ChangePasswordInput struct {
 
 	// The access token.
 	//
+	// AccessToken is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by ChangePasswordInput's
+	// String and GoString methods.
+	//
 	// AccessToken is a required field
 	AccessToken *string `type:"string" required:"true" sensitive:"true"`
 
 	// The old password.
+	//
+	// PreviousPassword is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by ChangePasswordInput's
+	// String and GoString methods.
 	//
 	// PreviousPassword is a required field
 	PreviousPassword *string `min:"6" type:"string" required:"true" sensitive:"true"`
 
 	// The new password.
 	//
+	// ProposedPassword is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by ChangePasswordInput's
+	// String and GoString methods.
+	//
 	// ProposedPassword is a required field
 	ProposedPassword *string `min:"6" type:"string" required:"true" sensitive:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ChangePasswordInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ChangePasswordInput) GoString() string {
 	return s.String()
 }
@@ -15361,12 +16457,20 @@ type ChangePasswordOutput struct {
 	_ struct{} `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ChangePasswordOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ChangePasswordOutput) GoString() string {
 	return s.String()
 }
@@ -15385,12 +16489,20 @@ type CodeDeliveryDetailsType struct {
 	Destination *string `type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CodeDeliveryDetailsType) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CodeDeliveryDetailsType) GoString() string {
 	return s.String()
 }
@@ -15422,12 +16534,20 @@ type CodeDeliveryFailureException struct {
 	Message_ *string `locationName:"message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CodeDeliveryFailureException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CodeDeliveryFailureException) GoString() string {
 	return s.String()
 }
@@ -15480,12 +16600,20 @@ type CodeMismatchException struct {
 	Message_ *string `locationName:"message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CodeMismatchException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CodeMismatchException) GoString() string {
 	return s.String()
 }
@@ -15538,12 +16666,20 @@ type CompromisedCredentialsActionsType struct {
 	EventAction *string `type:"string" required:"true" enum:"CompromisedCredentialsEventActionType"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CompromisedCredentialsActionsType) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CompromisedCredentialsActionsType) GoString() string {
 	return s.String()
 }
@@ -15581,12 +16717,20 @@ type CompromisedCredentialsRiskConfigurationType struct {
 	EventFilter []*string `type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CompromisedCredentialsRiskConfigurationType) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CompromisedCredentialsRiskConfigurationType) GoString() string {
 	return s.String()
 }
@@ -15630,12 +16774,20 @@ type ConcurrentModificationException struct {
 	Message_ *string `locationName:"message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ConcurrentModificationException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ConcurrentModificationException) GoString() string {
 	return s.String()
 }
@@ -15684,6 +16836,10 @@ type ConfirmDeviceInput struct {
 
 	// The access token.
 	//
+	// AccessToken is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by ConfirmDeviceInput's
+	// String and GoString methods.
+	//
 	// AccessToken is a required field
 	AccessToken *string `type:"string" required:"true" sensitive:"true"`
 
@@ -15699,12 +16855,20 @@ type ConfirmDeviceInput struct {
 	DeviceSecretVerifierConfig *DeviceSecretVerifierConfigType `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ConfirmDeviceInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ConfirmDeviceInput) GoString() string {
 	return s.String()
 }
@@ -15764,12 +16928,20 @@ type ConfirmDeviceOutput struct {
 	UserConfirmationNecessary *bool `type:"boolean"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ConfirmDeviceOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ConfirmDeviceOutput) GoString() string {
 	return s.String()
 }
@@ -15790,21 +16962,24 @@ type ConfirmForgotPasswordInput struct {
 
 	// The app client ID of the app associated with the user pool.
 	//
+	// ClientId is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by ConfirmForgotPasswordInput's
+	// String and GoString methods.
+	//
 	// ClientId is a required field
 	ClientId *string `min:"1" type:"string" required:"true" sensitive:"true"`
 
 	// A map of custom key-value pairs that you can provide as input for any custom
 	// workflows that this action triggers.
 	//
-	// You create custom workflows by assigning AWS Lambda functions to user pool
-	// triggers. When you use the ConfirmForgotPassword API action, Amazon Cognito
-	// invokes the function that is assigned to the post confirmation trigger. When
-	// Amazon Cognito invokes this function, it passes a JSON payload, which the
-	// function receives as input. This payload contains a clientMetadata attribute,
-	// which provides the data that you assigned to the ClientMetadata parameter
-	// in your ConfirmForgotPassword request. In your function code in AWS Lambda,
-	// you can process the clientMetadata value to enhance your workflow for your
-	// specific needs.
+	// You create custom workflows by assigning Lambda functions to user pool triggers.
+	// When you use the ConfirmForgotPassword API action, Amazon Cognito invokes
+	// the function that is assigned to the post confirmation trigger. When Amazon
+	// Cognito invokes this function, it passes a JSON payload, which the function
+	// receives as input. This payload contains a clientMetadata attribute, which
+	// provides the data that you assigned to the ClientMetadata parameter in your
+	// ConfirmForgotPassword request. In your function code in Lambda, you can process
+	// the clientMetadata value to enhance your workflow for your specific needs.
 	//
 	// For more information, see Customizing User Pool Workflows with Lambda Triggers
 	// (https://docs.aws.amazon.com/cognito/latest/developerguide/cognito-user-identity-pools-working-with-aws-lambda-triggers.html)
@@ -15814,9 +16989,9 @@ type ConfirmForgotPasswordInput struct {
 	// parameter:
 	//
 	//    * Amazon Cognito does not store the ClientMetadata value. This data is
-	//    available only to AWS Lambda triggers that are assigned to a user pool
-	//    to support custom workflows. If your user pool configuration does not
-	//    include triggers, the ClientMetadata parameter serves no purpose.
+	//    available only to Lambda triggers that are assigned to a user pool to
+	//    support custom workflows. If your user pool configuration does not include
+	//    triggers, the ClientMetadata parameter serves no purpose.
 	//
 	//    * Amazon Cognito does not validate the ClientMetadata value.
 	//
@@ -15832,11 +17007,19 @@ type ConfirmForgotPasswordInput struct {
 
 	// The password sent by a user's request to retrieve a forgotten password.
 	//
+	// Password is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by ConfirmForgotPasswordInput's
+	// String and GoString methods.
+	//
 	// Password is a required field
 	Password *string `min:"6" type:"string" required:"true" sensitive:"true"`
 
 	// A keyed-hash message authentication code (HMAC) calculated using the secret
 	// key of a user pool client and username plus the client ID in the message.
+	//
+	// SecretHash is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by ConfirmForgotPasswordInput's
+	// String and GoString methods.
 	SecretHash *string `min:"1" type:"string" sensitive:"true"`
 
 	// Contextual data such as the user's device fingerprint, IP address, or location
@@ -15847,16 +17030,28 @@ type ConfirmForgotPasswordInput struct {
 	// The user name of the user for whom you want to enter a code to retrieve a
 	// forgotten password.
 	//
+	// Username is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by ConfirmForgotPasswordInput's
+	// String and GoString methods.
+	//
 	// Username is a required field
 	Username *string `min:"1" type:"string" required:"true" sensitive:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ConfirmForgotPasswordInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ConfirmForgotPasswordInput) GoString() string {
 	return s.String()
 }
@@ -15952,12 +17147,20 @@ type ConfirmForgotPasswordOutput struct {
 	_ struct{} `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ConfirmForgotPasswordOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ConfirmForgotPasswordOutput) GoString() string {
 	return s.String()
 }
@@ -15972,20 +17175,24 @@ type ConfirmSignUpInput struct {
 
 	// The ID of the app client associated with the user pool.
 	//
+	// ClientId is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by ConfirmSignUpInput's
+	// String and GoString methods.
+	//
 	// ClientId is a required field
 	ClientId *string `min:"1" type:"string" required:"true" sensitive:"true"`
 
 	// A map of custom key-value pairs that you can provide as input for any custom
 	// workflows that this action triggers.
 	//
-	// You create custom workflows by assigning AWS Lambda functions to user pool
-	// triggers. When you use the ConfirmSignUp API action, Amazon Cognito invokes
-	// the function that is assigned to the post confirmation trigger. When Amazon
-	// Cognito invokes this function, it passes a JSON payload, which the function
-	// receives as input. This payload contains a clientMetadata attribute, which
-	// provides the data that you assigned to the ClientMetadata parameter in your
-	// ConfirmSignUp request. In your function code in AWS Lambda, you can process
-	// the clientMetadata value to enhance your workflow for your specific needs.
+	// You create custom workflows by assigning Lambda functions to user pool triggers.
+	// When you use the ConfirmSignUp API action, Amazon Cognito invokes the function
+	// that is assigned to the post confirmation trigger. When Amazon Cognito invokes
+	// this function, it passes a JSON payload, which the function receives as input.
+	// This payload contains a clientMetadata attribute, which provides the data
+	// that you assigned to the ClientMetadata parameter in your ConfirmSignUp request.
+	// In your function code in Lambda, you can process the clientMetadata value
+	// to enhance your workflow for your specific needs.
 	//
 	// For more information, see Customizing User Pool Workflows with Lambda Triggers
 	// (https://docs.aws.amazon.com/cognito/latest/developerguide/cognito-user-identity-pools-working-with-aws-lambda-triggers.html)
@@ -15995,9 +17202,9 @@ type ConfirmSignUpInput struct {
 	// parameter:
 	//
 	//    * Amazon Cognito does not store the ClientMetadata value. This data is
-	//    available only to AWS Lambda triggers that are assigned to a user pool
-	//    to support custom workflows. If your user pool configuration does not
-	//    include triggers, the ClientMetadata parameter serves no purpose.
+	//    available only to Lambda triggers that are assigned to a user pool to
+	//    support custom workflows. If your user pool configuration does not include
+	//    triggers, the ClientMetadata parameter serves no purpose.
 	//
 	//    * Amazon Cognito does not validate the ClientMetadata value.
 	//
@@ -16020,6 +17227,10 @@ type ConfirmSignUpInput struct {
 
 	// A keyed-hash message authentication code (HMAC) calculated using the secret
 	// key of a user pool client and username plus the client ID in the message.
+	//
+	// SecretHash is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by ConfirmSignUpInput's
+	// String and GoString methods.
 	SecretHash *string `min:"1" type:"string" sensitive:"true"`
 
 	// Contextual data such as the user's device fingerprint, IP address, or location
@@ -16029,16 +17240,28 @@ type ConfirmSignUpInput struct {
 
 	// The user name of the user whose registration you wish to confirm.
 	//
+	// Username is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by ConfirmSignUpInput's
+	// String and GoString methods.
+	//
 	// Username is a required field
 	Username *string `min:"1" type:"string" required:"true" sensitive:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ConfirmSignUpInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ConfirmSignUpInput) GoString() string {
 	return s.String()
 }
@@ -16127,12 +17350,20 @@ type ConfirmSignUpOutput struct {
 	_ struct{} `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ConfirmSignUpOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ConfirmSignUpOutput) GoString() string {
 	return s.String()
 }
@@ -16167,12 +17398,20 @@ type ContextDataType struct {
 	ServerPath *string `type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ContextDataType) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ContextDataType) GoString() string {
 	return s.String()
 }
@@ -16266,12 +17505,20 @@ type CreateGroupInput struct {
 	UserPoolId *string `min:"1" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateGroupInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateGroupInput) GoString() string {
 	return s.String()
 }
@@ -16338,12 +17585,20 @@ type CreateGroupOutput struct {
 	Group *GroupType `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateGroupOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateGroupOutput) GoString() string {
 	return s.String()
 }
@@ -16401,12 +17656,20 @@ type CreateIdentityProviderInput struct {
 	UserPoolId *string `min:"1" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateIdentityProviderInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateIdentityProviderInput) GoString() string {
 	return s.String()
 }
@@ -16484,12 +17747,20 @@ type CreateIdentityProviderOutput struct {
 	IdentityProvider *IdentityProviderType `type:"structure" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateIdentityProviderOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateIdentityProviderOutput) GoString() string {
 	return s.String()
 }
@@ -16523,12 +17794,20 @@ type CreateResourceServerInput struct {
 	UserPoolId *string `min:"1" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateResourceServerInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateResourceServerInput) GoString() string {
 	return s.String()
 }
@@ -16604,12 +17883,20 @@ type CreateResourceServerOutput struct {
 	ResourceServer *ResourceServerType `type:"structure" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateResourceServerOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateResourceServerOutput) GoString() string {
 	return s.String()
 }
@@ -16640,12 +17927,20 @@ type CreateUserImportJobInput struct {
 	UserPoolId *string `min:"1" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateUserImportJobInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateUserImportJobInput) GoString() string {
 	return s.String()
 }
@@ -16705,12 +18000,20 @@ type CreateUserImportJobOutput struct {
 	UserImportJob *UserImportJobType `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateUserImportJobOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateUserImportJobOutput) GoString() string {
 	return s.String()
 }
@@ -16749,8 +18052,9 @@ type CreateUserPoolClientInput struct {
 	AllowedOAuthFlowsUserPoolClient *bool `type:"boolean"`
 
 	// The allowed OAuth scopes. Possible values provided by OAuth are: phone, email,
-	// openid, and profile. Possible values provided by AWS are: aws.cognito.signin.user.admin.
-	// Custom scopes created in Resource Servers are also supported.
+	// openid, and profile. Possible values provided by Amazon Web Services are:
+	// aws.cognito.signin.user.admin. Custom scopes created in Resource Servers
+	// are also supported.
 	AllowedOAuthScopes []*string `type:"list"`
 
 	// The Amazon Pinpoint analytics configuration for collecting metrics for this
@@ -16802,6 +18106,13 @@ type CreateUserPoolClientInput struct {
 	//
 	// App callback URLs such as myapp://example are also supported.
 	DefaultRedirectURI *string `min:"1" type:"string"`
+
+	// Enables or disables token revocation. For more information about revoking
+	// tokens, see RevokeToken (https://docs.aws.amazon.com/cognito-user-identity-pools/latest/APIReference/API_RevokeToken.html).
+	//
+	// If you don't include this parameter, token revocation is automatically enabled
+	// for the new user pool client.
+	EnableTokenRevocation *bool `type:"boolean"`
 
 	// The authentication flows that are supported by the user pool clients. Flow
 	// names without the ALLOW_ prefix are deprecated in favor of new names with
@@ -16891,12 +18202,20 @@ type CreateUserPoolClientInput struct {
 	WriteAttributes []*string `type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateUserPoolClientInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateUserPoolClientInput) GoString() string {
 	return s.String()
 }
@@ -16985,6 +18304,12 @@ func (s *CreateUserPoolClientInput) SetDefaultRedirectURI(v string) *CreateUserP
 	return s
 }
 
+// SetEnableTokenRevocation sets the EnableTokenRevocation field's value.
+func (s *CreateUserPoolClientInput) SetEnableTokenRevocation(v bool) *CreateUserPoolClientInput {
+	s.EnableTokenRevocation = &v
+	return s
+}
+
 // SetExplicitAuthFlows sets the ExplicitAuthFlows field's value.
 func (s *CreateUserPoolClientInput) SetExplicitAuthFlows(v []*string) *CreateUserPoolClientInput {
 	s.ExplicitAuthFlows = v
@@ -17059,12 +18384,20 @@ type CreateUserPoolClientOutput struct {
 	UserPoolClient *UserPoolClientType `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateUserPoolClientOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateUserPoolClientOutput) GoString() string {
 	return s.String()
 }
@@ -17100,12 +18433,20 @@ type CreateUserPoolDomainInput struct {
 	UserPoolId *string `min:"1" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateUserPoolDomainInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateUserPoolDomainInput) GoString() string {
 	return s.String()
 }
@@ -17163,12 +18504,20 @@ type CreateUserPoolDomainOutput struct {
 	CloudFrontDomain *string `min:"1" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateUserPoolDomainOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateUserPoolDomainOutput) GoString() string {
 	return s.String()
 }
@@ -17208,10 +18557,14 @@ type CreateUserPoolInput struct {
 	// The email configuration.
 	EmailConfiguration *EmailConfigurationType `type:"structure"`
 
-	// A string representing the email verification message.
+	// A string representing the email verification message. EmailVerificationMessage
+	// is allowed only if EmailSendingAccount (https://docs.aws.amazon.com/cognito-user-identity-pools/latest/APIReference/API_EmailConfigurationType.html#CognitoUserPools-Type-EmailConfigurationType-EmailSendingAccount)
+	// is DEVELOPER.
 	EmailVerificationMessage *string `min:"6" type:"string"`
 
-	// A string representing the email verification subject.
+	// A string representing the email verification subject. EmailVerificationSubject
+	// is allowed only if EmailSendingAccount (https://docs.aws.amazon.com/cognito-user-identity-pools/latest/APIReference/API_EmailConfigurationType.html#CognitoUserPools-Type-EmailConfigurationType-EmailSendingAccount)
+	// is DEVELOPER.
 	EmailVerificationSubject *string `min:"1" type:"string"`
 
 	// The Lambda trigger configuration information for the new user pool.
@@ -17223,7 +18576,7 @@ type CreateUserPoolInput struct {
 	// For more information on using the Lambda API to add permission, see AddPermission
 	// (https://docs.aws.amazon.com/lambda/latest/dg/API_AddPermission.html).
 	//
-	// For adding permission using the AWS CLI, see add-permission (https://docs.aws.amazon.com/cli/latest/reference/lambda/add-permission.html).
+	// For adding permission using the CLI, see add-permission (https://docs.aws.amazon.com/cli/latest/reference/lambda/add-permission.html).
 	LambdaConfig *LambdaConfigType `type:"structure"`
 
 	// Specifies MFA configuration details.
@@ -17275,12 +18628,20 @@ type CreateUserPoolInput struct {
 	VerificationMessageTemplate *VerificationMessageTemplateType `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateUserPoolInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateUserPoolInput) GoString() string {
 	return s.String()
 }
@@ -17506,12 +18867,20 @@ type CreateUserPoolOutput struct {
 	UserPool *UserPoolType `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateUserPoolOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateUserPoolOutput) GoString() string {
 	return s.String()
 }
@@ -17527,19 +18896,27 @@ func (s *CreateUserPoolOutput) SetUserPool(v *UserPoolType) *CreateUserPoolOutpu
 type CustomDomainConfigType struct {
 	_ struct{} `type:"structure"`
 
-	// The Amazon Resource Name (ARN) of an AWS Certificate Manager SSL certificate.
+	// The Amazon Resource Name (ARN) of an Certificate Manager SSL certificate.
 	// You use this certificate for the subdomain of your custom domain.
 	//
 	// CertificateArn is a required field
 	CertificateArn *string `min:"20" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CustomDomainConfigType) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CustomDomainConfigType) GoString() string {
 	return s.String()
 }
@@ -17566,6 +18943,140 @@ func (s *CustomDomainConfigType) SetCertificateArn(v string) *CustomDomainConfig
 	return s
 }
 
+// A custom email sender Lambda configuration type.
+type CustomEmailLambdaVersionConfigType struct {
+	_ struct{} `type:"structure"`
+
+	// The Lambda Amazon Resource Name of the Lambda function that Amazon Cognito
+	// triggers to send email notifications to users.
+	//
+	// LambdaArn is a required field
+	LambdaArn *string `min:"20" type:"string" required:"true"`
+
+	// The Lambda version represents the signature of the "request" attribute in
+	// the "event" information Amazon Cognito passes to your custom email Lambda
+	// function. The only supported value is V1_0.
+	//
+	// LambdaVersion is a required field
+	LambdaVersion *string `type:"string" required:"true" enum:"CustomEmailSenderLambdaVersionType"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CustomEmailLambdaVersionConfigType) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CustomEmailLambdaVersionConfigType) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *CustomEmailLambdaVersionConfigType) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "CustomEmailLambdaVersionConfigType"}
+	if s.LambdaArn == nil {
+		invalidParams.Add(request.NewErrParamRequired("LambdaArn"))
+	}
+	if s.LambdaArn != nil && len(*s.LambdaArn) < 20 {
+		invalidParams.Add(request.NewErrParamMinLen("LambdaArn", 20))
+	}
+	if s.LambdaVersion == nil {
+		invalidParams.Add(request.NewErrParamRequired("LambdaVersion"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetLambdaArn sets the LambdaArn field's value.
+func (s *CustomEmailLambdaVersionConfigType) SetLambdaArn(v string) *CustomEmailLambdaVersionConfigType {
+	s.LambdaArn = &v
+	return s
+}
+
+// SetLambdaVersion sets the LambdaVersion field's value.
+func (s *CustomEmailLambdaVersionConfigType) SetLambdaVersion(v string) *CustomEmailLambdaVersionConfigType {
+	s.LambdaVersion = &v
+	return s
+}
+
+// A custom SMS sender Lambda configuration type.
+type CustomSMSLambdaVersionConfigType struct {
+	_ struct{} `type:"structure"`
+
+	// The Lambda Amazon Resource Name of the Lambda function that Amazon Cognito
+	// triggers to send SMS notifications to users.
+	//
+	// LambdaArn is a required field
+	LambdaArn *string `min:"20" type:"string" required:"true"`
+
+	// The Lambda version represents the signature of the "request" attribute in
+	// the "event" information Amazon Cognito passes to your custom SMS Lambda function.
+	// The only supported value is V1_0.
+	//
+	// LambdaVersion is a required field
+	LambdaVersion *string `type:"string" required:"true" enum:"CustomSMSSenderLambdaVersionType"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CustomSMSLambdaVersionConfigType) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CustomSMSLambdaVersionConfigType) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *CustomSMSLambdaVersionConfigType) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "CustomSMSLambdaVersionConfigType"}
+	if s.LambdaArn == nil {
+		invalidParams.Add(request.NewErrParamRequired("LambdaArn"))
+	}
+	if s.LambdaArn != nil && len(*s.LambdaArn) < 20 {
+		invalidParams.Add(request.NewErrParamMinLen("LambdaArn", 20))
+	}
+	if s.LambdaVersion == nil {
+		invalidParams.Add(request.NewErrParamRequired("LambdaVersion"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetLambdaArn sets the LambdaArn field's value.
+func (s *CustomSMSLambdaVersionConfigType) SetLambdaArn(v string) *CustomSMSLambdaVersionConfigType {
+	s.LambdaArn = &v
+	return s
+}
+
+// SetLambdaVersion sets the LambdaVersion field's value.
+func (s *CustomSMSLambdaVersionConfigType) SetLambdaVersion(v string) *CustomSMSLambdaVersionConfigType {
+	s.LambdaVersion = &v
+	return s
+}
+
 type DeleteGroupInput struct {
 	_ struct{} `type:"structure"`
 
@@ -17580,12 +19091,20 @@ type DeleteGroupInput struct {
 	UserPoolId *string `min:"1" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteGroupInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteGroupInput) GoString() string {
 	return s.String()
 }
@@ -17628,12 +19147,20 @@ type DeleteGroupOutput struct {
 	_ struct{} `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteGroupOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteGroupOutput) GoString() string {
 	return s.String()
 }
@@ -17652,12 +19179,20 @@ type DeleteIdentityProviderInput struct {
 	UserPoolId *string `min:"1" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteIdentityProviderInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteIdentityProviderInput) GoString() string {
 	return s.String()
 }
@@ -17700,12 +19235,20 @@ type DeleteIdentityProviderOutput struct {
 	_ struct{} `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteIdentityProviderOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteIdentityProviderOutput) GoString() string {
 	return s.String()
 }
@@ -17724,12 +19267,20 @@ type DeleteResourceServerInput struct {
 	UserPoolId *string `min:"1" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteResourceServerInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteResourceServerInput) GoString() string {
 	return s.String()
 }
@@ -17772,12 +19323,20 @@ type DeleteResourceServerOutput struct {
 	_ struct{} `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteResourceServerOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteResourceServerOutput) GoString() string {
 	return s.String()
 }
@@ -17787,6 +19346,10 @@ type DeleteUserAttributesInput struct {
 	_ struct{} `type:"structure"`
 
 	// The access token used in the request to delete user attributes.
+	//
+	// AccessToken is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by DeleteUserAttributesInput's
+	// String and GoString methods.
 	//
 	// AccessToken is a required field
 	AccessToken *string `type:"string" required:"true" sensitive:"true"`
@@ -17800,12 +19363,20 @@ type DeleteUserAttributesInput struct {
 	UserAttributeNames []*string `type:"list" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteUserAttributesInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteUserAttributesInput) GoString() string {
 	return s.String()
 }
@@ -17843,12 +19414,20 @@ type DeleteUserAttributesOutput struct {
 	_ struct{} `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteUserAttributesOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteUserAttributesOutput) GoString() string {
 	return s.String()
 }
@@ -17859,16 +19438,28 @@ type DeleteUserInput struct {
 
 	// The access token from a request to delete a user.
 	//
+	// AccessToken is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by DeleteUserInput's
+	// String and GoString methods.
+	//
 	// AccessToken is a required field
 	AccessToken *string `type:"string" required:"true" sensitive:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteUserInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteUserInput) GoString() string {
 	return s.String()
 }
@@ -17896,12 +19487,20 @@ type DeleteUserOutput struct {
 	_ struct{} `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteUserOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteUserOutput) GoString() string {
 	return s.String()
 }
@@ -17912,6 +19511,10 @@ type DeleteUserPoolClientInput struct {
 
 	// The app client ID of the app associated with the user pool.
 	//
+	// ClientId is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by DeleteUserPoolClientInput's
+	// String and GoString methods.
+	//
 	// ClientId is a required field
 	ClientId *string `min:"1" type:"string" required:"true" sensitive:"true"`
 
@@ -17921,12 +19524,20 @@ type DeleteUserPoolClientInput struct {
 	UserPoolId *string `min:"1" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteUserPoolClientInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteUserPoolClientInput) GoString() string {
 	return s.String()
 }
@@ -17969,12 +19580,20 @@ type DeleteUserPoolClientOutput struct {
 	_ struct{} `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteUserPoolClientOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteUserPoolClientOutput) GoString() string {
 	return s.String()
 }
@@ -17993,12 +19612,20 @@ type DeleteUserPoolDomainInput struct {
 	UserPoolId *string `min:"1" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteUserPoolDomainInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteUserPoolDomainInput) GoString() string {
 	return s.String()
 }
@@ -18041,12 +19668,20 @@ type DeleteUserPoolDomainOutput struct {
 	_ struct{} `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteUserPoolDomainOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteUserPoolDomainOutput) GoString() string {
 	return s.String()
 }
@@ -18061,12 +19696,20 @@ type DeleteUserPoolInput struct {
 	UserPoolId *string `min:"1" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteUserPoolInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteUserPoolInput) GoString() string {
 	return s.String()
 }
@@ -18097,12 +19740,20 @@ type DeleteUserPoolOutput struct {
 	_ struct{} `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteUserPoolOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteUserPoolOutput) GoString() string {
 	return s.String()
 }
@@ -18121,12 +19772,20 @@ type DescribeIdentityProviderInput struct {
 	UserPoolId *string `min:"1" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeIdentityProviderInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeIdentityProviderInput) GoString() string {
 	return s.String()
 }
@@ -18174,12 +19833,20 @@ type DescribeIdentityProviderOutput struct {
 	IdentityProvider *IdentityProviderType `type:"structure" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeIdentityProviderOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeIdentityProviderOutput) GoString() string {
 	return s.String()
 }
@@ -18204,12 +19871,20 @@ type DescribeResourceServerInput struct {
 	UserPoolId *string `min:"1" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeResourceServerInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeResourceServerInput) GoString() string {
 	return s.String()
 }
@@ -18257,12 +19932,20 @@ type DescribeResourceServerOutput struct {
 	ResourceServer *ResourceServerType `type:"structure" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeResourceServerOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeResourceServerOutput) GoString() string {
 	return s.String()
 }
@@ -18277,6 +19960,10 @@ type DescribeRiskConfigurationInput struct {
 	_ struct{} `type:"structure"`
 
 	// The app client ID.
+	//
+	// ClientId is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by DescribeRiskConfigurationInput's
+	// String and GoString methods.
 	ClientId *string `min:"1" type:"string" sensitive:"true"`
 
 	// The user pool ID.
@@ -18285,12 +19972,20 @@ type DescribeRiskConfigurationInput struct {
 	UserPoolId *string `min:"1" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeRiskConfigurationInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeRiskConfigurationInput) GoString() string {
 	return s.String()
 }
@@ -18335,12 +20030,20 @@ type DescribeRiskConfigurationOutput struct {
 	RiskConfiguration *RiskConfigurationType `type:"structure" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeRiskConfigurationOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeRiskConfigurationOutput) GoString() string {
 	return s.String()
 }
@@ -18366,12 +20069,20 @@ type DescribeUserImportJobInput struct {
 	UserPoolId *string `min:"1" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeUserImportJobInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeUserImportJobInput) GoString() string {
 	return s.String()
 }
@@ -18419,12 +20130,20 @@ type DescribeUserImportJobOutput struct {
 	UserImportJob *UserImportJobType `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeUserImportJobOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeUserImportJobOutput) GoString() string {
 	return s.String()
 }
@@ -18441,6 +20160,10 @@ type DescribeUserPoolClientInput struct {
 
 	// The app client ID of the app associated with the user pool.
 	//
+	// ClientId is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by DescribeUserPoolClientInput's
+	// String and GoString methods.
+	//
 	// ClientId is a required field
 	ClientId *string `min:"1" type:"string" required:"true" sensitive:"true"`
 
@@ -18450,12 +20173,20 @@ type DescribeUserPoolClientInput struct {
 	UserPoolId *string `min:"1" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeUserPoolClientInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeUserPoolClientInput) GoString() string {
 	return s.String()
 }
@@ -18503,12 +20234,20 @@ type DescribeUserPoolClientOutput struct {
 	UserPoolClient *UserPoolClientType `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeUserPoolClientOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeUserPoolClientOutput) GoString() string {
 	return s.String()
 }
@@ -18528,12 +20267,20 @@ type DescribeUserPoolDomainInput struct {
 	Domain *string `min:"1" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeUserPoolDomainInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeUserPoolDomainInput) GoString() string {
 	return s.String()
 }
@@ -18567,12 +20314,20 @@ type DescribeUserPoolDomainOutput struct {
 	DomainDescription *DomainDescriptionType `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeUserPoolDomainOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeUserPoolDomainOutput) GoString() string {
 	return s.String()
 }
@@ -18593,12 +20348,20 @@ type DescribeUserPoolInput struct {
 	UserPoolId *string `min:"1" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeUserPoolInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeUserPoolInput) GoString() string {
 	return s.String()
 }
@@ -18633,12 +20396,20 @@ type DescribeUserPoolOutput struct {
 	UserPool *UserPoolType `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeUserPoolOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeUserPoolOutput) GoString() string {
 	return s.String()
 }
@@ -18661,12 +20432,20 @@ type DeviceConfigurationType struct {
 	DeviceOnlyRememberedOnUserPrompt *bool `type:"boolean"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeviceConfigurationType) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeviceConfigurationType) GoString() string {
 	return s.String()
 }
@@ -18694,12 +20473,20 @@ type DeviceSecretVerifierConfigType struct {
 	Salt *string `type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeviceSecretVerifierConfigType) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeviceSecretVerifierConfigType) GoString() string {
 	return s.String()
 }
@@ -18736,12 +20523,20 @@ type DeviceType struct {
 	DeviceLastModifiedDate *time.Time `type:"timestamp"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeviceType) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeviceType) GoString() string {
 	return s.String()
 }
@@ -18780,7 +20575,7 @@ func (s *DeviceType) SetDeviceLastModifiedDate(v time.Time) *DeviceType {
 type DomainDescriptionType struct {
 	_ struct{} `type:"structure"`
 
-	// The AWS account ID for the user pool owner.
+	// The account ID for the user pool owner.
 	AWSAccountId *string `type:"string"`
 
 	// The ARN of the CloudFront distribution.
@@ -18806,12 +20601,20 @@ type DomainDescriptionType struct {
 	Version *string `min:"1" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DomainDescriptionType) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DomainDescriptionType) GoString() string {
 	return s.String()
 }
@@ -18873,12 +20676,20 @@ type DuplicateProviderException struct {
 	Message_ *string `locationName:"message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DuplicateProviderException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DuplicateProviderException) GoString() string {
 	return s.String()
 }
@@ -18922,6 +20733,10 @@ func (s *DuplicateProviderException) RequestID() string {
 }
 
 // The email configuration type.
+//
+// Amazon Cognito has specific regions for use with Amazon SES. For more information
+// on the supported regions, see Email Settings for Amazon Cognito User Pools
+// (https://docs.aws.amazon.com/cognito/latest/developerguide/user-pool-email.html).
 type EmailConfigurationType struct {
 	_ struct{} `type:"structure"`
 
@@ -18933,8 +20748,8 @@ type EmailConfigurationType struct {
 	//
 	//    * Event publishing – Amazon SES can track the number of send, delivery,
 	//    open, click, bounce, and complaint events for each email sent. Use event
-	//    publishing to send information about these events to other AWS services
-	//    such as SNS and CloudWatch.
+	//    publishing to send information about these events to other Amazon Web
+	//    Services services such as SNS and CloudWatch.
 	//
 	//    * IP pool management – When leasing dedicated IP addresses with Amazon
 	//    SES, you can create groups of IP addresses, called dedicated IP pools.
@@ -18962,13 +20777,34 @@ type EmailConfigurationType struct {
 	// the FROM address, provide the ARN of an Amazon SES verified email address
 	// for the SourceArn parameter.
 	//
+	// If EmailSendingAccount is COGNITO_DEFAULT, the following parameters aren't
+	// allowed:
+	//
+	//    * EmailVerificationMessage
+	//
+	//    * EmailVerificationSubject
+	//
+	//    * InviteMessageTemplate.EmailMessage
+	//
+	//    * InviteMessageTemplate.EmailSubject
+	//
+	//    * VerificationMessageTemplate.EmailMessage
+	//
+	//    * VerificationMessageTemplate.EmailMessageByLink
+	//
+	//    * VerificationMessageTemplate.EmailSubject,
+	//
+	//    * VerificationMessageTemplate.EmailSubjectByLink
+	//
+	// DEVELOPER EmailSendingAccount is required.
+	//
 	// DEVELOPER
 	//
 	// When Amazon Cognito emails your users, it uses your Amazon SES configuration.
 	// Amazon Cognito calls Amazon SES on your behalf to send email from your verified
 	// email address. When you use this option, the email delivery limits are the
 	// same limits that apply to your Amazon SES verified email address in your
-	// AWS account.
+	// account.
 	//
 	// If you use this option, you must provide the ARN of an Amazon SES verified
 	// email address for the SourceArn parameter.
@@ -18976,7 +20812,7 @@ type EmailConfigurationType struct {
 	// Before Amazon Cognito can email your users, it requires additional permissions
 	// to call Amazon SES on your behalf. When you update your user pool with this
 	// option, Amazon Cognito creates a service-linked role, which is a type of
-	// IAM role, in your AWS account. This role contains the permissions that allow
+	// IAM role, in your account. This role contains the permissions that allow
 	// Amazon Cognito to access Amazon SES and send email messages with your address.
 	// For more information about the service-linked role that Amazon Cognito creates,
 	// see Using Service-Linked Roles for Amazon Cognito (https://docs.aws.amazon.com/cognito/latest/developerguide/using-service-linked-roles.html)
@@ -19004,12 +20840,20 @@ type EmailConfigurationType struct {
 	SourceArn *string `min:"20" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s EmailConfigurationType) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s EmailConfigurationType) GoString() string {
 	return s.String()
 }
@@ -19069,12 +20913,20 @@ type EnableSoftwareTokenMFAException struct {
 	Message_ *string `locationName:"message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s EnableSoftwareTokenMFAException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s EnableSoftwareTokenMFAException) GoString() string {
 	return s.String()
 }
@@ -19137,12 +20989,20 @@ type EventContextDataType struct {
 	Timezone *string `type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s EventContextDataType) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s EventContextDataType) GoString() string {
 	return s.String()
 }
@@ -19195,12 +21055,20 @@ type EventFeedbackType struct {
 	Provider *string `type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s EventFeedbackType) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s EventFeedbackType) GoString() string {
 	return s.String()
 }
@@ -19238,12 +21106,20 @@ type EventRiskType struct {
 	RiskLevel *string `type:"string" enum:"RiskLevelType"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s EventRiskType) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s EventRiskType) GoString() string {
 	return s.String()
 }
@@ -19275,12 +21151,20 @@ type ExpiredCodeException struct {
 	Message_ *string `locationName:"message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ExpiredCodeException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ExpiredCodeException) GoString() string {
 	return s.String()
 }
@@ -19328,6 +21212,10 @@ type ForgetDeviceInput struct {
 	_ struct{} `type:"structure"`
 
 	// The access token for the forgotten device request.
+	//
+	// AccessToken is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by ForgetDeviceInput's
+	// String and GoString methods.
 	AccessToken *string `type:"string" sensitive:"true"`
 
 	// The device key.
@@ -19336,12 +21224,20 @@ type ForgetDeviceInput struct {
 	DeviceKey *string `min:"1" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ForgetDeviceInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ForgetDeviceInput) GoString() string {
 	return s.String()
 }
@@ -19378,12 +21274,20 @@ type ForgetDeviceOutput struct {
 	_ struct{} `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ForgetDeviceOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ForgetDeviceOutput) GoString() string {
 	return s.String()
 }
@@ -19398,20 +21302,24 @@ type ForgotPasswordInput struct {
 
 	// The ID of the client associated with the user pool.
 	//
+	// ClientId is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by ForgotPasswordInput's
+	// String and GoString methods.
+	//
 	// ClientId is a required field
 	ClientId *string `min:"1" type:"string" required:"true" sensitive:"true"`
 
 	// A map of custom key-value pairs that you can provide as input for any custom
 	// workflows that this action triggers.
 	//
-	// You create custom workflows by assigning AWS Lambda functions to user pool
-	// triggers. When you use the ForgotPassword API action, Amazon Cognito invokes
-	// any functions that are assigned to the following triggers: pre sign-up, custom
-	// message, and user migration. When Amazon Cognito invokes any of these functions,
-	// it passes a JSON payload, which the function receives as input. This payload
+	// You create custom workflows by assigning Lambda functions to user pool triggers.
+	// When you use the ForgotPassword API action, Amazon Cognito invokes any functions
+	// that are assigned to the following triggers: pre sign-up, custom message,
+	// and user migration. When Amazon Cognito invokes any of these functions, it
+	// passes a JSON payload, which the function receives as input. This payload
 	// contains a clientMetadata attribute, which provides the data that you assigned
 	// to the ClientMetadata parameter in your ForgotPassword request. In your function
-	// code in AWS Lambda, you can process the clientMetadata value to enhance your
+	// code in Lambda, you can process the clientMetadata value to enhance your
 	// workflow for your specific needs.
 	//
 	// For more information, see Customizing User Pool Workflows with Lambda Triggers
@@ -19422,9 +21330,9 @@ type ForgotPasswordInput struct {
 	// parameter:
 	//
 	//    * Amazon Cognito does not store the ClientMetadata value. This data is
-	//    available only to AWS Lambda triggers that are assigned to a user pool
-	//    to support custom workflows. If your user pool configuration does not
-	//    include triggers, the ClientMetadata parameter serves no purpose.
+	//    available only to Lambda triggers that are assigned to a user pool to
+	//    support custom workflows. If your user pool configuration does not include
+	//    triggers, the ClientMetadata parameter serves no purpose.
 	//
 	//    * Amazon Cognito does not validate the ClientMetadata value.
 	//
@@ -19434,6 +21342,10 @@ type ForgotPasswordInput struct {
 
 	// A keyed-hash message authentication code (HMAC) calculated using the secret
 	// key of a user pool client and username plus the client ID in the message.
+	//
+	// SecretHash is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by ForgotPasswordInput's
+	// String and GoString methods.
 	SecretHash *string `min:"1" type:"string" sensitive:"true"`
 
 	// Contextual data such as the user's device fingerprint, IP address, or location
@@ -19444,16 +21356,28 @@ type ForgotPasswordInput struct {
 	// The user name of the user for whom you want to enter a code to reset a forgotten
 	// password.
 	//
+	// Username is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by ForgotPasswordInput's
+	// String and GoString methods.
+	//
 	// Username is a required field
 	Username *string `min:"1" type:"string" required:"true" sensitive:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ForgotPasswordInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ForgotPasswordInput) GoString() string {
 	return s.String()
 }
@@ -19529,12 +21453,20 @@ type ForgotPasswordOutput struct {
 	CodeDeliveryDetails *CodeDeliveryDetailsType `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ForgotPasswordOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ForgotPasswordOutput) GoString() string {
 	return s.String()
 }
@@ -19556,12 +21488,20 @@ type GetCSVHeaderInput struct {
 	UserPoolId *string `min:"1" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetCSVHeaderInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetCSVHeaderInput) GoString() string {
 	return s.String()
 }
@@ -19600,12 +21540,20 @@ type GetCSVHeaderOutput struct {
 	UserPoolId *string `min:"1" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetCSVHeaderOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetCSVHeaderOutput) GoString() string {
 	return s.String()
 }
@@ -19627,6 +21575,10 @@ type GetDeviceInput struct {
 	_ struct{} `type:"structure"`
 
 	// The access token.
+	//
+	// AccessToken is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by GetDeviceInput's
+	// String and GoString methods.
 	AccessToken *string `type:"string" sensitive:"true"`
 
 	// The device key.
@@ -19635,12 +21587,20 @@ type GetDeviceInput struct {
 	DeviceKey *string `min:"1" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetDeviceInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetDeviceInput) GoString() string {
 	return s.String()
 }
@@ -19683,12 +21643,20 @@ type GetDeviceOutput struct {
 	Device *DeviceType `type:"structure" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetDeviceOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetDeviceOutput) GoString() string {
 	return s.String()
 }
@@ -19713,12 +21681,20 @@ type GetGroupInput struct {
 	UserPoolId *string `min:"1" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetGroupInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetGroupInput) GoString() string {
 	return s.String()
 }
@@ -19764,12 +21740,20 @@ type GetGroupOutput struct {
 	Group *GroupType `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetGroupOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetGroupOutput) GoString() string {
 	return s.String()
 }
@@ -19794,12 +21778,20 @@ type GetIdentityProviderByIdentifierInput struct {
 	UserPoolId *string `min:"1" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetIdentityProviderByIdentifierInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetIdentityProviderByIdentifierInput) GoString() string {
 	return s.String()
 }
@@ -19847,12 +21839,20 @@ type GetIdentityProviderByIdentifierOutput struct {
 	IdentityProvider *IdentityProviderType `type:"structure" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetIdentityProviderByIdentifierOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetIdentityProviderByIdentifierOutput) GoString() string {
 	return s.String()
 }
@@ -19873,12 +21873,20 @@ type GetSigningCertificateInput struct {
 	UserPoolId *string `min:"1" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetSigningCertificateInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetSigningCertificateInput) GoString() string {
 	return s.String()
 }
@@ -19913,12 +21921,20 @@ type GetSigningCertificateOutput struct {
 	Certificate *string `type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetSigningCertificateOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetSigningCertificateOutput) GoString() string {
 	return s.String()
 }
@@ -19933,6 +21949,10 @@ type GetUICustomizationInput struct {
 	_ struct{} `type:"structure"`
 
 	// The client ID for the client app.
+	//
+	// ClientId is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by GetUICustomizationInput's
+	// String and GoString methods.
 	ClientId *string `min:"1" type:"string" sensitive:"true"`
 
 	// The user pool ID for the user pool.
@@ -19941,12 +21961,20 @@ type GetUICustomizationInput struct {
 	UserPoolId *string `min:"1" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetUICustomizationInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetUICustomizationInput) GoString() string {
 	return s.String()
 }
@@ -19991,12 +22019,20 @@ type GetUICustomizationOutput struct {
 	UICustomization *UICustomizationType `type:"structure" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetUICustomizationOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetUICustomizationOutput) GoString() string {
 	return s.String()
 }
@@ -20014,6 +22050,10 @@ type GetUserAttributeVerificationCodeInput struct {
 	// The access token returned by the server response to get the user attribute
 	// verification code.
 	//
+	// AccessToken is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by GetUserAttributeVerificationCodeInput's
+	// String and GoString methods.
+	//
 	// AccessToken is a required field
 	AccessToken *string `type:"string" required:"true" sensitive:"true"`
 
@@ -20026,14 +22066,14 @@ type GetUserAttributeVerificationCodeInput struct {
 	// A map of custom key-value pairs that you can provide as input for any custom
 	// workflows that this action triggers.
 	//
-	// You create custom workflows by assigning AWS Lambda functions to user pool
-	// triggers. When you use the GetUserAttributeVerificationCode API action, Amazon
-	// Cognito invokes the function that is assigned to the custom message trigger.
-	// When Amazon Cognito invokes this function, it passes a JSON payload, which
-	// the function receives as input. This payload contains a clientMetadata attribute,
+	// You create custom workflows by assigning Lambda functions to user pool triggers.
+	// When you use the GetUserAttributeVerificationCode API action, Amazon Cognito
+	// invokes the function that is assigned to the custom message trigger. When
+	// Amazon Cognito invokes this function, it passes a JSON payload, which the
+	// function receives as input. This payload contains a clientMetadata attribute,
 	// which provides the data that you assigned to the ClientMetadata parameter
 	// in your GetUserAttributeVerificationCode request. In your function code in
-	// AWS Lambda, you can process the clientMetadata value to enhance your workflow
+	// Lambda, you can process the clientMetadata value to enhance your workflow
 	// for your specific needs.
 	//
 	// For more information, see Customizing User Pool Workflows with Lambda Triggers
@@ -20044,9 +22084,9 @@ type GetUserAttributeVerificationCodeInput struct {
 	// parameter:
 	//
 	//    * Amazon Cognito does not store the ClientMetadata value. This data is
-	//    available only to AWS Lambda triggers that are assigned to a user pool
-	//    to support custom workflows. If your user pool configuration does not
-	//    include triggers, the ClientMetadata parameter serves no purpose.
+	//    available only to Lambda triggers that are assigned to a user pool to
+	//    support custom workflows. If your user pool configuration does not include
+	//    triggers, the ClientMetadata parameter serves no purpose.
 	//
 	//    * Amazon Cognito does not validate the ClientMetadata value.
 	//
@@ -20055,12 +22095,20 @@ type GetUserAttributeVerificationCodeInput struct {
 	ClientMetadata map[string]*string `type:"map"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetUserAttributeVerificationCodeInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetUserAttributeVerificationCodeInput) GoString() string {
 	return s.String()
 }
@@ -20112,12 +22160,20 @@ type GetUserAttributeVerificationCodeOutput struct {
 	CodeDeliveryDetails *CodeDeliveryDetailsType `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetUserAttributeVerificationCodeOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetUserAttributeVerificationCodeOutput) GoString() string {
 	return s.String()
 }
@@ -20135,16 +22191,28 @@ type GetUserInput struct {
 	// The access token returned by the server response to get information about
 	// the user.
 	//
+	// AccessToken is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by GetUserInput's
+	// String and GoString methods.
+	//
 	// AccessToken is a required field
 	AccessToken *string `type:"string" required:"true" sensitive:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetUserInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetUserInput) GoString() string {
 	return s.String()
 }
@@ -20196,16 +22264,28 @@ type GetUserOutput struct {
 
 	// The user name of the user you wish to retrieve from the get user request.
 	//
+	// Username is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by GetUserOutput's
+	// String and GoString methods.
+	//
 	// Username is a required field
 	Username *string `min:"1" type:"string" required:"true" sensitive:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetUserOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetUserOutput) GoString() string {
 	return s.String()
 }
@@ -20249,12 +22329,20 @@ type GetUserPoolMfaConfigInput struct {
 	UserPoolId *string `min:"1" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetUserPoolMfaConfigInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetUserPoolMfaConfigInput) GoString() string {
 	return s.String()
 }
@@ -20301,12 +22389,20 @@ type GetUserPoolMfaConfigOutput struct {
 	SoftwareTokenMfaConfiguration *SoftwareTokenMfaConfigType `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetUserPoolMfaConfigOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetUserPoolMfaConfigOutput) GoString() string {
 	return s.String()
 }
@@ -20335,16 +22431,28 @@ type GlobalSignOutInput struct {
 
 	// The access token.
 	//
+	// AccessToken is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by GlobalSignOutInput's
+	// String and GoString methods.
+	//
 	// AccessToken is a required field
 	AccessToken *string `type:"string" required:"true" sensitive:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GlobalSignOutInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GlobalSignOutInput) GoString() string {
 	return s.String()
 }
@@ -20373,12 +22481,20 @@ type GlobalSignOutOutput struct {
 	_ struct{} `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GlobalSignOutOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GlobalSignOutOutput) GoString() string {
 	return s.String()
 }
@@ -20392,12 +22508,20 @@ type GroupExistsException struct {
 	Message_ *string `locationName:"message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GroupExistsException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GroupExistsException) GoString() string {
 	return s.String()
 }
@@ -20479,12 +22603,20 @@ type GroupType struct {
 	UserPoolId *string `min:"1" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GroupType) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GroupType) GoString() string {
 	return s.String()
 }
@@ -20542,12 +22674,20 @@ type HttpHeader struct {
 	HeaderValue *string `locationName:"headerValue" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s HttpHeader) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s HttpHeader) GoString() string {
 	return s.String()
 }
@@ -20595,7 +22735,7 @@ type IdentityProviderType struct {
 	//    URL specified by oidc_issuer key token_url if not available from discovery
 	//    URL specified by oidc_issuer key attributes_url if not available from
 	//    discovery URL specified by oidc_issuer key jwks_uri if not available from
-	//    discovery URL specified by oidc_issuer key authorize_scopes
+	//    discovery URL specified by oidc_issuer key
 	//
 	//    * For SAML providers: MetadataFile OR MetadataURL IDPSignOut optional
 	ProviderDetails map[string]*string `type:"map"`
@@ -20610,12 +22750,20 @@ type IdentityProviderType struct {
 	UserPoolId *string `min:"1" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s IdentityProviderType) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s IdentityProviderType) GoString() string {
 	return s.String()
 }
@@ -20726,9 +22874,17 @@ type InitiateAuthInput struct {
 	//    configured with client secret), DEVICE_KEY. To start the authentication
 	//    flow with password verification, include ChallengeName: SRP_A and SRP_A:
 	//    (The SRP_A Value).
+	//
+	// AuthParameters is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by InitiateAuthInput's
+	// String and GoString methods.
 	AuthParameters map[string]*string `type:"map" sensitive:"true"`
 
 	// The app client ID.
+	//
+	// ClientId is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by InitiateAuthInput's
+	// String and GoString methods.
 	//
 	// ClientId is a required field
 	ClientId *string `min:"1" type:"string" required:"true" sensitive:"true"`
@@ -20736,10 +22892,10 @@ type InitiateAuthInput struct {
 	// A map of custom key-value pairs that you can provide as input for certain
 	// custom workflows that this action triggers.
 	//
-	// You create custom workflows by assigning AWS Lambda functions to user pool
-	// triggers. When you use the InitiateAuth API action, Amazon Cognito invokes
-	// the AWS Lambda functions that are specified for various triggers. The ClientMetadata
-	// value is passed as input to the functions for only the following triggers:
+	// You create custom workflows by assigning Lambda functions to user pool triggers.
+	// When you use the InitiateAuth API action, Amazon Cognito invokes the Lambda
+	// functions that are specified for various triggers. The ClientMetadata value
+	// is passed as input to the functions for only the following triggers:
 	//
 	//    * Pre signup
 	//
@@ -20751,7 +22907,7 @@ type InitiateAuthInput struct {
 	// JSON payload, which the function receives as input. This payload contains
 	// a validationData attribute, which provides the data that you assigned to
 	// the ClientMetadata parameter in your InitiateAuth request. In your function
-	// code in AWS Lambda, you can process the validationData value to enhance your
+	// code in Lambda, you can process the validationData value to enhance your
 	// workflow for your specific needs.
 	//
 	// When you use the InitiateAuth API action, Amazon Cognito also invokes the
@@ -20778,9 +22934,9 @@ type InitiateAuthInput struct {
 	// parameter:
 	//
 	//    * Amazon Cognito does not store the ClientMetadata value. This data is
-	//    available only to AWS Lambda triggers that are assigned to a user pool
-	//    to support custom workflows. If your user pool configuration does not
-	//    include triggers, the ClientMetadata parameter serves no purpose.
+	//    available only to Lambda triggers that are assigned to a user pool to
+	//    support custom workflows. If your user pool configuration does not include
+	//    triggers, the ClientMetadata parameter serves no purpose.
 	//
 	//    * Amazon Cognito does not validate the ClientMetadata value.
 	//
@@ -20794,12 +22950,20 @@ type InitiateAuthInput struct {
 	UserContextData *UserContextDataType `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s InitiateAuthInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s InitiateAuthInput) GoString() string {
 	return s.String()
 }
@@ -20893,9 +23057,18 @@ type InitiateAuthOutput struct {
 	//    * DEVICE_PASSWORD_VERIFIER: Similar to PASSWORD_VERIFIER, but for devices
 	//    only.
 	//
-	//    * NEW_PASSWORD_REQUIRED: For users which are required to change their
-	//    passwords after successful first login. This challenge should be passed
-	//    with NEW_PASSWORD and any other required attributes.
+	//    * NEW_PASSWORD_REQUIRED: For users who are required to change their passwords
+	//    after successful first login. This challenge should be passed with NEW_PASSWORD
+	//    and any other required attributes.
+	//
+	//    * MFA_SETUP: For users who are required to setup an MFA factor before
+	//    they can sign-in. The MFA types enabled for the user pool will be listed
+	//    in the challenge parameters MFA_CAN_SETUP value. To setup software token
+	//    MFA, use the session returned here from InitiateAuth as an input to AssociateSoftwareToken,
+	//    and use the session returned by VerifySoftwareToken as an input to RespondToAuthChallenge
+	//    with challenge name MFA_SETUP to complete sign-in. To setup SMS MFA, users
+	//    will need help from an administrator to add a phone number to their account
+	//    and then call InitiateAuth again to restart sign-in.
 	ChallengeName *string `type:"string" enum:"ChallengeNameType"`
 
 	// The challenge parameters. These are returned to you in the InitiateAuth response
@@ -20912,12 +23085,20 @@ type InitiateAuthOutput struct {
 	Session *string `min:"20" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s InitiateAuthOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s InitiateAuthOutput) GoString() string {
 	return s.String()
 }
@@ -20955,12 +23136,20 @@ type InternalErrorException struct {
 	Message_ *string `locationName:"message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s InternalErrorException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s InternalErrorException) GoString() string {
 	return s.String()
 }
@@ -21014,12 +23203,20 @@ type InvalidEmailRoleAccessPolicyException struct {
 	Message_ *string `locationName:"message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s InvalidEmailRoleAccessPolicyException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s InvalidEmailRoleAccessPolicyException) GoString() string {
 	return s.String()
 }
@@ -21063,22 +23260,30 @@ func (s *InvalidEmailRoleAccessPolicyException) RequestID() string {
 }
 
 // This exception is thrown when the Amazon Cognito service encounters an invalid
-// AWS Lambda response.
+// Lambda response.
 type InvalidLambdaResponseException struct {
 	_            struct{}                  `type:"structure"`
 	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
 
-	// The message returned when the Amazon Cognito service throws an invalid AWS
-	// Lambda response exception.
+	// The message returned when the Amazon Cognito service throws an invalid Lambda
+	// response exception.
 	Message_ *string `locationName:"message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s InvalidLambdaResponseException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s InvalidLambdaResponseException) GoString() string {
 	return s.String()
 }
@@ -21129,12 +23334,20 @@ type InvalidOAuthFlowException struct {
 	Message_ *string `locationName:"message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s InvalidOAuthFlowException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s InvalidOAuthFlowException) GoString() string {
 	return s.String()
 }
@@ -21188,12 +23401,20 @@ type InvalidParameterException struct {
 	Message_ *string `locationName:"message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s InvalidParameterException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s InvalidParameterException) GoString() string {
 	return s.String()
 }
@@ -21247,12 +23468,20 @@ type InvalidPasswordException struct {
 	Message_ *string `locationName:"message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s InvalidPasswordException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s InvalidPasswordException) GoString() string {
 	return s.String()
 }
@@ -21306,12 +23535,20 @@ type InvalidSmsRoleAccessPolicyException struct {
 	Message_ *string `locationName:"message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s InvalidSmsRoleAccessPolicyException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s InvalidSmsRoleAccessPolicyException) GoString() string {
 	return s.String()
 }
@@ -21367,12 +23604,20 @@ type InvalidSmsRoleTrustRelationshipException struct {
 	Message_ *string `locationName:"message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s InvalidSmsRoleTrustRelationshipException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s InvalidSmsRoleTrustRelationshipException) GoString() string {
 	return s.String()
 }
@@ -21424,12 +23669,20 @@ type InvalidUserPoolConfigurationException struct {
 	Message_ *string `locationName:"message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s InvalidUserPoolConfigurationException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s InvalidUserPoolConfigurationException) GoString() string {
 	return s.String()
 }
@@ -21472,29 +23725,40 @@ func (s *InvalidUserPoolConfigurationException) RequestID() string {
 	return s.RespMetadata.RequestID
 }
 
-// Specifies the configuration for AWS Lambda triggers.
+// Specifies the configuration for Lambda triggers.
 type LambdaConfigType struct {
 	_ struct{} `type:"structure"`
 
 	// Creates an authentication challenge.
 	CreateAuthChallenge *string `min:"20" type:"string"`
 
-	// A custom Message AWS Lambda trigger.
+	// A custom email sender Lambda trigger.
+	CustomEmailSender *CustomEmailLambdaVersionConfigType `type:"structure"`
+
+	// A custom Message Lambda trigger.
 	CustomMessage *string `min:"20" type:"string"`
+
+	// A custom SMS sender Lambda trigger.
+	CustomSMSSender *CustomSMSLambdaVersionConfigType `type:"structure"`
 
 	// Defines the authentication challenge.
 	DefineAuthChallenge *string `min:"20" type:"string"`
 
-	// A post-authentication AWS Lambda trigger.
+	// The Amazon Resource Name of Key Management Service Customer master keys (/kms/latest/developerguide/concepts.html#master_keys)
+	// . Amazon Cognito uses the key to encrypt codes and temporary passwords sent
+	// to CustomEmailSender and CustomSMSSender.
+	KMSKeyID *string `min:"20" type:"string"`
+
+	// A post-authentication Lambda trigger.
 	PostAuthentication *string `min:"20" type:"string"`
 
-	// A post-confirmation AWS Lambda trigger.
+	// A post-confirmation Lambda trigger.
 	PostConfirmation *string `min:"20" type:"string"`
 
-	// A pre-authentication AWS Lambda trigger.
+	// A pre-authentication Lambda trigger.
 	PreAuthentication *string `min:"20" type:"string"`
 
-	// A pre-registration AWS Lambda trigger.
+	// A pre-registration Lambda trigger.
 	PreSignUp *string `min:"20" type:"string"`
 
 	// A Lambda trigger that is invoked before token generation.
@@ -21507,12 +23771,20 @@ type LambdaConfigType struct {
 	VerifyAuthChallengeResponse *string `min:"20" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s LambdaConfigType) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s LambdaConfigType) GoString() string {
 	return s.String()
 }
@@ -21528,6 +23800,9 @@ func (s *LambdaConfigType) Validate() error {
 	}
 	if s.DefineAuthChallenge != nil && len(*s.DefineAuthChallenge) < 20 {
 		invalidParams.Add(request.NewErrParamMinLen("DefineAuthChallenge", 20))
+	}
+	if s.KMSKeyID != nil && len(*s.KMSKeyID) < 20 {
+		invalidParams.Add(request.NewErrParamMinLen("KMSKeyID", 20))
 	}
 	if s.PostAuthentication != nil && len(*s.PostAuthentication) < 20 {
 		invalidParams.Add(request.NewErrParamMinLen("PostAuthentication", 20))
@@ -21550,6 +23825,16 @@ func (s *LambdaConfigType) Validate() error {
 	if s.VerifyAuthChallengeResponse != nil && len(*s.VerifyAuthChallengeResponse) < 20 {
 		invalidParams.Add(request.NewErrParamMinLen("VerifyAuthChallengeResponse", 20))
 	}
+	if s.CustomEmailSender != nil {
+		if err := s.CustomEmailSender.Validate(); err != nil {
+			invalidParams.AddNested("CustomEmailSender", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.CustomSMSSender != nil {
+		if err := s.CustomSMSSender.Validate(); err != nil {
+			invalidParams.AddNested("CustomSMSSender", err.(request.ErrInvalidParams))
+		}
+	}
 
 	if invalidParams.Len() > 0 {
 		return invalidParams
@@ -21563,15 +23848,33 @@ func (s *LambdaConfigType) SetCreateAuthChallenge(v string) *LambdaConfigType {
 	return s
 }
 
+// SetCustomEmailSender sets the CustomEmailSender field's value.
+func (s *LambdaConfigType) SetCustomEmailSender(v *CustomEmailLambdaVersionConfigType) *LambdaConfigType {
+	s.CustomEmailSender = v
+	return s
+}
+
 // SetCustomMessage sets the CustomMessage field's value.
 func (s *LambdaConfigType) SetCustomMessage(v string) *LambdaConfigType {
 	s.CustomMessage = &v
 	return s
 }
 
+// SetCustomSMSSender sets the CustomSMSSender field's value.
+func (s *LambdaConfigType) SetCustomSMSSender(v *CustomSMSLambdaVersionConfigType) *LambdaConfigType {
+	s.CustomSMSSender = v
+	return s
+}
+
 // SetDefineAuthChallenge sets the DefineAuthChallenge field's value.
 func (s *LambdaConfigType) SetDefineAuthChallenge(v string) *LambdaConfigType {
 	s.DefineAuthChallenge = &v
+	return s
+}
+
+// SetKMSKeyID sets the KMSKeyID field's value.
+func (s *LambdaConfigType) SetKMSKeyID(v string) *LambdaConfigType {
+	s.KMSKeyID = &v
 	return s
 }
 
@@ -21617,8 +23920,8 @@ func (s *LambdaConfigType) SetVerifyAuthChallengeResponse(v string) *LambdaConfi
 	return s
 }
 
-// This exception is thrown when a user exceeds the limit for a requested AWS
-// resource.
+// This exception is thrown when a user exceeds the limit for a requested Amazon
+// Web Services resource.
 type LimitExceededException struct {
 	_            struct{}                  `type:"structure"`
 	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
@@ -21627,12 +23930,20 @@ type LimitExceededException struct {
 	Message_ *string `locationName:"message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s LimitExceededException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s LimitExceededException) GoString() string {
 	return s.String()
 }
@@ -21681,6 +23992,10 @@ type ListDevicesInput struct {
 
 	// The access tokens for the request to list devices.
 	//
+	// AccessToken is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by ListDevicesInput's
+	// String and GoString methods.
+	//
 	// AccessToken is a required field
 	AccessToken *string `type:"string" required:"true" sensitive:"true"`
 
@@ -21691,12 +24006,20 @@ type ListDevicesInput struct {
 	PaginationToken *string `min:"1" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListDevicesInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListDevicesInput) GoString() string {
 	return s.String()
 }
@@ -21746,12 +24069,20 @@ type ListDevicesOutput struct {
 	PaginationToken *string `min:"1" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListDevicesOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListDevicesOutput) GoString() string {
 	return s.String()
 }
@@ -21784,12 +24115,20 @@ type ListGroupsInput struct {
 	UserPoolId *string `min:"1" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListGroupsInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListGroupsInput) GoString() string {
 	return s.String()
 }
@@ -21842,12 +24181,20 @@ type ListGroupsOutput struct {
 	NextToken *string `min:"1" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListGroupsOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListGroupsOutput) GoString() string {
 	return s.String()
 }
@@ -21879,12 +24226,20 @@ type ListIdentityProvidersInput struct {
 	UserPoolId *string `min:"1" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListIdentityProvidersInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListIdentityProvidersInput) GoString() string {
 	return s.String()
 }
@@ -21938,12 +24293,20 @@ type ListIdentityProvidersOutput struct {
 	Providers []*ProviderDescription `type:"list" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListIdentityProvidersOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListIdentityProvidersOutput) GoString() string {
 	return s.String()
 }
@@ -21975,12 +24338,20 @@ type ListResourceServersInput struct {
 	UserPoolId *string `min:"1" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListResourceServersInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListResourceServersInput) GoString() string {
 	return s.String()
 }
@@ -22037,12 +24408,20 @@ type ListResourceServersOutput struct {
 	ResourceServers []*ResourceServerType `type:"list" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListResourceServersOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListResourceServersOutput) GoString() string {
 	return s.String()
 }
@@ -22069,12 +24448,20 @@ type ListTagsForResourceInput struct {
 	ResourceArn *string `min:"20" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListTagsForResourceInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListTagsForResourceInput) GoString() string {
 	return s.String()
 }
@@ -22108,12 +24495,20 @@ type ListTagsForResourceOutput struct {
 	Tags map[string]*string `type:"map"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListTagsForResourceOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListTagsForResourceOutput) GoString() string {
 	return s.String()
 }
@@ -22143,12 +24538,20 @@ type ListUserImportJobsInput struct {
 	UserPoolId *string `min:"1" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListUserImportJobsInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListUserImportJobsInput) GoString() string {
 	return s.String()
 }
@@ -22209,12 +24612,20 @@ type ListUserImportJobsOutput struct {
 	UserImportJobs []*UserImportJobType `min:"1" type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListUserImportJobsOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListUserImportJobsOutput) GoString() string {
 	return s.String()
 }
@@ -22249,12 +24660,20 @@ type ListUserPoolClientsInput struct {
 	UserPoolId *string `min:"1" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListUserPoolClientsInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListUserPoolClientsInput) GoString() string {
 	return s.String()
 }
@@ -22311,12 +24730,20 @@ type ListUserPoolClientsOutput struct {
 	UserPoolClients []*UserPoolClientDescription `type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListUserPoolClientsOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListUserPoolClientsOutput) GoString() string {
 	return s.String()
 }
@@ -22348,12 +24775,20 @@ type ListUserPoolsInput struct {
 	NextToken *string `min:"1" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListUserPoolsInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListUserPoolsInput) GoString() string {
 	return s.String()
 }
@@ -22401,12 +24836,20 @@ type ListUserPoolsOutput struct {
 	UserPools []*UserPoolDescriptionType `type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListUserPoolsOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListUserPoolsOutput) GoString() string {
 	return s.String()
 }
@@ -22444,12 +24887,20 @@ type ListUsersInGroupInput struct {
 	UserPoolId *string `min:"1" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListUsersInGroupInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListUsersInGroupInput) GoString() string {
 	return s.String()
 }
@@ -22514,12 +24965,20 @@ type ListUsersInGroupOutput struct {
 	Users []*UserType `type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListUsersInGroupOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListUsersInGroupOutput) GoString() string {
 	return s.String()
 }
@@ -22602,12 +25061,20 @@ type ListUsersInput struct {
 	UserPoolId *string `min:"1" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListUsersInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListUsersInput) GoString() string {
 	return s.String()
 }
@@ -22673,12 +25140,20 @@ type ListUsersOutput struct {
 	Users []*UserType `type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListUsersOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListUsersOutput) GoString() string {
 	return s.String()
 }
@@ -22705,12 +25180,20 @@ type MFAMethodNotFoundException struct {
 	Message_ *string `locationName:"message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s MFAMethodNotFoundException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s MFAMethodNotFoundException) GoString() string {
 	return s.String()
 }
@@ -22766,12 +25249,20 @@ type MFAOptionType struct {
 	DeliveryMedium *string `type:"string" enum:"DeliveryMediumType"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s MFAOptionType) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s MFAOptionType) GoString() string {
 	return s.String()
 }
@@ -22805,22 +25296,34 @@ func (s *MFAOptionType) SetDeliveryMedium(v string) *MFAOptionType {
 type MessageTemplateType struct {
 	_ struct{} `type:"structure"`
 
-	// The message template for email messages.
+	// The message template for email messages. EmailMessage is allowed only if
+	// EmailSendingAccount (https://docs.aws.amazon.com/cognito-user-identity-pools/latest/APIReference/API_EmailConfigurationType.html#CognitoUserPools-Type-EmailConfigurationType-EmailSendingAccount)
+	// is DEVELOPER.
 	EmailMessage *string `min:"6" type:"string"`
 
-	// The subject line for email messages.
+	// The subject line for email messages. EmailSubject is allowed only if EmailSendingAccount
+	// (https://docs.aws.amazon.com/cognito-user-identity-pools/latest/APIReference/API_EmailConfigurationType.html#CognitoUserPools-Type-EmailConfigurationType-EmailSendingAccount)
+	// is DEVELOPER.
 	EmailSubject *string `min:"1" type:"string"`
 
 	// The message template for SMS messages.
 	SMSMessage *string `min:"6" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s MessageTemplateType) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s MessageTemplateType) GoString() string {
 	return s.String()
 }
@@ -22873,12 +25376,20 @@ type NewDeviceMetadataType struct {
 	DeviceKey *string `min:"1" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s NewDeviceMetadataType) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s NewDeviceMetadataType) GoString() string {
 	return s.String()
 }
@@ -22905,12 +25416,20 @@ type NotAuthorizedException struct {
 	Message_ *string `locationName:"message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s NotAuthorizedException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s NotAuthorizedException) GoString() string {
 	return s.String()
 }
@@ -22983,12 +25502,20 @@ type NotifyConfigurationType struct {
 	SourceArn *string `min:"20" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s NotifyConfigurationType) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s NotifyConfigurationType) GoString() string {
 	return s.String()
 }
@@ -23076,12 +25603,20 @@ type NotifyEmailType struct {
 	TextBody *string `min:"6" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s NotifyEmailType) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s NotifyEmailType) GoString() string {
 	return s.String()
 }
@@ -23138,12 +25673,20 @@ type NumberAttributeConstraintsType struct {
 	MinValue *string `type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s NumberAttributeConstraintsType) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s NumberAttributeConstraintsType) GoString() string {
 	return s.String()
 }
@@ -23194,12 +25737,20 @@ type PasswordPolicyType struct {
 	TemporaryPasswordValidityDays *int64 `type:"integer"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s PasswordPolicyType) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s PasswordPolicyType) GoString() string {
 	return s.String()
 }
@@ -23262,12 +25813,20 @@ type PasswordResetRequiredException struct {
 	Message_ *string `locationName:"message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s PasswordResetRequiredException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s PasswordResetRequiredException) GoString() string {
 	return s.String()
 }
@@ -23319,12 +25878,20 @@ type PreconditionNotMetException struct {
 	Message_ *string `locationName:"message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s PreconditionNotMetException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s PreconditionNotMetException) GoString() string {
 	return s.String()
 }
@@ -23384,12 +25951,20 @@ type ProviderDescription struct {
 	ProviderType *string `type:"string" enum:"IdentityProviderTypeType"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ProviderDescription) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ProviderDescription) GoString() string {
 	return s.String()
 }
@@ -23432,12 +26007,20 @@ type ProviderUserIdentifierType struct {
 	ProviderName *string `min:"1" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ProviderUserIdentifierType) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ProviderUserIdentifierType) GoString() string {
 	return s.String()
 }
@@ -23489,12 +26072,20 @@ type RecoveryOptionType struct {
 	Priority *int64 `min:"1" type:"integer" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s RecoveryOptionType) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s RecoveryOptionType) GoString() string {
 	return s.String()
 }
@@ -23540,21 +26131,25 @@ type ResendConfirmationCodeInput struct {
 
 	// The ID of the client associated with the user pool.
 	//
+	// ClientId is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by ResendConfirmationCodeInput's
+	// String and GoString methods.
+	//
 	// ClientId is a required field
 	ClientId *string `min:"1" type:"string" required:"true" sensitive:"true"`
 
 	// A map of custom key-value pairs that you can provide as input for any custom
 	// workflows that this action triggers.
 	//
-	// You create custom workflows by assigning AWS Lambda functions to user pool
-	// triggers. When you use the ResendConfirmationCode API action, Amazon Cognito
-	// invokes the function that is assigned to the custom message trigger. When
-	// Amazon Cognito invokes this function, it passes a JSON payload, which the
-	// function receives as input. This payload contains a clientMetadata attribute,
-	// which provides the data that you assigned to the ClientMetadata parameter
-	// in your ResendConfirmationCode request. In your function code in AWS Lambda,
-	// you can process the clientMetadata value to enhance your workflow for your
-	// specific needs.
+	// You create custom workflows by assigning Lambda functions to user pool triggers.
+	// When you use the ResendConfirmationCode API action, Amazon Cognito invokes
+	// the function that is assigned to the custom message trigger. When Amazon
+	// Cognito invokes this function, it passes a JSON payload, which the function
+	// receives as input. This payload contains a clientMetadata attribute, which
+	// provides the data that you assigned to the ClientMetadata parameter in your
+	// ResendConfirmationCode request. In your function code in Lambda, you can
+	// process the clientMetadata value to enhance your workflow for your specific
+	// needs.
 	//
 	// For more information, see Customizing User Pool Workflows with Lambda Triggers
 	// (https://docs.aws.amazon.com/cognito/latest/developerguide/cognito-user-identity-pools-working-with-aws-lambda-triggers.html)
@@ -23564,9 +26159,9 @@ type ResendConfirmationCodeInput struct {
 	// parameter:
 	//
 	//    * Amazon Cognito does not store the ClientMetadata value. This data is
-	//    available only to AWS Lambda triggers that are assigned to a user pool
-	//    to support custom workflows. If your user pool configuration does not
-	//    include triggers, the ClientMetadata parameter serves no purpose.
+	//    available only to Lambda triggers that are assigned to a user pool to
+	//    support custom workflows. If your user pool configuration does not include
+	//    triggers, the ClientMetadata parameter serves no purpose.
 	//
 	//    * Amazon Cognito does not validate the ClientMetadata value.
 	//
@@ -23576,6 +26171,10 @@ type ResendConfirmationCodeInput struct {
 
 	// A keyed-hash message authentication code (HMAC) calculated using the secret
 	// key of a user pool client and username plus the client ID in the message.
+	//
+	// SecretHash is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by ResendConfirmationCodeInput's
+	// String and GoString methods.
 	SecretHash *string `min:"1" type:"string" sensitive:"true"`
 
 	// Contextual data such as the user's device fingerprint, IP address, or location
@@ -23585,16 +26184,28 @@ type ResendConfirmationCodeInput struct {
 
 	// The user name of the user to whom you wish to resend a confirmation code.
 	//
+	// Username is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by ResendConfirmationCodeInput's
+	// String and GoString methods.
+	//
 	// Username is a required field
 	Username *string `min:"1" type:"string" required:"true" sensitive:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ResendConfirmationCodeInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ResendConfirmationCodeInput) GoString() string {
 	return s.String()
 }
@@ -23670,12 +26281,20 @@ type ResendConfirmationCodeOutput struct {
 	CodeDeliveryDetails *CodeDeliveryDetailsType `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ResendConfirmationCodeOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ResendConfirmationCodeOutput) GoString() string {
 	return s.String()
 }
@@ -23697,12 +26316,20 @@ type ResourceNotFoundException struct {
 	Message_ *string `locationName:"message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ResourceNotFoundException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ResourceNotFoundException) GoString() string {
 	return s.String()
 }
@@ -23760,12 +26387,20 @@ type ResourceServerScopeType struct {
 	ScopeName *string `min:"1" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ResourceServerScopeType) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ResourceServerScopeType) GoString() string {
 	return s.String()
 }
@@ -23821,12 +26456,20 @@ type ResourceServerType struct {
 	UserPoolId *string `min:"1" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ResourceServerType) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ResourceServerType) GoString() string {
 	return s.String()
 }
@@ -23891,9 +26534,16 @@ type RespondToAuthChallengeInput struct {
 	//
 	//    * DEVICE_PASSWORD_VERIFIER requires everything that PASSWORD_VERIFIER
 	//    requires plus DEVICE_KEY.
+	//
+	//    * MFA_SETUP requires USERNAME, plus you need to use the session value
+	//    returned by VerifySoftwareToken in the Session parameter.
 	ChallengeResponses map[string]*string `type:"map"`
 
 	// The app client ID.
+	//
+	// ClientId is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by RespondToAuthChallengeInput's
+	// String and GoString methods.
 	//
 	// ClientId is a required field
 	ClientId *string `min:"1" type:"string" required:"true" sensitive:"true"`
@@ -23901,16 +26551,16 @@ type RespondToAuthChallengeInput struct {
 	// A map of custom key-value pairs that you can provide as input for any custom
 	// workflows that this action triggers.
 	//
-	// You create custom workflows by assigning AWS Lambda functions to user pool
-	// triggers. When you use the RespondToAuthChallenge API action, Amazon Cognito
-	// invokes any functions that are assigned to the following triggers: post authentication,
+	// You create custom workflows by assigning Lambda functions to user pool triggers.
+	// When you use the RespondToAuthChallenge API action, Amazon Cognito invokes
+	// any functions that are assigned to the following triggers: post authentication,
 	// pre token generation, define auth challenge, create auth challenge, and verify
 	// auth challenge. When Amazon Cognito invokes any of these functions, it passes
 	// a JSON payload, which the function receives as input. This payload contains
 	// a clientMetadata attribute, which provides the data that you assigned to
 	// the ClientMetadata parameter in your RespondToAuthChallenge request. In your
-	// function code in AWS Lambda, you can process the clientMetadata value to
-	// enhance your workflow for your specific needs.
+	// function code in Lambda, you can process the clientMetadata value to enhance
+	// your workflow for your specific needs.
 	//
 	// For more information, see Customizing User Pool Workflows with Lambda Triggers
 	// (https://docs.aws.amazon.com/cognito/latest/developerguide/cognito-user-identity-pools-working-with-aws-lambda-triggers.html)
@@ -23920,9 +26570,9 @@ type RespondToAuthChallengeInput struct {
 	// parameter:
 	//
 	//    * Amazon Cognito does not store the ClientMetadata value. This data is
-	//    available only to AWS Lambda triggers that are assigned to a user pool
-	//    to support custom workflows. If your user pool configuration does not
-	//    include triggers, the ClientMetadata parameter serves no purpose.
+	//    available only to Lambda triggers that are assigned to a user pool to
+	//    support custom workflows. If your user pool configuration does not include
+	//    triggers, the ClientMetadata parameter serves no purpose.
 	//
 	//    * Amazon Cognito does not validate the ClientMetadata value.
 	//
@@ -23943,12 +26593,20 @@ type RespondToAuthChallengeInput struct {
 	UserContextData *UserContextDataType `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s RespondToAuthChallengeInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s RespondToAuthChallengeInput) GoString() string {
 	return s.String()
 }
@@ -24038,12 +26696,20 @@ type RespondToAuthChallengeOutput struct {
 	Session *string `min:"20" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s RespondToAuthChallengeOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s RespondToAuthChallengeOutput) GoString() string {
 	return s.String()
 }
@@ -24072,6 +26738,116 @@ func (s *RespondToAuthChallengeOutput) SetSession(v string) *RespondToAuthChalle
 	return s
 }
 
+type RevokeTokenInput struct {
+	_ struct{} `type:"structure"`
+
+	// The client ID for the token that you want to revoke.
+	//
+	// ClientId is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by RevokeTokenInput's
+	// String and GoString methods.
+	//
+	// ClientId is a required field
+	ClientId *string `min:"1" type:"string" required:"true" sensitive:"true"`
+
+	// The secret for the client ID. This is required only if the client ID has
+	// a secret.
+	//
+	// ClientSecret is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by RevokeTokenInput's
+	// String and GoString methods.
+	ClientSecret *string `min:"1" type:"string" sensitive:"true"`
+
+	// The token that you want to revoke.
+	//
+	// Token is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by RevokeTokenInput's
+	// String and GoString methods.
+	//
+	// Token is a required field
+	Token *string `type:"string" required:"true" sensitive:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s RevokeTokenInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s RevokeTokenInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *RevokeTokenInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "RevokeTokenInput"}
+	if s.ClientId == nil {
+		invalidParams.Add(request.NewErrParamRequired("ClientId"))
+	}
+	if s.ClientId != nil && len(*s.ClientId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ClientId", 1))
+	}
+	if s.ClientSecret != nil && len(*s.ClientSecret) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ClientSecret", 1))
+	}
+	if s.Token == nil {
+		invalidParams.Add(request.NewErrParamRequired("Token"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetClientId sets the ClientId field's value.
+func (s *RevokeTokenInput) SetClientId(v string) *RevokeTokenInput {
+	s.ClientId = &v
+	return s
+}
+
+// SetClientSecret sets the ClientSecret field's value.
+func (s *RevokeTokenInput) SetClientSecret(v string) *RevokeTokenInput {
+	s.ClientSecret = &v
+	return s
+}
+
+// SetToken sets the Token field's value.
+func (s *RevokeTokenInput) SetToken(v string) *RevokeTokenInput {
+	s.Token = &v
+	return s
+}
+
+type RevokeTokenOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s RevokeTokenOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s RevokeTokenOutput) GoString() string {
+	return s.String()
+}
+
 // The risk configuration type.
 type RiskConfigurationType struct {
 	_ struct{} `type:"structure"`
@@ -24081,6 +26857,10 @@ type RiskConfigurationType struct {
 	AccountTakeoverRiskConfiguration *AccountTakeoverRiskConfigurationType `type:"structure"`
 
 	// The app client ID.
+	//
+	// ClientId is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by RiskConfigurationType's
+	// String and GoString methods.
 	ClientId *string `min:"1" type:"string" sensitive:"true"`
 
 	// The compromised credentials risk configuration object including the EventFilter
@@ -24097,12 +26877,20 @@ type RiskConfigurationType struct {
 	UserPoolId *string `min:"1" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s RiskConfigurationType) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s RiskConfigurationType) GoString() string {
 	return s.String()
 }
@@ -24157,12 +26945,20 @@ type RiskExceptionConfigurationType struct {
 	SkippedIPRangeList []*string `type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s RiskExceptionConfigurationType) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s RiskExceptionConfigurationType) GoString() string {
 	return s.String()
 }
@@ -24179,23 +26975,39 @@ func (s *RiskExceptionConfigurationType) SetSkippedIPRangeList(v []*string) *Ris
 	return s
 }
 
-// The type used for enabling SMS MFA at the user level.
+// The type used for enabling SMS MFA at the user level. Phone numbers don't
+// need to be verified to be used for SMS MFA. If an MFA type is enabled for
+// a user, the user will be prompted for MFA during all sign in attempts, unless
+// device tracking is turned on and the device has been trusted. If you would
+// like MFA to be applied selectively based on the assessed risk level of sign
+// in attempts, disable MFA for users and turn on Adaptive Authentication for
+// the user pool.
 type SMSMfaSettingsType struct {
 	_ struct{} `type:"structure"`
 
-	// Specifies whether SMS text message MFA is enabled.
+	// Specifies whether SMS text message MFA is enabled. If an MFA type is enabled
+	// for a user, the user will be prompted for MFA during all sign in attempts,
+	// unless device tracking is turned on and the device has been trusted.
 	Enabled *bool `type:"boolean"`
 
 	// Specifies whether SMS is the preferred MFA method.
 	PreferredMfa *bool `type:"boolean"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s SMSMfaSettingsType) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s SMSMfaSettingsType) GoString() string {
 	return s.String()
 }
@@ -24255,12 +27067,20 @@ type SchemaAttributeType struct {
 	StringAttributeConstraints *StringAttributeConstraintsType `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s SchemaAttributeType) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s SchemaAttributeType) GoString() string {
 	return s.String()
 }
@@ -24328,12 +27148,20 @@ type ScopeDoesNotExistException struct {
 	Message_ *string `locationName:"message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ScopeDoesNotExistException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ScopeDoesNotExistException) GoString() string {
 	return s.String()
 }
@@ -24389,6 +27217,10 @@ type SetRiskConfigurationInput struct {
 	// Otherwise, ClientId is mapped to the client. When the client ID is not null,
 	// the user pool configuration is overridden and the risk configuration for
 	// the client is used instead.
+	//
+	// ClientId is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by SetRiskConfigurationInput's
+	// String and GoString methods.
 	ClientId *string `min:"1" type:"string" sensitive:"true"`
 
 	// The compromised credentials risk configuration.
@@ -24403,12 +27235,20 @@ type SetRiskConfigurationInput struct {
 	UserPoolId *string `min:"1" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s SetRiskConfigurationInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s SetRiskConfigurationInput) GoString() string {
 	return s.String()
 }
@@ -24481,12 +27321,20 @@ type SetRiskConfigurationOutput struct {
 	RiskConfiguration *RiskConfigurationType `type:"structure" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s SetRiskConfigurationOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s SetRiskConfigurationOutput) GoString() string {
 	return s.String()
 }
@@ -24504,10 +27352,13 @@ type SetUICustomizationInput struct {
 	CSS *string `type:"string"`
 
 	// The client ID for the client app.
+	//
+	// ClientId is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by SetUICustomizationInput's
+	// String and GoString methods.
 	ClientId *string `min:"1" type:"string" sensitive:"true"`
 
 	// The uploaded logo image for the UI customization.
-	//
 	// ImageFile is automatically base64 encoded/decoded by the SDK.
 	ImageFile []byte `type:"blob"`
 
@@ -24517,12 +27368,20 @@ type SetUICustomizationInput struct {
 	UserPoolId *string `min:"1" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s SetUICustomizationInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s SetUICustomizationInput) GoString() string {
 	return s.String()
 }
@@ -24579,12 +27438,20 @@ type SetUICustomizationOutput struct {
 	UICustomization *UICustomizationType `type:"structure" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s SetUICustomizationOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s SetUICustomizationOutput) GoString() string {
 	return s.String()
 }
@@ -24600,6 +27467,10 @@ type SetUserMFAPreferenceInput struct {
 
 	// The access token for the user.
 	//
+	// AccessToken is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by SetUserMFAPreferenceInput's
+	// String and GoString methods.
+	//
 	// AccessToken is a required field
 	AccessToken *string `type:"string" required:"true" sensitive:"true"`
 
@@ -24610,12 +27481,20 @@ type SetUserMFAPreferenceInput struct {
 	SoftwareTokenMfaSettings *SoftwareTokenMfaSettingsType `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s SetUserMFAPreferenceInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s SetUserMFAPreferenceInput) GoString() string {
 	return s.String()
 }
@@ -24655,12 +27534,20 @@ type SetUserMFAPreferenceOutput struct {
 	_ struct{} `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s SetUserMFAPreferenceOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s SetUserMFAPreferenceOutput) GoString() string {
 	return s.String()
 }
@@ -24668,7 +27555,10 @@ func (s SetUserMFAPreferenceOutput) GoString() string {
 type SetUserPoolMfaConfigInput struct {
 	_ struct{} `type:"structure"`
 
-	// The MFA configuration. Valid values include:
+	// The MFA configuration. Users who don't have an MFA factor set up won't be
+	// able to sign-in if you set the MfaConfiguration value to ‘ON’. See Adding
+	// Multi-Factor Authentication (MFA) to a User Pool (cognito/latest/developerguide/user-pool-settings-mfa.html)
+	// to learn more. Valid values include:
 	//
 	//    * OFF MFA will not be used for any users.
 	//
@@ -24690,12 +27580,20 @@ type SetUserPoolMfaConfigInput struct {
 	UserPoolId *string `min:"1" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s SetUserPoolMfaConfigInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s SetUserPoolMfaConfigInput) GoString() string {
 	return s.String()
 }
@@ -24765,12 +27663,20 @@ type SetUserPoolMfaConfigOutput struct {
 	SoftwareTokenMfaConfiguration *SoftwareTokenMfaConfigType `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s SetUserPoolMfaConfigOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s SetUserPoolMfaConfigOutput) GoString() string {
 	return s.String()
 }
@@ -24799,6 +27705,10 @@ type SetUserSettingsInput struct {
 
 	// The access token for the set user settings request.
 	//
+	// AccessToken is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by SetUserSettingsInput's
+	// String and GoString methods.
+	//
 	// AccessToken is a required field
 	AccessToken *string `type:"string" required:"true" sensitive:"true"`
 
@@ -24809,12 +27719,20 @@ type SetUserSettingsInput struct {
 	MFAOptions []*MFAOptionType `type:"list" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s SetUserSettingsInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s SetUserSettingsInput) GoString() string {
 	return s.String()
 }
@@ -24862,12 +27780,20 @@ type SetUserSettingsOutput struct {
 	_ struct{} `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s SetUserSettingsOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s SetUserSettingsOutput) GoString() string {
 	return s.String()
 }
@@ -24882,21 +27808,25 @@ type SignUpInput struct {
 
 	// The ID of the client associated with the user pool.
 	//
+	// ClientId is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by SignUpInput's
+	// String and GoString methods.
+	//
 	// ClientId is a required field
 	ClientId *string `min:"1" type:"string" required:"true" sensitive:"true"`
 
 	// A map of custom key-value pairs that you can provide as input for any custom
 	// workflows that this action triggers.
 	//
-	// You create custom workflows by assigning AWS Lambda functions to user pool
-	// triggers. When you use the SignUp API action, Amazon Cognito invokes any
-	// functions that are assigned to the following triggers: pre sign-up, custom
-	// message, and post confirmation. When Amazon Cognito invokes any of these
-	// functions, it passes a JSON payload, which the function receives as input.
-	// This payload contains a clientMetadata attribute, which provides the data
-	// that you assigned to the ClientMetadata parameter in your SignUp request.
-	// In your function code in AWS Lambda, you can process the clientMetadata value
-	// to enhance your workflow for your specific needs.
+	// You create custom workflows by assigning Lambda functions to user pool triggers.
+	// When you use the SignUp API action, Amazon Cognito invokes any functions
+	// that are assigned to the following triggers: pre sign-up, custom message,
+	// and post confirmation. When Amazon Cognito invokes any of these functions,
+	// it passes a JSON payload, which the function receives as input. This payload
+	// contains a clientMetadata attribute, which provides the data that you assigned
+	// to the ClientMetadata parameter in your SignUp request. In your function
+	// code in Lambda, you can process the clientMetadata value to enhance your
+	// workflow for your specific needs.
 	//
 	// For more information, see Customizing User Pool Workflows with Lambda Triggers
 	// (https://docs.aws.amazon.com/cognito/latest/developerguide/cognito-user-identity-pools-working-with-aws-lambda-triggers.html)
@@ -24906,9 +27836,9 @@ type SignUpInput struct {
 	// parameter:
 	//
 	//    * Amazon Cognito does not store the ClientMetadata value. This data is
-	//    available only to AWS Lambda triggers that are assigned to a user pool
-	//    to support custom workflows. If your user pool configuration does not
-	//    include triggers, the ClientMetadata parameter serves no purpose.
+	//    available only to Lambda triggers that are assigned to a user pool to
+	//    support custom workflows. If your user pool configuration does not include
+	//    triggers, the ClientMetadata parameter serves no purpose.
 	//
 	//    * Amazon Cognito does not validate the ClientMetadata value.
 	//
@@ -24918,11 +27848,19 @@ type SignUpInput struct {
 
 	// The password of the user you wish to register.
 	//
+	// Password is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by SignUpInput's
+	// String and GoString methods.
+	//
 	// Password is a required field
 	Password *string `min:"6" type:"string" required:"true" sensitive:"true"`
 
 	// A keyed-hash message authentication code (HMAC) calculated using the secret
 	// key of a user pool client and username plus the client ID in the message.
+	//
+	// SecretHash is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by SignUpInput's
+	// String and GoString methods.
 	SecretHash *string `min:"1" type:"string" sensitive:"true"`
 
 	// An array of name-value pairs representing user attributes.
@@ -24938,6 +27876,10 @@ type SignUpInput struct {
 
 	// The user name of the user you wish to register.
 	//
+	// Username is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by SignUpInput's
+	// String and GoString methods.
+	//
 	// Username is a required field
 	Username *string `min:"1" type:"string" required:"true" sensitive:"true"`
 
@@ -24945,12 +27887,20 @@ type SignUpInput struct {
 	ValidationData []*AttributeType `type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s SignUpInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s SignUpInput) GoString() string {
 	return s.String()
 }
@@ -25079,12 +28029,20 @@ type SignUpOutput struct {
 	UserSub *string `type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s SignUpOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s SignUpOutput) GoString() string {
 	return s.String()
 }
@@ -25109,8 +28067,8 @@ func (s *SignUpOutput) SetUserSub(v string) *SignUpOutput {
 
 // The SMS configuration type that includes the settings the Cognito User Pool
 // needs to call for the Amazon SNS service to send an SMS message from your
-// AWS account. The Cognito User Pool makes the request to the Amazon SNS Service
-// by using an AWS IAM role that you provide for your AWS account.
+// account. The Cognito User Pool makes the request to the Amazon SNS Service
+// by using an IAM role that you provide for your account.
 type SmsConfigurationType struct {
 	_ struct{} `type:"structure"`
 
@@ -25121,22 +28079,35 @@ type SmsConfigurationType struct {
 	// policy to require the ExternalID. If you use the Cognito Management Console
 	// to create a role for SMS MFA, Cognito will create a role with the required
 	// permissions and a trust policy that demonstrates use of the ExternalId.
+	//
+	// For more information about the ExternalId of a role, see How to use an external
+	// ID when granting access to your Amazon Web Services resources to a third
+	// party (https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_create_for-user_externalid.html)
 	ExternalId *string `type:"string"`
 
 	// The Amazon Resource Name (ARN) of the Amazon Simple Notification Service
-	// (SNS) caller. This is the ARN of the IAM role in your AWS account which Cognito
-	// will use to send SMS messages.
+	// (SNS) caller. This is the ARN of the IAM role in your account which Cognito
+	// will use to send SMS messages. SMS messages are subject to a spending limit
+	// (https://docs.aws.amazon.com/cognito/latest/developerguide/user-pool-settings-email-phone-verification.html).
 	//
 	// SnsCallerArn is a required field
 	SnsCallerArn *string `min:"20" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s SmsConfigurationType) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s SmsConfigurationType) GoString() string {
 	return s.String()
 }
@@ -25183,12 +28154,20 @@ type SmsMfaConfigType struct {
 	SmsConfiguration *SmsConfigurationType `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s SmsMfaConfigType) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s SmsMfaConfigType) GoString() string {
 	return s.String()
 }
@@ -25232,12 +28211,20 @@ type SoftwareTokenMFANotFoundException struct {
 	Message_ *string `locationName:"message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s SoftwareTokenMFANotFoundException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s SoftwareTokenMFANotFoundException) GoString() string {
 	return s.String()
 }
@@ -25288,12 +28275,20 @@ type SoftwareTokenMfaConfigType struct {
 	Enabled *bool `type:"boolean"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s SoftwareTokenMfaConfigType) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s SoftwareTokenMfaConfigType) GoString() string {
 	return s.String()
 }
@@ -25304,23 +28299,38 @@ func (s *SoftwareTokenMfaConfigType) SetEnabled(v bool) *SoftwareTokenMfaConfigT
 	return s
 }
 
-// The type used for enabling software token MFA at the user level.
+// The type used for enabling software token MFA at the user level. If an MFA
+// type is enabled for a user, the user will be prompted for MFA during all
+// sign in attempts, unless device tracking is turned on and the device has
+// been trusted. If you would like MFA to be applied selectively based on the
+// assessed risk level of sign in attempts, disable MFA for users and turn on
+// Adaptive Authentication for the user pool.
 type SoftwareTokenMfaSettingsType struct {
 	_ struct{} `type:"structure"`
 
-	// Specifies whether software token MFA is enabled.
+	// Specifies whether software token MFA is enabled. If an MFA type is enabled
+	// for a user, the user will be prompted for MFA during all sign in attempts,
+	// unless device tracking is turned on and the device has been trusted.
 	Enabled *bool `type:"boolean"`
 
 	// Specifies whether software token MFA is the preferred MFA method.
 	PreferredMfa *bool `type:"boolean"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s SoftwareTokenMfaSettingsType) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s SoftwareTokenMfaSettingsType) GoString() string {
 	return s.String()
 }
@@ -25352,12 +28362,20 @@ type StartUserImportJobInput struct {
 	UserPoolId *string `min:"1" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s StartUserImportJobInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s StartUserImportJobInput) GoString() string {
 	return s.String()
 }
@@ -25405,12 +28423,20 @@ type StartUserImportJobOutput struct {
 	UserImportJob *UserImportJobType `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s StartUserImportJobOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s StartUserImportJobOutput) GoString() string {
 	return s.String()
 }
@@ -25436,12 +28462,20 @@ type StopUserImportJobInput struct {
 	UserPoolId *string `min:"1" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s StopUserImportJobInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s StopUserImportJobInput) GoString() string {
 	return s.String()
 }
@@ -25489,12 +28523,20 @@ type StopUserImportJobOutput struct {
 	UserImportJob *UserImportJobType `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s StopUserImportJobOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s StopUserImportJobOutput) GoString() string {
 	return s.String()
 }
@@ -25516,12 +28558,20 @@ type StringAttributeConstraintsType struct {
 	MinLength *string `type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s StringAttributeConstraintsType) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s StringAttributeConstraintsType) GoString() string {
 	return s.String()
 }
@@ -25552,12 +28602,20 @@ type TagResourceInput struct {
 	Tags map[string]*string `type:"map" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s TagResourceInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s TagResourceInput) GoString() string {
 	return s.String()
 }
@@ -25597,12 +28655,20 @@ type TagResourceOutput struct {
 	_ struct{} `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s TagResourceOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s TagResourceOutput) GoString() string {
 	return s.String()
 }
@@ -25625,12 +28691,20 @@ type TokenValidityUnitsType struct {
 	RefreshToken *string `type:"string" enum:"TimeUnitsType"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s TokenValidityUnitsType) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s TokenValidityUnitsType) GoString() string {
 	return s.String()
 }
@@ -25664,12 +28738,20 @@ type TooManyFailedAttemptsException struct {
 	Message_ *string `locationName:"message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s TooManyFailedAttemptsException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s TooManyFailedAttemptsException) GoString() string {
 	return s.String()
 }
@@ -25723,12 +28805,20 @@ type TooManyRequestsException struct {
 	Message_ *string `locationName:"message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s TooManyRequestsException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s TooManyRequestsException) GoString() string {
 	return s.String()
 }
@@ -25783,6 +28873,10 @@ type UICustomizationType struct {
 	CSSVersion *string `type:"string"`
 
 	// The client ID for the client app.
+	//
+	// ClientId is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by UICustomizationType's
+	// String and GoString methods.
 	ClientId *string `min:"1" type:"string" sensitive:"true"`
 
 	// The creation date for the UI customization.
@@ -25798,12 +28892,20 @@ type UICustomizationType struct {
 	UserPoolId *string `min:"1" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UICustomizationType) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UICustomizationType) GoString() string {
 	return s.String()
 }
@@ -25850,23 +28952,96 @@ func (s *UICustomizationType) SetUserPoolId(v string) *UICustomizationType {
 	return s
 }
 
+// This exception is thrown when the request is not authorized. This can happen
+// due to an invalid access token in the request.
+type UnauthorizedException struct {
+	_            struct{}                  `type:"structure"`
+	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
+
+	Message_ *string `locationName:"message" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UnauthorizedException) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UnauthorizedException) GoString() string {
+	return s.String()
+}
+
+func newErrorUnauthorizedException(v protocol.ResponseMetadata) error {
+	return &UnauthorizedException{
+		RespMetadata: v,
+	}
+}
+
+// Code returns the exception type name.
+func (s *UnauthorizedException) Code() string {
+	return "UnauthorizedException"
+}
+
+// Message returns the exception's message.
+func (s *UnauthorizedException) Message() string {
+	if s.Message_ != nil {
+		return *s.Message_
+	}
+	return ""
+}
+
+// OrigErr always returns nil, satisfies awserr.Error interface.
+func (s *UnauthorizedException) OrigErr() error {
+	return nil
+}
+
+func (s *UnauthorizedException) Error() string {
+	return fmt.Sprintf("%s: %s", s.Code(), s.Message())
+}
+
+// Status code returns the HTTP status code for the request's response error.
+func (s *UnauthorizedException) StatusCode() int {
+	return s.RespMetadata.StatusCode
+}
+
+// RequestID returns the service's response RequestID for request.
+func (s *UnauthorizedException) RequestID() string {
+	return s.RespMetadata.RequestID
+}
+
 // This exception is thrown when the Amazon Cognito service encounters an unexpected
-// exception with the AWS Lambda service.
+// exception with the Lambda service.
 type UnexpectedLambdaException struct {
 	_            struct{}                  `type:"structure"`
 	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
 
 	// The message returned when the Amazon Cognito service returns an unexpected
-	// AWS Lambda exception.
+	// Lambda exception.
 	Message_ *string `locationName:"message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UnexpectedLambdaException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UnexpectedLambdaException) GoString() string {
 	return s.String()
 }
@@ -25917,12 +29092,20 @@ type UnsupportedIdentityProviderException struct {
 	Message_ *string `locationName:"message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UnsupportedIdentityProviderException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UnsupportedIdentityProviderException) GoString() string {
 	return s.String()
 }
@@ -25965,6 +29148,135 @@ func (s *UnsupportedIdentityProviderException) RequestID() string {
 	return s.RespMetadata.RequestID
 }
 
+// This exception is thrown when you attempt to perform an operation that is
+// not enabled for the user pool client.
+type UnsupportedOperationException struct {
+	_            struct{}                  `type:"structure"`
+	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
+
+	Message_ *string `locationName:"message" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UnsupportedOperationException) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UnsupportedOperationException) GoString() string {
+	return s.String()
+}
+
+func newErrorUnsupportedOperationException(v protocol.ResponseMetadata) error {
+	return &UnsupportedOperationException{
+		RespMetadata: v,
+	}
+}
+
+// Code returns the exception type name.
+func (s *UnsupportedOperationException) Code() string {
+	return "UnsupportedOperationException"
+}
+
+// Message returns the exception's message.
+func (s *UnsupportedOperationException) Message() string {
+	if s.Message_ != nil {
+		return *s.Message_
+	}
+	return ""
+}
+
+// OrigErr always returns nil, satisfies awserr.Error interface.
+func (s *UnsupportedOperationException) OrigErr() error {
+	return nil
+}
+
+func (s *UnsupportedOperationException) Error() string {
+	return fmt.Sprintf("%s: %s", s.Code(), s.Message())
+}
+
+// Status code returns the HTTP status code for the request's response error.
+func (s *UnsupportedOperationException) StatusCode() int {
+	return s.RespMetadata.StatusCode
+}
+
+// RequestID returns the service's response RequestID for request.
+func (s *UnsupportedOperationException) RequestID() string {
+	return s.RespMetadata.RequestID
+}
+
+// This exception is thrown when an unsupported token is passed to an operation.
+type UnsupportedTokenTypeException struct {
+	_            struct{}                  `type:"structure"`
+	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
+
+	Message_ *string `locationName:"message" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UnsupportedTokenTypeException) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UnsupportedTokenTypeException) GoString() string {
+	return s.String()
+}
+
+func newErrorUnsupportedTokenTypeException(v protocol.ResponseMetadata) error {
+	return &UnsupportedTokenTypeException{
+		RespMetadata: v,
+	}
+}
+
+// Code returns the exception type name.
+func (s *UnsupportedTokenTypeException) Code() string {
+	return "UnsupportedTokenTypeException"
+}
+
+// Message returns the exception's message.
+func (s *UnsupportedTokenTypeException) Message() string {
+	if s.Message_ != nil {
+		return *s.Message_
+	}
+	return ""
+}
+
+// OrigErr always returns nil, satisfies awserr.Error interface.
+func (s *UnsupportedTokenTypeException) OrigErr() error {
+	return nil
+}
+
+func (s *UnsupportedTokenTypeException) Error() string {
+	return fmt.Sprintf("%s: %s", s.Code(), s.Message())
+}
+
+// Status code returns the HTTP status code for the request's response error.
+func (s *UnsupportedTokenTypeException) StatusCode() int {
+	return s.RespMetadata.StatusCode
+}
+
+// RequestID returns the service's response RequestID for request.
+func (s *UnsupportedTokenTypeException) RequestID() string {
+	return s.RespMetadata.RequestID
+}
+
 // The request failed because the user is in an unsupported state.
 type UnsupportedUserStateException struct {
 	_            struct{}                  `type:"structure"`
@@ -25974,12 +29286,20 @@ type UnsupportedUserStateException struct {
 	Message_ *string `locationName:"message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UnsupportedUserStateException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UnsupportedUserStateException) GoString() string {
 	return s.String()
 }
@@ -26037,12 +29357,20 @@ type UntagResourceInput struct {
 	TagKeys []*string `type:"list" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UntagResourceInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UntagResourceInput) GoString() string {
 	return s.String()
 }
@@ -26082,12 +29410,20 @@ type UntagResourceOutput struct {
 	_ struct{} `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UntagResourceOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UntagResourceOutput) GoString() string {
 	return s.String()
 }
@@ -26101,6 +29437,10 @@ type UpdateAuthEventFeedbackInput struct {
 	EventId *string `min:"1" type:"string" required:"true"`
 
 	// The feedback token.
+	//
+	// FeedbackToken is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by UpdateAuthEventFeedbackInput's
+	// String and GoString methods.
 	//
 	// FeedbackToken is a required field
 	FeedbackToken *string `type:"string" required:"true" sensitive:"true"`
@@ -26117,16 +29457,28 @@ type UpdateAuthEventFeedbackInput struct {
 
 	// The user pool username.
 	//
+	// Username is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by UpdateAuthEventFeedbackInput's
+	// String and GoString methods.
+	//
 	// Username is a required field
 	Username *string `min:"1" type:"string" required:"true" sensitive:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpdateAuthEventFeedbackInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpdateAuthEventFeedbackInput) GoString() string {
 	return s.String()
 }
@@ -26199,12 +29551,20 @@ type UpdateAuthEventFeedbackOutput struct {
 	_ struct{} `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpdateAuthEventFeedbackOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpdateAuthEventFeedbackOutput) GoString() string {
 	return s.String()
 }
@@ -26214,6 +29574,10 @@ type UpdateDeviceStatusInput struct {
 	_ struct{} `type:"structure"`
 
 	// The access token.
+	//
+	// AccessToken is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by UpdateDeviceStatusInput's
+	// String and GoString methods.
 	//
 	// AccessToken is a required field
 	AccessToken *string `type:"string" required:"true" sensitive:"true"`
@@ -26227,12 +29591,20 @@ type UpdateDeviceStatusInput struct {
 	DeviceRememberedStatus *string `type:"string" enum:"DeviceRememberedStatusType"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpdateDeviceStatusInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpdateDeviceStatusInput) GoString() string {
 	return s.String()
 }
@@ -26279,12 +29651,20 @@ type UpdateDeviceStatusOutput struct {
 	_ struct{} `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpdateDeviceStatusOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpdateDeviceStatusOutput) GoString() string {
 	return s.String()
 }
@@ -26314,12 +29694,20 @@ type UpdateGroupInput struct {
 	UserPoolId *string `min:"1" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpdateGroupInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpdateGroupInput) GoString() string {
 	return s.String()
 }
@@ -26386,12 +29774,20 @@ type UpdateGroupOutput struct {
 	Group *GroupType `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpdateGroupOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpdateGroupOutput) GoString() string {
 	return s.String()
 }
@@ -26425,12 +29821,20 @@ type UpdateIdentityProviderInput struct {
 	UserPoolId *string `min:"1" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpdateIdentityProviderInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpdateIdentityProviderInput) GoString() string {
 	return s.String()
 }
@@ -26496,12 +29900,20 @@ type UpdateIdentityProviderOutput struct {
 	IdentityProvider *IdentityProviderType `type:"structure" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpdateIdentityProviderOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpdateIdentityProviderOutput) GoString() string {
 	return s.String()
 }
@@ -26534,12 +29946,20 @@ type UpdateResourceServerInput struct {
 	UserPoolId *string `min:"1" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpdateResourceServerInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpdateResourceServerInput) GoString() string {
 	return s.String()
 }
@@ -26615,12 +30035,20 @@ type UpdateResourceServerOutput struct {
 	ResourceServer *ResourceServerType `type:"structure" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpdateResourceServerOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpdateResourceServerOutput) GoString() string {
 	return s.String()
 }
@@ -26637,21 +30065,24 @@ type UpdateUserAttributesInput struct {
 
 	// The access token for the request to update user attributes.
 	//
+	// AccessToken is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by UpdateUserAttributesInput's
+	// String and GoString methods.
+	//
 	// AccessToken is a required field
 	AccessToken *string `type:"string" required:"true" sensitive:"true"`
 
 	// A map of custom key-value pairs that you can provide as input for any custom
 	// workflows that this action triggers.
 	//
-	// You create custom workflows by assigning AWS Lambda functions to user pool
-	// triggers. When you use the UpdateUserAttributes API action, Amazon Cognito
-	// invokes the function that is assigned to the custom message trigger. When
-	// Amazon Cognito invokes this function, it passes a JSON payload, which the
-	// function receives as input. This payload contains a clientMetadata attribute,
-	// which provides the data that you assigned to the ClientMetadata parameter
-	// in your UpdateUserAttributes request. In your function code in AWS Lambda,
-	// you can process the clientMetadata value to enhance your workflow for your
-	// specific needs.
+	// You create custom workflows by assigning Lambda functions to user pool triggers.
+	// When you use the UpdateUserAttributes API action, Amazon Cognito invokes
+	// the function that is assigned to the custom message trigger. When Amazon
+	// Cognito invokes this function, it passes a JSON payload, which the function
+	// receives as input. This payload contains a clientMetadata attribute, which
+	// provides the data that you assigned to the ClientMetadata parameter in your
+	// UpdateUserAttributes request. In your function code in Lambda, you can process
+	// the clientMetadata value to enhance your workflow for your specific needs.
 	//
 	// For more information, see Customizing User Pool Workflows with Lambda Triggers
 	// (https://docs.aws.amazon.com/cognito/latest/developerguide/cognito-user-identity-pools-working-with-aws-lambda-triggers.html)
@@ -26661,9 +30092,9 @@ type UpdateUserAttributesInput struct {
 	// parameter:
 	//
 	//    * Amazon Cognito does not store the ClientMetadata value. This data is
-	//    available only to AWS Lambda triggers that are assigned to a user pool
-	//    to support custom workflows. If your user pool configuration does not
-	//    include triggers, the ClientMetadata parameter serves no purpose.
+	//    available only to Lambda triggers that are assigned to a user pool to
+	//    support custom workflows. If your user pool configuration does not include
+	//    triggers, the ClientMetadata parameter serves no purpose.
 	//
 	//    * Amazon Cognito does not validate the ClientMetadata value.
 	//
@@ -26680,12 +30111,20 @@ type UpdateUserAttributesInput struct {
 	UserAttributes []*AttributeType `type:"list" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpdateUserAttributesInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpdateUserAttributesInput) GoString() string {
 	return s.String()
 }
@@ -26743,12 +30182,20 @@ type UpdateUserAttributesOutput struct {
 	CodeDeliveryDetailsList []*CodeDeliveryDetailsType `type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpdateUserAttributesOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpdateUserAttributesOutput) GoString() string {
 	return s.String()
 }
@@ -26786,8 +30233,9 @@ type UpdateUserPoolClientInput struct {
 	AllowedOAuthFlowsUserPoolClient *bool `type:"boolean"`
 
 	// The allowed OAuth scopes. Possible values provided by OAuth are: phone, email,
-	// openid, and profile. Possible values provided by AWS are: aws.cognito.signin.user.admin.
-	// Custom scopes created in Resource Servers are also supported.
+	// openid, and profile. Possible values provided by Amazon Web Services are:
+	// aws.cognito.signin.user.admin. Custom scopes created in Resource Servers
+	// are also supported.
 	AllowedOAuthScopes []*string `type:"list"`
 
 	// The Amazon Pinpoint analytics configuration for collecting metrics for this
@@ -26819,6 +30267,10 @@ type UpdateUserPoolClientInput struct {
 
 	// The ID of the client associated with the user pool.
 	//
+	// ClientId is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by UpdateUserPoolClientInput's
+	// String and GoString methods.
+	//
 	// ClientId is a required field
 	ClientId *string `min:"1" type:"string" required:"true" sensitive:"true"`
 
@@ -26842,6 +30294,10 @@ type UpdateUserPoolClientInput struct {
 	//
 	// App callback URLs such as myapp://example are also supported.
 	DefaultRedirectURI *string `min:"1" type:"string"`
+
+	// Enables or disables token revocation. For more information about revoking
+	// tokens, see RevokeToken (https://docs.aws.amazon.com/cognito-user-identity-pools/latest/APIReference/API_RevokeToken.html).
+	EnableTokenRevocation *bool `type:"boolean"`
 
 	// The authentication flows that are supported by the user pool clients. Flow
 	// names without the ALLOW_ prefix are deprecated in favor of new names with
@@ -26919,12 +30375,20 @@ type UpdateUserPoolClientInput struct {
 	WriteAttributes []*string `type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpdateUserPoolClientInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpdateUserPoolClientInput) GoString() string {
 	return s.String()
 }
@@ -27022,6 +30486,12 @@ func (s *UpdateUserPoolClientInput) SetDefaultRedirectURI(v string) *UpdateUserP
 	return s
 }
 
+// SetEnableTokenRevocation sets the EnableTokenRevocation field's value.
+func (s *UpdateUserPoolClientInput) SetEnableTokenRevocation(v bool) *UpdateUserPoolClientInput {
+	s.EnableTokenRevocation = &v
+	return s
+}
+
 // SetExplicitAuthFlows sets the ExplicitAuthFlows field's value.
 func (s *UpdateUserPoolClientInput) SetExplicitAuthFlows(v []*string) *UpdateUserPoolClientInput {
 	s.ExplicitAuthFlows = v
@@ -27092,12 +30562,20 @@ type UpdateUserPoolClientOutput struct {
 	UserPoolClient *UserPoolClientType `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpdateUserPoolClientOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpdateUserPoolClientOutput) GoString() string {
 	return s.String()
 }
@@ -27136,12 +30614,20 @@ type UpdateUserPoolDomainInput struct {
 	UserPoolId *string `min:"1" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpdateUserPoolDomainInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpdateUserPoolDomainInput) GoString() string {
 	return s.String()
 }
@@ -27203,12 +30689,20 @@ type UpdateUserPoolDomainOutput struct {
 	CloudFrontDomain *string `min:"1" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpdateUserPoolDomainOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpdateUserPoolDomainOutput) GoString() string {
 	return s.String()
 }
@@ -27251,7 +30745,7 @@ type UpdateUserPoolInput struct {
 	// The subject of the email verification message.
 	EmailVerificationSubject *string `min:"1" type:"string"`
 
-	// The AWS Lambda configuration information from the request to update the user
+	// The Lambda configuration information from the request to update the user
 	// pool.
 	LambdaConfig *LambdaConfigType `type:"structure"`
 
@@ -27261,7 +30755,9 @@ type UpdateUserPoolInput struct {
 	//    registration.
 	//
 	//    * ON - MFA tokens are required for all user registrations. You can only
-	//    specify required when you are initially creating a user pool.
+	//    specify ON when you are initially creating a user pool. You can use the
+	//    SetUserPoolMfaConfig (https://docs.aws.amazon.com/cognito-user-identity-pools/latest/APIReference/API_SetUserPoolMfaConfig.html)
+	//    API operation to turn MFA "ON" for existing user pools.
 	//
 	//    * OPTIONAL - Users have the option when registering to create an MFA token.
 	MfaConfiguration *string `type:"string" enum:"UserPoolMfaType"`
@@ -27296,12 +30792,20 @@ type UpdateUserPoolInput struct {
 	VerificationMessageTemplate *VerificationMessageTemplateType `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpdateUserPoolInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpdateUserPoolInput) GoString() string {
 	return s.String()
 }
@@ -27482,12 +30986,20 @@ type UpdateUserPoolOutput struct {
 	_ struct{} `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpdateUserPoolOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpdateUserPoolOutput) GoString() string {
 	return s.String()
 }
@@ -27504,12 +31016,20 @@ type UserContextDataType struct {
 	EncodedData *string `type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UserContextDataType) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UserContextDataType) GoString() string {
 	return s.String()
 }
@@ -27530,12 +31050,20 @@ type UserImportInProgressException struct {
 	Message_ *string `locationName:"message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UserImportInProgressException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UserImportInProgressException) GoString() string {
 	return s.String()
 }
@@ -27645,12 +31173,20 @@ type UserImportJobType struct {
 	UserPoolId *string `min:"1" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UserImportJobType) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UserImportJobType) GoString() string {
 	return s.String()
 }
@@ -27734,22 +31270,30 @@ func (s *UserImportJobType) SetUserPoolId(v string) *UserImportJobType {
 }
 
 // This exception is thrown when the Amazon Cognito service encounters a user
-// validation exception with the AWS Lambda service.
+// validation exception with the Lambda service.
 type UserLambdaValidationException struct {
 	_            struct{}                  `type:"structure"`
 	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
 
 	// The message returned when the Amazon Cognito service returns a user validation
-	// exception with the AWS Lambda service.
+	// exception with the Lambda service.
 	Message_ *string `locationName:"message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UserLambdaValidationException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UserLambdaValidationException) GoString() string {
 	return s.String()
 }
@@ -27801,12 +31345,20 @@ type UserNotConfirmedException struct {
 	Message_ *string `locationName:"message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UserNotConfirmedException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UserNotConfirmedException) GoString() string {
 	return s.String()
 }
@@ -27858,12 +31410,20 @@ type UserNotFoundException struct {
 	Message_ *string `locationName:"message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UserNotFoundException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UserNotFoundException) GoString() string {
 	return s.String()
 }
@@ -27914,12 +31474,20 @@ type UserPoolAddOnNotEnabledException struct {
 	Message_ *string `locationName:"message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UserPoolAddOnNotEnabledException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UserPoolAddOnNotEnabledException) GoString() string {
 	return s.String()
 }
@@ -27972,12 +31540,20 @@ type UserPoolAddOnsType struct {
 	AdvancedSecurityMode *string `type:"string" required:"true" enum:"AdvancedSecurityModeType"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UserPoolAddOnsType) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UserPoolAddOnsType) GoString() string {
 	return s.String()
 }
@@ -28006,6 +31582,10 @@ type UserPoolClientDescription struct {
 	_ struct{} `type:"structure"`
 
 	// The ID of the client associated with the user pool.
+	//
+	// ClientId is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by UserPoolClientDescription's
+	// String and GoString methods.
 	ClientId *string `min:"1" type:"string" sensitive:"true"`
 
 	// The client name from the user pool client description.
@@ -28016,12 +31596,20 @@ type UserPoolClientDescription struct {
 	UserPoolId *string `min:"1" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UserPoolClientDescription) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UserPoolClientDescription) GoString() string {
 	return s.String()
 }
@@ -28071,8 +31659,9 @@ type UserPoolClientType struct {
 	AllowedOAuthFlowsUserPoolClient *bool `type:"boolean"`
 
 	// The allowed OAuth scopes. Possible values provided by OAuth are: phone, email,
-	// openid, and profile. Possible values provided by AWS are: aws.cognito.signin.user.admin.
-	// Custom scopes created in Resource Servers are also supported.
+	// openid, and profile. Possible values provided by Amazon Web Services are:
+	// aws.cognito.signin.user.admin. Custom scopes created in Resource Servers
+	// are also supported.
 	AllowedOAuthScopes []*string `type:"list"`
 
 	// The Amazon Pinpoint analytics configuration for the user pool client.
@@ -28101,12 +31690,20 @@ type UserPoolClientType struct {
 	CallbackURLs []*string `type:"list"`
 
 	// The ID of the client associated with the user pool.
+	//
+	// ClientId is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by UserPoolClientType's
+	// String and GoString methods.
 	ClientId *string `min:"1" type:"string" sensitive:"true"`
 
 	// The client name from the user pool request of the client type.
 	ClientName *string `min:"1" type:"string"`
 
 	// The client secret from the user pool request of the client type.
+	//
+	// ClientSecret is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by UserPoolClientType's
+	// String and GoString methods.
 	ClientSecret *string `min:"1" type:"string" sensitive:"true"`
 
 	// The date the user pool client was created.
@@ -28129,6 +31726,11 @@ type UserPoolClientType struct {
 	//
 	// App callback URLs such as myapp://example are also supported.
 	DefaultRedirectURI *string `min:"1" type:"string"`
+
+	// Indicates whether token revocation is enabled for the user pool client. When
+	// you create a new user pool client, token revocation is enabled by default.
+	// For more information about revoking tokens, see RevokeToken (https://docs.aws.amazon.com/cognito-user-identity-pools/latest/APIReference/API_RevokeToken.html).
+	EnableTokenRevocation *bool `type:"boolean"`
 
 	// The authentication flows that are supported by the user pool clients. Flow
 	// names without the ALLOW_ prefix are deprecated in favor of new names with
@@ -28206,12 +31808,20 @@ type UserPoolClientType struct {
 	WriteAttributes []*string `type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UserPoolClientType) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UserPoolClientType) GoString() string {
 	return s.String()
 }
@@ -28279,6 +31889,12 @@ func (s *UserPoolClientType) SetCreationDate(v time.Time) *UserPoolClientType {
 // SetDefaultRedirectURI sets the DefaultRedirectURI field's value.
 func (s *UserPoolClientType) SetDefaultRedirectURI(v string) *UserPoolClientType {
 	s.DefaultRedirectURI = &v
+	return s
+}
+
+// SetEnableTokenRevocation sets the EnableTokenRevocation field's value.
+func (s *UserPoolClientType) SetEnableTokenRevocation(v bool) *UserPoolClientType {
+	s.EnableTokenRevocation = &v
 	return s
 }
 
@@ -28358,7 +31974,7 @@ type UserPoolDescriptionType struct {
 	// The ID in a user pool description.
 	Id *string `min:"1" type:"string"`
 
-	// The AWS Lambda configuration information in a user pool description.
+	// The Lambda configuration information in a user pool description.
 	LambdaConfig *LambdaConfigType `type:"structure"`
 
 	// The date the user pool description was last modified.
@@ -28371,12 +31987,20 @@ type UserPoolDescriptionType struct {
 	Status *string `type:"string" enum:"StatusType"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UserPoolDescriptionType) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UserPoolDescriptionType) GoString() string {
 	return s.String()
 }
@@ -28425,12 +32049,20 @@ type UserPoolPolicyType struct {
 	PasswordPolicy *PasswordPolicyType `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UserPoolPolicyType) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UserPoolPolicyType) GoString() string {
 	return s.String()
 }
@@ -28464,12 +32096,20 @@ type UserPoolTaggingException struct {
 	Message_ *string `locationName:"message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UserPoolTaggingException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UserPoolTaggingException) GoString() string {
 	return s.String()
 }
@@ -28572,7 +32212,7 @@ type UserPoolType struct {
 	// The ID of the user pool.
 	Id *string `min:"1" type:"string"`
 
-	// The AWS Lambda triggers associated with the user pool.
+	// The Lambda triggers associated with the user pool.
 	LambdaConfig *LambdaConfigType `type:"structure"`
 
 	// The date the user pool was last modified.
@@ -28605,6 +32245,19 @@ type UserPoolType struct {
 	SmsConfiguration *SmsConfigurationType `type:"structure"`
 
 	// The reason why the SMS configuration cannot send the messages to your users.
+	//
+	// This message might include comma-separated values to describe why your SMS
+	// configuration can't send messages to user pool end users.
+	//
+	//    * InvalidSmsRoleAccessPolicyException - The IAM role which Cognito uses
+	//    to send SMS messages is not properly configured. For more information,
+	//    see SmsConfigurationType (https://docs.aws.amazon.com/cognito-user-identity-pools/latest/APIReference/API_SmsConfigurationType.html).
+	//
+	//    * SNSSandbox - The account is in SNS Sandbox and messages won’t reach
+	//    unverified end users. This parameter won’t get populated with SNSSandbox
+	//    if the IAM user creating the user pool doesn’t have SNS permissions.
+	//    To learn how to move your account out of the sandbox, see Moving out of
+	//    the SMS sandbox (https://docs.aws.amazon.com/sns/latest/dg/sns-sms-sandbox-moving-to-production.html).
 	SmsConfigurationFailure *string `type:"string"`
 
 	// The contents of the SMS verification message.
@@ -28636,12 +32289,20 @@ type UserPoolType struct {
 	VerificationMessageTemplate *VerificationMessageTemplateType `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UserPoolType) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UserPoolType) GoString() string {
 	return s.String()
 }
@@ -28872,15 +32533,27 @@ type UserType struct {
 	UserStatus *string `type:"string" enum:"UserStatusType"`
 
 	// The user name of the user you wish to describe.
+	//
+	// Username is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by UserType's
+	// String and GoString methods.
 	Username *string `min:"1" type:"string" sensitive:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UserType) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UserType) GoString() string {
 	return s.String()
 }
@@ -28949,12 +32622,20 @@ type UsernameConfigurationType struct {
 	CaseSensitive *bool `type:"boolean" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UsernameConfigurationType) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UsernameConfigurationType) GoString() string {
 	return s.String()
 }
@@ -28988,12 +32669,20 @@ type UsernameExistsException struct {
 	Message_ *string `locationName:"message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UsernameExistsException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UsernameExistsException) GoString() string {
 	return s.String()
 }
@@ -29043,29 +32732,45 @@ type VerificationMessageTemplateType struct {
 	// The default email option.
 	DefaultEmailOption *string `type:"string" enum:"DefaultEmailOptionType"`
 
-	// The email message template.
+	// The email message template. EmailMessage is allowed only if EmailSendingAccount
+	// (https://docs.aws.amazon.com/cognito-user-identity-pools/latest/APIReference/API_EmailConfigurationType.html#CognitoUserPools-Type-EmailConfigurationType-EmailSendingAccount)
+	// is DEVELOPER.
 	EmailMessage *string `min:"6" type:"string"`
 
-	// The email message template for sending a confirmation link to the user.
+	// The email message template for sending a confirmation link to the user. EmailMessageByLink
+	// is allowed only if EmailSendingAccount (https://docs.aws.amazon.com/cognito-user-identity-pools/latest/APIReference/API_EmailConfigurationType.html#CognitoUserPools-Type-EmailConfigurationType-EmailSendingAccount)
+	// is DEVELOPER.
 	EmailMessageByLink *string `min:"6" type:"string"`
 
-	// The subject line for the email message template.
+	// The subject line for the email message template. EmailSubject is allowed
+	// only if EmailSendingAccount (https://docs.aws.amazon.com/cognito-user-identity-pools/latest/APIReference/API_EmailConfigurationType.html#CognitoUserPools-Type-EmailConfigurationType-EmailSendingAccount)
+	// is DEVELOPER.
 	EmailSubject *string `min:"1" type:"string"`
 
 	// The subject line for the email message template for sending a confirmation
-	// link to the user.
+	// link to the user. EmailSubjectByLink is allowed only EmailSendingAccount
+	// (https://docs.aws.amazon.com/cognito-user-identity-pools/latest/APIReference/API_EmailConfigurationType.html#CognitoUserPools-Type-EmailConfigurationType-EmailSendingAccount)
+	// is DEVELOPER.
 	EmailSubjectByLink *string `min:"1" type:"string"`
 
 	// The SMS message template.
 	SmsMessage *string `min:"6" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s VerificationMessageTemplateType) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s VerificationMessageTemplateType) GoString() string {
 	return s.String()
 }
@@ -29135,6 +32840,10 @@ type VerifySoftwareTokenInput struct {
 	_ struct{} `type:"structure"`
 
 	// The access token.
+	//
+	// AccessToken is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by VerifySoftwareTokenInput's
+	// String and GoString methods.
 	AccessToken *string `type:"string" sensitive:"true"`
 
 	// The friendly device name.
@@ -29151,12 +32860,20 @@ type VerifySoftwareTokenInput struct {
 	UserCode *string `min:"6" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s VerifySoftwareTokenInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s VerifySoftwareTokenInput) GoString() string {
 	return s.String()
 }
@@ -29215,12 +32932,20 @@ type VerifySoftwareTokenOutput struct {
 	Status *string `type:"string" enum:"VerifySoftwareTokenResponseType"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s VerifySoftwareTokenOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s VerifySoftwareTokenOutput) GoString() string {
 	return s.String()
 }
@@ -29243,6 +32968,10 @@ type VerifyUserAttributeInput struct {
 
 	// Represents the access token of the request to verify user attributes.
 	//
+	// AccessToken is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by VerifyUserAttributeInput's
+	// String and GoString methods.
+	//
 	// AccessToken is a required field
 	AccessToken *string `type:"string" required:"true" sensitive:"true"`
 
@@ -29257,12 +32986,20 @@ type VerifyUserAttributeInput struct {
 	Code *string `min:"1" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s VerifyUserAttributeInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s VerifyUserAttributeInput) GoString() string {
 	return s.String()
 }
@@ -29316,12 +33053,20 @@ type VerifyUserAttributeOutput struct {
 	_ struct{} `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s VerifyUserAttributeOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s VerifyUserAttributeOutput) GoString() string {
 	return s.String()
 }
@@ -29543,6 +33288,30 @@ func CompromisedCredentialsEventActionType_Values() []string {
 	return []string{
 		CompromisedCredentialsEventActionTypeBlock,
 		CompromisedCredentialsEventActionTypeNoAction,
+	}
+}
+
+const (
+	// CustomEmailSenderLambdaVersionTypeV10 is a CustomEmailSenderLambdaVersionType enum value
+	CustomEmailSenderLambdaVersionTypeV10 = "V1_0"
+)
+
+// CustomEmailSenderLambdaVersionType_Values returns all elements of the CustomEmailSenderLambdaVersionType enum
+func CustomEmailSenderLambdaVersionType_Values() []string {
+	return []string{
+		CustomEmailSenderLambdaVersionTypeV10,
+	}
+}
+
+const (
+	// CustomSMSSenderLambdaVersionTypeV10 is a CustomSMSSenderLambdaVersionType enum value
+	CustomSMSSenderLambdaVersionTypeV10 = "V1_0"
+)
+
+// CustomSMSSenderLambdaVersionType_Values returns all elements of the CustomSMSSenderLambdaVersionType enum
+func CustomSMSSenderLambdaVersionType_Values() []string {
+	return []string{
+		CustomSMSSenderLambdaVersionTypeV10,
 	}
 }
 

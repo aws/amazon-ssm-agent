@@ -1,3 +1,4 @@
+//go:build go1.7
 // +build go1.7
 
 package session
@@ -106,8 +107,9 @@ func TestLoadEnvConfig(t *testing.T) {
 		Env                 map[string]string
 		UseSharedConfigCall bool
 		Config              envConfig
+		WantErr             bool
 	}{
-		{
+		0: {
 			Env: map[string]string{
 				"AWS_REGION":  "region",
 				"AWS_PROFILE": "profile",
@@ -118,7 +120,7 @@ func TestLoadEnvConfig(t *testing.T) {
 				SharedConfigFile:      shareddefaults.SharedConfigFilename(),
 			},
 		},
-		{
+		1: {
 			Env: map[string]string{
 				"AWS_REGION":          "region",
 				"AWS_DEFAULT_REGION":  "default_region",
@@ -131,7 +133,7 @@ func TestLoadEnvConfig(t *testing.T) {
 				SharedConfigFile:      shareddefaults.SharedConfigFilename(),
 			},
 		},
-		{
+		2: {
 			Env: map[string]string{
 				"AWS_REGION":          "region",
 				"AWS_DEFAULT_REGION":  "default_region",
@@ -146,7 +148,7 @@ func TestLoadEnvConfig(t *testing.T) {
 				SharedConfigFile:      shareddefaults.SharedConfigFilename(),
 			},
 		},
-		{
+		3: {
 			Env: map[string]string{
 				"AWS_DEFAULT_REGION":  "default_region",
 				"AWS_DEFAULT_PROFILE": "default_profile",
@@ -156,7 +158,7 @@ func TestLoadEnvConfig(t *testing.T) {
 				SharedConfigFile:      shareddefaults.SharedConfigFilename(),
 			},
 		},
-		{
+		4: {
 			Env: map[string]string{
 				"AWS_DEFAULT_REGION":  "default_region",
 				"AWS_DEFAULT_PROFILE": "default_profile",
@@ -169,7 +171,7 @@ func TestLoadEnvConfig(t *testing.T) {
 				SharedConfigFile:      shareddefaults.SharedConfigFilename(),
 			},
 		},
-		{
+		5: {
 			Env: map[string]string{
 				"AWS_REGION":  "region",
 				"AWS_PROFILE": "profile",
@@ -182,7 +184,7 @@ func TestLoadEnvConfig(t *testing.T) {
 			},
 			UseSharedConfigCall: true,
 		},
-		{
+		6: {
 			Env: map[string]string{
 				"AWS_REGION":          "region",
 				"AWS_DEFAULT_REGION":  "default_region",
@@ -197,7 +199,7 @@ func TestLoadEnvConfig(t *testing.T) {
 			},
 			UseSharedConfigCall: true,
 		},
-		{
+		7: {
 			Env: map[string]string{
 				"AWS_REGION":          "region",
 				"AWS_DEFAULT_REGION":  "default_region",
@@ -213,7 +215,7 @@ func TestLoadEnvConfig(t *testing.T) {
 			},
 			UseSharedConfigCall: true,
 		},
-		{
+		8: {
 			Env: map[string]string{
 				"AWS_DEFAULT_REGION":  "default_region",
 				"AWS_DEFAULT_PROFILE": "default_profile",
@@ -226,7 +228,7 @@ func TestLoadEnvConfig(t *testing.T) {
 			},
 			UseSharedConfigCall: true,
 		},
-		{
+		9: {
 			Env: map[string]string{
 				"AWS_DEFAULT_REGION":  "default_region",
 				"AWS_DEFAULT_PROFILE": "default_profile",
@@ -240,7 +242,7 @@ func TestLoadEnvConfig(t *testing.T) {
 			},
 			UseSharedConfigCall: true,
 		},
-		{
+		10: {
 			Env: map[string]string{
 				"AWS_CA_BUNDLE": "custom_ca_bundle",
 			},
@@ -250,7 +252,7 @@ func TestLoadEnvConfig(t *testing.T) {
 				SharedConfigFile:      shareddefaults.SharedConfigFilename(),
 			},
 		},
-		{
+		11: {
 			Env: map[string]string{
 				"AWS_CA_BUNDLE": "custom_ca_bundle",
 			},
@@ -262,7 +264,51 @@ func TestLoadEnvConfig(t *testing.T) {
 			},
 			UseSharedConfigCall: true,
 		},
-		{
+		12: {
+			Env: map[string]string{
+				"AWS_SDK_GO_CLIENT_TLS_CERT": "client_tls_cert",
+			},
+			Config: envConfig{
+				ClientTLSCert:         "client_tls_cert",
+				SharedCredentialsFile: shareddefaults.SharedCredentialsFilename(),
+				SharedConfigFile:      shareddefaults.SharedConfigFilename(),
+			},
+		},
+		13: {
+			Env: map[string]string{
+				"AWS_SDK_GO_CLIENT_TLS_CERT": "client_tls_cert",
+			},
+			Config: envConfig{
+				ClientTLSCert:         "client_tls_cert",
+				EnableSharedConfig:    true,
+				SharedCredentialsFile: shareddefaults.SharedCredentialsFilename(),
+				SharedConfigFile:      shareddefaults.SharedConfigFilename(),
+			},
+			UseSharedConfigCall: true,
+		},
+		14: {
+			Env: map[string]string{
+				"AWS_SDK_GO_CLIENT_TLS_KEY": "client_tls_key",
+			},
+			Config: envConfig{
+				ClientTLSKey:          "client_tls_key",
+				SharedCredentialsFile: shareddefaults.SharedCredentialsFilename(),
+				SharedConfigFile:      shareddefaults.SharedConfigFilename(),
+			},
+		},
+		15: {
+			Env: map[string]string{
+				"AWS_SDK_GO_CLIENT_TLS_KEY": "client_tls_key",
+			},
+			Config: envConfig{
+				ClientTLSKey:          "client_tls_key",
+				EnableSharedConfig:    true,
+				SharedCredentialsFile: shareddefaults.SharedCredentialsFilename(),
+				SharedConfigFile:      shareddefaults.SharedConfigFilename(),
+			},
+			UseSharedConfigCall: true,
+		},
+		16: {
 			Env: map[string]string{
 				"AWS_SHARED_CREDENTIALS_FILE": "/path/to/credentials/file",
 				"AWS_CONFIG_FILE":             "/path/to/config/file",
@@ -272,7 +318,7 @@ func TestLoadEnvConfig(t *testing.T) {
 				SharedConfigFile:      "/path/to/config/file",
 			},
 		},
-		{
+		17: {
 			Env: map[string]string{
 				"AWS_STS_REGIONAL_ENDPOINTS": "regional",
 			},
@@ -282,7 +328,7 @@ func TestLoadEnvConfig(t *testing.T) {
 				SharedConfigFile:      shareddefaults.SharedConfigFilename(),
 			},
 		},
-		{
+		18: {
 			Env: map[string]string{
 				"AWS_S3_US_EAST_1_REGIONAL_ENDPOINT": "regional",
 			},
@@ -292,7 +338,7 @@ func TestLoadEnvConfig(t *testing.T) {
 				SharedConfigFile:          shareddefaults.SharedConfigFilename(),
 			},
 		},
-		{
+		19: {
 			Env: map[string]string{
 				"AWS_S3_USE_ARN_REGION": "true",
 			},
@@ -302,12 +348,69 @@ func TestLoadEnvConfig(t *testing.T) {
 				SharedConfigFile:      shareddefaults.SharedConfigFilename(),
 			},
 		},
-		{
+		20: {
 			Env: map[string]string{
 				"AWS_EC2_METADATA_SERVICE_ENDPOINT": "http://example.aws",
 			},
 			Config: envConfig{
 				EC2IMDSEndpoint:       "http://example.aws",
+				SharedCredentialsFile: shareddefaults.SharedCredentialsFilename(),
+				SharedConfigFile:      shareddefaults.SharedConfigFilename(),
+			},
+		},
+		21: {
+			Env: map[string]string{
+				"AWS_EC2_METADATA_SERVICE_ENDPOINT_MODE": "IPv6",
+			},
+			Config: envConfig{
+				EC2IMDSEndpointMode:   endpoints.EC2IMDSEndpointModeStateIPv6,
+				SharedCredentialsFile: shareddefaults.SharedCredentialsFilename(),
+				SharedConfigFile:      shareddefaults.SharedConfigFilename(),
+			},
+		},
+		22: {
+			Env: map[string]string{
+				"AWS_EC2_METADATA_SERVICE_ENDPOINT_MODE": "IPv4",
+			},
+			Config: envConfig{
+				EC2IMDSEndpointMode:   endpoints.EC2IMDSEndpointModeStateIPv4,
+				SharedCredentialsFile: shareddefaults.SharedCredentialsFilename(),
+				SharedConfigFile:      shareddefaults.SharedConfigFilename(),
+			},
+		},
+		23: {
+			Env: map[string]string{
+				"AWS_EC2_METADATA_SERVICE_ENDPOINT_MODE": "foobar",
+			},
+			WantErr: true,
+		},
+		24: {
+			Env: map[string]string{
+				"AWS_EC2_METADATA_SERVICE_ENDPOINT": "http://endpoint.localhost",
+			},
+			Config: envConfig{
+				EC2IMDSEndpoint:       "http://endpoint.localhost",
+				SharedCredentialsFile: shareddefaults.SharedCredentialsFilename(),
+				SharedConfigFile:      shareddefaults.SharedConfigFilename(),
+			},
+		},
+		25: {
+			Env: map[string]string{
+				"AWS_EC2_METADATA_SERVICE_ENDPOINT_MODE": "IPv6",
+				"AWS_EC2_METADATA_SERVICE_ENDPOINT":      "http://endpoint.localhost",
+			},
+			Config: envConfig{
+				EC2IMDSEndpoint:       "http://endpoint.localhost",
+				EC2IMDSEndpointMode:   endpoints.EC2IMDSEndpointModeStateIPv6,
+				SharedCredentialsFile: shareddefaults.SharedCredentialsFilename(),
+				SharedConfigFile:      shareddefaults.SharedConfigFilename(),
+			},
+		},
+		26: {
+			Env: map[string]string{
+				"AWS_EC2_METADATA_DISABLED": "false",
+			},
+			Config: envConfig{
 				SharedCredentialsFile: shareddefaults.SharedCredentialsFilename(),
 				SharedConfigFile:      shareddefaults.SharedConfigFilename(),
 			},
@@ -326,13 +429,15 @@ func TestLoadEnvConfig(t *testing.T) {
 			var err error
 			if c.UseSharedConfigCall {
 				cfg, err = loadSharedEnvConfig()
-				if err != nil {
-					t.Errorf("failed to load shared env config, %v", err)
+				if (err != nil) != c.WantErr {
+					t.Errorf("WantErr=%v, got err=%v", c.WantErr, err)
+					return
 				}
 			} else {
 				cfg, err = loadEnvConfig()
-				if err != nil {
-					t.Errorf("failed to load env config, %v", err)
+				if (err != nil) != c.WantErr {
+					t.Errorf("WantErr=%v, got err=%v", c.WantErr, err)
+					return
 				}
 			}
 

@@ -195,9 +195,25 @@ type DataSyncAPI interface {
 	UpdateAgentWithContext(aws.Context, *datasync.UpdateAgentInput, ...request.Option) (*datasync.UpdateAgentOutput, error)
 	UpdateAgentRequest(*datasync.UpdateAgentInput) (*request.Request, *datasync.UpdateAgentOutput)
 
+	UpdateLocationNfs(*datasync.UpdateLocationNfsInput) (*datasync.UpdateLocationNfsOutput, error)
+	UpdateLocationNfsWithContext(aws.Context, *datasync.UpdateLocationNfsInput, ...request.Option) (*datasync.UpdateLocationNfsOutput, error)
+	UpdateLocationNfsRequest(*datasync.UpdateLocationNfsInput) (*request.Request, *datasync.UpdateLocationNfsOutput)
+
+	UpdateLocationObjectStorage(*datasync.UpdateLocationObjectStorageInput) (*datasync.UpdateLocationObjectStorageOutput, error)
+	UpdateLocationObjectStorageWithContext(aws.Context, *datasync.UpdateLocationObjectStorageInput, ...request.Option) (*datasync.UpdateLocationObjectStorageOutput, error)
+	UpdateLocationObjectStorageRequest(*datasync.UpdateLocationObjectStorageInput) (*request.Request, *datasync.UpdateLocationObjectStorageOutput)
+
+	UpdateLocationSmb(*datasync.UpdateLocationSmbInput) (*datasync.UpdateLocationSmbOutput, error)
+	UpdateLocationSmbWithContext(aws.Context, *datasync.UpdateLocationSmbInput, ...request.Option) (*datasync.UpdateLocationSmbOutput, error)
+	UpdateLocationSmbRequest(*datasync.UpdateLocationSmbInput) (*request.Request, *datasync.UpdateLocationSmbOutput)
+
 	UpdateTask(*datasync.UpdateTaskInput) (*datasync.UpdateTaskOutput, error)
 	UpdateTaskWithContext(aws.Context, *datasync.UpdateTaskInput, ...request.Option) (*datasync.UpdateTaskOutput, error)
 	UpdateTaskRequest(*datasync.UpdateTaskInput) (*request.Request, *datasync.UpdateTaskOutput)
+
+	UpdateTaskExecution(*datasync.UpdateTaskExecutionInput) (*datasync.UpdateTaskExecutionOutput, error)
+	UpdateTaskExecutionWithContext(aws.Context, *datasync.UpdateTaskExecutionInput, ...request.Option) (*datasync.UpdateTaskExecutionOutput, error)
+	UpdateTaskExecutionRequest(*datasync.UpdateTaskExecutionInput) (*request.Request, *datasync.UpdateTaskExecutionOutput)
 }
 
 var _ DataSyncAPI = (*datasync.DataSync)(nil)

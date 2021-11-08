@@ -1,4 +1,5 @@
-// +build go1.10
+//go:build go1.15
+// +build go1.15
 
 package eventstreamtest
 

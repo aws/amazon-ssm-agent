@@ -105,6 +105,8 @@ func ExampleDatabaseMigrationService_CreateEndpoint_shared00() {
 				fmt.Println(databasemigrationservice.ErrCodeResourceNotFoundFault, aerr.Error())
 			case databasemigrationservice.ErrCodeAccessDeniedFault:
 				fmt.Println(databasemigrationservice.ErrCodeAccessDeniedFault, aerr.Error())
+			case databasemigrationservice.ErrCodeS3AccessDeniedFault:
+				fmt.Println(databasemigrationservice.ErrCodeS3AccessDeniedFault, aerr.Error())
 			default:
 				fmt.Println(aerr.Error())
 			}
@@ -1260,6 +1262,8 @@ func ExampleDatabaseMigrationService_TestConnection_shared00() {
 				fmt.Println(databasemigrationservice.ErrCodeKMSKeyNotAccessibleFault, aerr.Error())
 			case databasemigrationservice.ErrCodeResourceQuotaExceededFault:
 				fmt.Println(databasemigrationservice.ErrCodeResourceQuotaExceededFault, aerr.Error())
+			case databasemigrationservice.ErrCodeAccessDeniedFault:
+				fmt.Println(databasemigrationservice.ErrCodeAccessDeniedFault, aerr.Error())
 			default:
 				fmt.Println(aerr.Error())
 			}

@@ -61,8 +61,8 @@ func (c *Kendra) BatchDeleteDocumentRequest(input *BatchDeleteDocumentInput) (re
 // added with the BatchPutDocument operation.
 //
 // The documents are deleted asynchronously. You can see the progress of the
-// deletion by using AWS CloudWatch. Any error messages releated to the processing
-// of the batch are sent to you CloudWatch log.
+// deletion by using Amazon Web Services CloudWatch. Any error messages related
+// to the processing of the batch are sent to you CloudWatch log.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -101,6 +101,106 @@ func (c *Kendra) BatchDeleteDocument(input *BatchDeleteDocumentInput) (*BatchDel
 // for more information on using Contexts.
 func (c *Kendra) BatchDeleteDocumentWithContext(ctx aws.Context, input *BatchDeleteDocumentInput, opts ...request.Option) (*BatchDeleteDocumentOutput, error) {
 	req, out := c.BatchDeleteDocumentRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opBatchGetDocumentStatus = "BatchGetDocumentStatus"
+
+// BatchGetDocumentStatusRequest generates a "aws/request.Request" representing the
+// client's request for the BatchGetDocumentStatus operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See BatchGetDocumentStatus for more information on using the BatchGetDocumentStatus
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the BatchGetDocumentStatusRequest method.
+//    req, resp := client.BatchGetDocumentStatusRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/kendra-2019-02-03/BatchGetDocumentStatus
+func (c *Kendra) BatchGetDocumentStatusRequest(input *BatchGetDocumentStatusInput) (req *request.Request, output *BatchGetDocumentStatusOutput) {
+	op := &request.Operation{
+		Name:       opBatchGetDocumentStatus,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &BatchGetDocumentStatusInput{}
+	}
+
+	output = &BatchGetDocumentStatusOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// BatchGetDocumentStatus API operation for AWSKendraFrontendService.
+//
+// Returns the indexing status for one or more documents submitted with the
+// BatchPutDocument (https://docs.aws.amazon.com/kendra/latest/dg/API_BatchPutDocument.html)
+// operation.
+//
+// When you use the BatchPutDocument operation, documents are indexed asynchronously.
+// You can use the BatchGetDocumentStatus operation to get the current status
+// of a list of documents so that you can determine if they have been successfully
+// indexed.
+//
+// You can also use the BatchGetDocumentStatus operation to check the status
+// of the BatchDeleteDocument (https://docs.aws.amazon.com/kendra/latest/dg/API_BatchDeleteDocument.html)
+// operation. When a document is deleted from the index, Amazon Kendra returns
+// NOT_FOUND as the status.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWSKendraFrontendService's
+// API operation BatchGetDocumentStatus for usage and error information.
+//
+// Returned Error Types:
+//   * ValidationException
+//
+//   * ConflictException
+//
+//   * ResourceNotFoundException
+//
+//   * ThrottlingException
+//
+//   * AccessDeniedException
+//
+//   * InternalServerException
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/kendra-2019-02-03/BatchGetDocumentStatus
+func (c *Kendra) BatchGetDocumentStatus(input *BatchGetDocumentStatusInput) (*BatchGetDocumentStatusOutput, error) {
+	req, out := c.BatchGetDocumentStatusRequest(input)
+	return out, req.Send()
+}
+
+// BatchGetDocumentStatusWithContext is the same as BatchGetDocumentStatus with the addition of
+// the ability to pass a context and additional request options.
+//
+// See BatchGetDocumentStatus for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Kendra) BatchGetDocumentStatusWithContext(ctx aws.Context, input *BatchGetDocumentStatusInput, opts ...request.Option) (*BatchGetDocumentStatusOutput, error) {
+	req, out := c.BatchGetDocumentStatusRequest(input)
 	req.SetContext(ctx)
 	req.ApplyOptions(opts...)
 	return out, req.Send()
@@ -159,8 +259,8 @@ func (c *Kendra) BatchPutDocumentRequest(input *BatchPutDocumentInput) (req *req
 // the index.
 //
 // The documents are indexed asynchronously. You can see the progress of the
-// batch using AWS CloudWatch. Any error messages related to processing the
-// batch are sent to your AWS CloudWatch log.
+// batch using Amazon Web Services CloudWatch. Any error messages related to
+// processing the batch are sent to your Amazon Web Services CloudWatch log.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -201,6 +301,101 @@ func (c *Kendra) BatchPutDocument(input *BatchPutDocumentInput) (*BatchPutDocume
 // for more information on using Contexts.
 func (c *Kendra) BatchPutDocumentWithContext(ctx aws.Context, input *BatchPutDocumentInput, opts ...request.Option) (*BatchPutDocumentOutput, error) {
 	req, out := c.BatchPutDocumentRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opClearQuerySuggestions = "ClearQuerySuggestions"
+
+// ClearQuerySuggestionsRequest generates a "aws/request.Request" representing the
+// client's request for the ClearQuerySuggestions operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See ClearQuerySuggestions for more information on using the ClearQuerySuggestions
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the ClearQuerySuggestionsRequest method.
+//    req, resp := client.ClearQuerySuggestionsRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/kendra-2019-02-03/ClearQuerySuggestions
+func (c *Kendra) ClearQuerySuggestionsRequest(input *ClearQuerySuggestionsInput) (req *request.Request, output *ClearQuerySuggestionsOutput) {
+	op := &request.Operation{
+		Name:       opClearQuerySuggestions,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &ClearQuerySuggestionsInput{}
+	}
+
+	output = &ClearQuerySuggestionsOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
+	return
+}
+
+// ClearQuerySuggestions API operation for AWSKendraFrontendService.
+//
+// Clears existing query suggestions from an index.
+//
+// This deletes existing suggestions only, not the queries in the query log.
+// After you clear suggestions, Amazon Kendra learns new suggestions based on
+// new queries added to the query log from the time you cleared suggestions.
+// If you do not see any new suggestions, then please allow Amazon Kendra to
+// collect enough queries to learn new suggestions.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWSKendraFrontendService's
+// API operation ClearQuerySuggestions for usage and error information.
+//
+// Returned Error Types:
+//   * ValidationException
+//
+//   * ResourceNotFoundException
+//
+//   * ThrottlingException
+//
+//   * ConflictException
+//
+//   * AccessDeniedException
+//
+//   * InternalServerException
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/kendra-2019-02-03/ClearQuerySuggestions
+func (c *Kendra) ClearQuerySuggestions(input *ClearQuerySuggestionsInput) (*ClearQuerySuggestionsOutput, error) {
+	req, out := c.ClearQuerySuggestionsRequest(input)
+	return out, req.Send()
+}
+
+// ClearQuerySuggestionsWithContext is the same as ClearQuerySuggestions with the addition of
+// the ability to pass a context and additional request options.
+//
+// See ClearQuerySuggestions for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Kendra) ClearQuerySuggestionsWithContext(ctx aws.Context, input *ClearQuerySuggestionsInput, opts ...request.Option) (*ClearQuerySuggestionsOutput, error) {
+	req, out := c.ClearQuerySuggestionsRequest(input)
 	req.SetContext(ctx)
 	req.ApplyOptions(opts...)
 	return out, req.Send()
@@ -250,11 +445,10 @@ func (c *Kendra) CreateDataSourceRequest(input *CreateDataSourceInput) (req *req
 
 // CreateDataSource API operation for AWSKendraFrontendService.
 //
-// Creates a data source that you use to with an Amazon Kendra index.
+// Creates a data source that you want to use with an Amazon Kendra index.
 //
 // You specify a name, data source connector type and description for your data
-// source. You also specify configuration information such as document metadata
-// (author, source URI, and so on) and user context information.
+// source. You also specify configuration information for the data source connector.
 //
 // CreateDataSource is a synchronous operation. The operation returns 200 if
 // the data source was successfully created. Otherwise, an exception is raised.
@@ -441,11 +635,11 @@ func (c *Kendra) CreateIndexRequest(input *CreateIndexInput) (req *request.Reque
 //
 // Creates a new Amazon Kendra index. Index creation is an asynchronous operation.
 // To determine if index creation has completed, check the Status field returned
-// from a call to . The Status field is set to ACTIVE when the index is ready
-// to use.
+// from a call to DescribeIndex. The Status field is set to ACTIVE when the
+// index is ready to use.
 //
-// Once the index is active you can index your documents using the operation
-// or using one of the supported data sources.
+// Once the index is active you can index your documents using the BatchPutDocument
+// operation or using one of the supported data sources.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -486,6 +680,197 @@ func (c *Kendra) CreateIndex(input *CreateIndexInput) (*CreateIndexOutput, error
 // for more information on using Contexts.
 func (c *Kendra) CreateIndexWithContext(ctx aws.Context, input *CreateIndexInput, opts ...request.Option) (*CreateIndexOutput, error) {
 	req, out := c.CreateIndexRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opCreateQuerySuggestionsBlockList = "CreateQuerySuggestionsBlockList"
+
+// CreateQuerySuggestionsBlockListRequest generates a "aws/request.Request" representing the
+// client's request for the CreateQuerySuggestionsBlockList operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See CreateQuerySuggestionsBlockList for more information on using the CreateQuerySuggestionsBlockList
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the CreateQuerySuggestionsBlockListRequest method.
+//    req, resp := client.CreateQuerySuggestionsBlockListRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/kendra-2019-02-03/CreateQuerySuggestionsBlockList
+func (c *Kendra) CreateQuerySuggestionsBlockListRequest(input *CreateQuerySuggestionsBlockListInput) (req *request.Request, output *CreateQuerySuggestionsBlockListOutput) {
+	op := &request.Operation{
+		Name:       opCreateQuerySuggestionsBlockList,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &CreateQuerySuggestionsBlockListInput{}
+	}
+
+	output = &CreateQuerySuggestionsBlockListOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// CreateQuerySuggestionsBlockList API operation for AWSKendraFrontendService.
+//
+// Creates a block list to exlcude certain queries from suggestions.
+//
+// Any query that contains words or phrases specified in the block list is blocked
+// or filtered out from being shown as a suggestion.
+//
+// You need to provide the file location of your block list text file in your
+// S3 bucket. In your text file, enter each block word or phrase on a separate
+// line.
+//
+// For information on the current quota limits for block lists, see Quotas for
+// Amazon Kendra (https://docs.aws.amazon.com/kendra/latest/dg/quotas.html).
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWSKendraFrontendService's
+// API operation CreateQuerySuggestionsBlockList for usage and error information.
+//
+// Returned Error Types:
+//   * ValidationException
+//
+//   * ResourceNotFoundException
+//
+//   * ThrottlingException
+//
+//   * AccessDeniedException
+//
+//   * ServiceQuotaExceededException
+//
+//   * ConflictException
+//
+//   * InternalServerException
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/kendra-2019-02-03/CreateQuerySuggestionsBlockList
+func (c *Kendra) CreateQuerySuggestionsBlockList(input *CreateQuerySuggestionsBlockListInput) (*CreateQuerySuggestionsBlockListOutput, error) {
+	req, out := c.CreateQuerySuggestionsBlockListRequest(input)
+	return out, req.Send()
+}
+
+// CreateQuerySuggestionsBlockListWithContext is the same as CreateQuerySuggestionsBlockList with the addition of
+// the ability to pass a context and additional request options.
+//
+// See CreateQuerySuggestionsBlockList for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Kendra) CreateQuerySuggestionsBlockListWithContext(ctx aws.Context, input *CreateQuerySuggestionsBlockListInput, opts ...request.Option) (*CreateQuerySuggestionsBlockListOutput, error) {
+	req, out := c.CreateQuerySuggestionsBlockListRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opCreateThesaurus = "CreateThesaurus"
+
+// CreateThesaurusRequest generates a "aws/request.Request" representing the
+// client's request for the CreateThesaurus operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See CreateThesaurus for more information on using the CreateThesaurus
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the CreateThesaurusRequest method.
+//    req, resp := client.CreateThesaurusRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/kendra-2019-02-03/CreateThesaurus
+func (c *Kendra) CreateThesaurusRequest(input *CreateThesaurusInput) (req *request.Request, output *CreateThesaurusOutput) {
+	op := &request.Operation{
+		Name:       opCreateThesaurus,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &CreateThesaurusInput{}
+	}
+
+	output = &CreateThesaurusOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// CreateThesaurus API operation for AWSKendraFrontendService.
+//
+// Creates a thesaurus for an index. The thesaurus contains a list of synonyms
+// in Solr format.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWSKendraFrontendService's
+// API operation CreateThesaurus for usage and error information.
+//
+// Returned Error Types:
+//   * ValidationException
+//
+//   * ConflictException
+//
+//   * ResourceNotFoundException
+//
+//   * ThrottlingException
+//
+//   * ServiceQuotaExceededException
+//
+//   * AccessDeniedException
+//
+//   * InternalServerException
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/kendra-2019-02-03/CreateThesaurus
+func (c *Kendra) CreateThesaurus(input *CreateThesaurusInput) (*CreateThesaurusOutput, error) {
+	req, out := c.CreateThesaurusRequest(input)
+	return out, req.Send()
+}
+
+// CreateThesaurusWithContext is the same as CreateThesaurus with the addition of
+// the ability to pass a context and additional request options.
+//
+// See CreateThesaurus for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Kendra) CreateThesaurusWithContext(ctx aws.Context, input *CreateThesaurusInput, opts ...request.Option) (*CreateThesaurusOutput, error) {
+	req, out := c.CreateThesaurusRequest(input)
 	req.SetContext(ctx)
 	req.ApplyOptions(opts...)
 	return out, req.Send()
@@ -538,8 +923,8 @@ func (c *Kendra) DeleteDataSourceRequest(input *DeleteDataSourceInput) (req *req
 //
 // Deletes an Amazon Kendra data source. An exception is not thrown if the data
 // source is already being deleted. While the data source is being deleted,
-// the Status field returned by a call to the operation is set to DELETING.
-// For more information, see Deleting Data Sources (https://docs.aws.amazon.com/kendra/latest/dg/delete-data-source.html).
+// the Status field returned by a call to the DescribeDataSource operation is
+// set to DELETING. For more information, see Deleting Data Sources (https://docs.aws.amazon.com/kendra/latest/dg/delete-data-source.html).
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -758,6 +1143,288 @@ func (c *Kendra) DeleteIndex(input *DeleteIndexInput) (*DeleteIndexOutput, error
 // for more information on using Contexts.
 func (c *Kendra) DeleteIndexWithContext(ctx aws.Context, input *DeleteIndexInput, opts ...request.Option) (*DeleteIndexOutput, error) {
 	req, out := c.DeleteIndexRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opDeletePrincipalMapping = "DeletePrincipalMapping"
+
+// DeletePrincipalMappingRequest generates a "aws/request.Request" representing the
+// client's request for the DeletePrincipalMapping operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See DeletePrincipalMapping for more information on using the DeletePrincipalMapping
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the DeletePrincipalMappingRequest method.
+//    req, resp := client.DeletePrincipalMappingRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/kendra-2019-02-03/DeletePrincipalMapping
+func (c *Kendra) DeletePrincipalMappingRequest(input *DeletePrincipalMappingInput) (req *request.Request, output *DeletePrincipalMappingOutput) {
+	op := &request.Operation{
+		Name:       opDeletePrincipalMapping,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &DeletePrincipalMappingInput{}
+	}
+
+	output = &DeletePrincipalMappingOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
+	return
+}
+
+// DeletePrincipalMapping API operation for AWSKendraFrontendService.
+//
+// Deletes a group so that all users and sub groups that belong to the group
+// can no longer access documents only available to that group.
+//
+// For example, after deleting the group "Summer Interns", all interns who belonged
+// to that group no longer see intern-only documents in their search results.
+//
+// If you want to delete or replace users or sub groups of a group, you need
+// to use the PutPrincipalMapping operation. For example, if a user in the group
+// "Engineering" leaves the engineering team and another user takes their place,
+// you provide an updated list of users or sub groups that belong to the "Engineering"
+// group when calling PutPrincipalMapping. You can update your internal list
+// of users or sub groups and input this list when calling PutPrincipalMapping.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWSKendraFrontendService's
+// API operation DeletePrincipalMapping for usage and error information.
+//
+// Returned Error Types:
+//   * ValidationException
+//
+//   * ConflictException
+//
+//   * ResourceNotFoundException
+//
+//   * ThrottlingException
+//
+//   * AccessDeniedException
+//
+//   * InternalServerException
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/kendra-2019-02-03/DeletePrincipalMapping
+func (c *Kendra) DeletePrincipalMapping(input *DeletePrincipalMappingInput) (*DeletePrincipalMappingOutput, error) {
+	req, out := c.DeletePrincipalMappingRequest(input)
+	return out, req.Send()
+}
+
+// DeletePrincipalMappingWithContext is the same as DeletePrincipalMapping with the addition of
+// the ability to pass a context and additional request options.
+//
+// See DeletePrincipalMapping for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Kendra) DeletePrincipalMappingWithContext(ctx aws.Context, input *DeletePrincipalMappingInput, opts ...request.Option) (*DeletePrincipalMappingOutput, error) {
+	req, out := c.DeletePrincipalMappingRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opDeleteQuerySuggestionsBlockList = "DeleteQuerySuggestionsBlockList"
+
+// DeleteQuerySuggestionsBlockListRequest generates a "aws/request.Request" representing the
+// client's request for the DeleteQuerySuggestionsBlockList operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See DeleteQuerySuggestionsBlockList for more information on using the DeleteQuerySuggestionsBlockList
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the DeleteQuerySuggestionsBlockListRequest method.
+//    req, resp := client.DeleteQuerySuggestionsBlockListRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/kendra-2019-02-03/DeleteQuerySuggestionsBlockList
+func (c *Kendra) DeleteQuerySuggestionsBlockListRequest(input *DeleteQuerySuggestionsBlockListInput) (req *request.Request, output *DeleteQuerySuggestionsBlockListOutput) {
+	op := &request.Operation{
+		Name:       opDeleteQuerySuggestionsBlockList,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &DeleteQuerySuggestionsBlockListInput{}
+	}
+
+	output = &DeleteQuerySuggestionsBlockListOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
+	return
+}
+
+// DeleteQuerySuggestionsBlockList API operation for AWSKendraFrontendService.
+//
+// Deletes a block list used for query suggestions for an index.
+//
+// A deleted block list might not take effect right away. Amazon Kendra needs
+// to refresh the entire suggestions list to add back the queries that were
+// previously blocked.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWSKendraFrontendService's
+// API operation DeleteQuerySuggestionsBlockList for usage and error information.
+//
+// Returned Error Types:
+//   * ValidationException
+//
+//   * ResourceNotFoundException
+//
+//   * ThrottlingException
+//
+//   * AccessDeniedException
+//
+//   * ConflictException
+//
+//   * InternalServerException
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/kendra-2019-02-03/DeleteQuerySuggestionsBlockList
+func (c *Kendra) DeleteQuerySuggestionsBlockList(input *DeleteQuerySuggestionsBlockListInput) (*DeleteQuerySuggestionsBlockListOutput, error) {
+	req, out := c.DeleteQuerySuggestionsBlockListRequest(input)
+	return out, req.Send()
+}
+
+// DeleteQuerySuggestionsBlockListWithContext is the same as DeleteQuerySuggestionsBlockList with the addition of
+// the ability to pass a context and additional request options.
+//
+// See DeleteQuerySuggestionsBlockList for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Kendra) DeleteQuerySuggestionsBlockListWithContext(ctx aws.Context, input *DeleteQuerySuggestionsBlockListInput, opts ...request.Option) (*DeleteQuerySuggestionsBlockListOutput, error) {
+	req, out := c.DeleteQuerySuggestionsBlockListRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opDeleteThesaurus = "DeleteThesaurus"
+
+// DeleteThesaurusRequest generates a "aws/request.Request" representing the
+// client's request for the DeleteThesaurus operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See DeleteThesaurus for more information on using the DeleteThesaurus
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the DeleteThesaurusRequest method.
+//    req, resp := client.DeleteThesaurusRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/kendra-2019-02-03/DeleteThesaurus
+func (c *Kendra) DeleteThesaurusRequest(input *DeleteThesaurusInput) (req *request.Request, output *DeleteThesaurusOutput) {
+	op := &request.Operation{
+		Name:       opDeleteThesaurus,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &DeleteThesaurusInput{}
+	}
+
+	output = &DeleteThesaurusOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
+	return
+}
+
+// DeleteThesaurus API operation for AWSKendraFrontendService.
+//
+// Deletes an existing Amazon Kendra thesaurus.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWSKendraFrontendService's
+// API operation DeleteThesaurus for usage and error information.
+//
+// Returned Error Types:
+//   * ValidationException
+//
+//   * ConflictException
+//
+//   * ResourceNotFoundException
+//
+//   * ThrottlingException
+//
+//   * AccessDeniedException
+//
+//   * InternalServerException
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/kendra-2019-02-03/DeleteThesaurus
+func (c *Kendra) DeleteThesaurus(input *DeleteThesaurusInput) (*DeleteThesaurusOutput, error) {
+	req, out := c.DeleteThesaurusRequest(input)
+	return out, req.Send()
+}
+
+// DeleteThesaurusWithContext is the same as DeleteThesaurus with the addition of
+// the ability to pass a context and additional request options.
+//
+// See DeleteThesaurus for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Kendra) DeleteThesaurusWithContext(ctx aws.Context, input *DeleteThesaurusInput, opts ...request.Option) (*DeleteThesaurusOutput, error) {
+	req, out := c.DeleteThesaurusRequest(input)
 	req.SetContext(ctx)
 	req.ApplyOptions(opts...)
 	return out, req.Send()
@@ -1016,6 +1683,449 @@ func (c *Kendra) DescribeIndex(input *DescribeIndexInput) (*DescribeIndexOutput,
 // for more information on using Contexts.
 func (c *Kendra) DescribeIndexWithContext(ctx aws.Context, input *DescribeIndexInput, opts ...request.Option) (*DescribeIndexOutput, error) {
 	req, out := c.DescribeIndexRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opDescribePrincipalMapping = "DescribePrincipalMapping"
+
+// DescribePrincipalMappingRequest generates a "aws/request.Request" representing the
+// client's request for the DescribePrincipalMapping operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See DescribePrincipalMapping for more information on using the DescribePrincipalMapping
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the DescribePrincipalMappingRequest method.
+//    req, resp := client.DescribePrincipalMappingRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/kendra-2019-02-03/DescribePrincipalMapping
+func (c *Kendra) DescribePrincipalMappingRequest(input *DescribePrincipalMappingInput) (req *request.Request, output *DescribePrincipalMappingOutput) {
+	op := &request.Operation{
+		Name:       opDescribePrincipalMapping,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &DescribePrincipalMappingInput{}
+	}
+
+	output = &DescribePrincipalMappingOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// DescribePrincipalMapping API operation for AWSKendraFrontendService.
+//
+// Describes the processing of PUT and DELETE actions for mapping users to their
+// groups. This includes information on the status of actions currently processing
+// or yet to be processed, when actions were last updated, when actions were
+// received by Amazon Kendra, the latest action that should process and apply
+// after other actions, and useful error messages if an action could not be
+// processed.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWSKendraFrontendService's
+// API operation DescribePrincipalMapping for usage and error information.
+//
+// Returned Error Types:
+//   * ValidationException
+//
+//   * ResourceNotFoundException
+//
+//   * ThrottlingException
+//
+//   * AccessDeniedException
+//
+//   * InternalServerException
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/kendra-2019-02-03/DescribePrincipalMapping
+func (c *Kendra) DescribePrincipalMapping(input *DescribePrincipalMappingInput) (*DescribePrincipalMappingOutput, error) {
+	req, out := c.DescribePrincipalMappingRequest(input)
+	return out, req.Send()
+}
+
+// DescribePrincipalMappingWithContext is the same as DescribePrincipalMapping with the addition of
+// the ability to pass a context and additional request options.
+//
+// See DescribePrincipalMapping for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Kendra) DescribePrincipalMappingWithContext(ctx aws.Context, input *DescribePrincipalMappingInput, opts ...request.Option) (*DescribePrincipalMappingOutput, error) {
+	req, out := c.DescribePrincipalMappingRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opDescribeQuerySuggestionsBlockList = "DescribeQuerySuggestionsBlockList"
+
+// DescribeQuerySuggestionsBlockListRequest generates a "aws/request.Request" representing the
+// client's request for the DescribeQuerySuggestionsBlockList operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See DescribeQuerySuggestionsBlockList for more information on using the DescribeQuerySuggestionsBlockList
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the DescribeQuerySuggestionsBlockListRequest method.
+//    req, resp := client.DescribeQuerySuggestionsBlockListRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/kendra-2019-02-03/DescribeQuerySuggestionsBlockList
+func (c *Kendra) DescribeQuerySuggestionsBlockListRequest(input *DescribeQuerySuggestionsBlockListInput) (req *request.Request, output *DescribeQuerySuggestionsBlockListOutput) {
+	op := &request.Operation{
+		Name:       opDescribeQuerySuggestionsBlockList,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &DescribeQuerySuggestionsBlockListInput{}
+	}
+
+	output = &DescribeQuerySuggestionsBlockListOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// DescribeQuerySuggestionsBlockList API operation for AWSKendraFrontendService.
+//
+// Describes a block list used for query suggestions for an index.
+//
+// This is used to check the current settings that are applied to a block list.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWSKendraFrontendService's
+// API operation DescribeQuerySuggestionsBlockList for usage and error information.
+//
+// Returned Error Types:
+//   * ValidationException
+//
+//   * ResourceNotFoundException
+//
+//   * ThrottlingException
+//
+//   * AccessDeniedException
+//
+//   * InternalServerException
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/kendra-2019-02-03/DescribeQuerySuggestionsBlockList
+func (c *Kendra) DescribeQuerySuggestionsBlockList(input *DescribeQuerySuggestionsBlockListInput) (*DescribeQuerySuggestionsBlockListOutput, error) {
+	req, out := c.DescribeQuerySuggestionsBlockListRequest(input)
+	return out, req.Send()
+}
+
+// DescribeQuerySuggestionsBlockListWithContext is the same as DescribeQuerySuggestionsBlockList with the addition of
+// the ability to pass a context and additional request options.
+//
+// See DescribeQuerySuggestionsBlockList for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Kendra) DescribeQuerySuggestionsBlockListWithContext(ctx aws.Context, input *DescribeQuerySuggestionsBlockListInput, opts ...request.Option) (*DescribeQuerySuggestionsBlockListOutput, error) {
+	req, out := c.DescribeQuerySuggestionsBlockListRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opDescribeQuerySuggestionsConfig = "DescribeQuerySuggestionsConfig"
+
+// DescribeQuerySuggestionsConfigRequest generates a "aws/request.Request" representing the
+// client's request for the DescribeQuerySuggestionsConfig operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See DescribeQuerySuggestionsConfig for more information on using the DescribeQuerySuggestionsConfig
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the DescribeQuerySuggestionsConfigRequest method.
+//    req, resp := client.DescribeQuerySuggestionsConfigRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/kendra-2019-02-03/DescribeQuerySuggestionsConfig
+func (c *Kendra) DescribeQuerySuggestionsConfigRequest(input *DescribeQuerySuggestionsConfigInput) (req *request.Request, output *DescribeQuerySuggestionsConfigOutput) {
+	op := &request.Operation{
+		Name:       opDescribeQuerySuggestionsConfig,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &DescribeQuerySuggestionsConfigInput{}
+	}
+
+	output = &DescribeQuerySuggestionsConfigOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// DescribeQuerySuggestionsConfig API operation for AWSKendraFrontendService.
+//
+// Describes the settings of query suggestions for an index.
+//
+// This is used to check the current settings applied to query suggestions.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWSKendraFrontendService's
+// API operation DescribeQuerySuggestionsConfig for usage and error information.
+//
+// Returned Error Types:
+//   * ValidationException
+//
+//   * ResourceNotFoundException
+//
+//   * ThrottlingException
+//
+//   * AccessDeniedException
+//
+//   * InternalServerException
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/kendra-2019-02-03/DescribeQuerySuggestionsConfig
+func (c *Kendra) DescribeQuerySuggestionsConfig(input *DescribeQuerySuggestionsConfigInput) (*DescribeQuerySuggestionsConfigOutput, error) {
+	req, out := c.DescribeQuerySuggestionsConfigRequest(input)
+	return out, req.Send()
+}
+
+// DescribeQuerySuggestionsConfigWithContext is the same as DescribeQuerySuggestionsConfig with the addition of
+// the ability to pass a context and additional request options.
+//
+// See DescribeQuerySuggestionsConfig for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Kendra) DescribeQuerySuggestionsConfigWithContext(ctx aws.Context, input *DescribeQuerySuggestionsConfigInput, opts ...request.Option) (*DescribeQuerySuggestionsConfigOutput, error) {
+	req, out := c.DescribeQuerySuggestionsConfigRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opDescribeThesaurus = "DescribeThesaurus"
+
+// DescribeThesaurusRequest generates a "aws/request.Request" representing the
+// client's request for the DescribeThesaurus operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See DescribeThesaurus for more information on using the DescribeThesaurus
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the DescribeThesaurusRequest method.
+//    req, resp := client.DescribeThesaurusRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/kendra-2019-02-03/DescribeThesaurus
+func (c *Kendra) DescribeThesaurusRequest(input *DescribeThesaurusInput) (req *request.Request, output *DescribeThesaurusOutput) {
+	op := &request.Operation{
+		Name:       opDescribeThesaurus,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &DescribeThesaurusInput{}
+	}
+
+	output = &DescribeThesaurusOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// DescribeThesaurus API operation for AWSKendraFrontendService.
+//
+// Describes an existing Amazon Kendra thesaurus.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWSKendraFrontendService's
+// API operation DescribeThesaurus for usage and error information.
+//
+// Returned Error Types:
+//   * ValidationException
+//
+//   * ResourceNotFoundException
+//
+//   * ThrottlingException
+//
+//   * AccessDeniedException
+//
+//   * InternalServerException
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/kendra-2019-02-03/DescribeThesaurus
+func (c *Kendra) DescribeThesaurus(input *DescribeThesaurusInput) (*DescribeThesaurusOutput, error) {
+	req, out := c.DescribeThesaurusRequest(input)
+	return out, req.Send()
+}
+
+// DescribeThesaurusWithContext is the same as DescribeThesaurus with the addition of
+// the ability to pass a context and additional request options.
+//
+// See DescribeThesaurus for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Kendra) DescribeThesaurusWithContext(ctx aws.Context, input *DescribeThesaurusInput, opts ...request.Option) (*DescribeThesaurusOutput, error) {
+	req, out := c.DescribeThesaurusRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opGetQuerySuggestions = "GetQuerySuggestions"
+
+// GetQuerySuggestionsRequest generates a "aws/request.Request" representing the
+// client's request for the GetQuerySuggestions operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See GetQuerySuggestions for more information on using the GetQuerySuggestions
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the GetQuerySuggestionsRequest method.
+//    req, resp := client.GetQuerySuggestionsRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/kendra-2019-02-03/GetQuerySuggestions
+func (c *Kendra) GetQuerySuggestionsRequest(input *GetQuerySuggestionsInput) (req *request.Request, output *GetQuerySuggestionsOutput) {
+	op := &request.Operation{
+		Name:       opGetQuerySuggestions,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &GetQuerySuggestionsInput{}
+	}
+
+	output = &GetQuerySuggestionsOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// GetQuerySuggestions API operation for AWSKendraFrontendService.
+//
+// Fetches the queries that are suggested to your users.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWSKendraFrontendService's
+// API operation GetQuerySuggestions for usage and error information.
+//
+// Returned Error Types:
+//   * ValidationException
+//
+//   * ResourceNotFoundException
+//
+//   * ThrottlingException
+//
+//   * AccessDeniedException
+//
+//   * ServiceQuotaExceededException
+//
+//   * ConflictException
+//
+//   * InternalServerException
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/kendra-2019-02-03/GetQuerySuggestions
+func (c *Kendra) GetQuerySuggestions(input *GetQuerySuggestionsInput) (*GetQuerySuggestionsOutput, error) {
+	req, out := c.GetQuerySuggestionsRequest(input)
+	return out, req.Send()
+}
+
+// GetQuerySuggestionsWithContext is the same as GetQuerySuggestions with the addition of
+// the ability to pass a context and additional request options.
+//
+// See GetQuerySuggestions for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Kendra) GetQuerySuggestionsWithContext(ctx aws.Context, input *GetQuerySuggestionsInput, opts ...request.Option) (*GetQuerySuggestionsOutput, error) {
+	req, out := c.GetQuerySuggestionsRequest(input)
 	req.SetContext(ctx)
 	req.ApplyOptions(opts...)
 	return out, req.Send()
@@ -1397,6 +2507,95 @@ func (c *Kendra) ListFaqsWithContext(ctx aws.Context, input *ListFaqsInput, opts
 	return out, req.Send()
 }
 
+const opListGroupsOlderThanOrderingId = "ListGroupsOlderThanOrderingId"
+
+// ListGroupsOlderThanOrderingIdRequest generates a "aws/request.Request" representing the
+// client's request for the ListGroupsOlderThanOrderingId operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See ListGroupsOlderThanOrderingId for more information on using the ListGroupsOlderThanOrderingId
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the ListGroupsOlderThanOrderingIdRequest method.
+//    req, resp := client.ListGroupsOlderThanOrderingIdRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/kendra-2019-02-03/ListGroupsOlderThanOrderingId
+func (c *Kendra) ListGroupsOlderThanOrderingIdRequest(input *ListGroupsOlderThanOrderingIdInput) (req *request.Request, output *ListGroupsOlderThanOrderingIdOutput) {
+	op := &request.Operation{
+		Name:       opListGroupsOlderThanOrderingId,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &ListGroupsOlderThanOrderingIdInput{}
+	}
+
+	output = &ListGroupsOlderThanOrderingIdOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// ListGroupsOlderThanOrderingId API operation for AWSKendraFrontendService.
+//
+// Provides a list of groups that are mapped to users before a given ordering
+// or timestamp identifier.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWSKendraFrontendService's
+// API operation ListGroupsOlderThanOrderingId for usage and error information.
+//
+// Returned Error Types:
+//   * ValidationException
+//
+//   * ResourceNotFoundException
+//
+//   * AccessDeniedException
+//
+//   * ThrottlingException
+//
+//   * ConflictException
+//
+//   * InternalServerException
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/kendra-2019-02-03/ListGroupsOlderThanOrderingId
+func (c *Kendra) ListGroupsOlderThanOrderingId(input *ListGroupsOlderThanOrderingIdInput) (*ListGroupsOlderThanOrderingIdOutput, error) {
+	req, out := c.ListGroupsOlderThanOrderingIdRequest(input)
+	return out, req.Send()
+}
+
+// ListGroupsOlderThanOrderingIdWithContext is the same as ListGroupsOlderThanOrderingId with the addition of
+// the ability to pass a context and additional request options.
+//
+// See ListGroupsOlderThanOrderingId for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Kendra) ListGroupsOlderThanOrderingIdWithContext(ctx aws.Context, input *ListGroupsOlderThanOrderingIdInput, opts ...request.Option) (*ListGroupsOlderThanOrderingIdOutput, error) {
+	req, out := c.ListGroupsOlderThanOrderingIdRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opListIndices = "ListIndices"
 
 // ListIndicesRequest generates a "aws/request.Request" representing the
@@ -1539,6 +2738,95 @@ func (c *Kendra) ListIndicesPagesWithContext(ctx aws.Context, input *ListIndices
 	return p.Err()
 }
 
+const opListQuerySuggestionsBlockLists = "ListQuerySuggestionsBlockLists"
+
+// ListQuerySuggestionsBlockListsRequest generates a "aws/request.Request" representing the
+// client's request for the ListQuerySuggestionsBlockLists operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See ListQuerySuggestionsBlockLists for more information on using the ListQuerySuggestionsBlockLists
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the ListQuerySuggestionsBlockListsRequest method.
+//    req, resp := client.ListQuerySuggestionsBlockListsRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/kendra-2019-02-03/ListQuerySuggestionsBlockLists
+func (c *Kendra) ListQuerySuggestionsBlockListsRequest(input *ListQuerySuggestionsBlockListsInput) (req *request.Request, output *ListQuerySuggestionsBlockListsOutput) {
+	op := &request.Operation{
+		Name:       opListQuerySuggestionsBlockLists,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &ListQuerySuggestionsBlockListsInput{}
+	}
+
+	output = &ListQuerySuggestionsBlockListsOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// ListQuerySuggestionsBlockLists API operation for AWSKendraFrontendService.
+//
+// Lists the block lists used for query suggestions for an index.
+//
+// For information on the current quota limits for block lists, see Quotas for
+// Amazon Kendra (https://docs.aws.amazon.com/kendra/latest/dg/quotas.html).
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWSKendraFrontendService's
+// API operation ListQuerySuggestionsBlockLists for usage and error information.
+//
+// Returned Error Types:
+//   * ValidationException
+//
+//   * ResourceNotFoundException
+//
+//   * ThrottlingException
+//
+//   * AccessDeniedException
+//
+//   * InternalServerException
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/kendra-2019-02-03/ListQuerySuggestionsBlockLists
+func (c *Kendra) ListQuerySuggestionsBlockLists(input *ListQuerySuggestionsBlockListsInput) (*ListQuerySuggestionsBlockListsOutput, error) {
+	req, out := c.ListQuerySuggestionsBlockListsRequest(input)
+	return out, req.Send()
+}
+
+// ListQuerySuggestionsBlockListsWithContext is the same as ListQuerySuggestionsBlockLists with the addition of
+// the ability to pass a context and additional request options.
+//
+// See ListQuerySuggestionsBlockLists for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Kendra) ListQuerySuggestionsBlockListsWithContext(ctx aws.Context, input *ListQuerySuggestionsBlockListsInput, opts ...request.Option) (*ListQuerySuggestionsBlockListsOutput, error) {
+	req, out := c.ListQuerySuggestionsBlockListsRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opListTagsForResource = "ListTagsForResource"
 
 // ListTagsForResourceRequest generates a "aws/request.Request" representing the
@@ -1621,6 +2909,199 @@ func (c *Kendra) ListTagsForResource(input *ListTagsForResourceInput) (*ListTags
 // for more information on using Contexts.
 func (c *Kendra) ListTagsForResourceWithContext(ctx aws.Context, input *ListTagsForResourceInput, opts ...request.Option) (*ListTagsForResourceOutput, error) {
 	req, out := c.ListTagsForResourceRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opListThesauri = "ListThesauri"
+
+// ListThesauriRequest generates a "aws/request.Request" representing the
+// client's request for the ListThesauri operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See ListThesauri for more information on using the ListThesauri
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the ListThesauriRequest method.
+//    req, resp := client.ListThesauriRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/kendra-2019-02-03/ListThesauri
+func (c *Kendra) ListThesauriRequest(input *ListThesauriInput) (req *request.Request, output *ListThesauriOutput) {
+	op := &request.Operation{
+		Name:       opListThesauri,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &ListThesauriInput{}
+	}
+
+	output = &ListThesauriOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// ListThesauri API operation for AWSKendraFrontendService.
+//
+// Lists the Amazon Kendra thesauri associated with an index.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWSKendraFrontendService's
+// API operation ListThesauri for usage and error information.
+//
+// Returned Error Types:
+//   * ValidationException
+//
+//   * ResourceNotFoundException
+//
+//   * ThrottlingException
+//
+//   * AccessDeniedException
+//
+//   * InternalServerException
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/kendra-2019-02-03/ListThesauri
+func (c *Kendra) ListThesauri(input *ListThesauriInput) (*ListThesauriOutput, error) {
+	req, out := c.ListThesauriRequest(input)
+	return out, req.Send()
+}
+
+// ListThesauriWithContext is the same as ListThesauri with the addition of
+// the ability to pass a context and additional request options.
+//
+// See ListThesauri for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Kendra) ListThesauriWithContext(ctx aws.Context, input *ListThesauriInput, opts ...request.Option) (*ListThesauriOutput, error) {
+	req, out := c.ListThesauriRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opPutPrincipalMapping = "PutPrincipalMapping"
+
+// PutPrincipalMappingRequest generates a "aws/request.Request" representing the
+// client's request for the PutPrincipalMapping operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See PutPrincipalMapping for more information on using the PutPrincipalMapping
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the PutPrincipalMappingRequest method.
+//    req, resp := client.PutPrincipalMappingRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/kendra-2019-02-03/PutPrincipalMapping
+func (c *Kendra) PutPrincipalMappingRequest(input *PutPrincipalMappingInput) (req *request.Request, output *PutPrincipalMappingOutput) {
+	op := &request.Operation{
+		Name:       opPutPrincipalMapping,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &PutPrincipalMappingInput{}
+	}
+
+	output = &PutPrincipalMappingOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
+	return
+}
+
+// PutPrincipalMapping API operation for AWSKendraFrontendService.
+//
+// Maps users to their groups so that you only need to provide the user ID when
+// you issue the query.
+//
+// You can also map sub groups to groups. For example, the group "Company Intellectual
+// Property Teams" includes sub groups "Research" and "Engineering". These sub
+// groups include their own list of users or people who work in these teams.
+// Only users who work in research and engineering, and therefore belong in
+// the intellectual property group, can see top-secret company documents in
+// their search results.
+//
+// You map users to their groups when you want to filter search results for
+// different users based on their group’s access to documents. For more information
+// on filtering search results for different users, see Filtering on user context
+// (https://docs.aws.amazon.com/kendra/latest/dg/user-context-filter.html).
+//
+// If more than five PUT actions for a group are currently processing, a validation
+// exception is thrown.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWSKendraFrontendService's
+// API operation PutPrincipalMapping for usage and error information.
+//
+// Returned Error Types:
+//   * ValidationException
+//
+//   * ConflictException
+//
+//   * ResourceNotFoundException
+//
+//   * ThrottlingException
+//
+//   * AccessDeniedException
+//
+//   * ServiceQuotaExceededException
+//
+//   * InternalServerException
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/kendra-2019-02-03/PutPrincipalMapping
+func (c *Kendra) PutPrincipalMapping(input *PutPrincipalMappingInput) (*PutPrincipalMappingOutput, error) {
+	req, out := c.PutPrincipalMappingRequest(input)
+	return out, req.Send()
+}
+
+// PutPrincipalMappingWithContext is the same as PutPrincipalMapping with the addition of
+// the ability to pass a context and additional request options.
+//
+// See PutPrincipalMapping for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Kendra) PutPrincipalMappingWithContext(ctx aws.Context, input *PutPrincipalMappingInput, opts ...request.Option) (*PutPrincipalMappingOutput, error) {
+	req, out := c.PutPrincipalMappingRequest(input)
 	req.SetContext(ctx)
 	req.ApplyOptions(opts...)
 	return out, req.Send()
@@ -1960,7 +3441,7 @@ func (c *Kendra) SubmitFeedbackRequest(input *SubmitFeedbackInput) (req *request
 // SubmitFeedback API operation for AWSKendraFrontendService.
 //
 // Enables you to provide feedback to Amazon Kendra to improve the performance
-// of the service.
+// of your index.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -2359,20 +3840,318 @@ func (c *Kendra) UpdateIndexWithContext(ctx aws.Context, input *UpdateIndexInput
 	return out, req.Send()
 }
 
-// Access Control List files for the documents in a data source.
+const opUpdateQuerySuggestionsBlockList = "UpdateQuerySuggestionsBlockList"
+
+// UpdateQuerySuggestionsBlockListRequest generates a "aws/request.Request" representing the
+// client's request for the UpdateQuerySuggestionsBlockList operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See UpdateQuerySuggestionsBlockList for more information on using the UpdateQuerySuggestionsBlockList
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the UpdateQuerySuggestionsBlockListRequest method.
+//    req, resp := client.UpdateQuerySuggestionsBlockListRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/kendra-2019-02-03/UpdateQuerySuggestionsBlockList
+func (c *Kendra) UpdateQuerySuggestionsBlockListRequest(input *UpdateQuerySuggestionsBlockListInput) (req *request.Request, output *UpdateQuerySuggestionsBlockListOutput) {
+	op := &request.Operation{
+		Name:       opUpdateQuerySuggestionsBlockList,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &UpdateQuerySuggestionsBlockListInput{}
+	}
+
+	output = &UpdateQuerySuggestionsBlockListOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
+	return
+}
+
+// UpdateQuerySuggestionsBlockList API operation for AWSKendraFrontendService.
+//
+// Updates a block list used for query suggestions for an index.
+//
+// Updates to a block list might not take effect right away. Amazon Kendra needs
+// to refresh the entire suggestions list to apply any updates to the block
+// list. Other changes not related to the block list apply immediately.
+//
+// If a block list is updating, then you need to wait for the first update to
+// finish before submitting another update.
+//
+// Amazon Kendra supports partial updates, so you only need to provide the fields
+// you want to update.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWSKendraFrontendService's
+// API operation UpdateQuerySuggestionsBlockList for usage and error information.
+//
+// Returned Error Types:
+//   * ValidationException
+//
+//   * ResourceNotFoundException
+//
+//   * ThrottlingException
+//
+//   * AccessDeniedException
+//
+//   * ConflictException
+//
+//   * InternalServerException
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/kendra-2019-02-03/UpdateQuerySuggestionsBlockList
+func (c *Kendra) UpdateQuerySuggestionsBlockList(input *UpdateQuerySuggestionsBlockListInput) (*UpdateQuerySuggestionsBlockListOutput, error) {
+	req, out := c.UpdateQuerySuggestionsBlockListRequest(input)
+	return out, req.Send()
+}
+
+// UpdateQuerySuggestionsBlockListWithContext is the same as UpdateQuerySuggestionsBlockList with the addition of
+// the ability to pass a context and additional request options.
+//
+// See UpdateQuerySuggestionsBlockList for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Kendra) UpdateQuerySuggestionsBlockListWithContext(ctx aws.Context, input *UpdateQuerySuggestionsBlockListInput, opts ...request.Option) (*UpdateQuerySuggestionsBlockListOutput, error) {
+	req, out := c.UpdateQuerySuggestionsBlockListRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opUpdateQuerySuggestionsConfig = "UpdateQuerySuggestionsConfig"
+
+// UpdateQuerySuggestionsConfigRequest generates a "aws/request.Request" representing the
+// client's request for the UpdateQuerySuggestionsConfig operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See UpdateQuerySuggestionsConfig for more information on using the UpdateQuerySuggestionsConfig
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the UpdateQuerySuggestionsConfigRequest method.
+//    req, resp := client.UpdateQuerySuggestionsConfigRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/kendra-2019-02-03/UpdateQuerySuggestionsConfig
+func (c *Kendra) UpdateQuerySuggestionsConfigRequest(input *UpdateQuerySuggestionsConfigInput) (req *request.Request, output *UpdateQuerySuggestionsConfigOutput) {
+	op := &request.Operation{
+		Name:       opUpdateQuerySuggestionsConfig,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &UpdateQuerySuggestionsConfigInput{}
+	}
+
+	output = &UpdateQuerySuggestionsConfigOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
+	return
+}
+
+// UpdateQuerySuggestionsConfig API operation for AWSKendraFrontendService.
+//
+// Updates the settings of query suggestions for an index.
+//
+// Amazon Kendra supports partial updates, so you only need to provide the fields
+// you want to update.
+//
+// If an update is currently processing (i.e. 'happening'), you need to wait
+// for the update to finish before making another update.
+//
+// Updates to query suggestions settings might not take effect right away. The
+// time for your updated settings to take effect depends on the updates made
+// and the number of search queries in your index.
+//
+// You can still enable/disable query suggestions at any time.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWSKendraFrontendService's
+// API operation UpdateQuerySuggestionsConfig for usage and error information.
+//
+// Returned Error Types:
+//   * ValidationException
+//
+//   * ConflictException
+//
+//   * ResourceNotFoundException
+//
+//   * ThrottlingException
+//
+//   * AccessDeniedException
+//
+//   * InternalServerException
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/kendra-2019-02-03/UpdateQuerySuggestionsConfig
+func (c *Kendra) UpdateQuerySuggestionsConfig(input *UpdateQuerySuggestionsConfigInput) (*UpdateQuerySuggestionsConfigOutput, error) {
+	req, out := c.UpdateQuerySuggestionsConfigRequest(input)
+	return out, req.Send()
+}
+
+// UpdateQuerySuggestionsConfigWithContext is the same as UpdateQuerySuggestionsConfig with the addition of
+// the ability to pass a context and additional request options.
+//
+// See UpdateQuerySuggestionsConfig for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Kendra) UpdateQuerySuggestionsConfigWithContext(ctx aws.Context, input *UpdateQuerySuggestionsConfigInput, opts ...request.Option) (*UpdateQuerySuggestionsConfigOutput, error) {
+	req, out := c.UpdateQuerySuggestionsConfigRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opUpdateThesaurus = "UpdateThesaurus"
+
+// UpdateThesaurusRequest generates a "aws/request.Request" representing the
+// client's request for the UpdateThesaurus operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See UpdateThesaurus for more information on using the UpdateThesaurus
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the UpdateThesaurusRequest method.
+//    req, resp := client.UpdateThesaurusRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/kendra-2019-02-03/UpdateThesaurus
+func (c *Kendra) UpdateThesaurusRequest(input *UpdateThesaurusInput) (req *request.Request, output *UpdateThesaurusOutput) {
+	op := &request.Operation{
+		Name:       opUpdateThesaurus,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &UpdateThesaurusInput{}
+	}
+
+	output = &UpdateThesaurusOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
+	return
+}
+
+// UpdateThesaurus API operation for AWSKendraFrontendService.
+//
+// Updates a thesaurus file associated with an index.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWSKendraFrontendService's
+// API operation UpdateThesaurus for usage and error information.
+//
+// Returned Error Types:
+//   * ValidationException
+//
+//   * ResourceNotFoundException
+//
+//   * ThrottlingException
+//
+//   * AccessDeniedException
+//
+//   * ConflictException
+//
+//   * InternalServerException
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/kendra-2019-02-03/UpdateThesaurus
+func (c *Kendra) UpdateThesaurus(input *UpdateThesaurusInput) (*UpdateThesaurusOutput, error) {
+	req, out := c.UpdateThesaurusRequest(input)
+	return out, req.Send()
+}
+
+// UpdateThesaurusWithContext is the same as UpdateThesaurus with the addition of
+// the ability to pass a context and additional request options.
+//
+// See UpdateThesaurus for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Kendra) UpdateThesaurusWithContext(ctx aws.Context, input *UpdateThesaurusInput, opts ...request.Option) (*UpdateThesaurusOutput, error) {
+	req, out := c.UpdateThesaurusRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+// Access Control List files for the documents in a data source. For the format
+// of the file, see Access control for S3 data sources (https://docs.aws.amazon.com/kendra/latest/dg/s3-acl.html).
 type AccessControlListConfiguration struct {
 	_ struct{} `type:"structure"`
 
-	// Path to the AWS S3 bucket that contains the ACL files.
+	// Path to the Amazon Web Services S3 bucket that contains the ACL files.
 	KeyPath *string `min:"1" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AccessControlListConfiguration) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AccessControlListConfiguration) GoString() string {
 	return s.String()
 }
@@ -2403,12 +4182,20 @@ type AccessDeniedException struct {
 	Message_ *string `locationName:"Message" min:"1" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AccessDeniedException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AccessDeniedException) GoString() string {
 	return s.String()
 }
@@ -2464,12 +4251,20 @@ type AclConfiguration struct {
 	AllowedGroupsColumnName *string `min:"1" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AclConfiguration) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AclConfiguration) GoString() string {
 	return s.String()
 }
@@ -2516,12 +4311,20 @@ type AdditionalResultAttribute struct {
 	ValueType *string `type:"string" required:"true" enum:"AdditionalResultAttributeValueType"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AdditionalResultAttribute) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AdditionalResultAttribute) GoString() string {
 	return s.String()
 }
@@ -2553,12 +4356,20 @@ type AdditionalResultAttributeValue struct {
 	TextWithHighlightsValue *TextWithHighlights `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AdditionalResultAttributeValue) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AdditionalResultAttributeValue) GoString() string {
 	return s.String()
 }
@@ -2582,6 +4393,10 @@ func (s *AdditionalResultAttributeValue) SetTextWithHighlightsValue(v *TextWithH
 //
 // If you use more than 2 layers, you receive a ValidationException exception
 // with the message "AttributeFilter cannot have a depth of more than 2."
+//
+// If you use more than 10 attribute filters in a given list for AndAllFilters
+// or OrAllFilters, you receive a ValidationException with the message "AttributeFilter
+// cannot have a length of more than 10".
 type AttributeFilter struct {
 	_ struct{} `type:"structure"`
 
@@ -2600,19 +4415,19 @@ type AttributeFilter struct {
 	EqualsTo *DocumentAttribute `type:"structure"`
 
 	// Performs a greater than operation on two document attributes. Use with a
-	// document attribute of type Integer or Long.
+	// document attribute of type Date or Long.
 	GreaterThan *DocumentAttribute `type:"structure"`
 
 	// Performs a greater or equals than operation on two document attributes. Use
-	// with a document attribute of type Integer or Long.
+	// with a document attribute of type Date or Long.
 	GreaterThanOrEquals *DocumentAttribute `type:"structure"`
 
 	// Performs a less than operation on two document attributes. Use with a document
-	// attribute of type Integer or Long.
+	// attribute of type Date or Long.
 	LessThan *DocumentAttribute `type:"structure"`
 
 	// Performs a less than or equals operation on two document attributes. Use
-	// with a document attribute of type Integer or Long.
+	// with a document attribute of type Date or Long.
 	LessThanOrEquals *DocumentAttribute `type:"structure"`
 
 	// Performs a logical NOT operation on all supplied filters.
@@ -2622,12 +4437,20 @@ type AttributeFilter struct {
 	OrAllFilters []*AttributeFilter `type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AttributeFilter) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AttributeFilter) GoString() string {
 	return s.String()
 }
@@ -2752,6 +4575,157 @@ func (s *AttributeFilter) SetOrAllFilters(v []*AttributeFilter) *AttributeFilter
 	return s
 }
 
+// Provides the configuration information to connect to websites that require
+// user authentication.
+type AuthenticationConfiguration struct {
+	_ struct{} `type:"structure"`
+
+	// The list of configuration information that's required to connect to and crawl
+	// a website host using basic authentication credentials.
+	//
+	// The list includes the name and port number of the website host.
+	BasicAuthentication []*BasicAuthenticationConfiguration `type:"list"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s AuthenticationConfiguration) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s AuthenticationConfiguration) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *AuthenticationConfiguration) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "AuthenticationConfiguration"}
+	if s.BasicAuthentication != nil {
+		for i, v := range s.BasicAuthentication {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "BasicAuthentication", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetBasicAuthentication sets the BasicAuthentication field's value.
+func (s *AuthenticationConfiguration) SetBasicAuthentication(v []*BasicAuthenticationConfiguration) *AuthenticationConfiguration {
+	s.BasicAuthentication = v
+	return s
+}
+
+// Provides the configuration information to connect to websites that require
+// basic user authentication.
+type BasicAuthenticationConfiguration struct {
+	_ struct{} `type:"structure"`
+
+	// Your secret ARN, which you can create in AWS Secrets Manager (https://docs.aws.amazon.com/secretsmanager/latest/userguide/intro.html)
+	//
+	// You use a secret if basic authentication credentials are required to connect
+	// to a website. The secret stores your credentials of user name and password.
+	//
+	// Credentials is a required field
+	Credentials *string `min:"1" type:"string" required:"true"`
+
+	// The name of the website host you want to connect to using authentication
+	// credentials.
+	//
+	// For example, the host name of https://a.example.com/page1.html is "a.example.com".
+	//
+	// Host is a required field
+	Host *string `min:"1" type:"string" required:"true"`
+
+	// The port number of the website host you want to connect to using authentication
+	// credentials.
+	//
+	// For example, the port for https://a.example.com/page1.html is 443, the standard
+	// port for HTTPS.
+	//
+	// Port is a required field
+	Port *int64 `min:"1" type:"integer" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s BasicAuthenticationConfiguration) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s BasicAuthenticationConfiguration) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *BasicAuthenticationConfiguration) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "BasicAuthenticationConfiguration"}
+	if s.Credentials == nil {
+		invalidParams.Add(request.NewErrParamRequired("Credentials"))
+	}
+	if s.Credentials != nil && len(*s.Credentials) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Credentials", 1))
+	}
+	if s.Host == nil {
+		invalidParams.Add(request.NewErrParamRequired("Host"))
+	}
+	if s.Host != nil && len(*s.Host) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Host", 1))
+	}
+	if s.Port == nil {
+		invalidParams.Add(request.NewErrParamRequired("Port"))
+	}
+	if s.Port != nil && *s.Port < 1 {
+		invalidParams.Add(request.NewErrParamMinValue("Port", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetCredentials sets the Credentials field's value.
+func (s *BasicAuthenticationConfiguration) SetCredentials(v string) *BasicAuthenticationConfiguration {
+	s.Credentials = &v
+	return s
+}
+
+// SetHost sets the Host field's value.
+func (s *BasicAuthenticationConfiguration) SetHost(v string) *BasicAuthenticationConfiguration {
+	s.Host = &v
+	return s
+}
+
+// SetPort sets the Port field's value.
+func (s *BasicAuthenticationConfiguration) SetPort(v int64) *BasicAuthenticationConfiguration {
+	s.Port = &v
+	return s
+}
+
 type BatchDeleteDocumentInput struct {
 	_ struct{} `type:"structure"`
 
@@ -2769,12 +4743,20 @@ type BatchDeleteDocumentInput struct {
 	IndexId *string `min:"36" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s BatchDeleteDocumentInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s BatchDeleteDocumentInput) GoString() string {
 	return s.String()
 }
@@ -2833,12 +4815,20 @@ type BatchDeleteDocumentOutput struct {
 	FailedDocuments []*BatchDeleteDocumentResponseFailedDocument `type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s BatchDeleteDocumentOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s BatchDeleteDocumentOutput) GoString() string {
 	return s.String()
 }
@@ -2864,12 +4854,20 @@ type BatchDeleteDocumentResponseFailedDocument struct {
 	Id *string `min:"1" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s BatchDeleteDocumentResponseFailedDocument) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s BatchDeleteDocumentResponseFailedDocument) GoString() string {
 	return s.String()
 }
@@ -2892,10 +4890,192 @@ func (s *BatchDeleteDocumentResponseFailedDocument) SetId(v string) *BatchDelete
 	return s
 }
 
+type BatchGetDocumentStatusInput struct {
+	_ struct{} `type:"structure"`
+
+	// A list of DocumentInfo objects that identify the documents for which to get
+	// the status. You identify the documents by their document ID and optional
+	// attributes.
+	//
+	// DocumentInfoList is a required field
+	DocumentInfoList []*DocumentInfo `min:"1" type:"list" required:"true"`
+
+	// The identifier of the index to add documents to. The index ID is returned
+	// by the CreateIndex (https://docs.aws.amazon.com/kendra/latest/dg/API_CreateIndex.html)
+	// operation.
+	//
+	// IndexId is a required field
+	IndexId *string `min:"36" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s BatchGetDocumentStatusInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s BatchGetDocumentStatusInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *BatchGetDocumentStatusInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "BatchGetDocumentStatusInput"}
+	if s.DocumentInfoList == nil {
+		invalidParams.Add(request.NewErrParamRequired("DocumentInfoList"))
+	}
+	if s.DocumentInfoList != nil && len(s.DocumentInfoList) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("DocumentInfoList", 1))
+	}
+	if s.IndexId == nil {
+		invalidParams.Add(request.NewErrParamRequired("IndexId"))
+	}
+	if s.IndexId != nil && len(*s.IndexId) < 36 {
+		invalidParams.Add(request.NewErrParamMinLen("IndexId", 36))
+	}
+	if s.DocumentInfoList != nil {
+		for i, v := range s.DocumentInfoList {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "DocumentInfoList", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetDocumentInfoList sets the DocumentInfoList field's value.
+func (s *BatchGetDocumentStatusInput) SetDocumentInfoList(v []*DocumentInfo) *BatchGetDocumentStatusInput {
+	s.DocumentInfoList = v
+	return s
+}
+
+// SetIndexId sets the IndexId field's value.
+func (s *BatchGetDocumentStatusInput) SetIndexId(v string) *BatchGetDocumentStatusInput {
+	s.IndexId = &v
+	return s
+}
+
+type BatchGetDocumentStatusOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The status of documents. The status indicates if the document is waiting
+	// to be indexed, is in the process of indexing, has completed indexing, or
+	// failed indexing. If a document failed indexing, the status provides the reason
+	// why.
+	DocumentStatusList []*Status `type:"list"`
+
+	// A list of documents that Amazon Kendra couldn't get the status for. The list
+	// includes the ID of the document and the reason that the status couldn't be
+	// found.
+	Errors []*BatchGetDocumentStatusResponseError `type:"list"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s BatchGetDocumentStatusOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s BatchGetDocumentStatusOutput) GoString() string {
+	return s.String()
+}
+
+// SetDocumentStatusList sets the DocumentStatusList field's value.
+func (s *BatchGetDocumentStatusOutput) SetDocumentStatusList(v []*Status) *BatchGetDocumentStatusOutput {
+	s.DocumentStatusList = v
+	return s
+}
+
+// SetErrors sets the Errors field's value.
+func (s *BatchGetDocumentStatusOutput) SetErrors(v []*BatchGetDocumentStatusResponseError) *BatchGetDocumentStatusOutput {
+	s.Errors = v
+	return s
+}
+
+// Provides a response when the status of a document could not be retrieved.
+type BatchGetDocumentStatusResponseError struct {
+	_ struct{} `type:"structure"`
+
+	// The unique identifier of the document whose status could not be retrieved.
+	DocumentId *string `min:"1" type:"string"`
+
+	// Indicates the source of the error.
+	ErrorCode *string `type:"string" enum:"ErrorCode"`
+
+	// States that the API could not get the status of a document. This could be
+	// because the request is not valid or there is a system error.
+	ErrorMessage *string `min:"1" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s BatchGetDocumentStatusResponseError) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s BatchGetDocumentStatusResponseError) GoString() string {
+	return s.String()
+}
+
+// SetDocumentId sets the DocumentId field's value.
+func (s *BatchGetDocumentStatusResponseError) SetDocumentId(v string) *BatchGetDocumentStatusResponseError {
+	s.DocumentId = &v
+	return s
+}
+
+// SetErrorCode sets the ErrorCode field's value.
+func (s *BatchGetDocumentStatusResponseError) SetErrorCode(v string) *BatchGetDocumentStatusResponseError {
+	s.ErrorCode = &v
+	return s
+}
+
+// SetErrorMessage sets the ErrorMessage field's value.
+func (s *BatchGetDocumentStatusResponseError) SetErrorMessage(v string) *BatchGetDocumentStatusResponseError {
+	s.ErrorMessage = &v
+	return s
+}
+
 type BatchPutDocumentInput struct {
 	_ struct{} `type:"structure"`
 
 	// One or more documents to add to the index.
+	//
+	// Documents can include custom attributes. For example, 'DataSourceId' and
+	// 'DataSourceSyncJobId' are custom attributes that provide information on the
+	// synchronization of documents running on a data source. Note, 'DataSourceSyncJobId'
+	// could be an optional custom attribute as Amazon Kendra will use the ID of
+	// a running sync job.
 	//
 	// Documents have the following file size limits.
 	//
@@ -2922,12 +5102,20 @@ type BatchPutDocumentInput struct {
 	RoleArn *string `min:"1" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s BatchPutDocumentInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s BatchPutDocumentInput) GoString() string {
 	return s.String()
 }
@@ -2993,17 +5181,25 @@ type BatchPutDocumentOutput struct {
 	// why the document couldn't be added to the index.
 	//
 	// If there was an error adding a document to an index the error is reported
-	// in your AWS CloudWatch log. For more information, see Monitoring Amazon Kendra
-	// with Amazon CloudWatch Logs (https://docs.aws.amazon.com/kendra/latest/dg/cloudwatch-logs.html)
+	// in your Amazon Web Services CloudWatch log. For more information, see Monitoring
+	// Amazon Kendra with Amazon CloudWatch Logs (https://docs.aws.amazon.com/kendra/latest/dg/cloudwatch-logs.html)
 	FailedDocuments []*BatchPutDocumentResponseFailedDocument `type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s BatchPutDocumentOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s BatchPutDocumentOutput) GoString() string {
 	return s.String()
 }
@@ -3028,12 +5224,20 @@ type BatchPutDocumentResponseFailedDocument struct {
 	Id *string `min:"1" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s BatchPutDocumentResponseFailedDocument) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s BatchPutDocumentResponseFailedDocument) GoString() string {
 	return s.String()
 }
@@ -3056,30 +5260,50 @@ func (s *BatchPutDocumentResponseFailedDocument) SetId(v string) *BatchPutDocume
 	return s
 }
 
-// Specifies capacity units configured for your index. You can add and remove
-// capacity units to tune an index to your requirements.
+// Specifies capacity units configured for your enterprise edition index. You
+// can add and remove capacity units to tune an index to your requirements.
 type CapacityUnitsConfiguration struct {
 	_ struct{} `type:"structure"`
 
-	// The amount of extra query capacity for an index. Each capacity unit provides
-	// 0.5 queries per second and 40,000 queries per day.
+	// The amount of extra query capacity for an index and GetQuerySuggestions (https://docs.aws.amazon.com/kendra/latest/dg/API_GetQuerySuggestions.html)
+	// capacity.
+	//
+	// A single extra capacity unit for an index provides 0.1 queries per second
+	// or approximately 8,000 queries per day.
+	//
+	// GetQuerySuggestions capacity is five times the provisioned query capacity
+	// for an index, or the base capacity of 2.5 calls per second, whichever is
+	// higher. For example, the base capacity for an index is 0.1 queries per second,
+	// and GetQuerySuggestions capacity has a base of 2.5 calls per second. If you
+	// add another 0.1 queries per second to total 0.2 queries per second for an
+	// index, the GetQuerySuggestions capacity is 2.5 calls per second (higher than
+	// five times 0.2 queries per second).
 	//
 	// QueryCapacityUnits is a required field
 	QueryCapacityUnits *int64 `type:"integer" required:"true"`
 
-	// The amount of extra storage capacity for an index. Each capacity unit provides
-	// 150 Gb of storage space or 500,000 documents, whichever is reached first.
+	// The amount of extra storage capacity for an index. A single capacity unit
+	// provides 30 GB of storage space or 100,000 documents, whichever is reached
+	// first.
 	//
 	// StorageCapacityUnits is a required field
 	StorageCapacityUnits *int64 `type:"integer" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CapacityUnitsConfiguration) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CapacityUnitsConfiguration) GoString() string {
 	return s.String()
 }
@@ -3112,6 +5336,77 @@ func (s *CapacityUnitsConfiguration) SetStorageCapacityUnits(v int64) *CapacityU
 	return s
 }
 
+type ClearQuerySuggestionsInput struct {
+	_ struct{} `type:"structure"`
+
+	// The identifier of the index you want to clear query suggestions from.
+	//
+	// IndexId is a required field
+	IndexId *string `min:"36" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ClearQuerySuggestionsInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ClearQuerySuggestionsInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ClearQuerySuggestionsInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ClearQuerySuggestionsInput"}
+	if s.IndexId == nil {
+		invalidParams.Add(request.NewErrParamRequired("IndexId"))
+	}
+	if s.IndexId != nil && len(*s.IndexId) < 36 {
+		invalidParams.Add(request.NewErrParamMinLen("IndexId", 36))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetIndexId sets the IndexId field's value.
+func (s *ClearQuerySuggestionsInput) SetIndexId(v string) *ClearQuerySuggestionsInput {
+	s.IndexId = &v
+	return s
+}
+
+type ClearQuerySuggestionsOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ClearQuerySuggestionsOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ClearQuerySuggestionsOutput) GoString() string {
+	return s.String()
+}
+
 // Gathers information about when a particular result was clicked by a user.
 // Your application uses the SubmitFeedback operation to provide click information.
 type ClickFeedback struct {
@@ -3128,12 +5423,20 @@ type ClickFeedback struct {
 	ResultId *string `min:"1" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ClickFeedback) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ClickFeedback) GoString() string {
 	return s.String()
 }
@@ -3198,12 +5501,20 @@ type ColumnConfiguration struct {
 	FieldMappings []*DataSourceToIndexFieldMapping `min:"1" type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ColumnConfiguration) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ColumnConfiguration) GoString() string {
 	return s.String()
 }
@@ -3289,12 +5600,20 @@ type ConflictException struct {
 	Message_ *string `locationName:"Message" min:"1" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ConflictException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ConflictException) GoString() string {
 	return s.String()
 }
@@ -3356,12 +5675,20 @@ type ConfluenceAttachmentConfiguration struct {
 	CrawlAttachments *bool `type:"boolean"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ConfluenceAttachmentConfiguration) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ConfluenceAttachmentConfiguration) GoString() string {
 	return s.String()
 }
@@ -3404,13 +5731,13 @@ func (s *ConfluenceAttachmentConfiguration) SetCrawlAttachments(v bool) *Conflue
 // Defines the mapping between a field in the Confluence data source to a Amazon
 // Kendra index field.
 //
-// You must first create the index field using the operation.
+// You must first create the index field using the UpdateIndex operation.
 type ConfluenceAttachmentToIndexFieldMapping struct {
 	_ struct{} `type:"structure"`
 
 	// The name of the field in the data source.
 	//
-	// You must first create the index field using the operation.
+	// You must first create the index field using the UpdateIndex operation.
 	DataSourceFieldName *string `type:"string" enum:"ConfluenceAttachmentFieldName"`
 
 	// The format for date fields in the data source. If the field specified in
@@ -3423,12 +5750,20 @@ type ConfluenceAttachmentToIndexFieldMapping struct {
 	IndexFieldName *string `min:"1" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ConfluenceAttachmentToIndexFieldMapping) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ConfluenceAttachmentToIndexFieldMapping) GoString() string {
 	return s.String()
 }
@@ -3469,7 +5804,7 @@ func (s *ConfluenceAttachmentToIndexFieldMapping) SetIndexFieldName(v string) *C
 
 // Specifies the blog settings for the Confluence data source. Blogs are always
 // indexed unless filtered from the index by the ExclusionPatterns or InclusionPatterns
-// fields in the data type.
+// fields in the ConfluenceConfiguration type.
 type ConfluenceBlogConfiguration struct {
 	_ struct{} `type:"structure"`
 
@@ -3482,12 +5817,20 @@ type ConfluenceBlogConfiguration struct {
 	BlogFieldMappings []*ConfluenceBlogToIndexFieldMapping `min:"1" type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ConfluenceBlogConfiguration) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ConfluenceBlogConfiguration) GoString() string {
 	return s.String()
 }
@@ -3524,7 +5867,7 @@ func (s *ConfluenceBlogConfiguration) SetBlogFieldMappings(v []*ConfluenceBlogTo
 // Defines the mapping between a blog field in the Confluence data source to
 // a Amazon Kendra index field.
 //
-// You must first create the index field using the operation.
+// You must first create the index field using the UpdateIndex operation.
 type ConfluenceBlogToIndexFieldMapping struct {
 	_ struct{} `type:"structure"`
 
@@ -3541,12 +5884,20 @@ type ConfluenceBlogToIndexFieldMapping struct {
 	IndexFieldName *string `min:"1" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ConfluenceBlogToIndexFieldMapping) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ConfluenceBlogToIndexFieldMapping) GoString() string {
 	return s.String()
 }
@@ -3615,7 +5966,7 @@ type ConfluenceConfiguration struct {
 	// Specifies configuration information for indexing Confluence pages.
 	PageConfiguration *ConfluencePageConfiguration `type:"structure"`
 
-	// The Amazon Resource Name (ARN) of an AWS Secrets Manager secret that contains
+	// The Amazon Resource Name (ARN) of an Secrets Managersecret that contains
 	// the key/value pairs required to connect to your Confluence server. The secret
 	// must contain a JSON structure with the following keys:
 	//
@@ -3648,12 +5999,20 @@ type ConfluenceConfiguration struct {
 	VpcConfiguration *DataSourceVpcConfiguration `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ConfluenceConfiguration) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ConfluenceConfiguration) GoString() string {
 	return s.String()
 }
@@ -3781,12 +6140,20 @@ type ConfluencePageConfiguration struct {
 	PageFieldMappings []*ConfluencePageToIndexFieldMapping `min:"1" type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ConfluencePageConfiguration) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ConfluencePageConfiguration) GoString() string {
 	return s.String()
 }
@@ -3823,7 +6190,7 @@ func (s *ConfluencePageConfiguration) SetPageFieldMappings(v []*ConfluencePageTo
 // Defines the mapping between a field in the Confluence data source to a Amazon
 // Kendra index field.
 //
-// You must first create the index field using the operation.
+// You must first create the index field using the UpdateIndex operation.
 type ConfluencePageToIndexFieldMapping struct {
 	_ struct{} `type:"structure"`
 
@@ -3840,12 +6207,20 @@ type ConfluencePageToIndexFieldMapping struct {
 	IndexFieldName *string `min:"1" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ConfluencePageToIndexFieldMapping) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ConfluencePageToIndexFieldMapping) GoString() string {
 	return s.String()
 }
@@ -3919,12 +6294,20 @@ type ConfluenceSpaceConfiguration struct {
 	SpaceFieldMappings []*ConfluenceSpaceToIndexFieldMapping `min:"1" type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ConfluenceSpaceConfiguration) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ConfluenceSpaceConfiguration) GoString() string {
 	return s.String()
 }
@@ -3991,7 +6374,7 @@ func (s *ConfluenceSpaceConfiguration) SetSpaceFieldMappings(v []*ConfluenceSpac
 // Defines the mapping between a field in the Confluence data source to a Amazon
 // Kendra index field.
 //
-// You must first create the index field using the operation.
+// You must first create the index field using the UpdateIndex operation.
 type ConfluenceSpaceToIndexFieldMapping struct {
 	_ struct{} `type:"structure"`
 
@@ -4008,12 +6391,20 @@ type ConfluenceSpaceToIndexFieldMapping struct {
 	IndexFieldName *string `min:"1" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ConfluenceSpaceToIndexFieldMapping) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ConfluenceSpaceToIndexFieldMapping) GoString() string {
 	return s.String()
 }
@@ -4072,12 +6463,11 @@ type ConnectionConfiguration struct {
 	// DatabasePort is a required field
 	DatabasePort *int64 `min:"1" type:"integer" required:"true"`
 
-	// The Amazon Resource Name (ARN) of credentials stored in AWS Secrets Manager.
+	// The Amazon Resource Name (ARN) of credentials stored in Secrets Manager.
 	// The credentials should be a user/password pair. For more information, see
 	// Using a Database Data Source (https://docs.aws.amazon.com/kendra/latest/dg/data-source-database.html).
-	// For more information about AWS Secrets Manager, see What Is AWS Secrets Manager
-	// (https://docs.aws.amazon.com/secretsmanager/latest/userguide/intro.html)
-	// in the AWS Secrets Manager user guide.
+	// For more information about Secrets Manager, see What Is Secrets Manager (https://docs.aws.amazon.com/secretsmanager/latest/userguide/intro.html)
+	// in the Secrets Manager user guide.
 	//
 	// SecretArn is a required field
 	SecretArn *string `min:"1" type:"string" required:"true"`
@@ -4088,12 +6478,20 @@ type ConnectionConfiguration struct {
 	TableName *string `min:"1" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ConnectionConfiguration) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ConnectionConfiguration) GoString() string {
 	return s.String()
 }
@@ -4192,6 +6590,12 @@ type CreateDataSourceInput struct {
 	// IndexId is a required field
 	IndexId *string `min:"36" type:"string" required:"true"`
 
+	// The code for a language. This allows you to support a language for all documents
+	// when creating the data source. English is supported by default. For more
+	// information on supported languages, including their codes, see Adding documents
+	// in languages other than English (https://docs.aws.amazon.com/kendra/latest/dg/in-adding-languages.html).
+	LanguageCode *string `min:"2" type:"string"`
+
 	// A unique name for the data source. A data source name can't be changed without
 	// deleting and recreating the data source.
 	//
@@ -4226,12 +6630,20 @@ type CreateDataSourceInput struct {
 	Type *string `type:"string" required:"true" enum:"DataSourceType"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateDataSourceInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateDataSourceInput) GoString() string {
 	return s.String()
 }
@@ -4247,6 +6659,9 @@ func (s *CreateDataSourceInput) Validate() error {
 	}
 	if s.IndexId != nil && len(*s.IndexId) < 36 {
 		invalidParams.Add(request.NewErrParamMinLen("IndexId", 36))
+	}
+	if s.LanguageCode != nil && len(*s.LanguageCode) < 2 {
+		invalidParams.Add(request.NewErrParamMinLen("LanguageCode", 2))
 	}
 	if s.Name == nil {
 		invalidParams.Add(request.NewErrParamRequired("Name"))
@@ -4306,6 +6721,12 @@ func (s *CreateDataSourceInput) SetIndexId(v string) *CreateDataSourceInput {
 	return s
 }
 
+// SetLanguageCode sets the LanguageCode field's value.
+func (s *CreateDataSourceInput) SetLanguageCode(v string) *CreateDataSourceInput {
+	s.LanguageCode = &v
+	return s
+}
+
 // SetName sets the Name field's value.
 func (s *CreateDataSourceInput) SetName(v string) *CreateDataSourceInput {
 	s.Name = &v
@@ -4345,12 +6766,20 @@ type CreateDataSourceOutput struct {
 	Id *string `min:"1" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateDataSourceOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateDataSourceOutput) GoString() string {
 	return s.String()
 }
@@ -4387,6 +6816,12 @@ type CreateFaqInput struct {
 	// IndexId is a required field
 	IndexId *string `min:"36" type:"string" required:"true"`
 
+	// The code for a language. This allows you to support a language for the FAQ
+	// document. English is supported by default. For more information on supported
+	// languages, including their codes, see Adding documents in languages other
+	// than English (https://docs.aws.amazon.com/kendra/latest/dg/in-adding-languages.html).
+	LanguageCode *string `min:"2" type:"string"`
+
 	// The name that should be associated with the FAQ.
 	//
 	// Name is a required field
@@ -4409,12 +6844,20 @@ type CreateFaqInput struct {
 	Tags []*Tag `type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateFaqInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateFaqInput) GoString() string {
 	return s.String()
 }
@@ -4430,6 +6873,9 @@ func (s *CreateFaqInput) Validate() error {
 	}
 	if s.IndexId != nil && len(*s.IndexId) < 36 {
 		invalidParams.Add(request.NewErrParamMinLen("IndexId", 36))
+	}
+	if s.LanguageCode != nil && len(*s.LanguageCode) < 2 {
+		invalidParams.Add(request.NewErrParamMinLen("LanguageCode", 2))
 	}
 	if s.Name == nil {
 		invalidParams.Add(request.NewErrParamRequired("Name"))
@@ -4492,6 +6938,12 @@ func (s *CreateFaqInput) SetIndexId(v string) *CreateFaqInput {
 	return s
 }
 
+// SetLanguageCode sets the LanguageCode field's value.
+func (s *CreateFaqInput) SetLanguageCode(v string) *CreateFaqInput {
+	s.LanguageCode = &v
+	return s
+}
+
 // SetName sets the Name field's value.
 func (s *CreateFaqInput) SetName(v string) *CreateFaqInput {
 	s.Name = &v
@@ -4523,12 +6975,20 @@ type CreateFaqOutput struct {
 	Id *string `min:"1" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateFaqOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateFaqOutput) GoString() string {
 	return s.String()
 }
@@ -4557,6 +7017,9 @@ type CreateIndexInput struct {
 	//
 	// The Edition parameter is optional. If you don't supply a value, the default
 	// is ENTERPRISE_EDITION.
+	//
+	// For more information on quota limits for enterprise and developer editions,
+	// see Quotas (https://docs.aws.amazon.com/kendra/latest/dg/quotas.html).
 	Edition *string `type:"string" enum:"IndexEdition"`
 
 	// The name for the new index.
@@ -4564,16 +7027,16 @@ type CreateIndexInput struct {
 	// Name is a required field
 	Name *string `min:"1" type:"string" required:"true"`
 
-	// An AWS Identity and Access Management (IAM) role that gives Amazon Kendra
-	// permissions to access your Amazon CloudWatch logs and metrics. This is also
-	// the role used when you use the BatchPutDocument operation to index documents
-	// from an Amazon S3 bucket.
+	// An Identity and Access Management(IAM) role that gives Amazon Kendra permissions
+	// to access your Amazon CloudWatch logs and metrics. This is also the role
+	// used when you use the BatchPutDocument operation to index documents from
+	// an Amazon S3 bucket.
 	//
 	// RoleArn is a required field
 	RoleArn *string `min:"1" type:"string" required:"true"`
 
-	// The identifier of the AWS KMS customer managed key (CMK) to use to encrypt
-	// data indexed by Amazon Kendra. Amazon Kendra doesn't support asymmetric CMKs.
+	// The identifier of the KMScustomer managed key (CMK) to use to encrypt data
+	// indexed by Amazon Kendra. Amazon Kendra doesn't support asymmetric CMKs.
 	ServerSideEncryptionConfiguration *ServerSideEncryptionConfiguration `type:"structure"`
 
 	// A list of key-value pairs that identify the index. You can use the tags to
@@ -4584,26 +7047,41 @@ type CreateIndexInput struct {
 	//
 	// ATTRIBUTE_FILTER
 	//
-	// All indexed content is searchable and displayable for all users. If there
-	// is an access control list, it is ignored. You can filter on user and group
-	// attributes.
+	// All indexed content is searchable and displayable for all users. If you want
+	// to filter search results on user context, you can use the attribute filters
+	// of _user_id and _group_ids or you can provide user and group information
+	// in UserContext.
 	//
 	// USER_TOKEN
 	//
-	// Enables SSO and token-based user access control. All documents with no access
-	// control and all documents accessible to the user will be searchable and displayable.
+	// Enables token-based user access control to filter search results on user
+	// context. All documents with no access control and all documents accessible
+	// to the user will be searchable and displayable.
 	UserContextPolicy *string `type:"string" enum:"UserContextPolicy"`
+
+	// Enables fetching access levels of groups and users from an AWS Single Sign-On
+	// identity source. To configure this, see UserGroupResolutionConfiguration
+	// (https://docs.aws.amazon.com/kendra/latest/dg/API_UserGroupResolutionConfiguration.html).
+	UserGroupResolutionConfiguration *UserGroupResolutionConfiguration `type:"structure"`
 
 	// The user token configuration.
 	UserTokenConfigurations []*UserTokenConfiguration `type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateIndexInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateIndexInput) GoString() string {
 	return s.String()
 }
@@ -4639,6 +7117,11 @@ func (s *CreateIndexInput) Validate() error {
 			if err := v.Validate(); err != nil {
 				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "Tags", i), err.(request.ErrInvalidParams))
 			}
+		}
+	}
+	if s.UserGroupResolutionConfiguration != nil {
+		if err := s.UserGroupResolutionConfiguration.Validate(); err != nil {
+			invalidParams.AddNested("UserGroupResolutionConfiguration", err.(request.ErrInvalidParams))
 		}
 	}
 	if s.UserTokenConfigurations != nil {
@@ -4706,6 +7189,12 @@ func (s *CreateIndexInput) SetUserContextPolicy(v string) *CreateIndexInput {
 	return s
 }
 
+// SetUserGroupResolutionConfiguration sets the UserGroupResolutionConfiguration field's value.
+func (s *CreateIndexInput) SetUserGroupResolutionConfiguration(v *UserGroupResolutionConfiguration) *CreateIndexInput {
+	s.UserGroupResolutionConfiguration = v
+	return s
+}
+
 // SetUserTokenConfigurations sets the UserTokenConfigurations field's value.
 func (s *CreateIndexInput) SetUserTokenConfigurations(v []*UserTokenConfiguration) *CreateIndexInput {
 	s.UserTokenConfigurations = v
@@ -4720,18 +7209,394 @@ type CreateIndexOutput struct {
 	Id *string `min:"36" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateIndexOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateIndexOutput) GoString() string {
 	return s.String()
 }
 
 // SetId sets the Id field's value.
 func (s *CreateIndexOutput) SetId(v string) *CreateIndexOutput {
+	s.Id = &v
+	return s
+}
+
+type CreateQuerySuggestionsBlockListInput struct {
+	_ struct{} `type:"structure"`
+
+	// A token that you provide to identify the request to create a query suggestions
+	// block list.
+	ClientToken *string `min:"1" type:"string" idempotencyToken:"true"`
+
+	// A user-friendly description for the block list.
+	//
+	// For example, the description "List of all offensive words that can appear
+	// in user queries and need to be blocked from suggestions."
+	Description *string `type:"string"`
+
+	// The identifier of the index you want to create a query suggestions block
+	// list for.
+	//
+	// IndexId is a required field
+	IndexId *string `min:"36" type:"string" required:"true"`
+
+	// A user friendly name for the block list.
+	//
+	// For example, the block list named 'offensive-words' includes all offensive
+	// words that could appear in user queries and need to be blocked from suggestions.
+	//
+	// Name is a required field
+	Name *string `min:"1" type:"string" required:"true"`
+
+	// The IAM (Identity and Access Management) role used by Amazon Kendra to access
+	// the block list text file in your S3 bucket.
+	//
+	// You need permissions to the role ARN (Amazon Resource Name). The role needs
+	// S3 read permissions to your file in S3 and needs to give STS (Security Token
+	// Service) assume role permissions to Amazon Kendra.
+	//
+	// RoleArn is a required field
+	RoleArn *string `min:"1" type:"string" required:"true"`
+
+	// The S3 path to your block list text file in your S3 bucket.
+	//
+	// Each block word or phrase should be on a separate line in a text file.
+	//
+	// For information on the current quota limits for block lists, see Quotas for
+	// Amazon Kendra (https://docs.aws.amazon.com/kendra/latest/dg/quotas.html).
+	//
+	// SourceS3Path is a required field
+	SourceS3Path *S3Path `type:"structure" required:"true"`
+
+	// A tag that you can assign to a block list that categorizes the block list.
+	Tags []*Tag `type:"list"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateQuerySuggestionsBlockListInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateQuerySuggestionsBlockListInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *CreateQuerySuggestionsBlockListInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "CreateQuerySuggestionsBlockListInput"}
+	if s.ClientToken != nil && len(*s.ClientToken) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ClientToken", 1))
+	}
+	if s.IndexId == nil {
+		invalidParams.Add(request.NewErrParamRequired("IndexId"))
+	}
+	if s.IndexId != nil && len(*s.IndexId) < 36 {
+		invalidParams.Add(request.NewErrParamMinLen("IndexId", 36))
+	}
+	if s.Name == nil {
+		invalidParams.Add(request.NewErrParamRequired("Name"))
+	}
+	if s.Name != nil && len(*s.Name) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Name", 1))
+	}
+	if s.RoleArn == nil {
+		invalidParams.Add(request.NewErrParamRequired("RoleArn"))
+	}
+	if s.RoleArn != nil && len(*s.RoleArn) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("RoleArn", 1))
+	}
+	if s.SourceS3Path == nil {
+		invalidParams.Add(request.NewErrParamRequired("SourceS3Path"))
+	}
+	if s.SourceS3Path != nil {
+		if err := s.SourceS3Path.Validate(); err != nil {
+			invalidParams.AddNested("SourceS3Path", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.Tags != nil {
+		for i, v := range s.Tags {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "Tags", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetClientToken sets the ClientToken field's value.
+func (s *CreateQuerySuggestionsBlockListInput) SetClientToken(v string) *CreateQuerySuggestionsBlockListInput {
+	s.ClientToken = &v
+	return s
+}
+
+// SetDescription sets the Description field's value.
+func (s *CreateQuerySuggestionsBlockListInput) SetDescription(v string) *CreateQuerySuggestionsBlockListInput {
+	s.Description = &v
+	return s
+}
+
+// SetIndexId sets the IndexId field's value.
+func (s *CreateQuerySuggestionsBlockListInput) SetIndexId(v string) *CreateQuerySuggestionsBlockListInput {
+	s.IndexId = &v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *CreateQuerySuggestionsBlockListInput) SetName(v string) *CreateQuerySuggestionsBlockListInput {
+	s.Name = &v
+	return s
+}
+
+// SetRoleArn sets the RoleArn field's value.
+func (s *CreateQuerySuggestionsBlockListInput) SetRoleArn(v string) *CreateQuerySuggestionsBlockListInput {
+	s.RoleArn = &v
+	return s
+}
+
+// SetSourceS3Path sets the SourceS3Path field's value.
+func (s *CreateQuerySuggestionsBlockListInput) SetSourceS3Path(v *S3Path) *CreateQuerySuggestionsBlockListInput {
+	s.SourceS3Path = v
+	return s
+}
+
+// SetTags sets the Tags field's value.
+func (s *CreateQuerySuggestionsBlockListInput) SetTags(v []*Tag) *CreateQuerySuggestionsBlockListInput {
+	s.Tags = v
+	return s
+}
+
+type CreateQuerySuggestionsBlockListOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The unique identifier of the created block list.
+	Id *string `min:"36" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateQuerySuggestionsBlockListOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateQuerySuggestionsBlockListOutput) GoString() string {
+	return s.String()
+}
+
+// SetId sets the Id field's value.
+func (s *CreateQuerySuggestionsBlockListOutput) SetId(v string) *CreateQuerySuggestionsBlockListOutput {
+	s.Id = &v
+	return s
+}
+
+type CreateThesaurusInput struct {
+	_ struct{} `type:"structure"`
+
+	// A token that you provide to identify the request to create a thesaurus. Multiple
+	// calls to the CreateThesaurus operation with the same client token will create
+	// only one thesaurus.
+	ClientToken *string `min:"1" type:"string" idempotencyToken:"true"`
+
+	// The description for the new thesaurus.
+	Description *string `type:"string"`
+
+	// The unique identifier of the index for the new thesaurus.
+	//
+	// IndexId is a required field
+	IndexId *string `min:"36" type:"string" required:"true"`
+
+	// The name for the new thesaurus.
+	//
+	// Name is a required field
+	Name *string `min:"1" type:"string" required:"true"`
+
+	// An AWS Identity and Access Management (IAM) role that gives Amazon Kendra
+	// permissions to access thesaurus file specified in SourceS3Path.
+	//
+	// RoleArn is a required field
+	RoleArn *string `min:"1" type:"string" required:"true"`
+
+	// The thesaurus file Amazon S3 source path.
+	//
+	// SourceS3Path is a required field
+	SourceS3Path *S3Path `type:"structure" required:"true"`
+
+	// A list of key-value pairs that identify the thesaurus. You can use the tags
+	// to identify and organize your resources and to control access to resources.
+	Tags []*Tag `type:"list"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateThesaurusInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateThesaurusInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *CreateThesaurusInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "CreateThesaurusInput"}
+	if s.ClientToken != nil && len(*s.ClientToken) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ClientToken", 1))
+	}
+	if s.IndexId == nil {
+		invalidParams.Add(request.NewErrParamRequired("IndexId"))
+	}
+	if s.IndexId != nil && len(*s.IndexId) < 36 {
+		invalidParams.Add(request.NewErrParamMinLen("IndexId", 36))
+	}
+	if s.Name == nil {
+		invalidParams.Add(request.NewErrParamRequired("Name"))
+	}
+	if s.Name != nil && len(*s.Name) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Name", 1))
+	}
+	if s.RoleArn == nil {
+		invalidParams.Add(request.NewErrParamRequired("RoleArn"))
+	}
+	if s.RoleArn != nil && len(*s.RoleArn) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("RoleArn", 1))
+	}
+	if s.SourceS3Path == nil {
+		invalidParams.Add(request.NewErrParamRequired("SourceS3Path"))
+	}
+	if s.SourceS3Path != nil {
+		if err := s.SourceS3Path.Validate(); err != nil {
+			invalidParams.AddNested("SourceS3Path", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.Tags != nil {
+		for i, v := range s.Tags {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "Tags", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetClientToken sets the ClientToken field's value.
+func (s *CreateThesaurusInput) SetClientToken(v string) *CreateThesaurusInput {
+	s.ClientToken = &v
+	return s
+}
+
+// SetDescription sets the Description field's value.
+func (s *CreateThesaurusInput) SetDescription(v string) *CreateThesaurusInput {
+	s.Description = &v
+	return s
+}
+
+// SetIndexId sets the IndexId field's value.
+func (s *CreateThesaurusInput) SetIndexId(v string) *CreateThesaurusInput {
+	s.IndexId = &v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *CreateThesaurusInput) SetName(v string) *CreateThesaurusInput {
+	s.Name = &v
+	return s
+}
+
+// SetRoleArn sets the RoleArn field's value.
+func (s *CreateThesaurusInput) SetRoleArn(v string) *CreateThesaurusInput {
+	s.RoleArn = &v
+	return s
+}
+
+// SetSourceS3Path sets the SourceS3Path field's value.
+func (s *CreateThesaurusInput) SetSourceS3Path(v *S3Path) *CreateThesaurusInput {
+	s.SourceS3Path = v
+	return s
+}
+
+// SetTags sets the Tags field's value.
+func (s *CreateThesaurusInput) SetTags(v []*Tag) *CreateThesaurusInput {
+	s.Tags = v
+	return s
+}
+
+type CreateThesaurusOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The unique identifier of the thesaurus.
+	Id *string `min:"1" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateThesaurusOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateThesaurusOutput) GoString() string {
+	return s.String()
+}
+
+// SetId sets the Id field's value.
+func (s *CreateThesaurusOutput) SetId(v string) *CreateThesaurusOutput {
 	s.Id = &v
 	return s
 }
@@ -4746,7 +7611,10 @@ type DataSourceConfiguration struct {
 	// Provides information necessary to create a data source connector for a database.
 	DatabaseConfiguration *DatabaseConfiguration `type:"structure"`
 
-	// Provided configuration for data sources that connect to Microsoft OneDrive.
+	// Provides configuration for data sources that connect to Google Drive.
+	GoogleDriveConfiguration *GoogleDriveConfiguration `type:"structure"`
+
+	// Provides configuration for data sources that connect to Microsoft OneDrive.
 	OneDriveConfiguration *OneDriveConfiguration `type:"structure"`
 
 	// Provides information to create a data source connector for a document repository
@@ -4763,14 +7631,29 @@ type DataSourceConfiguration struct {
 	// Provides information necessary to create a data source connector for a Microsoft
 	// SharePoint site.
 	SharePointConfiguration *SharePointConfiguration `type:"structure"`
+
+	// Provides the configuration information required for Amazon Kendra web crawler.
+	WebCrawlerConfiguration *WebCrawlerConfiguration `type:"structure"`
+
+	// Provides the configuration information to connect to WorkDocs as your data
+	// source.
+	WorkDocsConfiguration *WorkDocsConfiguration `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DataSourceConfiguration) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DataSourceConfiguration) GoString() string {
 	return s.String()
 }
@@ -4786,6 +7669,11 @@ func (s *DataSourceConfiguration) Validate() error {
 	if s.DatabaseConfiguration != nil {
 		if err := s.DatabaseConfiguration.Validate(); err != nil {
 			invalidParams.AddNested("DatabaseConfiguration", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.GoogleDriveConfiguration != nil {
+		if err := s.GoogleDriveConfiguration.Validate(); err != nil {
+			invalidParams.AddNested("GoogleDriveConfiguration", err.(request.ErrInvalidParams))
 		}
 	}
 	if s.OneDriveConfiguration != nil {
@@ -4813,6 +7701,16 @@ func (s *DataSourceConfiguration) Validate() error {
 			invalidParams.AddNested("SharePointConfiguration", err.(request.ErrInvalidParams))
 		}
 	}
+	if s.WebCrawlerConfiguration != nil {
+		if err := s.WebCrawlerConfiguration.Validate(); err != nil {
+			invalidParams.AddNested("WebCrawlerConfiguration", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.WorkDocsConfiguration != nil {
+		if err := s.WorkDocsConfiguration.Validate(); err != nil {
+			invalidParams.AddNested("WorkDocsConfiguration", err.(request.ErrInvalidParams))
+		}
+	}
 
 	if invalidParams.Len() > 0 {
 		return invalidParams
@@ -4829,6 +7727,12 @@ func (s *DataSourceConfiguration) SetConfluenceConfiguration(v *ConfluenceConfig
 // SetDatabaseConfiguration sets the DatabaseConfiguration field's value.
 func (s *DataSourceConfiguration) SetDatabaseConfiguration(v *DatabaseConfiguration) *DataSourceConfiguration {
 	s.DatabaseConfiguration = v
+	return s
+}
+
+// SetGoogleDriveConfiguration sets the GoogleDriveConfiguration field's value.
+func (s *DataSourceConfiguration) SetGoogleDriveConfiguration(v *GoogleDriveConfiguration) *DataSourceConfiguration {
+	s.GoogleDriveConfiguration = v
 	return s
 }
 
@@ -4862,7 +7766,90 @@ func (s *DataSourceConfiguration) SetSharePointConfiguration(v *SharePointConfig
 	return s
 }
 
-// Summary information for a Amazon Kendra data source. Returned in a call to .
+// SetWebCrawlerConfiguration sets the WebCrawlerConfiguration field's value.
+func (s *DataSourceConfiguration) SetWebCrawlerConfiguration(v *WebCrawlerConfiguration) *DataSourceConfiguration {
+	s.WebCrawlerConfiguration = v
+	return s
+}
+
+// SetWorkDocsConfiguration sets the WorkDocsConfiguration field's value.
+func (s *DataSourceConfiguration) SetWorkDocsConfiguration(v *WorkDocsConfiguration) *DataSourceConfiguration {
+	s.WorkDocsConfiguration = v
+	return s
+}
+
+// Data source information for user context filtering.
+type DataSourceGroup struct {
+	_ struct{} `type:"structure"`
+
+	// The identifier of the data source group you want to add to your list of data
+	// source groups. This is for filtering search results based on the groups'
+	// access to documents in that data source.
+	//
+	// DataSourceId is a required field
+	DataSourceId *string `min:"1" type:"string" required:"true"`
+
+	// The identifier of the group you want to add to your list of groups. This
+	// is for filtering search results based on the groups' access to documents.
+	//
+	// GroupId is a required field
+	GroupId *string `min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DataSourceGroup) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DataSourceGroup) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DataSourceGroup) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DataSourceGroup"}
+	if s.DataSourceId == nil {
+		invalidParams.Add(request.NewErrParamRequired("DataSourceId"))
+	}
+	if s.DataSourceId != nil && len(*s.DataSourceId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("DataSourceId", 1))
+	}
+	if s.GroupId == nil {
+		invalidParams.Add(request.NewErrParamRequired("GroupId"))
+	}
+	if s.GroupId != nil && len(*s.GroupId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("GroupId", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetDataSourceId sets the DataSourceId field's value.
+func (s *DataSourceGroup) SetDataSourceId(v string) *DataSourceGroup {
+	s.DataSourceId = &v
+	return s
+}
+
+// SetGroupId sets the GroupId field's value.
+func (s *DataSourceGroup) SetGroupId(v string) *DataSourceGroup {
+	s.GroupId = &v
+	return s
+}
+
+// Summary information for a Amazon Kendra data source. Returned in a call to
+// the DescribeDataSource operation.
 type DataSourceSummary struct {
 	_ struct{} `type:"structure"`
 
@@ -4872,11 +7859,17 @@ type DataSourceSummary struct {
 	// The unique identifier for the data source.
 	Id *string `min:"1" type:"string"`
 
+	// The code for a language. This shows a supported language for all documents
+	// in the data source. English is supported by default. For more information
+	// on supported languages, including their codes, see Adding documents in languages
+	// other than English (https://docs.aws.amazon.com/kendra/latest/dg/in-adding-languages.html).
+	LanguageCode *string `min:"2" type:"string"`
+
 	// The name of the data source.
 	Name *string `min:"1" type:"string"`
 
-	// The status of the data source. When the status is ATIVE the data source is
-	// ready to use.
+	// The status of the data source. When the status is ACTIVE the data source
+	// is ready to use.
 	Status *string `type:"string" enum:"DataSourceStatus"`
 
 	// The type of the data source.
@@ -4886,12 +7879,20 @@ type DataSourceSummary struct {
 	UpdatedAt *time.Time `type:"timestamp"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DataSourceSummary) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DataSourceSummary) GoString() string {
 	return s.String()
 }
@@ -4905,6 +7906,12 @@ func (s *DataSourceSummary) SetCreatedAt(v time.Time) *DataSourceSummary {
 // SetId sets the Id field's value.
 func (s *DataSourceSummary) SetId(v string) *DataSourceSummary {
 	s.Id = &v
+	return s
+}
+
+// SetLanguageCode sets the LanguageCode field's value.
+func (s *DataSourceSummary) SetLanguageCode(v string) *DataSourceSummary {
+	s.LanguageCode = &v
 	return s
 }
 
@@ -4969,12 +7976,20 @@ type DataSourceSyncJob struct {
 	Status *string `type:"string" enum:"DataSourceSyncJobStatus"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DataSourceSyncJob) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DataSourceSyncJob) GoString() string {
 	return s.String()
 }
@@ -5038,16 +8053,30 @@ type DataSourceSyncJobMetricTarget struct {
 
 	// The ID of the sync job that is running on the data source.
 	//
-	// DataSourceSyncJobId is a required field
-	DataSourceSyncJobId *string `min:"1" type:"string" required:"true"`
+	// If the ID of a sync job is not provided and there is a sync job running,
+	// then the ID of this sync job is used and metrics are generated for this sync
+	// job.
+	//
+	// If the ID of a sync job is not provided and there is no sync job running,
+	// then no metrics are generated and documents are indexed/deleted at the index
+	// level without sync job metrics included.
+	DataSourceSyncJobId *string `min:"1" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DataSourceSyncJobMetricTarget) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DataSourceSyncJobMetricTarget) GoString() string {
 	return s.String()
 }
@@ -5060,9 +8089,6 @@ func (s *DataSourceSyncJobMetricTarget) Validate() error {
 	}
 	if s.DataSourceId != nil && len(*s.DataSourceId) < 1 {
 		invalidParams.Add(request.NewErrParamMinLen("DataSourceId", 1))
-	}
-	if s.DataSourceSyncJobId == nil {
-		invalidParams.Add(request.NewErrParamRequired("DataSourceSyncJobId"))
 	}
 	if s.DataSourceSyncJobId != nil && len(*s.DataSourceSyncJobId) < 1 {
 		invalidParams.Add(request.NewErrParamMinLen("DataSourceSyncJobId", 1))
@@ -5113,12 +8139,20 @@ type DataSourceSyncJobMetrics struct {
 	DocumentsScanned *string `type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DataSourceSyncJobMetrics) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DataSourceSyncJobMetrics) GoString() string {
 	return s.String()
 }
@@ -5172,12 +8206,20 @@ type DataSourceToIndexFieldMapping struct {
 	IndexFieldName *string `min:"1" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DataSourceToIndexFieldMapping) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DataSourceToIndexFieldMapping) GoString() string {
 	return s.String()
 }
@@ -5243,12 +8285,20 @@ type DataSourceVpcConfiguration struct {
 	SubnetIds []*string `min:"1" type:"list" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DataSourceVpcConfiguration) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DataSourceVpcConfiguration) GoString() string {
 	return s.String()
 }
@@ -5319,12 +8369,20 @@ type DatabaseConfiguration struct {
 	VpcConfiguration *DataSourceVpcConfiguration `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DatabaseConfiguration) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DatabaseConfiguration) GoString() string {
 	return s.String()
 }
@@ -5418,12 +8476,20 @@ type DeleteDataSourceInput struct {
 	IndexId *string `min:"36" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteDataSourceInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteDataSourceInput) GoString() string {
 	return s.String()
 }
@@ -5466,12 +8532,20 @@ type DeleteDataSourceOutput struct {
 	_ struct{} `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteDataSourceOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteDataSourceOutput) GoString() string {
 	return s.String()
 }
@@ -5490,12 +8564,20 @@ type DeleteFaqInput struct {
 	IndexId *string `min:"36" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteFaqInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteFaqInput) GoString() string {
 	return s.String()
 }
@@ -5538,12 +8620,20 @@ type DeleteFaqOutput struct {
 	_ struct{} `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteFaqOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteFaqOutput) GoString() string {
 	return s.String()
 }
@@ -5557,12 +8647,20 @@ type DeleteIndexInput struct {
 	Id *string `min:"36" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteIndexInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteIndexInput) GoString() string {
 	return s.String()
 }
@@ -5593,13 +8691,328 @@ type DeleteIndexOutput struct {
 	_ struct{} `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteIndexOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteIndexOutput) GoString() string {
+	return s.String()
+}
+
+type DeletePrincipalMappingInput struct {
+	_ struct{} `type:"structure"`
+
+	// The identifier of the data source you want to delete a group from.
+	//
+	// This is useful if a group is tied to multiple data sources and you want to
+	// delete a group from accessing documents in a certain data source. For example,
+	// the groups "Research", "Engineering", and "Sales and Marketing" are all tied
+	// to the company's documents stored in the data sources Confluence and Salesforce.
+	// You want to delete "Research" and "Engineering" groups from Salesforce, so
+	// that these groups cannot access customer-related documents stored in Salesforce.
+	// Only "Sales and Marketing" should access documents in the Salesforce data
+	// source.
+	DataSourceId *string `min:"1" type:"string"`
+
+	// The identifier of the group you want to delete.
+	//
+	// GroupId is a required field
+	GroupId *string `min:"1" type:"string" required:"true"`
+
+	// The identifier of the index you want to delete a group from.
+	//
+	// IndexId is a required field
+	IndexId *string `min:"36" type:"string" required:"true"`
+
+	// The timestamp identifier you specify to ensure Amazon Kendra does not override
+	// the latest DELETE action with previous actions. The highest number ID, which
+	// is the ordering ID, is the latest action you want to process and apply on
+	// top of other actions with lower number IDs. This prevents previous actions
+	// with lower number IDs from possibly overriding the latest action.
+	//
+	// The ordering ID can be the UNIX time of the last update you made to a group
+	// members list. You would then provide this list when calling PutPrincipalMapping.
+	// This ensures your DELETE action for that updated group with the latest members
+	// list doesn't get overwritten by earlier DELETE actions for the same group
+	// which are yet to be processed.
+	//
+	// The default ordering ID is the current UNIX time in milliseconds that the
+	// action was received by Amazon Kendra.
+	OrderingId *int64 `type:"long"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeletePrincipalMappingInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeletePrincipalMappingInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DeletePrincipalMappingInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DeletePrincipalMappingInput"}
+	if s.DataSourceId != nil && len(*s.DataSourceId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("DataSourceId", 1))
+	}
+	if s.GroupId == nil {
+		invalidParams.Add(request.NewErrParamRequired("GroupId"))
+	}
+	if s.GroupId != nil && len(*s.GroupId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("GroupId", 1))
+	}
+	if s.IndexId == nil {
+		invalidParams.Add(request.NewErrParamRequired("IndexId"))
+	}
+	if s.IndexId != nil && len(*s.IndexId) < 36 {
+		invalidParams.Add(request.NewErrParamMinLen("IndexId", 36))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetDataSourceId sets the DataSourceId field's value.
+func (s *DeletePrincipalMappingInput) SetDataSourceId(v string) *DeletePrincipalMappingInput {
+	s.DataSourceId = &v
+	return s
+}
+
+// SetGroupId sets the GroupId field's value.
+func (s *DeletePrincipalMappingInput) SetGroupId(v string) *DeletePrincipalMappingInput {
+	s.GroupId = &v
+	return s
+}
+
+// SetIndexId sets the IndexId field's value.
+func (s *DeletePrincipalMappingInput) SetIndexId(v string) *DeletePrincipalMappingInput {
+	s.IndexId = &v
+	return s
+}
+
+// SetOrderingId sets the OrderingId field's value.
+func (s *DeletePrincipalMappingInput) SetOrderingId(v int64) *DeletePrincipalMappingInput {
+	s.OrderingId = &v
+	return s
+}
+
+type DeletePrincipalMappingOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeletePrincipalMappingOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeletePrincipalMappingOutput) GoString() string {
+	return s.String()
+}
+
+type DeleteQuerySuggestionsBlockListInput struct {
+	_ struct{} `type:"structure"`
+
+	// The unique identifier of the block list that needs to be deleted.
+	//
+	// Id is a required field
+	Id *string `min:"36" type:"string" required:"true"`
+
+	// The identifier of the you want to delete a block list from.
+	//
+	// IndexId is a required field
+	IndexId *string `min:"36" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeleteQuerySuggestionsBlockListInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeleteQuerySuggestionsBlockListInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DeleteQuerySuggestionsBlockListInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DeleteQuerySuggestionsBlockListInput"}
+	if s.Id == nil {
+		invalidParams.Add(request.NewErrParamRequired("Id"))
+	}
+	if s.Id != nil && len(*s.Id) < 36 {
+		invalidParams.Add(request.NewErrParamMinLen("Id", 36))
+	}
+	if s.IndexId == nil {
+		invalidParams.Add(request.NewErrParamRequired("IndexId"))
+	}
+	if s.IndexId != nil && len(*s.IndexId) < 36 {
+		invalidParams.Add(request.NewErrParamMinLen("IndexId", 36))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetId sets the Id field's value.
+func (s *DeleteQuerySuggestionsBlockListInput) SetId(v string) *DeleteQuerySuggestionsBlockListInput {
+	s.Id = &v
+	return s
+}
+
+// SetIndexId sets the IndexId field's value.
+func (s *DeleteQuerySuggestionsBlockListInput) SetIndexId(v string) *DeleteQuerySuggestionsBlockListInput {
+	s.IndexId = &v
+	return s
+}
+
+type DeleteQuerySuggestionsBlockListOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeleteQuerySuggestionsBlockListOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeleteQuerySuggestionsBlockListOutput) GoString() string {
+	return s.String()
+}
+
+type DeleteThesaurusInput struct {
+	_ struct{} `type:"structure"`
+
+	// The identifier of the thesaurus to delete.
+	//
+	// Id is a required field
+	Id *string `min:"1" type:"string" required:"true"`
+
+	// The identifier of the index associated with the thesaurus to delete.
+	//
+	// IndexId is a required field
+	IndexId *string `min:"36" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeleteThesaurusInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeleteThesaurusInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DeleteThesaurusInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DeleteThesaurusInput"}
+	if s.Id == nil {
+		invalidParams.Add(request.NewErrParamRequired("Id"))
+	}
+	if s.Id != nil && len(*s.Id) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Id", 1))
+	}
+	if s.IndexId == nil {
+		invalidParams.Add(request.NewErrParamRequired("IndexId"))
+	}
+	if s.IndexId != nil && len(*s.IndexId) < 36 {
+		invalidParams.Add(request.NewErrParamMinLen("IndexId", 36))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetId sets the Id field's value.
+func (s *DeleteThesaurusInput) SetId(v string) *DeleteThesaurusInput {
+	s.Id = &v
+	return s
+}
+
+// SetIndexId sets the IndexId field's value.
+func (s *DeleteThesaurusInput) SetIndexId(v string) *DeleteThesaurusInput {
+	s.IndexId = &v
+	return s
+}
+
+type DeleteThesaurusOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeleteThesaurusOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeleteThesaurusOutput) GoString() string {
 	return s.String()
 }
 
@@ -5617,12 +9030,20 @@ type DescribeDataSourceInput struct {
 	IndexId *string `min:"36" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeDataSourceInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeDataSourceInput) GoString() string {
 	return s.String()
 }
@@ -5685,6 +9106,12 @@ type DescribeDataSourceOutput struct {
 	// The identifier of the index that contains the data source.
 	IndexId *string `min:"36" type:"string"`
 
+	// The code for a language. This shows a supported language for all documents
+	// in the data source. English is supported by default. For more information
+	// on supported languages, including their codes, see Adding documents in languages
+	// other than English (https://docs.aws.amazon.com/kendra/latest/dg/in-adding-languages.html).
+	LanguageCode *string `min:"2" type:"string"`
+
 	// The name that you gave the data source when it was created.
 	Name *string `min:"1" type:"string"`
 
@@ -5707,12 +9134,20 @@ type DescribeDataSourceOutput struct {
 	UpdatedAt *time.Time `type:"timestamp"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeDataSourceOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeDataSourceOutput) GoString() string {
 	return s.String()
 }
@@ -5750,6 +9185,12 @@ func (s *DescribeDataSourceOutput) SetId(v string) *DescribeDataSourceOutput {
 // SetIndexId sets the IndexId field's value.
 func (s *DescribeDataSourceOutput) SetIndexId(v string) *DescribeDataSourceOutput {
 	s.IndexId = &v
+	return s
+}
+
+// SetLanguageCode sets the LanguageCode field's value.
+func (s *DescribeDataSourceOutput) SetLanguageCode(v string) *DescribeDataSourceOutput {
+	s.LanguageCode = &v
 	return s
 }
 
@@ -5803,12 +9244,20 @@ type DescribeFaqInput struct {
 	IndexId *string `min:"36" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeFaqInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeFaqInput) GoString() string {
 	return s.String()
 }
@@ -5869,6 +9318,12 @@ type DescribeFaqOutput struct {
 	// The identifier of the index that contains the FAQ.
 	IndexId *string `min:"36" type:"string"`
 
+	// The code for a language. This shows a supported language for the FAQ document.
+	// English is supported by default. For more information on supported languages,
+	// including their codes, see Adding documents in languages other than English
+	// (https://docs.aws.amazon.com/kendra/latest/dg/in-adding-languages.html).
+	LanguageCode *string `min:"2" type:"string"`
+
 	// The name that you gave the FAQ when it was created.
 	Name *string `min:"1" type:"string"`
 
@@ -5886,12 +9341,20 @@ type DescribeFaqOutput struct {
 	UpdatedAt *time.Time `type:"timestamp"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeFaqOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeFaqOutput) GoString() string {
 	return s.String()
 }
@@ -5929,6 +9392,12 @@ func (s *DescribeFaqOutput) SetId(v string) *DescribeFaqOutput {
 // SetIndexId sets the IndexId field's value.
 func (s *DescribeFaqOutput) SetIndexId(v string) *DescribeFaqOutput {
 	s.IndexId = &v
+	return s
+}
+
+// SetLanguageCode sets the LanguageCode field's value.
+func (s *DescribeFaqOutput) SetLanguageCode(v string) *DescribeFaqOutput {
+	s.LanguageCode = &v
 	return s
 }
 
@@ -5971,12 +9440,20 @@ type DescribeIndexInput struct {
 	Id *string `min:"36" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeIndexInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeIndexInput) GoString() string {
 	return s.String()
 }
@@ -6006,7 +9483,7 @@ func (s *DescribeIndexInput) SetId(v string) *DescribeIndexInput {
 type DescribeIndexOutput struct {
 	_ struct{} `type:"structure"`
 
-	// For enterprise edtion indexes, you can choose to use additional capacity
+	// For Enterprise edition indexes, you can choose to use additional capacity
 	// to meet the needs of your application. This contains the capacity units used
 	// for the index. A 0 for the query capacity or the storage capacity indicates
 	// that the index is using the default capacity for the index.
@@ -6029,7 +9506,7 @@ type DescribeIndexOutput struct {
 	// message that explains why.
 	ErrorMessage *string `min:"1" type:"string"`
 
-	// the name of the index.
+	// The name of the index.
 	Id *string `min:"36" type:"string"`
 
 	// Provides information about the number of FAQ questions and answers and the
@@ -6043,8 +9520,8 @@ type DescribeIndexOutput struct {
 	// to write to your Amazon Cloudwatch logs.
 	RoleArn *string `min:"1" type:"string"`
 
-	// The identifier of the AWS KMS customer master key (CMK) used to encrypt your
-	// data. Amazon Kendra doesn't support asymmetric CMKs.
+	// The identifier of the KMScustomer master key (CMK) used to encrypt your data.
+	// Amazon Kendra doesn't support asymmetric CMKs.
 	ServerSideEncryptionConfiguration *ServerSideEncryptionConfiguration `type:"structure"`
 
 	// The current status of the index. When the value is ACTIVE, the index is ready
@@ -6058,16 +9535,28 @@ type DescribeIndexOutput struct {
 	// The user context policy for the Amazon Kendra index.
 	UserContextPolicy *string `type:"string" enum:"UserContextPolicy"`
 
+	// Shows whether you have enabled the configuration for fetching access levels
+	// of groups and users from an AWS Single Sign-On identity source.
+	UserGroupResolutionConfiguration *UserGroupResolutionConfiguration `type:"structure"`
+
 	// The user token configuration for the Amazon Kendra index.
 	UserTokenConfigurations []*UserTokenConfiguration `type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeIndexOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeIndexOutput) GoString() string {
 	return s.String()
 }
@@ -6156,9 +9645,765 @@ func (s *DescribeIndexOutput) SetUserContextPolicy(v string) *DescribeIndexOutpu
 	return s
 }
 
+// SetUserGroupResolutionConfiguration sets the UserGroupResolutionConfiguration field's value.
+func (s *DescribeIndexOutput) SetUserGroupResolutionConfiguration(v *UserGroupResolutionConfiguration) *DescribeIndexOutput {
+	s.UserGroupResolutionConfiguration = v
+	return s
+}
+
 // SetUserTokenConfigurations sets the UserTokenConfigurations field's value.
 func (s *DescribeIndexOutput) SetUserTokenConfigurations(v []*UserTokenConfiguration) *DescribeIndexOutput {
 	s.UserTokenConfigurations = v
+	return s
+}
+
+type DescribePrincipalMappingInput struct {
+	_ struct{} `type:"structure"`
+
+	// The identifier of the data source to check the processing of PUT and DELETE
+	// actions for mapping users to their groups.
+	DataSourceId *string `min:"1" type:"string"`
+
+	// The identifier of the group required to check the processing of PUT and DELETE
+	// actions for mapping users to their groups.
+	//
+	// GroupId is a required field
+	GroupId *string `min:"1" type:"string" required:"true"`
+
+	// The identifier of the index required to check the processing of PUT and DELETE
+	// actions for mapping users to their groups.
+	//
+	// IndexId is a required field
+	IndexId *string `min:"36" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DescribePrincipalMappingInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DescribePrincipalMappingInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DescribePrincipalMappingInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DescribePrincipalMappingInput"}
+	if s.DataSourceId != nil && len(*s.DataSourceId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("DataSourceId", 1))
+	}
+	if s.GroupId == nil {
+		invalidParams.Add(request.NewErrParamRequired("GroupId"))
+	}
+	if s.GroupId != nil && len(*s.GroupId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("GroupId", 1))
+	}
+	if s.IndexId == nil {
+		invalidParams.Add(request.NewErrParamRequired("IndexId"))
+	}
+	if s.IndexId != nil && len(*s.IndexId) < 36 {
+		invalidParams.Add(request.NewErrParamMinLen("IndexId", 36))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetDataSourceId sets the DataSourceId field's value.
+func (s *DescribePrincipalMappingInput) SetDataSourceId(v string) *DescribePrincipalMappingInput {
+	s.DataSourceId = &v
+	return s
+}
+
+// SetGroupId sets the GroupId field's value.
+func (s *DescribePrincipalMappingInput) SetGroupId(v string) *DescribePrincipalMappingInput {
+	s.GroupId = &v
+	return s
+}
+
+// SetIndexId sets the IndexId field's value.
+func (s *DescribePrincipalMappingInput) SetIndexId(v string) *DescribePrincipalMappingInput {
+	s.IndexId = &v
+	return s
+}
+
+type DescribePrincipalMappingOutput struct {
+	_ struct{} `type:"structure"`
+
+	// Shows the identifier of the data source to see information on the processing
+	// of PUT and DELETE actions for mapping users to their groups.
+	DataSourceId *string `min:"1" type:"string"`
+
+	// Shows the identifier of the group to see information on the processing of
+	// PUT and DELETE actions for mapping users to their groups.
+	GroupId *string `min:"1" type:"string"`
+
+	// Shows the following information on the processing of PUT and DELETE actions
+	// for mapping users to their groups:
+	//
+	//    * Status – the status can be either PROCESSING, SUCCEEDED, DELETING,
+	//    DELETED, or FAILED.
+	//
+	//    * Last updated – the last date-time an action was updated.
+	//
+	//    * Received – the last date-time an action was received or submitted.
+	//
+	//    * Ordering ID – the latest action that should process and apply after
+	//    other actions.
+	//
+	//    * Failure reason – the reason an action could not be processed.
+	GroupOrderingIdSummaries []*GroupOrderingIdSummary `type:"list"`
+
+	// Shows the identifier of the index to see information on the processing of
+	// PUT and DELETE actions for mapping users to their groups.
+	IndexId *string `min:"36" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DescribePrincipalMappingOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DescribePrincipalMappingOutput) GoString() string {
+	return s.String()
+}
+
+// SetDataSourceId sets the DataSourceId field's value.
+func (s *DescribePrincipalMappingOutput) SetDataSourceId(v string) *DescribePrincipalMappingOutput {
+	s.DataSourceId = &v
+	return s
+}
+
+// SetGroupId sets the GroupId field's value.
+func (s *DescribePrincipalMappingOutput) SetGroupId(v string) *DescribePrincipalMappingOutput {
+	s.GroupId = &v
+	return s
+}
+
+// SetGroupOrderingIdSummaries sets the GroupOrderingIdSummaries field's value.
+func (s *DescribePrincipalMappingOutput) SetGroupOrderingIdSummaries(v []*GroupOrderingIdSummary) *DescribePrincipalMappingOutput {
+	s.GroupOrderingIdSummaries = v
+	return s
+}
+
+// SetIndexId sets the IndexId field's value.
+func (s *DescribePrincipalMappingOutput) SetIndexId(v string) *DescribePrincipalMappingOutput {
+	s.IndexId = &v
+	return s
+}
+
+type DescribeQuerySuggestionsBlockListInput struct {
+	_ struct{} `type:"structure"`
+
+	// The unique identifier of the block list.
+	//
+	// Id is a required field
+	Id *string `min:"36" type:"string" required:"true"`
+
+	// The identifier of the index for the block list.
+	//
+	// IndexId is a required field
+	IndexId *string `min:"36" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DescribeQuerySuggestionsBlockListInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DescribeQuerySuggestionsBlockListInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DescribeQuerySuggestionsBlockListInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DescribeQuerySuggestionsBlockListInput"}
+	if s.Id == nil {
+		invalidParams.Add(request.NewErrParamRequired("Id"))
+	}
+	if s.Id != nil && len(*s.Id) < 36 {
+		invalidParams.Add(request.NewErrParamMinLen("Id", 36))
+	}
+	if s.IndexId == nil {
+		invalidParams.Add(request.NewErrParamRequired("IndexId"))
+	}
+	if s.IndexId != nil && len(*s.IndexId) < 36 {
+		invalidParams.Add(request.NewErrParamMinLen("IndexId", 36))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetId sets the Id field's value.
+func (s *DescribeQuerySuggestionsBlockListInput) SetId(v string) *DescribeQuerySuggestionsBlockListInput {
+	s.Id = &v
+	return s
+}
+
+// SetIndexId sets the IndexId field's value.
+func (s *DescribeQuerySuggestionsBlockListInput) SetIndexId(v string) *DescribeQuerySuggestionsBlockListInput {
+	s.IndexId = &v
+	return s
+}
+
+type DescribeQuerySuggestionsBlockListOutput struct {
+	_ struct{} `type:"structure"`
+
+	// Shows the date-time a block list for query suggestions was created.
+	CreatedAt *time.Time `type:"timestamp"`
+
+	// Shows the description for the block list.
+	Description *string `type:"string"`
+
+	// Shows the error message with details when there are issues in processing
+	// the block list.
+	ErrorMessage *string `min:"1" type:"string"`
+
+	// Shows the current size of the block list text file in S3.
+	FileSizeBytes *int64 `type:"long"`
+
+	// Shows the unique identifier of the block list.
+	Id *string `min:"36" type:"string"`
+
+	// Shows the identifier of the index for the block list.
+	IndexId *string `min:"36" type:"string"`
+
+	// Shows the current number of valid, non-empty words or phrases in the block
+	// list text file.
+	ItemCount *int64 `type:"integer"`
+
+	// Shows the name of the block list.
+	Name *string `min:"1" type:"string"`
+
+	// Shows the current IAM (Identity and Access Management) role used by Amazon
+	// Kendra to access the block list text file in S3.
+	//
+	// The role needs S3 read permissions to your file in S3 and needs to give STS
+	// (Security Token Service) assume role permissions to Amazon Kendra.
+	RoleArn *string `min:"1" type:"string"`
+
+	// Shows the current S3 path to your block list text file in your S3 bucket.
+	//
+	// Each block word or phrase should be on a separate line in a text file.
+	//
+	// For information on the current quota limits for block lists, see Quotas for
+	// Amazon Kendra (https://docs.aws.amazon.com/kendra/latest/dg/quotas.html).
+	SourceS3Path *S3Path `type:"structure"`
+
+	// Shows whether the current status of the block list is ACTIVE or INACTIVE.
+	Status *string `type:"string" enum:"QuerySuggestionsBlockListStatus"`
+
+	// Shows the date-time a block list for query suggestions was last updated.
+	UpdatedAt *time.Time `type:"timestamp"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DescribeQuerySuggestionsBlockListOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DescribeQuerySuggestionsBlockListOutput) GoString() string {
+	return s.String()
+}
+
+// SetCreatedAt sets the CreatedAt field's value.
+func (s *DescribeQuerySuggestionsBlockListOutput) SetCreatedAt(v time.Time) *DescribeQuerySuggestionsBlockListOutput {
+	s.CreatedAt = &v
+	return s
+}
+
+// SetDescription sets the Description field's value.
+func (s *DescribeQuerySuggestionsBlockListOutput) SetDescription(v string) *DescribeQuerySuggestionsBlockListOutput {
+	s.Description = &v
+	return s
+}
+
+// SetErrorMessage sets the ErrorMessage field's value.
+func (s *DescribeQuerySuggestionsBlockListOutput) SetErrorMessage(v string) *DescribeQuerySuggestionsBlockListOutput {
+	s.ErrorMessage = &v
+	return s
+}
+
+// SetFileSizeBytes sets the FileSizeBytes field's value.
+func (s *DescribeQuerySuggestionsBlockListOutput) SetFileSizeBytes(v int64) *DescribeQuerySuggestionsBlockListOutput {
+	s.FileSizeBytes = &v
+	return s
+}
+
+// SetId sets the Id field's value.
+func (s *DescribeQuerySuggestionsBlockListOutput) SetId(v string) *DescribeQuerySuggestionsBlockListOutput {
+	s.Id = &v
+	return s
+}
+
+// SetIndexId sets the IndexId field's value.
+func (s *DescribeQuerySuggestionsBlockListOutput) SetIndexId(v string) *DescribeQuerySuggestionsBlockListOutput {
+	s.IndexId = &v
+	return s
+}
+
+// SetItemCount sets the ItemCount field's value.
+func (s *DescribeQuerySuggestionsBlockListOutput) SetItemCount(v int64) *DescribeQuerySuggestionsBlockListOutput {
+	s.ItemCount = &v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *DescribeQuerySuggestionsBlockListOutput) SetName(v string) *DescribeQuerySuggestionsBlockListOutput {
+	s.Name = &v
+	return s
+}
+
+// SetRoleArn sets the RoleArn field's value.
+func (s *DescribeQuerySuggestionsBlockListOutput) SetRoleArn(v string) *DescribeQuerySuggestionsBlockListOutput {
+	s.RoleArn = &v
+	return s
+}
+
+// SetSourceS3Path sets the SourceS3Path field's value.
+func (s *DescribeQuerySuggestionsBlockListOutput) SetSourceS3Path(v *S3Path) *DescribeQuerySuggestionsBlockListOutput {
+	s.SourceS3Path = v
+	return s
+}
+
+// SetStatus sets the Status field's value.
+func (s *DescribeQuerySuggestionsBlockListOutput) SetStatus(v string) *DescribeQuerySuggestionsBlockListOutput {
+	s.Status = &v
+	return s
+}
+
+// SetUpdatedAt sets the UpdatedAt field's value.
+func (s *DescribeQuerySuggestionsBlockListOutput) SetUpdatedAt(v time.Time) *DescribeQuerySuggestionsBlockListOutput {
+	s.UpdatedAt = &v
+	return s
+}
+
+type DescribeQuerySuggestionsConfigInput struct {
+	_ struct{} `type:"structure"`
+
+	// The identifier of the index you want to describe query suggestions settings
+	// for.
+	//
+	// IndexId is a required field
+	IndexId *string `min:"36" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DescribeQuerySuggestionsConfigInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DescribeQuerySuggestionsConfigInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DescribeQuerySuggestionsConfigInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DescribeQuerySuggestionsConfigInput"}
+	if s.IndexId == nil {
+		invalidParams.Add(request.NewErrParamRequired("IndexId"))
+	}
+	if s.IndexId != nil && len(*s.IndexId) < 36 {
+		invalidParams.Add(request.NewErrParamMinLen("IndexId", 36))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetIndexId sets the IndexId field's value.
+func (s *DescribeQuerySuggestionsConfigInput) SetIndexId(v string) *DescribeQuerySuggestionsConfigInput {
+	s.IndexId = &v
+	return s
+}
+
+type DescribeQuerySuggestionsConfigOutput struct {
+	_ struct{} `type:"structure"`
+
+	// Shows whether Amazon Kendra uses all queries or only uses queries that include
+	// user information to generate query suggestions.
+	IncludeQueriesWithoutUserInformation *bool `type:"boolean"`
+
+	// Shows the date-time query suggestions for an index was last cleared.
+	//
+	// After you clear suggestions, Amazon Kendra learns new suggestions based on
+	// new queries added to the query log from the time you cleared suggestions.
+	// Amazon Kendra only considers re-occurences of a query from the time you cleared
+	// suggestions.
+	LastClearTime *time.Time `type:"timestamp"`
+
+	// Shows the date-time query suggestions for an index was last updated.
+	LastSuggestionsBuildTime *time.Time `type:"timestamp"`
+
+	// Shows the minimum number of unique users who must search a query in order
+	// for the query to be eligible to suggest to your users.
+	MinimumNumberOfQueryingUsers *int64 `min:"1" type:"integer"`
+
+	// Shows the minimum number of times a query must be searched in order for the
+	// query to be eligible to suggest to your users.
+	MinimumQueryCount *int64 `min:"1" type:"integer"`
+
+	// Shows whether query suggestions are currently in ENABLED mode or LEARN_ONLY
+	// mode.
+	//
+	// By default, Amazon Kendra enables query suggestions.LEARN_ONLY turns off
+	// query suggestions for your users. You can change the mode using the UpdateQuerySuggestionsConfig
+	// (https://docs.aws.amazon.com/kendra/latest/dg/API_UpdateQuerySuggestionsConfig.html)
+	// operation.
+	Mode *string `type:"string" enum:"Mode"`
+
+	// Shows how recent your queries are in your query log time window (in days).
+	QueryLogLookBackWindowInDays *int64 `type:"integer"`
+
+	// Shows whether the status of query suggestions settings is currently Active
+	// or Updating.
+	//
+	// Active means the current settings apply and Updating means your changed settings
+	// are in the process of applying.
+	Status *string `type:"string" enum:"QuerySuggestionsStatus"`
+
+	// Shows the current total count of query suggestions for an index.
+	//
+	// This count can change when you update your query suggestions settings, if
+	// you filter out certain queries from suggestions using a block list, and as
+	// the query log accumulates more queries for Amazon Kendra to learn from.
+	TotalSuggestionsCount *int64 `type:"integer"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DescribeQuerySuggestionsConfigOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DescribeQuerySuggestionsConfigOutput) GoString() string {
+	return s.String()
+}
+
+// SetIncludeQueriesWithoutUserInformation sets the IncludeQueriesWithoutUserInformation field's value.
+func (s *DescribeQuerySuggestionsConfigOutput) SetIncludeQueriesWithoutUserInformation(v bool) *DescribeQuerySuggestionsConfigOutput {
+	s.IncludeQueriesWithoutUserInformation = &v
+	return s
+}
+
+// SetLastClearTime sets the LastClearTime field's value.
+func (s *DescribeQuerySuggestionsConfigOutput) SetLastClearTime(v time.Time) *DescribeQuerySuggestionsConfigOutput {
+	s.LastClearTime = &v
+	return s
+}
+
+// SetLastSuggestionsBuildTime sets the LastSuggestionsBuildTime field's value.
+func (s *DescribeQuerySuggestionsConfigOutput) SetLastSuggestionsBuildTime(v time.Time) *DescribeQuerySuggestionsConfigOutput {
+	s.LastSuggestionsBuildTime = &v
+	return s
+}
+
+// SetMinimumNumberOfQueryingUsers sets the MinimumNumberOfQueryingUsers field's value.
+func (s *DescribeQuerySuggestionsConfigOutput) SetMinimumNumberOfQueryingUsers(v int64) *DescribeQuerySuggestionsConfigOutput {
+	s.MinimumNumberOfQueryingUsers = &v
+	return s
+}
+
+// SetMinimumQueryCount sets the MinimumQueryCount field's value.
+func (s *DescribeQuerySuggestionsConfigOutput) SetMinimumQueryCount(v int64) *DescribeQuerySuggestionsConfigOutput {
+	s.MinimumQueryCount = &v
+	return s
+}
+
+// SetMode sets the Mode field's value.
+func (s *DescribeQuerySuggestionsConfigOutput) SetMode(v string) *DescribeQuerySuggestionsConfigOutput {
+	s.Mode = &v
+	return s
+}
+
+// SetQueryLogLookBackWindowInDays sets the QueryLogLookBackWindowInDays field's value.
+func (s *DescribeQuerySuggestionsConfigOutput) SetQueryLogLookBackWindowInDays(v int64) *DescribeQuerySuggestionsConfigOutput {
+	s.QueryLogLookBackWindowInDays = &v
+	return s
+}
+
+// SetStatus sets the Status field's value.
+func (s *DescribeQuerySuggestionsConfigOutput) SetStatus(v string) *DescribeQuerySuggestionsConfigOutput {
+	s.Status = &v
+	return s
+}
+
+// SetTotalSuggestionsCount sets the TotalSuggestionsCount field's value.
+func (s *DescribeQuerySuggestionsConfigOutput) SetTotalSuggestionsCount(v int64) *DescribeQuerySuggestionsConfigOutput {
+	s.TotalSuggestionsCount = &v
+	return s
+}
+
+type DescribeThesaurusInput struct {
+	_ struct{} `type:"structure"`
+
+	// The identifier of the thesaurus to describe.
+	//
+	// Id is a required field
+	Id *string `min:"1" type:"string" required:"true"`
+
+	// The identifier of the index associated with the thesaurus to describe.
+	//
+	// IndexId is a required field
+	IndexId *string `min:"36" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DescribeThesaurusInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DescribeThesaurusInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DescribeThesaurusInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DescribeThesaurusInput"}
+	if s.Id == nil {
+		invalidParams.Add(request.NewErrParamRequired("Id"))
+	}
+	if s.Id != nil && len(*s.Id) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Id", 1))
+	}
+	if s.IndexId == nil {
+		invalidParams.Add(request.NewErrParamRequired("IndexId"))
+	}
+	if s.IndexId != nil && len(*s.IndexId) < 36 {
+		invalidParams.Add(request.NewErrParamMinLen("IndexId", 36))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetId sets the Id field's value.
+func (s *DescribeThesaurusInput) SetId(v string) *DescribeThesaurusInput {
+	s.Id = &v
+	return s
+}
+
+// SetIndexId sets the IndexId field's value.
+func (s *DescribeThesaurusInput) SetIndexId(v string) *DescribeThesaurusInput {
+	s.IndexId = &v
+	return s
+}
+
+type DescribeThesaurusOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The Unix datetime that the thesaurus was created.
+	CreatedAt *time.Time `type:"timestamp"`
+
+	// The thesaurus description.
+	Description *string `type:"string"`
+
+	// When the Status field value is FAILED, the ErrorMessage field provides more
+	// information.
+	ErrorMessage *string `min:"1" type:"string"`
+
+	// The size of the thesaurus file in bytes.
+	FileSizeBytes *int64 `type:"long"`
+
+	// The identifier of the thesaurus.
+	Id *string `min:"1" type:"string"`
+
+	// The identifier of the index associated with the thesaurus to describe.
+	IndexId *string `min:"36" type:"string"`
+
+	// The thesaurus name.
+	Name *string `min:"1" type:"string"`
+
+	// An AWS Identity and Access Management (IAM) role that gives Amazon Kendra
+	// permissions to access thesaurus file specified in SourceS3Path.
+	RoleArn *string `min:"1" type:"string"`
+
+	// Information required to find a specific file in an Amazon S3 bucket.
+	SourceS3Path *S3Path `type:"structure"`
+
+	// The current status of the thesaurus. When the value is ACTIVE, queries are
+	// able to use the thesaurus. If the Status field value is FAILED, the ErrorMessage
+	// field provides more information.
+	//
+	// If the status is ACTIVE_BUT_UPDATE_FAILED, it means that Amazon Kendra could
+	// not ingest the new thesaurus file. The old thesaurus file is still active.
+	Status *string `type:"string" enum:"ThesaurusStatus"`
+
+	// The number of synonym rules in the thesaurus file.
+	SynonymRuleCount *int64 `type:"long"`
+
+	// The number of unique terms in the thesaurus file. For example, the synonyms
+	// a,b,c and a=>d, the term count would be 4.
+	TermCount *int64 `type:"long"`
+
+	// The Unix datetime that the thesaurus was last updated.
+	UpdatedAt *time.Time `type:"timestamp"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DescribeThesaurusOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DescribeThesaurusOutput) GoString() string {
+	return s.String()
+}
+
+// SetCreatedAt sets the CreatedAt field's value.
+func (s *DescribeThesaurusOutput) SetCreatedAt(v time.Time) *DescribeThesaurusOutput {
+	s.CreatedAt = &v
+	return s
+}
+
+// SetDescription sets the Description field's value.
+func (s *DescribeThesaurusOutput) SetDescription(v string) *DescribeThesaurusOutput {
+	s.Description = &v
+	return s
+}
+
+// SetErrorMessage sets the ErrorMessage field's value.
+func (s *DescribeThesaurusOutput) SetErrorMessage(v string) *DescribeThesaurusOutput {
+	s.ErrorMessage = &v
+	return s
+}
+
+// SetFileSizeBytes sets the FileSizeBytes field's value.
+func (s *DescribeThesaurusOutput) SetFileSizeBytes(v int64) *DescribeThesaurusOutput {
+	s.FileSizeBytes = &v
+	return s
+}
+
+// SetId sets the Id field's value.
+func (s *DescribeThesaurusOutput) SetId(v string) *DescribeThesaurusOutput {
+	s.Id = &v
+	return s
+}
+
+// SetIndexId sets the IndexId field's value.
+func (s *DescribeThesaurusOutput) SetIndexId(v string) *DescribeThesaurusOutput {
+	s.IndexId = &v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *DescribeThesaurusOutput) SetName(v string) *DescribeThesaurusOutput {
+	s.Name = &v
+	return s
+}
+
+// SetRoleArn sets the RoleArn field's value.
+func (s *DescribeThesaurusOutput) SetRoleArn(v string) *DescribeThesaurusOutput {
+	s.RoleArn = &v
+	return s
+}
+
+// SetSourceS3Path sets the SourceS3Path field's value.
+func (s *DescribeThesaurusOutput) SetSourceS3Path(v *S3Path) *DescribeThesaurusOutput {
+	s.SourceS3Path = v
+	return s
+}
+
+// SetStatus sets the Status field's value.
+func (s *DescribeThesaurusOutput) SetStatus(v string) *DescribeThesaurusOutput {
+	s.Status = &v
+	return s
+}
+
+// SetSynonymRuleCount sets the SynonymRuleCount field's value.
+func (s *DescribeThesaurusOutput) SetSynonymRuleCount(v int64) *DescribeThesaurusOutput {
+	s.SynonymRuleCount = &v
+	return s
+}
+
+// SetTermCount sets the TermCount field's value.
+func (s *DescribeThesaurusOutput) SetTermCount(v int64) *DescribeThesaurusOutput {
+	s.TermCount = &v
+	return s
+}
+
+// SetUpdatedAt sets the UpdatedAt field's value.
+func (s *DescribeThesaurusOutput) SetUpdatedAt(v time.Time) *DescribeThesaurusOutput {
+	s.UpdatedAt = &v
 	return s
 }
 
@@ -6166,7 +10411,8 @@ func (s *DescribeIndexOutput) SetUserTokenConfigurations(v []*UserTokenConfigura
 type Document struct {
 	_ struct{} `type:"structure"`
 
-	// Information to use for user context filtering.
+	// Information on user and group access rights, which is used for user context
+	// filtering.
 	AccessControlList []*Principal `type:"list"`
 
 	// Custom attributes to apply to the document. Use the custom attributes to
@@ -6177,15 +10423,20 @@ type Document struct {
 	// The contents of the document.
 	//
 	// Documents passed to the Blob parameter must be base64 encoded. Your code
-	// might not need to encode the document file bytes if you're using an AWS SDK
-	// to call Amazon Kendra operations. If you are calling the Amazon Kendra endpoint
-	// directly using REST, you must base64 encode the contents before sending.
-	//
+	// might not need to encode the document file bytes if you're using an Amazon
+	// Web Services SDK to call Amazon Kendra operations. If you are calling the
+	// Amazon Kendra endpoint directly using REST, you must base64 encode the contents
+	// before sending.
 	// Blob is automatically base64 encoded/decoded by the SDK.
 	Blob []byte `type:"blob"`
 
 	// The file type of the document in the Blob field.
 	ContentType *string `type:"string" enum:"ContentType"`
+
+	// The list of principal (https://docs.aws.amazon.com/kendra/latest/dg/API_Principal.html)
+	// lists that define the hierarchy for which documents users should have access
+	// to.
+	HierarchicalAccessControlList []*HierarchicalPrincipal `min:"1" type:"list"`
 
 	// A unique identifier of the document in the index.
 	//
@@ -6199,12 +10450,20 @@ type Document struct {
 	Title *string `type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s Document) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s Document) GoString() string {
 	return s.String()
 }
@@ -6212,6 +10471,9 @@ func (s Document) GoString() string {
 // Validate inspects the fields of the type to determine if they are valid.
 func (s *Document) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "Document"}
+	if s.HierarchicalAccessControlList != nil && len(s.HierarchicalAccessControlList) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("HierarchicalAccessControlList", 1))
+	}
 	if s.Id == nil {
 		invalidParams.Add(request.NewErrParamRequired("Id"))
 	}
@@ -6235,6 +10497,16 @@ func (s *Document) Validate() error {
 			}
 			if err := v.Validate(); err != nil {
 				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "Attributes", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+	if s.HierarchicalAccessControlList != nil {
+		for i, v := range s.HierarchicalAccessControlList {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "HierarchicalAccessControlList", i), err.(request.ErrInvalidParams))
 			}
 		}
 	}
@@ -6274,6 +10546,12 @@ func (s *Document) SetContentType(v string) *Document {
 	return s
 }
 
+// SetHierarchicalAccessControlList sets the HierarchicalAccessControlList field's value.
+func (s *Document) SetHierarchicalAccessControlList(v []*HierarchicalPrincipal) *Document {
+	s.HierarchicalAccessControlList = v
+	return s
+}
+
 // SetId sets the Id field's value.
 func (s *Document) SetId(v string) *Document {
 	s.Id = &v
@@ -6307,12 +10585,20 @@ type DocumentAttribute struct {
 	Value *DocumentAttributeValue `type:"structure" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DocumentAttribute) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DocumentAttribute) GoString() string {
 	return s.String()
 }
@@ -6359,6 +10645,10 @@ type DocumentAttributeValue struct {
 	_ struct{} `type:"structure"`
 
 	// A date expressed as an ISO 8601 string.
+	//
+	// It is important for the time zone to be included in the ISO 8601 date-time
+	// format. For example, 20120325T123010+01:00 is the ISO 8601 date-time format
+	// for March 25th 2012 at 12:30PM (plus 10 seconds) in Central European Time.
 	DateValue *time.Time `type:"timestamp"`
 
 	// A long integer value.
@@ -6371,12 +10661,20 @@ type DocumentAttributeValue struct {
 	StringValue *string `min:"1" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DocumentAttributeValue) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DocumentAttributeValue) GoString() string {
 	return s.String()
 }
@@ -6431,12 +10729,20 @@ type DocumentAttributeValueCountPair struct {
 	DocumentAttributeValue *DocumentAttributeValue `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DocumentAttributeValueCountPair) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DocumentAttributeValueCountPair) GoString() string {
 	return s.String()
 }
@@ -6450,6 +10756,92 @@ func (s *DocumentAttributeValueCountPair) SetCount(v int64) *DocumentAttributeVa
 // SetDocumentAttributeValue sets the DocumentAttributeValue field's value.
 func (s *DocumentAttributeValueCountPair) SetDocumentAttributeValue(v *DocumentAttributeValue) *DocumentAttributeValueCountPair {
 	s.DocumentAttributeValue = v
+	return s
+}
+
+// Identifies a document for which to retrieve status information
+type DocumentInfo struct {
+	_ struct{} `type:"structure"`
+
+	// Attributes that identify a specific version of a document to check.
+	//
+	// The only valid attributes are:
+	//
+	//    * version
+	//
+	//    * datasourceId
+	//
+	//    * jobExecutionId
+	//
+	// The attributes follow these rules:
+	//
+	//    * dataSourceId and jobExecutionId must be used together.
+	//
+	//    * version is ignored if dataSourceId and jobExecutionId are not provided.
+	//
+	//    * If dataSourceId and jobExecutionId are provided, but version is not,
+	//    the version defaults to "0".
+	Attributes []*DocumentAttribute `type:"list"`
+
+	// The unique identifier of the document.
+	//
+	// DocumentId is a required field
+	DocumentId *string `min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DocumentInfo) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DocumentInfo) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DocumentInfo) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DocumentInfo"}
+	if s.DocumentId == nil {
+		invalidParams.Add(request.NewErrParamRequired("DocumentId"))
+	}
+	if s.DocumentId != nil && len(*s.DocumentId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("DocumentId", 1))
+	}
+	if s.Attributes != nil {
+		for i, v := range s.Attributes {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "Attributes", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetAttributes sets the Attributes field's value.
+func (s *DocumentInfo) SetAttributes(v []*DocumentAttribute) *DocumentInfo {
+	s.Attributes = v
+	return s
+}
+
+// SetDocumentId sets the DocumentId field's value.
+func (s *DocumentInfo) SetDocumentId(v string) *DocumentInfo {
+	s.DocumentId = &v
 	return s
 }
 
@@ -6475,12 +10867,20 @@ type DocumentMetadataConfiguration struct {
 	Type *string `type:"string" required:"true" enum:"DocumentAttributeValueType"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DocumentMetadataConfiguration) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DocumentMetadataConfiguration) GoString() string {
 	return s.String()
 }
@@ -6533,24 +10933,104 @@ func (s *DocumentMetadataConfiguration) SetType(v string) *DocumentMetadataConfi
 	return s
 }
 
+// Overrides the document relevance properties of a custom index field.
+type DocumentRelevanceConfiguration struct {
+	_ struct{} `type:"structure"`
+
+	// The name of the tuning configuration to override document relevance at the
+	// index level.
+	//
+	// Name is a required field
+	Name *string `min:"1" type:"string" required:"true"`
+
+	// Provides information for manually tuning the relevance of a field in a search.
+	// When a query includes terms that match the field, the results are given a
+	// boost in the response based on these tuning parameters.
+	//
+	// Relevance is a required field
+	Relevance *Relevance `type:"structure" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DocumentRelevanceConfiguration) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DocumentRelevanceConfiguration) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DocumentRelevanceConfiguration) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DocumentRelevanceConfiguration"}
+	if s.Name == nil {
+		invalidParams.Add(request.NewErrParamRequired("Name"))
+	}
+	if s.Name != nil && len(*s.Name) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Name", 1))
+	}
+	if s.Relevance == nil {
+		invalidParams.Add(request.NewErrParamRequired("Relevance"))
+	}
+	if s.Relevance != nil {
+		if err := s.Relevance.Validate(); err != nil {
+			invalidParams.AddNested("Relevance", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetName sets the Name field's value.
+func (s *DocumentRelevanceConfiguration) SetName(v string) *DocumentRelevanceConfiguration {
+	s.Name = &v
+	return s
+}
+
+// SetRelevance sets the Relevance field's value.
+func (s *DocumentRelevanceConfiguration) SetRelevance(v *Relevance) *DocumentRelevanceConfiguration {
+	s.Relevance = v
+	return s
+}
+
 // Document metadata files that contain information such as the document access
 // control information, source URI, document author, and custom attributes.
 // Each metadata file contains metadata about a single document.
 type DocumentsMetadataConfiguration struct {
 	_ struct{} `type:"structure"`
 
-	// A prefix used to filter metadata configuration files in the AWS S3 bucket.
-	// The S3 bucket might contain multiple metadata files. Use S3Prefix to include
-	// only the desired metadata files.
+	// A prefix used to filter metadata configuration files in the Amazon Web Services
+	// S3 bucket. The S3 bucket might contain multiple metadata files. Use S3Prefix
+	// to include only the desired metadata files.
 	S3Prefix *string `min:"1" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DocumentsMetadataConfiguration) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DocumentsMetadataConfiguration) GoString() string {
 	return s.String()
 }
@@ -6582,12 +11062,20 @@ type Facet struct {
 	DocumentAttributeKey *string `min:"1" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s Facet) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s Facet) GoString() string {
 	return s.String()
 }
@@ -6628,12 +11116,20 @@ type FacetResult struct {
 	DocumentAttributeValueType *string `type:"string" enum:"DocumentAttributeValueType"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s FacetResult) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s FacetResult) GoString() string {
 	return s.String()
 }
@@ -6667,12 +11163,20 @@ type FaqStatistics struct {
 	IndexedQuestionAnswersCount *int64 `type:"integer" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s FaqStatistics) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s FaqStatistics) GoString() string {
 	return s.String()
 }
@@ -6697,6 +11201,12 @@ type FaqSummary struct {
 	// The unique identifier of the FAQ.
 	Id *string `min:"1" type:"string"`
 
+	// The code for a language. This shows a supported language for the FAQ document
+	// as part of the summary information for FAQs. English is supported by default.
+	// For more information on supported languages, including their codes, see Adding
+	// documents in languages other than English (https://docs.aws.amazon.com/kendra/latest/dg/in-adding-languages.html).
+	LanguageCode *string `min:"2" type:"string"`
+
 	// The name that you assigned the FAQ when you created or updated the FAQ.
 	Name *string `min:"1" type:"string"`
 
@@ -6708,12 +11218,20 @@ type FaqSummary struct {
 	UpdatedAt *time.Time `type:"timestamp"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s FaqSummary) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s FaqSummary) GoString() string {
 	return s.String()
 }
@@ -6736,6 +11254,12 @@ func (s *FaqSummary) SetId(v string) *FaqSummary {
 	return s
 }
 
+// SetLanguageCode sets the LanguageCode field's value.
+func (s *FaqSummary) SetLanguageCode(v string) *FaqSummary {
+	s.LanguageCode = &v
+	return s
+}
+
 // SetName sets the Name field's value.
 func (s *FaqSummary) SetName(v string) *FaqSummary {
 	s.Name = &v
@@ -6751,6 +11275,546 @@ func (s *FaqSummary) SetStatus(v string) *FaqSummary {
 // SetUpdatedAt sets the UpdatedAt field's value.
 func (s *FaqSummary) SetUpdatedAt(v time.Time) *FaqSummary {
 	s.UpdatedAt = &v
+	return s
+}
+
+type GetQuerySuggestionsInput struct {
+	_ struct{} `type:"structure"`
+
+	// The identifier of the index you want to get query suggestions from.
+	//
+	// IndexId is a required field
+	IndexId *string `min:"36" type:"string" required:"true"`
+
+	// The maximum number of query suggestions you want to show to your users.
+	MaxSuggestionsCount *int64 `type:"integer"`
+
+	// The text of a user's query to generate query suggestions.
+	//
+	// A query is suggested if the query prefix matches what a user starts to type
+	// as their query.
+	//
+	// Amazon Kendra does not show any suggestions if a user types fewer than two
+	// characters or more than 60 characters. A query must also have at least one
+	// search result and contain at least one word of more than four characters.
+	//
+	// QueryText is a required field
+	QueryText *string `type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetQuerySuggestionsInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetQuerySuggestionsInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *GetQuerySuggestionsInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "GetQuerySuggestionsInput"}
+	if s.IndexId == nil {
+		invalidParams.Add(request.NewErrParamRequired("IndexId"))
+	}
+	if s.IndexId != nil && len(*s.IndexId) < 36 {
+		invalidParams.Add(request.NewErrParamMinLen("IndexId", 36))
+	}
+	if s.QueryText == nil {
+		invalidParams.Add(request.NewErrParamRequired("QueryText"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetIndexId sets the IndexId field's value.
+func (s *GetQuerySuggestionsInput) SetIndexId(v string) *GetQuerySuggestionsInput {
+	s.IndexId = &v
+	return s
+}
+
+// SetMaxSuggestionsCount sets the MaxSuggestionsCount field's value.
+func (s *GetQuerySuggestionsInput) SetMaxSuggestionsCount(v int64) *GetQuerySuggestionsInput {
+	s.MaxSuggestionsCount = &v
+	return s
+}
+
+// SetQueryText sets the QueryText field's value.
+func (s *GetQuerySuggestionsInput) SetQueryText(v string) *GetQuerySuggestionsInput {
+	s.QueryText = &v
+	return s
+}
+
+type GetQuerySuggestionsOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The unique identifier for a list of query suggestions for an index.
+	QuerySuggestionsId *string `min:"1" type:"string"`
+
+	// A list of query suggestions for an index.
+	Suggestions []*Suggestion `type:"list"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetQuerySuggestionsOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetQuerySuggestionsOutput) GoString() string {
+	return s.String()
+}
+
+// SetQuerySuggestionsId sets the QuerySuggestionsId field's value.
+func (s *GetQuerySuggestionsOutput) SetQuerySuggestionsId(v string) *GetQuerySuggestionsOutput {
+	s.QuerySuggestionsId = &v
+	return s
+}
+
+// SetSuggestions sets the Suggestions field's value.
+func (s *GetQuerySuggestionsOutput) SetSuggestions(v []*Suggestion) *GetQuerySuggestionsOutput {
+	s.Suggestions = v
+	return s
+}
+
+// Provides configuration information for data sources that connect to Google
+// Drive.
+type GoogleDriveConfiguration struct {
+	_ struct{} `type:"structure"`
+
+	// A list of MIME types to exclude from the index. All documents matching the
+	// specified MIME type are excluded.
+	//
+	// For a list of MIME types, see Using a Google Workspace Drive data source
+	// (https://docs.aws.amazon.com/kendra/latest/dg/data-source-google-drive.html).
+	ExcludeMimeTypes []*string `type:"list"`
+
+	// A list of identifiers or shared drives to exclude from the index. All files
+	// and folders stored on the shared drive are excluded.
+	ExcludeSharedDrives []*string `type:"list"`
+
+	// A list of email addresses of the users. Documents owned by these users are
+	// excluded from the index. Documents shared with excluded users are indexed
+	// unless they are excluded in another way.
+	ExcludeUserAccounts []*string `type:"list"`
+
+	// A list of regular expression patterns that apply to the path on Google Drive.
+	// Items that match the pattern are excluded from the index from both shared
+	// drives and users' My Drives. Items that don't match the pattern are included
+	// in the index. If an item matches both an exclusion pattern and an inclusion
+	// pattern, it is excluded from the index.
+	ExclusionPatterns []*string `type:"list"`
+
+	// Defines mapping between a field in the Google Drive and a Amazon Kendra index
+	// field.
+	//
+	// If you are using the console, you can define index fields when creating the
+	// mapping. If you are using the API, you must first create the field using
+	// the UpdateIndex operation.
+	FieldMappings []*DataSourceToIndexFieldMapping `min:"1" type:"list"`
+
+	// A list of regular expression patterns that apply to path on Google Drive.
+	// Items that match the pattern are included in the index from both shared drives
+	// and users' My Drives. Items that don't match the pattern are excluded from
+	// the index. If an item matches both an inclusion pattern and an exclusion
+	// pattern, it is excluded from the index.
+	InclusionPatterns []*string `type:"list"`
+
+	// The Amazon Resource Name (ARN) of a Secrets Managersecret that contains the
+	// credentials required to connect to Google Drive. For more information, see
+	// Using a Google Workspace Drive data source (https://docs.aws.amazon.com/kendra/latest/dg/data-source-google-drive.html).
+	//
+	// SecretArn is a required field
+	SecretArn *string `min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GoogleDriveConfiguration) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GoogleDriveConfiguration) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *GoogleDriveConfiguration) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "GoogleDriveConfiguration"}
+	if s.FieldMappings != nil && len(s.FieldMappings) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("FieldMappings", 1))
+	}
+	if s.SecretArn == nil {
+		invalidParams.Add(request.NewErrParamRequired("SecretArn"))
+	}
+	if s.SecretArn != nil && len(*s.SecretArn) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("SecretArn", 1))
+	}
+	if s.FieldMappings != nil {
+		for i, v := range s.FieldMappings {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "FieldMappings", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetExcludeMimeTypes sets the ExcludeMimeTypes field's value.
+func (s *GoogleDriveConfiguration) SetExcludeMimeTypes(v []*string) *GoogleDriveConfiguration {
+	s.ExcludeMimeTypes = v
+	return s
+}
+
+// SetExcludeSharedDrives sets the ExcludeSharedDrives field's value.
+func (s *GoogleDriveConfiguration) SetExcludeSharedDrives(v []*string) *GoogleDriveConfiguration {
+	s.ExcludeSharedDrives = v
+	return s
+}
+
+// SetExcludeUserAccounts sets the ExcludeUserAccounts field's value.
+func (s *GoogleDriveConfiguration) SetExcludeUserAccounts(v []*string) *GoogleDriveConfiguration {
+	s.ExcludeUserAccounts = v
+	return s
+}
+
+// SetExclusionPatterns sets the ExclusionPatterns field's value.
+func (s *GoogleDriveConfiguration) SetExclusionPatterns(v []*string) *GoogleDriveConfiguration {
+	s.ExclusionPatterns = v
+	return s
+}
+
+// SetFieldMappings sets the FieldMappings field's value.
+func (s *GoogleDriveConfiguration) SetFieldMappings(v []*DataSourceToIndexFieldMapping) *GoogleDriveConfiguration {
+	s.FieldMappings = v
+	return s
+}
+
+// SetInclusionPatterns sets the InclusionPatterns field's value.
+func (s *GoogleDriveConfiguration) SetInclusionPatterns(v []*string) *GoogleDriveConfiguration {
+	s.InclusionPatterns = v
+	return s
+}
+
+// SetSecretArn sets the SecretArn field's value.
+func (s *GoogleDriveConfiguration) SetSecretArn(v string) *GoogleDriveConfiguration {
+	s.SecretArn = &v
+	return s
+}
+
+// A list of users or sub groups that belong to a group. Users and groups are
+// useful for filtering search results to different users based on their group's
+// access to documents.
+type GroupMembers struct {
+	_ struct{} `type:"structure"`
+
+	// A list of sub groups that belong to a group. For example, the sub groups
+	// "Research", "Engineering", and "Sales and Marketing" all belong to the group
+	// "Company".
+	MemberGroups []*MemberGroup `min:"1" type:"list"`
+
+	// A list of users that belong to a group. For example, a list of interns all
+	// belong to the "Interns" group.
+	MemberUsers []*MemberUser `min:"1" type:"list"`
+
+	// If you have more than 1000 users and/or sub groups for a single group, you
+	// need to provide the path to the S3 file that lists your users and sub groups
+	// for a group. Your sub groups can contain more than 1000 users, but the list
+	// of sub groups that belong to a group (and/or users) must be no more than
+	// 1000.
+	//
+	// You can download this example S3 file (https://docs.aws.amazon.com/kendra/latest/dg/samples/group_members.zip)
+	// that uses the correct format for listing group members. Note, dataSourceId
+	// is optional. The value of type for a group is always GROUP and for a user
+	// it is always USER.
+	S3PathforGroupMembers *S3Path `type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GroupMembers) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GroupMembers) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *GroupMembers) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "GroupMembers"}
+	if s.MemberGroups != nil && len(s.MemberGroups) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("MemberGroups", 1))
+	}
+	if s.MemberUsers != nil && len(s.MemberUsers) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("MemberUsers", 1))
+	}
+	if s.MemberGroups != nil {
+		for i, v := range s.MemberGroups {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "MemberGroups", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+	if s.MemberUsers != nil {
+		for i, v := range s.MemberUsers {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "MemberUsers", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+	if s.S3PathforGroupMembers != nil {
+		if err := s.S3PathforGroupMembers.Validate(); err != nil {
+			invalidParams.AddNested("S3PathforGroupMembers", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetMemberGroups sets the MemberGroups field's value.
+func (s *GroupMembers) SetMemberGroups(v []*MemberGroup) *GroupMembers {
+	s.MemberGroups = v
+	return s
+}
+
+// SetMemberUsers sets the MemberUsers field's value.
+func (s *GroupMembers) SetMemberUsers(v []*MemberUser) *GroupMembers {
+	s.MemberUsers = v
+	return s
+}
+
+// SetS3PathforGroupMembers sets the S3PathforGroupMembers field's value.
+func (s *GroupMembers) SetS3PathforGroupMembers(v *S3Path) *GroupMembers {
+	s.S3PathforGroupMembers = v
+	return s
+}
+
+// Information on the processing of PUT and DELETE actions for mapping users
+// to their groups.
+type GroupOrderingIdSummary struct {
+	_ struct{} `type:"structure"`
+
+	// The reason an action could not be processed. An action can be a PUT or DELETE
+	// action for mapping users to their groups.
+	FailureReason *string `min:"1" type:"string"`
+
+	// The last date-time an action was updated. An action can be a PUT or DELETE
+	// action for mapping users to their groups.
+	LastUpdatedAt *time.Time `type:"timestamp"`
+
+	// The order in which actions should complete processing. An action can be a
+	// PUT or DELETE action for mapping users to their groups.
+	OrderingId *int64 `type:"long"`
+
+	// The date-time an action was received by Amazon Kendra. An action can be a
+	// PUT or DELETE action for mapping users to their groups.
+	ReceivedAt *time.Time `type:"timestamp"`
+
+	// The current processing status of actions for mapping users to their groups.
+	// The status can be either PROCESSING, SUCCEEDED, DELETING, DELETED, or FAILED.
+	Status *string `type:"string" enum:"PrincipalMappingStatus"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GroupOrderingIdSummary) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GroupOrderingIdSummary) GoString() string {
+	return s.String()
+}
+
+// SetFailureReason sets the FailureReason field's value.
+func (s *GroupOrderingIdSummary) SetFailureReason(v string) *GroupOrderingIdSummary {
+	s.FailureReason = &v
+	return s
+}
+
+// SetLastUpdatedAt sets the LastUpdatedAt field's value.
+func (s *GroupOrderingIdSummary) SetLastUpdatedAt(v time.Time) *GroupOrderingIdSummary {
+	s.LastUpdatedAt = &v
+	return s
+}
+
+// SetOrderingId sets the OrderingId field's value.
+func (s *GroupOrderingIdSummary) SetOrderingId(v int64) *GroupOrderingIdSummary {
+	s.OrderingId = &v
+	return s
+}
+
+// SetReceivedAt sets the ReceivedAt field's value.
+func (s *GroupOrderingIdSummary) SetReceivedAt(v time.Time) *GroupOrderingIdSummary {
+	s.ReceivedAt = &v
+	return s
+}
+
+// SetStatus sets the Status field's value.
+func (s *GroupOrderingIdSummary) SetStatus(v string) *GroupOrderingIdSummary {
+	s.Status = &v
+	return s
+}
+
+// Group summary information.
+type GroupSummary struct {
+	_ struct{} `type:"structure"`
+
+	// The identifier of the group you want group summary information on.
+	GroupId *string `min:"1" type:"string"`
+
+	// The timestamp identifier used for the latest PUT or DELETE action.
+	OrderingId *int64 `type:"long"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GroupSummary) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GroupSummary) GoString() string {
+	return s.String()
+}
+
+// SetGroupId sets the GroupId field's value.
+func (s *GroupSummary) SetGroupId(v string) *GroupSummary {
+	s.GroupId = &v
+	return s
+}
+
+// SetOrderingId sets the OrderingId field's value.
+func (s *GroupSummary) SetOrderingId(v int64) *GroupSummary {
+	s.OrderingId = &v
+	return s
+}
+
+// Information to define the hierarchy for which documents users should have
+// access to.
+type HierarchicalPrincipal struct {
+	_ struct{} `type:"structure"`
+
+	// A list of principal (https://docs.aws.amazon.com/kendra/latest/dg/API_Principal.html)
+	// lists that define the hierarchy for which documents users should have access
+	// to. Each hierarchical list specifies which user or group has allow or deny
+	// access for each document.
+	//
+	// PrincipalList is a required field
+	PrincipalList []*Principal `type:"list" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s HierarchicalPrincipal) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s HierarchicalPrincipal) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *HierarchicalPrincipal) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "HierarchicalPrincipal"}
+	if s.PrincipalList == nil {
+		invalidParams.Add(request.NewErrParamRequired("PrincipalList"))
+	}
+	if s.PrincipalList != nil {
+		for i, v := range s.PrincipalList {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "PrincipalList", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetPrincipalList sets the PrincipalList field's value.
+func (s *HierarchicalPrincipal) SetPrincipalList(v []*Principal) *HierarchicalPrincipal {
+	s.PrincipalList = v
 	return s
 }
 
@@ -6772,14 +11836,25 @@ type Highlight struct {
 	// Indicates whether the response is the best response. True if this is the
 	// best response; otherwise, false.
 	TopAnswer *bool `type:"boolean"`
+
+	// The highlight type.
+	Type *string `type:"string" enum:"HighlightType"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s Highlight) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s Highlight) GoString() string {
 	return s.String()
 }
@@ -6799,6 +11874,12 @@ func (s *Highlight) SetEndOffset(v int64) *Highlight {
 // SetTopAnswer sets the TopAnswer field's value.
 func (s *Highlight) SetTopAnswer(v bool) *Highlight {
 	s.TopAnswer = &v
+	return s
+}
+
+// SetType sets the Type field's value.
+func (s *Highlight) SetType(v string) *Highlight {
+	s.Type = &v
 	return s
 }
 
@@ -6834,12 +11915,20 @@ type IndexConfigurationSummary struct {
 	UpdatedAt *time.Time `type:"timestamp" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s IndexConfigurationSummary) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s IndexConfigurationSummary) GoString() string {
 	return s.String()
 }
@@ -6896,12 +11985,20 @@ type IndexStatistics struct {
 	TextDocumentStatistics *TextDocumentStatistics `type:"structure" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s IndexStatistics) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s IndexStatistics) GoString() string {
 	return s.String()
 }
@@ -6925,12 +12022,20 @@ type InternalServerException struct {
 	Message_ *string `locationName:"Message" min:"1" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s InternalServerException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s InternalServerException) GoString() string {
 	return s.String()
 }
@@ -6988,12 +12093,20 @@ type JsonTokenTypeConfiguration struct {
 	UserNameAttributeField *string `min:"1" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s JsonTokenTypeConfiguration) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s JsonTokenTypeConfiguration) GoString() string {
 	return s.String()
 }
@@ -7060,12 +12173,20 @@ type JwtTokenTypeConfiguration struct {
 	UserNameAttributeField *string `min:"1" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s JwtTokenTypeConfiguration) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s JwtTokenTypeConfiguration) GoString() string {
 	return s.String()
 }
@@ -7161,8 +12282,9 @@ type ListDataSourceSyncJobsInput struct {
 	// results.
 	MaxResults *int64 `min:"1" type:"integer"`
 
-	// If the result of the previous request to GetDataSourceSyncJobHistory was
-	// truncated, include the NextToken to fetch the next set of jobs.
+	// If the previous response was incomplete (because there is more data to retrieve),
+	// Amazon Kendra returns a pagination token in the response. You can use this
+	// pagination token to retrieve the next set of jobs.
 	NextToken *string `min:"1" type:"string"`
 
 	// When specified, the synchronization jobs returned in the list are limited
@@ -7174,12 +12296,20 @@ type ListDataSourceSyncJobsInput struct {
 	StatusFilter *string `type:"string" enum:"DataSourceSyncJobStatus"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListDataSourceSyncJobsInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListDataSourceSyncJobsInput) GoString() string {
 	return s.String()
 }
@@ -7254,20 +12384,25 @@ type ListDataSourceSyncJobsOutput struct {
 	// A history of synchronization jobs for the data source.
 	History []*DataSourceSyncJob `type:"list"`
 
-	// The GetDataSourceSyncJobHistory operation returns a page of vocabularies
-	// at a time. The maximum size of the page is set by the MaxResults parameter.
-	// If there are more jobs in the list than the page size, Amazon Kendra returns
-	// the NextPage token. Include the token in the next request to the GetDataSourceSyncJobHistory
-	// operation to return in the next page of jobs.
+	// If the response is truncated, Amazon Kendra returns this token that you can
+	// use in the subsequent request to retrieve the next set of jobs.
 	NextToken *string `min:"1" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListDataSourceSyncJobsOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListDataSourceSyncJobsOutput) GoString() string {
 	return s.String()
 }
@@ -7301,12 +12436,20 @@ type ListDataSourcesInput struct {
 	NextToken *string `min:"1" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListDataSourcesInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListDataSourcesInput) GoString() string {
 	return s.String()
 }
@@ -7362,12 +12505,20 @@ type ListDataSourcesOutput struct {
 	SummaryItems []*DataSourceSummary `type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListDataSourcesOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListDataSourcesOutput) GoString() string {
 	return s.String()
 }
@@ -7396,17 +12547,26 @@ type ListFaqsInput struct {
 	// results in the list, this response contains only the actual results.
 	MaxResults *int64 `min:"1" type:"integer"`
 
-	// If the result of the previous request to ListFaqs was truncated, include
-	// the NextToken to fetch the next set of FAQs.
+	// If the previous response was incomplete (because there is more data to retrieve),
+	// Amazon Kendra returns a pagination token in the response. You can use this
+	// pagination token to retrieve the next set of FAQs.
 	NextToken *string `min:"1" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListFaqsInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListFaqsInput) GoString() string {
 	return s.String()
 }
@@ -7457,20 +12617,25 @@ type ListFaqsOutput struct {
 	// information about the FAQs associated with the specified index.
 	FaqSummaryItems []*FaqSummary `type:"list"`
 
-	// The ListFaqs operation returns a page of FAQs at a time. The maximum size
-	// of the page is set by the MaxResults parameter. If there are more jobs in
-	// the list than the page size, Amazon Kendra returns the NextPage token. Include
-	// the token in the next request to the ListFaqs operation to return the next
-	// page of FAQs.
+	// If the response is truncated, Amazon Kendra returns this token that you can
+	// use in the subsequent request to retrieve the next set of FAQs.
 	NextToken *string `min:"1" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListFaqsOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListFaqsOutput) GoString() string {
 	return s.String()
 }
@@ -7487,6 +12652,155 @@ func (s *ListFaqsOutput) SetNextToken(v string) *ListFaqsOutput {
 	return s
 }
 
+type ListGroupsOlderThanOrderingIdInput struct {
+	_ struct{} `type:"structure"`
+
+	// The identifier of the data source for getting a list of groups mapped to
+	// users before a given ordering timestamp identifier.
+	DataSourceId *string `min:"1" type:"string"`
+
+	// The identifier of the index for getting a list of groups mapped to users
+	// before a given ordering or timestamp identifier.
+	//
+	// IndexId is a required field
+	IndexId *string `min:"36" type:"string" required:"true"`
+
+	// The maximum number of returned groups that are mapped to users before a given
+	// ordering or timestamp identifier.
+	MaxResults *int64 `min:"1" type:"integer"`
+
+	// If the previous response was incomplete (because there is more data to retrieve),
+	// Amazon Kendra returns a pagination token in the response. You can use this
+	// pagination token to retrieve the next set of groups that are mapped to users
+	// before a given ordering or timestamp identifier.
+	NextToken *string `min:"1" type:"string"`
+
+	// The timestamp identifier used for the latest PUT or DELETE action for mapping
+	// users to their groups.
+	//
+	// OrderingId is a required field
+	OrderingId *int64 `type:"long" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListGroupsOlderThanOrderingIdInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListGroupsOlderThanOrderingIdInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ListGroupsOlderThanOrderingIdInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ListGroupsOlderThanOrderingIdInput"}
+	if s.DataSourceId != nil && len(*s.DataSourceId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("DataSourceId", 1))
+	}
+	if s.IndexId == nil {
+		invalidParams.Add(request.NewErrParamRequired("IndexId"))
+	}
+	if s.IndexId != nil && len(*s.IndexId) < 36 {
+		invalidParams.Add(request.NewErrParamMinLen("IndexId", 36))
+	}
+	if s.MaxResults != nil && *s.MaxResults < 1 {
+		invalidParams.Add(request.NewErrParamMinValue("MaxResults", 1))
+	}
+	if s.NextToken != nil && len(*s.NextToken) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("NextToken", 1))
+	}
+	if s.OrderingId == nil {
+		invalidParams.Add(request.NewErrParamRequired("OrderingId"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetDataSourceId sets the DataSourceId field's value.
+func (s *ListGroupsOlderThanOrderingIdInput) SetDataSourceId(v string) *ListGroupsOlderThanOrderingIdInput {
+	s.DataSourceId = &v
+	return s
+}
+
+// SetIndexId sets the IndexId field's value.
+func (s *ListGroupsOlderThanOrderingIdInput) SetIndexId(v string) *ListGroupsOlderThanOrderingIdInput {
+	s.IndexId = &v
+	return s
+}
+
+// SetMaxResults sets the MaxResults field's value.
+func (s *ListGroupsOlderThanOrderingIdInput) SetMaxResults(v int64) *ListGroupsOlderThanOrderingIdInput {
+	s.MaxResults = &v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListGroupsOlderThanOrderingIdInput) SetNextToken(v string) *ListGroupsOlderThanOrderingIdInput {
+	s.NextToken = &v
+	return s
+}
+
+// SetOrderingId sets the OrderingId field's value.
+func (s *ListGroupsOlderThanOrderingIdInput) SetOrderingId(v int64) *ListGroupsOlderThanOrderingIdInput {
+	s.OrderingId = &v
+	return s
+}
+
+type ListGroupsOlderThanOrderingIdOutput struct {
+	_ struct{} `type:"structure"`
+
+	// Summary information for list of groups that are mapped to users before a
+	// given ordering or timestamp identifier.
+	GroupsSummaries []*GroupSummary `type:"list"`
+
+	// If the response is truncated, Amazon Kendra returns this token that you can
+	// use in the subsequent request to retrieve the next set of groups that are
+	// mapped to users before a given ordering or timestamp identifier.
+	NextToken *string `min:"1" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListGroupsOlderThanOrderingIdOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListGroupsOlderThanOrderingIdOutput) GoString() string {
+	return s.String()
+}
+
+// SetGroupsSummaries sets the GroupsSummaries field's value.
+func (s *ListGroupsOlderThanOrderingIdOutput) SetGroupsSummaries(v []*GroupSummary) *ListGroupsOlderThanOrderingIdOutput {
+	s.GroupsSummaries = v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListGroupsOlderThanOrderingIdOutput) SetNextToken(v string) *ListGroupsOlderThanOrderingIdOutput {
+	s.NextToken = &v
+	return s
+}
+
 type ListIndicesInput struct {
 	_ struct{} `type:"structure"`
 
@@ -7499,12 +12813,20 @@ type ListIndicesInput struct {
 	NextToken *string `min:"1" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListIndicesInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListIndicesInput) GoString() string {
 	return s.String()
 }
@@ -7548,12 +12870,20 @@ type ListIndicesOutput struct {
 	NextToken *string `min:"1" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListIndicesOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListIndicesOutput) GoString() string {
 	return s.String()
 }
@@ -7570,6 +12900,133 @@ func (s *ListIndicesOutput) SetNextToken(v string) *ListIndicesOutput {
 	return s
 }
 
+type ListQuerySuggestionsBlockListsInput struct {
+	_ struct{} `type:"structure"`
+
+	// The identifier of the index for a list of all block lists that exist for
+	// that index.
+	//
+	// For information on the current quota limits for block lists, see Quotas for
+	// Amazon Kendra (https://docs.aws.amazon.com/kendra/latest/dg/quotas.html).
+	//
+	// IndexId is a required field
+	IndexId *string `min:"36" type:"string" required:"true"`
+
+	// The maximum number of block lists to return.
+	MaxResults *int64 `min:"1" type:"integer"`
+
+	// If the previous response was incomplete (because there is more data to retrieve),
+	// Amazon Kendra returns a pagination token in the response. You can use this
+	// pagination token to retrieve the next set of block lists (BlockListSummaryItems).
+	NextToken *string `min:"1" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListQuerySuggestionsBlockListsInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListQuerySuggestionsBlockListsInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ListQuerySuggestionsBlockListsInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ListQuerySuggestionsBlockListsInput"}
+	if s.IndexId == nil {
+		invalidParams.Add(request.NewErrParamRequired("IndexId"))
+	}
+	if s.IndexId != nil && len(*s.IndexId) < 36 {
+		invalidParams.Add(request.NewErrParamMinLen("IndexId", 36))
+	}
+	if s.MaxResults != nil && *s.MaxResults < 1 {
+		invalidParams.Add(request.NewErrParamMinValue("MaxResults", 1))
+	}
+	if s.NextToken != nil && len(*s.NextToken) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("NextToken", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetIndexId sets the IndexId field's value.
+func (s *ListQuerySuggestionsBlockListsInput) SetIndexId(v string) *ListQuerySuggestionsBlockListsInput {
+	s.IndexId = &v
+	return s
+}
+
+// SetMaxResults sets the MaxResults field's value.
+func (s *ListQuerySuggestionsBlockListsInput) SetMaxResults(v int64) *ListQuerySuggestionsBlockListsInput {
+	s.MaxResults = &v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListQuerySuggestionsBlockListsInput) SetNextToken(v string) *ListQuerySuggestionsBlockListsInput {
+	s.NextToken = &v
+	return s
+}
+
+type ListQuerySuggestionsBlockListsOutput struct {
+	_ struct{} `type:"structure"`
+
+	// Summary items for a block list.
+	//
+	// This includes summary items on the block list ID, block list name, when the
+	// block list was created, when the block list was last updated, and the count
+	// of block words/phrases in the block list.
+	//
+	// For information on the current quota limits for block lists, see Quotas for
+	// Amazon Kendra (https://docs.aws.amazon.com/kendra/latest/dg/quotas.html).
+	BlockListSummaryItems []*QuerySuggestionsBlockListSummary `type:"list"`
+
+	// If the response is truncated, Amazon Kendra returns this token that you can
+	// use in the subsequent request to retrieve the next set of block lists.
+	NextToken *string `min:"1" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListQuerySuggestionsBlockListsOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListQuerySuggestionsBlockListsOutput) GoString() string {
+	return s.String()
+}
+
+// SetBlockListSummaryItems sets the BlockListSummaryItems field's value.
+func (s *ListQuerySuggestionsBlockListsOutput) SetBlockListSummaryItems(v []*QuerySuggestionsBlockListSummary) *ListQuerySuggestionsBlockListsOutput {
+	s.BlockListSummaryItems = v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListQuerySuggestionsBlockListsOutput) SetNextToken(v string) *ListQuerySuggestionsBlockListsOutput {
+	s.NextToken = &v
+	return s
+}
+
 type ListTagsForResourceInput struct {
 	_ struct{} `type:"structure"`
 
@@ -7580,12 +13037,20 @@ type ListTagsForResourceInput struct {
 	ResourceARN *string `min:"1" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListTagsForResourceInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListTagsForResourceInput) GoString() string {
 	return s.String()
 }
@@ -7619,12 +13084,20 @@ type ListTagsForResourceOutput struct {
 	Tags []*Tag `type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListTagsForResourceOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListTagsForResourceOutput) GoString() string {
 	return s.String()
 }
@@ -7632,6 +13105,235 @@ func (s ListTagsForResourceOutput) GoString() string {
 // SetTags sets the Tags field's value.
 func (s *ListTagsForResourceOutput) SetTags(v []*Tag) *ListTagsForResourceOutput {
 	s.Tags = v
+	return s
+}
+
+type ListThesauriInput struct {
+	_ struct{} `type:"structure"`
+
+	// The identifier of the index associated with the thesaurus to list.
+	//
+	// IndexId is a required field
+	IndexId *string `min:"36" type:"string" required:"true"`
+
+	// The maximum number of thesauri to return.
+	MaxResults *int64 `min:"1" type:"integer"`
+
+	// If the previous response was incomplete (because there is more data to retrieve),
+	// Amazon Kendra returns a pagination token in the response. You can use this
+	// pagination token to retrieve the next set of thesauri (ThesaurusSummaryItems).
+	NextToken *string `min:"1" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListThesauriInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListThesauriInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ListThesauriInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ListThesauriInput"}
+	if s.IndexId == nil {
+		invalidParams.Add(request.NewErrParamRequired("IndexId"))
+	}
+	if s.IndexId != nil && len(*s.IndexId) < 36 {
+		invalidParams.Add(request.NewErrParamMinLen("IndexId", 36))
+	}
+	if s.MaxResults != nil && *s.MaxResults < 1 {
+		invalidParams.Add(request.NewErrParamMinValue("MaxResults", 1))
+	}
+	if s.NextToken != nil && len(*s.NextToken) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("NextToken", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetIndexId sets the IndexId field's value.
+func (s *ListThesauriInput) SetIndexId(v string) *ListThesauriInput {
+	s.IndexId = &v
+	return s
+}
+
+// SetMaxResults sets the MaxResults field's value.
+func (s *ListThesauriInput) SetMaxResults(v int64) *ListThesauriInput {
+	s.MaxResults = &v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListThesauriInput) SetNextToken(v string) *ListThesauriInput {
+	s.NextToken = &v
+	return s
+}
+
+type ListThesauriOutput struct {
+	_ struct{} `type:"structure"`
+
+	// If the response is truncated, Amazon Kendra returns this token that you can
+	// use in the subsequent request to retrieve the next set of thesauri.
+	NextToken *string `min:"1" type:"string"`
+
+	// An array of summary information for a thesaurus or multiple thesauri.
+	ThesaurusSummaryItems []*ThesaurusSummary `type:"list"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListThesauriOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListThesauriOutput) GoString() string {
+	return s.String()
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListThesauriOutput) SetNextToken(v string) *ListThesauriOutput {
+	s.NextToken = &v
+	return s
+}
+
+// SetThesaurusSummaryItems sets the ThesaurusSummaryItems field's value.
+func (s *ListThesauriOutput) SetThesaurusSummaryItems(v []*ThesaurusSummary) *ListThesauriOutput {
+	s.ThesaurusSummaryItems = v
+	return s
+}
+
+// The sub groups that belong to a group.
+type MemberGroup struct {
+	_ struct{} `type:"structure"`
+
+	// The identifier of the data source for the sub group you want to map to a
+	// group.
+	DataSourceId *string `min:"1" type:"string"`
+
+	// The identifier of the sub group you want to map to a group.
+	//
+	// GroupId is a required field
+	GroupId *string `min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s MemberGroup) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s MemberGroup) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *MemberGroup) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "MemberGroup"}
+	if s.DataSourceId != nil && len(*s.DataSourceId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("DataSourceId", 1))
+	}
+	if s.GroupId == nil {
+		invalidParams.Add(request.NewErrParamRequired("GroupId"))
+	}
+	if s.GroupId != nil && len(*s.GroupId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("GroupId", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetDataSourceId sets the DataSourceId field's value.
+func (s *MemberGroup) SetDataSourceId(v string) *MemberGroup {
+	s.DataSourceId = &v
+	return s
+}
+
+// SetGroupId sets the GroupId field's value.
+func (s *MemberGroup) SetGroupId(v string) *MemberGroup {
+	s.GroupId = &v
+	return s
+}
+
+// The users that belong to a group.
+type MemberUser struct {
+	_ struct{} `type:"structure"`
+
+	// The identifier of the user you want to map to a group.
+	//
+	// UserId is a required field
+	UserId *string `min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s MemberUser) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s MemberUser) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *MemberUser) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "MemberUser"}
+	if s.UserId == nil {
+		invalidParams.Add(request.NewErrParamRequired("UserId"))
+	}
+	if s.UserId != nil && len(*s.UserId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("UserId", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetUserId sets the UserId field's value.
+func (s *MemberUser) SetUserId(v string) *MemberUser {
+	s.UserId = &v
 	return s
 }
 
@@ -7668,7 +13370,7 @@ type OneDriveConfiguration struct {
 	// OneDriveUsers is a required field
 	OneDriveUsers *OneDriveUsers `type:"structure" required:"true"`
 
-	// The Amazon Resource Name (ARN) of an AWS Secrets Manager secret that contains
+	// The Amazon Resource Name (ARN) of an Secrets Managersecret that contains
 	// the user name and password to connect to OneDrive. The user namd should be
 	// the application ID for the OneDrive application, and the password is the
 	// application key for the OneDrive application.
@@ -7676,18 +13378,26 @@ type OneDriveConfiguration struct {
 	// SecretArn is a required field
 	SecretArn *string `min:"1" type:"string" required:"true"`
 
-	// Tha Azure Active Directory domain of the organization.
+	// The Azure Active Directory domain of the organization.
 	//
 	// TenantDomain is a required field
 	TenantDomain *string `min:"1" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s OneDriveConfiguration) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s OneDriveConfiguration) GoString() string {
 	return s.String()
 }
@@ -7792,12 +13502,20 @@ type OneDriveUsers struct {
 	OneDriveUserS3Path *S3Path `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s OneDriveUsers) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s OneDriveUsers) GoString() string {
 	return s.String()
 }
@@ -7841,6 +13559,9 @@ type Principal struct {
 	// Access is a required field
 	Access *string `type:"string" required:"true" enum:"ReadAccessType"`
 
+	// The identifier of the data source the principal should access documents from.
+	DataSourceId *string `min:"1" type:"string"`
+
 	// The name of the user or group.
 	//
 	// Name is a required field
@@ -7852,12 +13573,20 @@ type Principal struct {
 	Type *string `type:"string" required:"true" enum:"PrincipalType"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s Principal) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s Principal) GoString() string {
 	return s.String()
 }
@@ -7867,6 +13596,9 @@ func (s *Principal) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "Principal"}
 	if s.Access == nil {
 		invalidParams.Add(request.NewErrParamRequired("Access"))
+	}
+	if s.DataSourceId != nil && len(*s.DataSourceId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("DataSourceId", 1))
 	}
 	if s.Name == nil {
 		invalidParams.Add(request.NewErrParamRequired("Name"))
@@ -7890,6 +13622,12 @@ func (s *Principal) SetAccess(v string) *Principal {
 	return s
 }
 
+// SetDataSourceId sets the DataSourceId field's value.
+func (s *Principal) SetDataSourceId(v string) *Principal {
+	s.DataSourceId = &v
+	return s
+}
+
 // SetName sets the Name field's value.
 func (s *Principal) SetName(v string) *Principal {
 	s.Name = &v
@@ -7900,6 +13638,268 @@ func (s *Principal) SetName(v string) *Principal {
 func (s *Principal) SetType(v string) *Principal {
 	s.Type = &v
 	return s
+}
+
+// Provides the configuration information for a web proxy to connect to website
+// hosts.
+type ProxyConfiguration struct {
+	_ struct{} `type:"structure"`
+
+	// Your secret ARN, which you can create in AWS Secrets Manager (https://docs.aws.amazon.com/secretsmanager/latest/userguide/intro.html)
+	//
+	// The credentials are optional. You use a secret if web proxy credentials are
+	// required to connect to a website host. Amazon Kendra currently support basic
+	// authentication to connect to a web proxy server. The secret stores your credentials.
+	Credentials *string `min:"1" type:"string"`
+
+	// The name of the website host you want to connect to via a web proxy server.
+	//
+	// For example, the host name of https://a.example.com/page1.html is "a.example.com".
+	//
+	// Host is a required field
+	Host *string `min:"1" type:"string" required:"true"`
+
+	// The port number of the website host you want to connect to via a web proxy
+	// server.
+	//
+	// For example, the port for https://a.example.com/page1.html is 443, the standard
+	// port for HTTPS.
+	//
+	// Port is a required field
+	Port *int64 `min:"1" type:"integer" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ProxyConfiguration) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ProxyConfiguration) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ProxyConfiguration) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ProxyConfiguration"}
+	if s.Credentials != nil && len(*s.Credentials) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Credentials", 1))
+	}
+	if s.Host == nil {
+		invalidParams.Add(request.NewErrParamRequired("Host"))
+	}
+	if s.Host != nil && len(*s.Host) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Host", 1))
+	}
+	if s.Port == nil {
+		invalidParams.Add(request.NewErrParamRequired("Port"))
+	}
+	if s.Port != nil && *s.Port < 1 {
+		invalidParams.Add(request.NewErrParamMinValue("Port", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetCredentials sets the Credentials field's value.
+func (s *ProxyConfiguration) SetCredentials(v string) *ProxyConfiguration {
+	s.Credentials = &v
+	return s
+}
+
+// SetHost sets the Host field's value.
+func (s *ProxyConfiguration) SetHost(v string) *ProxyConfiguration {
+	s.Host = &v
+	return s
+}
+
+// SetPort sets the Port field's value.
+func (s *ProxyConfiguration) SetPort(v int64) *ProxyConfiguration {
+	s.Port = &v
+	return s
+}
+
+type PutPrincipalMappingInput struct {
+	_ struct{} `type:"structure"`
+
+	// The identifier of the data source you want to map users to their groups.
+	//
+	// This is useful if a group is tied to multiple data sources, but you only
+	// want the group to access documents of a certain data source. For example,
+	// the groups "Research", "Engineering", and "Sales and Marketing" are all tied
+	// to the company's documents stored in the data sources Confluence and Salesforce.
+	// However, "Sales and Marketing" team only needs access to customer-related
+	// documents stored in Salesforce.
+	DataSourceId *string `min:"1" type:"string"`
+
+	// The identifier of the group you want to map its users to.
+	//
+	// GroupId is a required field
+	GroupId *string `min:"1" type:"string" required:"true"`
+
+	// The list that contains your users or sub groups that belong the same group.
+	//
+	// For example, the group "Company" includes the user "CEO" and the sub groups
+	// "Research", "Engineering", and "Sales and Marketing".
+	//
+	// If you have more than 1000 users and/or sub groups for a single group, you
+	// need to provide the path to the S3 file that lists your users and sub groups
+	// for a group. Your sub groups can contain more than 1000 users, but the list
+	// of sub groups that belong to a group (and/or users) must be no more than
+	// 1000.
+	//
+	// GroupMembers is a required field
+	GroupMembers *GroupMembers `type:"structure" required:"true"`
+
+	// The identifier of the index you want to map users to their groups.
+	//
+	// IndexId is a required field
+	IndexId *string `min:"36" type:"string" required:"true"`
+
+	// The timestamp identifier you specify to ensure Amazon Kendra does not override
+	// the latest PUT action with previous actions. The highest number ID, which
+	// is the ordering ID, is the latest action you want to process and apply on
+	// top of other actions with lower number IDs. This prevents previous actions
+	// with lower number IDs from possibly overriding the latest action.
+	//
+	// The ordering ID can be the UNIX time of the last update you made to a group
+	// members list. You would then provide this list when calling PutPrincipalMapping.
+	// This ensures your PUT action for that updated group with the latest members
+	// list doesn't get overwritten by earlier PUT actions for the same group which
+	// are yet to be processed.
+	//
+	// The default ordering ID is the current UNIX time in milliseconds that the
+	// action was received by Amazon Kendra.
+	OrderingId *int64 `type:"long"`
+
+	// The Amazon Resource Name (ARN) of a role that has access to the S3 file that
+	// contains your list of users or sub groups that belong to a group.
+	//
+	// For more information, see IAM roles for Amazon Kendra (https://docs.aws.amazon.com/kendra/latest/dg/iam-roles.html#iam-roles-ds).
+	RoleArn *string `min:"1" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s PutPrincipalMappingInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s PutPrincipalMappingInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *PutPrincipalMappingInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "PutPrincipalMappingInput"}
+	if s.DataSourceId != nil && len(*s.DataSourceId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("DataSourceId", 1))
+	}
+	if s.GroupId == nil {
+		invalidParams.Add(request.NewErrParamRequired("GroupId"))
+	}
+	if s.GroupId != nil && len(*s.GroupId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("GroupId", 1))
+	}
+	if s.GroupMembers == nil {
+		invalidParams.Add(request.NewErrParamRequired("GroupMembers"))
+	}
+	if s.IndexId == nil {
+		invalidParams.Add(request.NewErrParamRequired("IndexId"))
+	}
+	if s.IndexId != nil && len(*s.IndexId) < 36 {
+		invalidParams.Add(request.NewErrParamMinLen("IndexId", 36))
+	}
+	if s.RoleArn != nil && len(*s.RoleArn) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("RoleArn", 1))
+	}
+	if s.GroupMembers != nil {
+		if err := s.GroupMembers.Validate(); err != nil {
+			invalidParams.AddNested("GroupMembers", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetDataSourceId sets the DataSourceId field's value.
+func (s *PutPrincipalMappingInput) SetDataSourceId(v string) *PutPrincipalMappingInput {
+	s.DataSourceId = &v
+	return s
+}
+
+// SetGroupId sets the GroupId field's value.
+func (s *PutPrincipalMappingInput) SetGroupId(v string) *PutPrincipalMappingInput {
+	s.GroupId = &v
+	return s
+}
+
+// SetGroupMembers sets the GroupMembers field's value.
+func (s *PutPrincipalMappingInput) SetGroupMembers(v *GroupMembers) *PutPrincipalMappingInput {
+	s.GroupMembers = v
+	return s
+}
+
+// SetIndexId sets the IndexId field's value.
+func (s *PutPrincipalMappingInput) SetIndexId(v string) *PutPrincipalMappingInput {
+	s.IndexId = &v
+	return s
+}
+
+// SetOrderingId sets the OrderingId field's value.
+func (s *PutPrincipalMappingInput) SetOrderingId(v int64) *PutPrincipalMappingInput {
+	s.OrderingId = &v
+	return s
+}
+
+// SetRoleArn sets the RoleArn field's value.
+func (s *PutPrincipalMappingInput) SetRoleArn(v string) *PutPrincipalMappingInput {
+	s.RoleArn = &v
+	return s
+}
+
+type PutPrincipalMappingOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s PutPrincipalMappingOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s PutPrincipalMappingOutput) GoString() string {
+	return s.String()
 }
 
 type QueryInput struct {
@@ -7913,13 +13913,29 @@ type QueryInput struct {
 	// that a document must satisfy to be included in the query results.
 	AttributeFilter *AttributeFilter `type:"structure"`
 
+	// Overrides relevance tuning configurations of fields or attributes set at
+	// the index level.
+	//
+	// If you use this API to override the relevance tuning configured at the index
+	// level, but there is no relevance tuning configured at the index level, then
+	// Amazon Kendra does not apply any relevance tuning.
+	//
+	// If there is relevance tuning configured at the index level, but you do not
+	// use this API to override any relevance tuning in the index, then Amazon Kendra
+	// uses the relevance tuning that is configured at the index level.
+	//
+	// If there is relevance tuning configured for fields at the index level, but
+	// you use this API to override only some of these fields, then for the fields
+	// you did not override, the importance is set to 1.
+	DocumentRelevanceOverrideConfigurations []*DocumentRelevanceConfiguration `type:"list"`
+
 	// An array of documents attributes. Amazon Kendra returns a count for each
 	// attribute key specified. You can use this information to help narrow the
 	// search for your user.
 	Facets []*Facet `type:"list"`
 
 	// The unique identifier of the index to search. The identifier is returned
-	// in the response from the operation.
+	// in the response from the CreateIndex operation.
 	//
 	// IndexId is a required field
 	IndexId *string `min:"36" type:"string" required:"true"`
@@ -7956,16 +13972,29 @@ type QueryInput struct {
 	// relevance that Amazon Kendra determines for the result.
 	SortingConfiguration *SortingConfiguration `type:"structure"`
 
-	// The user context token.
+	// The user context token or user and group information.
 	UserContext *UserContext `type:"structure"`
+
+	// Provides an identifier for a specific user. The VisitorId should be a unique
+	// identifier, such as a GUID. Don't use personally identifiable information,
+	// such as the user's email address, as the VisitorId.
+	VisitorId *string `min:"1" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s QueryInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s QueryInput) GoString() string {
 	return s.String()
 }
@@ -7988,9 +14017,22 @@ func (s *QueryInput) Validate() error {
 	if s.RequestedDocumentAttributes != nil && len(s.RequestedDocumentAttributes) < 1 {
 		invalidParams.Add(request.NewErrParamMinLen("RequestedDocumentAttributes", 1))
 	}
+	if s.VisitorId != nil && len(*s.VisitorId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("VisitorId", 1))
+	}
 	if s.AttributeFilter != nil {
 		if err := s.AttributeFilter.Validate(); err != nil {
 			invalidParams.AddNested("AttributeFilter", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.DocumentRelevanceOverrideConfigurations != nil {
+		for i, v := range s.DocumentRelevanceOverrideConfigurations {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "DocumentRelevanceOverrideConfigurations", i), err.(request.ErrInvalidParams))
+			}
 		}
 	}
 	if s.Facets != nil {
@@ -8023,6 +14065,12 @@ func (s *QueryInput) Validate() error {
 // SetAttributeFilter sets the AttributeFilter field's value.
 func (s *QueryInput) SetAttributeFilter(v *AttributeFilter) *QueryInput {
 	s.AttributeFilter = v
+	return s
+}
+
+// SetDocumentRelevanceOverrideConfigurations sets the DocumentRelevanceOverrideConfigurations field's value.
+func (s *QueryInput) SetDocumentRelevanceOverrideConfigurations(v []*DocumentRelevanceConfiguration) *QueryInput {
+	s.DocumentRelevanceOverrideConfigurations = v
 	return s
 }
 
@@ -8080,6 +14128,12 @@ func (s *QueryInput) SetUserContext(v *UserContext) *QueryInput {
 	return s
 }
 
+// SetVisitorId sets the VisitorId field's value.
+func (s *QueryInput) SetVisitorId(v string) *QueryInput {
+	s.VisitorId = &v
+	return s
+}
+
 type QueryOutput struct {
 	_ struct{} `type:"structure"`
 
@@ -8100,12 +14154,20 @@ type QueryOutput struct {
 	TotalNumberOfResults *int64 `type:"integer"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s QueryOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s QueryOutput) GoString() string {
 	return s.String()
 }
@@ -8165,6 +14227,11 @@ type QueryResultItem struct {
 	// The URI of the original location of the document.
 	DocumentURI *string `min:"1" type:"string"`
 
+	// A token that identifies a particular result from a particular query. Use
+	// this token to provide click-through feedback for the result. For more information,
+	// see Submitting feedback (https://docs.aws.amazon.com/kendra/latest/dg/submitting-feedback.html).
+	FeedbackToken *string `min:"1" type:"string"`
+
 	// The unique identifier for the query result.
 	Id *string `min:"1" type:"string"`
 
@@ -8181,12 +14248,20 @@ type QueryResultItem struct {
 	Type *string `type:"string" enum:"QueryResultType"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s QueryResultItem) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s QueryResultItem) GoString() string {
 	return s.String()
 }
@@ -8227,6 +14302,12 @@ func (s *QueryResultItem) SetDocumentURI(v string) *QueryResultItem {
 	return s
 }
 
+// SetFeedbackToken sets the FeedbackToken field's value.
+func (s *QueryResultItem) SetFeedbackToken(v string) *QueryResultItem {
+	s.FeedbackToken = &v
+	return s
+}
+
 // SetId sets the Id field's value.
 func (s *QueryResultItem) SetId(v string) *QueryResultItem {
 	s.Id = &v
@@ -8242,6 +14323,91 @@ func (s *QueryResultItem) SetScoreAttributes(v *ScoreAttributes) *QueryResultIte
 // SetType sets the Type field's value.
 func (s *QueryResultItem) SetType(v string) *QueryResultItem {
 	s.Type = &v
+	return s
+}
+
+// Summary information on a query suggestions block list.
+//
+// This includes information on the block list ID, block list name, when the
+// block list was created, when the block list was last updated, and the count
+// of block words/phrases in the block list.
+//
+// For information on the current quota limits for block lists, see Quotas for
+// Amazon Kendra (https://docs.aws.amazon.com/kendra/latest/dg/quotas.html).
+type QuerySuggestionsBlockListSummary struct {
+	_ struct{} `type:"structure"`
+
+	// The date-time summary information for a query suggestions block list was
+	// last created.
+	CreatedAt *time.Time `type:"timestamp"`
+
+	// The identifier of a block list.
+	Id *string `min:"36" type:"string"`
+
+	// The number of items in the block list file.
+	ItemCount *int64 `type:"integer"`
+
+	// The name of the block list.
+	Name *string `min:"1" type:"string"`
+
+	// The status of the block list.
+	Status *string `type:"string" enum:"QuerySuggestionsBlockListStatus"`
+
+	// The date-time the block list was last updated.
+	UpdatedAt *time.Time `type:"timestamp"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s QuerySuggestionsBlockListSummary) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s QuerySuggestionsBlockListSummary) GoString() string {
+	return s.String()
+}
+
+// SetCreatedAt sets the CreatedAt field's value.
+func (s *QuerySuggestionsBlockListSummary) SetCreatedAt(v time.Time) *QuerySuggestionsBlockListSummary {
+	s.CreatedAt = &v
+	return s
+}
+
+// SetId sets the Id field's value.
+func (s *QuerySuggestionsBlockListSummary) SetId(v string) *QuerySuggestionsBlockListSummary {
+	s.Id = &v
+	return s
+}
+
+// SetItemCount sets the ItemCount field's value.
+func (s *QuerySuggestionsBlockListSummary) SetItemCount(v int64) *QuerySuggestionsBlockListSummary {
+	s.ItemCount = &v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *QuerySuggestionsBlockListSummary) SetName(v string) *QuerySuggestionsBlockListSummary {
+	s.Name = &v
+	return s
+}
+
+// SetStatus sets the Status field's value.
+func (s *QuerySuggestionsBlockListSummary) SetStatus(v string) *QuerySuggestionsBlockListSummary {
+	s.Status = &v
+	return s
+}
+
+// SetUpdatedAt sets the UpdatedAt field's value.
+func (s *QuerySuggestionsBlockListSummary) SetUpdatedAt(v time.Time) *QuerySuggestionsBlockListSummary {
+	s.UpdatedAt = &v
 	return s
 }
 
@@ -8299,12 +14465,20 @@ type Relevance struct {
 	ValueImportanceMap map[string]*int64 `type:"map"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s Relevance) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s Relevance) GoString() string {
 	return s.String()
 }
@@ -8372,12 +14546,20 @@ type RelevanceFeedback struct {
 	ResultId *string `min:"1" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s RelevanceFeedback) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s RelevanceFeedback) GoString() string {
 	return s.String()
 }
@@ -8420,12 +14602,20 @@ type ResourceAlreadyExistException struct {
 	Message_ *string `locationName:"Message" min:"1" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ResourceAlreadyExistException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ResourceAlreadyExistException) GoString() string {
 	return s.String()
 }
@@ -8475,12 +14665,20 @@ type ResourceInUseException struct {
 	Message_ *string `locationName:"Message" min:"1" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ResourceInUseException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ResourceInUseException) GoString() string {
 	return s.String()
 }
@@ -8530,12 +14728,20 @@ type ResourceNotFoundException struct {
 	Message_ *string `locationName:"Message" min:"1" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ResourceNotFoundException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ResourceNotFoundException) GoString() string {
 	return s.String()
 }
@@ -8585,12 +14791,20 @@ type ResourceUnavailableException struct {
 	Message_ *string `locationName:"Message" min:"1" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ResourceUnavailableException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ResourceUnavailableException) GoString() string {
 	return s.String()
 }
@@ -8639,7 +14853,8 @@ type S3DataSourceConfiguration struct {
 	_ struct{} `type:"structure"`
 
 	// Provides the path to the S3 bucket that contains the user context filtering
-	// files for the data source.
+	// files for the data source. For the format of the file, see Access control
+	// for S3 data sources (https://docs.aws.amazon.com/kendra/latest/dg/s3-acl.html).
 	AccessControlListConfiguration *AccessControlListConfiguration `type:"structure"`
 
 	// The name of the bucket that contains the documents.
@@ -8656,28 +14871,53 @@ type S3DataSourceConfiguration struct {
 	// that matches an inclusion prefix or inclusion pattern also matches an exclusion
 	// pattern, the document is not indexed.
 	//
-	// For more information about glob patterns, see glob (programming) (https://en.wikipedia.org/wiki/Glob_(programming))
-	// in Wikipedia.
+	// Some examples (https://docs.aws.amazon.com/cli/latest/reference/s3/#use-of-exclude-and-include-filters)
+	// are:
+	//
+	//    * *.png , *.jpg will exclude all PNG and JPEG image files in a directory
+	//    (files with the extensions .png and .jpg).
+	//
+	//    * *internal* will exclude all files in a directory that contain 'internal'
+	//    in the file name, such as 'internal', 'internal_only', 'company_internal'.
+	//
+	//    * **/*internal* will exclude all internal-related files in a directory
+	//    and its subdirectories.
 	ExclusionPatterns []*string `type:"list"`
 
 	// A list of glob patterns for documents that should be indexed. If a document
 	// that matches an inclusion pattern also matches an exclusion pattern, the
 	// document is not indexed.
 	//
-	// For more information about glob patterns, see glob (programming) (https://en.wikipedia.org/wiki/Glob_(programming))
-	// in Wikipedia.
+	// Some examples (https://docs.aws.amazon.com/cli/latest/reference/s3/#use-of-exclude-and-include-filters)
+	// are:
+	//
+	//    * *.txt will include all text files in a directory (files with the extension
+	//    .txt).
+	//
+	//    * **/*.txt will include all text files in a directory and its subdirectories.
+	//
+	//    * *tax* will include all files in a directory that contain 'tax' in the
+	//    file name, such as 'tax', 'taxes', 'income_tax'.
 	InclusionPatterns []*string `type:"list"`
 
 	// A list of S3 prefixes for the documents that should be included in the index.
 	InclusionPrefixes []*string `type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s S3DataSourceConfiguration) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s S3DataSourceConfiguration) GoString() string {
 	return s.String()
 }
@@ -8759,12 +14999,20 @@ type S3Path struct {
 	Key *string `min:"1" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s S3Path) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s S3Path) GoString() string {
 	return s.String()
 }
@@ -8815,7 +15063,7 @@ type SalesforceChatterFeedConfiguration struct {
 	DocumentDataFieldName *string `min:"1" type:"string" required:"true"`
 
 	// The name of the column in the Salesforce FeedItem table that contains the
-	// title of the document. This is typically the Title collumn.
+	// title of the document. This is typically the Title column.
 	DocumentTitleFieldName *string `min:"1" type:"string"`
 
 	// Maps fields from a Salesforce chatter feed into Amazon Kendra index fields.
@@ -8828,12 +15076,20 @@ type SalesforceChatterFeedConfiguration struct {
 	IncludeFilterTypes []*string `min:"1" type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s SalesforceChatterFeedConfiguration) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s SalesforceChatterFeedConfiguration) GoString() string {
 	return s.String()
 }
@@ -8923,13 +15179,13 @@ type SalesforceConfiguration struct {
 	// The regex is applied to the name of the attached file.
 	IncludeAttachmentFilePatterns []*string `type:"list"`
 
-	// Specifies configuration information for the knowlege article types that Amazon
-	// Kendra indexes. Amazon Kendra indexes standard knowledge articles and the
-	// standard fields of knowledge articles, or the custom fields of custom knowledge
-	// articles, but not both.
+	// Specifies configuration information for the knowledge article types that
+	// Amazon Kendra indexes. Amazon Kendra indexes standard knowledge articles
+	// and the standard fields of knowledge articles, or the custom fields of custom
+	// knowledge articles, but not both.
 	KnowledgeArticleConfiguration *SalesforceKnowledgeArticleConfiguration `type:"structure"`
 
-	// The Amazon Resource Name (ARN) of an AWS Secrets Manager secret that contains
+	// The Amazon Resource Name (ARN) of an Secrets Managersecret that contains
 	// the key/value pairs required to connect to your Salesforce instance. The
 	// secret must contain a JSON structure with the following keys:
 	//
@@ -8966,12 +15222,20 @@ type SalesforceConfiguration struct {
 	StandardObjectConfigurations []*SalesforceStandardObjectConfiguration `min:"1" type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s SalesforceConfiguration) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s SalesforceConfiguration) GoString() string {
 	return s.String()
 }
@@ -9104,12 +15368,20 @@ type SalesforceCustomKnowledgeArticleTypeConfiguration struct {
 	Name *string `min:"1" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s SalesforceCustomKnowledgeArticleTypeConfiguration) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s SalesforceCustomKnowledgeArticleTypeConfiguration) GoString() string {
 	return s.String()
 }
@@ -9176,10 +15448,10 @@ func (s *SalesforceCustomKnowledgeArticleTypeConfiguration) SetName(v string) *S
 	return s
 }
 
-// Specifies configuration information for the knowlege article types that Amazon
-// Kendra indexes. Amazon Kendra indexes standard knowledge articles and the
-// standard fields of knowledge articles, or the custom fields of custom knowledge
-// articles, but not both
+// Specifies configuration information for the knowledge article types that
+// Amazon Kendra indexes. Amazon Kendra indexes standard knowledge articles
+// and the standard fields of knowledge articles, or the custom fields of custom
+// knowledge articles, but not both
 type SalesforceKnowledgeArticleConfiguration struct {
 	_ struct{} `type:"structure"`
 
@@ -9196,12 +15468,20 @@ type SalesforceKnowledgeArticleConfiguration struct {
 	StandardKnowledgeArticleTypeConfiguration *SalesforceStandardKnowledgeArticleTypeConfiguration `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s SalesforceKnowledgeArticleConfiguration) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s SalesforceKnowledgeArticleConfiguration) GoString() string {
 	return s.String()
 }
@@ -9276,12 +15556,20 @@ type SalesforceStandardKnowledgeArticleTypeConfiguration struct {
 	FieldMappings []*DataSourceToIndexFieldMapping `min:"1" type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s SalesforceStandardKnowledgeArticleTypeConfiguration) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s SalesforceStandardKnowledgeArticleTypeConfiguration) GoString() string {
 	return s.String()
 }
@@ -9349,12 +15637,20 @@ type SalesforceStandardObjectAttachmentConfiguration struct {
 	FieldMappings []*DataSourceToIndexFieldMapping `min:"1" type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s SalesforceStandardObjectAttachmentConfiguration) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s SalesforceStandardObjectAttachmentConfiguration) GoString() string {
 	return s.String()
 }
@@ -9397,7 +15693,7 @@ func (s *SalesforceStandardObjectAttachmentConfiguration) SetFieldMappings(v []*
 	return s
 }
 
-// Specifies confguration information for indexing a single standard object.
+// Specifies configuration information for indexing a single standard object.
 type SalesforceStandardObjectConfiguration struct {
 	_ struct{} `type:"structure"`
 
@@ -9408,7 +15704,7 @@ type SalesforceStandardObjectConfiguration struct {
 	DocumentDataFieldName *string `min:"1" type:"string" required:"true"`
 
 	// The name of the field in the standard object table that contains the document
-	// titleB.
+	// title.
 	DocumentTitleFieldName *string `min:"1" type:"string"`
 
 	// One or more objects that map fields in the standard object to Amazon Kendra
@@ -9422,12 +15718,20 @@ type SalesforceStandardObjectConfiguration struct {
 	Name *string `type:"string" required:"true" enum:"SalesforceStandardObjectName"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s SalesforceStandardObjectConfiguration) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s SalesforceStandardObjectConfiguration) GoString() string {
 	return s.String()
 }
@@ -9500,12 +15804,20 @@ type ScoreAttributes struct {
 	ScoreConfidence *string `type:"string" enum:"ScoreConfidence"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ScoreAttributes) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ScoreAttributes) GoString() string {
 	return s.String()
 }
@@ -9540,12 +15852,20 @@ type Search struct {
 	Sortable *bool `type:"boolean"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s Search) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s Search) GoString() string {
 	return s.String()
 }
@@ -9574,23 +15894,111 @@ func (s *Search) SetSortable(v bool) *Search {
 	return s
 }
 
-// Provides the identifier of the AWS KMS customer master key (CMK) used to
-// encrypt data indexed by Amazon Kendra. Amazon Kendra doesn't support asymmetric
-// CMKs.
+// Provides the configuration information of the seed or starting point URLs
+// to crawl.
+//
+// When selecting websites to index, you must adhere to the Amazon Acceptable
+// Use Policy (https://aws.amazon.com/aup/) and all other Amazon terms. Remember
+// that you must only use the Amazon Kendra web crawler to index your own webpages,
+// or webpages that you have authorization to index.
+type SeedUrlConfiguration struct {
+	_ struct{} `type:"structure"`
+
+	// The list of seed or starting point URLs of the websites you want to crawl.
+	//
+	// The list can include a maximum of 100 seed URLs.
+	//
+	// SeedUrls is a required field
+	SeedUrls []*string `type:"list" required:"true"`
+
+	// You can choose one of the following modes:
+	//
+	//    * HOST_ONLY – crawl only the website host names. For example, if the
+	//    seed URL is "abc.example.com", then only URLs with host name "abc.example.com"
+	//    are crawled.
+	//
+	//    * SUBDOMAINS – crawl the website host names with subdomains. For example,
+	//    if the seed URL is "abc.example.com", then "a.abc.example.com" and "b.abc.example.com"
+	//    are also crawled.
+	//
+	//    * EVERYTHING – crawl the website host names with subdomains and other
+	//    domains that the webpages link to.
+	//
+	// The default mode is set to HOST_ONLY.
+	WebCrawlerMode *string `type:"string" enum:"WebCrawlerMode"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s SeedUrlConfiguration) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s SeedUrlConfiguration) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *SeedUrlConfiguration) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "SeedUrlConfiguration"}
+	if s.SeedUrls == nil {
+		invalidParams.Add(request.NewErrParamRequired("SeedUrls"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetSeedUrls sets the SeedUrls field's value.
+func (s *SeedUrlConfiguration) SetSeedUrls(v []*string) *SeedUrlConfiguration {
+	s.SeedUrls = v
+	return s
+}
+
+// SetWebCrawlerMode sets the WebCrawlerMode field's value.
+func (s *SeedUrlConfiguration) SetWebCrawlerMode(v string) *SeedUrlConfiguration {
+	s.WebCrawlerMode = &v
+	return s
+}
+
+// Provides the identifier of the KMScustomer master key (CMK) used to encrypt
+// data indexed by Amazon Kendra. Amazon Kendra doesn't support asymmetric CMKs.
 type ServerSideEncryptionConfiguration struct {
 	_ struct{} `type:"structure"`
 
-	// The identifier of the AWS KMS customer master key (CMK). Amazon Kendra doesn't
+	// The identifier of the KMScustomer master key (CMK). Amazon Kendra doesn't
 	// support asymmetric CMKs.
+	//
+	// KmsKeyId is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by ServerSideEncryptionConfiguration's
+	// String and GoString methods.
 	KmsKeyId *string `min:"1" type:"string" sensitive:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ServerSideEncryptionConfiguration) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ServerSideEncryptionConfiguration) GoString() string {
 	return s.String()
 }
@@ -9619,6 +16027,19 @@ func (s *ServerSideEncryptionConfiguration) SetKmsKeyId(v string) *ServerSideEnc
 type ServiceNowConfiguration struct {
 	_ struct{} `type:"structure"`
 
+	// Determines the type of authentication used to connect to the ServiceNow instance.
+	// If you choose HTTP_BASIC, Amazon Kendra is authenticated using the user name
+	// and password provided in the AWS Secrets Manager secret in the SecretArn
+	// field. When you choose OAUTH2, Amazon Kendra is authenticated using the OAuth
+	// token and secret provided in the Secrets Manager secret, and the user name
+	// and password are used to determine which information Amazon Kendra has access
+	// to.
+	//
+	// When you use OAUTH2 authentication, you must generate a token and a client
+	// secret using the ServiceNow console. For more information, see Using a ServiceNow
+	// data source (https://docs.aws.amazon.com/kendra/latest/dg/data-source-servicenow.html).
+	AuthenticationType *string `type:"string" enum:"ServiceNowAuthenticationType"`
+
 	// The ServiceNow instance that the data source connects to. The host endpoint
 	// should look like the following: {instance}.service-now.com.
 	//
@@ -9629,7 +16050,7 @@ type ServiceNowConfiguration struct {
 	// ServiceNow site.
 	KnowledgeArticleConfiguration *ServiceNowKnowledgeArticleConfiguration `type:"structure"`
 
-	// The Amazon Resource Name (ARN) of the AWS Secret Manager secret that contains
+	// The Amazon Resource Name (ARN) of the Secrets Manager secret that contains
 	// the user name and password required to connect to the ServiceNow instance.
 	//
 	// SecretArn is a required field
@@ -9646,12 +16067,20 @@ type ServiceNowConfiguration struct {
 	ServiceNowBuildVersion *string `type:"string" required:"true" enum:"ServiceNowBuildVersionType"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ServiceNowConfiguration) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ServiceNowConfiguration) GoString() string {
 	return s.String()
 }
@@ -9689,6 +16118,12 @@ func (s *ServiceNowConfiguration) Validate() error {
 		return invalidParams
 	}
 	return nil
+}
+
+// SetAuthenticationType sets the AuthenticationType field's value.
+func (s *ServiceNowConfiguration) SetAuthenticationType(v string) *ServiceNowConfiguration {
+	s.AuthenticationType = &v
+	return s
 }
 
 // SetHostUrl sets the HostUrl field's value.
@@ -9748,18 +16183,34 @@ type ServiceNowKnowledgeArticleConfiguration struct {
 	// create the index field before you map the field.
 	FieldMappings []*DataSourceToIndexFieldMapping `min:"1" type:"list"`
 
+	// A query that selects the knowledge articles to index. The query can return
+	// articles from multiple knowledge bases, and the knowledge bases can be public
+	// or private.
+	//
+	// The query string must be one generated by the ServiceNow console. For more
+	// information, see Specifying documents to index with a query (https://docs.aws.amazon.com/kendra/latest/dg/servicenow-query.html).
+	FilterQuery *string `min:"1" type:"string"`
+
 	// List of regular expressions applied to knowledge articles. Items that don't
 	// match the inclusion pattern are not indexed. The regex is applied to the
 	// field specified in the PatternTargetField.
 	IncludeAttachmentFilePatterns []*string `type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ServiceNowKnowledgeArticleConfiguration) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ServiceNowKnowledgeArticleConfiguration) GoString() string {
 	return s.String()
 }
@@ -9778,6 +16229,9 @@ func (s *ServiceNowKnowledgeArticleConfiguration) Validate() error {
 	}
 	if s.FieldMappings != nil && len(s.FieldMappings) < 1 {
 		invalidParams.Add(request.NewErrParamMinLen("FieldMappings", 1))
+	}
+	if s.FilterQuery != nil && len(*s.FilterQuery) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("FilterQuery", 1))
 	}
 	if s.FieldMappings != nil {
 		for i, v := range s.FieldMappings {
@@ -9826,6 +16280,12 @@ func (s *ServiceNowKnowledgeArticleConfiguration) SetFieldMappings(v []*DataSour
 	return s
 }
 
+// SetFilterQuery sets the FilterQuery field's value.
+func (s *ServiceNowKnowledgeArticleConfiguration) SetFilterQuery(v string) *ServiceNowKnowledgeArticleConfiguration {
+	s.FilterQuery = &v
+	return s
+}
+
 // SetIncludeAttachmentFilePatterns sets the IncludeAttachmentFilePatterns field's value.
 func (s *ServiceNowKnowledgeArticleConfiguration) SetIncludeAttachmentFilePatterns(v []*string) *ServiceNowKnowledgeArticleConfiguration {
 	s.IncludeAttachmentFilePatterns = v
@@ -9851,23 +16311,41 @@ type ServiceNowServiceCatalogConfiguration struct {
 	// field.
 	DocumentTitleFieldName *string `min:"1" type:"string"`
 
-	// Determines the types of file attachments that are excluded from the index.
+	// A list of regular expression patterns. Documents that match the patterns
+	// are excluded from the index. Documents that don't match the patterns are
+	// included in the index. If a document matches both an exclusion pattern and
+	// an inclusion pattern, the document is not included in the index.
+	//
+	// The regex is applied to the file name of the attachment.
 	ExcludeAttachmentFilePatterns []*string `type:"list"`
 
 	// Mapping between ServiceNow fields and Amazon Kendra index fields. You must
 	// create the index field before you map the field.
 	FieldMappings []*DataSourceToIndexFieldMapping `min:"1" type:"list"`
 
-	// Determines the types of file attachments that are included in the index.
+	// A list of regular expression patterns. Documents that match the patterns
+	// are included in the index. Documents that don't match the patterns are excluded
+	// from the index. If a document matches both an exclusion pattern and an inclusion
+	// pattern, the document is not included in the index.
+	//
+	// The regex is applied to the file name of the attachment.
 	IncludeAttachmentFilePatterns []*string `type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ServiceNowServiceCatalogConfiguration) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ServiceNowServiceCatalogConfiguration) GoString() string {
 	return s.String()
 }
@@ -9947,12 +16425,20 @@ type ServiceQuotaExceededException struct {
 	Message_ *string `locationName:"Message" min:"1" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ServiceQuotaExceededException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ServiceQuotaExceededException) GoString() string {
 	return s.String()
 }
@@ -10021,8 +16507,8 @@ type SharePointConfiguration struct {
 
 	// A list of DataSourceToIndexFieldMapping objects that map Microsoft SharePoint
 	// attributes to custom fields in the Amazon Kendra index. You must first create
-	// the index fields using the operation before you map SharePoint attributes.
-	// For more information, see Mapping Data Source Fields (https://docs.aws.amazon.com/kendra/latest/dg/field-mapping.html).
+	// the index fields using the UpdateIndex operation before you map SharePoint
+	// attributes. For more information, see Mapping Data Source Fields (https://docs.aws.amazon.com/kendra/latest/dg/field-mapping.html).
 	FieldMappings []*DataSourceToIndexFieldMapping `min:"1" type:"list"`
 
 	// A list of regular expression patterns. Documents that match the patterns
@@ -10033,12 +16519,12 @@ type SharePointConfiguration struct {
 	// The regex is applied to the display URL of the SharePoint document.
 	InclusionPatterns []*string `type:"list"`
 
-	// The Amazon Resource Name (ARN) of credentials stored in AWS Secrets Manager.
-	// The credentials should be a user/password pair. For more information, see
-	// Using a Microsoft SharePoint Data Source (https://docs.aws.amazon.com/kendra/latest/dg/data-source-sharepoint.html).
-	// For more information about AWS Secrets Manager, see What Is AWS Secrets Manager
-	// (https://docs.aws.amazon.com/secretsmanager/latest/userguide/intro.html)
-	// in the AWS Secrets Manager user guide.
+	// The Amazon Resource Name (ARN) of credentials stored in Secrets Manager.
+	// The credentials should be a user/password pair. If you use SharePoint Server,
+	// you also need to provide the sever domain name as part of the credentials.
+	// For more information, see Using a Microsoft SharePoint Data Source (https://docs.aws.amazon.com/kendra/latest/dg/data-source-sharepoint.html).
+	// For more information about Secrets Manager, see What Is Secrets Manager (https://docs.aws.amazon.com/secretsmanager/latest/userguide/intro.html)
+	// in the Secrets Manager user guide.
 	//
 	// SecretArn is a required field
 	SecretArn *string `min:"1" type:"string" required:"true"`
@@ -10047,6 +16533,9 @@ type SharePointConfiguration struct {
 	//
 	// SharePointVersion is a required field
 	SharePointVersion *string `type:"string" required:"true" enum:"SharePointVersion"`
+
+	// Information required to find a specific file in an Amazon S3 bucket.
+	SslCertificateS3Path *S3Path `type:"structure"`
 
 	// The URLs of the Microsoft SharePoint site that contains the documents that
 	// should be indexed.
@@ -10065,12 +16554,20 @@ type SharePointConfiguration struct {
 	VpcConfiguration *DataSourceVpcConfiguration `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s SharePointConfiguration) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s SharePointConfiguration) GoString() string {
 	return s.String()
 }
@@ -10107,6 +16604,11 @@ func (s *SharePointConfiguration) Validate() error {
 			if err := v.Validate(); err != nil {
 				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "FieldMappings", i), err.(request.ErrInvalidParams))
 			}
+		}
+	}
+	if s.SslCertificateS3Path != nil {
+		if err := s.SslCertificateS3Path.Validate(); err != nil {
+			invalidParams.AddNested("SslCertificateS3Path", err.(request.ErrInvalidParams))
 		}
 	}
 	if s.VpcConfiguration != nil {
@@ -10169,6 +16671,12 @@ func (s *SharePointConfiguration) SetSharePointVersion(v string) *SharePointConf
 	return s
 }
 
+// SetSslCertificateS3Path sets the SslCertificateS3Path field's value.
+func (s *SharePointConfiguration) SetSslCertificateS3Path(v *S3Path) *SharePointConfiguration {
+	s.SslCertificateS3Path = v
+	return s
+}
+
 // SetUrls sets the Urls field's value.
 func (s *SharePointConfiguration) SetUrls(v []*string) *SharePointConfiguration {
 	s.Urls = v
@@ -10184,6 +16692,60 @@ func (s *SharePointConfiguration) SetUseChangeLog(v bool) *SharePointConfigurati
 // SetVpcConfiguration sets the VpcConfiguration field's value.
 func (s *SharePointConfiguration) SetVpcConfiguration(v *DataSourceVpcConfiguration) *SharePointConfiguration {
 	s.VpcConfiguration = v
+	return s
+}
+
+// Provides the configuration information of the sitemap URLs to crawl.
+//
+// When selecting websites to index, you must adhere to the Amazon Acceptable
+// Use Policy (https://aws.amazon.com/aup/) and all other Amazon terms. Remember
+// that you must only use the Amazon Kendra web crawler to index your own webpages,
+// or webpages that you have authorization to index.
+type SiteMapsConfiguration struct {
+	_ struct{} `type:"structure"`
+
+	// The list of sitemap URLs of the websites you want to crawl.
+	//
+	// The list can include a maximum of three sitemap URLs.
+	//
+	// SiteMaps is a required field
+	SiteMaps []*string `type:"list" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s SiteMapsConfiguration) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s SiteMapsConfiguration) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *SiteMapsConfiguration) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "SiteMapsConfiguration"}
+	if s.SiteMaps == nil {
+		invalidParams.Add(request.NewErrParamRequired("SiteMaps"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetSiteMaps sets the SiteMaps field's value.
+func (s *SiteMapsConfiguration) SetSiteMaps(v []*string) *SiteMapsConfiguration {
+	s.SiteMaps = v
 	return s
 }
 
@@ -10231,12 +16793,20 @@ type SortingConfiguration struct {
 	SortOrder *string `type:"string" required:"true" enum:"SortOrder"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s SortingConfiguration) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s SortingConfiguration) GoString() string {
 	return s.String()
 }
@@ -10292,12 +16862,20 @@ type SqlConfiguration struct {
 	QueryIdentifiersEnclosingOption *string `type:"string" enum:"QueryIdentifiersEnclosingOption"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s SqlConfiguration) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s SqlConfiguration) GoString() string {
 	return s.String()
 }
@@ -10322,12 +16900,20 @@ type StartDataSourceSyncJobInput struct {
 	IndexId *string `min:"36" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s StartDataSourceSyncJobInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s StartDataSourceSyncJobInput) GoString() string {
 	return s.String()
 }
@@ -10373,12 +16959,20 @@ type StartDataSourceSyncJobOutput struct {
 	ExecutionId *string `min:"1" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s StartDataSourceSyncJobOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s StartDataSourceSyncJobOutput) GoString() string {
 	return s.String()
 }
@@ -10386,6 +16980,70 @@ func (s StartDataSourceSyncJobOutput) GoString() string {
 // SetExecutionId sets the ExecutionId field's value.
 func (s *StartDataSourceSyncJobOutput) SetExecutionId(v string) *StartDataSourceSyncJobOutput {
 	s.ExecutionId = &v
+	return s
+}
+
+// Provides information about the status of documents submitted for indexing.
+type Status struct {
+	_ struct{} `type:"structure"`
+
+	// The unique identifier of the document.
+	DocumentId *string `min:"1" type:"string"`
+
+	// The current status of a document.
+	//
+	// If the document was submitted for deletion, the status is NOT_FOUND after
+	// the document is deleted.
+	DocumentStatus *string `type:"string" enum:"DocumentStatus"`
+
+	// Indicates the source of the error.
+	FailureCode *string `min:"1" type:"string"`
+
+	// Provides detailed information about why the document couldn't be indexed.
+	// Use this information to correct the error before you resubmit the document
+	// for indexing.
+	FailureReason *string `min:"1" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s Status) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s Status) GoString() string {
+	return s.String()
+}
+
+// SetDocumentId sets the DocumentId field's value.
+func (s *Status) SetDocumentId(v string) *Status {
+	s.DocumentId = &v
+	return s
+}
+
+// SetDocumentStatus sets the DocumentStatus field's value.
+func (s *Status) SetDocumentStatus(v string) *Status {
+	s.DocumentStatus = &v
+	return s
+}
+
+// SetFailureCode sets the FailureCode field's value.
+func (s *Status) SetFailureCode(v string) *Status {
+	s.FailureCode = &v
+	return s
+}
+
+// SetFailureReason sets the FailureReason field's value.
+func (s *Status) SetFailureReason(v string) *Status {
+	s.FailureReason = &v
 	return s
 }
 
@@ -10403,12 +17061,20 @@ type StopDataSourceSyncJobInput struct {
 	IndexId *string `min:"36" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s StopDataSourceSyncJobInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s StopDataSourceSyncJobInput) GoString() string {
 	return s.String()
 }
@@ -10451,12 +17117,20 @@ type StopDataSourceSyncJobOutput struct {
 	_ struct{} `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s StopDataSourceSyncJobOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s StopDataSourceSyncJobOutput) GoString() string {
 	return s.String()
 }
@@ -10474,7 +17148,7 @@ type SubmitFeedbackInput struct {
 	IndexId *string `min:"36" type:"string" required:"true"`
 
 	// The identifier of the specific query for which you are submitting feedback.
-	// The query ID is returned in the response to the operation.
+	// The query ID is returned in the response to the Query operation.
 	//
 	// QueryId is a required field
 	QueryId *string `min:"1" type:"string" required:"true"`
@@ -10484,12 +17158,20 @@ type SubmitFeedbackInput struct {
 	RelevanceFeedbackItems []*RelevanceFeedback `type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s SubmitFeedbackInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s SubmitFeedbackInput) GoString() string {
 	return s.String()
 }
@@ -10564,14 +17246,182 @@ type SubmitFeedbackOutput struct {
 	_ struct{} `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s SubmitFeedbackOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s SubmitFeedbackOutput) GoString() string {
 	return s.String()
+}
+
+// A single query suggestion.
+type Suggestion struct {
+	_ struct{} `type:"structure"`
+
+	// The unique UUID (universally unique identifier) of a single query suggestion.
+	Id *string `min:"1" type:"string"`
+
+	// The value for the unique UUID (universally unique identifier) of a single
+	// query suggestion.
+	//
+	// The value is the text string of a suggestion.
+	Value *SuggestionValue `type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s Suggestion) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s Suggestion) GoString() string {
+	return s.String()
+}
+
+// SetId sets the Id field's value.
+func (s *Suggestion) SetId(v string) *Suggestion {
+	s.Id = &v
+	return s
+}
+
+// SetValue sets the Value field's value.
+func (s *Suggestion) SetValue(v *SuggestionValue) *Suggestion {
+	s.Value = v
+	return s
+}
+
+// The text highlights for a single query suggestion.
+type SuggestionHighlight struct {
+	_ struct{} `type:"structure"`
+
+	// The zero-based location in the response string where the highlight starts.
+	BeginOffset *int64 `type:"integer"`
+
+	// The zero-based location in the response string where the highlight ends.
+	EndOffset *int64 `type:"integer"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s SuggestionHighlight) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s SuggestionHighlight) GoString() string {
+	return s.String()
+}
+
+// SetBeginOffset sets the BeginOffset field's value.
+func (s *SuggestionHighlight) SetBeginOffset(v int64) *SuggestionHighlight {
+	s.BeginOffset = &v
+	return s
+}
+
+// SetEndOffset sets the EndOffset field's value.
+func (s *SuggestionHighlight) SetEndOffset(v int64) *SuggestionHighlight {
+	s.EndOffset = &v
+	return s
+}
+
+// Provides text and information about where to highlight the query suggestion
+// text.
+type SuggestionTextWithHighlights struct {
+	_ struct{} `type:"structure"`
+
+	// The beginning and end of the query suggestion text that should be highlighted.
+	Highlights []*SuggestionHighlight `type:"list"`
+
+	// The query suggestion text to display to the user.
+	Text *string `min:"1" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s SuggestionTextWithHighlights) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s SuggestionTextWithHighlights) GoString() string {
+	return s.String()
+}
+
+// SetHighlights sets the Highlights field's value.
+func (s *SuggestionTextWithHighlights) SetHighlights(v []*SuggestionHighlight) *SuggestionTextWithHighlights {
+	s.Highlights = v
+	return s
+}
+
+// SetText sets the Text field's value.
+func (s *SuggestionTextWithHighlights) SetText(v string) *SuggestionTextWithHighlights {
+	s.Text = &v
+	return s
+}
+
+// The SuggestionTextWithHighlights structure information.
+type SuggestionValue struct {
+	_ struct{} `type:"structure"`
+
+	// The SuggestionTextWithHighlights structure that contains the query suggestion
+	// text and highlights.
+	Text *SuggestionTextWithHighlights `type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s SuggestionValue) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s SuggestionValue) GoString() string {
+	return s.String()
+}
+
+// SetText sets the Text field's value.
+func (s *SuggestionValue) SetText(v *SuggestionTextWithHighlights) *SuggestionValue {
+	s.Text = v
+	return s
 }
 
 // A list of key/value pairs that identify an index, FAQ, or data source. Tag
@@ -10593,12 +17443,20 @@ type Tag struct {
 	Value *string `type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s Tag) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s Tag) GoString() string {
 	return s.String()
 }
@@ -10649,12 +17507,20 @@ type TagResourceInput struct {
 	Tags []*Tag `type:"list" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s TagResourceInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s TagResourceInput) GoString() string {
 	return s.String()
 }
@@ -10704,12 +17570,20 @@ type TagResourceOutput struct {
 	_ struct{} `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s TagResourceOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s TagResourceOutput) GoString() string {
 	return s.String()
 }
@@ -10729,12 +17603,20 @@ type TextDocumentStatistics struct {
 	IndexedTextDocumentsCount *int64 `type:"integer" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s TextDocumentStatistics) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s TextDocumentStatistics) GoString() string {
 	return s.String()
 }
@@ -10762,12 +17644,20 @@ type TextWithHighlights struct {
 	Text *string `min:"1" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s TextWithHighlights) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s TextWithHighlights) GoString() string {
 	return s.String()
 }
@@ -10784,6 +17674,74 @@ func (s *TextWithHighlights) SetText(v string) *TextWithHighlights {
 	return s
 }
 
+// An array of summary information for a thesaurus or multiple thesauri.
+type ThesaurusSummary struct {
+	_ struct{} `type:"structure"`
+
+	// The Unix datetime that the thesaurus was created.
+	CreatedAt *time.Time `type:"timestamp"`
+
+	// The identifier of the thesaurus.
+	Id *string `min:"1" type:"string"`
+
+	// The name of the thesaurus.
+	Name *string `min:"1" type:"string"`
+
+	// The status of the thesaurus.
+	Status *string `type:"string" enum:"ThesaurusStatus"`
+
+	// The Unix datetime that the thesaurus was last updated.
+	UpdatedAt *time.Time `type:"timestamp"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ThesaurusSummary) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ThesaurusSummary) GoString() string {
+	return s.String()
+}
+
+// SetCreatedAt sets the CreatedAt field's value.
+func (s *ThesaurusSummary) SetCreatedAt(v time.Time) *ThesaurusSummary {
+	s.CreatedAt = &v
+	return s
+}
+
+// SetId sets the Id field's value.
+func (s *ThesaurusSummary) SetId(v string) *ThesaurusSummary {
+	s.Id = &v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *ThesaurusSummary) SetName(v string) *ThesaurusSummary {
+	s.Name = &v
+	return s
+}
+
+// SetStatus sets the Status field's value.
+func (s *ThesaurusSummary) SetStatus(v string) *ThesaurusSummary {
+	s.Status = &v
+	return s
+}
+
+// SetUpdatedAt sets the UpdatedAt field's value.
+func (s *ThesaurusSummary) SetUpdatedAt(v time.Time) *ThesaurusSummary {
+	s.UpdatedAt = &v
+	return s
+}
+
 type ThrottlingException struct {
 	_            struct{}                  `type:"structure"`
 	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
@@ -10791,12 +17749,20 @@ type ThrottlingException struct {
 	Message_ *string `locationName:"Message" min:"1" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ThrottlingException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ThrottlingException) GoString() string {
 	return s.String()
 }
@@ -10850,12 +17816,20 @@ type TimeRange struct {
 	StartTime *time.Time `type:"timestamp"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s TimeRange) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s TimeRange) GoString() string {
 	return s.String()
 }
@@ -10888,12 +17862,20 @@ type UntagResourceInput struct {
 	TagKeys []*string `type:"list" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UntagResourceInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UntagResourceInput) GoString() string {
 	return s.String()
 }
@@ -10933,12 +17915,20 @@ type UntagResourceOutput struct {
 	_ struct{} `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UntagResourceOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UntagResourceOutput) GoString() string {
 	return s.String()
 }
@@ -10962,6 +17952,12 @@ type UpdateDataSourceInput struct {
 	// IndexId is a required field
 	IndexId *string `min:"36" type:"string" required:"true"`
 
+	// The code for a language. This allows you to support a language for all documents
+	// when updating the data source. English is supported by default. For more
+	// information on supported languages, including their codes, see Adding documents
+	// in languages other than English (https://docs.aws.amazon.com/kendra/latest/dg/in-adding-languages.html).
+	LanguageCode *string `min:"2" type:"string"`
+
 	// The name of the data source to update. The name of the data source can't
 	// be updated. To rename a data source you must delete the data source and re-create
 	// it.
@@ -10975,12 +17971,20 @@ type UpdateDataSourceInput struct {
 	Schedule *string `type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpdateDataSourceInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpdateDataSourceInput) GoString() string {
 	return s.String()
 }
@@ -10999,6 +18003,9 @@ func (s *UpdateDataSourceInput) Validate() error {
 	}
 	if s.IndexId != nil && len(*s.IndexId) < 36 {
 		invalidParams.Add(request.NewErrParamMinLen("IndexId", 36))
+	}
+	if s.LanguageCode != nil && len(*s.LanguageCode) < 2 {
+		invalidParams.Add(request.NewErrParamMinLen("LanguageCode", 2))
 	}
 	if s.Name != nil && len(*s.Name) < 1 {
 		invalidParams.Add(request.NewErrParamMinLen("Name", 1))
@@ -11042,6 +18049,12 @@ func (s *UpdateDataSourceInput) SetIndexId(v string) *UpdateDataSourceInput {
 	return s
 }
 
+// SetLanguageCode sets the LanguageCode field's value.
+func (s *UpdateDataSourceInput) SetLanguageCode(v string) *UpdateDataSourceInput {
+	s.LanguageCode = &v
+	return s
+}
+
 // SetName sets the Name field's value.
 func (s *UpdateDataSourceInput) SetName(v string) *UpdateDataSourceInput {
 	s.Name = &v
@@ -11064,12 +18077,20 @@ type UpdateDataSourceOutput struct {
 	_ struct{} `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpdateDataSourceOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpdateDataSourceOutput) GoString() string {
 	return s.String()
 }
@@ -11077,7 +18098,7 @@ func (s UpdateDataSourceOutput) GoString() string {
 type UpdateIndexInput struct {
 	_ struct{} `type:"structure"`
 
-	// Sets the number of addtional storage and query capacity units that should
+	// Sets the number of additional storage and query capacity units that should
 	// be used by the index. You can change the capacity of the index up to 5 times
 	// per day.
 	//
@@ -11103,19 +18124,32 @@ type UpdateIndexInput struct {
 	// CloudWatch logs.
 	RoleArn *string `min:"1" type:"string"`
 
-	// The user user token context policy.
+	// The user context policy.
 	UserContextPolicy *string `type:"string" enum:"UserContextPolicy"`
+
+	// Enables fetching access levels of groups and users from an AWS Single Sign-On
+	// identity source. To configure this, see UserGroupResolutionConfiguration
+	// (https://docs.aws.amazon.com/kendra/latest/dg/API_UserGroupResolutionConfiguration.html).
+	UserGroupResolutionConfiguration *UserGroupResolutionConfiguration `type:"structure"`
 
 	// The user token configuration.
 	UserTokenConfigurations []*UserTokenConfiguration `type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpdateIndexInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpdateIndexInput) GoString() string {
 	return s.String()
 }
@@ -11148,6 +18182,11 @@ func (s *UpdateIndexInput) Validate() error {
 			if err := v.Validate(); err != nil {
 				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "DocumentMetadataConfigurationUpdates", i), err.(request.ErrInvalidParams))
 			}
+		}
+	}
+	if s.UserGroupResolutionConfiguration != nil {
+		if err := s.UserGroupResolutionConfiguration.Validate(); err != nil {
+			invalidParams.AddNested("UserGroupResolutionConfiguration", err.(request.ErrInvalidParams))
 		}
 	}
 	if s.UserTokenConfigurations != nil {
@@ -11209,6 +18248,12 @@ func (s *UpdateIndexInput) SetUserContextPolicy(v string) *UpdateIndexInput {
 	return s
 }
 
+// SetUserGroupResolutionConfiguration sets the UserGroupResolutionConfiguration field's value.
+func (s *UpdateIndexInput) SetUserGroupResolutionConfiguration(v *UserGroupResolutionConfiguration) *UpdateIndexInput {
+	s.UserGroupResolutionConfiguration = v
+	return s
+}
+
 // SetUserTokenConfigurations sets the UserTokenConfigurations field's value.
 func (s *UpdateIndexInput) SetUserTokenConfigurations(v []*UserTokenConfiguration) *UpdateIndexInput {
 	s.UserTokenConfigurations = v
@@ -11219,39 +18264,103 @@ type UpdateIndexOutput struct {
 	_ struct{} `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpdateIndexOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpdateIndexOutput) GoString() string {
 	return s.String()
 }
 
-// Provides information about the user context for a Amazon Kendra index.
-type UserContext struct {
+type UpdateQuerySuggestionsBlockListInput struct {
 	_ struct{} `type:"structure"`
 
-	// The user context token. It must be a JWT or a JSON token.
-	Token *string `min:"1" type:"string"`
+	// The description for a block list.
+	Description *string `type:"string"`
+
+	// The unique identifier of a block list.
+	//
+	// Id is a required field
+	Id *string `min:"36" type:"string" required:"true"`
+
+	// The identifier of the index for a block list.
+	//
+	// IndexId is a required field
+	IndexId *string `min:"36" type:"string" required:"true"`
+
+	// The name of a block list.
+	Name *string `min:"1" type:"string"`
+
+	// The IAM (Identity and Access Management) role used to access the block list
+	// text file in S3.
+	RoleArn *string `min:"1" type:"string"`
+
+	// The S3 path where your block list text file sits in S3.
+	//
+	// If you update your block list and provide the same path to the block list
+	// text file in S3, then Amazon Kendra reloads the file to refresh the block
+	// list. Amazon Kendra does not automatically refresh your block list. You need
+	// to call the UpdateQuerySuggestionsBlockList API to refresh you block list.
+	//
+	// If you update your block list, then Amazon Kendra asynchronously refreshes
+	// all query suggestions with the latest content in the S3 file. This means
+	// changes might not take effect immediately.
+	SourceS3Path *S3Path `type:"structure"`
 }
 
-// String returns the string representation
-func (s UserContext) String() string {
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdateQuerySuggestionsBlockListInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
-func (s UserContext) GoString() string {
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdateQuerySuggestionsBlockListInput) GoString() string {
 	return s.String()
 }
 
 // Validate inspects the fields of the type to determine if they are valid.
-func (s *UserContext) Validate() error {
-	invalidParams := request.ErrInvalidParams{Context: "UserContext"}
-	if s.Token != nil && len(*s.Token) < 1 {
-		invalidParams.Add(request.NewErrParamMinLen("Token", 1))
+func (s *UpdateQuerySuggestionsBlockListInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "UpdateQuerySuggestionsBlockListInput"}
+	if s.Id == nil {
+		invalidParams.Add(request.NewErrParamRequired("Id"))
+	}
+	if s.Id != nil && len(*s.Id) < 36 {
+		invalidParams.Add(request.NewErrParamMinLen("Id", 36))
+	}
+	if s.IndexId == nil {
+		invalidParams.Add(request.NewErrParamRequired("IndexId"))
+	}
+	if s.IndexId != nil && len(*s.IndexId) < 36 {
+		invalidParams.Add(request.NewErrParamMinLen("IndexId", 36))
+	}
+	if s.Name != nil && len(*s.Name) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Name", 1))
+	}
+	if s.RoleArn != nil && len(*s.RoleArn) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("RoleArn", 1))
+	}
+	if s.SourceS3Path != nil {
+		if err := s.SourceS3Path.Validate(); err != nil {
+			invalidParams.AddNested("SourceS3Path", err.(request.ErrInvalidParams))
+		}
 	}
 
 	if invalidParams.Len() > 0 {
@@ -11260,9 +18369,604 @@ func (s *UserContext) Validate() error {
 	return nil
 }
 
+// SetDescription sets the Description field's value.
+func (s *UpdateQuerySuggestionsBlockListInput) SetDescription(v string) *UpdateQuerySuggestionsBlockListInput {
+	s.Description = &v
+	return s
+}
+
+// SetId sets the Id field's value.
+func (s *UpdateQuerySuggestionsBlockListInput) SetId(v string) *UpdateQuerySuggestionsBlockListInput {
+	s.Id = &v
+	return s
+}
+
+// SetIndexId sets the IndexId field's value.
+func (s *UpdateQuerySuggestionsBlockListInput) SetIndexId(v string) *UpdateQuerySuggestionsBlockListInput {
+	s.IndexId = &v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *UpdateQuerySuggestionsBlockListInput) SetName(v string) *UpdateQuerySuggestionsBlockListInput {
+	s.Name = &v
+	return s
+}
+
+// SetRoleArn sets the RoleArn field's value.
+func (s *UpdateQuerySuggestionsBlockListInput) SetRoleArn(v string) *UpdateQuerySuggestionsBlockListInput {
+	s.RoleArn = &v
+	return s
+}
+
+// SetSourceS3Path sets the SourceS3Path field's value.
+func (s *UpdateQuerySuggestionsBlockListInput) SetSourceS3Path(v *S3Path) *UpdateQuerySuggestionsBlockListInput {
+	s.SourceS3Path = v
+	return s
+}
+
+type UpdateQuerySuggestionsBlockListOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdateQuerySuggestionsBlockListOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdateQuerySuggestionsBlockListOutput) GoString() string {
+	return s.String()
+}
+
+type UpdateQuerySuggestionsConfigInput struct {
+	_ struct{} `type:"structure"`
+
+	// TRUE to include queries without user information (i.e. all queries, irrespective
+	// of the user), otherwise FALSE to only include queries with user information.
+	//
+	// If you pass user information to Amazon Kendra along with the queries, you
+	// can set this flag to FALSE and instruct Amazon Kendra to only consider queries
+	// with user information.
+	//
+	// If you set to FALSE, Amazon Kendra only considers queries searched at least
+	// MinimumQueryCount times across MinimumNumberOfQueryingUsers unique users
+	// for suggestions.
+	//
+	// If you set to TRUE, Amazon Kendra ignores all user information and learns
+	// from all queries.
+	IncludeQueriesWithoutUserInformation *bool `type:"boolean"`
+
+	// The identifier of the index you want to update query suggestions settings
+	// for.
+	//
+	// IndexId is a required field
+	IndexId *string `min:"36" type:"string" required:"true"`
+
+	// The minimum number of unique users who must search a query in order for the
+	// query to be eligible to suggest to your users.
+	//
+	// Increasing this number might decrease the number of suggestions. However,
+	// this ensures a query is searched by many users and is truly popular to suggest
+	// to users.
+	//
+	// How you tune this setting depends on your specific needs.
+	MinimumNumberOfQueryingUsers *int64 `min:"1" type:"integer"`
+
+	// The the minimum number of times a query must be searched in order to be eligible
+	// to suggest to your users.
+	//
+	// Decreasing this number increases the number of suggestions. However, this
+	// affects the quality of suggestions as it sets a low bar for a query to be
+	// considered popular to suggest to users.
+	//
+	// How you tune this setting depends on your specific needs.
+	MinimumQueryCount *int64 `min:"1" type:"integer"`
+
+	// Set the mode to ENABLED or LEARN_ONLY.
+	//
+	// By default, Amazon Kendra enables query suggestions. LEARN_ONLY mode allows
+	// you to turn off query suggestions. You can to update this at any time.
+	//
+	// In LEARN_ONLY mode, Amazon Kendra continues to learn from new queries to
+	// keep suggestions up to date for when you are ready to switch to ENABLED mode
+	// again.
+	Mode *string `type:"string" enum:"Mode"`
+
+	// How recent your queries are in your query log time window.
+	//
+	// The time window is the number of days from current day to past days.
+	//
+	// By default, Amazon Kendra sets this to 180.
+	QueryLogLookBackWindowInDays *int64 `type:"integer"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdateQuerySuggestionsConfigInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdateQuerySuggestionsConfigInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *UpdateQuerySuggestionsConfigInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "UpdateQuerySuggestionsConfigInput"}
+	if s.IndexId == nil {
+		invalidParams.Add(request.NewErrParamRequired("IndexId"))
+	}
+	if s.IndexId != nil && len(*s.IndexId) < 36 {
+		invalidParams.Add(request.NewErrParamMinLen("IndexId", 36))
+	}
+	if s.MinimumNumberOfQueryingUsers != nil && *s.MinimumNumberOfQueryingUsers < 1 {
+		invalidParams.Add(request.NewErrParamMinValue("MinimumNumberOfQueryingUsers", 1))
+	}
+	if s.MinimumQueryCount != nil && *s.MinimumQueryCount < 1 {
+		invalidParams.Add(request.NewErrParamMinValue("MinimumQueryCount", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetIncludeQueriesWithoutUserInformation sets the IncludeQueriesWithoutUserInformation field's value.
+func (s *UpdateQuerySuggestionsConfigInput) SetIncludeQueriesWithoutUserInformation(v bool) *UpdateQuerySuggestionsConfigInput {
+	s.IncludeQueriesWithoutUserInformation = &v
+	return s
+}
+
+// SetIndexId sets the IndexId field's value.
+func (s *UpdateQuerySuggestionsConfigInput) SetIndexId(v string) *UpdateQuerySuggestionsConfigInput {
+	s.IndexId = &v
+	return s
+}
+
+// SetMinimumNumberOfQueryingUsers sets the MinimumNumberOfQueryingUsers field's value.
+func (s *UpdateQuerySuggestionsConfigInput) SetMinimumNumberOfQueryingUsers(v int64) *UpdateQuerySuggestionsConfigInput {
+	s.MinimumNumberOfQueryingUsers = &v
+	return s
+}
+
+// SetMinimumQueryCount sets the MinimumQueryCount field's value.
+func (s *UpdateQuerySuggestionsConfigInput) SetMinimumQueryCount(v int64) *UpdateQuerySuggestionsConfigInput {
+	s.MinimumQueryCount = &v
+	return s
+}
+
+// SetMode sets the Mode field's value.
+func (s *UpdateQuerySuggestionsConfigInput) SetMode(v string) *UpdateQuerySuggestionsConfigInput {
+	s.Mode = &v
+	return s
+}
+
+// SetQueryLogLookBackWindowInDays sets the QueryLogLookBackWindowInDays field's value.
+func (s *UpdateQuerySuggestionsConfigInput) SetQueryLogLookBackWindowInDays(v int64) *UpdateQuerySuggestionsConfigInput {
+	s.QueryLogLookBackWindowInDays = &v
+	return s
+}
+
+type UpdateQuerySuggestionsConfigOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdateQuerySuggestionsConfigOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdateQuerySuggestionsConfigOutput) GoString() string {
+	return s.String()
+}
+
+type UpdateThesaurusInput struct {
+	_ struct{} `type:"structure"`
+
+	// The updated description of the thesaurus.
+	Description *string `type:"string"`
+
+	// The identifier of the thesaurus to update.
+	//
+	// Id is a required field
+	Id *string `min:"1" type:"string" required:"true"`
+
+	// The identifier of the index associated with the thesaurus to update.
+	//
+	// IndexId is a required field
+	IndexId *string `min:"36" type:"string" required:"true"`
+
+	// The updated name of the thesaurus.
+	Name *string `min:"1" type:"string"`
+
+	// The updated role ARN of the thesaurus.
+	RoleArn *string `min:"1" type:"string"`
+
+	// Information required to find a specific file in an Amazon S3 bucket.
+	SourceS3Path *S3Path `type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdateThesaurusInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdateThesaurusInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *UpdateThesaurusInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "UpdateThesaurusInput"}
+	if s.Id == nil {
+		invalidParams.Add(request.NewErrParamRequired("Id"))
+	}
+	if s.Id != nil && len(*s.Id) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Id", 1))
+	}
+	if s.IndexId == nil {
+		invalidParams.Add(request.NewErrParamRequired("IndexId"))
+	}
+	if s.IndexId != nil && len(*s.IndexId) < 36 {
+		invalidParams.Add(request.NewErrParamMinLen("IndexId", 36))
+	}
+	if s.Name != nil && len(*s.Name) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Name", 1))
+	}
+	if s.RoleArn != nil && len(*s.RoleArn) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("RoleArn", 1))
+	}
+	if s.SourceS3Path != nil {
+		if err := s.SourceS3Path.Validate(); err != nil {
+			invalidParams.AddNested("SourceS3Path", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetDescription sets the Description field's value.
+func (s *UpdateThesaurusInput) SetDescription(v string) *UpdateThesaurusInput {
+	s.Description = &v
+	return s
+}
+
+// SetId sets the Id field's value.
+func (s *UpdateThesaurusInput) SetId(v string) *UpdateThesaurusInput {
+	s.Id = &v
+	return s
+}
+
+// SetIndexId sets the IndexId field's value.
+func (s *UpdateThesaurusInput) SetIndexId(v string) *UpdateThesaurusInput {
+	s.IndexId = &v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *UpdateThesaurusInput) SetName(v string) *UpdateThesaurusInput {
+	s.Name = &v
+	return s
+}
+
+// SetRoleArn sets the RoleArn field's value.
+func (s *UpdateThesaurusInput) SetRoleArn(v string) *UpdateThesaurusInput {
+	s.RoleArn = &v
+	return s
+}
+
+// SetSourceS3Path sets the SourceS3Path field's value.
+func (s *UpdateThesaurusInput) SetSourceS3Path(v *S3Path) *UpdateThesaurusInput {
+	s.SourceS3Path = v
+	return s
+}
+
+type UpdateThesaurusOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdateThesaurusOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdateThesaurusOutput) GoString() string {
+	return s.String()
+}
+
+// Provides the configuration information of the URLs to crawl.
+//
+// You can only crawl websites that use the secure communication protocol, Hypertext
+// Transfer Protocol Secure (HTTPS). If you receive an error when crawling a
+// website, it could be that the website is blocked from crawling.
+//
+// When selecting websites to index, you must adhere to the Amazon Acceptable
+// Use Policy (https://aws.amazon.com/aup/) and all other Amazon terms. Remember
+// that you must only use the Amazon Kendra web crawler to index your own webpages,
+// or webpages that you have authorization to index.
+type Urls struct {
+	_ struct{} `type:"structure"`
+
+	// Provides the configuration of the seed or starting point URLs of the websites
+	// you want to crawl.
+	//
+	// You can choose to crawl only the website host names, or the website host
+	// names with subdomains, or the website host names with subdomains and other
+	// domains that the webpages link to.
+	//
+	// You can list up to 100 seed URLs.
+	SeedUrlConfiguration *SeedUrlConfiguration `type:"structure"`
+
+	// Provides the configuration of the sitemap URLs of the websites you want to
+	// crawl.
+	//
+	// Only URLs belonging to the same website host names are crawled. You can list
+	// up to three sitemap URLs.
+	SiteMapsConfiguration *SiteMapsConfiguration `type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s Urls) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s Urls) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *Urls) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "Urls"}
+	if s.SeedUrlConfiguration != nil {
+		if err := s.SeedUrlConfiguration.Validate(); err != nil {
+			invalidParams.AddNested("SeedUrlConfiguration", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.SiteMapsConfiguration != nil {
+		if err := s.SiteMapsConfiguration.Validate(); err != nil {
+			invalidParams.AddNested("SiteMapsConfiguration", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetSeedUrlConfiguration sets the SeedUrlConfiguration field's value.
+func (s *Urls) SetSeedUrlConfiguration(v *SeedUrlConfiguration) *Urls {
+	s.SeedUrlConfiguration = v
+	return s
+}
+
+// SetSiteMapsConfiguration sets the SiteMapsConfiguration field's value.
+func (s *Urls) SetSiteMapsConfiguration(v *SiteMapsConfiguration) *Urls {
+	s.SiteMapsConfiguration = v
+	return s
+}
+
+// Provides information about the user context for an Amazon Kendra index.
+//
+// This is used for filtering search results for different users based on their
+// access to documents.
+//
+// You provide one of the following:
+//
+//    * User token
+//
+//    * User ID, the groups the user belongs to, and any data sources the groups
+//    can access.
+//
+// If you provide both, an exception is thrown.
+type UserContext struct {
+	_ struct{} `type:"structure"`
+
+	// The list of data source groups you want to filter search results based on
+	// groups' access to documents in that data source.
+	DataSourceGroups []*DataSourceGroup `min:"1" type:"list"`
+
+	// The list of groups you want to filter search results based on the groups'
+	// access to documents.
+	Groups []*string `min:"1" type:"list"`
+
+	// The user context token for filtering search results for a user. It must be
+	// a JWT or a JSON token.
+	Token *string `min:"1" type:"string"`
+
+	// The identifier of the user you want to filter search results based on their
+	// access to documents.
+	UserId *string `min:"1" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UserContext) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UserContext) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *UserContext) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "UserContext"}
+	if s.DataSourceGroups != nil && len(s.DataSourceGroups) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("DataSourceGroups", 1))
+	}
+	if s.Groups != nil && len(s.Groups) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Groups", 1))
+	}
+	if s.Token != nil && len(*s.Token) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Token", 1))
+	}
+	if s.UserId != nil && len(*s.UserId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("UserId", 1))
+	}
+	if s.DataSourceGroups != nil {
+		for i, v := range s.DataSourceGroups {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "DataSourceGroups", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetDataSourceGroups sets the DataSourceGroups field's value.
+func (s *UserContext) SetDataSourceGroups(v []*DataSourceGroup) *UserContext {
+	s.DataSourceGroups = v
+	return s
+}
+
+// SetGroups sets the Groups field's value.
+func (s *UserContext) SetGroups(v []*string) *UserContext {
+	s.Groups = v
+	return s
+}
+
 // SetToken sets the Token field's value.
 func (s *UserContext) SetToken(v string) *UserContext {
 	s.Token = &v
+	return s
+}
+
+// SetUserId sets the UserId field's value.
+func (s *UserContext) SetUserId(v string) *UserContext {
+	s.UserId = &v
+	return s
+}
+
+// Provides the configuration information to fetch access levels of groups and
+// users from an AWS Single Sign-On identity source. This is useful for setting
+// up user context filtering, where Amazon Kendra filters search results for
+// different users based on their group's access to documents. You can also
+// map your users to their groups for user context filtering using the PutPrincipalMapping
+// operation (https://docs.aws.amazon.com/latest/dg/API_PutPrincipalMapping.html).
+//
+// To set up an AWS SSO identity source in the console to use with Amazon Kendra,
+// see Getting started with an AWS SSO identity source (https://docs.aws.amazon.com/kendra/latest/dg/getting-started-aws-sso.html).
+// You must also grant the required permissions to use AWS SSO with Amazon Kendra.
+// For more information, see IAM roles for AWS Single Sign-On (https://docs.aws.amazon.com/kendra/latest/dg/iam-roles.html#iam-roles-aws-sso).
+type UserGroupResolutionConfiguration struct {
+	_ struct{} `type:"structure"`
+
+	// The identity store provider (mode) you want to use to fetch access levels
+	// of groups and users. AWS Single Sign-On is currently the only available mode.
+	// Your users and groups must exist in an AWS SSO identity source in order to
+	// use this mode.
+	//
+	// UserGroupResolutionMode is a required field
+	UserGroupResolutionMode *string `type:"string" required:"true" enum:"UserGroupResolutionMode"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UserGroupResolutionConfiguration) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UserGroupResolutionConfiguration) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *UserGroupResolutionConfiguration) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "UserGroupResolutionConfiguration"}
+	if s.UserGroupResolutionMode == nil {
+		invalidParams.Add(request.NewErrParamRequired("UserGroupResolutionMode"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetUserGroupResolutionMode sets the UserGroupResolutionMode field's value.
+func (s *UserGroupResolutionConfiguration) SetUserGroupResolutionMode(v string) *UserGroupResolutionConfiguration {
+	s.UserGroupResolutionMode = &v
 	return s
 }
 
@@ -11277,12 +18981,20 @@ type UserTokenConfiguration struct {
 	JwtTokenTypeConfiguration *JwtTokenTypeConfiguration `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UserTokenConfiguration) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UserTokenConfiguration) GoString() string {
 	return s.String()
 }
@@ -11326,12 +19038,20 @@ type ValidationException struct {
 	Message_ *string `locationName:"Message" min:"1" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ValidationException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ValidationException) GoString() string {
 	return s.String()
 }
@@ -11372,6 +19092,352 @@ func (s *ValidationException) StatusCode() int {
 // RequestID returns the service's response RequestID for request.
 func (s *ValidationException) RequestID() string {
 	return s.RespMetadata.RequestID
+}
+
+// Provides the configuration information required for Amazon Kendra web crawler.
+type WebCrawlerConfiguration struct {
+	_ struct{} `type:"structure"`
+
+	// Provides configuration information required to connect to websites using
+	// authentication.
+	//
+	// You can connect to websites using basic authentication of user name and password.
+	//
+	// You must provide the website host name and port number. For example, the
+	// host name of https://a.example.com/page1.html is "a.example.com" and the
+	// port is 443, the standard port for HTTPS. You use a secret in AWS Secrets
+	// Manager (https://docs.aws.amazon.com/secretsmanager/latest/userguide/intro.html)
+	// to store your authentication credentials.
+	AuthenticationConfiguration *AuthenticationConfiguration `type:"structure"`
+
+	// Specifies the number of levels in a website that you want to crawl.
+	//
+	// The first level begins from the website seed or starting point URL. For example,
+	// if a website has 3 levels – index level (i.e. seed in this example), sections
+	// level, and subsections level – and you are only interested in crawling
+	// information up to the sections level (i.e. levels 0-1), you can set your
+	// depth to 1.
+	//
+	// The default crawl depth is set to 2.
+	CrawlDepth *int64 `type:"integer"`
+
+	// The maximum size (in MB) of a webpage or attachment to crawl.
+	//
+	// Files larger than this size (in MB) are skipped/not crawled.
+	//
+	// The default maximum size of a webpage or attachment is set to 50 MB.
+	MaxContentSizePerPageInMegaBytes *float64 `min:"1e-06" type:"float"`
+
+	// The maximum number of URLs on a webpage to include when crawling a website.
+	// This number is per webpage.
+	//
+	// As a website’s webpages are crawled, any URLs the webpages link to are
+	// also crawled. URLs on a webpage are crawled in order of appearance.
+	//
+	// The default maximum links per page is 100.
+	MaxLinksPerPage *int64 `min:"1" type:"integer"`
+
+	// The maximum number of URLs crawled per website host per minute.
+	//
+	// A minimum of one URL is required.
+	//
+	// The default maximum number of URLs crawled per website host per minute is
+	// 300.
+	MaxUrlsPerMinuteCrawlRate *int64 `min:"1" type:"integer"`
+
+	// Provides configuration information required to connect to your internal websites
+	// via a web proxy.
+	//
+	// You must provide the website host name and port number. For example, the
+	// host name of https://a.example.com/page1.html is "a.example.com" and the
+	// port is 443, the standard port for HTTPS.
+	//
+	// Web proxy credentials are optional and you can use them to connect to a web
+	// proxy server that requires basic authentication. To store web proxy credentials,
+	// you use a secret in AWS Secrets Manager (https://docs.aws.amazon.com/secretsmanager/latest/userguide/intro.html).
+	ProxyConfiguration *ProxyConfiguration `type:"structure"`
+
+	// The regular expression pattern to exclude certain URLs to crawl.
+	//
+	// If there is a regular expression pattern to include certain URLs that conflicts
+	// with the exclude pattern, the exclude pattern takes precedence.
+	UrlExclusionPatterns []*string `type:"list"`
+
+	// The regular expression pattern to include certain URLs to crawl.
+	//
+	// If there is a regular expression pattern to exclude certain URLs that conflicts
+	// with the include pattern, the exclude pattern takes precedence.
+	UrlInclusionPatterns []*string `type:"list"`
+
+	// Specifies the seed or starting point URLs of the websites or the sitemap
+	// URLs of the websites you want to crawl.
+	//
+	// You can include website subdomains. You can list up to 100 seed URLs and
+	// up to three sitemap URLs.
+	//
+	// You can only crawl websites that use the secure communication protocol, Hypertext
+	// Transfer Protocol Secure (HTTPS). If you receive an error when crawling a
+	// website, it could be that the website is blocked from crawling.
+	//
+	// When selecting websites to index, you must adhere to the Amazon Acceptable
+	// Use Policy (https://aws.amazon.com/aup/) and all other Amazon terms. Remember
+	// that you must only use the Amazon Kendra web crawler to index your own webpages,
+	// or webpages that you have authorization to index.
+	//
+	// Urls is a required field
+	Urls *Urls `type:"structure" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s WebCrawlerConfiguration) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s WebCrawlerConfiguration) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *WebCrawlerConfiguration) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "WebCrawlerConfiguration"}
+	if s.MaxContentSizePerPageInMegaBytes != nil && *s.MaxContentSizePerPageInMegaBytes < 1e-06 {
+		invalidParams.Add(request.NewErrParamMinValue("MaxContentSizePerPageInMegaBytes", 1e-06))
+	}
+	if s.MaxLinksPerPage != nil && *s.MaxLinksPerPage < 1 {
+		invalidParams.Add(request.NewErrParamMinValue("MaxLinksPerPage", 1))
+	}
+	if s.MaxUrlsPerMinuteCrawlRate != nil && *s.MaxUrlsPerMinuteCrawlRate < 1 {
+		invalidParams.Add(request.NewErrParamMinValue("MaxUrlsPerMinuteCrawlRate", 1))
+	}
+	if s.Urls == nil {
+		invalidParams.Add(request.NewErrParamRequired("Urls"))
+	}
+	if s.AuthenticationConfiguration != nil {
+		if err := s.AuthenticationConfiguration.Validate(); err != nil {
+			invalidParams.AddNested("AuthenticationConfiguration", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.ProxyConfiguration != nil {
+		if err := s.ProxyConfiguration.Validate(); err != nil {
+			invalidParams.AddNested("ProxyConfiguration", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.Urls != nil {
+		if err := s.Urls.Validate(); err != nil {
+			invalidParams.AddNested("Urls", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetAuthenticationConfiguration sets the AuthenticationConfiguration field's value.
+func (s *WebCrawlerConfiguration) SetAuthenticationConfiguration(v *AuthenticationConfiguration) *WebCrawlerConfiguration {
+	s.AuthenticationConfiguration = v
+	return s
+}
+
+// SetCrawlDepth sets the CrawlDepth field's value.
+func (s *WebCrawlerConfiguration) SetCrawlDepth(v int64) *WebCrawlerConfiguration {
+	s.CrawlDepth = &v
+	return s
+}
+
+// SetMaxContentSizePerPageInMegaBytes sets the MaxContentSizePerPageInMegaBytes field's value.
+func (s *WebCrawlerConfiguration) SetMaxContentSizePerPageInMegaBytes(v float64) *WebCrawlerConfiguration {
+	s.MaxContentSizePerPageInMegaBytes = &v
+	return s
+}
+
+// SetMaxLinksPerPage sets the MaxLinksPerPage field's value.
+func (s *WebCrawlerConfiguration) SetMaxLinksPerPage(v int64) *WebCrawlerConfiguration {
+	s.MaxLinksPerPage = &v
+	return s
+}
+
+// SetMaxUrlsPerMinuteCrawlRate sets the MaxUrlsPerMinuteCrawlRate field's value.
+func (s *WebCrawlerConfiguration) SetMaxUrlsPerMinuteCrawlRate(v int64) *WebCrawlerConfiguration {
+	s.MaxUrlsPerMinuteCrawlRate = &v
+	return s
+}
+
+// SetProxyConfiguration sets the ProxyConfiguration field's value.
+func (s *WebCrawlerConfiguration) SetProxyConfiguration(v *ProxyConfiguration) *WebCrawlerConfiguration {
+	s.ProxyConfiguration = v
+	return s
+}
+
+// SetUrlExclusionPatterns sets the UrlExclusionPatterns field's value.
+func (s *WebCrawlerConfiguration) SetUrlExclusionPatterns(v []*string) *WebCrawlerConfiguration {
+	s.UrlExclusionPatterns = v
+	return s
+}
+
+// SetUrlInclusionPatterns sets the UrlInclusionPatterns field's value.
+func (s *WebCrawlerConfiguration) SetUrlInclusionPatterns(v []*string) *WebCrawlerConfiguration {
+	s.UrlInclusionPatterns = v
+	return s
+}
+
+// SetUrls sets the Urls field's value.
+func (s *WebCrawlerConfiguration) SetUrls(v *Urls) *WebCrawlerConfiguration {
+	s.Urls = v
+	return s
+}
+
+// Provides the configuration information to connect to Amazon WorkDocs as your
+// data source.
+//
+// Amazon WorkDocs connector is available in Oregon, North Virginia, Sydney,
+// Singapore and Ireland regions.
+type WorkDocsConfiguration struct {
+	_ struct{} `type:"structure"`
+
+	// TRUE to include comments on documents in your index. Including comments in
+	// your index means each comment is a document that can be searched on.
+	//
+	// The default is set to FALSE.
+	CrawlComments *bool `type:"boolean"`
+
+	// A list of regular expression patterns to exclude certain files in your Amazon
+	// WorkDocs site repository. Files that match the patterns are excluded from
+	// the index. Files that don’t match the patterns are included in the index.
+	// If a file matches both an inclusion pattern and an exclusion pattern, the
+	// exclusion pattern takes precedence and the file isn’t included in the index.
+	ExclusionPatterns []*string `type:"list"`
+
+	// A list of DataSourceToIndexFieldMapping objects that map Amazon WorkDocs
+	// field names to custom index field names in Amazon Kendra. You must first
+	// create the custom index fields using the UpdateIndex operation before you
+	// map to Amazon WorkDocs fields. For more information, see Mapping Data Source
+	// Fields (https://docs.aws.amazon.com/kendra/latest/dg/field-mapping.html).
+	// The Amazon WorkDocs data source field names need to exist in your Amazon
+	// WorkDocs custom metadata.
+	FieldMappings []*DataSourceToIndexFieldMapping `min:"1" type:"list"`
+
+	// A list of regular expression patterns to include certain files in your Amazon
+	// WorkDocs site repository. Files that match the patterns are included in the
+	// index. Files that don't match the patterns are excluded from the index. If
+	// a file matches both an inclusion pattern and an exclusion pattern, the exclusion
+	// pattern takes precedence and the file isn’t included in the index.
+	InclusionPatterns []*string `type:"list"`
+
+	// The identifier of the directory corresponding to your Amazon WorkDocs site
+	// repository.
+	//
+	// You can find the organization ID in the AWS Directory Service (https://console.aws.amazon.com/directoryservicev2/)
+	// by going to Active Directory, then Directories. Your Amazon WorkDocs site
+	// directory has an ID, which is the organization ID. You can also set up a
+	// new Amazon WorkDocs directory in the AWS Directory Service console and enable
+	// a Amazon WorkDocs site for the directory in the Amazon WorkDocs console.
+	//
+	// OrganizationId is a required field
+	OrganizationId *string `min:"12" type:"string" required:"true"`
+
+	// TRUE to use the change logs to update documents in your index instead of
+	// scanning all documents.
+	//
+	// If you are syncing your Amazon WorkDocs data source with your index for the
+	// first time, all documents are scanned. After your first sync, you can use
+	// the change logs to update your documents in your index for future syncs.
+	//
+	// The default is set to FALSE.
+	UseChangeLog *bool `type:"boolean"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s WorkDocsConfiguration) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s WorkDocsConfiguration) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *WorkDocsConfiguration) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "WorkDocsConfiguration"}
+	if s.FieldMappings != nil && len(s.FieldMappings) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("FieldMappings", 1))
+	}
+	if s.OrganizationId == nil {
+		invalidParams.Add(request.NewErrParamRequired("OrganizationId"))
+	}
+	if s.OrganizationId != nil && len(*s.OrganizationId) < 12 {
+		invalidParams.Add(request.NewErrParamMinLen("OrganizationId", 12))
+	}
+	if s.FieldMappings != nil {
+		for i, v := range s.FieldMappings {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "FieldMappings", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetCrawlComments sets the CrawlComments field's value.
+func (s *WorkDocsConfiguration) SetCrawlComments(v bool) *WorkDocsConfiguration {
+	s.CrawlComments = &v
+	return s
+}
+
+// SetExclusionPatterns sets the ExclusionPatterns field's value.
+func (s *WorkDocsConfiguration) SetExclusionPatterns(v []*string) *WorkDocsConfiguration {
+	s.ExclusionPatterns = v
+	return s
+}
+
+// SetFieldMappings sets the FieldMappings field's value.
+func (s *WorkDocsConfiguration) SetFieldMappings(v []*DataSourceToIndexFieldMapping) *WorkDocsConfiguration {
+	s.FieldMappings = v
+	return s
+}
+
+// SetInclusionPatterns sets the InclusionPatterns field's value.
+func (s *WorkDocsConfiguration) SetInclusionPatterns(v []*string) *WorkDocsConfiguration {
+	s.InclusionPatterns = v
+	return s
+}
+
+// SetOrganizationId sets the OrganizationId field's value.
+func (s *WorkDocsConfiguration) SetOrganizationId(v string) *WorkDocsConfiguration {
+	s.OrganizationId = &v
+	return s
+}
+
+// SetUseChangeLog sets the UseChangeLog field's value.
+func (s *WorkDocsConfiguration) SetUseChangeLog(v bool) *WorkDocsConfiguration {
+	s.UseChangeLog = &v
+	return s
 }
 
 const (
@@ -11694,6 +19760,15 @@ const (
 
 	// DataSourceTypeConfluence is a DataSourceType enum value
 	DataSourceTypeConfluence = "CONFLUENCE"
+
+	// DataSourceTypeGoogledrive is a DataSourceType enum value
+	DataSourceTypeGoogledrive = "GOOGLEDRIVE"
+
+	// DataSourceTypeWebcrawler is a DataSourceType enum value
+	DataSourceTypeWebcrawler = "WEBCRAWLER"
+
+	// DataSourceTypeWorkdocs is a DataSourceType enum value
+	DataSourceTypeWorkdocs = "WORKDOCS"
 )
 
 // DataSourceType_Values returns all elements of the DataSourceType enum
@@ -11707,6 +19782,9 @@ func DataSourceType_Values() []string {
 		DataSourceTypeServicenow,
 		DataSourceTypeCustom,
 		DataSourceTypeConfluence,
+		DataSourceTypeGoogledrive,
+		DataSourceTypeWebcrawler,
+		DataSourceTypeWorkdocs,
 	}
 }
 
@@ -11755,6 +19833,38 @@ func DocumentAttributeValueType_Values() []string {
 		DocumentAttributeValueTypeStringListValue,
 		DocumentAttributeValueTypeLongValue,
 		DocumentAttributeValueTypeDateValue,
+	}
+}
+
+const (
+	// DocumentStatusNotFound is a DocumentStatus enum value
+	DocumentStatusNotFound = "NOT_FOUND"
+
+	// DocumentStatusProcessing is a DocumentStatus enum value
+	DocumentStatusProcessing = "PROCESSING"
+
+	// DocumentStatusIndexed is a DocumentStatus enum value
+	DocumentStatusIndexed = "INDEXED"
+
+	// DocumentStatusUpdated is a DocumentStatus enum value
+	DocumentStatusUpdated = "UPDATED"
+
+	// DocumentStatusFailed is a DocumentStatus enum value
+	DocumentStatusFailed = "FAILED"
+
+	// DocumentStatusUpdateFailed is a DocumentStatus enum value
+	DocumentStatusUpdateFailed = "UPDATE_FAILED"
+)
+
+// DocumentStatus_Values returns all elements of the DocumentStatus enum
+func DocumentStatus_Values() []string {
+	return []string{
+		DocumentStatusNotFound,
+		DocumentStatusProcessing,
+		DocumentStatusIndexed,
+		DocumentStatusUpdated,
+		DocumentStatusFailed,
+		DocumentStatusUpdateFailed,
 	}
 }
 
@@ -11823,6 +19933,22 @@ func FaqStatus_Values() []string {
 }
 
 const (
+	// HighlightTypeStandard is a HighlightType enum value
+	HighlightTypeStandard = "STANDARD"
+
+	// HighlightTypeThesaurusSynonym is a HighlightType enum value
+	HighlightTypeThesaurusSynonym = "THESAURUS_SYNONYM"
+)
+
+// HighlightType_Values returns all elements of the HighlightType enum
+func HighlightType_Values() []string {
+	return []string{
+		HighlightTypeStandard,
+		HighlightTypeThesaurusSynonym,
+	}
+}
+
+const (
 	// IndexEditionDeveloperEdition is a IndexEdition enum value
 	IndexEditionDeveloperEdition = "DEVELOPER_EDITION"
 
@@ -11887,6 +20013,22 @@ func KeyLocation_Values() []string {
 }
 
 const (
+	// ModeEnabled is a Mode enum value
+	ModeEnabled = "ENABLED"
+
+	// ModeLearnOnly is a Mode enum value
+	ModeLearnOnly = "LEARN_ONLY"
+)
+
+// Mode_Values returns all elements of the Mode enum
+func Mode_Values() []string {
+	return []string{
+		ModeEnabled,
+		ModeLearnOnly,
+	}
+}
+
+const (
 	// OrderAscending is a Order enum value
 	OrderAscending = "ASCENDING"
 
@@ -11899,6 +20041,34 @@ func Order_Values() []string {
 	return []string{
 		OrderAscending,
 		OrderDescending,
+	}
+}
+
+const (
+	// PrincipalMappingStatusFailed is a PrincipalMappingStatus enum value
+	PrincipalMappingStatusFailed = "FAILED"
+
+	// PrincipalMappingStatusSucceeded is a PrincipalMappingStatus enum value
+	PrincipalMappingStatusSucceeded = "SUCCEEDED"
+
+	// PrincipalMappingStatusProcessing is a PrincipalMappingStatus enum value
+	PrincipalMappingStatusProcessing = "PROCESSING"
+
+	// PrincipalMappingStatusDeleting is a PrincipalMappingStatus enum value
+	PrincipalMappingStatusDeleting = "DELETING"
+
+	// PrincipalMappingStatusDeleted is a PrincipalMappingStatus enum value
+	PrincipalMappingStatusDeleted = "DELETED"
+)
+
+// PrincipalMappingStatus_Values returns all elements of the PrincipalMappingStatus enum
+func PrincipalMappingStatus_Values() []string {
+	return []string{
+		PrincipalMappingStatusFailed,
+		PrincipalMappingStatusSucceeded,
+		PrincipalMappingStatusProcessing,
+		PrincipalMappingStatusDeleting,
+		PrincipalMappingStatusDeleted,
 	}
 }
 
@@ -11951,6 +20121,54 @@ func QueryResultType_Values() []string {
 		QueryResultTypeDocument,
 		QueryResultTypeQuestionAnswer,
 		QueryResultTypeAnswer,
+	}
+}
+
+const (
+	// QuerySuggestionsBlockListStatusActive is a QuerySuggestionsBlockListStatus enum value
+	QuerySuggestionsBlockListStatusActive = "ACTIVE"
+
+	// QuerySuggestionsBlockListStatusCreating is a QuerySuggestionsBlockListStatus enum value
+	QuerySuggestionsBlockListStatusCreating = "CREATING"
+
+	// QuerySuggestionsBlockListStatusDeleting is a QuerySuggestionsBlockListStatus enum value
+	QuerySuggestionsBlockListStatusDeleting = "DELETING"
+
+	// QuerySuggestionsBlockListStatusUpdating is a QuerySuggestionsBlockListStatus enum value
+	QuerySuggestionsBlockListStatusUpdating = "UPDATING"
+
+	// QuerySuggestionsBlockListStatusActiveButUpdateFailed is a QuerySuggestionsBlockListStatus enum value
+	QuerySuggestionsBlockListStatusActiveButUpdateFailed = "ACTIVE_BUT_UPDATE_FAILED"
+
+	// QuerySuggestionsBlockListStatusFailed is a QuerySuggestionsBlockListStatus enum value
+	QuerySuggestionsBlockListStatusFailed = "FAILED"
+)
+
+// QuerySuggestionsBlockListStatus_Values returns all elements of the QuerySuggestionsBlockListStatus enum
+func QuerySuggestionsBlockListStatus_Values() []string {
+	return []string{
+		QuerySuggestionsBlockListStatusActive,
+		QuerySuggestionsBlockListStatusCreating,
+		QuerySuggestionsBlockListStatusDeleting,
+		QuerySuggestionsBlockListStatusUpdating,
+		QuerySuggestionsBlockListStatusActiveButUpdateFailed,
+		QuerySuggestionsBlockListStatusFailed,
+	}
+}
+
+const (
+	// QuerySuggestionsStatusActive is a QuerySuggestionsStatus enum value
+	QuerySuggestionsStatusActive = "ACTIVE"
+
+	// QuerySuggestionsStatusUpdating is a QuerySuggestionsStatus enum value
+	QuerySuggestionsStatusUpdating = "UPDATING"
+)
+
+// QuerySuggestionsStatus_Values returns all elements of the QuerySuggestionsStatus enum
+func QuerySuggestionsStatus_Values() []string {
+	return []string{
+		QuerySuggestionsStatusActive,
+		QuerySuggestionsStatusUpdating,
 	}
 }
 
@@ -12111,6 +20329,9 @@ const (
 
 	// ScoreConfidenceLow is a ScoreConfidence enum value
 	ScoreConfidenceLow = "LOW"
+
+	// ScoreConfidenceNotAvailable is a ScoreConfidence enum value
+	ScoreConfidenceNotAvailable = "NOT_AVAILABLE"
 )
 
 // ScoreConfidence_Values returns all elements of the ScoreConfidence enum
@@ -12120,6 +20341,23 @@ func ScoreConfidence_Values() []string {
 		ScoreConfidenceHigh,
 		ScoreConfidenceMedium,
 		ScoreConfidenceLow,
+		ScoreConfidenceNotAvailable,
+	}
+}
+
+const (
+	// ServiceNowAuthenticationTypeHttpBasic is a ServiceNowAuthenticationType enum value
+	ServiceNowAuthenticationTypeHttpBasic = "HTTP_BASIC"
+
+	// ServiceNowAuthenticationTypeOauth2 is a ServiceNowAuthenticationType enum value
+	ServiceNowAuthenticationTypeOauth2 = "OAUTH2"
+)
+
+// ServiceNowAuthenticationType_Values returns all elements of the ServiceNowAuthenticationType enum
+func ServiceNowAuthenticationType_Values() []string {
+	return []string{
+		ServiceNowAuthenticationTypeHttpBasic,
+		ServiceNowAuthenticationTypeOauth2,
 	}
 }
 
@@ -12140,6 +20378,12 @@ func ServiceNowBuildVersionType_Values() []string {
 }
 
 const (
+	// SharePointVersionSharepoint2013 is a SharePointVersion enum value
+	SharePointVersionSharepoint2013 = "SHAREPOINT_2013"
+
+	// SharePointVersionSharepoint2016 is a SharePointVersion enum value
+	SharePointVersionSharepoint2016 = "SHAREPOINT_2016"
+
 	// SharePointVersionSharepointOnline is a SharePointVersion enum value
 	SharePointVersionSharepointOnline = "SHAREPOINT_ONLINE"
 )
@@ -12147,6 +20391,8 @@ const (
 // SharePointVersion_Values returns all elements of the SharePointVersion enum
 func SharePointVersion_Values() []string {
 	return []string{
+		SharePointVersionSharepoint2013,
+		SharePointVersionSharepoint2016,
 		SharePointVersionSharepointOnline,
 	}
 }
@@ -12168,6 +20414,38 @@ func SortOrder_Values() []string {
 }
 
 const (
+	// ThesaurusStatusCreating is a ThesaurusStatus enum value
+	ThesaurusStatusCreating = "CREATING"
+
+	// ThesaurusStatusActive is a ThesaurusStatus enum value
+	ThesaurusStatusActive = "ACTIVE"
+
+	// ThesaurusStatusDeleting is a ThesaurusStatus enum value
+	ThesaurusStatusDeleting = "DELETING"
+
+	// ThesaurusStatusUpdating is a ThesaurusStatus enum value
+	ThesaurusStatusUpdating = "UPDATING"
+
+	// ThesaurusStatusActiveButUpdateFailed is a ThesaurusStatus enum value
+	ThesaurusStatusActiveButUpdateFailed = "ACTIVE_BUT_UPDATE_FAILED"
+
+	// ThesaurusStatusFailed is a ThesaurusStatus enum value
+	ThesaurusStatusFailed = "FAILED"
+)
+
+// ThesaurusStatus_Values returns all elements of the ThesaurusStatus enum
+func ThesaurusStatus_Values() []string {
+	return []string{
+		ThesaurusStatusCreating,
+		ThesaurusStatusActive,
+		ThesaurusStatusDeleting,
+		ThesaurusStatusUpdating,
+		ThesaurusStatusActiveButUpdateFailed,
+		ThesaurusStatusFailed,
+	}
+}
+
+const (
 	// UserContextPolicyAttributeFilter is a UserContextPolicy enum value
 	UserContextPolicyAttributeFilter = "ATTRIBUTE_FILTER"
 
@@ -12180,5 +20458,41 @@ func UserContextPolicy_Values() []string {
 	return []string{
 		UserContextPolicyAttributeFilter,
 		UserContextPolicyUserToken,
+	}
+}
+
+const (
+	// UserGroupResolutionModeAwsSso is a UserGroupResolutionMode enum value
+	UserGroupResolutionModeAwsSso = "AWS_SSO"
+
+	// UserGroupResolutionModeNone is a UserGroupResolutionMode enum value
+	UserGroupResolutionModeNone = "NONE"
+)
+
+// UserGroupResolutionMode_Values returns all elements of the UserGroupResolutionMode enum
+func UserGroupResolutionMode_Values() []string {
+	return []string{
+		UserGroupResolutionModeAwsSso,
+		UserGroupResolutionModeNone,
+	}
+}
+
+const (
+	// WebCrawlerModeHostOnly is a WebCrawlerMode enum value
+	WebCrawlerModeHostOnly = "HOST_ONLY"
+
+	// WebCrawlerModeSubdomains is a WebCrawlerMode enum value
+	WebCrawlerModeSubdomains = "SUBDOMAINS"
+
+	// WebCrawlerModeEverything is a WebCrawlerMode enum value
+	WebCrawlerModeEverything = "EVERYTHING"
+)
+
+// WebCrawlerMode_Values returns all elements of the WebCrawlerMode enum
+func WebCrawlerMode_Values() []string {
+	return []string{
+		WebCrawlerModeHostOnly,
+		WebCrawlerModeSubdomains,
+		WebCrawlerModeEverything,
 	}
 }

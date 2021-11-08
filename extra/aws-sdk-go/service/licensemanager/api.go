@@ -13,6 +13,721 @@ import (
 	"github.com/aws/aws-sdk-go/private/protocol/jsonrpc"
 )
 
+const opAcceptGrant = "AcceptGrant"
+
+// AcceptGrantRequest generates a "aws/request.Request" representing the
+// client's request for the AcceptGrant operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See AcceptGrant for more information on using the AcceptGrant
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the AcceptGrantRequest method.
+//    req, resp := client.AcceptGrantRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/license-manager-2018-08-01/AcceptGrant
+func (c *LicenseManager) AcceptGrantRequest(input *AcceptGrantInput) (req *request.Request, output *AcceptGrantOutput) {
+	op := &request.Operation{
+		Name:       opAcceptGrant,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &AcceptGrantInput{}
+	}
+
+	output = &AcceptGrantOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// AcceptGrant API operation for AWS License Manager.
+//
+// Accepts the specified grant.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS License Manager's
+// API operation AcceptGrant for usage and error information.
+//
+// Returned Error Types:
+//   * ValidationException
+//   The provided input is not valid. Try your request again.
+//
+//   * InvalidParameterValueException
+//   One or more parameter values are not valid.
+//
+//   * AuthorizationException
+//   The Amazon Web Services user account does not have permission to perform
+//   the action. Check the IAM policy associated with this account.
+//
+//   * AccessDeniedException
+//   Access to resource denied.
+//
+//   * RateLimitExceededException
+//   Too many requests have been submitted. Try again after a brief wait.
+//
+//   * ResourceLimitExceededException
+//   Your resource limits have been exceeded.
+//
+//   * ServerInternalException
+//   The server experienced an internal error. Try again.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/license-manager-2018-08-01/AcceptGrant
+func (c *LicenseManager) AcceptGrant(input *AcceptGrantInput) (*AcceptGrantOutput, error) {
+	req, out := c.AcceptGrantRequest(input)
+	return out, req.Send()
+}
+
+// AcceptGrantWithContext is the same as AcceptGrant with the addition of
+// the ability to pass a context and additional request options.
+//
+// See AcceptGrant for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *LicenseManager) AcceptGrantWithContext(ctx aws.Context, input *AcceptGrantInput, opts ...request.Option) (*AcceptGrantOutput, error) {
+	req, out := c.AcceptGrantRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opCheckInLicense = "CheckInLicense"
+
+// CheckInLicenseRequest generates a "aws/request.Request" representing the
+// client's request for the CheckInLicense operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See CheckInLicense for more information on using the CheckInLicense
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the CheckInLicenseRequest method.
+//    req, resp := client.CheckInLicenseRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/license-manager-2018-08-01/CheckInLicense
+func (c *LicenseManager) CheckInLicenseRequest(input *CheckInLicenseInput) (req *request.Request, output *CheckInLicenseOutput) {
+	op := &request.Operation{
+		Name:       opCheckInLicense,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &CheckInLicenseInput{}
+	}
+
+	output = &CheckInLicenseOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
+	return
+}
+
+// CheckInLicense API operation for AWS License Manager.
+//
+// Checks in the specified license. Check in a license when it is no longer
+// in use.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS License Manager's
+// API operation CheckInLicense for usage and error information.
+//
+// Returned Error Types:
+//   * ValidationException
+//   The provided input is not valid. Try your request again.
+//
+//   * InvalidParameterValueException
+//   One or more parameter values are not valid.
+//
+//   * ResourceNotFoundException
+//   The resource cannot be found.
+//
+//   * ConflictException
+//   There was a conflict processing the request. Try your request again.
+//
+//   * AuthorizationException
+//   The Amazon Web Services user account does not have permission to perform
+//   the action. Check the IAM policy associated with this account.
+//
+//   * AccessDeniedException
+//   Access to resource denied.
+//
+//   * RateLimitExceededException
+//   Too many requests have been submitted. Try again after a brief wait.
+//
+//   * ServerInternalException
+//   The server experienced an internal error. Try again.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/license-manager-2018-08-01/CheckInLicense
+func (c *LicenseManager) CheckInLicense(input *CheckInLicenseInput) (*CheckInLicenseOutput, error) {
+	req, out := c.CheckInLicenseRequest(input)
+	return out, req.Send()
+}
+
+// CheckInLicenseWithContext is the same as CheckInLicense with the addition of
+// the ability to pass a context and additional request options.
+//
+// See CheckInLicense for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *LicenseManager) CheckInLicenseWithContext(ctx aws.Context, input *CheckInLicenseInput, opts ...request.Option) (*CheckInLicenseOutput, error) {
+	req, out := c.CheckInLicenseRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opCheckoutBorrowLicense = "CheckoutBorrowLicense"
+
+// CheckoutBorrowLicenseRequest generates a "aws/request.Request" representing the
+// client's request for the CheckoutBorrowLicense operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See CheckoutBorrowLicense for more information on using the CheckoutBorrowLicense
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the CheckoutBorrowLicenseRequest method.
+//    req, resp := client.CheckoutBorrowLicenseRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/license-manager-2018-08-01/CheckoutBorrowLicense
+func (c *LicenseManager) CheckoutBorrowLicenseRequest(input *CheckoutBorrowLicenseInput) (req *request.Request, output *CheckoutBorrowLicenseOutput) {
+	op := &request.Operation{
+		Name:       opCheckoutBorrowLicense,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &CheckoutBorrowLicenseInput{}
+	}
+
+	output = &CheckoutBorrowLicenseOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// CheckoutBorrowLicense API operation for AWS License Manager.
+//
+// Checks out the specified license for offline use.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS License Manager's
+// API operation CheckoutBorrowLicense for usage and error information.
+//
+// Returned Error Types:
+//   * ValidationException
+//   The provided input is not valid. Try your request again.
+//
+//   * InvalidParameterValueException
+//   One or more parameter values are not valid.
+//
+//   * ResourceNotFoundException
+//   The resource cannot be found.
+//
+//   * NoEntitlementsAllowedException
+//   There are no entitlements found for this license, or the entitlement maximum
+//   count is reached.
+//
+//   * EntitlementNotAllowedException
+//   The entitlement is not allowed.
+//
+//   * UnsupportedDigitalSignatureMethodException
+//   The digital signature method is unsupported. Try your request again.
+//
+//   * RedirectException
+//   This is not the correct Region for the resource. Try again.
+//
+//   * AuthorizationException
+//   The Amazon Web Services user account does not have permission to perform
+//   the action. Check the IAM policy associated with this account.
+//
+//   * AccessDeniedException
+//   Access to resource denied.
+//
+//   * RateLimitExceededException
+//   Too many requests have been submitted. Try again after a brief wait.
+//
+//   * ServerInternalException
+//   The server experienced an internal error. Try again.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/license-manager-2018-08-01/CheckoutBorrowLicense
+func (c *LicenseManager) CheckoutBorrowLicense(input *CheckoutBorrowLicenseInput) (*CheckoutBorrowLicenseOutput, error) {
+	req, out := c.CheckoutBorrowLicenseRequest(input)
+	return out, req.Send()
+}
+
+// CheckoutBorrowLicenseWithContext is the same as CheckoutBorrowLicense with the addition of
+// the ability to pass a context and additional request options.
+//
+// See CheckoutBorrowLicense for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *LicenseManager) CheckoutBorrowLicenseWithContext(ctx aws.Context, input *CheckoutBorrowLicenseInput, opts ...request.Option) (*CheckoutBorrowLicenseOutput, error) {
+	req, out := c.CheckoutBorrowLicenseRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opCheckoutLicense = "CheckoutLicense"
+
+// CheckoutLicenseRequest generates a "aws/request.Request" representing the
+// client's request for the CheckoutLicense operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See CheckoutLicense for more information on using the CheckoutLicense
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the CheckoutLicenseRequest method.
+//    req, resp := client.CheckoutLicenseRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/license-manager-2018-08-01/CheckoutLicense
+func (c *LicenseManager) CheckoutLicenseRequest(input *CheckoutLicenseInput) (req *request.Request, output *CheckoutLicenseOutput) {
+	op := &request.Operation{
+		Name:       opCheckoutLicense,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &CheckoutLicenseInput{}
+	}
+
+	output = &CheckoutLicenseOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// CheckoutLicense API operation for AWS License Manager.
+//
+// Checks out the specified license.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS License Manager's
+// API operation CheckoutLicense for usage and error information.
+//
+// Returned Error Types:
+//   * ValidationException
+//   The provided input is not valid. Try your request again.
+//
+//   * InvalidParameterValueException
+//   One or more parameter values are not valid.
+//
+//   * ResourceNotFoundException
+//   The resource cannot be found.
+//
+//   * NoEntitlementsAllowedException
+//   There are no entitlements found for this license, or the entitlement maximum
+//   count is reached.
+//
+//   * UnsupportedDigitalSignatureMethodException
+//   The digital signature method is unsupported. Try your request again.
+//
+//   * RedirectException
+//   This is not the correct Region for the resource. Try again.
+//
+//   * AuthorizationException
+//   The Amazon Web Services user account does not have permission to perform
+//   the action. Check the IAM policy associated with this account.
+//
+//   * AccessDeniedException
+//   Access to resource denied.
+//
+//   * RateLimitExceededException
+//   Too many requests have been submitted. Try again after a brief wait.
+//
+//   * ServerInternalException
+//   The server experienced an internal error. Try again.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/license-manager-2018-08-01/CheckoutLicense
+func (c *LicenseManager) CheckoutLicense(input *CheckoutLicenseInput) (*CheckoutLicenseOutput, error) {
+	req, out := c.CheckoutLicenseRequest(input)
+	return out, req.Send()
+}
+
+// CheckoutLicenseWithContext is the same as CheckoutLicense with the addition of
+// the ability to pass a context and additional request options.
+//
+// See CheckoutLicense for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *LicenseManager) CheckoutLicenseWithContext(ctx aws.Context, input *CheckoutLicenseInput, opts ...request.Option) (*CheckoutLicenseOutput, error) {
+	req, out := c.CheckoutLicenseRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opCreateGrant = "CreateGrant"
+
+// CreateGrantRequest generates a "aws/request.Request" representing the
+// client's request for the CreateGrant operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See CreateGrant for more information on using the CreateGrant
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the CreateGrantRequest method.
+//    req, resp := client.CreateGrantRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/license-manager-2018-08-01/CreateGrant
+func (c *LicenseManager) CreateGrantRequest(input *CreateGrantInput) (req *request.Request, output *CreateGrantOutput) {
+	op := &request.Operation{
+		Name:       opCreateGrant,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &CreateGrantInput{}
+	}
+
+	output = &CreateGrantOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// CreateGrant API operation for AWS License Manager.
+//
+// Creates a grant for the specified license. A grant shares the use of license
+// entitlements with specific Amazon Web Services accounts.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS License Manager's
+// API operation CreateGrant for usage and error information.
+//
+// Returned Error Types:
+//   * ValidationException
+//   The provided input is not valid. Try your request again.
+//
+//   * InvalidParameterValueException
+//   One or more parameter values are not valid.
+//
+//   * ResourceLimitExceededException
+//   Your resource limits have been exceeded.
+//
+//   * ServerInternalException
+//   The server experienced an internal error. Try again.
+//
+//   * AuthorizationException
+//   The Amazon Web Services user account does not have permission to perform
+//   the action. Check the IAM policy associated with this account.
+//
+//   * RateLimitExceededException
+//   Too many requests have been submitted. Try again after a brief wait.
+//
+//   * AccessDeniedException
+//   Access to resource denied.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/license-manager-2018-08-01/CreateGrant
+func (c *LicenseManager) CreateGrant(input *CreateGrantInput) (*CreateGrantOutput, error) {
+	req, out := c.CreateGrantRequest(input)
+	return out, req.Send()
+}
+
+// CreateGrantWithContext is the same as CreateGrant with the addition of
+// the ability to pass a context and additional request options.
+//
+// See CreateGrant for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *LicenseManager) CreateGrantWithContext(ctx aws.Context, input *CreateGrantInput, opts ...request.Option) (*CreateGrantOutput, error) {
+	req, out := c.CreateGrantRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opCreateGrantVersion = "CreateGrantVersion"
+
+// CreateGrantVersionRequest generates a "aws/request.Request" representing the
+// client's request for the CreateGrantVersion operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See CreateGrantVersion for more information on using the CreateGrantVersion
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the CreateGrantVersionRequest method.
+//    req, resp := client.CreateGrantVersionRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/license-manager-2018-08-01/CreateGrantVersion
+func (c *LicenseManager) CreateGrantVersionRequest(input *CreateGrantVersionInput) (req *request.Request, output *CreateGrantVersionOutput) {
+	op := &request.Operation{
+		Name:       opCreateGrantVersion,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &CreateGrantVersionInput{}
+	}
+
+	output = &CreateGrantVersionOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// CreateGrantVersion API operation for AWS License Manager.
+//
+// Creates a new version of the specified grant.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS License Manager's
+// API operation CreateGrantVersion for usage and error information.
+//
+// Returned Error Types:
+//   * ValidationException
+//   The provided input is not valid. Try your request again.
+//
+//   * InvalidParameterValueException
+//   One or more parameter values are not valid.
+//
+//   * ResourceLimitExceededException
+//   Your resource limits have been exceeded.
+//
+//   * ServerInternalException
+//   The server experienced an internal error. Try again.
+//
+//   * AuthorizationException
+//   The Amazon Web Services user account does not have permission to perform
+//   the action. Check the IAM policy associated with this account.
+//
+//   * AccessDeniedException
+//   Access to resource denied.
+//
+//   * RateLimitExceededException
+//   Too many requests have been submitted. Try again after a brief wait.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/license-manager-2018-08-01/CreateGrantVersion
+func (c *LicenseManager) CreateGrantVersion(input *CreateGrantVersionInput) (*CreateGrantVersionOutput, error) {
+	req, out := c.CreateGrantVersionRequest(input)
+	return out, req.Send()
+}
+
+// CreateGrantVersionWithContext is the same as CreateGrantVersion with the addition of
+// the ability to pass a context and additional request options.
+//
+// See CreateGrantVersion for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *LicenseManager) CreateGrantVersionWithContext(ctx aws.Context, input *CreateGrantVersionInput, opts ...request.Option) (*CreateGrantVersionOutput, error) {
+	req, out := c.CreateGrantVersionRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opCreateLicense = "CreateLicense"
+
+// CreateLicenseRequest generates a "aws/request.Request" representing the
+// client's request for the CreateLicense operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See CreateLicense for more information on using the CreateLicense
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the CreateLicenseRequest method.
+//    req, resp := client.CreateLicenseRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/license-manager-2018-08-01/CreateLicense
+func (c *LicenseManager) CreateLicenseRequest(input *CreateLicenseInput) (req *request.Request, output *CreateLicenseOutput) {
+	op := &request.Operation{
+		Name:       opCreateLicense,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &CreateLicenseInput{}
+	}
+
+	output = &CreateLicenseOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// CreateLicense API operation for AWS License Manager.
+//
+// Creates a license.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS License Manager's
+// API operation CreateLicense for usage and error information.
+//
+// Returned Error Types:
+//   * ValidationException
+//   The provided input is not valid. Try your request again.
+//
+//   * InvalidParameterValueException
+//   One or more parameter values are not valid.
+//
+//   * RedirectException
+//   This is not the correct Region for the resource. Try again.
+//
+//   * AuthorizationException
+//   The Amazon Web Services user account does not have permission to perform
+//   the action. Check the IAM policy associated with this account.
+//
+//   * AccessDeniedException
+//   Access to resource denied.
+//
+//   * RateLimitExceededException
+//   Too many requests have been submitted. Try again after a brief wait.
+//
+//   * ServerInternalException
+//   The server experienced an internal error. Try again.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/license-manager-2018-08-01/CreateLicense
+func (c *LicenseManager) CreateLicense(input *CreateLicenseInput) (*CreateLicenseOutput, error) {
+	req, out := c.CreateLicenseRequest(input)
+	return out, req.Send()
+}
+
+// CreateLicenseWithContext is the same as CreateLicense with the addition of
+// the ability to pass a context and additional request options.
+//
+// See CreateLicense for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *LicenseManager) CreateLicenseWithContext(ctx aws.Context, input *CreateLicenseInput, opts ...request.Option) (*CreateLicenseOutput, error) {
+	req, out := c.CreateLicenseRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opCreateLicenseConfiguration = "CreateLicenseConfiguration"
 
 // CreateLicenseConfigurationRequest generates a "aws/request.Request" representing the
@@ -84,8 +799,8 @@ func (c *LicenseManager) CreateLicenseConfigurationRequest(input *CreateLicenseC
 //   Your resource limits have been exceeded.
 //
 //   * AuthorizationException
-//   The AWS user account does not have permission to perform the action. Check
-//   the IAM policy associated with this account.
+//   The Amazon Web Services user account does not have permission to perform
+//   the action. Check the IAM policy associated with this account.
 //
 //   * AccessDeniedException
 //   Access to resource denied.
@@ -110,6 +825,607 @@ func (c *LicenseManager) CreateLicenseConfiguration(input *CreateLicenseConfigur
 // for more information on using Contexts.
 func (c *LicenseManager) CreateLicenseConfigurationWithContext(ctx aws.Context, input *CreateLicenseConfigurationInput, opts ...request.Option) (*CreateLicenseConfigurationOutput, error) {
 	req, out := c.CreateLicenseConfigurationRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opCreateLicenseConversionTaskForResource = "CreateLicenseConversionTaskForResource"
+
+// CreateLicenseConversionTaskForResourceRequest generates a "aws/request.Request" representing the
+// client's request for the CreateLicenseConversionTaskForResource operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See CreateLicenseConversionTaskForResource for more information on using the CreateLicenseConversionTaskForResource
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the CreateLicenseConversionTaskForResourceRequest method.
+//    req, resp := client.CreateLicenseConversionTaskForResourceRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/license-manager-2018-08-01/CreateLicenseConversionTaskForResource
+func (c *LicenseManager) CreateLicenseConversionTaskForResourceRequest(input *CreateLicenseConversionTaskForResourceInput) (req *request.Request, output *CreateLicenseConversionTaskForResourceOutput) {
+	op := &request.Operation{
+		Name:       opCreateLicenseConversionTaskForResource,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &CreateLicenseConversionTaskForResourceInput{}
+	}
+
+	output = &CreateLicenseConversionTaskForResourceOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// CreateLicenseConversionTaskForResource API operation for AWS License Manager.
+//
+// Creates a new license conversion task.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS License Manager's
+// API operation CreateLicenseConversionTaskForResource for usage and error information.
+//
+// Returned Error Types:
+//   * InvalidParameterValueException
+//   One or more parameter values are not valid.
+//
+//   * ValidationException
+//   The provided input is not valid. Try your request again.
+//
+//   * ServerInternalException
+//   The server experienced an internal error. Try again.
+//
+//   * AuthorizationException
+//   The Amazon Web Services user account does not have permission to perform
+//   the action. Check the IAM policy associated with this account.
+//
+//   * AccessDeniedException
+//   Access to resource denied.
+//
+//   * RateLimitExceededException
+//   Too many requests have been submitted. Try again after a brief wait.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/license-manager-2018-08-01/CreateLicenseConversionTaskForResource
+func (c *LicenseManager) CreateLicenseConversionTaskForResource(input *CreateLicenseConversionTaskForResourceInput) (*CreateLicenseConversionTaskForResourceOutput, error) {
+	req, out := c.CreateLicenseConversionTaskForResourceRequest(input)
+	return out, req.Send()
+}
+
+// CreateLicenseConversionTaskForResourceWithContext is the same as CreateLicenseConversionTaskForResource with the addition of
+// the ability to pass a context and additional request options.
+//
+// See CreateLicenseConversionTaskForResource for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *LicenseManager) CreateLicenseConversionTaskForResourceWithContext(ctx aws.Context, input *CreateLicenseConversionTaskForResourceInput, opts ...request.Option) (*CreateLicenseConversionTaskForResourceOutput, error) {
+	req, out := c.CreateLicenseConversionTaskForResourceRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opCreateLicenseManagerReportGenerator = "CreateLicenseManagerReportGenerator"
+
+// CreateLicenseManagerReportGeneratorRequest generates a "aws/request.Request" representing the
+// client's request for the CreateLicenseManagerReportGenerator operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See CreateLicenseManagerReportGenerator for more information on using the CreateLicenseManagerReportGenerator
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the CreateLicenseManagerReportGeneratorRequest method.
+//    req, resp := client.CreateLicenseManagerReportGeneratorRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/license-manager-2018-08-01/CreateLicenseManagerReportGenerator
+func (c *LicenseManager) CreateLicenseManagerReportGeneratorRequest(input *CreateLicenseManagerReportGeneratorInput) (req *request.Request, output *CreateLicenseManagerReportGeneratorOutput) {
+	op := &request.Operation{
+		Name:       opCreateLicenseManagerReportGenerator,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &CreateLicenseManagerReportGeneratorInput{}
+	}
+
+	output = &CreateLicenseManagerReportGeneratorOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// CreateLicenseManagerReportGenerator API operation for AWS License Manager.
+//
+// Creates a report generator.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS License Manager's
+// API operation CreateLicenseManagerReportGenerator for usage and error information.
+//
+// Returned Error Types:
+//   * ValidationException
+//   The provided input is not valid. Try your request again.
+//
+//   * InvalidParameterValueException
+//   One or more parameter values are not valid.
+//
+//   * ResourceLimitExceededException
+//   Your resource limits have been exceeded.
+//
+//   * ServerInternalException
+//   The server experienced an internal error. Try again.
+//
+//   * AuthorizationException
+//   The Amazon Web Services user account does not have permission to perform
+//   the action. Check the IAM policy associated with this account.
+//
+//   * RateLimitExceededException
+//   Too many requests have been submitted. Try again after a brief wait.
+//
+//   * AccessDeniedException
+//   Access to resource denied.
+//
+//   * ResourceNotFoundException
+//   The resource cannot be found.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/license-manager-2018-08-01/CreateLicenseManagerReportGenerator
+func (c *LicenseManager) CreateLicenseManagerReportGenerator(input *CreateLicenseManagerReportGeneratorInput) (*CreateLicenseManagerReportGeneratorOutput, error) {
+	req, out := c.CreateLicenseManagerReportGeneratorRequest(input)
+	return out, req.Send()
+}
+
+// CreateLicenseManagerReportGeneratorWithContext is the same as CreateLicenseManagerReportGenerator with the addition of
+// the ability to pass a context and additional request options.
+//
+// See CreateLicenseManagerReportGenerator for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *LicenseManager) CreateLicenseManagerReportGeneratorWithContext(ctx aws.Context, input *CreateLicenseManagerReportGeneratorInput, opts ...request.Option) (*CreateLicenseManagerReportGeneratorOutput, error) {
+	req, out := c.CreateLicenseManagerReportGeneratorRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opCreateLicenseVersion = "CreateLicenseVersion"
+
+// CreateLicenseVersionRequest generates a "aws/request.Request" representing the
+// client's request for the CreateLicenseVersion operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See CreateLicenseVersion for more information on using the CreateLicenseVersion
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the CreateLicenseVersionRequest method.
+//    req, resp := client.CreateLicenseVersionRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/license-manager-2018-08-01/CreateLicenseVersion
+func (c *LicenseManager) CreateLicenseVersionRequest(input *CreateLicenseVersionInput) (req *request.Request, output *CreateLicenseVersionOutput) {
+	op := &request.Operation{
+		Name:       opCreateLicenseVersion,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &CreateLicenseVersionInput{}
+	}
+
+	output = &CreateLicenseVersionOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// CreateLicenseVersion API operation for AWS License Manager.
+//
+// Creates a new version of the specified license.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS License Manager's
+// API operation CreateLicenseVersion for usage and error information.
+//
+// Returned Error Types:
+//   * ValidationException
+//   The provided input is not valid. Try your request again.
+//
+//   * AccessDeniedException
+//   Access to resource denied.
+//
+//   * ResourceNotFoundException
+//   The resource cannot be found.
+//
+//   * RedirectException
+//   This is not the correct Region for the resource. Try again.
+//
+//   * ConflictException
+//   There was a conflict processing the request. Try your request again.
+//
+//   * ServerInternalException
+//   The server experienced an internal error. Try again.
+//
+//   * AuthorizationException
+//   The Amazon Web Services user account does not have permission to perform
+//   the action. Check the IAM policy associated with this account.
+//
+//   * RateLimitExceededException
+//   Too many requests have been submitted. Try again after a brief wait.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/license-manager-2018-08-01/CreateLicenseVersion
+func (c *LicenseManager) CreateLicenseVersion(input *CreateLicenseVersionInput) (*CreateLicenseVersionOutput, error) {
+	req, out := c.CreateLicenseVersionRequest(input)
+	return out, req.Send()
+}
+
+// CreateLicenseVersionWithContext is the same as CreateLicenseVersion with the addition of
+// the ability to pass a context and additional request options.
+//
+// See CreateLicenseVersion for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *LicenseManager) CreateLicenseVersionWithContext(ctx aws.Context, input *CreateLicenseVersionInput, opts ...request.Option) (*CreateLicenseVersionOutput, error) {
+	req, out := c.CreateLicenseVersionRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opCreateToken = "CreateToken"
+
+// CreateTokenRequest generates a "aws/request.Request" representing the
+// client's request for the CreateToken operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See CreateToken for more information on using the CreateToken
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the CreateTokenRequest method.
+//    req, resp := client.CreateTokenRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/license-manager-2018-08-01/CreateToken
+func (c *LicenseManager) CreateTokenRequest(input *CreateTokenInput) (req *request.Request, output *CreateTokenOutput) {
+	op := &request.Operation{
+		Name:       opCreateToken,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &CreateTokenInput{}
+	}
+
+	output = &CreateTokenOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// CreateToken API operation for AWS License Manager.
+//
+// Creates a long-lived token.
+//
+// A refresh token is a JWT token used to get an access token. With an access
+// token, you can call AssumeRoleWithWebIdentity to get role credentials that
+// you can use to call License Manager to manage the specified license.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS License Manager's
+// API operation CreateToken for usage and error information.
+//
+// Returned Error Types:
+//   * ValidationException
+//   The provided input is not valid. Try your request again.
+//
+//   * AuthorizationException
+//   The Amazon Web Services user account does not have permission to perform
+//   the action. Check the IAM policy associated with this account.
+//
+//   * AccessDeniedException
+//   Access to resource denied.
+//
+//   * RateLimitExceededException
+//   Too many requests have been submitted. Try again after a brief wait.
+//
+//   * ResourceLimitExceededException
+//   Your resource limits have been exceeded.
+//
+//   * ServerInternalException
+//   The server experienced an internal error. Try again.
+//
+//   * ResourceNotFoundException
+//   The resource cannot be found.
+//
+//   * RedirectException
+//   This is not the correct Region for the resource. Try again.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/license-manager-2018-08-01/CreateToken
+func (c *LicenseManager) CreateToken(input *CreateTokenInput) (*CreateTokenOutput, error) {
+	req, out := c.CreateTokenRequest(input)
+	return out, req.Send()
+}
+
+// CreateTokenWithContext is the same as CreateToken with the addition of
+// the ability to pass a context and additional request options.
+//
+// See CreateToken for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *LicenseManager) CreateTokenWithContext(ctx aws.Context, input *CreateTokenInput, opts ...request.Option) (*CreateTokenOutput, error) {
+	req, out := c.CreateTokenRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opDeleteGrant = "DeleteGrant"
+
+// DeleteGrantRequest generates a "aws/request.Request" representing the
+// client's request for the DeleteGrant operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See DeleteGrant for more information on using the DeleteGrant
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the DeleteGrantRequest method.
+//    req, resp := client.DeleteGrantRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/license-manager-2018-08-01/DeleteGrant
+func (c *LicenseManager) DeleteGrantRequest(input *DeleteGrantInput) (req *request.Request, output *DeleteGrantOutput) {
+	op := &request.Operation{
+		Name:       opDeleteGrant,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &DeleteGrantInput{}
+	}
+
+	output = &DeleteGrantOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// DeleteGrant API operation for AWS License Manager.
+//
+// Deletes the specified grant.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS License Manager's
+// API operation DeleteGrant for usage and error information.
+//
+// Returned Error Types:
+//   * ValidationException
+//   The provided input is not valid. Try your request again.
+//
+//   * InvalidParameterValueException
+//   One or more parameter values are not valid.
+//
+//   * AuthorizationException
+//   The Amazon Web Services user account does not have permission to perform
+//   the action. Check the IAM policy associated with this account.
+//
+//   * AccessDeniedException
+//   Access to resource denied.
+//
+//   * RateLimitExceededException
+//   Too many requests have been submitted. Try again after a brief wait.
+//
+//   * ResourceLimitExceededException
+//   Your resource limits have been exceeded.
+//
+//   * ServerInternalException
+//   The server experienced an internal error. Try again.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/license-manager-2018-08-01/DeleteGrant
+func (c *LicenseManager) DeleteGrant(input *DeleteGrantInput) (*DeleteGrantOutput, error) {
+	req, out := c.DeleteGrantRequest(input)
+	return out, req.Send()
+}
+
+// DeleteGrantWithContext is the same as DeleteGrant with the addition of
+// the ability to pass a context and additional request options.
+//
+// See DeleteGrant for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *LicenseManager) DeleteGrantWithContext(ctx aws.Context, input *DeleteGrantInput, opts ...request.Option) (*DeleteGrantOutput, error) {
+	req, out := c.DeleteGrantRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opDeleteLicense = "DeleteLicense"
+
+// DeleteLicenseRequest generates a "aws/request.Request" representing the
+// client's request for the DeleteLicense operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See DeleteLicense for more information on using the DeleteLicense
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the DeleteLicenseRequest method.
+//    req, resp := client.DeleteLicenseRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/license-manager-2018-08-01/DeleteLicense
+func (c *LicenseManager) DeleteLicenseRequest(input *DeleteLicenseInput) (req *request.Request, output *DeleteLicenseOutput) {
+	op := &request.Operation{
+		Name:       opDeleteLicense,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &DeleteLicenseInput{}
+	}
+
+	output = &DeleteLicenseOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// DeleteLicense API operation for AWS License Manager.
+//
+// Deletes the specified license.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS License Manager's
+// API operation DeleteLicense for usage and error information.
+//
+// Returned Error Types:
+//   * ValidationException
+//   The provided input is not valid. Try your request again.
+//
+//   * InvalidParameterValueException
+//   One or more parameter values are not valid.
+//
+//   * RedirectException
+//   This is not the correct Region for the resource. Try again.
+//
+//   * ConflictException
+//   There was a conflict processing the request. Try your request again.
+//
+//   * ServerInternalException
+//   The server experienced an internal error. Try again.
+//
+//   * AuthorizationException
+//   The Amazon Web Services user account does not have permission to perform
+//   the action. Check the IAM policy associated with this account.
+//
+//   * AccessDeniedException
+//   Access to resource denied.
+//
+//   * RateLimitExceededException
+//   Too many requests have been submitted. Try again after a brief wait.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/license-manager-2018-08-01/DeleteLicense
+func (c *LicenseManager) DeleteLicense(input *DeleteLicenseInput) (*DeleteLicenseOutput, error) {
+	req, out := c.DeleteLicenseRequest(input)
+	return out, req.Send()
+}
+
+// DeleteLicenseWithContext is the same as DeleteLicense with the addition of
+// the ability to pass a context and additional request options.
+//
+// See DeleteLicense for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *LicenseManager) DeleteLicenseWithContext(ctx aws.Context, input *DeleteLicenseInput, opts ...request.Option) (*DeleteLicenseOutput, error) {
+	req, out := c.DeleteLicenseRequest(input)
 	req.SetContext(ctx)
 	req.ApplyOptions(opts...)
 	return out, req.Send()
@@ -179,8 +1495,8 @@ func (c *LicenseManager) DeleteLicenseConfigurationRequest(input *DeleteLicenseC
 //   The server experienced an internal error. Try again.
 //
 //   * AuthorizationException
-//   The AWS user account does not have permission to perform the action. Check
-//   the IAM policy associated with this account.
+//   The Amazon Web Services user account does not have permission to perform
+//   the action. Check the IAM policy associated with this account.
 //
 //   * AccessDeniedException
 //   Access to resource denied.
@@ -205,6 +1521,595 @@ func (c *LicenseManager) DeleteLicenseConfiguration(input *DeleteLicenseConfigur
 // for more information on using Contexts.
 func (c *LicenseManager) DeleteLicenseConfigurationWithContext(ctx aws.Context, input *DeleteLicenseConfigurationInput, opts ...request.Option) (*DeleteLicenseConfigurationOutput, error) {
 	req, out := c.DeleteLicenseConfigurationRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opDeleteLicenseManagerReportGenerator = "DeleteLicenseManagerReportGenerator"
+
+// DeleteLicenseManagerReportGeneratorRequest generates a "aws/request.Request" representing the
+// client's request for the DeleteLicenseManagerReportGenerator operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See DeleteLicenseManagerReportGenerator for more information on using the DeleteLicenseManagerReportGenerator
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the DeleteLicenseManagerReportGeneratorRequest method.
+//    req, resp := client.DeleteLicenseManagerReportGeneratorRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/license-manager-2018-08-01/DeleteLicenseManagerReportGenerator
+func (c *LicenseManager) DeleteLicenseManagerReportGeneratorRequest(input *DeleteLicenseManagerReportGeneratorInput) (req *request.Request, output *DeleteLicenseManagerReportGeneratorOutput) {
+	op := &request.Operation{
+		Name:       opDeleteLicenseManagerReportGenerator,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &DeleteLicenseManagerReportGeneratorInput{}
+	}
+
+	output = &DeleteLicenseManagerReportGeneratorOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
+	return
+}
+
+// DeleteLicenseManagerReportGenerator API operation for AWS License Manager.
+//
+// Deletes the specified report generator.
+//
+// This action deletes the report generator, which stops it from generating
+// future reports. The action cannot be reversed. It has no effect on the previous
+// reports from this generator.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS License Manager's
+// API operation DeleteLicenseManagerReportGenerator for usage and error information.
+//
+// Returned Error Types:
+//   * ValidationException
+//   The provided input is not valid. Try your request again.
+//
+//   * InvalidParameterValueException
+//   One or more parameter values are not valid.
+//
+//   * ResourceLimitExceededException
+//   Your resource limits have been exceeded.
+//
+//   * ServerInternalException
+//   The server experienced an internal error. Try again.
+//
+//   * AuthorizationException
+//   The Amazon Web Services user account does not have permission to perform
+//   the action. Check the IAM policy associated with this account.
+//
+//   * RateLimitExceededException
+//   Too many requests have been submitted. Try again after a brief wait.
+//
+//   * AccessDeniedException
+//   Access to resource denied.
+//
+//   * ResourceNotFoundException
+//   The resource cannot be found.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/license-manager-2018-08-01/DeleteLicenseManagerReportGenerator
+func (c *LicenseManager) DeleteLicenseManagerReportGenerator(input *DeleteLicenseManagerReportGeneratorInput) (*DeleteLicenseManagerReportGeneratorOutput, error) {
+	req, out := c.DeleteLicenseManagerReportGeneratorRequest(input)
+	return out, req.Send()
+}
+
+// DeleteLicenseManagerReportGeneratorWithContext is the same as DeleteLicenseManagerReportGenerator with the addition of
+// the ability to pass a context and additional request options.
+//
+// See DeleteLicenseManagerReportGenerator for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *LicenseManager) DeleteLicenseManagerReportGeneratorWithContext(ctx aws.Context, input *DeleteLicenseManagerReportGeneratorInput, opts ...request.Option) (*DeleteLicenseManagerReportGeneratorOutput, error) {
+	req, out := c.DeleteLicenseManagerReportGeneratorRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opDeleteToken = "DeleteToken"
+
+// DeleteTokenRequest generates a "aws/request.Request" representing the
+// client's request for the DeleteToken operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See DeleteToken for more information on using the DeleteToken
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the DeleteTokenRequest method.
+//    req, resp := client.DeleteTokenRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/license-manager-2018-08-01/DeleteToken
+func (c *LicenseManager) DeleteTokenRequest(input *DeleteTokenInput) (req *request.Request, output *DeleteTokenOutput) {
+	op := &request.Operation{
+		Name:       opDeleteToken,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &DeleteTokenInput{}
+	}
+
+	output = &DeleteTokenOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
+	return
+}
+
+// DeleteToken API operation for AWS License Manager.
+//
+// Deletes the specified token. Must be called in the license home Region.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS License Manager's
+// API operation DeleteToken for usage and error information.
+//
+// Returned Error Types:
+//   * ValidationException
+//   The provided input is not valid. Try your request again.
+//
+//   * AuthorizationException
+//   The Amazon Web Services user account does not have permission to perform
+//   the action. Check the IAM policy associated with this account.
+//
+//   * AccessDeniedException
+//   Access to resource denied.
+//
+//   * RateLimitExceededException
+//   Too many requests have been submitted. Try again after a brief wait.
+//
+//   * ServerInternalException
+//   The server experienced an internal error. Try again.
+//
+//   * ResourceNotFoundException
+//   The resource cannot be found.
+//
+//   * RedirectException
+//   This is not the correct Region for the resource. Try again.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/license-manager-2018-08-01/DeleteToken
+func (c *LicenseManager) DeleteToken(input *DeleteTokenInput) (*DeleteTokenOutput, error) {
+	req, out := c.DeleteTokenRequest(input)
+	return out, req.Send()
+}
+
+// DeleteTokenWithContext is the same as DeleteToken with the addition of
+// the ability to pass a context and additional request options.
+//
+// See DeleteToken for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *LicenseManager) DeleteTokenWithContext(ctx aws.Context, input *DeleteTokenInput, opts ...request.Option) (*DeleteTokenOutput, error) {
+	req, out := c.DeleteTokenRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opExtendLicenseConsumption = "ExtendLicenseConsumption"
+
+// ExtendLicenseConsumptionRequest generates a "aws/request.Request" representing the
+// client's request for the ExtendLicenseConsumption operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See ExtendLicenseConsumption for more information on using the ExtendLicenseConsumption
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the ExtendLicenseConsumptionRequest method.
+//    req, resp := client.ExtendLicenseConsumptionRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/license-manager-2018-08-01/ExtendLicenseConsumption
+func (c *LicenseManager) ExtendLicenseConsumptionRequest(input *ExtendLicenseConsumptionInput) (req *request.Request, output *ExtendLicenseConsumptionOutput) {
+	op := &request.Operation{
+		Name:       opExtendLicenseConsumption,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &ExtendLicenseConsumptionInput{}
+	}
+
+	output = &ExtendLicenseConsumptionOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// ExtendLicenseConsumption API operation for AWS License Manager.
+//
+// Extends the expiration date for license consumption.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS License Manager's
+// API operation ExtendLicenseConsumption for usage and error information.
+//
+// Returned Error Types:
+//   * ValidationException
+//   The provided input is not valid. Try your request again.
+//
+//   * InvalidParameterValueException
+//   One or more parameter values are not valid.
+//
+//   * AuthorizationException
+//   The Amazon Web Services user account does not have permission to perform
+//   the action. Check the IAM policy associated with this account.
+//
+//   * AccessDeniedException
+//   Access to resource denied.
+//
+//   * RateLimitExceededException
+//   Too many requests have been submitted. Try again after a brief wait.
+//
+//   * ServerInternalException
+//   The server experienced an internal error. Try again.
+//
+//   * ResourceNotFoundException
+//   The resource cannot be found.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/license-manager-2018-08-01/ExtendLicenseConsumption
+func (c *LicenseManager) ExtendLicenseConsumption(input *ExtendLicenseConsumptionInput) (*ExtendLicenseConsumptionOutput, error) {
+	req, out := c.ExtendLicenseConsumptionRequest(input)
+	return out, req.Send()
+}
+
+// ExtendLicenseConsumptionWithContext is the same as ExtendLicenseConsumption with the addition of
+// the ability to pass a context and additional request options.
+//
+// See ExtendLicenseConsumption for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *LicenseManager) ExtendLicenseConsumptionWithContext(ctx aws.Context, input *ExtendLicenseConsumptionInput, opts ...request.Option) (*ExtendLicenseConsumptionOutput, error) {
+	req, out := c.ExtendLicenseConsumptionRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opGetAccessToken = "GetAccessToken"
+
+// GetAccessTokenRequest generates a "aws/request.Request" representing the
+// client's request for the GetAccessToken operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See GetAccessToken for more information on using the GetAccessToken
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the GetAccessTokenRequest method.
+//    req, resp := client.GetAccessTokenRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/license-manager-2018-08-01/GetAccessToken
+func (c *LicenseManager) GetAccessTokenRequest(input *GetAccessTokenInput) (req *request.Request, output *GetAccessTokenOutput) {
+	op := &request.Operation{
+		Name:       opGetAccessToken,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &GetAccessTokenInput{}
+	}
+
+	output = &GetAccessTokenOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// GetAccessToken API operation for AWS License Manager.
+//
+// Gets a temporary access token to use with AssumeRoleWithWebIdentity. Access
+// tokens are valid for one hour.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS License Manager's
+// API operation GetAccessToken for usage and error information.
+//
+// Returned Error Types:
+//   * ValidationException
+//   The provided input is not valid. Try your request again.
+//
+//   * AuthorizationException
+//   The Amazon Web Services user account does not have permission to perform
+//   the action. Check the IAM policy associated with this account.
+//
+//   * AccessDeniedException
+//   Access to resource denied.
+//
+//   * RateLimitExceededException
+//   Too many requests have been submitted. Try again after a brief wait.
+//
+//   * ServerInternalException
+//   The server experienced an internal error. Try again.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/license-manager-2018-08-01/GetAccessToken
+func (c *LicenseManager) GetAccessToken(input *GetAccessTokenInput) (*GetAccessTokenOutput, error) {
+	req, out := c.GetAccessTokenRequest(input)
+	return out, req.Send()
+}
+
+// GetAccessTokenWithContext is the same as GetAccessToken with the addition of
+// the ability to pass a context and additional request options.
+//
+// See GetAccessToken for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *LicenseManager) GetAccessTokenWithContext(ctx aws.Context, input *GetAccessTokenInput, opts ...request.Option) (*GetAccessTokenOutput, error) {
+	req, out := c.GetAccessTokenRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opGetGrant = "GetGrant"
+
+// GetGrantRequest generates a "aws/request.Request" representing the
+// client's request for the GetGrant operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See GetGrant for more information on using the GetGrant
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the GetGrantRequest method.
+//    req, resp := client.GetGrantRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/license-manager-2018-08-01/GetGrant
+func (c *LicenseManager) GetGrantRequest(input *GetGrantInput) (req *request.Request, output *GetGrantOutput) {
+	op := &request.Operation{
+		Name:       opGetGrant,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &GetGrantInput{}
+	}
+
+	output = &GetGrantOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// GetGrant API operation for AWS License Manager.
+//
+// Gets detailed information about the specified grant.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS License Manager's
+// API operation GetGrant for usage and error information.
+//
+// Returned Error Types:
+//   * ValidationException
+//   The provided input is not valid. Try your request again.
+//
+//   * InvalidParameterValueException
+//   One or more parameter values are not valid.
+//
+//   * ResourceLimitExceededException
+//   Your resource limits have been exceeded.
+//
+//   * ServerInternalException
+//   The server experienced an internal error. Try again.
+//
+//   * AuthorizationException
+//   The Amazon Web Services user account does not have permission to perform
+//   the action. Check the IAM policy associated with this account.
+//
+//   * AccessDeniedException
+//   Access to resource denied.
+//
+//   * RateLimitExceededException
+//   Too many requests have been submitted. Try again after a brief wait.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/license-manager-2018-08-01/GetGrant
+func (c *LicenseManager) GetGrant(input *GetGrantInput) (*GetGrantOutput, error) {
+	req, out := c.GetGrantRequest(input)
+	return out, req.Send()
+}
+
+// GetGrantWithContext is the same as GetGrant with the addition of
+// the ability to pass a context and additional request options.
+//
+// See GetGrant for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *LicenseManager) GetGrantWithContext(ctx aws.Context, input *GetGrantInput, opts ...request.Option) (*GetGrantOutput, error) {
+	req, out := c.GetGrantRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opGetLicense = "GetLicense"
+
+// GetLicenseRequest generates a "aws/request.Request" representing the
+// client's request for the GetLicense operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See GetLicense for more information on using the GetLicense
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the GetLicenseRequest method.
+//    req, resp := client.GetLicenseRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/license-manager-2018-08-01/GetLicense
+func (c *LicenseManager) GetLicenseRequest(input *GetLicenseInput) (req *request.Request, output *GetLicenseOutput) {
+	op := &request.Operation{
+		Name:       opGetLicense,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &GetLicenseInput{}
+	}
+
+	output = &GetLicenseOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// GetLicense API operation for AWS License Manager.
+//
+// Gets detailed information about the specified license.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS License Manager's
+// API operation GetLicense for usage and error information.
+//
+// Returned Error Types:
+//   * ValidationException
+//   The provided input is not valid. Try your request again.
+//
+//   * InvalidParameterValueException
+//   One or more parameter values are not valid.
+//
+//   * AuthorizationException
+//   The Amazon Web Services user account does not have permission to perform
+//   the action. Check the IAM policy associated with this account.
+//
+//   * AccessDeniedException
+//   Access to resource denied.
+//
+//   * RateLimitExceededException
+//   Too many requests have been submitted. Try again after a brief wait.
+//
+//   * ServerInternalException
+//   The server experienced an internal error. Try again.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/license-manager-2018-08-01/GetLicense
+func (c *LicenseManager) GetLicense(input *GetLicenseInput) (*GetLicenseOutput, error) {
+	req, out := c.GetLicenseRequest(input)
+	return out, req.Send()
+}
+
+// GetLicenseWithContext is the same as GetLicense with the addition of
+// the ability to pass a context and additional request options.
+//
+// See GetLicense for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *LicenseManager) GetLicenseWithContext(ctx aws.Context, input *GetLicenseInput, opts ...request.Option) (*GetLicenseOutput, error) {
+	req, out := c.GetLicenseRequest(input)
 	req.SetContext(ctx)
 	req.ApplyOptions(opts...)
 	return out, req.Send()
@@ -271,8 +2176,8 @@ func (c *LicenseManager) GetLicenseConfigurationRequest(input *GetLicenseConfigu
 //   The server experienced an internal error. Try again.
 //
 //   * AuthorizationException
-//   The AWS user account does not have permission to perform the action. Check
-//   the IAM policy associated with this account.
+//   The Amazon Web Services user account does not have permission to perform
+//   the action. Check the IAM policy associated with this account.
 //
 //   * AccessDeniedException
 //   Access to resource denied.
@@ -297,6 +2202,294 @@ func (c *LicenseManager) GetLicenseConfiguration(input *GetLicenseConfigurationI
 // for more information on using Contexts.
 func (c *LicenseManager) GetLicenseConfigurationWithContext(ctx aws.Context, input *GetLicenseConfigurationInput, opts ...request.Option) (*GetLicenseConfigurationOutput, error) {
 	req, out := c.GetLicenseConfigurationRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opGetLicenseConversionTask = "GetLicenseConversionTask"
+
+// GetLicenseConversionTaskRequest generates a "aws/request.Request" representing the
+// client's request for the GetLicenseConversionTask operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See GetLicenseConversionTask for more information on using the GetLicenseConversionTask
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the GetLicenseConversionTaskRequest method.
+//    req, resp := client.GetLicenseConversionTaskRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/license-manager-2018-08-01/GetLicenseConversionTask
+func (c *LicenseManager) GetLicenseConversionTaskRequest(input *GetLicenseConversionTaskInput) (req *request.Request, output *GetLicenseConversionTaskOutput) {
+	op := &request.Operation{
+		Name:       opGetLicenseConversionTask,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &GetLicenseConversionTaskInput{}
+	}
+
+	output = &GetLicenseConversionTaskOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// GetLicenseConversionTask API operation for AWS License Manager.
+//
+// Gets information about the specified license type conversion task.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS License Manager's
+// API operation GetLicenseConversionTask for usage and error information.
+//
+// Returned Error Types:
+//   * InvalidParameterValueException
+//   One or more parameter values are not valid.
+//
+//   * ServerInternalException
+//   The server experienced an internal error. Try again.
+//
+//   * AuthorizationException
+//   The Amazon Web Services user account does not have permission to perform
+//   the action. Check the IAM policy associated with this account.
+//
+//   * AccessDeniedException
+//   Access to resource denied.
+//
+//   * RateLimitExceededException
+//   Too many requests have been submitted. Try again after a brief wait.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/license-manager-2018-08-01/GetLicenseConversionTask
+func (c *LicenseManager) GetLicenseConversionTask(input *GetLicenseConversionTaskInput) (*GetLicenseConversionTaskOutput, error) {
+	req, out := c.GetLicenseConversionTaskRequest(input)
+	return out, req.Send()
+}
+
+// GetLicenseConversionTaskWithContext is the same as GetLicenseConversionTask with the addition of
+// the ability to pass a context and additional request options.
+//
+// See GetLicenseConversionTask for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *LicenseManager) GetLicenseConversionTaskWithContext(ctx aws.Context, input *GetLicenseConversionTaskInput, opts ...request.Option) (*GetLicenseConversionTaskOutput, error) {
+	req, out := c.GetLicenseConversionTaskRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opGetLicenseManagerReportGenerator = "GetLicenseManagerReportGenerator"
+
+// GetLicenseManagerReportGeneratorRequest generates a "aws/request.Request" representing the
+// client's request for the GetLicenseManagerReportGenerator operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See GetLicenseManagerReportGenerator for more information on using the GetLicenseManagerReportGenerator
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the GetLicenseManagerReportGeneratorRequest method.
+//    req, resp := client.GetLicenseManagerReportGeneratorRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/license-manager-2018-08-01/GetLicenseManagerReportGenerator
+func (c *LicenseManager) GetLicenseManagerReportGeneratorRequest(input *GetLicenseManagerReportGeneratorInput) (req *request.Request, output *GetLicenseManagerReportGeneratorOutput) {
+	op := &request.Operation{
+		Name:       opGetLicenseManagerReportGenerator,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &GetLicenseManagerReportGeneratorInput{}
+	}
+
+	output = &GetLicenseManagerReportGeneratorOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// GetLicenseManagerReportGenerator API operation for AWS License Manager.
+//
+// Gets information about the specified report generator.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS License Manager's
+// API operation GetLicenseManagerReportGenerator for usage and error information.
+//
+// Returned Error Types:
+//   * ValidationException
+//   The provided input is not valid. Try your request again.
+//
+//   * InvalidParameterValueException
+//   One or more parameter values are not valid.
+//
+//   * ResourceLimitExceededException
+//   Your resource limits have been exceeded.
+//
+//   * ServerInternalException
+//   The server experienced an internal error. Try again.
+//
+//   * AuthorizationException
+//   The Amazon Web Services user account does not have permission to perform
+//   the action. Check the IAM policy associated with this account.
+//
+//   * RateLimitExceededException
+//   Too many requests have been submitted. Try again after a brief wait.
+//
+//   * AccessDeniedException
+//   Access to resource denied.
+//
+//   * ResourceNotFoundException
+//   The resource cannot be found.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/license-manager-2018-08-01/GetLicenseManagerReportGenerator
+func (c *LicenseManager) GetLicenseManagerReportGenerator(input *GetLicenseManagerReportGeneratorInput) (*GetLicenseManagerReportGeneratorOutput, error) {
+	req, out := c.GetLicenseManagerReportGeneratorRequest(input)
+	return out, req.Send()
+}
+
+// GetLicenseManagerReportGeneratorWithContext is the same as GetLicenseManagerReportGenerator with the addition of
+// the ability to pass a context and additional request options.
+//
+// See GetLicenseManagerReportGenerator for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *LicenseManager) GetLicenseManagerReportGeneratorWithContext(ctx aws.Context, input *GetLicenseManagerReportGeneratorInput, opts ...request.Option) (*GetLicenseManagerReportGeneratorOutput, error) {
+	req, out := c.GetLicenseManagerReportGeneratorRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opGetLicenseUsage = "GetLicenseUsage"
+
+// GetLicenseUsageRequest generates a "aws/request.Request" representing the
+// client's request for the GetLicenseUsage operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See GetLicenseUsage for more information on using the GetLicenseUsage
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the GetLicenseUsageRequest method.
+//    req, resp := client.GetLicenseUsageRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/license-manager-2018-08-01/GetLicenseUsage
+func (c *LicenseManager) GetLicenseUsageRequest(input *GetLicenseUsageInput) (req *request.Request, output *GetLicenseUsageOutput) {
+	op := &request.Operation{
+		Name:       opGetLicenseUsage,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &GetLicenseUsageInput{}
+	}
+
+	output = &GetLicenseUsageOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// GetLicenseUsage API operation for AWS License Manager.
+//
+// Gets detailed information about the usage of the specified license.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS License Manager's
+// API operation GetLicenseUsage for usage and error information.
+//
+// Returned Error Types:
+//   * ValidationException
+//   The provided input is not valid. Try your request again.
+//
+//   * InvalidParameterValueException
+//   One or more parameter values are not valid.
+//
+//   * AuthorizationException
+//   The Amazon Web Services user account does not have permission to perform
+//   the action. Check the IAM policy associated with this account.
+//
+//   * AccessDeniedException
+//   Access to resource denied.
+//
+//   * RateLimitExceededException
+//   Too many requests have been submitted. Try again after a brief wait.
+//
+//   * ServerInternalException
+//   The server experienced an internal error. Try again.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/license-manager-2018-08-01/GetLicenseUsage
+func (c *LicenseManager) GetLicenseUsage(input *GetLicenseUsageInput) (*GetLicenseUsageOutput, error) {
+	req, out := c.GetLicenseUsageRequest(input)
+	return out, req.Send()
+}
+
+// GetLicenseUsageWithContext is the same as GetLicenseUsage with the addition of
+// the ability to pass a context and additional request options.
+//
+// See GetLicenseUsage for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *LicenseManager) GetLicenseUsageWithContext(ctx aws.Context, input *GetLicenseUsageInput, opts ...request.Option) (*GetLicenseUsageOutput, error) {
+	req, out := c.GetLicenseUsageRequest(input)
 	req.SetContext(ctx)
 	req.ApplyOptions(opts...)
 	return out, req.Send()
@@ -360,8 +2553,8 @@ func (c *LicenseManager) GetServiceSettingsRequest(input *GetServiceSettingsInpu
 //   The server experienced an internal error. Try again.
 //
 //   * AuthorizationException
-//   The AWS user account does not have permission to perform the action. Check
-//   the IAM policy associated with this account.
+//   The Amazon Web Services user account does not have permission to perform
+//   the action. Check the IAM policy associated with this account.
 //
 //   * AccessDeniedException
 //   Access to resource denied.
@@ -459,8 +2652,8 @@ func (c *LicenseManager) ListAssociationsForLicenseConfigurationRequest(input *L
 //   The server experienced an internal error. Try again.
 //
 //   * AuthorizationException
-//   The AWS user account does not have permission to perform the action. Check
-//   the IAM policy associated with this account.
+//   The Amazon Web Services user account does not have permission to perform
+//   the action. Check the IAM policy associated with this account.
 //
 //   * AccessDeniedException
 //   Access to resource denied.
@@ -485,6 +2678,104 @@ func (c *LicenseManager) ListAssociationsForLicenseConfiguration(input *ListAsso
 // for more information on using Contexts.
 func (c *LicenseManager) ListAssociationsForLicenseConfigurationWithContext(ctx aws.Context, input *ListAssociationsForLicenseConfigurationInput, opts ...request.Option) (*ListAssociationsForLicenseConfigurationOutput, error) {
 	req, out := c.ListAssociationsForLicenseConfigurationRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opListDistributedGrants = "ListDistributedGrants"
+
+// ListDistributedGrantsRequest generates a "aws/request.Request" representing the
+// client's request for the ListDistributedGrants operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See ListDistributedGrants for more information on using the ListDistributedGrants
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the ListDistributedGrantsRequest method.
+//    req, resp := client.ListDistributedGrantsRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/license-manager-2018-08-01/ListDistributedGrants
+func (c *LicenseManager) ListDistributedGrantsRequest(input *ListDistributedGrantsInput) (req *request.Request, output *ListDistributedGrantsOutput) {
+	op := &request.Operation{
+		Name:       opListDistributedGrants,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &ListDistributedGrantsInput{}
+	}
+
+	output = &ListDistributedGrantsOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// ListDistributedGrants API operation for AWS License Manager.
+//
+// Lists the grants distributed for the specified license.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS License Manager's
+// API operation ListDistributedGrants for usage and error information.
+//
+// Returned Error Types:
+//   * ValidationException
+//   The provided input is not valid. Try your request again.
+//
+//   * InvalidParameterValueException
+//   One or more parameter values are not valid.
+//
+//   * ResourceLimitExceededException
+//   Your resource limits have been exceeded.
+//
+//   * ServerInternalException
+//   The server experienced an internal error. Try again.
+//
+//   * AuthorizationException
+//   The Amazon Web Services user account does not have permission to perform
+//   the action. Check the IAM policy associated with this account.
+//
+//   * AccessDeniedException
+//   Access to resource denied.
+//
+//   * RateLimitExceededException
+//   Too many requests have been submitted. Try again after a brief wait.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/license-manager-2018-08-01/ListDistributedGrants
+func (c *LicenseManager) ListDistributedGrants(input *ListDistributedGrantsInput) (*ListDistributedGrantsOutput, error) {
+	req, out := c.ListDistributedGrantsRequest(input)
+	return out, req.Send()
+}
+
+// ListDistributedGrantsWithContext is the same as ListDistributedGrants with the addition of
+// the ability to pass a context and additional request options.
+//
+// See ListDistributedGrants for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *LicenseManager) ListDistributedGrantsWithContext(ctx aws.Context, input *ListDistributedGrantsInput, opts ...request.Option) (*ListDistributedGrantsOutput, error) {
+	req, out := c.ListDistributedGrantsRequest(input)
 	req.SetContext(ctx)
 	req.ApplyOptions(opts...)
 	return out, req.Send()
@@ -551,8 +2842,8 @@ func (c *LicenseManager) ListFailuresForLicenseConfigurationOperationsRequest(in
 //   The server experienced an internal error. Try again.
 //
 //   * AuthorizationException
-//   The AWS user account does not have permission to perform the action. Check
-//   the IAM policy associated with this account.
+//   The Amazon Web Services user account does not have permission to perform
+//   the action. Check the IAM policy associated with this account.
 //
 //   * AccessDeniedException
 //   Access to resource denied.
@@ -646,8 +2937,8 @@ func (c *LicenseManager) ListLicenseConfigurationsRequest(input *ListLicenseConf
 //   The request uses too many filters or too many filter values.
 //
 //   * AuthorizationException
-//   The AWS user account does not have permission to perform the action. Check
-//   the IAM policy associated with this account.
+//   The Amazon Web Services user account does not have permission to perform
+//   the action. Check the IAM policy associated with this account.
 //
 //   * AccessDeniedException
 //   Access to resource denied.
@@ -672,6 +2963,199 @@ func (c *LicenseManager) ListLicenseConfigurations(input *ListLicenseConfigurati
 // for more information on using Contexts.
 func (c *LicenseManager) ListLicenseConfigurationsWithContext(ctx aws.Context, input *ListLicenseConfigurationsInput, opts ...request.Option) (*ListLicenseConfigurationsOutput, error) {
 	req, out := c.ListLicenseConfigurationsRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opListLicenseConversionTasks = "ListLicenseConversionTasks"
+
+// ListLicenseConversionTasksRequest generates a "aws/request.Request" representing the
+// client's request for the ListLicenseConversionTasks operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See ListLicenseConversionTasks for more information on using the ListLicenseConversionTasks
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the ListLicenseConversionTasksRequest method.
+//    req, resp := client.ListLicenseConversionTasksRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/license-manager-2018-08-01/ListLicenseConversionTasks
+func (c *LicenseManager) ListLicenseConversionTasksRequest(input *ListLicenseConversionTasksInput) (req *request.Request, output *ListLicenseConversionTasksOutput) {
+	op := &request.Operation{
+		Name:       opListLicenseConversionTasks,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &ListLicenseConversionTasksInput{}
+	}
+
+	output = &ListLicenseConversionTasksOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// ListLicenseConversionTasks API operation for AWS License Manager.
+//
+// Lists the license type conversion tasks for your account.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS License Manager's
+// API operation ListLicenseConversionTasks for usage and error information.
+//
+// Returned Error Types:
+//   * InvalidParameterValueException
+//   One or more parameter values are not valid.
+//
+//   * ServerInternalException
+//   The server experienced an internal error. Try again.
+//
+//   * AuthorizationException
+//   The Amazon Web Services user account does not have permission to perform
+//   the action. Check the IAM policy associated with this account.
+//
+//   * AccessDeniedException
+//   Access to resource denied.
+//
+//   * RateLimitExceededException
+//   Too many requests have been submitted. Try again after a brief wait.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/license-manager-2018-08-01/ListLicenseConversionTasks
+func (c *LicenseManager) ListLicenseConversionTasks(input *ListLicenseConversionTasksInput) (*ListLicenseConversionTasksOutput, error) {
+	req, out := c.ListLicenseConversionTasksRequest(input)
+	return out, req.Send()
+}
+
+// ListLicenseConversionTasksWithContext is the same as ListLicenseConversionTasks with the addition of
+// the ability to pass a context and additional request options.
+//
+// See ListLicenseConversionTasks for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *LicenseManager) ListLicenseConversionTasksWithContext(ctx aws.Context, input *ListLicenseConversionTasksInput, opts ...request.Option) (*ListLicenseConversionTasksOutput, error) {
+	req, out := c.ListLicenseConversionTasksRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opListLicenseManagerReportGenerators = "ListLicenseManagerReportGenerators"
+
+// ListLicenseManagerReportGeneratorsRequest generates a "aws/request.Request" representing the
+// client's request for the ListLicenseManagerReportGenerators operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See ListLicenseManagerReportGenerators for more information on using the ListLicenseManagerReportGenerators
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the ListLicenseManagerReportGeneratorsRequest method.
+//    req, resp := client.ListLicenseManagerReportGeneratorsRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/license-manager-2018-08-01/ListLicenseManagerReportGenerators
+func (c *LicenseManager) ListLicenseManagerReportGeneratorsRequest(input *ListLicenseManagerReportGeneratorsInput) (req *request.Request, output *ListLicenseManagerReportGeneratorsOutput) {
+	op := &request.Operation{
+		Name:       opListLicenseManagerReportGenerators,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &ListLicenseManagerReportGeneratorsInput{}
+	}
+
+	output = &ListLicenseManagerReportGeneratorsOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// ListLicenseManagerReportGenerators API operation for AWS License Manager.
+//
+// Lists the report generators for your account.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS License Manager's
+// API operation ListLicenseManagerReportGenerators for usage and error information.
+//
+// Returned Error Types:
+//   * ValidationException
+//   The provided input is not valid. Try your request again.
+//
+//   * InvalidParameterValueException
+//   One or more parameter values are not valid.
+//
+//   * ResourceLimitExceededException
+//   Your resource limits have been exceeded.
+//
+//   * ServerInternalException
+//   The server experienced an internal error. Try again.
+//
+//   * AuthorizationException
+//   The Amazon Web Services user account does not have permission to perform
+//   the action. Check the IAM policy associated with this account.
+//
+//   * RateLimitExceededException
+//   Too many requests have been submitted. Try again after a brief wait.
+//
+//   * AccessDeniedException
+//   Access to resource denied.
+//
+//   * ResourceNotFoundException
+//   The resource cannot be found.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/license-manager-2018-08-01/ListLicenseManagerReportGenerators
+func (c *LicenseManager) ListLicenseManagerReportGenerators(input *ListLicenseManagerReportGeneratorsInput) (*ListLicenseManagerReportGeneratorsOutput, error) {
+	req, out := c.ListLicenseManagerReportGeneratorsRequest(input)
+	return out, req.Send()
+}
+
+// ListLicenseManagerReportGeneratorsWithContext is the same as ListLicenseManagerReportGenerators with the addition of
+// the ability to pass a context and additional request options.
+//
+// See ListLicenseManagerReportGenerators for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *LicenseManager) ListLicenseManagerReportGeneratorsWithContext(ctx aws.Context, input *ListLicenseManagerReportGeneratorsInput, opts ...request.Option) (*ListLicenseManagerReportGeneratorsOutput, error) {
+	req, out := c.ListLicenseManagerReportGeneratorsRequest(input)
 	req.SetContext(ctx)
 	req.ApplyOptions(opts...)
 	return out, req.Send()
@@ -738,8 +3222,8 @@ func (c *LicenseManager) ListLicenseSpecificationsForResourceRequest(input *List
 //   The server experienced an internal error. Try again.
 //
 //   * AuthorizationException
-//   The AWS user account does not have permission to perform the action. Check
-//   the IAM policy associated with this account.
+//   The Amazon Web Services user account does not have permission to perform
+//   the action. Check the IAM policy associated with this account.
 //
 //   * AccessDeniedException
 //   Access to resource denied.
@@ -764,6 +3248,389 @@ func (c *LicenseManager) ListLicenseSpecificationsForResource(input *ListLicense
 // for more information on using Contexts.
 func (c *LicenseManager) ListLicenseSpecificationsForResourceWithContext(ctx aws.Context, input *ListLicenseSpecificationsForResourceInput, opts ...request.Option) (*ListLicenseSpecificationsForResourceOutput, error) {
 	req, out := c.ListLicenseSpecificationsForResourceRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opListLicenseVersions = "ListLicenseVersions"
+
+// ListLicenseVersionsRequest generates a "aws/request.Request" representing the
+// client's request for the ListLicenseVersions operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See ListLicenseVersions for more information on using the ListLicenseVersions
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the ListLicenseVersionsRequest method.
+//    req, resp := client.ListLicenseVersionsRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/license-manager-2018-08-01/ListLicenseVersions
+func (c *LicenseManager) ListLicenseVersionsRequest(input *ListLicenseVersionsInput) (req *request.Request, output *ListLicenseVersionsOutput) {
+	op := &request.Operation{
+		Name:       opListLicenseVersions,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &ListLicenseVersionsInput{}
+	}
+
+	output = &ListLicenseVersionsOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// ListLicenseVersions API operation for AWS License Manager.
+//
+// Lists all versions of the specified license.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS License Manager's
+// API operation ListLicenseVersions for usage and error information.
+//
+// Returned Error Types:
+//   * InvalidParameterValueException
+//   One or more parameter values are not valid.
+//
+//   * AuthorizationException
+//   The Amazon Web Services user account does not have permission to perform
+//   the action. Check the IAM policy associated with this account.
+//
+//   * AccessDeniedException
+//   Access to resource denied.
+//
+//   * RateLimitExceededException
+//   Too many requests have been submitted. Try again after a brief wait.
+//
+//   * ServerInternalException
+//   The server experienced an internal error. Try again.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/license-manager-2018-08-01/ListLicenseVersions
+func (c *LicenseManager) ListLicenseVersions(input *ListLicenseVersionsInput) (*ListLicenseVersionsOutput, error) {
+	req, out := c.ListLicenseVersionsRequest(input)
+	return out, req.Send()
+}
+
+// ListLicenseVersionsWithContext is the same as ListLicenseVersions with the addition of
+// the ability to pass a context and additional request options.
+//
+// See ListLicenseVersions for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *LicenseManager) ListLicenseVersionsWithContext(ctx aws.Context, input *ListLicenseVersionsInput, opts ...request.Option) (*ListLicenseVersionsOutput, error) {
+	req, out := c.ListLicenseVersionsRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opListLicenses = "ListLicenses"
+
+// ListLicensesRequest generates a "aws/request.Request" representing the
+// client's request for the ListLicenses operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See ListLicenses for more information on using the ListLicenses
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the ListLicensesRequest method.
+//    req, resp := client.ListLicensesRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/license-manager-2018-08-01/ListLicenses
+func (c *LicenseManager) ListLicensesRequest(input *ListLicensesInput) (req *request.Request, output *ListLicensesOutput) {
+	op := &request.Operation{
+		Name:       opListLicenses,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &ListLicensesInput{}
+	}
+
+	output = &ListLicensesOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// ListLicenses API operation for AWS License Manager.
+//
+// Lists the licenses for your account.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS License Manager's
+// API operation ListLicenses for usage and error information.
+//
+// Returned Error Types:
+//   * ValidationException
+//   The provided input is not valid. Try your request again.
+//
+//   * InvalidParameterValueException
+//   One or more parameter values are not valid.
+//
+//   * AuthorizationException
+//   The Amazon Web Services user account does not have permission to perform
+//   the action. Check the IAM policy associated with this account.
+//
+//   * AccessDeniedException
+//   Access to resource denied.
+//
+//   * RateLimitExceededException
+//   Too many requests have been submitted. Try again after a brief wait.
+//
+//   * ServerInternalException
+//   The server experienced an internal error. Try again.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/license-manager-2018-08-01/ListLicenses
+func (c *LicenseManager) ListLicenses(input *ListLicensesInput) (*ListLicensesOutput, error) {
+	req, out := c.ListLicensesRequest(input)
+	return out, req.Send()
+}
+
+// ListLicensesWithContext is the same as ListLicenses with the addition of
+// the ability to pass a context and additional request options.
+//
+// See ListLicenses for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *LicenseManager) ListLicensesWithContext(ctx aws.Context, input *ListLicensesInput, opts ...request.Option) (*ListLicensesOutput, error) {
+	req, out := c.ListLicensesRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opListReceivedGrants = "ListReceivedGrants"
+
+// ListReceivedGrantsRequest generates a "aws/request.Request" representing the
+// client's request for the ListReceivedGrants operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See ListReceivedGrants for more information on using the ListReceivedGrants
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the ListReceivedGrantsRequest method.
+//    req, resp := client.ListReceivedGrantsRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/license-manager-2018-08-01/ListReceivedGrants
+func (c *LicenseManager) ListReceivedGrantsRequest(input *ListReceivedGrantsInput) (req *request.Request, output *ListReceivedGrantsOutput) {
+	op := &request.Operation{
+		Name:       opListReceivedGrants,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &ListReceivedGrantsInput{}
+	}
+
+	output = &ListReceivedGrantsOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// ListReceivedGrants API operation for AWS License Manager.
+//
+// Lists grants that are received but not accepted.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS License Manager's
+// API operation ListReceivedGrants for usage and error information.
+//
+// Returned Error Types:
+//   * ValidationException
+//   The provided input is not valid. Try your request again.
+//
+//   * InvalidParameterValueException
+//   One or more parameter values are not valid.
+//
+//   * ResourceLimitExceededException
+//   Your resource limits have been exceeded.
+//
+//   * ServerInternalException
+//   The server experienced an internal error. Try again.
+//
+//   * AuthorizationException
+//   The Amazon Web Services user account does not have permission to perform
+//   the action. Check the IAM policy associated with this account.
+//
+//   * AccessDeniedException
+//   Access to resource denied.
+//
+//   * RateLimitExceededException
+//   Too many requests have been submitted. Try again after a brief wait.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/license-manager-2018-08-01/ListReceivedGrants
+func (c *LicenseManager) ListReceivedGrants(input *ListReceivedGrantsInput) (*ListReceivedGrantsOutput, error) {
+	req, out := c.ListReceivedGrantsRequest(input)
+	return out, req.Send()
+}
+
+// ListReceivedGrantsWithContext is the same as ListReceivedGrants with the addition of
+// the ability to pass a context and additional request options.
+//
+// See ListReceivedGrants for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *LicenseManager) ListReceivedGrantsWithContext(ctx aws.Context, input *ListReceivedGrantsInput, opts ...request.Option) (*ListReceivedGrantsOutput, error) {
+	req, out := c.ListReceivedGrantsRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opListReceivedLicenses = "ListReceivedLicenses"
+
+// ListReceivedLicensesRequest generates a "aws/request.Request" representing the
+// client's request for the ListReceivedLicenses operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See ListReceivedLicenses for more information on using the ListReceivedLicenses
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the ListReceivedLicensesRequest method.
+//    req, resp := client.ListReceivedLicensesRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/license-manager-2018-08-01/ListReceivedLicenses
+func (c *LicenseManager) ListReceivedLicensesRequest(input *ListReceivedLicensesInput) (req *request.Request, output *ListReceivedLicensesOutput) {
+	op := &request.Operation{
+		Name:       opListReceivedLicenses,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &ListReceivedLicensesInput{}
+	}
+
+	output = &ListReceivedLicensesOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// ListReceivedLicenses API operation for AWS License Manager.
+//
+// Lists received licenses.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS License Manager's
+// API operation ListReceivedLicenses for usage and error information.
+//
+// Returned Error Types:
+//   * ValidationException
+//   The provided input is not valid. Try your request again.
+//
+//   * InvalidParameterValueException
+//   One or more parameter values are not valid.
+//
+//   * ResourceLimitExceededException
+//   Your resource limits have been exceeded.
+//
+//   * ServerInternalException
+//   The server experienced an internal error. Try again.
+//
+//   * AuthorizationException
+//   The Amazon Web Services user account does not have permission to perform
+//   the action. Check the IAM policy associated with this account.
+//
+//   * AccessDeniedException
+//   Access to resource denied.
+//
+//   * RateLimitExceededException
+//   Too many requests have been submitted. Try again after a brief wait.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/license-manager-2018-08-01/ListReceivedLicenses
+func (c *LicenseManager) ListReceivedLicenses(input *ListReceivedLicensesInput) (*ListReceivedLicensesOutput, error) {
+	req, out := c.ListReceivedLicensesRequest(input)
+	return out, req.Send()
+}
+
+// ListReceivedLicensesWithContext is the same as ListReceivedLicenses with the addition of
+// the ability to pass a context and additional request options.
+//
+// See ListReceivedLicenses for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *LicenseManager) ListReceivedLicensesWithContext(ctx aws.Context, input *ListReceivedLicensesInput, opts ...request.Option) (*ListReceivedLicensesOutput, error) {
+	req, out := c.ListReceivedLicensesRequest(input)
 	req.SetContext(ctx)
 	req.ApplyOptions(opts...)
 	return out, req.Send()
@@ -836,8 +3703,8 @@ func (c *LicenseManager) ListResourceInventoryRequest(input *ListResourceInvento
 //   A dependency required to run the API is missing.
 //
 //   * AuthorizationException
-//   The AWS user account does not have permission to perform the action. Check
-//   the IAM policy associated with this account.
+//   The Amazon Web Services user account does not have permission to perform
+//   the action. Check the IAM policy associated with this account.
 //
 //   * AccessDeniedException
 //   Access to resource denied.
@@ -928,8 +3795,8 @@ func (c *LicenseManager) ListTagsForResourceRequest(input *ListTagsForResourceIn
 //   The server experienced an internal error. Try again.
 //
 //   * AuthorizationException
-//   The AWS user account does not have permission to perform the action. Check
-//   the IAM policy associated with this account.
+//   The Amazon Web Services user account does not have permission to perform
+//   the action. Check the IAM policy associated with this account.
 //
 //   * AccessDeniedException
 //   Access to resource denied.
@@ -954,6 +3821,98 @@ func (c *LicenseManager) ListTagsForResource(input *ListTagsForResourceInput) (*
 // for more information on using Contexts.
 func (c *LicenseManager) ListTagsForResourceWithContext(ctx aws.Context, input *ListTagsForResourceInput, opts ...request.Option) (*ListTagsForResourceOutput, error) {
 	req, out := c.ListTagsForResourceRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opListTokens = "ListTokens"
+
+// ListTokensRequest generates a "aws/request.Request" representing the
+// client's request for the ListTokens operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See ListTokens for more information on using the ListTokens
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the ListTokensRequest method.
+//    req, resp := client.ListTokensRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/license-manager-2018-08-01/ListTokens
+func (c *LicenseManager) ListTokensRequest(input *ListTokensInput) (req *request.Request, output *ListTokensOutput) {
+	op := &request.Operation{
+		Name:       opListTokens,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &ListTokensInput{}
+	}
+
+	output = &ListTokensOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// ListTokens API operation for AWS License Manager.
+//
+// Lists your tokens.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS License Manager's
+// API operation ListTokens for usage and error information.
+//
+// Returned Error Types:
+//   * ValidationException
+//   The provided input is not valid. Try your request again.
+//
+//   * AuthorizationException
+//   The Amazon Web Services user account does not have permission to perform
+//   the action. Check the IAM policy associated with this account.
+//
+//   * AccessDeniedException
+//   Access to resource denied.
+//
+//   * RateLimitExceededException
+//   Too many requests have been submitted. Try again after a brief wait.
+//
+//   * ServerInternalException
+//   The server experienced an internal error. Try again.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/license-manager-2018-08-01/ListTokens
+func (c *LicenseManager) ListTokens(input *ListTokensInput) (*ListTokensOutput, error) {
+	req, out := c.ListTokensRequest(input)
+	return out, req.Send()
+}
+
+// ListTokensWithContext is the same as ListTokens with the addition of
+// the ability to pass a context and additional request options.
+//
+// See ListTokens for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *LicenseManager) ListTokensWithContext(ctx aws.Context, input *ListTokensInput, opts ...request.Option) (*ListTokensOutput, error) {
+	req, out := c.ListTokensRequest(input)
 	req.SetContext(ctx)
 	req.ApplyOptions(opts...)
 	return out, req.Send()
@@ -1025,8 +3984,8 @@ func (c *LicenseManager) ListUsageForLicenseConfigurationRequest(input *ListUsag
 //   The server experienced an internal error. Try again.
 //
 //   * AuthorizationException
-//   The AWS user account does not have permission to perform the action. Check
-//   the IAM policy associated with this account.
+//   The Amazon Web Services user account does not have permission to perform
+//   the action. Check the IAM policy associated with this account.
 //
 //   * AccessDeniedException
 //   Access to resource denied.
@@ -1051,6 +4010,104 @@ func (c *LicenseManager) ListUsageForLicenseConfiguration(input *ListUsageForLic
 // for more information on using Contexts.
 func (c *LicenseManager) ListUsageForLicenseConfigurationWithContext(ctx aws.Context, input *ListUsageForLicenseConfigurationInput, opts ...request.Option) (*ListUsageForLicenseConfigurationOutput, error) {
 	req, out := c.ListUsageForLicenseConfigurationRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opRejectGrant = "RejectGrant"
+
+// RejectGrantRequest generates a "aws/request.Request" representing the
+// client's request for the RejectGrant operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See RejectGrant for more information on using the RejectGrant
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the RejectGrantRequest method.
+//    req, resp := client.RejectGrantRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/license-manager-2018-08-01/RejectGrant
+func (c *LicenseManager) RejectGrantRequest(input *RejectGrantInput) (req *request.Request, output *RejectGrantOutput) {
+	op := &request.Operation{
+		Name:       opRejectGrant,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &RejectGrantInput{}
+	}
+
+	output = &RejectGrantOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// RejectGrant API operation for AWS License Manager.
+//
+// Rejects the specified grant.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS License Manager's
+// API operation RejectGrant for usage and error information.
+//
+// Returned Error Types:
+//   * ValidationException
+//   The provided input is not valid. Try your request again.
+//
+//   * InvalidParameterValueException
+//   One or more parameter values are not valid.
+//
+//   * AuthorizationException
+//   The Amazon Web Services user account does not have permission to perform
+//   the action. Check the IAM policy associated with this account.
+//
+//   * AccessDeniedException
+//   Access to resource denied.
+//
+//   * RateLimitExceededException
+//   Too many requests have been submitted. Try again after a brief wait.
+//
+//   * ResourceLimitExceededException
+//   Your resource limits have been exceeded.
+//
+//   * ServerInternalException
+//   The server experienced an internal error. Try again.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/license-manager-2018-08-01/RejectGrant
+func (c *LicenseManager) RejectGrant(input *RejectGrantInput) (*RejectGrantOutput, error) {
+	req, out := c.RejectGrantRequest(input)
+	return out, req.Send()
+}
+
+// RejectGrantWithContext is the same as RejectGrant with the addition of
+// the ability to pass a context and additional request options.
+//
+// See RejectGrant for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *LicenseManager) RejectGrantWithContext(ctx aws.Context, input *RejectGrantInput, opts ...request.Option) (*RejectGrantOutput, error) {
+	req, out := c.RejectGrantRequest(input)
 	req.SetContext(ctx)
 	req.ApplyOptions(opts...)
 	return out, req.Send()
@@ -1118,8 +4175,8 @@ func (c *LicenseManager) TagResourceRequest(input *TagResourceInput) (req *reque
 //   The server experienced an internal error. Try again.
 //
 //   * AuthorizationException
-//   The AWS user account does not have permission to perform the action. Check
-//   the IAM policy associated with this account.
+//   The Amazon Web Services user account does not have permission to perform
+//   the action. Check the IAM policy associated with this account.
 //
 //   * AccessDeniedException
 //   Access to resource denied.
@@ -1211,8 +4268,8 @@ func (c *LicenseManager) UntagResourceRequest(input *UntagResourceInput) (req *r
 //   The server experienced an internal error. Try again.
 //
 //   * AuthorizationException
-//   The AWS user account does not have permission to perform the action. Check
-//   the IAM policy associated with this account.
+//   The Amazon Web Services user account does not have permission to perform
+//   the action. Check the IAM policy associated with this account.
 //
 //   * AccessDeniedException
 //   Access to resource denied.
@@ -1304,14 +4361,17 @@ func (c *LicenseManager) UpdateLicenseConfigurationRequest(input *UpdateLicenseC
 //   The server experienced an internal error. Try again.
 //
 //   * AuthorizationException
-//   The AWS user account does not have permission to perform the action. Check
-//   the IAM policy associated with this account.
+//   The Amazon Web Services user account does not have permission to perform
+//   the action. Check the IAM policy associated with this account.
 //
 //   * AccessDeniedException
 //   Access to resource denied.
 //
 //   * RateLimitExceededException
 //   Too many requests have been submitted. Try again after a brief wait.
+//
+//   * ResourceLimitExceededException
+//   Your resource limits have been exceeded.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/license-manager-2018-08-01/UpdateLicenseConfiguration
 func (c *LicenseManager) UpdateLicenseConfiguration(input *UpdateLicenseConfigurationInput) (*UpdateLicenseConfigurationOutput, error) {
@@ -1330,6 +4390,111 @@ func (c *LicenseManager) UpdateLicenseConfiguration(input *UpdateLicenseConfigur
 // for more information on using Contexts.
 func (c *LicenseManager) UpdateLicenseConfigurationWithContext(ctx aws.Context, input *UpdateLicenseConfigurationInput, opts ...request.Option) (*UpdateLicenseConfigurationOutput, error) {
 	req, out := c.UpdateLicenseConfigurationRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opUpdateLicenseManagerReportGenerator = "UpdateLicenseManagerReportGenerator"
+
+// UpdateLicenseManagerReportGeneratorRequest generates a "aws/request.Request" representing the
+// client's request for the UpdateLicenseManagerReportGenerator operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See UpdateLicenseManagerReportGenerator for more information on using the UpdateLicenseManagerReportGenerator
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the UpdateLicenseManagerReportGeneratorRequest method.
+//    req, resp := client.UpdateLicenseManagerReportGeneratorRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/license-manager-2018-08-01/UpdateLicenseManagerReportGenerator
+func (c *LicenseManager) UpdateLicenseManagerReportGeneratorRequest(input *UpdateLicenseManagerReportGeneratorInput) (req *request.Request, output *UpdateLicenseManagerReportGeneratorOutput) {
+	op := &request.Operation{
+		Name:       opUpdateLicenseManagerReportGenerator,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &UpdateLicenseManagerReportGeneratorInput{}
+	}
+
+	output = &UpdateLicenseManagerReportGeneratorOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
+	return
+}
+
+// UpdateLicenseManagerReportGenerator API operation for AWS License Manager.
+//
+// Updates a report generator.
+//
+// After you make changes to a report generator, it starts generating new reports
+// within 60 minutes of being updated.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS License Manager's
+// API operation UpdateLicenseManagerReportGenerator for usage and error information.
+//
+// Returned Error Types:
+//   * ValidationException
+//   The provided input is not valid. Try your request again.
+//
+//   * InvalidParameterValueException
+//   One or more parameter values are not valid.
+//
+//   * RateLimitExceededException
+//   Too many requests have been submitted. Try again after a brief wait.
+//
+//   * ServerInternalException
+//   The server experienced an internal error. Try again.
+//
+//   * AuthorizationException
+//   The Amazon Web Services user account does not have permission to perform
+//   the action. Check the IAM policy associated with this account.
+//
+//   * AccessDeniedException
+//   Access to resource denied.
+//
+//   * ResourceNotFoundException
+//   The resource cannot be found.
+//
+//   * ResourceLimitExceededException
+//   Your resource limits have been exceeded.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/license-manager-2018-08-01/UpdateLicenseManagerReportGenerator
+func (c *LicenseManager) UpdateLicenseManagerReportGenerator(input *UpdateLicenseManagerReportGeneratorInput) (*UpdateLicenseManagerReportGeneratorOutput, error) {
+	req, out := c.UpdateLicenseManagerReportGeneratorRequest(input)
+	return out, req.Send()
+}
+
+// UpdateLicenseManagerReportGeneratorWithContext is the same as UpdateLicenseManagerReportGenerator with the addition of
+// the ability to pass a context and additional request options.
+//
+// See UpdateLicenseManagerReportGenerator for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *LicenseManager) UpdateLicenseManagerReportGeneratorWithContext(ctx aws.Context, input *UpdateLicenseManagerReportGeneratorInput, opts ...request.Option) (*UpdateLicenseManagerReportGeneratorOutput, error) {
+	req, out := c.UpdateLicenseManagerReportGeneratorRequest(input)
 	req.SetContext(ctx)
 	req.ApplyOptions(opts...)
 	return out, req.Send()
@@ -1380,13 +4545,13 @@ func (c *LicenseManager) UpdateLicenseSpecificationsForResourceRequest(input *Up
 
 // UpdateLicenseSpecificationsForResource API operation for AWS License Manager.
 //
-// Adds or removes the specified license configurations for the specified AWS
-// resource.
+// Adds or removes the specified license configurations for the specified Amazon
+// Web Services resource.
 //
 // You can update the license specifications of AMIs, instances, and hosts.
-// You cannot update the license specifications for launch templates and AWS
-// CloudFormation templates, as they send license configurations to the operation
-// that creates the resource.
+// You cannot update the license specifications for launch templates and CloudFormation
+// templates, as they send license configurations to the operation that creates
+// the resource.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -1412,8 +4577,8 @@ func (c *LicenseManager) UpdateLicenseSpecificationsForResourceRequest(input *Up
 //   The server experienced an internal error. Try again.
 //
 //   * AuthorizationException
-//   The AWS user account does not have permission to perform the action. Check
-//   the IAM policy associated with this account.
+//   The Amazon Web Services user account does not have permission to perform
+//   the action. Check the IAM policy associated with this account.
 //
 //   * AccessDeniedException
 //   Access to resource denied.
@@ -1505,8 +4670,8 @@ func (c *LicenseManager) UpdateServiceSettingsRequest(input *UpdateServiceSettin
 //   The server experienced an internal error. Try again.
 //
 //   * AuthorizationException
-//   The AWS user account does not have permission to perform the action. Check
-//   the IAM policy associated with this account.
+//   The Amazon Web Services user account does not have permission to perform
+//   the action. Check the IAM policy associated with this account.
 //
 //   * AccessDeniedException
 //   Access to resource denied.
@@ -1536,6 +4701,101 @@ func (c *LicenseManager) UpdateServiceSettingsWithContext(ctx aws.Context, input
 	return out, req.Send()
 }
 
+type AcceptGrantInput struct {
+	_ struct{} `type:"structure"`
+
+	// Amazon Resource Name (ARN) of the grant.
+	//
+	// GrantArn is a required field
+	GrantArn *string `type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s AcceptGrantInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s AcceptGrantInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *AcceptGrantInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "AcceptGrantInput"}
+	if s.GrantArn == nil {
+		invalidParams.Add(request.NewErrParamRequired("GrantArn"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetGrantArn sets the GrantArn field's value.
+func (s *AcceptGrantInput) SetGrantArn(v string) *AcceptGrantInput {
+	s.GrantArn = &v
+	return s
+}
+
+type AcceptGrantOutput struct {
+	_ struct{} `type:"structure"`
+
+	// Grant ARN.
+	GrantArn *string `type:"string"`
+
+	// Grant status.
+	Status *string `type:"string" enum:"GrantStatus"`
+
+	// Grant version.
+	Version *string `type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s AcceptGrantOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s AcceptGrantOutput) GoString() string {
+	return s.String()
+}
+
+// SetGrantArn sets the GrantArn field's value.
+func (s *AcceptGrantOutput) SetGrantArn(v string) *AcceptGrantOutput {
+	s.GrantArn = &v
+	return s
+}
+
+// SetStatus sets the Status field's value.
+func (s *AcceptGrantOutput) SetStatus(v string) *AcceptGrantOutput {
+	s.Status = &v
+	return s
+}
+
+// SetVersion sets the Version field's value.
+func (s *AcceptGrantOutput) SetVersion(v string) *AcceptGrantOutput {
+	s.Version = &v
+	return s
+}
+
 // Access to resource denied.
 type AccessDeniedException struct {
 	_            struct{}                  `type:"structure"`
@@ -1544,12 +4804,20 @@ type AccessDeniedException struct {
 	Message_ *string `locationName:"Message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AccessDeniedException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AccessDeniedException) GoString() string {
 	return s.String()
 }
@@ -1592,8 +4860,8 @@ func (s *AccessDeniedException) RequestID() string {
 	return s.RespMetadata.RequestID
 }
 
-// The AWS user account does not have permission to perform the action. Check
-// the IAM policy associated with this account.
+// The Amazon Web Services user account does not have permission to perform
+// the action. Check the IAM policy associated with this account.
 type AuthorizationException struct {
 	_            struct{}                  `type:"structure"`
 	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
@@ -1601,12 +4869,20 @@ type AuthorizationException struct {
 	Message_ *string `locationName:"Message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AuthorizationException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AuthorizationException) GoString() string {
 	return s.String()
 }
@@ -1657,12 +4933,20 @@ type AutomatedDiscoveryInformation struct {
 	LastRunTime *time.Time `type:"timestamp"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AutomatedDiscoveryInformation) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AutomatedDiscoveryInformation) GoString() string {
 	return s.String()
 }
@@ -1671,6 +4955,647 @@ func (s AutomatedDiscoveryInformation) GoString() string {
 func (s *AutomatedDiscoveryInformation) SetLastRunTime(v time.Time) *AutomatedDiscoveryInformation {
 	s.LastRunTime = &v
 	return s
+}
+
+// Details about a borrow configuration.
+type BorrowConfiguration struct {
+	_ struct{} `type:"structure"`
+
+	// Indicates whether early check-ins are allowed.
+	//
+	// AllowEarlyCheckIn is a required field
+	AllowEarlyCheckIn *bool `type:"boolean" required:"true"`
+
+	// Maximum time for the borrow configuration, in minutes.
+	//
+	// MaxTimeToLiveInMinutes is a required field
+	MaxTimeToLiveInMinutes *int64 `type:"integer" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s BorrowConfiguration) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s BorrowConfiguration) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *BorrowConfiguration) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "BorrowConfiguration"}
+	if s.AllowEarlyCheckIn == nil {
+		invalidParams.Add(request.NewErrParamRequired("AllowEarlyCheckIn"))
+	}
+	if s.MaxTimeToLiveInMinutes == nil {
+		invalidParams.Add(request.NewErrParamRequired("MaxTimeToLiveInMinutes"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetAllowEarlyCheckIn sets the AllowEarlyCheckIn field's value.
+func (s *BorrowConfiguration) SetAllowEarlyCheckIn(v bool) *BorrowConfiguration {
+	s.AllowEarlyCheckIn = &v
+	return s
+}
+
+// SetMaxTimeToLiveInMinutes sets the MaxTimeToLiveInMinutes field's value.
+func (s *BorrowConfiguration) SetMaxTimeToLiveInMinutes(v int64) *BorrowConfiguration {
+	s.MaxTimeToLiveInMinutes = &v
+	return s
+}
+
+type CheckInLicenseInput struct {
+	_ struct{} `type:"structure"`
+
+	// License beneficiary.
+	Beneficiary *string `type:"string"`
+
+	// License consumption token.
+	//
+	// LicenseConsumptionToken is a required field
+	LicenseConsumptionToken *string `type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CheckInLicenseInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CheckInLicenseInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *CheckInLicenseInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "CheckInLicenseInput"}
+	if s.LicenseConsumptionToken == nil {
+		invalidParams.Add(request.NewErrParamRequired("LicenseConsumptionToken"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetBeneficiary sets the Beneficiary field's value.
+func (s *CheckInLicenseInput) SetBeneficiary(v string) *CheckInLicenseInput {
+	s.Beneficiary = &v
+	return s
+}
+
+// SetLicenseConsumptionToken sets the LicenseConsumptionToken field's value.
+func (s *CheckInLicenseInput) SetLicenseConsumptionToken(v string) *CheckInLicenseInput {
+	s.LicenseConsumptionToken = &v
+	return s
+}
+
+type CheckInLicenseOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CheckInLicenseOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CheckInLicenseOutput) GoString() string {
+	return s.String()
+}
+
+type CheckoutBorrowLicenseInput struct {
+	_ struct{} `type:"structure"`
+
+	// Information about constraints.
+	CheckoutMetadata []*Metadata `type:"list"`
+
+	// Unique, case-sensitive identifier that you provide to ensure the idempotency
+	// of the request.
+	//
+	// ClientToken is a required field
+	ClientToken *string `type:"string" required:"true"`
+
+	// Digital signature method. The possible value is JSON Web Signature (JWS)
+	// algorithm PS384. For more information, see RFC 7518 Digital Signature with
+	// RSASSA-PSS (https://tools.ietf.org/html/rfc7518#section-3.5).
+	//
+	// DigitalSignatureMethod is a required field
+	DigitalSignatureMethod *string `type:"string" required:"true" enum:"DigitalSignatureMethod"`
+
+	// License entitlements. Partial checkouts are not supported.
+	//
+	// Entitlements is a required field
+	Entitlements []*EntitlementData `type:"list" required:"true"`
+
+	// Amazon Resource Name (ARN) of the license. The license must use the borrow
+	// consumption configuration.
+	//
+	// LicenseArn is a required field
+	LicenseArn *string `type:"string" required:"true"`
+
+	// Node ID.
+	NodeId *string `type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CheckoutBorrowLicenseInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CheckoutBorrowLicenseInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *CheckoutBorrowLicenseInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "CheckoutBorrowLicenseInput"}
+	if s.ClientToken == nil {
+		invalidParams.Add(request.NewErrParamRequired("ClientToken"))
+	}
+	if s.DigitalSignatureMethod == nil {
+		invalidParams.Add(request.NewErrParamRequired("DigitalSignatureMethod"))
+	}
+	if s.Entitlements == nil {
+		invalidParams.Add(request.NewErrParamRequired("Entitlements"))
+	}
+	if s.LicenseArn == nil {
+		invalidParams.Add(request.NewErrParamRequired("LicenseArn"))
+	}
+	if s.Entitlements != nil {
+		for i, v := range s.Entitlements {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "Entitlements", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetCheckoutMetadata sets the CheckoutMetadata field's value.
+func (s *CheckoutBorrowLicenseInput) SetCheckoutMetadata(v []*Metadata) *CheckoutBorrowLicenseInput {
+	s.CheckoutMetadata = v
+	return s
+}
+
+// SetClientToken sets the ClientToken field's value.
+func (s *CheckoutBorrowLicenseInput) SetClientToken(v string) *CheckoutBorrowLicenseInput {
+	s.ClientToken = &v
+	return s
+}
+
+// SetDigitalSignatureMethod sets the DigitalSignatureMethod field's value.
+func (s *CheckoutBorrowLicenseInput) SetDigitalSignatureMethod(v string) *CheckoutBorrowLicenseInput {
+	s.DigitalSignatureMethod = &v
+	return s
+}
+
+// SetEntitlements sets the Entitlements field's value.
+func (s *CheckoutBorrowLicenseInput) SetEntitlements(v []*EntitlementData) *CheckoutBorrowLicenseInput {
+	s.Entitlements = v
+	return s
+}
+
+// SetLicenseArn sets the LicenseArn field's value.
+func (s *CheckoutBorrowLicenseInput) SetLicenseArn(v string) *CheckoutBorrowLicenseInput {
+	s.LicenseArn = &v
+	return s
+}
+
+// SetNodeId sets the NodeId field's value.
+func (s *CheckoutBorrowLicenseInput) SetNodeId(v string) *CheckoutBorrowLicenseInput {
+	s.NodeId = &v
+	return s
+}
+
+type CheckoutBorrowLicenseOutput struct {
+	_ struct{} `type:"structure"`
+
+	// Information about constraints.
+	CheckoutMetadata []*Metadata `type:"list"`
+
+	// Allowed license entitlements.
+	EntitlementsAllowed []*EntitlementData `type:"list"`
+
+	// Date and time at which the license checkout expires.
+	Expiration *string `type:"string"`
+
+	// Date and time at which the license checkout is issued.
+	IssuedAt *string `type:"string"`
+
+	// Amazon Resource Name (ARN) of the license.
+	LicenseArn *string `type:"string"`
+
+	// License consumption token.
+	LicenseConsumptionToken *string `type:"string"`
+
+	// Node ID.
+	NodeId *string `type:"string"`
+
+	// Signed token.
+	SignedToken *string `min:"4096" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CheckoutBorrowLicenseOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CheckoutBorrowLicenseOutput) GoString() string {
+	return s.String()
+}
+
+// SetCheckoutMetadata sets the CheckoutMetadata field's value.
+func (s *CheckoutBorrowLicenseOutput) SetCheckoutMetadata(v []*Metadata) *CheckoutBorrowLicenseOutput {
+	s.CheckoutMetadata = v
+	return s
+}
+
+// SetEntitlementsAllowed sets the EntitlementsAllowed field's value.
+func (s *CheckoutBorrowLicenseOutput) SetEntitlementsAllowed(v []*EntitlementData) *CheckoutBorrowLicenseOutput {
+	s.EntitlementsAllowed = v
+	return s
+}
+
+// SetExpiration sets the Expiration field's value.
+func (s *CheckoutBorrowLicenseOutput) SetExpiration(v string) *CheckoutBorrowLicenseOutput {
+	s.Expiration = &v
+	return s
+}
+
+// SetIssuedAt sets the IssuedAt field's value.
+func (s *CheckoutBorrowLicenseOutput) SetIssuedAt(v string) *CheckoutBorrowLicenseOutput {
+	s.IssuedAt = &v
+	return s
+}
+
+// SetLicenseArn sets the LicenseArn field's value.
+func (s *CheckoutBorrowLicenseOutput) SetLicenseArn(v string) *CheckoutBorrowLicenseOutput {
+	s.LicenseArn = &v
+	return s
+}
+
+// SetLicenseConsumptionToken sets the LicenseConsumptionToken field's value.
+func (s *CheckoutBorrowLicenseOutput) SetLicenseConsumptionToken(v string) *CheckoutBorrowLicenseOutput {
+	s.LicenseConsumptionToken = &v
+	return s
+}
+
+// SetNodeId sets the NodeId field's value.
+func (s *CheckoutBorrowLicenseOutput) SetNodeId(v string) *CheckoutBorrowLicenseOutput {
+	s.NodeId = &v
+	return s
+}
+
+// SetSignedToken sets the SignedToken field's value.
+func (s *CheckoutBorrowLicenseOutput) SetSignedToken(v string) *CheckoutBorrowLicenseOutput {
+	s.SignedToken = &v
+	return s
+}
+
+type CheckoutLicenseInput struct {
+	_ struct{} `type:"structure"`
+
+	// License beneficiary.
+	Beneficiary *string `type:"string"`
+
+	// Checkout type.
+	//
+	// CheckoutType is a required field
+	CheckoutType *string `type:"string" required:"true" enum:"CheckoutType"`
+
+	// Unique, case-sensitive identifier that you provide to ensure the idempotency
+	// of the request.
+	//
+	// ClientToken is a required field
+	ClientToken *string `type:"string" required:"true"`
+
+	// License entitlements.
+	//
+	// Entitlements is a required field
+	Entitlements []*EntitlementData `type:"list" required:"true"`
+
+	// Key fingerprint identifying the license.
+	//
+	// KeyFingerprint is a required field
+	KeyFingerprint *string `type:"string" required:"true"`
+
+	// Node ID.
+	NodeId *string `type:"string"`
+
+	// Product SKU.
+	//
+	// ProductSKU is a required field
+	ProductSKU *string `type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CheckoutLicenseInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CheckoutLicenseInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *CheckoutLicenseInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "CheckoutLicenseInput"}
+	if s.CheckoutType == nil {
+		invalidParams.Add(request.NewErrParamRequired("CheckoutType"))
+	}
+	if s.ClientToken == nil {
+		invalidParams.Add(request.NewErrParamRequired("ClientToken"))
+	}
+	if s.Entitlements == nil {
+		invalidParams.Add(request.NewErrParamRequired("Entitlements"))
+	}
+	if s.KeyFingerprint == nil {
+		invalidParams.Add(request.NewErrParamRequired("KeyFingerprint"))
+	}
+	if s.ProductSKU == nil {
+		invalidParams.Add(request.NewErrParamRequired("ProductSKU"))
+	}
+	if s.Entitlements != nil {
+		for i, v := range s.Entitlements {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "Entitlements", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetBeneficiary sets the Beneficiary field's value.
+func (s *CheckoutLicenseInput) SetBeneficiary(v string) *CheckoutLicenseInput {
+	s.Beneficiary = &v
+	return s
+}
+
+// SetCheckoutType sets the CheckoutType field's value.
+func (s *CheckoutLicenseInput) SetCheckoutType(v string) *CheckoutLicenseInput {
+	s.CheckoutType = &v
+	return s
+}
+
+// SetClientToken sets the ClientToken field's value.
+func (s *CheckoutLicenseInput) SetClientToken(v string) *CheckoutLicenseInput {
+	s.ClientToken = &v
+	return s
+}
+
+// SetEntitlements sets the Entitlements field's value.
+func (s *CheckoutLicenseInput) SetEntitlements(v []*EntitlementData) *CheckoutLicenseInput {
+	s.Entitlements = v
+	return s
+}
+
+// SetKeyFingerprint sets the KeyFingerprint field's value.
+func (s *CheckoutLicenseInput) SetKeyFingerprint(v string) *CheckoutLicenseInput {
+	s.KeyFingerprint = &v
+	return s
+}
+
+// SetNodeId sets the NodeId field's value.
+func (s *CheckoutLicenseInput) SetNodeId(v string) *CheckoutLicenseInput {
+	s.NodeId = &v
+	return s
+}
+
+// SetProductSKU sets the ProductSKU field's value.
+func (s *CheckoutLicenseInput) SetProductSKU(v string) *CheckoutLicenseInput {
+	s.ProductSKU = &v
+	return s
+}
+
+type CheckoutLicenseOutput struct {
+	_ struct{} `type:"structure"`
+
+	// Checkout type.
+	CheckoutType *string `type:"string" enum:"CheckoutType"`
+
+	// Allowed license entitlements.
+	EntitlementsAllowed []*EntitlementData `type:"list"`
+
+	// Date and time at which the license checkout expires.
+	Expiration *string `type:"string"`
+
+	// Date and time at which the license checkout is issued.
+	IssuedAt *string `type:"string"`
+
+	// Amazon Resource Name (ARN) of the checkout license.
+	LicenseArn *string `type:"string"`
+
+	// License consumption token.
+	LicenseConsumptionToken *string `type:"string"`
+
+	// Node ID.
+	NodeId *string `type:"string"`
+
+	// Signed token.
+	SignedToken *string `min:"4096" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CheckoutLicenseOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CheckoutLicenseOutput) GoString() string {
+	return s.String()
+}
+
+// SetCheckoutType sets the CheckoutType field's value.
+func (s *CheckoutLicenseOutput) SetCheckoutType(v string) *CheckoutLicenseOutput {
+	s.CheckoutType = &v
+	return s
+}
+
+// SetEntitlementsAllowed sets the EntitlementsAllowed field's value.
+func (s *CheckoutLicenseOutput) SetEntitlementsAllowed(v []*EntitlementData) *CheckoutLicenseOutput {
+	s.EntitlementsAllowed = v
+	return s
+}
+
+// SetExpiration sets the Expiration field's value.
+func (s *CheckoutLicenseOutput) SetExpiration(v string) *CheckoutLicenseOutput {
+	s.Expiration = &v
+	return s
+}
+
+// SetIssuedAt sets the IssuedAt field's value.
+func (s *CheckoutLicenseOutput) SetIssuedAt(v string) *CheckoutLicenseOutput {
+	s.IssuedAt = &v
+	return s
+}
+
+// SetLicenseArn sets the LicenseArn field's value.
+func (s *CheckoutLicenseOutput) SetLicenseArn(v string) *CheckoutLicenseOutput {
+	s.LicenseArn = &v
+	return s
+}
+
+// SetLicenseConsumptionToken sets the LicenseConsumptionToken field's value.
+func (s *CheckoutLicenseOutput) SetLicenseConsumptionToken(v string) *CheckoutLicenseOutput {
+	s.LicenseConsumptionToken = &v
+	return s
+}
+
+// SetNodeId sets the NodeId field's value.
+func (s *CheckoutLicenseOutput) SetNodeId(v string) *CheckoutLicenseOutput {
+	s.NodeId = &v
+	return s
+}
+
+// SetSignedToken sets the SignedToken field's value.
+func (s *CheckoutLicenseOutput) SetSignedToken(v string) *CheckoutLicenseOutput {
+	s.SignedToken = &v
+	return s
+}
+
+// There was a conflict processing the request. Try your request again.
+type ConflictException struct {
+	_            struct{}                  `type:"structure"`
+	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
+
+	Message_ *string `locationName:"Message" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ConflictException) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ConflictException) GoString() string {
+	return s.String()
+}
+
+func newErrorConflictException(v protocol.ResponseMetadata) error {
+	return &ConflictException{
+		RespMetadata: v,
+	}
+}
+
+// Code returns the exception type name.
+func (s *ConflictException) Code() string {
+	return "ConflictException"
+}
+
+// Message returns the exception's message.
+func (s *ConflictException) Message() string {
+	if s.Message_ != nil {
+		return *s.Message_
+	}
+	return ""
+}
+
+// OrigErr always returns nil, satisfies awserr.Error interface.
+func (s *ConflictException) OrigErr() error {
+	return nil
+}
+
+func (s *ConflictException) Error() string {
+	return fmt.Sprintf("%s: %s", s.Code(), s.Message())
+}
+
+// Status code returns the HTTP status code for the request's response error.
+func (s *ConflictException) StatusCode() int {
+	return s.RespMetadata.StatusCode
+}
+
+// RequestID returns the service's response RequestID for request.
+func (s *ConflictException) RequestID() string {
+	return s.RespMetadata.RequestID
 }
 
 // Details about license consumption.
@@ -1684,12 +5609,20 @@ type ConsumedLicenseSummary struct {
 	ResourceType *string `type:"string" enum:"ResourceType"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ConsumedLicenseSummary) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ConsumedLicenseSummary) GoString() string {
 	return s.String()
 }
@@ -1706,11 +5639,414 @@ func (s *ConsumedLicenseSummary) SetResourceType(v string) *ConsumedLicenseSumma
 	return s
 }
 
+// Details about a consumption configuration.
+type ConsumptionConfiguration struct {
+	_ struct{} `type:"structure"`
+
+	// Details about a borrow configuration.
+	BorrowConfiguration *BorrowConfiguration `type:"structure"`
+
+	// Details about a provisional configuration.
+	ProvisionalConfiguration *ProvisionalConfiguration `type:"structure"`
+
+	// Renewal frequency.
+	RenewType *string `type:"string" enum:"RenewType"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ConsumptionConfiguration) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ConsumptionConfiguration) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ConsumptionConfiguration) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ConsumptionConfiguration"}
+	if s.BorrowConfiguration != nil {
+		if err := s.BorrowConfiguration.Validate(); err != nil {
+			invalidParams.AddNested("BorrowConfiguration", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.ProvisionalConfiguration != nil {
+		if err := s.ProvisionalConfiguration.Validate(); err != nil {
+			invalidParams.AddNested("ProvisionalConfiguration", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetBorrowConfiguration sets the BorrowConfiguration field's value.
+func (s *ConsumptionConfiguration) SetBorrowConfiguration(v *BorrowConfiguration) *ConsumptionConfiguration {
+	s.BorrowConfiguration = v
+	return s
+}
+
+// SetProvisionalConfiguration sets the ProvisionalConfiguration field's value.
+func (s *ConsumptionConfiguration) SetProvisionalConfiguration(v *ProvisionalConfiguration) *ConsumptionConfiguration {
+	s.ProvisionalConfiguration = v
+	return s
+}
+
+// SetRenewType sets the RenewType field's value.
+func (s *ConsumptionConfiguration) SetRenewType(v string) *ConsumptionConfiguration {
+	s.RenewType = &v
+	return s
+}
+
+type CreateGrantInput struct {
+	_ struct{} `type:"structure"`
+
+	// Allowed operations for the grant.
+	//
+	// AllowedOperations is a required field
+	AllowedOperations []*string `min:"1" type:"list" required:"true"`
+
+	// Unique, case-sensitive identifier that you provide to ensure the idempotency
+	// of the request.
+	//
+	// ClientToken is a required field
+	ClientToken *string `type:"string" required:"true"`
+
+	// Grant name.
+	//
+	// GrantName is a required field
+	GrantName *string `type:"string" required:"true"`
+
+	// Home Region of the grant.
+	//
+	// HomeRegion is a required field
+	HomeRegion *string `type:"string" required:"true"`
+
+	// Amazon Resource Name (ARN) of the license.
+	//
+	// LicenseArn is a required field
+	LicenseArn *string `type:"string" required:"true"`
+
+	// The grant principals.
+	//
+	// Principals is a required field
+	Principals []*string `min:"1" type:"list" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateGrantInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateGrantInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *CreateGrantInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "CreateGrantInput"}
+	if s.AllowedOperations == nil {
+		invalidParams.Add(request.NewErrParamRequired("AllowedOperations"))
+	}
+	if s.AllowedOperations != nil && len(s.AllowedOperations) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("AllowedOperations", 1))
+	}
+	if s.ClientToken == nil {
+		invalidParams.Add(request.NewErrParamRequired("ClientToken"))
+	}
+	if s.GrantName == nil {
+		invalidParams.Add(request.NewErrParamRequired("GrantName"))
+	}
+	if s.HomeRegion == nil {
+		invalidParams.Add(request.NewErrParamRequired("HomeRegion"))
+	}
+	if s.LicenseArn == nil {
+		invalidParams.Add(request.NewErrParamRequired("LicenseArn"))
+	}
+	if s.Principals == nil {
+		invalidParams.Add(request.NewErrParamRequired("Principals"))
+	}
+	if s.Principals != nil && len(s.Principals) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Principals", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetAllowedOperations sets the AllowedOperations field's value.
+func (s *CreateGrantInput) SetAllowedOperations(v []*string) *CreateGrantInput {
+	s.AllowedOperations = v
+	return s
+}
+
+// SetClientToken sets the ClientToken field's value.
+func (s *CreateGrantInput) SetClientToken(v string) *CreateGrantInput {
+	s.ClientToken = &v
+	return s
+}
+
+// SetGrantName sets the GrantName field's value.
+func (s *CreateGrantInput) SetGrantName(v string) *CreateGrantInput {
+	s.GrantName = &v
+	return s
+}
+
+// SetHomeRegion sets the HomeRegion field's value.
+func (s *CreateGrantInput) SetHomeRegion(v string) *CreateGrantInput {
+	s.HomeRegion = &v
+	return s
+}
+
+// SetLicenseArn sets the LicenseArn field's value.
+func (s *CreateGrantInput) SetLicenseArn(v string) *CreateGrantInput {
+	s.LicenseArn = &v
+	return s
+}
+
+// SetPrincipals sets the Principals field's value.
+func (s *CreateGrantInput) SetPrincipals(v []*string) *CreateGrantInput {
+	s.Principals = v
+	return s
+}
+
+type CreateGrantOutput struct {
+	_ struct{} `type:"structure"`
+
+	// Grant ARN.
+	GrantArn *string `type:"string"`
+
+	// Grant status.
+	Status *string `type:"string" enum:"GrantStatus"`
+
+	// Grant version.
+	Version *string `type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateGrantOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateGrantOutput) GoString() string {
+	return s.String()
+}
+
+// SetGrantArn sets the GrantArn field's value.
+func (s *CreateGrantOutput) SetGrantArn(v string) *CreateGrantOutput {
+	s.GrantArn = &v
+	return s
+}
+
+// SetStatus sets the Status field's value.
+func (s *CreateGrantOutput) SetStatus(v string) *CreateGrantOutput {
+	s.Status = &v
+	return s
+}
+
+// SetVersion sets the Version field's value.
+func (s *CreateGrantOutput) SetVersion(v string) *CreateGrantOutput {
+	s.Version = &v
+	return s
+}
+
+type CreateGrantVersionInput struct {
+	_ struct{} `type:"structure"`
+
+	// Allowed operations for the grant.
+	AllowedOperations []*string `min:"1" type:"list"`
+
+	// Unique, case-sensitive identifier that you provide to ensure the idempotency
+	// of the request.
+	//
+	// ClientToken is a required field
+	ClientToken *string `type:"string" required:"true"`
+
+	// Amazon Resource Name (ARN) of the grant.
+	//
+	// GrantArn is a required field
+	GrantArn *string `type:"string" required:"true"`
+
+	// Grant name.
+	GrantName *string `type:"string"`
+
+	// Current version of the grant.
+	SourceVersion *string `type:"string"`
+
+	// Grant status.
+	Status *string `type:"string" enum:"GrantStatus"`
+
+	// Grant status reason.
+	StatusReason *string `type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateGrantVersionInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateGrantVersionInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *CreateGrantVersionInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "CreateGrantVersionInput"}
+	if s.AllowedOperations != nil && len(s.AllowedOperations) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("AllowedOperations", 1))
+	}
+	if s.ClientToken == nil {
+		invalidParams.Add(request.NewErrParamRequired("ClientToken"))
+	}
+	if s.GrantArn == nil {
+		invalidParams.Add(request.NewErrParamRequired("GrantArn"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetAllowedOperations sets the AllowedOperations field's value.
+func (s *CreateGrantVersionInput) SetAllowedOperations(v []*string) *CreateGrantVersionInput {
+	s.AllowedOperations = v
+	return s
+}
+
+// SetClientToken sets the ClientToken field's value.
+func (s *CreateGrantVersionInput) SetClientToken(v string) *CreateGrantVersionInput {
+	s.ClientToken = &v
+	return s
+}
+
+// SetGrantArn sets the GrantArn field's value.
+func (s *CreateGrantVersionInput) SetGrantArn(v string) *CreateGrantVersionInput {
+	s.GrantArn = &v
+	return s
+}
+
+// SetGrantName sets the GrantName field's value.
+func (s *CreateGrantVersionInput) SetGrantName(v string) *CreateGrantVersionInput {
+	s.GrantName = &v
+	return s
+}
+
+// SetSourceVersion sets the SourceVersion field's value.
+func (s *CreateGrantVersionInput) SetSourceVersion(v string) *CreateGrantVersionInput {
+	s.SourceVersion = &v
+	return s
+}
+
+// SetStatus sets the Status field's value.
+func (s *CreateGrantVersionInput) SetStatus(v string) *CreateGrantVersionInput {
+	s.Status = &v
+	return s
+}
+
+// SetStatusReason sets the StatusReason field's value.
+func (s *CreateGrantVersionInput) SetStatusReason(v string) *CreateGrantVersionInput {
+	s.StatusReason = &v
+	return s
+}
+
+type CreateGrantVersionOutput struct {
+	_ struct{} `type:"structure"`
+
+	// Grant ARN.
+	GrantArn *string `type:"string"`
+
+	// Grant status.
+	Status *string `type:"string" enum:"GrantStatus"`
+
+	// New version of the grant.
+	Version *string `type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateGrantVersionOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateGrantVersionOutput) GoString() string {
+	return s.String()
+}
+
+// SetGrantArn sets the GrantArn field's value.
+func (s *CreateGrantVersionOutput) SetGrantArn(v string) *CreateGrantVersionOutput {
+	s.GrantArn = &v
+	return s
+}
+
+// SetStatus sets the Status field's value.
+func (s *CreateGrantVersionOutput) SetStatus(v string) *CreateGrantVersionOutput {
+	s.Status = &v
+	return s
+}
+
+// SetVersion sets the Version field's value.
+func (s *CreateGrantVersionOutput) SetVersion(v string) *CreateGrantVersionOutput {
+	s.Version = &v
+	return s
+}
+
 type CreateLicenseConfigurationInput struct {
 	_ struct{} `type:"structure"`
 
 	// Description of the license configuration.
 	Description *string `type:"string"`
+
+	// When true, disassociates a resource when software is uninstalled.
+	DisassociateWhenNotFound *bool `type:"boolean"`
 
 	// Number of licenses managed by the license configuration.
 	LicenseCount *int64 `type:"long"`
@@ -1757,12 +6093,20 @@ type CreateLicenseConfigurationInput struct {
 	Tags []*Tag `type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateLicenseConfigurationInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateLicenseConfigurationInput) GoString() string {
 	return s.String()
 }
@@ -1796,6 +6140,12 @@ func (s *CreateLicenseConfigurationInput) Validate() error {
 // SetDescription sets the Description field's value.
 func (s *CreateLicenseConfigurationInput) SetDescription(v string) *CreateLicenseConfigurationInput {
 	s.Description = &v
+	return s
+}
+
+// SetDisassociateWhenNotFound sets the DisassociateWhenNotFound field's value.
+func (s *CreateLicenseConfigurationInput) SetDisassociateWhenNotFound(v bool) *CreateLicenseConfigurationInput {
+	s.DisassociateWhenNotFound = &v
 	return s
 }
 
@@ -1848,12 +6198,20 @@ type CreateLicenseConfigurationOutput struct {
 	LicenseConfigurationArn *string `type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateLicenseConfigurationOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateLicenseConfigurationOutput) GoString() string {
 	return s.String()
 }
@@ -1861,6 +6219,1127 @@ func (s CreateLicenseConfigurationOutput) GoString() string {
 // SetLicenseConfigurationArn sets the LicenseConfigurationArn field's value.
 func (s *CreateLicenseConfigurationOutput) SetLicenseConfigurationArn(v string) *CreateLicenseConfigurationOutput {
 	s.LicenseConfigurationArn = &v
+	return s
+}
+
+type CreateLicenseConversionTaskForResourceInput struct {
+	_ struct{} `type:"structure"`
+
+	// Information that identifies the license type you are converting to. For the
+	// structure of the destination license, see Convert a license type using the
+	// AWS CLI (https://docs.aws.amazon.com/license-manager/latest/userguide/conversion-procedures.html#conversion-cli)
+	// in the License Manager User Guide.
+	//
+	// DestinationLicenseContext is a required field
+	DestinationLicenseContext *LicenseConversionContext `type:"structure" required:"true"`
+
+	// Amazon Resource Name (ARN) of the resource you are converting the license
+	// type for.
+	//
+	// ResourceArn is a required field
+	ResourceArn *string `type:"string" required:"true"`
+
+	// Information that identifies the license type you are converting from. For
+	// the structure of the source license, see Convert a license type using the
+	// AWS CLI (https://docs.aws.amazon.com/license-manager/latest/userguide/conversion-procedures.html#conversion-cli)
+	// in the License Manager User Guide.
+	//
+	// SourceLicenseContext is a required field
+	SourceLicenseContext *LicenseConversionContext `type:"structure" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateLicenseConversionTaskForResourceInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateLicenseConversionTaskForResourceInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *CreateLicenseConversionTaskForResourceInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "CreateLicenseConversionTaskForResourceInput"}
+	if s.DestinationLicenseContext == nil {
+		invalidParams.Add(request.NewErrParamRequired("DestinationLicenseContext"))
+	}
+	if s.ResourceArn == nil {
+		invalidParams.Add(request.NewErrParamRequired("ResourceArn"))
+	}
+	if s.SourceLicenseContext == nil {
+		invalidParams.Add(request.NewErrParamRequired("SourceLicenseContext"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetDestinationLicenseContext sets the DestinationLicenseContext field's value.
+func (s *CreateLicenseConversionTaskForResourceInput) SetDestinationLicenseContext(v *LicenseConversionContext) *CreateLicenseConversionTaskForResourceInput {
+	s.DestinationLicenseContext = v
+	return s
+}
+
+// SetResourceArn sets the ResourceArn field's value.
+func (s *CreateLicenseConversionTaskForResourceInput) SetResourceArn(v string) *CreateLicenseConversionTaskForResourceInput {
+	s.ResourceArn = &v
+	return s
+}
+
+// SetSourceLicenseContext sets the SourceLicenseContext field's value.
+func (s *CreateLicenseConversionTaskForResourceInput) SetSourceLicenseContext(v *LicenseConversionContext) *CreateLicenseConversionTaskForResourceInput {
+	s.SourceLicenseContext = v
+	return s
+}
+
+type CreateLicenseConversionTaskForResourceOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The ID of the created license type conversion task.
+	LicenseConversionTaskId *string `type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateLicenseConversionTaskForResourceOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateLicenseConversionTaskForResourceOutput) GoString() string {
+	return s.String()
+}
+
+// SetLicenseConversionTaskId sets the LicenseConversionTaskId field's value.
+func (s *CreateLicenseConversionTaskForResourceOutput) SetLicenseConversionTaskId(v string) *CreateLicenseConversionTaskForResourceOutput {
+	s.LicenseConversionTaskId = &v
+	return s
+}
+
+type CreateLicenseInput struct {
+	_ struct{} `type:"structure"`
+
+	// License beneficiary.
+	//
+	// Beneficiary is a required field
+	Beneficiary *string `type:"string" required:"true"`
+
+	// Unique, case-sensitive identifier that you provide to ensure the idempotency
+	// of the request.
+	//
+	// ClientToken is a required field
+	ClientToken *string `type:"string" required:"true"`
+
+	// Configuration for consumption of the license. Choose a provisional configuration
+	// for workloads running with continuous connectivity. Choose a borrow configuration
+	// for workloads with offline usage.
+	//
+	// ConsumptionConfiguration is a required field
+	ConsumptionConfiguration *ConsumptionConfiguration `type:"structure" required:"true"`
+
+	// License entitlements.
+	//
+	// Entitlements is a required field
+	Entitlements []*Entitlement `type:"list" required:"true"`
+
+	// Home Region for the license.
+	//
+	// HomeRegion is a required field
+	HomeRegion *string `type:"string" required:"true"`
+
+	// License issuer.
+	//
+	// Issuer is a required field
+	Issuer *Issuer `type:"structure" required:"true"`
+
+	// Information about the license.
+	LicenseMetadata []*Metadata `type:"list"`
+
+	// License name.
+	//
+	// LicenseName is a required field
+	LicenseName *string `type:"string" required:"true"`
+
+	// Product name.
+	//
+	// ProductName is a required field
+	ProductName *string `type:"string" required:"true"`
+
+	// Product SKU.
+	//
+	// ProductSKU is a required field
+	ProductSKU *string `type:"string" required:"true"`
+
+	// Date and time range during which the license is valid, in ISO8601-UTC format.
+	//
+	// Validity is a required field
+	Validity *DatetimeRange `type:"structure" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateLicenseInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateLicenseInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *CreateLicenseInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "CreateLicenseInput"}
+	if s.Beneficiary == nil {
+		invalidParams.Add(request.NewErrParamRequired("Beneficiary"))
+	}
+	if s.ClientToken == nil {
+		invalidParams.Add(request.NewErrParamRequired("ClientToken"))
+	}
+	if s.ConsumptionConfiguration == nil {
+		invalidParams.Add(request.NewErrParamRequired("ConsumptionConfiguration"))
+	}
+	if s.Entitlements == nil {
+		invalidParams.Add(request.NewErrParamRequired("Entitlements"))
+	}
+	if s.HomeRegion == nil {
+		invalidParams.Add(request.NewErrParamRequired("HomeRegion"))
+	}
+	if s.Issuer == nil {
+		invalidParams.Add(request.NewErrParamRequired("Issuer"))
+	}
+	if s.LicenseName == nil {
+		invalidParams.Add(request.NewErrParamRequired("LicenseName"))
+	}
+	if s.ProductName == nil {
+		invalidParams.Add(request.NewErrParamRequired("ProductName"))
+	}
+	if s.ProductSKU == nil {
+		invalidParams.Add(request.NewErrParamRequired("ProductSKU"))
+	}
+	if s.Validity == nil {
+		invalidParams.Add(request.NewErrParamRequired("Validity"))
+	}
+	if s.ConsumptionConfiguration != nil {
+		if err := s.ConsumptionConfiguration.Validate(); err != nil {
+			invalidParams.AddNested("ConsumptionConfiguration", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.Entitlements != nil {
+		for i, v := range s.Entitlements {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "Entitlements", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+	if s.Issuer != nil {
+		if err := s.Issuer.Validate(); err != nil {
+			invalidParams.AddNested("Issuer", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.Validity != nil {
+		if err := s.Validity.Validate(); err != nil {
+			invalidParams.AddNested("Validity", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetBeneficiary sets the Beneficiary field's value.
+func (s *CreateLicenseInput) SetBeneficiary(v string) *CreateLicenseInput {
+	s.Beneficiary = &v
+	return s
+}
+
+// SetClientToken sets the ClientToken field's value.
+func (s *CreateLicenseInput) SetClientToken(v string) *CreateLicenseInput {
+	s.ClientToken = &v
+	return s
+}
+
+// SetConsumptionConfiguration sets the ConsumptionConfiguration field's value.
+func (s *CreateLicenseInput) SetConsumptionConfiguration(v *ConsumptionConfiguration) *CreateLicenseInput {
+	s.ConsumptionConfiguration = v
+	return s
+}
+
+// SetEntitlements sets the Entitlements field's value.
+func (s *CreateLicenseInput) SetEntitlements(v []*Entitlement) *CreateLicenseInput {
+	s.Entitlements = v
+	return s
+}
+
+// SetHomeRegion sets the HomeRegion field's value.
+func (s *CreateLicenseInput) SetHomeRegion(v string) *CreateLicenseInput {
+	s.HomeRegion = &v
+	return s
+}
+
+// SetIssuer sets the Issuer field's value.
+func (s *CreateLicenseInput) SetIssuer(v *Issuer) *CreateLicenseInput {
+	s.Issuer = v
+	return s
+}
+
+// SetLicenseMetadata sets the LicenseMetadata field's value.
+func (s *CreateLicenseInput) SetLicenseMetadata(v []*Metadata) *CreateLicenseInput {
+	s.LicenseMetadata = v
+	return s
+}
+
+// SetLicenseName sets the LicenseName field's value.
+func (s *CreateLicenseInput) SetLicenseName(v string) *CreateLicenseInput {
+	s.LicenseName = &v
+	return s
+}
+
+// SetProductName sets the ProductName field's value.
+func (s *CreateLicenseInput) SetProductName(v string) *CreateLicenseInput {
+	s.ProductName = &v
+	return s
+}
+
+// SetProductSKU sets the ProductSKU field's value.
+func (s *CreateLicenseInput) SetProductSKU(v string) *CreateLicenseInput {
+	s.ProductSKU = &v
+	return s
+}
+
+// SetValidity sets the Validity field's value.
+func (s *CreateLicenseInput) SetValidity(v *DatetimeRange) *CreateLicenseInput {
+	s.Validity = v
+	return s
+}
+
+type CreateLicenseManagerReportGeneratorInput struct {
+	_ struct{} `type:"structure"`
+
+	// Unique, case-sensitive identifier that you provide to ensure the idempotency
+	// of the request.
+	//
+	// ClientToken is a required field
+	ClientToken *string `min:"1" type:"string" required:"true"`
+
+	// Description of the report generator.
+	Description *string `type:"string"`
+
+	// Defines the type of license configuration the report generator tracks.
+	//
+	// ReportContext is a required field
+	ReportContext *ReportContext `type:"structure" required:"true"`
+
+	// Frequency by which reports are generated. Reports can be generated daily,
+	// monthly, or weekly.
+	//
+	// ReportFrequency is a required field
+	ReportFrequency *ReportFrequency `type:"structure" required:"true"`
+
+	// Name of the report generator.
+	//
+	// ReportGeneratorName is a required field
+	ReportGeneratorName *string `min:"1" type:"string" required:"true"`
+
+	// Tags to add to the report generator.
+	Tags []*Tag `type:"list"`
+
+	// Type of reports to generate. The following report types an be generated:
+	//
+	//    * License configuration report - Reports the number and details of consumed
+	//    licenses for a license configuration.
+	//
+	//    * Resource report - Reports the tracked licenses and resource consumption
+	//    for a license configuration.
+	//
+	// Type is a required field
+	Type []*string `type:"list" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateLicenseManagerReportGeneratorInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateLicenseManagerReportGeneratorInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *CreateLicenseManagerReportGeneratorInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "CreateLicenseManagerReportGeneratorInput"}
+	if s.ClientToken == nil {
+		invalidParams.Add(request.NewErrParamRequired("ClientToken"))
+	}
+	if s.ClientToken != nil && len(*s.ClientToken) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ClientToken", 1))
+	}
+	if s.ReportContext == nil {
+		invalidParams.Add(request.NewErrParamRequired("ReportContext"))
+	}
+	if s.ReportFrequency == nil {
+		invalidParams.Add(request.NewErrParamRequired("ReportFrequency"))
+	}
+	if s.ReportGeneratorName == nil {
+		invalidParams.Add(request.NewErrParamRequired("ReportGeneratorName"))
+	}
+	if s.ReportGeneratorName != nil && len(*s.ReportGeneratorName) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ReportGeneratorName", 1))
+	}
+	if s.Type == nil {
+		invalidParams.Add(request.NewErrParamRequired("Type"))
+	}
+	if s.ReportContext != nil {
+		if err := s.ReportContext.Validate(); err != nil {
+			invalidParams.AddNested("ReportContext", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetClientToken sets the ClientToken field's value.
+func (s *CreateLicenseManagerReportGeneratorInput) SetClientToken(v string) *CreateLicenseManagerReportGeneratorInput {
+	s.ClientToken = &v
+	return s
+}
+
+// SetDescription sets the Description field's value.
+func (s *CreateLicenseManagerReportGeneratorInput) SetDescription(v string) *CreateLicenseManagerReportGeneratorInput {
+	s.Description = &v
+	return s
+}
+
+// SetReportContext sets the ReportContext field's value.
+func (s *CreateLicenseManagerReportGeneratorInput) SetReportContext(v *ReportContext) *CreateLicenseManagerReportGeneratorInput {
+	s.ReportContext = v
+	return s
+}
+
+// SetReportFrequency sets the ReportFrequency field's value.
+func (s *CreateLicenseManagerReportGeneratorInput) SetReportFrequency(v *ReportFrequency) *CreateLicenseManagerReportGeneratorInput {
+	s.ReportFrequency = v
+	return s
+}
+
+// SetReportGeneratorName sets the ReportGeneratorName field's value.
+func (s *CreateLicenseManagerReportGeneratorInput) SetReportGeneratorName(v string) *CreateLicenseManagerReportGeneratorInput {
+	s.ReportGeneratorName = &v
+	return s
+}
+
+// SetTags sets the Tags field's value.
+func (s *CreateLicenseManagerReportGeneratorInput) SetTags(v []*Tag) *CreateLicenseManagerReportGeneratorInput {
+	s.Tags = v
+	return s
+}
+
+// SetType sets the Type field's value.
+func (s *CreateLicenseManagerReportGeneratorInput) SetType(v []*string) *CreateLicenseManagerReportGeneratorInput {
+	s.Type = v
+	return s
+}
+
+type CreateLicenseManagerReportGeneratorOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The Amazon Resource Name (ARN) of the new report generator.
+	LicenseManagerReportGeneratorArn *string `type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateLicenseManagerReportGeneratorOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateLicenseManagerReportGeneratorOutput) GoString() string {
+	return s.String()
+}
+
+// SetLicenseManagerReportGeneratorArn sets the LicenseManagerReportGeneratorArn field's value.
+func (s *CreateLicenseManagerReportGeneratorOutput) SetLicenseManagerReportGeneratorArn(v string) *CreateLicenseManagerReportGeneratorOutput {
+	s.LicenseManagerReportGeneratorArn = &v
+	return s
+}
+
+type CreateLicenseOutput struct {
+	_ struct{} `type:"structure"`
+
+	// Amazon Resource Name (ARN) of the license.
+	LicenseArn *string `type:"string"`
+
+	// License status.
+	Status *string `type:"string" enum:"LicenseStatus"`
+
+	// License version.
+	Version *string `type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateLicenseOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateLicenseOutput) GoString() string {
+	return s.String()
+}
+
+// SetLicenseArn sets the LicenseArn field's value.
+func (s *CreateLicenseOutput) SetLicenseArn(v string) *CreateLicenseOutput {
+	s.LicenseArn = &v
+	return s
+}
+
+// SetStatus sets the Status field's value.
+func (s *CreateLicenseOutput) SetStatus(v string) *CreateLicenseOutput {
+	s.Status = &v
+	return s
+}
+
+// SetVersion sets the Version field's value.
+func (s *CreateLicenseOutput) SetVersion(v string) *CreateLicenseOutput {
+	s.Version = &v
+	return s
+}
+
+type CreateLicenseVersionInput struct {
+	_ struct{} `type:"structure"`
+
+	// Unique, case-sensitive identifier that you provide to ensure the idempotency
+	// of the request.
+	//
+	// ClientToken is a required field
+	ClientToken *string `type:"string" required:"true"`
+
+	// Configuration for consumption of the license. Choose a provisional configuration
+	// for workloads running with continuous connectivity. Choose a borrow configuration
+	// for workloads with offline usage.
+	//
+	// ConsumptionConfiguration is a required field
+	ConsumptionConfiguration *ConsumptionConfiguration `type:"structure" required:"true"`
+
+	// License entitlements.
+	//
+	// Entitlements is a required field
+	Entitlements []*Entitlement `type:"list" required:"true"`
+
+	// Home Region of the license.
+	//
+	// HomeRegion is a required field
+	HomeRegion *string `type:"string" required:"true"`
+
+	// License issuer.
+	//
+	// Issuer is a required field
+	Issuer *Issuer `type:"structure" required:"true"`
+
+	// Amazon Resource Name (ARN) of the license.
+	//
+	// LicenseArn is a required field
+	LicenseArn *string `type:"string" required:"true"`
+
+	// Information about the license.
+	LicenseMetadata []*Metadata `type:"list"`
+
+	// License name.
+	//
+	// LicenseName is a required field
+	LicenseName *string `type:"string" required:"true"`
+
+	// Product name.
+	//
+	// ProductName is a required field
+	ProductName *string `type:"string" required:"true"`
+
+	// Current version of the license.
+	SourceVersion *string `type:"string"`
+
+	// License status.
+	//
+	// Status is a required field
+	Status *string `type:"string" required:"true" enum:"LicenseStatus"`
+
+	// Date and time range during which the license is valid, in ISO8601-UTC format.
+	//
+	// Validity is a required field
+	Validity *DatetimeRange `type:"structure" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateLicenseVersionInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateLicenseVersionInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *CreateLicenseVersionInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "CreateLicenseVersionInput"}
+	if s.ClientToken == nil {
+		invalidParams.Add(request.NewErrParamRequired("ClientToken"))
+	}
+	if s.ConsumptionConfiguration == nil {
+		invalidParams.Add(request.NewErrParamRequired("ConsumptionConfiguration"))
+	}
+	if s.Entitlements == nil {
+		invalidParams.Add(request.NewErrParamRequired("Entitlements"))
+	}
+	if s.HomeRegion == nil {
+		invalidParams.Add(request.NewErrParamRequired("HomeRegion"))
+	}
+	if s.Issuer == nil {
+		invalidParams.Add(request.NewErrParamRequired("Issuer"))
+	}
+	if s.LicenseArn == nil {
+		invalidParams.Add(request.NewErrParamRequired("LicenseArn"))
+	}
+	if s.LicenseName == nil {
+		invalidParams.Add(request.NewErrParamRequired("LicenseName"))
+	}
+	if s.ProductName == nil {
+		invalidParams.Add(request.NewErrParamRequired("ProductName"))
+	}
+	if s.Status == nil {
+		invalidParams.Add(request.NewErrParamRequired("Status"))
+	}
+	if s.Validity == nil {
+		invalidParams.Add(request.NewErrParamRequired("Validity"))
+	}
+	if s.ConsumptionConfiguration != nil {
+		if err := s.ConsumptionConfiguration.Validate(); err != nil {
+			invalidParams.AddNested("ConsumptionConfiguration", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.Entitlements != nil {
+		for i, v := range s.Entitlements {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "Entitlements", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+	if s.Issuer != nil {
+		if err := s.Issuer.Validate(); err != nil {
+			invalidParams.AddNested("Issuer", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.Validity != nil {
+		if err := s.Validity.Validate(); err != nil {
+			invalidParams.AddNested("Validity", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetClientToken sets the ClientToken field's value.
+func (s *CreateLicenseVersionInput) SetClientToken(v string) *CreateLicenseVersionInput {
+	s.ClientToken = &v
+	return s
+}
+
+// SetConsumptionConfiguration sets the ConsumptionConfiguration field's value.
+func (s *CreateLicenseVersionInput) SetConsumptionConfiguration(v *ConsumptionConfiguration) *CreateLicenseVersionInput {
+	s.ConsumptionConfiguration = v
+	return s
+}
+
+// SetEntitlements sets the Entitlements field's value.
+func (s *CreateLicenseVersionInput) SetEntitlements(v []*Entitlement) *CreateLicenseVersionInput {
+	s.Entitlements = v
+	return s
+}
+
+// SetHomeRegion sets the HomeRegion field's value.
+func (s *CreateLicenseVersionInput) SetHomeRegion(v string) *CreateLicenseVersionInput {
+	s.HomeRegion = &v
+	return s
+}
+
+// SetIssuer sets the Issuer field's value.
+func (s *CreateLicenseVersionInput) SetIssuer(v *Issuer) *CreateLicenseVersionInput {
+	s.Issuer = v
+	return s
+}
+
+// SetLicenseArn sets the LicenseArn field's value.
+func (s *CreateLicenseVersionInput) SetLicenseArn(v string) *CreateLicenseVersionInput {
+	s.LicenseArn = &v
+	return s
+}
+
+// SetLicenseMetadata sets the LicenseMetadata field's value.
+func (s *CreateLicenseVersionInput) SetLicenseMetadata(v []*Metadata) *CreateLicenseVersionInput {
+	s.LicenseMetadata = v
+	return s
+}
+
+// SetLicenseName sets the LicenseName field's value.
+func (s *CreateLicenseVersionInput) SetLicenseName(v string) *CreateLicenseVersionInput {
+	s.LicenseName = &v
+	return s
+}
+
+// SetProductName sets the ProductName field's value.
+func (s *CreateLicenseVersionInput) SetProductName(v string) *CreateLicenseVersionInput {
+	s.ProductName = &v
+	return s
+}
+
+// SetSourceVersion sets the SourceVersion field's value.
+func (s *CreateLicenseVersionInput) SetSourceVersion(v string) *CreateLicenseVersionInput {
+	s.SourceVersion = &v
+	return s
+}
+
+// SetStatus sets the Status field's value.
+func (s *CreateLicenseVersionInput) SetStatus(v string) *CreateLicenseVersionInput {
+	s.Status = &v
+	return s
+}
+
+// SetValidity sets the Validity field's value.
+func (s *CreateLicenseVersionInput) SetValidity(v *DatetimeRange) *CreateLicenseVersionInput {
+	s.Validity = v
+	return s
+}
+
+type CreateLicenseVersionOutput struct {
+	_ struct{} `type:"structure"`
+
+	// License ARN.
+	LicenseArn *string `type:"string"`
+
+	// License status.
+	Status *string `type:"string" enum:"LicenseStatus"`
+
+	// New version of the license.
+	Version *string `type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateLicenseVersionOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateLicenseVersionOutput) GoString() string {
+	return s.String()
+}
+
+// SetLicenseArn sets the LicenseArn field's value.
+func (s *CreateLicenseVersionOutput) SetLicenseArn(v string) *CreateLicenseVersionOutput {
+	s.LicenseArn = &v
+	return s
+}
+
+// SetStatus sets the Status field's value.
+func (s *CreateLicenseVersionOutput) SetStatus(v string) *CreateLicenseVersionOutput {
+	s.Status = &v
+	return s
+}
+
+// SetVersion sets the Version field's value.
+func (s *CreateLicenseVersionOutput) SetVersion(v string) *CreateLicenseVersionOutput {
+	s.Version = &v
+	return s
+}
+
+type CreateTokenInput struct {
+	_ struct{} `type:"structure"`
+
+	// Idempotency token, valid for 10 minutes.
+	//
+	// ClientToken is a required field
+	ClientToken *string `type:"string" required:"true"`
+
+	// Token expiration, in days, counted from token creation. The default is 365
+	// days.
+	ExpirationInDays *int64 `type:"integer"`
+
+	// Amazon Resource Name (ARN) of the license. The ARN is mapped to the aud claim
+	// of the JWT token.
+	//
+	// LicenseArn is a required field
+	LicenseArn *string `type:"string" required:"true"`
+
+	// Amazon Resource Name (ARN) of the IAM roles to embed in the token. License
+	// Manager does not check whether the roles are in use.
+	RoleArns []*string `type:"list"`
+
+	// Data specified by the caller to be included in the JWT token. The data is
+	// mapped to the amr claim of the JWT token.
+	TokenProperties []*string `type:"list"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateTokenInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateTokenInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *CreateTokenInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "CreateTokenInput"}
+	if s.ClientToken == nil {
+		invalidParams.Add(request.NewErrParamRequired("ClientToken"))
+	}
+	if s.LicenseArn == nil {
+		invalidParams.Add(request.NewErrParamRequired("LicenseArn"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetClientToken sets the ClientToken field's value.
+func (s *CreateTokenInput) SetClientToken(v string) *CreateTokenInput {
+	s.ClientToken = &v
+	return s
+}
+
+// SetExpirationInDays sets the ExpirationInDays field's value.
+func (s *CreateTokenInput) SetExpirationInDays(v int64) *CreateTokenInput {
+	s.ExpirationInDays = &v
+	return s
+}
+
+// SetLicenseArn sets the LicenseArn field's value.
+func (s *CreateTokenInput) SetLicenseArn(v string) *CreateTokenInput {
+	s.LicenseArn = &v
+	return s
+}
+
+// SetRoleArns sets the RoleArns field's value.
+func (s *CreateTokenInput) SetRoleArns(v []*string) *CreateTokenInput {
+	s.RoleArns = v
+	return s
+}
+
+// SetTokenProperties sets the TokenProperties field's value.
+func (s *CreateTokenInput) SetTokenProperties(v []*string) *CreateTokenInput {
+	s.TokenProperties = v
+	return s
+}
+
+type CreateTokenOutput struct {
+	_ struct{} `type:"structure"`
+
+	// Refresh token, encoded as a JWT token.
+	Token *string `type:"string"`
+
+	// Token ID.
+	TokenId *string `type:"string"`
+
+	// Token type.
+	TokenType *string `type:"string" enum:"TokenType"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateTokenOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateTokenOutput) GoString() string {
+	return s.String()
+}
+
+// SetToken sets the Token field's value.
+func (s *CreateTokenOutput) SetToken(v string) *CreateTokenOutput {
+	s.Token = &v
+	return s
+}
+
+// SetTokenId sets the TokenId field's value.
+func (s *CreateTokenOutput) SetTokenId(v string) *CreateTokenOutput {
+	s.TokenId = &v
+	return s
+}
+
+// SetTokenType sets the TokenType field's value.
+func (s *CreateTokenOutput) SetTokenType(v string) *CreateTokenOutput {
+	s.TokenType = &v
+	return s
+}
+
+// Describes a time range, in ISO8601-UTC format.
+type DatetimeRange struct {
+	_ struct{} `type:"structure"`
+
+	// Start of the time range.
+	//
+	// Begin is a required field
+	Begin *string `type:"string" required:"true"`
+
+	// End of the time range.
+	End *string `type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DatetimeRange) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DatetimeRange) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DatetimeRange) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DatetimeRange"}
+	if s.Begin == nil {
+		invalidParams.Add(request.NewErrParamRequired("Begin"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetBegin sets the Begin field's value.
+func (s *DatetimeRange) SetBegin(v string) *DatetimeRange {
+	s.Begin = &v
+	return s
+}
+
+// SetEnd sets the End field's value.
+func (s *DatetimeRange) SetEnd(v string) *DatetimeRange {
+	s.End = &v
+	return s
+}
+
+type DeleteGrantInput struct {
+	_ struct{} `type:"structure"`
+
+	// Amazon Resource Name (ARN) of the grant.
+	//
+	// GrantArn is a required field
+	GrantArn *string `type:"string" required:"true"`
+
+	// The Status reason for the delete request.
+	StatusReason *string `type:"string"`
+
+	// Current version of the grant.
+	//
+	// Version is a required field
+	Version *string `type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeleteGrantInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeleteGrantInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DeleteGrantInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DeleteGrantInput"}
+	if s.GrantArn == nil {
+		invalidParams.Add(request.NewErrParamRequired("GrantArn"))
+	}
+	if s.Version == nil {
+		invalidParams.Add(request.NewErrParamRequired("Version"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetGrantArn sets the GrantArn field's value.
+func (s *DeleteGrantInput) SetGrantArn(v string) *DeleteGrantInput {
+	s.GrantArn = &v
+	return s
+}
+
+// SetStatusReason sets the StatusReason field's value.
+func (s *DeleteGrantInput) SetStatusReason(v string) *DeleteGrantInput {
+	s.StatusReason = &v
+	return s
+}
+
+// SetVersion sets the Version field's value.
+func (s *DeleteGrantInput) SetVersion(v string) *DeleteGrantInput {
+	s.Version = &v
+	return s
+}
+
+type DeleteGrantOutput struct {
+	_ struct{} `type:"structure"`
+
+	// Grant ARN.
+	GrantArn *string `type:"string"`
+
+	// Grant status.
+	Status *string `type:"string" enum:"GrantStatus"`
+
+	// Grant version.
+	Version *string `type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeleteGrantOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeleteGrantOutput) GoString() string {
+	return s.String()
+}
+
+// SetGrantArn sets the GrantArn field's value.
+func (s *DeleteGrantOutput) SetGrantArn(v string) *DeleteGrantOutput {
+	s.GrantArn = &v
+	return s
+}
+
+// SetStatus sets the Status field's value.
+func (s *DeleteGrantOutput) SetStatus(v string) *DeleteGrantOutput {
+	s.Status = &v
+	return s
+}
+
+// SetVersion sets the Version field's value.
+func (s *DeleteGrantOutput) SetVersion(v string) *DeleteGrantOutput {
+	s.Version = &v
 	return s
 }
 
@@ -1873,12 +7352,20 @@ type DeleteLicenseConfigurationInput struct {
 	LicenseConfigurationArn *string `type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteLicenseConfigurationInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteLicenseConfigurationInput) GoString() string {
 	return s.String()
 }
@@ -1906,14 +7393,651 @@ type DeleteLicenseConfigurationOutput struct {
 	_ struct{} `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteLicenseConfigurationOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteLicenseConfigurationOutput) GoString() string {
 	return s.String()
+}
+
+type DeleteLicenseInput struct {
+	_ struct{} `type:"structure"`
+
+	// Amazon Resource Name (ARN) of the license.
+	//
+	// LicenseArn is a required field
+	LicenseArn *string `type:"string" required:"true"`
+
+	// Current version of the license.
+	//
+	// SourceVersion is a required field
+	SourceVersion *string `type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeleteLicenseInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeleteLicenseInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DeleteLicenseInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DeleteLicenseInput"}
+	if s.LicenseArn == nil {
+		invalidParams.Add(request.NewErrParamRequired("LicenseArn"))
+	}
+	if s.SourceVersion == nil {
+		invalidParams.Add(request.NewErrParamRequired("SourceVersion"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetLicenseArn sets the LicenseArn field's value.
+func (s *DeleteLicenseInput) SetLicenseArn(v string) *DeleteLicenseInput {
+	s.LicenseArn = &v
+	return s
+}
+
+// SetSourceVersion sets the SourceVersion field's value.
+func (s *DeleteLicenseInput) SetSourceVersion(v string) *DeleteLicenseInput {
+	s.SourceVersion = &v
+	return s
+}
+
+type DeleteLicenseManagerReportGeneratorInput struct {
+	_ struct{} `type:"structure"`
+
+	// Amazon Resource Name (ARN) of the report generator to be deleted.
+	//
+	// LicenseManagerReportGeneratorArn is a required field
+	LicenseManagerReportGeneratorArn *string `type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeleteLicenseManagerReportGeneratorInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeleteLicenseManagerReportGeneratorInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DeleteLicenseManagerReportGeneratorInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DeleteLicenseManagerReportGeneratorInput"}
+	if s.LicenseManagerReportGeneratorArn == nil {
+		invalidParams.Add(request.NewErrParamRequired("LicenseManagerReportGeneratorArn"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetLicenseManagerReportGeneratorArn sets the LicenseManagerReportGeneratorArn field's value.
+func (s *DeleteLicenseManagerReportGeneratorInput) SetLicenseManagerReportGeneratorArn(v string) *DeleteLicenseManagerReportGeneratorInput {
+	s.LicenseManagerReportGeneratorArn = &v
+	return s
+}
+
+type DeleteLicenseManagerReportGeneratorOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeleteLicenseManagerReportGeneratorOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeleteLicenseManagerReportGeneratorOutput) GoString() string {
+	return s.String()
+}
+
+type DeleteLicenseOutput struct {
+	_ struct{} `type:"structure"`
+
+	// Date when the license is deleted.
+	DeletionDate *string `type:"string"`
+
+	// License status.
+	Status *string `type:"string" enum:"LicenseDeletionStatus"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeleteLicenseOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeleteLicenseOutput) GoString() string {
+	return s.String()
+}
+
+// SetDeletionDate sets the DeletionDate field's value.
+func (s *DeleteLicenseOutput) SetDeletionDate(v string) *DeleteLicenseOutput {
+	s.DeletionDate = &v
+	return s
+}
+
+// SetStatus sets the Status field's value.
+func (s *DeleteLicenseOutput) SetStatus(v string) *DeleteLicenseOutput {
+	s.Status = &v
+	return s
+}
+
+type DeleteTokenInput struct {
+	_ struct{} `type:"structure"`
+
+	// Token ID.
+	//
+	// TokenId is a required field
+	TokenId *string `type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeleteTokenInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeleteTokenInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DeleteTokenInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DeleteTokenInput"}
+	if s.TokenId == nil {
+		invalidParams.Add(request.NewErrParamRequired("TokenId"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetTokenId sets the TokenId field's value.
+func (s *DeleteTokenInput) SetTokenId(v string) *DeleteTokenInput {
+	s.TokenId = &v
+	return s
+}
+
+type DeleteTokenOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeleteTokenOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeleteTokenOutput) GoString() string {
+	return s.String()
+}
+
+// Describes a resource entitled for use with a license.
+type Entitlement struct {
+	_ struct{} `type:"structure"`
+
+	// Indicates whether check-ins are allowed.
+	AllowCheckIn *bool `type:"boolean"`
+
+	// Maximum entitlement count. Use if the unit is not None.
+	MaxCount *int64 `type:"long"`
+
+	// Entitlement name.
+	//
+	// Name is a required field
+	Name *string `type:"string" required:"true"`
+
+	// Indicates whether overages are allowed.
+	Overage *bool `type:"boolean"`
+
+	// Entitlement unit.
+	//
+	// Unit is a required field
+	Unit *string `type:"string" required:"true" enum:"EntitlementUnit"`
+
+	// Entitlement resource. Use only if the unit is None.
+	Value *string `type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s Entitlement) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s Entitlement) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *Entitlement) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "Entitlement"}
+	if s.Name == nil {
+		invalidParams.Add(request.NewErrParamRequired("Name"))
+	}
+	if s.Unit == nil {
+		invalidParams.Add(request.NewErrParamRequired("Unit"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetAllowCheckIn sets the AllowCheckIn field's value.
+func (s *Entitlement) SetAllowCheckIn(v bool) *Entitlement {
+	s.AllowCheckIn = &v
+	return s
+}
+
+// SetMaxCount sets the MaxCount field's value.
+func (s *Entitlement) SetMaxCount(v int64) *Entitlement {
+	s.MaxCount = &v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *Entitlement) SetName(v string) *Entitlement {
+	s.Name = &v
+	return s
+}
+
+// SetOverage sets the Overage field's value.
+func (s *Entitlement) SetOverage(v bool) *Entitlement {
+	s.Overage = &v
+	return s
+}
+
+// SetUnit sets the Unit field's value.
+func (s *Entitlement) SetUnit(v string) *Entitlement {
+	s.Unit = &v
+	return s
+}
+
+// SetValue sets the Value field's value.
+func (s *Entitlement) SetValue(v string) *Entitlement {
+	s.Value = &v
+	return s
+}
+
+// Data associated with an entitlement resource.
+type EntitlementData struct {
+	_ struct{} `type:"structure"`
+
+	// Entitlement data name.
+	//
+	// Name is a required field
+	Name *string `type:"string" required:"true"`
+
+	// Entitlement data unit.
+	//
+	// Unit is a required field
+	Unit *string `type:"string" required:"true" enum:"EntitlementDataUnit"`
+
+	// Entitlement data value.
+	Value *string `type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s EntitlementData) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s EntitlementData) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *EntitlementData) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "EntitlementData"}
+	if s.Name == nil {
+		invalidParams.Add(request.NewErrParamRequired("Name"))
+	}
+	if s.Unit == nil {
+		invalidParams.Add(request.NewErrParamRequired("Unit"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetName sets the Name field's value.
+func (s *EntitlementData) SetName(v string) *EntitlementData {
+	s.Name = &v
+	return s
+}
+
+// SetUnit sets the Unit field's value.
+func (s *EntitlementData) SetUnit(v string) *EntitlementData {
+	s.Unit = &v
+	return s
+}
+
+// SetValue sets the Value field's value.
+func (s *EntitlementData) SetValue(v string) *EntitlementData {
+	s.Value = &v
+	return s
+}
+
+// The entitlement is not allowed.
+type EntitlementNotAllowedException struct {
+	_            struct{}                  `type:"structure"`
+	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
+
+	Message_ *string `locationName:"Message" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s EntitlementNotAllowedException) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s EntitlementNotAllowedException) GoString() string {
+	return s.String()
+}
+
+func newErrorEntitlementNotAllowedException(v protocol.ResponseMetadata) error {
+	return &EntitlementNotAllowedException{
+		RespMetadata: v,
+	}
+}
+
+// Code returns the exception type name.
+func (s *EntitlementNotAllowedException) Code() string {
+	return "EntitlementNotAllowedException"
+}
+
+// Message returns the exception's message.
+func (s *EntitlementNotAllowedException) Message() string {
+	if s.Message_ != nil {
+		return *s.Message_
+	}
+	return ""
+}
+
+// OrigErr always returns nil, satisfies awserr.Error interface.
+func (s *EntitlementNotAllowedException) OrigErr() error {
+	return nil
+}
+
+func (s *EntitlementNotAllowedException) Error() string {
+	return fmt.Sprintf("%s: %s", s.Code(), s.Message())
+}
+
+// Status code returns the HTTP status code for the request's response error.
+func (s *EntitlementNotAllowedException) StatusCode() int {
+	return s.RespMetadata.StatusCode
+}
+
+// RequestID returns the service's response RequestID for request.
+func (s *EntitlementNotAllowedException) RequestID() string {
+	return s.RespMetadata.RequestID
+}
+
+// Usage associated with an entitlement resource.
+type EntitlementUsage struct {
+	_ struct{} `type:"structure"`
+
+	// Resource usage consumed.
+	//
+	// ConsumedValue is a required field
+	ConsumedValue *string `type:"string" required:"true"`
+
+	// Maximum entitlement usage count.
+	MaxCount *string `type:"string"`
+
+	// Entitlement usage name.
+	//
+	// Name is a required field
+	Name *string `type:"string" required:"true"`
+
+	// Entitlement usage unit.
+	//
+	// Unit is a required field
+	Unit *string `type:"string" required:"true" enum:"EntitlementDataUnit"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s EntitlementUsage) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s EntitlementUsage) GoString() string {
+	return s.String()
+}
+
+// SetConsumedValue sets the ConsumedValue field's value.
+func (s *EntitlementUsage) SetConsumedValue(v string) *EntitlementUsage {
+	s.ConsumedValue = &v
+	return s
+}
+
+// SetMaxCount sets the MaxCount field's value.
+func (s *EntitlementUsage) SetMaxCount(v string) *EntitlementUsage {
+	s.MaxCount = &v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *EntitlementUsage) SetName(v string) *EntitlementUsage {
+	s.Name = &v
+	return s
+}
+
+// SetUnit sets the Unit field's value.
+func (s *EntitlementUsage) SetUnit(v string) *EntitlementUsage {
+	s.Unit = &v
+	return s
+}
+
+type ExtendLicenseConsumptionInput struct {
+	_ struct{} `type:"structure"`
+
+	// Checks whether you have the required permissions for the action, without
+	// actually making the request. Provides an error response if you do not have
+	// the required permissions.
+	DryRun *bool `type:"boolean"`
+
+	// License consumption token.
+	//
+	// LicenseConsumptionToken is a required field
+	LicenseConsumptionToken *string `type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ExtendLicenseConsumptionInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ExtendLicenseConsumptionInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ExtendLicenseConsumptionInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ExtendLicenseConsumptionInput"}
+	if s.LicenseConsumptionToken == nil {
+		invalidParams.Add(request.NewErrParamRequired("LicenseConsumptionToken"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetDryRun sets the DryRun field's value.
+func (s *ExtendLicenseConsumptionInput) SetDryRun(v bool) *ExtendLicenseConsumptionInput {
+	s.DryRun = &v
+	return s
+}
+
+// SetLicenseConsumptionToken sets the LicenseConsumptionToken field's value.
+func (s *ExtendLicenseConsumptionInput) SetLicenseConsumptionToken(v string) *ExtendLicenseConsumptionInput {
+	s.LicenseConsumptionToken = &v
+	return s
+}
+
+type ExtendLicenseConsumptionOutput struct {
+	_ struct{} `type:"structure"`
+
+	// Date and time at which the license consumption expires.
+	Expiration *string `type:"string"`
+
+	// License consumption token.
+	LicenseConsumptionToken *string `type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ExtendLicenseConsumptionOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ExtendLicenseConsumptionOutput) GoString() string {
+	return s.String()
+}
+
+// SetExpiration sets the Expiration field's value.
+func (s *ExtendLicenseConsumptionOutput) SetExpiration(v string) *ExtendLicenseConsumptionOutput {
+	s.Expiration = &v
+	return s
+}
+
+// SetLicenseConsumptionToken sets the LicenseConsumptionToken field's value.
+func (s *ExtendLicenseConsumptionOutput) SetLicenseConsumptionToken(v string) *ExtendLicenseConsumptionOutput {
+	s.LicenseConsumptionToken = &v
+	return s
 }
 
 // A dependency required to run the API is missing.
@@ -1921,15 +8045,25 @@ type FailedDependencyException struct {
 	_            struct{}                  `type:"structure"`
 	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
 
+	ErrorCode *string `type:"string"`
+
 	Message_ *string `locationName:"Message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s FailedDependencyException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s FailedDependencyException) GoString() string {
 	return s.String()
 }
@@ -1959,7 +8093,7 @@ func (s *FailedDependencyException) OrigErr() error {
 }
 
 func (s *FailedDependencyException) Error() string {
-	return fmt.Sprintf("%s: %s", s.Code(), s.Message())
+	return fmt.Sprintf("%s: %s\n%s", s.Code(), s.Message(), s.String())
 }
 
 // Status code returns the HTTP status code for the request's response error.
@@ -1985,12 +8119,20 @@ type Filter struct {
 	Values []*string `type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s Filter) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s Filter) GoString() string {
 	return s.String()
 }
@@ -2015,12 +8157,20 @@ type FilterLimitExceededException struct {
 	Message_ *string `locationName:"Message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s FilterLimitExceededException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s FilterLimitExceededException) GoString() string {
 	return s.String()
 }
@@ -2063,6 +8213,178 @@ func (s *FilterLimitExceededException) RequestID() string {
 	return s.RespMetadata.RequestID
 }
 
+type GetAccessTokenInput struct {
+	_ struct{} `type:"structure"`
+
+	// Refresh token, encoded as a JWT token.
+	//
+	// Token is a required field
+	Token *string `type:"string" required:"true"`
+
+	// Token properties to validate against those present in the JWT token.
+	TokenProperties []*string `type:"list"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetAccessTokenInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetAccessTokenInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *GetAccessTokenInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "GetAccessTokenInput"}
+	if s.Token == nil {
+		invalidParams.Add(request.NewErrParamRequired("Token"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetToken sets the Token field's value.
+func (s *GetAccessTokenInput) SetToken(v string) *GetAccessTokenInput {
+	s.Token = &v
+	return s
+}
+
+// SetTokenProperties sets the TokenProperties field's value.
+func (s *GetAccessTokenInput) SetTokenProperties(v []*string) *GetAccessTokenInput {
+	s.TokenProperties = v
+	return s
+}
+
+type GetAccessTokenOutput struct {
+	_ struct{} `type:"structure"`
+
+	// Temporary access token.
+	AccessToken *string `type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetAccessTokenOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetAccessTokenOutput) GoString() string {
+	return s.String()
+}
+
+// SetAccessToken sets the AccessToken field's value.
+func (s *GetAccessTokenOutput) SetAccessToken(v string) *GetAccessTokenOutput {
+	s.AccessToken = &v
+	return s
+}
+
+type GetGrantInput struct {
+	_ struct{} `type:"structure"`
+
+	// Amazon Resource Name (ARN) of the grant.
+	//
+	// GrantArn is a required field
+	GrantArn *string `type:"string" required:"true"`
+
+	// Grant version.
+	Version *string `type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetGrantInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetGrantInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *GetGrantInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "GetGrantInput"}
+	if s.GrantArn == nil {
+		invalidParams.Add(request.NewErrParamRequired("GrantArn"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetGrantArn sets the GrantArn field's value.
+func (s *GetGrantInput) SetGrantArn(v string) *GetGrantInput {
+	s.GrantArn = &v
+	return s
+}
+
+// SetVersion sets the Version field's value.
+func (s *GetGrantInput) SetVersion(v string) *GetGrantInput {
+	s.Version = &v
+	return s
+}
+
+type GetGrantOutput struct {
+	_ struct{} `type:"structure"`
+
+	// Grant details.
+	Grant *Grant `type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetGrantOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetGrantOutput) GoString() string {
+	return s.String()
+}
+
+// SetGrant sets the Grant field's value.
+func (s *GetGrantOutput) SetGrant(v *Grant) *GetGrantOutput {
+	s.Grant = v
+	return s
+}
+
 type GetLicenseConfigurationInput struct {
 	_ struct{} `type:"structure"`
 
@@ -2072,12 +8394,20 @@ type GetLicenseConfigurationInput struct {
 	LicenseConfigurationArn *string `type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetLicenseConfigurationInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetLicenseConfigurationInput) GoString() string {
 	return s.String()
 }
@@ -2116,6 +8446,9 @@ type GetLicenseConfigurationOutput struct {
 	// Description of the license configuration.
 	Description *string `type:"string"`
 
+	// When true, disassociates a resource when software is uninstalled.
+	DisassociateWhenNotFound *bool `type:"boolean"`
+
 	// Amazon Resource Name (ARN) of the license configuration.
 	LicenseConfigurationArn *string `type:"string"`
 
@@ -2128,7 +8461,7 @@ type GetLicenseConfigurationOutput struct {
 	// Sets the number of available licenses as a hard limit.
 	LicenseCountHardLimit *bool `type:"boolean"`
 
-	// Dimension on which the licenses are counted.
+	// Dimension for which the licenses are counted.
 	LicenseCountingType *string `type:"string" enum:"LicenseCountingType"`
 
 	// License rules.
@@ -2153,12 +8486,20 @@ type GetLicenseConfigurationOutput struct {
 	Tags []*Tag `type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetLicenseConfigurationOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetLicenseConfigurationOutput) GoString() string {
 	return s.String()
 }
@@ -2184,6 +8525,12 @@ func (s *GetLicenseConfigurationOutput) SetConsumedLicenses(v int64) *GetLicense
 // SetDescription sets the Description field's value.
 func (s *GetLicenseConfigurationOutput) SetDescription(v string) *GetLicenseConfigurationOutput {
 	s.Description = &v
+	return s
+}
+
+// SetDisassociateWhenNotFound sets the DisassociateWhenNotFound field's value.
+func (s *GetLicenseConfigurationOutput) SetDisassociateWhenNotFound(v bool) *GetLicenseConfigurationOutput {
+	s.DisassociateWhenNotFound = &v
 	return s
 }
 
@@ -2259,16 +8606,414 @@ func (s *GetLicenseConfigurationOutput) SetTags(v []*Tag) *GetLicenseConfigurati
 	return s
 }
 
+type GetLicenseConversionTaskInput struct {
+	_ struct{} `type:"structure"`
+
+	// ID of the license type conversion task to retrieve information on.
+	//
+	// LicenseConversionTaskId is a required field
+	LicenseConversionTaskId *string `type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetLicenseConversionTaskInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetLicenseConversionTaskInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *GetLicenseConversionTaskInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "GetLicenseConversionTaskInput"}
+	if s.LicenseConversionTaskId == nil {
+		invalidParams.Add(request.NewErrParamRequired("LicenseConversionTaskId"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetLicenseConversionTaskId sets the LicenseConversionTaskId field's value.
+func (s *GetLicenseConversionTaskInput) SetLicenseConversionTaskId(v string) *GetLicenseConversionTaskInput {
+	s.LicenseConversionTaskId = &v
+	return s
+}
+
+type GetLicenseConversionTaskOutput struct {
+	_ struct{} `type:"structure"`
+
+	// Information about the license type converted to.
+	DestinationLicenseContext *LicenseConversionContext `type:"structure"`
+
+	// Time at which the license type conversion task was completed.
+	EndTime *time.Time `type:"timestamp"`
+
+	// ID of the license type conversion task.
+	LicenseConversionTaskId *string `type:"string"`
+
+	// Amount of time to complete the license type conversion.
+	LicenseConversionTime *time.Time `type:"timestamp"`
+
+	// Amazon Resource Names (ARN) of the resources the license conversion task
+	// is associated with.
+	ResourceArn *string `type:"string"`
+
+	// Information about the license type converted from.
+	SourceLicenseContext *LicenseConversionContext `type:"structure"`
+
+	// Time at which the license type conversion task was started .
+	StartTime *time.Time `type:"timestamp"`
+
+	// Status of the license type conversion task.
+	Status *string `type:"string" enum:"LicenseConversionTaskStatus"`
+
+	// The status message for the conversion task.
+	StatusMessage *string `type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetLicenseConversionTaskOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetLicenseConversionTaskOutput) GoString() string {
+	return s.String()
+}
+
+// SetDestinationLicenseContext sets the DestinationLicenseContext field's value.
+func (s *GetLicenseConversionTaskOutput) SetDestinationLicenseContext(v *LicenseConversionContext) *GetLicenseConversionTaskOutput {
+	s.DestinationLicenseContext = v
+	return s
+}
+
+// SetEndTime sets the EndTime field's value.
+func (s *GetLicenseConversionTaskOutput) SetEndTime(v time.Time) *GetLicenseConversionTaskOutput {
+	s.EndTime = &v
+	return s
+}
+
+// SetLicenseConversionTaskId sets the LicenseConversionTaskId field's value.
+func (s *GetLicenseConversionTaskOutput) SetLicenseConversionTaskId(v string) *GetLicenseConversionTaskOutput {
+	s.LicenseConversionTaskId = &v
+	return s
+}
+
+// SetLicenseConversionTime sets the LicenseConversionTime field's value.
+func (s *GetLicenseConversionTaskOutput) SetLicenseConversionTime(v time.Time) *GetLicenseConversionTaskOutput {
+	s.LicenseConversionTime = &v
+	return s
+}
+
+// SetResourceArn sets the ResourceArn field's value.
+func (s *GetLicenseConversionTaskOutput) SetResourceArn(v string) *GetLicenseConversionTaskOutput {
+	s.ResourceArn = &v
+	return s
+}
+
+// SetSourceLicenseContext sets the SourceLicenseContext field's value.
+func (s *GetLicenseConversionTaskOutput) SetSourceLicenseContext(v *LicenseConversionContext) *GetLicenseConversionTaskOutput {
+	s.SourceLicenseContext = v
+	return s
+}
+
+// SetStartTime sets the StartTime field's value.
+func (s *GetLicenseConversionTaskOutput) SetStartTime(v time.Time) *GetLicenseConversionTaskOutput {
+	s.StartTime = &v
+	return s
+}
+
+// SetStatus sets the Status field's value.
+func (s *GetLicenseConversionTaskOutput) SetStatus(v string) *GetLicenseConversionTaskOutput {
+	s.Status = &v
+	return s
+}
+
+// SetStatusMessage sets the StatusMessage field's value.
+func (s *GetLicenseConversionTaskOutput) SetStatusMessage(v string) *GetLicenseConversionTaskOutput {
+	s.StatusMessage = &v
+	return s
+}
+
+type GetLicenseInput struct {
+	_ struct{} `type:"structure"`
+
+	// Amazon Resource Name (ARN) of the license.
+	//
+	// LicenseArn is a required field
+	LicenseArn *string `type:"string" required:"true"`
+
+	// License version.
+	Version *string `type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetLicenseInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetLicenseInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *GetLicenseInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "GetLicenseInput"}
+	if s.LicenseArn == nil {
+		invalidParams.Add(request.NewErrParamRequired("LicenseArn"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetLicenseArn sets the LicenseArn field's value.
+func (s *GetLicenseInput) SetLicenseArn(v string) *GetLicenseInput {
+	s.LicenseArn = &v
+	return s
+}
+
+// SetVersion sets the Version field's value.
+func (s *GetLicenseInput) SetVersion(v string) *GetLicenseInput {
+	s.Version = &v
+	return s
+}
+
+type GetLicenseManagerReportGeneratorInput struct {
+	_ struct{} `type:"structure"`
+
+	// Amazon Resource Name (ARN) of the report generator.
+	//
+	// LicenseManagerReportGeneratorArn is a required field
+	LicenseManagerReportGeneratorArn *string `type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetLicenseManagerReportGeneratorInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetLicenseManagerReportGeneratorInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *GetLicenseManagerReportGeneratorInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "GetLicenseManagerReportGeneratorInput"}
+	if s.LicenseManagerReportGeneratorArn == nil {
+		invalidParams.Add(request.NewErrParamRequired("LicenseManagerReportGeneratorArn"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetLicenseManagerReportGeneratorArn sets the LicenseManagerReportGeneratorArn field's value.
+func (s *GetLicenseManagerReportGeneratorInput) SetLicenseManagerReportGeneratorArn(v string) *GetLicenseManagerReportGeneratorInput {
+	s.LicenseManagerReportGeneratorArn = &v
+	return s
+}
+
+type GetLicenseManagerReportGeneratorOutput struct {
+	_ struct{} `type:"structure"`
+
+	// A report generator that creates periodic reports about your license configurations.
+	ReportGenerator *ReportGenerator `type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetLicenseManagerReportGeneratorOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetLicenseManagerReportGeneratorOutput) GoString() string {
+	return s.String()
+}
+
+// SetReportGenerator sets the ReportGenerator field's value.
+func (s *GetLicenseManagerReportGeneratorOutput) SetReportGenerator(v *ReportGenerator) *GetLicenseManagerReportGeneratorOutput {
+	s.ReportGenerator = v
+	return s
+}
+
+type GetLicenseOutput struct {
+	_ struct{} `type:"structure"`
+
+	// License details.
+	License *License `type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetLicenseOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetLicenseOutput) GoString() string {
+	return s.String()
+}
+
+// SetLicense sets the License field's value.
+func (s *GetLicenseOutput) SetLicense(v *License) *GetLicenseOutput {
+	s.License = v
+	return s
+}
+
+type GetLicenseUsageInput struct {
+	_ struct{} `type:"structure"`
+
+	// Amazon Resource Name (ARN) of the license.
+	//
+	// LicenseArn is a required field
+	LicenseArn *string `type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetLicenseUsageInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetLicenseUsageInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *GetLicenseUsageInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "GetLicenseUsageInput"}
+	if s.LicenseArn == nil {
+		invalidParams.Add(request.NewErrParamRequired("LicenseArn"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetLicenseArn sets the LicenseArn field's value.
+func (s *GetLicenseUsageInput) SetLicenseArn(v string) *GetLicenseUsageInput {
+	s.LicenseArn = &v
+	return s
+}
+
+type GetLicenseUsageOutput struct {
+	_ struct{} `type:"structure"`
+
+	// License usage details.
+	LicenseUsage *LicenseUsage `type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetLicenseUsageOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetLicenseUsageOutput) GoString() string {
+	return s.String()
+}
+
+// SetLicenseUsage sets the LicenseUsage field's value.
+func (s *GetLicenseUsageOutput) SetLicenseUsage(v *LicenseUsage) *GetLicenseUsageOutput {
+	s.LicenseUsage = v
+	return s
+}
+
 type GetServiceSettingsInput struct {
 	_ struct{} `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetServiceSettingsInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetServiceSettingsInput) GoString() string {
 	return s.String()
 }
@@ -2276,15 +9021,15 @@ func (s GetServiceSettingsInput) GoString() string {
 type GetServiceSettingsOutput struct {
 	_ struct{} `type:"structure"`
 
-	// Indicates whether cross-account discovery has been enabled.
+	// Indicates whether cross-account discovery is enabled.
 	EnableCrossAccountsDiscovery *bool `type:"boolean"`
 
-	// Amazon Resource Name (ARN) of the AWS resource share. The License Manager
-	// master account will provide member accounts with access to this share.
+	// Amazon Resource Name (ARN) of the resource share. The License Manager management
+	// account provides member accounts with access to this share.
 	LicenseManagerResourceShareArn *string `type:"string"`
 
-	// Indicates whether AWS Organizations has been integrated with License Manager
-	// for cross-account discovery.
+	// Indicates whether Organizations is integrated with License Manager for cross-account
+	// discovery.
 	OrganizationConfiguration *OrganizationConfiguration `type:"structure"`
 
 	// Regional S3 bucket path for storing reports, license trail event data, discovery
@@ -2295,12 +9040,20 @@ type GetServiceSettingsOutput struct {
 	SnsTopicArn *string `type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetServiceSettingsOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetServiceSettingsOutput) GoString() string {
 	return s.String()
 }
@@ -2335,6 +9088,296 @@ func (s *GetServiceSettingsOutput) SetSnsTopicArn(v string) *GetServiceSettingsO
 	return s
 }
 
+// Describes a grant.
+type Grant struct {
+	_ struct{} `type:"structure"`
+
+	// Amazon Resource Name (ARN) of the grant.
+	//
+	// GrantArn is a required field
+	GrantArn *string `type:"string" required:"true"`
+
+	// Grant name.
+	//
+	// GrantName is a required field
+	GrantName *string `type:"string" required:"true"`
+
+	// Grant status.
+	//
+	// GrantStatus is a required field
+	GrantStatus *string `type:"string" required:"true" enum:"GrantStatus"`
+
+	// Granted operations.
+	//
+	// GrantedOperations is a required field
+	GrantedOperations []*string `min:"1" type:"list" required:"true"`
+
+	// The grantee principal ARN.
+	//
+	// GranteePrincipalArn is a required field
+	GranteePrincipalArn *string `type:"string" required:"true"`
+
+	// Home Region of the grant.
+	//
+	// HomeRegion is a required field
+	HomeRegion *string `type:"string" required:"true"`
+
+	// License ARN.
+	//
+	// LicenseArn is a required field
+	LicenseArn *string `type:"string" required:"true"`
+
+	// Parent ARN.
+	//
+	// ParentArn is a required field
+	ParentArn *string `type:"string" required:"true"`
+
+	// Grant status reason.
+	StatusReason *string `type:"string"`
+
+	// Grant version.
+	//
+	// Version is a required field
+	Version *string `type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s Grant) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s Grant) GoString() string {
+	return s.String()
+}
+
+// SetGrantArn sets the GrantArn field's value.
+func (s *Grant) SetGrantArn(v string) *Grant {
+	s.GrantArn = &v
+	return s
+}
+
+// SetGrantName sets the GrantName field's value.
+func (s *Grant) SetGrantName(v string) *Grant {
+	s.GrantName = &v
+	return s
+}
+
+// SetGrantStatus sets the GrantStatus field's value.
+func (s *Grant) SetGrantStatus(v string) *Grant {
+	s.GrantStatus = &v
+	return s
+}
+
+// SetGrantedOperations sets the GrantedOperations field's value.
+func (s *Grant) SetGrantedOperations(v []*string) *Grant {
+	s.GrantedOperations = v
+	return s
+}
+
+// SetGranteePrincipalArn sets the GranteePrincipalArn field's value.
+func (s *Grant) SetGranteePrincipalArn(v string) *Grant {
+	s.GranteePrincipalArn = &v
+	return s
+}
+
+// SetHomeRegion sets the HomeRegion field's value.
+func (s *Grant) SetHomeRegion(v string) *Grant {
+	s.HomeRegion = &v
+	return s
+}
+
+// SetLicenseArn sets the LicenseArn field's value.
+func (s *Grant) SetLicenseArn(v string) *Grant {
+	s.LicenseArn = &v
+	return s
+}
+
+// SetParentArn sets the ParentArn field's value.
+func (s *Grant) SetParentArn(v string) *Grant {
+	s.ParentArn = &v
+	return s
+}
+
+// SetStatusReason sets the StatusReason field's value.
+func (s *Grant) SetStatusReason(v string) *Grant {
+	s.StatusReason = &v
+	return s
+}
+
+// SetVersion sets the Version field's value.
+func (s *Grant) SetVersion(v string) *Grant {
+	s.Version = &v
+	return s
+}
+
+// Describes a license that is granted to a grantee.
+type GrantedLicense struct {
+	_ struct{} `type:"structure"`
+
+	// Granted license beneficiary.
+	Beneficiary *string `type:"string"`
+
+	// Configuration for consumption of the license.
+	ConsumptionConfiguration *ConsumptionConfiguration `type:"structure"`
+
+	// Creation time of the granted license.
+	CreateTime *string `type:"string"`
+
+	// License entitlements.
+	Entitlements []*Entitlement `type:"list"`
+
+	// Home Region of the granted license.
+	HomeRegion *string `type:"string"`
+
+	// Granted license issuer.
+	Issuer *IssuerDetails `type:"structure"`
+
+	// Amazon Resource Name (ARN) of the license.
+	LicenseArn *string `type:"string"`
+
+	// Granted license metadata.
+	LicenseMetadata []*Metadata `type:"list"`
+
+	// License name.
+	LicenseName *string `type:"string"`
+
+	// Product name.
+	ProductName *string `type:"string"`
+
+	// Product SKU.
+	ProductSKU *string `type:"string"`
+
+	// Granted license received metadata.
+	ReceivedMetadata *ReceivedMetadata `type:"structure"`
+
+	// Granted license status.
+	Status *string `type:"string" enum:"LicenseStatus"`
+
+	// Date and time range during which the granted license is valid, in ISO8601-UTC
+	// format.
+	Validity *DatetimeRange `type:"structure"`
+
+	// Version of the granted license.
+	Version *string `type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GrantedLicense) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GrantedLicense) GoString() string {
+	return s.String()
+}
+
+// SetBeneficiary sets the Beneficiary field's value.
+func (s *GrantedLicense) SetBeneficiary(v string) *GrantedLicense {
+	s.Beneficiary = &v
+	return s
+}
+
+// SetConsumptionConfiguration sets the ConsumptionConfiguration field's value.
+func (s *GrantedLicense) SetConsumptionConfiguration(v *ConsumptionConfiguration) *GrantedLicense {
+	s.ConsumptionConfiguration = v
+	return s
+}
+
+// SetCreateTime sets the CreateTime field's value.
+func (s *GrantedLicense) SetCreateTime(v string) *GrantedLicense {
+	s.CreateTime = &v
+	return s
+}
+
+// SetEntitlements sets the Entitlements field's value.
+func (s *GrantedLicense) SetEntitlements(v []*Entitlement) *GrantedLicense {
+	s.Entitlements = v
+	return s
+}
+
+// SetHomeRegion sets the HomeRegion field's value.
+func (s *GrantedLicense) SetHomeRegion(v string) *GrantedLicense {
+	s.HomeRegion = &v
+	return s
+}
+
+// SetIssuer sets the Issuer field's value.
+func (s *GrantedLicense) SetIssuer(v *IssuerDetails) *GrantedLicense {
+	s.Issuer = v
+	return s
+}
+
+// SetLicenseArn sets the LicenseArn field's value.
+func (s *GrantedLicense) SetLicenseArn(v string) *GrantedLicense {
+	s.LicenseArn = &v
+	return s
+}
+
+// SetLicenseMetadata sets the LicenseMetadata field's value.
+func (s *GrantedLicense) SetLicenseMetadata(v []*Metadata) *GrantedLicense {
+	s.LicenseMetadata = v
+	return s
+}
+
+// SetLicenseName sets the LicenseName field's value.
+func (s *GrantedLicense) SetLicenseName(v string) *GrantedLicense {
+	s.LicenseName = &v
+	return s
+}
+
+// SetProductName sets the ProductName field's value.
+func (s *GrantedLicense) SetProductName(v string) *GrantedLicense {
+	s.ProductName = &v
+	return s
+}
+
+// SetProductSKU sets the ProductSKU field's value.
+func (s *GrantedLicense) SetProductSKU(v string) *GrantedLicense {
+	s.ProductSKU = &v
+	return s
+}
+
+// SetReceivedMetadata sets the ReceivedMetadata field's value.
+func (s *GrantedLicense) SetReceivedMetadata(v *ReceivedMetadata) *GrantedLicense {
+	s.ReceivedMetadata = v
+	return s
+}
+
+// SetStatus sets the Status field's value.
+func (s *GrantedLicense) SetStatus(v string) *GrantedLicense {
+	s.Status = &v
+	return s
+}
+
+// SetValidity sets the Validity field's value.
+func (s *GrantedLicense) SetValidity(v *DatetimeRange) *GrantedLicense {
+	s.Validity = v
+	return s
+}
+
+// SetVersion sets the Version field's value.
+func (s *GrantedLicense) SetVersion(v string) *GrantedLicense {
+	s.Version = &v
+	return s
+}
+
 // One or more parameter values are not valid.
 type InvalidParameterValueException struct {
 	_            struct{}                  `type:"structure"`
@@ -2343,12 +9386,20 @@ type InvalidParameterValueException struct {
 	Message_ *string `locationName:"Message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s InvalidParameterValueException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s InvalidParameterValueException) GoString() string {
 	return s.String()
 }
@@ -2402,12 +9453,20 @@ type InvalidResourceStateException struct {
 	Message_ *string `locationName:"Message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s InvalidResourceStateException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s InvalidResourceStateException) GoString() string {
 	return s.String()
 }
@@ -2468,12 +9527,20 @@ type InventoryFilter struct {
 	Value *string `type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s InventoryFilter) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s InventoryFilter) GoString() string {
 	return s.String()
 }
@@ -2512,6 +9579,263 @@ func (s *InventoryFilter) SetValue(v string) *InventoryFilter {
 	return s
 }
 
+// Details about the issuer of a license.
+type Issuer struct {
+	_ struct{} `type:"structure"`
+
+	// Issuer name.
+	//
+	// Name is a required field
+	Name *string `type:"string" required:"true"`
+
+	// Asymmetric KMS key from Key Management Service. The KMS key must have a key
+	// usage of sign and verify, and support the RSASSA-PSS SHA-256 signing algorithm.
+	SignKey *string `type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s Issuer) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s Issuer) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *Issuer) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "Issuer"}
+	if s.Name == nil {
+		invalidParams.Add(request.NewErrParamRequired("Name"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetName sets the Name field's value.
+func (s *Issuer) SetName(v string) *Issuer {
+	s.Name = &v
+	return s
+}
+
+// SetSignKey sets the SignKey field's value.
+func (s *Issuer) SetSignKey(v string) *Issuer {
+	s.SignKey = &v
+	return s
+}
+
+// Details associated with the issuer of a license.
+type IssuerDetails struct {
+	_ struct{} `type:"structure"`
+
+	// Issuer key fingerprint.
+	KeyFingerprint *string `type:"string"`
+
+	// Issuer name.
+	Name *string `type:"string"`
+
+	// Asymmetric KMS key from Key Management Service. The KMS key must have a key
+	// usage of sign and verify, and support the RSASSA-PSS SHA-256 signing algorithm.
+	SignKey *string `type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s IssuerDetails) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s IssuerDetails) GoString() string {
+	return s.String()
+}
+
+// SetKeyFingerprint sets the KeyFingerprint field's value.
+func (s *IssuerDetails) SetKeyFingerprint(v string) *IssuerDetails {
+	s.KeyFingerprint = &v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *IssuerDetails) SetName(v string) *IssuerDetails {
+	s.Name = &v
+	return s
+}
+
+// SetSignKey sets the SignKey field's value.
+func (s *IssuerDetails) SetSignKey(v string) *IssuerDetails {
+	s.SignKey = &v
+	return s
+}
+
+// Software license that is managed in License Manager.
+type License struct {
+	_ struct{} `type:"structure"`
+
+	// License beneficiary.
+	Beneficiary *string `type:"string"`
+
+	// Configuration for consumption of the license.
+	ConsumptionConfiguration *ConsumptionConfiguration `type:"structure"`
+
+	// License creation time.
+	CreateTime *string `type:"string"`
+
+	// License entitlements.
+	Entitlements []*Entitlement `type:"list"`
+
+	// Home Region of the license.
+	HomeRegion *string `type:"string"`
+
+	// License issuer.
+	Issuer *IssuerDetails `type:"structure"`
+
+	// Amazon Resource Name (ARN) of the license.
+	LicenseArn *string `type:"string"`
+
+	// License metadata.
+	LicenseMetadata []*Metadata `type:"list"`
+
+	// License name.
+	LicenseName *string `type:"string"`
+
+	// Product name.
+	ProductName *string `type:"string"`
+
+	// Product SKU.
+	ProductSKU *string `type:"string"`
+
+	// License status.
+	Status *string `type:"string" enum:"LicenseStatus"`
+
+	// Date and time range during which the license is valid, in ISO8601-UTC format.
+	Validity *DatetimeRange `type:"structure"`
+
+	// License version.
+	Version *string `type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s License) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s License) GoString() string {
+	return s.String()
+}
+
+// SetBeneficiary sets the Beneficiary field's value.
+func (s *License) SetBeneficiary(v string) *License {
+	s.Beneficiary = &v
+	return s
+}
+
+// SetConsumptionConfiguration sets the ConsumptionConfiguration field's value.
+func (s *License) SetConsumptionConfiguration(v *ConsumptionConfiguration) *License {
+	s.ConsumptionConfiguration = v
+	return s
+}
+
+// SetCreateTime sets the CreateTime field's value.
+func (s *License) SetCreateTime(v string) *License {
+	s.CreateTime = &v
+	return s
+}
+
+// SetEntitlements sets the Entitlements field's value.
+func (s *License) SetEntitlements(v []*Entitlement) *License {
+	s.Entitlements = v
+	return s
+}
+
+// SetHomeRegion sets the HomeRegion field's value.
+func (s *License) SetHomeRegion(v string) *License {
+	s.HomeRegion = &v
+	return s
+}
+
+// SetIssuer sets the Issuer field's value.
+func (s *License) SetIssuer(v *IssuerDetails) *License {
+	s.Issuer = v
+	return s
+}
+
+// SetLicenseArn sets the LicenseArn field's value.
+func (s *License) SetLicenseArn(v string) *License {
+	s.LicenseArn = &v
+	return s
+}
+
+// SetLicenseMetadata sets the LicenseMetadata field's value.
+func (s *License) SetLicenseMetadata(v []*Metadata) *License {
+	s.LicenseMetadata = v
+	return s
+}
+
+// SetLicenseName sets the LicenseName field's value.
+func (s *License) SetLicenseName(v string) *License {
+	s.LicenseName = &v
+	return s
+}
+
+// SetProductName sets the ProductName field's value.
+func (s *License) SetProductName(v string) *License {
+	s.ProductName = &v
+	return s
+}
+
+// SetProductSKU sets the ProductSKU field's value.
+func (s *License) SetProductSKU(v string) *License {
+	s.ProductSKU = &v
+	return s
+}
+
+// SetStatus sets the Status field's value.
+func (s *License) SetStatus(v string) *License {
+	s.Status = &v
+	return s
+}
+
+// SetValidity sets the Validity field's value.
+func (s *License) SetValidity(v *DatetimeRange) *License {
+	s.Validity = v
+	return s
+}
+
+// SetVersion sets the Version field's value.
+func (s *License) SetVersion(v string) *License {
+	s.Version = &v
+	return s
+}
+
 // A license configuration is an abstraction of a customer license agreement
 // that can be consumed and enforced by License Manager. Components include
 // specifications for the license type (licensing by instance, socket, CPU,
@@ -2532,6 +9856,9 @@ type LicenseConfiguration struct {
 
 	// Description of the license configuration.
 	Description *string `type:"string"`
+
+	// When true, disassociates a resource when software is uninstalled.
+	DisassociateWhenNotFound *bool `type:"boolean"`
 
 	// Amazon Resource Name (ARN) of the license configuration.
 	LicenseConfigurationArn *string `type:"string"`
@@ -2567,12 +9894,20 @@ type LicenseConfiguration struct {
 	Status *string `type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s LicenseConfiguration) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s LicenseConfiguration) GoString() string {
 	return s.String()
 }
@@ -2598,6 +9933,12 @@ func (s *LicenseConfiguration) SetConsumedLicenses(v int64) *LicenseConfiguratio
 // SetDescription sets the Description field's value.
 func (s *LicenseConfiguration) SetDescription(v string) *LicenseConfiguration {
 	s.Description = &v
+	return s
+}
+
+// SetDisassociateWhenNotFound sets the DisassociateWhenNotFound field's value.
+func (s *LicenseConfiguration) SetDisassociateWhenNotFound(v bool) *LicenseConfiguration {
+	s.DisassociateWhenNotFound = &v
 	return s
 }
 
@@ -2671,27 +10012,44 @@ func (s *LicenseConfiguration) SetStatus(v string) *LicenseConfiguration {
 type LicenseConfigurationAssociation struct {
 	_ struct{} `type:"structure"`
 
+	// Scope of AMI associations. The possible value is cross-account.
+	AmiAssociationScope *string `type:"string"`
+
 	// Time when the license configuration was associated with the resource.
 	AssociationTime *time.Time `type:"timestamp"`
 
 	// Amazon Resource Name (ARN) of the resource.
 	ResourceArn *string `type:"string"`
 
-	// ID of the AWS account that owns the resource consuming licenses.
+	// ID of the Amazon Web Services account that owns the resource consuming licenses.
 	ResourceOwnerId *string `type:"string"`
 
 	// Type of server resource.
 	ResourceType *string `type:"string" enum:"ResourceType"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s LicenseConfigurationAssociation) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s LicenseConfigurationAssociation) GoString() string {
 	return s.String()
+}
+
+// SetAmiAssociationScope sets the AmiAssociationScope field's value.
+func (s *LicenseConfigurationAssociation) SetAmiAssociationScope(v string) *LicenseConfigurationAssociation {
+	s.AmiAssociationScope = &v
+	return s
 }
 
 // SetAssociationTime sets the AssociationTime field's value.
@@ -2741,12 +10099,20 @@ type LicenseConfigurationUsage struct {
 	ResourceType *string `type:"string" enum:"ResourceType"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s LicenseConfigurationUsage) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s LicenseConfigurationUsage) GoString() string {
 	return s.String()
 }
@@ -2787,6 +10153,146 @@ func (s *LicenseConfigurationUsage) SetResourceType(v string) *LicenseConfigurat
 	return s
 }
 
+// Information about a license type conversion task.
+type LicenseConversionContext struct {
+	_ struct{} `type:"structure"`
+
+	// The Usage operation value that corresponds to the license type you are converting
+	// your resource from. For more information about which platforms correspond
+	// to which usage operation values see Sample data: usage operation by platform
+	// (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/billing-info-fields.html#billing-info)
+	UsageOperation *string `type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s LicenseConversionContext) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s LicenseConversionContext) GoString() string {
+	return s.String()
+}
+
+// SetUsageOperation sets the UsageOperation field's value.
+func (s *LicenseConversionContext) SetUsageOperation(v string) *LicenseConversionContext {
+	s.UsageOperation = &v
+	return s
+}
+
+// Information about a license type conversion task.
+type LicenseConversionTask struct {
+	_ struct{} `type:"structure"`
+
+	// Information about the license type this conversion task converted to.
+	DestinationLicenseContext *LicenseConversionContext `type:"structure"`
+
+	// The time the conversion task was completed.
+	EndTime *time.Time `type:"timestamp"`
+
+	// The ID of the license type conversion task.
+	LicenseConversionTaskId *string `type:"string"`
+
+	// The time the usage operation value of the resource was changed.
+	LicenseConversionTime *time.Time `type:"timestamp"`
+
+	// The Amazon Resource Name (ARN) of the resource associated with the license
+	// type conversion task.
+	ResourceArn *string `type:"string"`
+
+	// Information about the license type this conversion task converted from.
+	SourceLicenseContext *LicenseConversionContext `type:"structure"`
+
+	// The time the conversion task was started at.
+	StartTime *time.Time `type:"timestamp"`
+
+	// The status of the conversion task.
+	Status *string `type:"string" enum:"LicenseConversionTaskStatus"`
+
+	// The status message for the conversion task.
+	StatusMessage *string `type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s LicenseConversionTask) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s LicenseConversionTask) GoString() string {
+	return s.String()
+}
+
+// SetDestinationLicenseContext sets the DestinationLicenseContext field's value.
+func (s *LicenseConversionTask) SetDestinationLicenseContext(v *LicenseConversionContext) *LicenseConversionTask {
+	s.DestinationLicenseContext = v
+	return s
+}
+
+// SetEndTime sets the EndTime field's value.
+func (s *LicenseConversionTask) SetEndTime(v time.Time) *LicenseConversionTask {
+	s.EndTime = &v
+	return s
+}
+
+// SetLicenseConversionTaskId sets the LicenseConversionTaskId field's value.
+func (s *LicenseConversionTask) SetLicenseConversionTaskId(v string) *LicenseConversionTask {
+	s.LicenseConversionTaskId = &v
+	return s
+}
+
+// SetLicenseConversionTime sets the LicenseConversionTime field's value.
+func (s *LicenseConversionTask) SetLicenseConversionTime(v time.Time) *LicenseConversionTask {
+	s.LicenseConversionTime = &v
+	return s
+}
+
+// SetResourceArn sets the ResourceArn field's value.
+func (s *LicenseConversionTask) SetResourceArn(v string) *LicenseConversionTask {
+	s.ResourceArn = &v
+	return s
+}
+
+// SetSourceLicenseContext sets the SourceLicenseContext field's value.
+func (s *LicenseConversionTask) SetSourceLicenseContext(v *LicenseConversionContext) *LicenseConversionTask {
+	s.SourceLicenseContext = v
+	return s
+}
+
+// SetStartTime sets the StartTime field's value.
+func (s *LicenseConversionTask) SetStartTime(v time.Time) *LicenseConversionTask {
+	s.StartTime = &v
+	return s
+}
+
+// SetStatus sets the Status field's value.
+func (s *LicenseConversionTask) SetStatus(v string) *LicenseConversionTask {
+	s.Status = &v
+	return s
+}
+
+// SetStatusMessage sets the StatusMessage field's value.
+func (s *LicenseConversionTask) SetStatusMessage(v string) *LicenseConversionTask {
+	s.StatusMessage = &v
+	return s
+}
+
 // Describes the failure of a license operation.
 type LicenseOperationFailure struct {
 	_ struct{} `type:"structure"`
@@ -2809,19 +10315,27 @@ type LicenseOperationFailure struct {
 	// Amazon Resource Name (ARN) of the resource.
 	ResourceArn *string `type:"string"`
 
-	// ID of the AWS account that owns the resource.
+	// ID of the Amazon Web Services account that owns the resource.
 	ResourceOwnerId *string `type:"string"`
 
 	// Resource type.
 	ResourceType *string `type:"string" enum:"ResourceType"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s LicenseOperationFailure) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s LicenseOperationFailure) GoString() string {
 	return s.String()
 }
@@ -2878,18 +10392,29 @@ func (s *LicenseOperationFailure) SetResourceType(v string) *LicenseOperationFai
 type LicenseSpecification struct {
 	_ struct{} `type:"structure"`
 
+	// Scope of AMI associations. The possible value is cross-account.
+	AmiAssociationScope *string `type:"string"`
+
 	// Amazon Resource Name (ARN) of the license configuration.
 	//
 	// LicenseConfigurationArn is a required field
 	LicenseConfigurationArn *string `type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s LicenseSpecification) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s LicenseSpecification) GoString() string {
 	return s.String()
 }
@@ -2907,9 +10432,47 @@ func (s *LicenseSpecification) Validate() error {
 	return nil
 }
 
+// SetAmiAssociationScope sets the AmiAssociationScope field's value.
+func (s *LicenseSpecification) SetAmiAssociationScope(v string) *LicenseSpecification {
+	s.AmiAssociationScope = &v
+	return s
+}
+
 // SetLicenseConfigurationArn sets the LicenseConfigurationArn field's value.
 func (s *LicenseSpecification) SetLicenseConfigurationArn(v string) *LicenseSpecification {
 	s.LicenseConfigurationArn = &v
+	return s
+}
+
+// Describes the entitlement usage associated with a license.
+type LicenseUsage struct {
+	_ struct{} `type:"structure"`
+
+	// License entitlement usages.
+	EntitlementUsages []*EntitlementUsage `type:"list"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s LicenseUsage) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s LicenseUsage) GoString() string {
+	return s.String()
+}
+
+// SetEntitlementUsages sets the EntitlementUsages field's value.
+func (s *LicenseUsage) SetEntitlementUsages(v []*EntitlementUsage) *LicenseUsage {
+	s.EntitlementUsages = v
 	return s
 }
 
@@ -2921,12 +10484,20 @@ type LicenseUsageException struct {
 	Message_ *string `locationName:"Message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s LicenseUsageException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s LicenseUsageException) GoString() string {
 	return s.String()
 }
@@ -2984,12 +10555,20 @@ type ListAssociationsForLicenseConfigurationInput struct {
 	NextToken *string `type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListAssociationsForLicenseConfigurationInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListAssociationsForLicenseConfigurationInput) GoString() string {
 	return s.String()
 }
@@ -3035,12 +10614,20 @@ type ListAssociationsForLicenseConfigurationOutput struct {
 	NextToken *string `type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListAssociationsForLicenseConfigurationOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListAssociationsForLicenseConfigurationOutput) GoString() string {
 	return s.String()
 }
@@ -3053,6 +10640,127 @@ func (s *ListAssociationsForLicenseConfigurationOutput) SetLicenseConfigurationA
 
 // SetNextToken sets the NextToken field's value.
 func (s *ListAssociationsForLicenseConfigurationOutput) SetNextToken(v string) *ListAssociationsForLicenseConfigurationOutput {
+	s.NextToken = &v
+	return s
+}
+
+type ListDistributedGrantsInput struct {
+	_ struct{} `type:"structure"`
+
+	// Filters to scope the results. The following filters are supported:
+	//
+	//    * LicenseArn
+	//
+	//    * GrantStatus
+	//
+	//    * GranteePrincipalARN
+	//
+	//    * ProductSKU
+	//
+	//    * LicenseIssuerName
+	Filters []*Filter `type:"list"`
+
+	// Amazon Resource Names (ARNs) of the grants.
+	GrantArns []*string `type:"list"`
+
+	// Maximum number of results to return in a single call.
+	MaxResults *int64 `min:"1" type:"integer"`
+
+	// Token for the next set of results.
+	NextToken *string `type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListDistributedGrantsInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListDistributedGrantsInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ListDistributedGrantsInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ListDistributedGrantsInput"}
+	if s.MaxResults != nil && *s.MaxResults < 1 {
+		invalidParams.Add(request.NewErrParamMinValue("MaxResults", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetFilters sets the Filters field's value.
+func (s *ListDistributedGrantsInput) SetFilters(v []*Filter) *ListDistributedGrantsInput {
+	s.Filters = v
+	return s
+}
+
+// SetGrantArns sets the GrantArns field's value.
+func (s *ListDistributedGrantsInput) SetGrantArns(v []*string) *ListDistributedGrantsInput {
+	s.GrantArns = v
+	return s
+}
+
+// SetMaxResults sets the MaxResults field's value.
+func (s *ListDistributedGrantsInput) SetMaxResults(v int64) *ListDistributedGrantsInput {
+	s.MaxResults = &v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListDistributedGrantsInput) SetNextToken(v string) *ListDistributedGrantsInput {
+	s.NextToken = &v
+	return s
+}
+
+type ListDistributedGrantsOutput struct {
+	_ struct{} `type:"structure"`
+
+	// Distributed grant details.
+	Grants []*Grant `type:"list"`
+
+	// Token for the next set of results.
+	NextToken *string `type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListDistributedGrantsOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListDistributedGrantsOutput) GoString() string {
+	return s.String()
+}
+
+// SetGrants sets the Grants field's value.
+func (s *ListDistributedGrantsOutput) SetGrants(v []*Grant) *ListDistributedGrantsOutput {
+	s.Grants = v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListDistributedGrantsOutput) SetNextToken(v string) *ListDistributedGrantsOutput {
 	s.NextToken = &v
 	return s
 }
@@ -3072,12 +10780,20 @@ type ListFailuresForLicenseConfigurationOperationsInput struct {
 	NextToken *string `type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListFailuresForLicenseConfigurationOperationsInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListFailuresForLicenseConfigurationOperationsInput) GoString() string {
 	return s.String()
 }
@@ -3123,12 +10839,20 @@ type ListFailuresForLicenseConfigurationOperationsOutput struct {
 	NextToken *string `type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListFailuresForLicenseConfigurationOperationsOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListFailuresForLicenseConfigurationOperationsOutput) GoString() string {
 	return s.String()
 }
@@ -3151,9 +10875,9 @@ type ListLicenseConfigurationsInput struct {
 	// Filters to scope the results. The following filters and logical operators
 	// are supported:
 	//
-	//    * licenseCountingType - The dimension on which licenses are counted. Possible
-	//    values are vCPU | Instance | Core | Socket. Logical operators are EQUALS
-	//    | NOT_EQUALS.
+	//    * licenseCountingType - The dimension for which licenses are counted.
+	//    Possible values are vCPU | Instance | Core | Socket. Logical operators
+	//    are EQUALS | NOT_EQUALS.
 	//
 	//    * enforceLicenseCount - A Boolean value that indicates whether hard license
 	//    enforcement is used. Logical operators are EQUALS | NOT_EQUALS.
@@ -3172,12 +10896,20 @@ type ListLicenseConfigurationsInput struct {
 	NextToken *string `type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListLicenseConfigurationsInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListLicenseConfigurationsInput) GoString() string {
 	return s.String()
 }
@@ -3216,12 +10948,20 @@ type ListLicenseConfigurationsOutput struct {
 	NextToken *string `type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListLicenseConfigurationsOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListLicenseConfigurationsOutput) GoString() string {
 	return s.String()
 }
@@ -3235,6 +10975,199 @@ func (s *ListLicenseConfigurationsOutput) SetLicenseConfigurations(v []*LicenseC
 // SetNextToken sets the NextToken field's value.
 func (s *ListLicenseConfigurationsOutput) SetNextToken(v string) *ListLicenseConfigurationsOutput {
 	s.NextToken = &v
+	return s
+}
+
+type ListLicenseConversionTasksInput struct {
+	_ struct{} `type:"structure"`
+
+	// Filters to scope the results. Valid filters are ResourceArns and Status.
+	Filters []*Filter `type:"list"`
+
+	// Maximum number of results to return in a single call.
+	MaxResults *int64 `type:"integer"`
+
+	// Token for the next set of results.
+	NextToken *string `type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListLicenseConversionTasksInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListLicenseConversionTasksInput) GoString() string {
+	return s.String()
+}
+
+// SetFilters sets the Filters field's value.
+func (s *ListLicenseConversionTasksInput) SetFilters(v []*Filter) *ListLicenseConversionTasksInput {
+	s.Filters = v
+	return s
+}
+
+// SetMaxResults sets the MaxResults field's value.
+func (s *ListLicenseConversionTasksInput) SetMaxResults(v int64) *ListLicenseConversionTasksInput {
+	s.MaxResults = &v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListLicenseConversionTasksInput) SetNextToken(v string) *ListLicenseConversionTasksInput {
+	s.NextToken = &v
+	return s
+}
+
+type ListLicenseConversionTasksOutput struct {
+	_ struct{} `type:"structure"`
+
+	// Information about the license configuration tasks for your account.
+	LicenseConversionTasks []*LicenseConversionTask `type:"list"`
+
+	// Token for the next set of results.
+	NextToken *string `type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListLicenseConversionTasksOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListLicenseConversionTasksOutput) GoString() string {
+	return s.String()
+}
+
+// SetLicenseConversionTasks sets the LicenseConversionTasks field's value.
+func (s *ListLicenseConversionTasksOutput) SetLicenseConversionTasks(v []*LicenseConversionTask) *ListLicenseConversionTasksOutput {
+	s.LicenseConversionTasks = v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListLicenseConversionTasksOutput) SetNextToken(v string) *ListLicenseConversionTasksOutput {
+	s.NextToken = &v
+	return s
+}
+
+type ListLicenseManagerReportGeneratorsInput struct {
+	_ struct{} `type:"structure"`
+
+	// Filters to scope the results. The following filters are supported:
+	//
+	//    * LicenseConfigurationArn
+	Filters []*Filter `type:"list"`
+
+	// Maximum number of results to return in a single call.
+	MaxResults *int64 `min:"1" type:"integer"`
+
+	// Token for the next set of results.
+	NextToken *string `type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListLicenseManagerReportGeneratorsInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListLicenseManagerReportGeneratorsInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ListLicenseManagerReportGeneratorsInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ListLicenseManagerReportGeneratorsInput"}
+	if s.MaxResults != nil && *s.MaxResults < 1 {
+		invalidParams.Add(request.NewErrParamMinValue("MaxResults", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetFilters sets the Filters field's value.
+func (s *ListLicenseManagerReportGeneratorsInput) SetFilters(v []*Filter) *ListLicenseManagerReportGeneratorsInput {
+	s.Filters = v
+	return s
+}
+
+// SetMaxResults sets the MaxResults field's value.
+func (s *ListLicenseManagerReportGeneratorsInput) SetMaxResults(v int64) *ListLicenseManagerReportGeneratorsInput {
+	s.MaxResults = &v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListLicenseManagerReportGeneratorsInput) SetNextToken(v string) *ListLicenseManagerReportGeneratorsInput {
+	s.NextToken = &v
+	return s
+}
+
+type ListLicenseManagerReportGeneratorsOutput struct {
+	_ struct{} `type:"structure"`
+
+	// Token for the next set of results.
+	NextToken *string `type:"string"`
+
+	// A report generator that creates periodic reports about your license configurations.
+	ReportGenerators []*ReportGenerator `type:"list"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListLicenseManagerReportGeneratorsOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListLicenseManagerReportGeneratorsOutput) GoString() string {
+	return s.String()
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListLicenseManagerReportGeneratorsOutput) SetNextToken(v string) *ListLicenseManagerReportGeneratorsOutput {
+	s.NextToken = &v
+	return s
+}
+
+// SetReportGenerators sets the ReportGenerators field's value.
+func (s *ListLicenseManagerReportGeneratorsOutput) SetReportGenerators(v []*ReportGenerator) *ListLicenseManagerReportGeneratorsOutput {
+	s.ReportGenerators = v
 	return s
 }
 
@@ -3253,12 +11186,20 @@ type ListLicenseSpecificationsForResourceInput struct {
 	ResourceArn *string `type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListLicenseSpecificationsForResourceInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListLicenseSpecificationsForResourceInput) GoString() string {
 	return s.String()
 }
@@ -3304,12 +11245,20 @@ type ListLicenseSpecificationsForResourceOutput struct {
 	NextToken *string `type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListLicenseSpecificationsForResourceOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListLicenseSpecificationsForResourceOutput) GoString() string {
 	return s.String()
 }
@@ -3326,14 +11275,482 @@ func (s *ListLicenseSpecificationsForResourceOutput) SetNextToken(v string) *Lis
 	return s
 }
 
+type ListLicenseVersionsInput struct {
+	_ struct{} `type:"structure"`
+
+	// Amazon Resource Name (ARN) of the license.
+	//
+	// LicenseArn is a required field
+	LicenseArn *string `type:"string" required:"true"`
+
+	// Maximum number of results to return in a single call.
+	MaxResults *int64 `min:"1" type:"integer"`
+
+	// Token for the next set of results.
+	NextToken *string `type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListLicenseVersionsInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListLicenseVersionsInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ListLicenseVersionsInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ListLicenseVersionsInput"}
+	if s.LicenseArn == nil {
+		invalidParams.Add(request.NewErrParamRequired("LicenseArn"))
+	}
+	if s.MaxResults != nil && *s.MaxResults < 1 {
+		invalidParams.Add(request.NewErrParamMinValue("MaxResults", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetLicenseArn sets the LicenseArn field's value.
+func (s *ListLicenseVersionsInput) SetLicenseArn(v string) *ListLicenseVersionsInput {
+	s.LicenseArn = &v
+	return s
+}
+
+// SetMaxResults sets the MaxResults field's value.
+func (s *ListLicenseVersionsInput) SetMaxResults(v int64) *ListLicenseVersionsInput {
+	s.MaxResults = &v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListLicenseVersionsInput) SetNextToken(v string) *ListLicenseVersionsInput {
+	s.NextToken = &v
+	return s
+}
+
+type ListLicenseVersionsOutput struct {
+	_ struct{} `type:"structure"`
+
+	// License details.
+	Licenses []*License `type:"list"`
+
+	// Token for the next set of results.
+	NextToken *string `type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListLicenseVersionsOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListLicenseVersionsOutput) GoString() string {
+	return s.String()
+}
+
+// SetLicenses sets the Licenses field's value.
+func (s *ListLicenseVersionsOutput) SetLicenses(v []*License) *ListLicenseVersionsOutput {
+	s.Licenses = v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListLicenseVersionsOutput) SetNextToken(v string) *ListLicenseVersionsOutput {
+	s.NextToken = &v
+	return s
+}
+
+type ListLicensesInput struct {
+	_ struct{} `type:"structure"`
+
+	// Filters to scope the results. The following filters are supported:
+	//
+	//    * Beneficiary
+	//
+	//    * ProductSKU
+	//
+	//    * Fingerprint
+	//
+	//    * Status
+	Filters []*Filter `type:"list"`
+
+	// Amazon Resource Names (ARNs) of the licenses.
+	LicenseArns []*string `type:"list"`
+
+	// Maximum number of results to return in a single call.
+	MaxResults *int64 `min:"1" type:"integer"`
+
+	// Token for the next set of results.
+	NextToken *string `type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListLicensesInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListLicensesInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ListLicensesInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ListLicensesInput"}
+	if s.MaxResults != nil && *s.MaxResults < 1 {
+		invalidParams.Add(request.NewErrParamMinValue("MaxResults", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetFilters sets the Filters field's value.
+func (s *ListLicensesInput) SetFilters(v []*Filter) *ListLicensesInput {
+	s.Filters = v
+	return s
+}
+
+// SetLicenseArns sets the LicenseArns field's value.
+func (s *ListLicensesInput) SetLicenseArns(v []*string) *ListLicensesInput {
+	s.LicenseArns = v
+	return s
+}
+
+// SetMaxResults sets the MaxResults field's value.
+func (s *ListLicensesInput) SetMaxResults(v int64) *ListLicensesInput {
+	s.MaxResults = &v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListLicensesInput) SetNextToken(v string) *ListLicensesInput {
+	s.NextToken = &v
+	return s
+}
+
+type ListLicensesOutput struct {
+	_ struct{} `type:"structure"`
+
+	// License details.
+	Licenses []*License `type:"list"`
+
+	// Token for the next set of results.
+	NextToken *string `type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListLicensesOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListLicensesOutput) GoString() string {
+	return s.String()
+}
+
+// SetLicenses sets the Licenses field's value.
+func (s *ListLicensesOutput) SetLicenses(v []*License) *ListLicensesOutput {
+	s.Licenses = v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListLicensesOutput) SetNextToken(v string) *ListLicensesOutput {
+	s.NextToken = &v
+	return s
+}
+
+type ListReceivedGrantsInput struct {
+	_ struct{} `type:"structure"`
+
+	// Filters to scope the results. The following filters are supported:
+	//
+	//    * ProductSKU
+	//
+	//    * LicenseIssuerName
+	//
+	//    * LicenseArn
+	//
+	//    * GrantStatus
+	//
+	//    * GranterAccountId
+	Filters []*Filter `type:"list"`
+
+	// Amazon Resource Names (ARNs) of the grants.
+	GrantArns []*string `type:"list"`
+
+	// Maximum number of results to return in a single call.
+	MaxResults *int64 `min:"1" type:"integer"`
+
+	// Token for the next set of results.
+	NextToken *string `type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListReceivedGrantsInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListReceivedGrantsInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ListReceivedGrantsInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ListReceivedGrantsInput"}
+	if s.MaxResults != nil && *s.MaxResults < 1 {
+		invalidParams.Add(request.NewErrParamMinValue("MaxResults", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetFilters sets the Filters field's value.
+func (s *ListReceivedGrantsInput) SetFilters(v []*Filter) *ListReceivedGrantsInput {
+	s.Filters = v
+	return s
+}
+
+// SetGrantArns sets the GrantArns field's value.
+func (s *ListReceivedGrantsInput) SetGrantArns(v []*string) *ListReceivedGrantsInput {
+	s.GrantArns = v
+	return s
+}
+
+// SetMaxResults sets the MaxResults field's value.
+func (s *ListReceivedGrantsInput) SetMaxResults(v int64) *ListReceivedGrantsInput {
+	s.MaxResults = &v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListReceivedGrantsInput) SetNextToken(v string) *ListReceivedGrantsInput {
+	s.NextToken = &v
+	return s
+}
+
+type ListReceivedGrantsOutput struct {
+	_ struct{} `type:"structure"`
+
+	// Received grant details.
+	Grants []*Grant `type:"list"`
+
+	// Token for the next set of results.
+	NextToken *string `type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListReceivedGrantsOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListReceivedGrantsOutput) GoString() string {
+	return s.String()
+}
+
+// SetGrants sets the Grants field's value.
+func (s *ListReceivedGrantsOutput) SetGrants(v []*Grant) *ListReceivedGrantsOutput {
+	s.Grants = v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListReceivedGrantsOutput) SetNextToken(v string) *ListReceivedGrantsOutput {
+	s.NextToken = &v
+	return s
+}
+
+type ListReceivedLicensesInput struct {
+	_ struct{} `type:"structure"`
+
+	// Filters to scope the results. The following filters are supported:
+	//
+	//    * ProductSKU
+	//
+	//    * Status
+	//
+	//    * Fingerprint
+	//
+	//    * IssuerName
+	//
+	//    * Beneficiary
+	Filters []*Filter `type:"list"`
+
+	// Amazon Resource Names (ARNs) of the licenses.
+	LicenseArns []*string `type:"list"`
+
+	// Maximum number of results to return in a single call.
+	MaxResults *int64 `min:"1" type:"integer"`
+
+	// Token for the next set of results.
+	NextToken *string `type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListReceivedLicensesInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListReceivedLicensesInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ListReceivedLicensesInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ListReceivedLicensesInput"}
+	if s.MaxResults != nil && *s.MaxResults < 1 {
+		invalidParams.Add(request.NewErrParamMinValue("MaxResults", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetFilters sets the Filters field's value.
+func (s *ListReceivedLicensesInput) SetFilters(v []*Filter) *ListReceivedLicensesInput {
+	s.Filters = v
+	return s
+}
+
+// SetLicenseArns sets the LicenseArns field's value.
+func (s *ListReceivedLicensesInput) SetLicenseArns(v []*string) *ListReceivedLicensesInput {
+	s.LicenseArns = v
+	return s
+}
+
+// SetMaxResults sets the MaxResults field's value.
+func (s *ListReceivedLicensesInput) SetMaxResults(v int64) *ListReceivedLicensesInput {
+	s.MaxResults = &v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListReceivedLicensesInput) SetNextToken(v string) *ListReceivedLicensesInput {
+	s.NextToken = &v
+	return s
+}
+
+type ListReceivedLicensesOutput struct {
+	_ struct{} `type:"structure"`
+
+	// Received license details.
+	Licenses []*GrantedLicense `type:"list"`
+
+	// Token for the next set of results.
+	NextToken *string `type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListReceivedLicensesOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListReceivedLicensesOutput) GoString() string {
+	return s.String()
+}
+
+// SetLicenses sets the Licenses field's value.
+func (s *ListReceivedLicensesOutput) SetLicenses(v []*GrantedLicense) *ListReceivedLicensesOutput {
+	s.Licenses = v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListReceivedLicensesOutput) SetNextToken(v string) *ListReceivedLicensesOutput {
+	s.NextToken = &v
+	return s
+}
+
 type ListResourceInventoryInput struct {
 	_ struct{} `type:"structure"`
 
 	// Filters to scope the results. The following filters and logical operators
 	// are supported:
 	//
-	//    * account_id - The ID of the AWS account that owns the resource. Logical
-	//    operators are EQUALS | NOT_EQUALS.
+	//    * account_id - The ID of the Amazon Web Services account that owns the
+	//    resource. Logical operators are EQUALS | NOT_EQUALS.
 	//
 	//    * application_name - The name of the application. Logical operators are
 	//    EQUALS | BEGINS_WITH.
@@ -3347,6 +11764,10 @@ type ListResourceInventoryInput struct {
 	//
 	//    * resource_id - The ID of the resource. Logical operators are EQUALS |
 	//    NOT_EQUALS.
+	//
+	//    * tag:<key> - The key/value combination of a tag assigned to the resource.
+	//    Logical operators are EQUALS (single account) or EQUALS | NOT_EQUALS (cross
+	//    account).
 	Filters []*InventoryFilter `type:"list"`
 
 	// Maximum number of results to return in a single call.
@@ -3356,12 +11777,20 @@ type ListResourceInventoryInput struct {
 	NextToken *string `type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListResourceInventoryInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListResourceInventoryInput) GoString() string {
 	return s.String()
 }
@@ -3414,12 +11843,20 @@ type ListResourceInventoryOutput struct {
 	ResourceInventoryList []*ResourceInventory `type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListResourceInventoryOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListResourceInventoryOutput) GoString() string {
 	return s.String()
 }
@@ -3445,12 +11882,20 @@ type ListTagsForResourceInput struct {
 	ResourceArn *string `type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListTagsForResourceInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListTagsForResourceInput) GoString() string {
 	return s.String()
 }
@@ -3481,12 +11926,20 @@ type ListTagsForResourceOutput struct {
 	Tags []*Tag `type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListTagsForResourceOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListTagsForResourceOutput) GoString() string {
 	return s.String()
 }
@@ -3494,6 +11947,119 @@ func (s ListTagsForResourceOutput) GoString() string {
 // SetTags sets the Tags field's value.
 func (s *ListTagsForResourceOutput) SetTags(v []*Tag) *ListTagsForResourceOutput {
 	s.Tags = v
+	return s
+}
+
+type ListTokensInput struct {
+	_ struct{} `type:"structure"`
+
+	// Filters to scope the results. The following filter is supported:
+	//
+	//    * LicenseArns
+	Filters []*Filter `type:"list"`
+
+	// Maximum number of results to return in a single call.
+	MaxResults *int64 `min:"1" type:"integer"`
+
+	// Token for the next set of results.
+	NextToken *string `type:"string"`
+
+	// Token IDs.
+	TokenIds []*string `type:"list"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListTokensInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListTokensInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ListTokensInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ListTokensInput"}
+	if s.MaxResults != nil && *s.MaxResults < 1 {
+		invalidParams.Add(request.NewErrParamMinValue("MaxResults", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetFilters sets the Filters field's value.
+func (s *ListTokensInput) SetFilters(v []*Filter) *ListTokensInput {
+	s.Filters = v
+	return s
+}
+
+// SetMaxResults sets the MaxResults field's value.
+func (s *ListTokensInput) SetMaxResults(v int64) *ListTokensInput {
+	s.MaxResults = &v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListTokensInput) SetNextToken(v string) *ListTokensInput {
+	s.NextToken = &v
+	return s
+}
+
+// SetTokenIds sets the TokenIds field's value.
+func (s *ListTokensInput) SetTokenIds(v []*string) *ListTokensInput {
+	s.TokenIds = v
+	return s
+}
+
+type ListTokensOutput struct {
+	_ struct{} `type:"structure"`
+
+	// Token for the next set of results.
+	NextToken *string `type:"string"`
+
+	// Received token details.
+	Tokens []*TokenData `type:"list"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListTokensOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListTokensOutput) GoString() string {
+	return s.String()
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListTokensOutput) SetNextToken(v string) *ListTokensOutput {
+	s.NextToken = &v
+	return s
+}
+
+// SetTokens sets the Tokens field's value.
+func (s *ListTokensOutput) SetTokens(v []*TokenData) *ListTokensOutput {
+	s.Tokens = v
 	return s
 }
 
@@ -3525,12 +12091,20 @@ type ListUsageForLicenseConfigurationInput struct {
 	NextToken *string `type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListUsageForLicenseConfigurationInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListUsageForLicenseConfigurationInput) GoString() string {
 	return s.String()
 }
@@ -3582,12 +12156,20 @@ type ListUsageForLicenseConfigurationOutput struct {
 	NextToken *string `type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListUsageForLicenseConfigurationOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListUsageForLicenseConfigurationOutput) GoString() string {
 	return s.String()
 }
@@ -3615,12 +12197,20 @@ type ManagedResourceSummary struct {
 	ResourceType *string `type:"string" enum:"ResourceType"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ManagedResourceSummary) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ManagedResourceSummary) GoString() string {
 	return s.String()
 }
@@ -3637,23 +12227,31 @@ func (s *ManagedResourceSummary) SetResourceType(v string) *ManagedResourceSumma
 	return s
 }
 
-// Reserved.
+// Describes key/value pairs.
 type Metadata struct {
 	_ struct{} `type:"structure"`
 
-	// Reserved.
+	// The key name.
 	Name *string `type:"string"`
 
-	// Reserved.
+	// The value.
 	Value *string `type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s Metadata) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s Metadata) GoString() string {
 	return s.String()
 }
@@ -3670,22 +12268,95 @@ func (s *Metadata) SetValue(v string) *Metadata {
 	return s
 }
 
-// Configuration information for AWS Organizations.
+// There are no entitlements found for this license, or the entitlement maximum
+// count is reached.
+type NoEntitlementsAllowedException struct {
+	_            struct{}                  `type:"structure"`
+	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
+
+	Message_ *string `locationName:"Message" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s NoEntitlementsAllowedException) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s NoEntitlementsAllowedException) GoString() string {
+	return s.String()
+}
+
+func newErrorNoEntitlementsAllowedException(v protocol.ResponseMetadata) error {
+	return &NoEntitlementsAllowedException{
+		RespMetadata: v,
+	}
+}
+
+// Code returns the exception type name.
+func (s *NoEntitlementsAllowedException) Code() string {
+	return "NoEntitlementsAllowedException"
+}
+
+// Message returns the exception's message.
+func (s *NoEntitlementsAllowedException) Message() string {
+	if s.Message_ != nil {
+		return *s.Message_
+	}
+	return ""
+}
+
+// OrigErr always returns nil, satisfies awserr.Error interface.
+func (s *NoEntitlementsAllowedException) OrigErr() error {
+	return nil
+}
+
+func (s *NoEntitlementsAllowedException) Error() string {
+	return fmt.Sprintf("%s: %s", s.Code(), s.Message())
+}
+
+// Status code returns the HTTP status code for the request's response error.
+func (s *NoEntitlementsAllowedException) StatusCode() int {
+	return s.RespMetadata.StatusCode
+}
+
+// RequestID returns the service's response RequestID for request.
+func (s *NoEntitlementsAllowedException) RequestID() string {
+	return s.RespMetadata.RequestID
+}
+
+// Configuration information for Organizations.
 type OrganizationConfiguration struct {
 	_ struct{} `type:"structure"`
 
-	// Enables AWS Organization integration.
+	// Enables Organizations integration.
 	//
 	// EnableIntegration is a required field
 	EnableIntegration *bool `type:"boolean" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s OrganizationConfiguration) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s OrganizationConfiguration) GoString() string {
 	return s.String()
 }
@@ -3713,10 +12384,15 @@ func (s *OrganizationConfiguration) SetEnableIntegration(v bool) *OrganizationCo
 type ProductInformation struct {
 	_ struct{} `type:"structure"`
 
-	// Product information filters.
+	// A Product information filter consists of a ProductInformationFilterComparator
+	// which is a logical operator, a ProductInformationFilterName which specifies
+	// the type of filter being declared, and a ProductInformationFilterValue that
+	// specifies the value to filter on.
 	//
-	// The following filters and logical operators are supported when the resource
-	// type is SSM_MANAGED:
+	// Accepted values for ProductInformationFilterName are listed here along with
+	// descriptions and valid options for ProductInformationFilterComparator.
+	//
+	// The following filters and are supported when the resource type is SSM_MANAGED:
 	//
 	//    * Application Name - The name of the application. Logical operator is
 	//    EQUALS.
@@ -3730,6 +12406,15 @@ type ProductInformation struct {
 	//    * Platform Name - The name of the platform. Logical operator is EQUALS.
 	//
 	//    * Platform Type - The platform type. Logical operator is EQUALS.
+	//
+	//    * Tag:key - The key of a tag attached to an Amazon Web Services resource
+	//    you wish to exclude from automated discovery. Logical operator is NOT_EQUALS.
+	//    The key for your tag must be appended to Tag: following the example: Tag:name-of-your-key.
+	//    ProductInformationFilterValue is optional if you are not using values
+	//    for the key.
+	//
+	//    * AccountId - The 12-digit ID of an Amazon Web Services account you wish
+	//    to exclude from automated discovery. Logical operator is NOT_EQUALS.
 	//
 	//    * License Included - The type of license included. Logical operators are
 	//    EQUALS and NOT_EQUALS. Possible values are: sql-server-enterprise | sql-server-standard
@@ -3754,12 +12439,20 @@ type ProductInformation struct {
 	ResourceType *string `type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ProductInformation) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ProductInformation) GoString() string {
 	return s.String()
 }
@@ -3817,17 +12510,23 @@ type ProductInformationFilter struct {
 	ProductInformationFilterName *string `type:"string" required:"true"`
 
 	// Filter value.
-	//
-	// ProductInformationFilterValue is a required field
-	ProductInformationFilterValue []*string `type:"list" required:"true"`
+	ProductInformationFilterValue []*string `type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ProductInformationFilter) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ProductInformationFilter) GoString() string {
 	return s.String()
 }
@@ -3840,9 +12539,6 @@ func (s *ProductInformationFilter) Validate() error {
 	}
 	if s.ProductInformationFilterName == nil {
 		invalidParams.Add(request.NewErrParamRequired("ProductInformationFilterName"))
-	}
-	if s.ProductInformationFilterValue == nil {
-		invalidParams.Add(request.NewErrParamRequired("ProductInformationFilterValue"))
 	}
 
 	if invalidParams.Len() > 0 {
@@ -3869,6 +12565,53 @@ func (s *ProductInformationFilter) SetProductInformationFilterValue(v []*string)
 	return s
 }
 
+// Details about a provisional configuration.
+type ProvisionalConfiguration struct {
+	_ struct{} `type:"structure"`
+
+	// Maximum time for the provisional configuration, in minutes.
+	//
+	// MaxTimeToLiveInMinutes is a required field
+	MaxTimeToLiveInMinutes *int64 `type:"integer" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ProvisionalConfiguration) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ProvisionalConfiguration) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ProvisionalConfiguration) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ProvisionalConfiguration"}
+	if s.MaxTimeToLiveInMinutes == nil {
+		invalidParams.Add(request.NewErrParamRequired("MaxTimeToLiveInMinutes"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetMaxTimeToLiveInMinutes sets the MaxTimeToLiveInMinutes field's value.
+func (s *ProvisionalConfiguration) SetMaxTimeToLiveInMinutes(v int64) *ProvisionalConfiguration {
+	s.MaxTimeToLiveInMinutes = &v
+	return s
+}
+
 // Too many requests have been submitted. Try again after a brief wait.
 type RateLimitExceededException struct {
 	_            struct{}                  `type:"structure"`
@@ -3877,12 +12620,20 @@ type RateLimitExceededException struct {
 	Message_ *string `locationName:"Message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s RateLimitExceededException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s RateLimitExceededException) GoString() string {
 	return s.String()
 }
@@ -3925,6 +12676,447 @@ func (s *RateLimitExceededException) RequestID() string {
 	return s.RespMetadata.RequestID
 }
 
+// Metadata associated with received licenses and grants.
+type ReceivedMetadata struct {
+	_ struct{} `type:"structure"`
+
+	// Allowed operations.
+	AllowedOperations []*string `min:"1" type:"list"`
+
+	// Received status.
+	ReceivedStatus *string `type:"string" enum:"ReceivedStatus"`
+
+	// Received status reason.
+	ReceivedStatusReason *string `type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ReceivedMetadata) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ReceivedMetadata) GoString() string {
+	return s.String()
+}
+
+// SetAllowedOperations sets the AllowedOperations field's value.
+func (s *ReceivedMetadata) SetAllowedOperations(v []*string) *ReceivedMetadata {
+	s.AllowedOperations = v
+	return s
+}
+
+// SetReceivedStatus sets the ReceivedStatus field's value.
+func (s *ReceivedMetadata) SetReceivedStatus(v string) *ReceivedMetadata {
+	s.ReceivedStatus = &v
+	return s
+}
+
+// SetReceivedStatusReason sets the ReceivedStatusReason field's value.
+func (s *ReceivedMetadata) SetReceivedStatusReason(v string) *ReceivedMetadata {
+	s.ReceivedStatusReason = &v
+	return s
+}
+
+// This is not the correct Region for the resource. Try again.
+type RedirectException struct {
+	_            struct{}                  `type:"structure"`
+	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
+
+	Location *string `type:"string"`
+
+	Message_ *string `locationName:"Message" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s RedirectException) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s RedirectException) GoString() string {
+	return s.String()
+}
+
+func newErrorRedirectException(v protocol.ResponseMetadata) error {
+	return &RedirectException{
+		RespMetadata: v,
+	}
+}
+
+// Code returns the exception type name.
+func (s *RedirectException) Code() string {
+	return "RedirectException"
+}
+
+// Message returns the exception's message.
+func (s *RedirectException) Message() string {
+	if s.Message_ != nil {
+		return *s.Message_
+	}
+	return ""
+}
+
+// OrigErr always returns nil, satisfies awserr.Error interface.
+func (s *RedirectException) OrigErr() error {
+	return nil
+}
+
+func (s *RedirectException) Error() string {
+	return fmt.Sprintf("%s: %s\n%s", s.Code(), s.Message(), s.String())
+}
+
+// Status code returns the HTTP status code for the request's response error.
+func (s *RedirectException) StatusCode() int {
+	return s.RespMetadata.StatusCode
+}
+
+// RequestID returns the service's response RequestID for request.
+func (s *RedirectException) RequestID() string {
+	return s.RespMetadata.RequestID
+}
+
+type RejectGrantInput struct {
+	_ struct{} `type:"structure"`
+
+	// Amazon Resource Name (ARN) of the grant.
+	//
+	// GrantArn is a required field
+	GrantArn *string `type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s RejectGrantInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s RejectGrantInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *RejectGrantInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "RejectGrantInput"}
+	if s.GrantArn == nil {
+		invalidParams.Add(request.NewErrParamRequired("GrantArn"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetGrantArn sets the GrantArn field's value.
+func (s *RejectGrantInput) SetGrantArn(v string) *RejectGrantInput {
+	s.GrantArn = &v
+	return s
+}
+
+type RejectGrantOutput struct {
+	_ struct{} `type:"structure"`
+
+	// Grant ARN.
+	GrantArn *string `type:"string"`
+
+	// Grant status.
+	Status *string `type:"string" enum:"GrantStatus"`
+
+	// Grant version.
+	Version *string `type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s RejectGrantOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s RejectGrantOutput) GoString() string {
+	return s.String()
+}
+
+// SetGrantArn sets the GrantArn field's value.
+func (s *RejectGrantOutput) SetGrantArn(v string) *RejectGrantOutput {
+	s.GrantArn = &v
+	return s
+}
+
+// SetStatus sets the Status field's value.
+func (s *RejectGrantOutput) SetStatus(v string) *RejectGrantOutput {
+	s.Status = &v
+	return s
+}
+
+// SetVersion sets the Version field's value.
+func (s *RejectGrantOutput) SetVersion(v string) *RejectGrantOutput {
+	s.Version = &v
+	return s
+}
+
+// Details of the license configuration that this generator reports on.
+type ReportContext struct {
+	_ struct{} `type:"structure"`
+
+	// Amazon Resource Name (ARN) of the license configuration that this generator
+	// reports on.
+	//
+	// LicenseConfigurationArns is a required field
+	LicenseConfigurationArns []*string `locationName:"licenseConfigurationArns" type:"list" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ReportContext) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ReportContext) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ReportContext) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ReportContext"}
+	if s.LicenseConfigurationArns == nil {
+		invalidParams.Add(request.NewErrParamRequired("LicenseConfigurationArns"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetLicenseConfigurationArns sets the LicenseConfigurationArns field's value.
+func (s *ReportContext) SetLicenseConfigurationArns(v []*string) *ReportContext {
+	s.LicenseConfigurationArns = v
+	return s
+}
+
+// Details about how frequently reports are generated.
+type ReportFrequency struct {
+	_ struct{} `type:"structure"`
+
+	// Time period between each report. The period can be daily, weekly, or monthly.
+	Period *string `locationName:"period" type:"string" enum:"ReportFrequencyType"`
+
+	// Number of times within the frequency period that a report is generated. The
+	// only supported value is 1.
+	Value *int64 `locationName:"value" type:"integer"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ReportFrequency) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ReportFrequency) GoString() string {
+	return s.String()
+}
+
+// SetPeriod sets the Period field's value.
+func (s *ReportFrequency) SetPeriod(v string) *ReportFrequency {
+	s.Period = &v
+	return s
+}
+
+// SetValue sets the Value field's value.
+func (s *ReportFrequency) SetValue(v int64) *ReportFrequency {
+	s.Value = &v
+	return s
+}
+
+// Describe the details of a report generator.
+type ReportGenerator struct {
+	_ struct{} `type:"structure"`
+
+	// Time the report was created.
+	CreateTime *string `type:"string"`
+
+	// Description of the report generator.
+	Description *string `type:"string"`
+
+	// Time the last report was generated at.
+	LastReportGenerationTime *string `type:"string"`
+
+	// Failure message for the last report generation attempt.
+	LastRunFailureReason *string `type:"string"`
+
+	// Status of the last report generation attempt.
+	LastRunStatus *string `type:"string"`
+
+	// Amazon Resource Name (ARN) of the report generator.
+	LicenseManagerReportGeneratorArn *string `type:"string"`
+
+	// License configuration type for this generator.
+	ReportContext *ReportContext `type:"structure"`
+
+	// The Amazon Web Services account ID used to create the report generator.
+	ReportCreatorAccount *string `type:"string"`
+
+	// Details about how frequently reports are generated.
+	ReportFrequency *ReportFrequency `type:"structure"`
+
+	// Name of the report generator.
+	ReportGeneratorName *string `type:"string"`
+
+	// Type of reports that are generated.
+	ReportType []*string `type:"list"`
+
+	// Details of the S3 bucket that report generator reports are published to.
+	S3Location *S3Location `type:"structure"`
+
+	// Tags associated with the report generator.
+	Tags []*Tag `type:"list"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ReportGenerator) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ReportGenerator) GoString() string {
+	return s.String()
+}
+
+// SetCreateTime sets the CreateTime field's value.
+func (s *ReportGenerator) SetCreateTime(v string) *ReportGenerator {
+	s.CreateTime = &v
+	return s
+}
+
+// SetDescription sets the Description field's value.
+func (s *ReportGenerator) SetDescription(v string) *ReportGenerator {
+	s.Description = &v
+	return s
+}
+
+// SetLastReportGenerationTime sets the LastReportGenerationTime field's value.
+func (s *ReportGenerator) SetLastReportGenerationTime(v string) *ReportGenerator {
+	s.LastReportGenerationTime = &v
+	return s
+}
+
+// SetLastRunFailureReason sets the LastRunFailureReason field's value.
+func (s *ReportGenerator) SetLastRunFailureReason(v string) *ReportGenerator {
+	s.LastRunFailureReason = &v
+	return s
+}
+
+// SetLastRunStatus sets the LastRunStatus field's value.
+func (s *ReportGenerator) SetLastRunStatus(v string) *ReportGenerator {
+	s.LastRunStatus = &v
+	return s
+}
+
+// SetLicenseManagerReportGeneratorArn sets the LicenseManagerReportGeneratorArn field's value.
+func (s *ReportGenerator) SetLicenseManagerReportGeneratorArn(v string) *ReportGenerator {
+	s.LicenseManagerReportGeneratorArn = &v
+	return s
+}
+
+// SetReportContext sets the ReportContext field's value.
+func (s *ReportGenerator) SetReportContext(v *ReportContext) *ReportGenerator {
+	s.ReportContext = v
+	return s
+}
+
+// SetReportCreatorAccount sets the ReportCreatorAccount field's value.
+func (s *ReportGenerator) SetReportCreatorAccount(v string) *ReportGenerator {
+	s.ReportCreatorAccount = &v
+	return s
+}
+
+// SetReportFrequency sets the ReportFrequency field's value.
+func (s *ReportGenerator) SetReportFrequency(v *ReportFrequency) *ReportGenerator {
+	s.ReportFrequency = v
+	return s
+}
+
+// SetReportGeneratorName sets the ReportGeneratorName field's value.
+func (s *ReportGenerator) SetReportGeneratorName(v string) *ReportGenerator {
+	s.ReportGeneratorName = &v
+	return s
+}
+
+// SetReportType sets the ReportType field's value.
+func (s *ReportGenerator) SetReportType(v []*string) *ReportGenerator {
+	s.ReportType = v
+	return s
+}
+
+// SetS3Location sets the S3Location field's value.
+func (s *ReportGenerator) SetS3Location(v *S3Location) *ReportGenerator {
+	s.S3Location = v
+	return s
+}
+
+// SetTags sets the Tags field's value.
+func (s *ReportGenerator) SetTags(v []*Tag) *ReportGenerator {
+	s.Tags = v
+	return s
+}
+
 // Details about a resource.
 type ResourceInventory struct {
 	_ struct{} `type:"structure"`
@@ -3948,12 +13140,20 @@ type ResourceInventory struct {
 	ResourceType *string `type:"string" enum:"ResourceType"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ResourceInventory) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ResourceInventory) GoString() string {
 	return s.String()
 }
@@ -4002,12 +13202,20 @@ type ResourceLimitExceededException struct {
 	Message_ *string `locationName:"Message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ResourceLimitExceededException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ResourceLimitExceededException) GoString() string {
 	return s.String()
 }
@@ -4050,6 +13258,111 @@ func (s *ResourceLimitExceededException) RequestID() string {
 	return s.RespMetadata.RequestID
 }
 
+// The resource cannot be found.
+type ResourceNotFoundException struct {
+	_            struct{}                  `type:"structure"`
+	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
+
+	Message_ *string `locationName:"Message" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ResourceNotFoundException) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ResourceNotFoundException) GoString() string {
+	return s.String()
+}
+
+func newErrorResourceNotFoundException(v protocol.ResponseMetadata) error {
+	return &ResourceNotFoundException{
+		RespMetadata: v,
+	}
+}
+
+// Code returns the exception type name.
+func (s *ResourceNotFoundException) Code() string {
+	return "ResourceNotFoundException"
+}
+
+// Message returns the exception's message.
+func (s *ResourceNotFoundException) Message() string {
+	if s.Message_ != nil {
+		return *s.Message_
+	}
+	return ""
+}
+
+// OrigErr always returns nil, satisfies awserr.Error interface.
+func (s *ResourceNotFoundException) OrigErr() error {
+	return nil
+}
+
+func (s *ResourceNotFoundException) Error() string {
+	return fmt.Sprintf("%s: %s", s.Code(), s.Message())
+}
+
+// Status code returns the HTTP status code for the request's response error.
+func (s *ResourceNotFoundException) StatusCode() int {
+	return s.RespMetadata.StatusCode
+}
+
+// RequestID returns the service's response RequestID for request.
+func (s *ResourceNotFoundException) RequestID() string {
+	return s.RespMetadata.RequestID
+}
+
+// Details of the S3 bucket that report generator reports are published to.
+type S3Location struct {
+	_ struct{} `type:"structure"`
+
+	// Name of the S3 bucket reports are published to.
+	Bucket *string `locationName:"bucket" type:"string"`
+
+	// Prefix of the S3 bucket reports are published to.
+	KeyPrefix *string `locationName:"keyPrefix" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s S3Location) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s S3Location) GoString() string {
+	return s.String()
+}
+
+// SetBucket sets the Bucket field's value.
+func (s *S3Location) SetBucket(v string) *S3Location {
+	s.Bucket = &v
+	return s
+}
+
+// SetKeyPrefix sets the KeyPrefix field's value.
+func (s *S3Location) SetKeyPrefix(v string) *S3Location {
+	s.KeyPrefix = &v
+	return s
+}
+
 // The server experienced an internal error. Try again.
 type ServerInternalException struct {
 	_            struct{}                  `type:"structure"`
@@ -4058,12 +13371,20 @@ type ServerInternalException struct {
 	Message_ *string `locationName:"Message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ServerInternalException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ServerInternalException) GoString() string {
 	return s.String()
 }
@@ -4117,12 +13438,20 @@ type Tag struct {
 	Value *string `type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s Tag) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s Tag) GoString() string {
 	return s.String()
 }
@@ -4153,12 +13482,20 @@ type TagResourceInput struct {
 	Tags []*Tag `type:"list" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s TagResourceInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s TagResourceInput) GoString() string {
 	return s.String()
 }
@@ -4195,14 +13532,172 @@ type TagResourceOutput struct {
 	_ struct{} `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s TagResourceOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s TagResourceOutput) GoString() string {
 	return s.String()
+}
+
+// Describes a token.
+type TokenData struct {
+	_ struct{} `type:"structure"`
+
+	// Token expiration time, in ISO8601-UTC format.
+	ExpirationTime *string `type:"string"`
+
+	// Amazon Resource Name (ARN) of the license.
+	LicenseArn *string `type:"string"`
+
+	// Amazon Resource Names (ARN) of the roles included in the token.
+	RoleArns []*string `type:"list"`
+
+	// Token status. The possible values are AVAILABLE and DELETED.
+	Status *string `type:"string"`
+
+	// Token ID.
+	TokenId *string `type:"string"`
+
+	// Data specified by the caller.
+	TokenProperties []*string `type:"list"`
+
+	// Type of token generated. The supported value is REFRESH_TOKEN.
+	TokenType *string `type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s TokenData) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s TokenData) GoString() string {
+	return s.String()
+}
+
+// SetExpirationTime sets the ExpirationTime field's value.
+func (s *TokenData) SetExpirationTime(v string) *TokenData {
+	s.ExpirationTime = &v
+	return s
+}
+
+// SetLicenseArn sets the LicenseArn field's value.
+func (s *TokenData) SetLicenseArn(v string) *TokenData {
+	s.LicenseArn = &v
+	return s
+}
+
+// SetRoleArns sets the RoleArns field's value.
+func (s *TokenData) SetRoleArns(v []*string) *TokenData {
+	s.RoleArns = v
+	return s
+}
+
+// SetStatus sets the Status field's value.
+func (s *TokenData) SetStatus(v string) *TokenData {
+	s.Status = &v
+	return s
+}
+
+// SetTokenId sets the TokenId field's value.
+func (s *TokenData) SetTokenId(v string) *TokenData {
+	s.TokenId = &v
+	return s
+}
+
+// SetTokenProperties sets the TokenProperties field's value.
+func (s *TokenData) SetTokenProperties(v []*string) *TokenData {
+	s.TokenProperties = v
+	return s
+}
+
+// SetTokenType sets the TokenType field's value.
+func (s *TokenData) SetTokenType(v string) *TokenData {
+	s.TokenType = &v
+	return s
+}
+
+// The digital signature method is unsupported. Try your request again.
+type UnsupportedDigitalSignatureMethodException struct {
+	_            struct{}                  `type:"structure"`
+	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
+
+	Message_ *string `locationName:"Message" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UnsupportedDigitalSignatureMethodException) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UnsupportedDigitalSignatureMethodException) GoString() string {
+	return s.String()
+}
+
+func newErrorUnsupportedDigitalSignatureMethodException(v protocol.ResponseMetadata) error {
+	return &UnsupportedDigitalSignatureMethodException{
+		RespMetadata: v,
+	}
+}
+
+// Code returns the exception type name.
+func (s *UnsupportedDigitalSignatureMethodException) Code() string {
+	return "UnsupportedDigitalSignatureMethodException"
+}
+
+// Message returns the exception's message.
+func (s *UnsupportedDigitalSignatureMethodException) Message() string {
+	if s.Message_ != nil {
+		return *s.Message_
+	}
+	return ""
+}
+
+// OrigErr always returns nil, satisfies awserr.Error interface.
+func (s *UnsupportedDigitalSignatureMethodException) OrigErr() error {
+	return nil
+}
+
+func (s *UnsupportedDigitalSignatureMethodException) Error() string {
+	return fmt.Sprintf("%s: %s", s.Code(), s.Message())
+}
+
+// Status code returns the HTTP status code for the request's response error.
+func (s *UnsupportedDigitalSignatureMethodException) StatusCode() int {
+	return s.RespMetadata.StatusCode
+}
+
+// RequestID returns the service's response RequestID for request.
+func (s *UnsupportedDigitalSignatureMethodException) RequestID() string {
+	return s.RespMetadata.RequestID
 }
 
 type UntagResourceInput struct {
@@ -4219,12 +13714,20 @@ type UntagResourceInput struct {
 	TagKeys []*string `type:"list" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UntagResourceInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UntagResourceInput) GoString() string {
 	return s.String()
 }
@@ -4261,12 +13764,20 @@ type UntagResourceOutput struct {
 	_ struct{} `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UntagResourceOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UntagResourceOutput) GoString() string {
 	return s.String()
 }
@@ -4276,6 +13787,9 @@ type UpdateLicenseConfigurationInput struct {
 
 	// New description of the license configuration.
 	Description *string `type:"string"`
+
+	// When true, disassociates a resource when software is uninstalled.
+	DisassociateWhenNotFound *bool `type:"boolean"`
 
 	// Amazon Resource Name (ARN) of the license configuration.
 	//
@@ -4302,12 +13816,20 @@ type UpdateLicenseConfigurationInput struct {
 	ProductInformationList []*ProductInformation `type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpdateLicenseConfigurationInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpdateLicenseConfigurationInput) GoString() string {
 	return s.String()
 }
@@ -4338,6 +13860,12 @@ func (s *UpdateLicenseConfigurationInput) Validate() error {
 // SetDescription sets the Description field's value.
 func (s *UpdateLicenseConfigurationInput) SetDescription(v string) *UpdateLicenseConfigurationInput {
 	s.Description = &v
+	return s
+}
+
+// SetDisassociateWhenNotFound sets the DisassociateWhenNotFound field's value.
+func (s *UpdateLicenseConfigurationInput) SetDisassociateWhenNotFound(v bool) *UpdateLicenseConfigurationInput {
+	s.DisassociateWhenNotFound = &v
 	return s
 }
 
@@ -4387,13 +13915,186 @@ type UpdateLicenseConfigurationOutput struct {
 	_ struct{} `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpdateLicenseConfigurationOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpdateLicenseConfigurationOutput) GoString() string {
+	return s.String()
+}
+
+type UpdateLicenseManagerReportGeneratorInput struct {
+	_ struct{} `type:"structure"`
+
+	// Unique, case-sensitive identifier that you provide to ensure the idempotency
+	// of the request.
+	//
+	// ClientToken is a required field
+	ClientToken *string `min:"1" type:"string" required:"true"`
+
+	// Description of the report generator.
+	Description *string `type:"string"`
+
+	// Amazon Resource Name (ARN) of the report generator to update.
+	//
+	// LicenseManagerReportGeneratorArn is a required field
+	LicenseManagerReportGeneratorArn *string `type:"string" required:"true"`
+
+	// The report context.
+	//
+	// ReportContext is a required field
+	ReportContext *ReportContext `type:"structure" required:"true"`
+
+	// Frequency by which reports are generated.
+	//
+	// ReportFrequency is a required field
+	ReportFrequency *ReportFrequency `type:"structure" required:"true"`
+
+	// Name of the report generator.
+	//
+	// ReportGeneratorName is a required field
+	ReportGeneratorName *string `min:"1" type:"string" required:"true"`
+
+	// Type of reports to generate. The following report types are supported:
+	//
+	//    * License configuration report - Reports the number and details of consumed
+	//    licenses for a license configuration.
+	//
+	//    * Resource report - Reports the tracked licenses and resource consumption
+	//    for a license configuration.
+	//
+	// Type is a required field
+	Type []*string `type:"list" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdateLicenseManagerReportGeneratorInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdateLicenseManagerReportGeneratorInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *UpdateLicenseManagerReportGeneratorInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "UpdateLicenseManagerReportGeneratorInput"}
+	if s.ClientToken == nil {
+		invalidParams.Add(request.NewErrParamRequired("ClientToken"))
+	}
+	if s.ClientToken != nil && len(*s.ClientToken) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ClientToken", 1))
+	}
+	if s.LicenseManagerReportGeneratorArn == nil {
+		invalidParams.Add(request.NewErrParamRequired("LicenseManagerReportGeneratorArn"))
+	}
+	if s.ReportContext == nil {
+		invalidParams.Add(request.NewErrParamRequired("ReportContext"))
+	}
+	if s.ReportFrequency == nil {
+		invalidParams.Add(request.NewErrParamRequired("ReportFrequency"))
+	}
+	if s.ReportGeneratorName == nil {
+		invalidParams.Add(request.NewErrParamRequired("ReportGeneratorName"))
+	}
+	if s.ReportGeneratorName != nil && len(*s.ReportGeneratorName) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ReportGeneratorName", 1))
+	}
+	if s.Type == nil {
+		invalidParams.Add(request.NewErrParamRequired("Type"))
+	}
+	if s.ReportContext != nil {
+		if err := s.ReportContext.Validate(); err != nil {
+			invalidParams.AddNested("ReportContext", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetClientToken sets the ClientToken field's value.
+func (s *UpdateLicenseManagerReportGeneratorInput) SetClientToken(v string) *UpdateLicenseManagerReportGeneratorInput {
+	s.ClientToken = &v
+	return s
+}
+
+// SetDescription sets the Description field's value.
+func (s *UpdateLicenseManagerReportGeneratorInput) SetDescription(v string) *UpdateLicenseManagerReportGeneratorInput {
+	s.Description = &v
+	return s
+}
+
+// SetLicenseManagerReportGeneratorArn sets the LicenseManagerReportGeneratorArn field's value.
+func (s *UpdateLicenseManagerReportGeneratorInput) SetLicenseManagerReportGeneratorArn(v string) *UpdateLicenseManagerReportGeneratorInput {
+	s.LicenseManagerReportGeneratorArn = &v
+	return s
+}
+
+// SetReportContext sets the ReportContext field's value.
+func (s *UpdateLicenseManagerReportGeneratorInput) SetReportContext(v *ReportContext) *UpdateLicenseManagerReportGeneratorInput {
+	s.ReportContext = v
+	return s
+}
+
+// SetReportFrequency sets the ReportFrequency field's value.
+func (s *UpdateLicenseManagerReportGeneratorInput) SetReportFrequency(v *ReportFrequency) *UpdateLicenseManagerReportGeneratorInput {
+	s.ReportFrequency = v
+	return s
+}
+
+// SetReportGeneratorName sets the ReportGeneratorName field's value.
+func (s *UpdateLicenseManagerReportGeneratorInput) SetReportGeneratorName(v string) *UpdateLicenseManagerReportGeneratorInput {
+	s.ReportGeneratorName = &v
+	return s
+}
+
+// SetType sets the Type field's value.
+func (s *UpdateLicenseManagerReportGeneratorInput) SetType(v []*string) *UpdateLicenseManagerReportGeneratorInput {
+	s.Type = v
+	return s
+}
+
+type UpdateLicenseManagerReportGeneratorOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdateLicenseManagerReportGeneratorOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdateLicenseManagerReportGeneratorOutput) GoString() string {
 	return s.String()
 }
 
@@ -4406,18 +14107,26 @@ type UpdateLicenseSpecificationsForResourceInput struct {
 	// ARNs of the license configurations to remove.
 	RemoveLicenseSpecifications []*LicenseSpecification `type:"list"`
 
-	// Amazon Resource Name (ARN) of the AWS resource.
+	// Amazon Resource Name (ARN) of the Amazon Web Services resource.
 	//
 	// ResourceArn is a required field
 	ResourceArn *string `type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpdateLicenseSpecificationsForResourceInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpdateLicenseSpecificationsForResourceInput) GoString() string {
 	return s.String()
 }
@@ -4477,12 +14186,20 @@ type UpdateLicenseSpecificationsForResourceOutput struct {
 	_ struct{} `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpdateLicenseSpecificationsForResourceOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpdateLicenseSpecificationsForResourceOutput) GoString() string {
 	return s.String()
 }
@@ -4493,7 +14210,7 @@ type UpdateServiceSettingsInput struct {
 	// Activates cross-account discovery.
 	EnableCrossAccountsDiscovery *bool `type:"boolean"`
 
-	// Enables integration with AWS Organizations for cross-account discovery.
+	// Enables integration with Organizations for cross-account discovery.
 	OrganizationConfiguration *OrganizationConfiguration `type:"structure"`
 
 	// Amazon Resource Name (ARN) of the Amazon S3 bucket where the License Manager
@@ -4505,12 +14222,20 @@ type UpdateServiceSettingsInput struct {
 	SnsTopicArn *string `type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpdateServiceSettingsInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpdateServiceSettingsInput) GoString() string {
 	return s.String()
 }
@@ -4558,14 +14283,426 @@ type UpdateServiceSettingsOutput struct {
 	_ struct{} `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpdateServiceSettingsOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpdateServiceSettingsOutput) GoString() string {
 	return s.String()
+}
+
+// The provided input is not valid. Try your request again.
+type ValidationException struct {
+	_            struct{}                  `type:"structure"`
+	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
+
+	Message_ *string `locationName:"Message" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ValidationException) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ValidationException) GoString() string {
+	return s.String()
+}
+
+func newErrorValidationException(v protocol.ResponseMetadata) error {
+	return &ValidationException{
+		RespMetadata: v,
+	}
+}
+
+// Code returns the exception type name.
+func (s *ValidationException) Code() string {
+	return "ValidationException"
+}
+
+// Message returns the exception's message.
+func (s *ValidationException) Message() string {
+	if s.Message_ != nil {
+		return *s.Message_
+	}
+	return ""
+}
+
+// OrigErr always returns nil, satisfies awserr.Error interface.
+func (s *ValidationException) OrigErr() error {
+	return nil
+}
+
+func (s *ValidationException) Error() string {
+	return fmt.Sprintf("%s: %s", s.Code(), s.Message())
+}
+
+// Status code returns the HTTP status code for the request's response error.
+func (s *ValidationException) StatusCode() int {
+	return s.RespMetadata.StatusCode
+}
+
+// RequestID returns the service's response RequestID for request.
+func (s *ValidationException) RequestID() string {
+	return s.RespMetadata.RequestID
+}
+
+const (
+	// AllowedOperationCreateGrant is a AllowedOperation enum value
+	AllowedOperationCreateGrant = "CreateGrant"
+
+	// AllowedOperationCheckoutLicense is a AllowedOperation enum value
+	AllowedOperationCheckoutLicense = "CheckoutLicense"
+
+	// AllowedOperationCheckoutBorrowLicense is a AllowedOperation enum value
+	AllowedOperationCheckoutBorrowLicense = "CheckoutBorrowLicense"
+
+	// AllowedOperationCheckInLicense is a AllowedOperation enum value
+	AllowedOperationCheckInLicense = "CheckInLicense"
+
+	// AllowedOperationExtendConsumptionLicense is a AllowedOperation enum value
+	AllowedOperationExtendConsumptionLicense = "ExtendConsumptionLicense"
+
+	// AllowedOperationListPurchasedLicenses is a AllowedOperation enum value
+	AllowedOperationListPurchasedLicenses = "ListPurchasedLicenses"
+
+	// AllowedOperationCreateToken is a AllowedOperation enum value
+	AllowedOperationCreateToken = "CreateToken"
+)
+
+// AllowedOperation_Values returns all elements of the AllowedOperation enum
+func AllowedOperation_Values() []string {
+	return []string{
+		AllowedOperationCreateGrant,
+		AllowedOperationCheckoutLicense,
+		AllowedOperationCheckoutBorrowLicense,
+		AllowedOperationCheckInLicense,
+		AllowedOperationExtendConsumptionLicense,
+		AllowedOperationListPurchasedLicenses,
+		AllowedOperationCreateToken,
+	}
+}
+
+const (
+	// CheckoutTypeProvisional is a CheckoutType enum value
+	CheckoutTypeProvisional = "PROVISIONAL"
+
+	// CheckoutTypePerpetual is a CheckoutType enum value
+	CheckoutTypePerpetual = "PERPETUAL"
+)
+
+// CheckoutType_Values returns all elements of the CheckoutType enum
+func CheckoutType_Values() []string {
+	return []string{
+		CheckoutTypeProvisional,
+		CheckoutTypePerpetual,
+	}
+}
+
+const (
+	// DigitalSignatureMethodJwtPs384 is a DigitalSignatureMethod enum value
+	DigitalSignatureMethodJwtPs384 = "JWT_PS384"
+)
+
+// DigitalSignatureMethod_Values returns all elements of the DigitalSignatureMethod enum
+func DigitalSignatureMethod_Values() []string {
+	return []string{
+		DigitalSignatureMethodJwtPs384,
+	}
+}
+
+const (
+	// EntitlementDataUnitCount is a EntitlementDataUnit enum value
+	EntitlementDataUnitCount = "Count"
+
+	// EntitlementDataUnitNone is a EntitlementDataUnit enum value
+	EntitlementDataUnitNone = "None"
+
+	// EntitlementDataUnitSeconds is a EntitlementDataUnit enum value
+	EntitlementDataUnitSeconds = "Seconds"
+
+	// EntitlementDataUnitMicroseconds is a EntitlementDataUnit enum value
+	EntitlementDataUnitMicroseconds = "Microseconds"
+
+	// EntitlementDataUnitMilliseconds is a EntitlementDataUnit enum value
+	EntitlementDataUnitMilliseconds = "Milliseconds"
+
+	// EntitlementDataUnitBytes is a EntitlementDataUnit enum value
+	EntitlementDataUnitBytes = "Bytes"
+
+	// EntitlementDataUnitKilobytes is a EntitlementDataUnit enum value
+	EntitlementDataUnitKilobytes = "Kilobytes"
+
+	// EntitlementDataUnitMegabytes is a EntitlementDataUnit enum value
+	EntitlementDataUnitMegabytes = "Megabytes"
+
+	// EntitlementDataUnitGigabytes is a EntitlementDataUnit enum value
+	EntitlementDataUnitGigabytes = "Gigabytes"
+
+	// EntitlementDataUnitTerabytes is a EntitlementDataUnit enum value
+	EntitlementDataUnitTerabytes = "Terabytes"
+
+	// EntitlementDataUnitBits is a EntitlementDataUnit enum value
+	EntitlementDataUnitBits = "Bits"
+
+	// EntitlementDataUnitKilobits is a EntitlementDataUnit enum value
+	EntitlementDataUnitKilobits = "Kilobits"
+
+	// EntitlementDataUnitMegabits is a EntitlementDataUnit enum value
+	EntitlementDataUnitMegabits = "Megabits"
+
+	// EntitlementDataUnitGigabits is a EntitlementDataUnit enum value
+	EntitlementDataUnitGigabits = "Gigabits"
+
+	// EntitlementDataUnitTerabits is a EntitlementDataUnit enum value
+	EntitlementDataUnitTerabits = "Terabits"
+
+	// EntitlementDataUnitPercent is a EntitlementDataUnit enum value
+	EntitlementDataUnitPercent = "Percent"
+
+	// EntitlementDataUnitBytesSecond is a EntitlementDataUnit enum value
+	EntitlementDataUnitBytesSecond = "Bytes/Second"
+
+	// EntitlementDataUnitKilobytesSecond is a EntitlementDataUnit enum value
+	EntitlementDataUnitKilobytesSecond = "Kilobytes/Second"
+
+	// EntitlementDataUnitMegabytesSecond is a EntitlementDataUnit enum value
+	EntitlementDataUnitMegabytesSecond = "Megabytes/Second"
+
+	// EntitlementDataUnitGigabytesSecond is a EntitlementDataUnit enum value
+	EntitlementDataUnitGigabytesSecond = "Gigabytes/Second"
+
+	// EntitlementDataUnitTerabytesSecond is a EntitlementDataUnit enum value
+	EntitlementDataUnitTerabytesSecond = "Terabytes/Second"
+
+	// EntitlementDataUnitBitsSecond is a EntitlementDataUnit enum value
+	EntitlementDataUnitBitsSecond = "Bits/Second"
+
+	// EntitlementDataUnitKilobitsSecond is a EntitlementDataUnit enum value
+	EntitlementDataUnitKilobitsSecond = "Kilobits/Second"
+
+	// EntitlementDataUnitMegabitsSecond is a EntitlementDataUnit enum value
+	EntitlementDataUnitMegabitsSecond = "Megabits/Second"
+
+	// EntitlementDataUnitGigabitsSecond is a EntitlementDataUnit enum value
+	EntitlementDataUnitGigabitsSecond = "Gigabits/Second"
+
+	// EntitlementDataUnitTerabitsSecond is a EntitlementDataUnit enum value
+	EntitlementDataUnitTerabitsSecond = "Terabits/Second"
+
+	// EntitlementDataUnitCountSecond is a EntitlementDataUnit enum value
+	EntitlementDataUnitCountSecond = "Count/Second"
+)
+
+// EntitlementDataUnit_Values returns all elements of the EntitlementDataUnit enum
+func EntitlementDataUnit_Values() []string {
+	return []string{
+		EntitlementDataUnitCount,
+		EntitlementDataUnitNone,
+		EntitlementDataUnitSeconds,
+		EntitlementDataUnitMicroseconds,
+		EntitlementDataUnitMilliseconds,
+		EntitlementDataUnitBytes,
+		EntitlementDataUnitKilobytes,
+		EntitlementDataUnitMegabytes,
+		EntitlementDataUnitGigabytes,
+		EntitlementDataUnitTerabytes,
+		EntitlementDataUnitBits,
+		EntitlementDataUnitKilobits,
+		EntitlementDataUnitMegabits,
+		EntitlementDataUnitGigabits,
+		EntitlementDataUnitTerabits,
+		EntitlementDataUnitPercent,
+		EntitlementDataUnitBytesSecond,
+		EntitlementDataUnitKilobytesSecond,
+		EntitlementDataUnitMegabytesSecond,
+		EntitlementDataUnitGigabytesSecond,
+		EntitlementDataUnitTerabytesSecond,
+		EntitlementDataUnitBitsSecond,
+		EntitlementDataUnitKilobitsSecond,
+		EntitlementDataUnitMegabitsSecond,
+		EntitlementDataUnitGigabitsSecond,
+		EntitlementDataUnitTerabitsSecond,
+		EntitlementDataUnitCountSecond,
+	}
+}
+
+const (
+	// EntitlementUnitCount is a EntitlementUnit enum value
+	EntitlementUnitCount = "Count"
+
+	// EntitlementUnitNone is a EntitlementUnit enum value
+	EntitlementUnitNone = "None"
+
+	// EntitlementUnitSeconds is a EntitlementUnit enum value
+	EntitlementUnitSeconds = "Seconds"
+
+	// EntitlementUnitMicroseconds is a EntitlementUnit enum value
+	EntitlementUnitMicroseconds = "Microseconds"
+
+	// EntitlementUnitMilliseconds is a EntitlementUnit enum value
+	EntitlementUnitMilliseconds = "Milliseconds"
+
+	// EntitlementUnitBytes is a EntitlementUnit enum value
+	EntitlementUnitBytes = "Bytes"
+
+	// EntitlementUnitKilobytes is a EntitlementUnit enum value
+	EntitlementUnitKilobytes = "Kilobytes"
+
+	// EntitlementUnitMegabytes is a EntitlementUnit enum value
+	EntitlementUnitMegabytes = "Megabytes"
+
+	// EntitlementUnitGigabytes is a EntitlementUnit enum value
+	EntitlementUnitGigabytes = "Gigabytes"
+
+	// EntitlementUnitTerabytes is a EntitlementUnit enum value
+	EntitlementUnitTerabytes = "Terabytes"
+
+	// EntitlementUnitBits is a EntitlementUnit enum value
+	EntitlementUnitBits = "Bits"
+
+	// EntitlementUnitKilobits is a EntitlementUnit enum value
+	EntitlementUnitKilobits = "Kilobits"
+
+	// EntitlementUnitMegabits is a EntitlementUnit enum value
+	EntitlementUnitMegabits = "Megabits"
+
+	// EntitlementUnitGigabits is a EntitlementUnit enum value
+	EntitlementUnitGigabits = "Gigabits"
+
+	// EntitlementUnitTerabits is a EntitlementUnit enum value
+	EntitlementUnitTerabits = "Terabits"
+
+	// EntitlementUnitPercent is a EntitlementUnit enum value
+	EntitlementUnitPercent = "Percent"
+
+	// EntitlementUnitBytesSecond is a EntitlementUnit enum value
+	EntitlementUnitBytesSecond = "Bytes/Second"
+
+	// EntitlementUnitKilobytesSecond is a EntitlementUnit enum value
+	EntitlementUnitKilobytesSecond = "Kilobytes/Second"
+
+	// EntitlementUnitMegabytesSecond is a EntitlementUnit enum value
+	EntitlementUnitMegabytesSecond = "Megabytes/Second"
+
+	// EntitlementUnitGigabytesSecond is a EntitlementUnit enum value
+	EntitlementUnitGigabytesSecond = "Gigabytes/Second"
+
+	// EntitlementUnitTerabytesSecond is a EntitlementUnit enum value
+	EntitlementUnitTerabytesSecond = "Terabytes/Second"
+
+	// EntitlementUnitBitsSecond is a EntitlementUnit enum value
+	EntitlementUnitBitsSecond = "Bits/Second"
+
+	// EntitlementUnitKilobitsSecond is a EntitlementUnit enum value
+	EntitlementUnitKilobitsSecond = "Kilobits/Second"
+
+	// EntitlementUnitMegabitsSecond is a EntitlementUnit enum value
+	EntitlementUnitMegabitsSecond = "Megabits/Second"
+
+	// EntitlementUnitGigabitsSecond is a EntitlementUnit enum value
+	EntitlementUnitGigabitsSecond = "Gigabits/Second"
+
+	// EntitlementUnitTerabitsSecond is a EntitlementUnit enum value
+	EntitlementUnitTerabitsSecond = "Terabits/Second"
+
+	// EntitlementUnitCountSecond is a EntitlementUnit enum value
+	EntitlementUnitCountSecond = "Count/Second"
+)
+
+// EntitlementUnit_Values returns all elements of the EntitlementUnit enum
+func EntitlementUnit_Values() []string {
+	return []string{
+		EntitlementUnitCount,
+		EntitlementUnitNone,
+		EntitlementUnitSeconds,
+		EntitlementUnitMicroseconds,
+		EntitlementUnitMilliseconds,
+		EntitlementUnitBytes,
+		EntitlementUnitKilobytes,
+		EntitlementUnitMegabytes,
+		EntitlementUnitGigabytes,
+		EntitlementUnitTerabytes,
+		EntitlementUnitBits,
+		EntitlementUnitKilobits,
+		EntitlementUnitMegabits,
+		EntitlementUnitGigabits,
+		EntitlementUnitTerabits,
+		EntitlementUnitPercent,
+		EntitlementUnitBytesSecond,
+		EntitlementUnitKilobytesSecond,
+		EntitlementUnitMegabytesSecond,
+		EntitlementUnitGigabytesSecond,
+		EntitlementUnitTerabytesSecond,
+		EntitlementUnitBitsSecond,
+		EntitlementUnitKilobitsSecond,
+		EntitlementUnitMegabitsSecond,
+		EntitlementUnitGigabitsSecond,
+		EntitlementUnitTerabitsSecond,
+		EntitlementUnitCountSecond,
+	}
+}
+
+const (
+	// GrantStatusPendingWorkflow is a GrantStatus enum value
+	GrantStatusPendingWorkflow = "PENDING_WORKFLOW"
+
+	// GrantStatusPendingAccept is a GrantStatus enum value
+	GrantStatusPendingAccept = "PENDING_ACCEPT"
+
+	// GrantStatusRejected is a GrantStatus enum value
+	GrantStatusRejected = "REJECTED"
+
+	// GrantStatusActive is a GrantStatus enum value
+	GrantStatusActive = "ACTIVE"
+
+	// GrantStatusFailedWorkflow is a GrantStatus enum value
+	GrantStatusFailedWorkflow = "FAILED_WORKFLOW"
+
+	// GrantStatusDeleted is a GrantStatus enum value
+	GrantStatusDeleted = "DELETED"
+
+	// GrantStatusPendingDelete is a GrantStatus enum value
+	GrantStatusPendingDelete = "PENDING_DELETE"
+
+	// GrantStatusDisabled is a GrantStatus enum value
+	GrantStatusDisabled = "DISABLED"
+
+	// GrantStatusWorkflowCompleted is a GrantStatus enum value
+	GrantStatusWorkflowCompleted = "WORKFLOW_COMPLETED"
+)
+
+// GrantStatus_Values returns all elements of the GrantStatus enum
+func GrantStatus_Values() []string {
+	return []string{
+		GrantStatusPendingWorkflow,
+		GrantStatusPendingAccept,
+		GrantStatusRejected,
+		GrantStatusActive,
+		GrantStatusFailedWorkflow,
+		GrantStatusDeleted,
+		GrantStatusPendingDelete,
+		GrantStatusDisabled,
+		GrantStatusWorkflowCompleted,
+	}
 }
 
 const (
@@ -4609,6 +14746,26 @@ func LicenseConfigurationStatus_Values() []string {
 }
 
 const (
+	// LicenseConversionTaskStatusInProgress is a LicenseConversionTaskStatus enum value
+	LicenseConversionTaskStatusInProgress = "IN_PROGRESS"
+
+	// LicenseConversionTaskStatusSucceeded is a LicenseConversionTaskStatus enum value
+	LicenseConversionTaskStatusSucceeded = "SUCCEEDED"
+
+	// LicenseConversionTaskStatusFailed is a LicenseConversionTaskStatus enum value
+	LicenseConversionTaskStatusFailed = "FAILED"
+)
+
+// LicenseConversionTaskStatus_Values returns all elements of the LicenseConversionTaskStatus enum
+func LicenseConversionTaskStatus_Values() []string {
+	return []string{
+		LicenseConversionTaskStatusInProgress,
+		LicenseConversionTaskStatusSucceeded,
+		LicenseConversionTaskStatusFailed,
+	}
+}
+
+const (
 	// LicenseCountingTypeVCpu is a LicenseCountingType enum value
 	LicenseCountingTypeVCpu = "vCPU"
 
@@ -4629,6 +14786,154 @@ func LicenseCountingType_Values() []string {
 		LicenseCountingTypeInstance,
 		LicenseCountingTypeCore,
 		LicenseCountingTypeSocket,
+	}
+}
+
+const (
+	// LicenseDeletionStatusPendingDelete is a LicenseDeletionStatus enum value
+	LicenseDeletionStatusPendingDelete = "PENDING_DELETE"
+
+	// LicenseDeletionStatusDeleted is a LicenseDeletionStatus enum value
+	LicenseDeletionStatusDeleted = "DELETED"
+)
+
+// LicenseDeletionStatus_Values returns all elements of the LicenseDeletionStatus enum
+func LicenseDeletionStatus_Values() []string {
+	return []string{
+		LicenseDeletionStatusPendingDelete,
+		LicenseDeletionStatusDeleted,
+	}
+}
+
+const (
+	// LicenseStatusAvailable is a LicenseStatus enum value
+	LicenseStatusAvailable = "AVAILABLE"
+
+	// LicenseStatusPendingAvailable is a LicenseStatus enum value
+	LicenseStatusPendingAvailable = "PENDING_AVAILABLE"
+
+	// LicenseStatusDeactivated is a LicenseStatus enum value
+	LicenseStatusDeactivated = "DEACTIVATED"
+
+	// LicenseStatusSuspended is a LicenseStatus enum value
+	LicenseStatusSuspended = "SUSPENDED"
+
+	// LicenseStatusExpired is a LicenseStatus enum value
+	LicenseStatusExpired = "EXPIRED"
+
+	// LicenseStatusPendingDelete is a LicenseStatus enum value
+	LicenseStatusPendingDelete = "PENDING_DELETE"
+
+	// LicenseStatusDeleted is a LicenseStatus enum value
+	LicenseStatusDeleted = "DELETED"
+)
+
+// LicenseStatus_Values returns all elements of the LicenseStatus enum
+func LicenseStatus_Values() []string {
+	return []string{
+		LicenseStatusAvailable,
+		LicenseStatusPendingAvailable,
+		LicenseStatusDeactivated,
+		LicenseStatusSuspended,
+		LicenseStatusExpired,
+		LicenseStatusPendingDelete,
+		LicenseStatusDeleted,
+	}
+}
+
+const (
+	// ReceivedStatusPendingWorkflow is a ReceivedStatus enum value
+	ReceivedStatusPendingWorkflow = "PENDING_WORKFLOW"
+
+	// ReceivedStatusPendingAccept is a ReceivedStatus enum value
+	ReceivedStatusPendingAccept = "PENDING_ACCEPT"
+
+	// ReceivedStatusRejected is a ReceivedStatus enum value
+	ReceivedStatusRejected = "REJECTED"
+
+	// ReceivedStatusActive is a ReceivedStatus enum value
+	ReceivedStatusActive = "ACTIVE"
+
+	// ReceivedStatusFailedWorkflow is a ReceivedStatus enum value
+	ReceivedStatusFailedWorkflow = "FAILED_WORKFLOW"
+
+	// ReceivedStatusDeleted is a ReceivedStatus enum value
+	ReceivedStatusDeleted = "DELETED"
+
+	// ReceivedStatusDisabled is a ReceivedStatus enum value
+	ReceivedStatusDisabled = "DISABLED"
+
+	// ReceivedStatusWorkflowCompleted is a ReceivedStatus enum value
+	ReceivedStatusWorkflowCompleted = "WORKFLOW_COMPLETED"
+)
+
+// ReceivedStatus_Values returns all elements of the ReceivedStatus enum
+func ReceivedStatus_Values() []string {
+	return []string{
+		ReceivedStatusPendingWorkflow,
+		ReceivedStatusPendingAccept,
+		ReceivedStatusRejected,
+		ReceivedStatusActive,
+		ReceivedStatusFailedWorkflow,
+		ReceivedStatusDeleted,
+		ReceivedStatusDisabled,
+		ReceivedStatusWorkflowCompleted,
+	}
+}
+
+const (
+	// RenewTypeNone is a RenewType enum value
+	RenewTypeNone = "None"
+
+	// RenewTypeWeekly is a RenewType enum value
+	RenewTypeWeekly = "Weekly"
+
+	// RenewTypeMonthly is a RenewType enum value
+	RenewTypeMonthly = "Monthly"
+)
+
+// RenewType_Values returns all elements of the RenewType enum
+func RenewType_Values() []string {
+	return []string{
+		RenewTypeNone,
+		RenewTypeWeekly,
+		RenewTypeMonthly,
+	}
+}
+
+const (
+	// ReportFrequencyTypeDay is a ReportFrequencyType enum value
+	ReportFrequencyTypeDay = "DAY"
+
+	// ReportFrequencyTypeWeek is a ReportFrequencyType enum value
+	ReportFrequencyTypeWeek = "WEEK"
+
+	// ReportFrequencyTypeMonth is a ReportFrequencyType enum value
+	ReportFrequencyTypeMonth = "MONTH"
+)
+
+// ReportFrequencyType_Values returns all elements of the ReportFrequencyType enum
+func ReportFrequencyType_Values() []string {
+	return []string{
+		ReportFrequencyTypeDay,
+		ReportFrequencyTypeWeek,
+		ReportFrequencyTypeMonth,
+	}
+}
+
+const (
+	// ReportTypeLicenseConfigurationSummaryReport is a ReportType enum value
+	ReportTypeLicenseConfigurationSummaryReport = "LicenseConfigurationSummaryReport"
+
+	// ReportTypeLicenseConfigurationUsageReport is a ReportType enum value
+	ReportTypeLicenseConfigurationUsageReport = "LicenseConfigurationUsageReport"
+)
+
+// ReportType_Values returns all elements of the ReportType enum
+func ReportType_Values() []string {
+	return []string{
+		ReportTypeLicenseConfigurationSummaryReport,
+		ReportTypeLicenseConfigurationUsageReport,
 	}
 }
 
@@ -4657,5 +14962,17 @@ func ResourceType_Values() []string {
 		ResourceTypeEc2Ami,
 		ResourceTypeRds,
 		ResourceTypeSystemsManagerManagedInstance,
+	}
+}
+
+const (
+	// TokenTypeRefreshToken is a TokenType enum value
+	TokenTypeRefreshToken = "REFRESH_TOKEN"
+)
+
+// TokenType_Values returns all elements of the TokenType enum
+func TokenType_Values() []string {
+	return []string{
+		TokenTypeRefreshToken,
 	}
 }

@@ -88,6 +88,10 @@ type KinesisAnalyticsV2API interface {
 	CreateApplicationWithContext(aws.Context, *kinesisanalyticsv2.CreateApplicationInput, ...request.Option) (*kinesisanalyticsv2.CreateApplicationOutput, error)
 	CreateApplicationRequest(*kinesisanalyticsv2.CreateApplicationInput) (*request.Request, *kinesisanalyticsv2.CreateApplicationOutput)
 
+	CreateApplicationPresignedUrl(*kinesisanalyticsv2.CreateApplicationPresignedUrlInput) (*kinesisanalyticsv2.CreateApplicationPresignedUrlOutput, error)
+	CreateApplicationPresignedUrlWithContext(aws.Context, *kinesisanalyticsv2.CreateApplicationPresignedUrlInput, ...request.Option) (*kinesisanalyticsv2.CreateApplicationPresignedUrlOutput, error)
+	CreateApplicationPresignedUrlRequest(*kinesisanalyticsv2.CreateApplicationPresignedUrlInput) (*request.Request, *kinesisanalyticsv2.CreateApplicationPresignedUrlOutput)
+
 	CreateApplicationSnapshot(*kinesisanalyticsv2.CreateApplicationSnapshotInput) (*kinesisanalyticsv2.CreateApplicationSnapshotOutput, error)
 	CreateApplicationSnapshotWithContext(aws.Context, *kinesisanalyticsv2.CreateApplicationSnapshotInput, ...request.Option) (*kinesisanalyticsv2.CreateApplicationSnapshotOutput, error)
 	CreateApplicationSnapshotRequest(*kinesisanalyticsv2.CreateApplicationSnapshotInput) (*request.Request, *kinesisanalyticsv2.CreateApplicationSnapshotOutput)
@@ -128,6 +132,10 @@ type KinesisAnalyticsV2API interface {
 	DescribeApplicationSnapshotWithContext(aws.Context, *kinesisanalyticsv2.DescribeApplicationSnapshotInput, ...request.Option) (*kinesisanalyticsv2.DescribeApplicationSnapshotOutput, error)
 	DescribeApplicationSnapshotRequest(*kinesisanalyticsv2.DescribeApplicationSnapshotInput) (*request.Request, *kinesisanalyticsv2.DescribeApplicationSnapshotOutput)
 
+	DescribeApplicationVersion(*kinesisanalyticsv2.DescribeApplicationVersionInput) (*kinesisanalyticsv2.DescribeApplicationVersionOutput, error)
+	DescribeApplicationVersionWithContext(aws.Context, *kinesisanalyticsv2.DescribeApplicationVersionInput, ...request.Option) (*kinesisanalyticsv2.DescribeApplicationVersionOutput, error)
+	DescribeApplicationVersionRequest(*kinesisanalyticsv2.DescribeApplicationVersionInput) (*request.Request, *kinesisanalyticsv2.DescribeApplicationVersionOutput)
+
 	DiscoverInputSchema(*kinesisanalyticsv2.DiscoverInputSchemaInput) (*kinesisanalyticsv2.DiscoverInputSchemaOutput, error)
 	DiscoverInputSchemaWithContext(aws.Context, *kinesisanalyticsv2.DiscoverInputSchemaInput, ...request.Option) (*kinesisanalyticsv2.DiscoverInputSchemaOutput, error)
 	DiscoverInputSchemaRequest(*kinesisanalyticsv2.DiscoverInputSchemaInput) (*request.Request, *kinesisanalyticsv2.DiscoverInputSchemaOutput)
@@ -136,6 +144,10 @@ type KinesisAnalyticsV2API interface {
 	ListApplicationSnapshotsWithContext(aws.Context, *kinesisanalyticsv2.ListApplicationSnapshotsInput, ...request.Option) (*kinesisanalyticsv2.ListApplicationSnapshotsOutput, error)
 	ListApplicationSnapshotsRequest(*kinesisanalyticsv2.ListApplicationSnapshotsInput) (*request.Request, *kinesisanalyticsv2.ListApplicationSnapshotsOutput)
 
+	ListApplicationVersions(*kinesisanalyticsv2.ListApplicationVersionsInput) (*kinesisanalyticsv2.ListApplicationVersionsOutput, error)
+	ListApplicationVersionsWithContext(aws.Context, *kinesisanalyticsv2.ListApplicationVersionsInput, ...request.Option) (*kinesisanalyticsv2.ListApplicationVersionsOutput, error)
+	ListApplicationVersionsRequest(*kinesisanalyticsv2.ListApplicationVersionsInput) (*request.Request, *kinesisanalyticsv2.ListApplicationVersionsOutput)
+
 	ListApplications(*kinesisanalyticsv2.ListApplicationsInput) (*kinesisanalyticsv2.ListApplicationsOutput, error)
 	ListApplicationsWithContext(aws.Context, *kinesisanalyticsv2.ListApplicationsInput, ...request.Option) (*kinesisanalyticsv2.ListApplicationsOutput, error)
 	ListApplicationsRequest(*kinesisanalyticsv2.ListApplicationsInput) (*request.Request, *kinesisanalyticsv2.ListApplicationsOutput)
@@ -143,6 +155,10 @@ type KinesisAnalyticsV2API interface {
 	ListTagsForResource(*kinesisanalyticsv2.ListTagsForResourceInput) (*kinesisanalyticsv2.ListTagsForResourceOutput, error)
 	ListTagsForResourceWithContext(aws.Context, *kinesisanalyticsv2.ListTagsForResourceInput, ...request.Option) (*kinesisanalyticsv2.ListTagsForResourceOutput, error)
 	ListTagsForResourceRequest(*kinesisanalyticsv2.ListTagsForResourceInput) (*request.Request, *kinesisanalyticsv2.ListTagsForResourceOutput)
+
+	RollbackApplication(*kinesisanalyticsv2.RollbackApplicationInput) (*kinesisanalyticsv2.RollbackApplicationOutput, error)
+	RollbackApplicationWithContext(aws.Context, *kinesisanalyticsv2.RollbackApplicationInput, ...request.Option) (*kinesisanalyticsv2.RollbackApplicationOutput, error)
+	RollbackApplicationRequest(*kinesisanalyticsv2.RollbackApplicationInput) (*request.Request, *kinesisanalyticsv2.RollbackApplicationOutput)
 
 	StartApplication(*kinesisanalyticsv2.StartApplicationInput) (*kinesisanalyticsv2.StartApplicationOutput, error)
 	StartApplicationWithContext(aws.Context, *kinesisanalyticsv2.StartApplicationInput, ...request.Option) (*kinesisanalyticsv2.StartApplicationOutput, error)
@@ -163,6 +179,10 @@ type KinesisAnalyticsV2API interface {
 	UpdateApplication(*kinesisanalyticsv2.UpdateApplicationInput) (*kinesisanalyticsv2.UpdateApplicationOutput, error)
 	UpdateApplicationWithContext(aws.Context, *kinesisanalyticsv2.UpdateApplicationInput, ...request.Option) (*kinesisanalyticsv2.UpdateApplicationOutput, error)
 	UpdateApplicationRequest(*kinesisanalyticsv2.UpdateApplicationInput) (*request.Request, *kinesisanalyticsv2.UpdateApplicationOutput)
+
+	UpdateApplicationMaintenanceConfiguration(*kinesisanalyticsv2.UpdateApplicationMaintenanceConfigurationInput) (*kinesisanalyticsv2.UpdateApplicationMaintenanceConfigurationOutput, error)
+	UpdateApplicationMaintenanceConfigurationWithContext(aws.Context, *kinesisanalyticsv2.UpdateApplicationMaintenanceConfigurationInput, ...request.Option) (*kinesisanalyticsv2.UpdateApplicationMaintenanceConfigurationOutput, error)
+	UpdateApplicationMaintenanceConfigurationRequest(*kinesisanalyticsv2.UpdateApplicationMaintenanceConfigurationInput) (*request.Request, *kinesisanalyticsv2.UpdateApplicationMaintenanceConfigurationOutput)
 }
 
 var _ KinesisAnalyticsV2API = (*kinesisanalyticsv2.KinesisAnalyticsV2)(nil)

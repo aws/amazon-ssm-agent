@@ -11,7 +11,7 @@ const (
 	// ErrCodeAccessDeniedException for service response error code
 	// "AccessDeniedException".
 	//
-	// You do not have sufficient access to perform this action.
+	// Client authentication is not available in this region at this time.
 	ErrCodeAccessDeniedException = "AccessDeniedException"
 
 	// ErrCodeAuthenticationFailedException for service response error code
@@ -52,10 +52,18 @@ const (
 	// A client exception has occurred.
 	ErrCodeClientException = "ClientException"
 
+	// ErrCodeDirectoryAlreadyInRegionException for service response error code
+	// "DirectoryAlreadyInRegionException".
+	//
+	// The Region you specified is the same Region where the Managed Microsoft AD
+	// directory was created. Specify a different Region and try again.
+	ErrCodeDirectoryAlreadyInRegionException = "DirectoryAlreadyInRegionException"
+
 	// ErrCodeDirectoryAlreadySharedException for service response error code
 	// "DirectoryAlreadySharedException".
 	//
-	// The specified directory has already been shared with this AWS account.
+	// The specified directory has already been shared with this Amazon Web Services
+	// account.
 	ErrCodeDirectoryAlreadySharedException = "DirectoryAlreadySharedException"
 
 	// ErrCodeDirectoryDoesNotExistException for service response error code
@@ -75,7 +83,8 @@ const (
 	// ErrCodeDirectoryNotSharedException for service response error code
 	// "DirectoryNotSharedException".
 	//
-	// The specified directory has not been shared with this AWS account.
+	// The specified directory has not been shared with this Amazon Web Services
+	// account.
 	ErrCodeDirectoryNotSharedException = "DirectoryNotSharedException"
 
 	// ErrCodeDirectoryUnavailableException for service response error code
@@ -114,6 +123,12 @@ const (
 	//
 	// The certificate PEM that was provided has incorrect encoding.
 	ErrCodeInvalidCertificateException = "InvalidCertificateException"
+
+	// ErrCodeInvalidClientAuthStatusException for service response error code
+	// "InvalidClientAuthStatusException".
+	//
+	// Client authentication is already enabled.
+	ErrCodeInvalidClientAuthStatusException = "InvalidClientAuthStatusException"
 
 	// ErrCodeInvalidLDAPSStatusException for service response error code
 	// "InvalidLDAPSStatusException".
@@ -157,27 +172,34 @@ const (
 	// ErrCodeNoAvailableCertificateException for service response error code
 	// "NoAvailableCertificateException".
 	//
-	// The LDAP activities could not be performed because at least one valid certificate
-	// must be registered with the system.
+	// Client authentication setup could not be completed because at least one valid
+	// certificate must be registered in the system.
 	ErrCodeNoAvailableCertificateException = "NoAvailableCertificateException"
 
 	// ErrCodeOrganizationsException for service response error code
 	// "OrganizationsException".
 	//
-	// Exception encountered while trying to access your AWS organization.
+	// Exception encountered while trying to access your Amazon Web Services organization.
 	ErrCodeOrganizationsException = "OrganizationsException"
+
+	// ErrCodeRegionLimitExceededException for service response error code
+	// "RegionLimitExceededException".
+	//
+	// You have reached the limit for maximum number of simultaneous Region replications
+	// per directory.
+	ErrCodeRegionLimitExceededException = "RegionLimitExceededException"
 
 	// ErrCodeServiceException for service response error code
 	// "ServiceException".
 	//
-	// An exception has occurred in AWS Directory Service.
+	// An exception has occurred in Directory Service.
 	ErrCodeServiceException = "ServiceException"
 
 	// ErrCodeShareLimitExceededException for service response error code
 	// "ShareLimitExceededException".
 	//
-	// The maximum number of AWS accounts that you can share with this directory
-	// has been reached.
+	// The maximum number of Amazon Web Services accounts that you can share with
+	// this directory has been reached.
 	ErrCodeShareLimitExceededException = "ShareLimitExceededException"
 
 	// ErrCodeSnapshotLimitExceededException for service response error code
@@ -215,6 +237,7 @@ var exceptionFromCode = map[string]func(protocol.ResponseMetadata) error{
 	"CertificateInUseException":              newErrorCertificateInUseException,
 	"CertificateLimitExceededException":      newErrorCertificateLimitExceededException,
 	"ClientException":                        newErrorClientException,
+	"DirectoryAlreadyInRegionException":      newErrorDirectoryAlreadyInRegionException,
 	"DirectoryAlreadySharedException":        newErrorDirectoryAlreadySharedException,
 	"DirectoryDoesNotExistException":         newErrorDirectoryDoesNotExistException,
 	"DirectoryLimitExceededException":        newErrorDirectoryLimitExceededException,
@@ -225,6 +248,7 @@ var exceptionFromCode = map[string]func(protocol.ResponseMetadata) error{
 	"EntityDoesNotExistException":            newErrorEntityDoesNotExistException,
 	"InsufficientPermissionsException":       newErrorInsufficientPermissionsException,
 	"InvalidCertificateException":            newErrorInvalidCertificateException,
+	"InvalidClientAuthStatusException":       newErrorInvalidClientAuthStatusException,
 	"InvalidLDAPSStatusException":            newErrorInvalidLDAPSStatusException,
 	"InvalidNextTokenException":              newErrorInvalidNextTokenException,
 	"InvalidParameterException":              newErrorInvalidParameterException,
@@ -233,6 +257,7 @@ var exceptionFromCode = map[string]func(protocol.ResponseMetadata) error{
 	"IpRouteLimitExceededException":          newErrorIpRouteLimitExceededException,
 	"NoAvailableCertificateException":        newErrorNoAvailableCertificateException,
 	"OrganizationsException":                 newErrorOrganizationsException,
+	"RegionLimitExceededException":           newErrorRegionLimitExceededException,
 	"ServiceException":                       newErrorServiceException,
 	"ShareLimitExceededException":            newErrorShareLimitExceededException,
 	"SnapshotLimitExceededException":         newErrorSnapshotLimitExceededException,

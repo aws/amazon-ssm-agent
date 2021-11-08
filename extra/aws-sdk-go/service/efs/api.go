@@ -63,8 +63,8 @@ func (c *EFS) CreateAccessPointRequest(input *CreateAccessPointInput) (req *requ
 // point. The operating system user and group override any identity information
 // provided by the NFS client. The file system path is exposed as the access
 // point's root directory. Applications using the access point can only access
-// data in its own directory and below. To learn more, see Mounting a File System
-// Using EFS Access Points (https://docs.aws.amazon.com/efs/latest/ug/efs-access-points.html).
+// data in its own directory and below. To learn more, see Mounting a file system
+// using EFS access points (https://docs.aws.amazon.com/efs/latest/ug/efs-access-points.html).
 //
 // This operation requires permissions for the elasticfilesystem:CreateAccessPoint
 // action.
@@ -93,11 +93,11 @@ func (c *EFS) CreateAccessPointRequest(input *CreateAccessPointInput) (req *requ
 //
 //   * FileSystemNotFound
 //   Returned if the specified FileSystemId value doesn't exist in the requester's
-//   AWS account.
+//   Amazon Web Services account.
 //
 //   * AccessPointLimitExceeded
-//   Returned if the AWS account has already created the maximum number of access
-//   points allowed per file system.
+//   Returned if the Amazon Web Services account has already created the maximum
+//   number of access points allowed per file system.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/elasticfilesystem-2015-02-01/CreateAccessPoint
 func (c *EFS) CreateAccessPoint(input *CreateAccessPointInput) (*CreateAccessPointOutput, error) {
@@ -168,8 +168,8 @@ func (c *EFS) CreateFileSystemRequest(input *CreateFileSystemInput) (req *reques
 // Creates a new, empty file system. The operation requires a creation token
 // in the request that Amazon EFS uses to ensure idempotent creation (calling
 // the operation with same creation token has no effect). If a file system does
-// not currently exist that is owned by the caller's AWS account with the specified
-// creation token, this operation does the following:
+// not currently exist that is owned by the caller's Amazon Web Services account
+// with the specified creation token, this operation does the following:
 //
 //    * Creates a new, empty file system. The file system will have an Amazon
 //    EFS assigned ID, and an initial lifecycle state creating.
@@ -190,18 +190,24 @@ func (c *EFS) CreateFileSystemRequest(input *CreateFileSystemInput) (req *reques
 // if the initial call had succeeded in creating a file system, the client can
 // learn of its existence from the FileSystemAlreadyExists error.
 //
+// For more information, see Creating a file system (https://docs.aws.amazon.com/efs/latest/ug/creating-using-create-fs.html#creating-using-create-fs-part1)
+// in the Amazon EFS User Guide.
+//
 // The CreateFileSystem call returns while the file system's lifecycle state
 // is still creating. You can check the file system creation status by calling
 // the DescribeFileSystems operation, which among other things returns the file
 // system state.
 //
-// This operation also takes an optional PerformanceMode parameter that you
-// choose for your file system. We recommend generalPurpose performance mode
-// for most file systems. File systems using the maxIO performance mode can
-// scale to higher levels of aggregate throughput and operations per second
-// with a tradeoff of slightly higher latencies for most file operations. The
-// performance mode can't be changed after the file system has been created.
-// For more information, see Amazon EFS: Performance Modes (https://docs.aws.amazon.com/efs/latest/ug/performance.html#performancemodes.html).
+// This operation accepts an optional PerformanceMode parameter that you choose
+// for your file system. We recommend generalPurpose performance mode for most
+// file systems. File systems using the maxIO performance mode can scale to
+// higher levels of aggregate throughput and operations per second with a tradeoff
+// of slightly higher latencies for most file operations. The performance mode
+// can't be changed after the file system has been created. For more information,
+// see Amazon EFS performance modes (https://docs.aws.amazon.com/efs/latest/ug/performance.html#performancemodes.html).
+//
+// You can set the throughput mode for the file system using the ThroughputMode
+// parameter.
 //
 // After the file system is fully created, Amazon EFS sets its lifecycle state
 // to available, at which point you can create one or more mount targets for
@@ -233,19 +239,23 @@ func (c *EFS) CreateFileSystemRequest(input *CreateFileSystemInput) (req *reques
 //   the creation token you provided.
 //
 //   * FileSystemLimitExceeded
-//   Returned if the AWS account has already created the maximum number of file
-//   systems allowed per account.
+//   Returned if the Amazon Web Services account has already created the maximum
+//   number of file systems allowed per account.
 //
 //   * InsufficientThroughputCapacity
 //   Returned if there's not enough capacity to provision additional throughput.
 //   This value might be returned when you try to create a file system in provisioned
 //   throughput mode, when you attempt to increase the provisioned throughput
 //   of an existing file system, or when you attempt to change an existing file
-//   system from bursting to provisioned throughput mode.
+//   system from bursting to provisioned throughput mode. Try again later.
 //
 //   * ThroughputLimitExceeded
 //   Returned if the throughput mode or amount of provisioned throughput can't
 //   be changed because the throughput limit of 1024 MiB/s has been reached.
+//
+//   * UnsupportedAvailabilityZone
+//   Returned if the requested Amazon EFS functionality is not available in the
+//   specified Availability Zone.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/elasticfilesystem-2015-02-01/CreateFileSystem
 func (c *EFS) CreateFileSystem(input *CreateFileSystemInput) (*FileSystemDescription, error) {
@@ -321,20 +331,29 @@ func (c *EFS) CreateMountTargetRequest(input *CreateMountTargetInput) (req *requ
 // target for a given file system. If you have multiple subnets in an Availability
 // Zone, you create a mount target in one of the subnets. EC2 instances do not
 // need to be in the same subnet as the mount target in order to access their
-// file system. For more information, see Amazon EFS: How it Works (https://docs.aws.amazon.com/efs/latest/ug/how-it-works.html).
+// file system.
 //
-// In the request, you also specify a file system ID for which you are creating
-// the mount target and the file system's lifecycle state must be available.
-// For more information, see DescribeFileSystems.
+// You can create only one mount target for an EFS file system using One Zone
+// storage classes. You must create that mount target in the same Availability
+// Zone in which the file system is located. Use the AvailabilityZoneName and
+// AvailabiltyZoneId properties in the DescribeFileSystems response object to
+// get this information. Use the subnetId associated with the file system's
+// Availability Zone when creating the mount target.
 //
-// In the request, you also provide a subnet ID, which determines the following:
+// For more information, see Amazon EFS: How it Works (https://docs.aws.amazon.com/efs/latest/ug/how-it-works.html).
 //
-//    * VPC in which Amazon EFS creates the mount target
+// To create a mount target for a file system, the file system's lifecycle state
+// must be available. For more information, see DescribeFileSystems.
 //
-//    * Availability Zone in which Amazon EFS creates the mount target
+// In the request, provide the following:
 //
-//    * IP address range from which Amazon EFS selects the IP address of the
-//    mount target (if you don't specify an IP address in the request)
+//    * The file system ID for which you are creating the mount target.
+//
+//    * A subnet ID, which determines the following: The VPC in which Amazon
+//    EFS creates the mount target The Availability Zone in which Amazon EFS
+//    creates the mount target The IP address range from which Amazon EFS selects
+//    the IP address of the mount target (if you don't specify an IP address
+//    in the request)
 //
 // After creating the mount target, Amazon EFS returns a response that includes,
 // a MountTargetId and an IpAddress. You use this IP address when mounting the
@@ -420,7 +439,7 @@ func (c *EFS) CreateMountTargetRequest(input *CreateMountTargetInput) (req *requ
 //
 //   * FileSystemNotFound
 //   Returned if the specified FileSystemId value doesn't exist in the requester's
-//   AWS account.
+//   Amazon Web Services account.
 //
 //   * IncorrectFileSystemLifeCycleState
 //   Returned if the file system's lifecycle state is not "available".
@@ -442,9 +461,9 @@ func (c *EFS) CreateMountTargetRequest(input *CreateMountTargetInput) (req *requ
 //
 //   * NetworkInterfaceLimitExceeded
 //   The calling account has reached the limit for elastic network interfaces
-//   for the specific AWS Region. The client should try to delete some elastic
-//   network interfaces or get the account limit raised. For more information,
-//   see Amazon VPC Limits (https://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_Appendix_Limits.html)
+//   for the specific Amazon Web Services Region. The client should try to delete
+//   some elastic network interfaces or get the account limit raised. For more
+//   information, see Amazon VPC Limits (https://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_Appendix_Limits.html)
 //   in the Amazon VPC User Guide (see the Network interfaces per VPC entry in
 //   the table).
 //
@@ -457,6 +476,14 @@ func (c *EFS) CreateMountTargetRequest(input *CreateMountTargetInput) (req *requ
 //   VPC.
 //
 //   * UnsupportedAvailabilityZone
+//   Returned if the requested Amazon EFS functionality is not available in the
+//   specified Availability Zone.
+//
+//   * AvailabilityZonesMismatch
+//   Returned if the Availability Zone that was specified for a mount target is
+//   different from the Availability Zone that was specified for One Zone storage
+//   classes. For more information, see Regional and One Zone storage redundancy
+//   (https://docs.aws.amazon.com/efs/latest/ug/availability-durability.html).
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/elasticfilesystem-2015-02-01/CreateMountTarget
 func (c *EFS) CreateMountTarget(input *CreateMountTargetInput) (*MountTargetDescription, error) {
@@ -530,6 +557,10 @@ func (c *EFS) CreateTagsRequest(input *CreateTagsInput) (req *request.Request, o
 
 // CreateTags API operation for Amazon Elastic File System.
 //
+//
+// DEPRECATED - CreateTags is deprecated and not maintained. Please use the
+// API action to create tags for EFS resources.
+//
 // Creates or overwrites tags associated with a file system. Each tag is a key-value
 // pair. If a tag key specified in the request already exists on the file system,
 // this operation overwrites its value with the value provided in the request.
@@ -555,7 +586,7 @@ func (c *EFS) CreateTagsRequest(input *CreateTagsInput) (req *request.Request, o
 //
 //   * FileSystemNotFound
 //   Returned if the specified FileSystemId value doesn't exist in the requester's
-//   AWS account.
+//   Amazon Web Services account.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/elasticfilesystem-2015-02-01/CreateTags
 //
@@ -653,7 +684,7 @@ func (c *EFS) DeleteAccessPointRequest(input *DeleteAccessPointInput) (req *requ
 //
 //   * AccessPointNotFound
 //   Returned if the specified AccessPointId value doesn't exist in the requester's
-//   AWS account.
+//   Amazon Web Services account.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/elasticfilesystem-2015-02-01/DeleteAccessPoint
 func (c *EFS) DeleteAccessPoint(input *DeleteAccessPointInput) (*DeleteAccessPointOutput, error) {
@@ -756,7 +787,7 @@ func (c *EFS) DeleteFileSystemRequest(input *DeleteFileSystemInput) (req *reques
 //
 //   * FileSystemNotFound
 //   Returned if the specified FileSystemId value doesn't exist in the requester's
-//   AWS account.
+//   Amazon Web Services account.
 //
 //   * FileSystemInUse
 //   Returned if a file system has mount targets.
@@ -849,7 +880,7 @@ func (c *EFS) DeleteFileSystemPolicyRequest(input *DeleteFileSystemPolicyInput) 
 //
 //   * FileSystemNotFound
 //   Returned if the specified FileSystemId value doesn't exist in the requester's
-//   AWS account.
+//   Amazon Web Services account.
 //
 //   * IncorrectFileSystemLifeCycleState
 //   Returned if the file system's lifecycle state is not "available".
@@ -968,7 +999,7 @@ func (c *EFS) DeleteMountTargetRequest(input *DeleteMountTargetInput) (req *requ
 //
 //   * MountTargetNotFound
 //   Returned if there is no mount target with the specified ID found in the caller's
-//   account.
+//   Amazon Web Services account.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/elasticfilesystem-2015-02-01/DeleteMountTarget
 func (c *EFS) DeleteMountTarget(input *DeleteMountTargetInput) (*DeleteMountTargetOutput, error) {
@@ -1042,11 +1073,15 @@ func (c *EFS) DeleteTagsRequest(input *DeleteTagsInput) (req *request.Request, o
 
 // DeleteTags API operation for Amazon Elastic File System.
 //
+//
+// DEPRECATED - DeleteTags is deprecated and not maintained. Please use the
+// API action to remove tags from EFS resources.
+//
 // Deletes the specified tags from a file system. If the DeleteTags request
 // includes a tag key that doesn't exist, Amazon EFS ignores it and doesn't
 // cause an error. For more information about tags and related restrictions,
-// see Tag Restrictions (https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/cost-alloc-tags.html)
-// in the AWS Billing and Cost Management User Guide.
+// see Tag restrictions (https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/cost-alloc-tags.html)
+// in the Billing and Cost Management User Guide.
 //
 // This operation requires permissions for the elasticfilesystem:DeleteTags
 // action.
@@ -1068,7 +1103,7 @@ func (c *EFS) DeleteTagsRequest(input *DeleteTagsInput) (req *request.Request, o
 //
 //   * FileSystemNotFound
 //   Returned if the specified FileSystemId value doesn't exist in the requester's
-//   AWS account.
+//   Amazon Web Services account.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/elasticfilesystem-2015-02-01/DeleteTags
 //
@@ -1171,11 +1206,11 @@ func (c *EFS) DescribeAccessPointsRequest(input *DescribeAccessPointsInput) (req
 //
 //   * FileSystemNotFound
 //   Returned if the specified FileSystemId value doesn't exist in the requester's
-//   AWS account.
+//   Amazon Web Services account.
 //
 //   * AccessPointNotFound
 //   Returned if the specified AccessPointId value doesn't exist in the requester's
-//   AWS account.
+//   Amazon Web Services account.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/elasticfilesystem-2015-02-01/DescribeAccessPoints
 func (c *EFS) DescribeAccessPoints(input *DescribeAccessPointsInput) (*DescribeAccessPointsOutput, error) {
@@ -1251,6 +1286,87 @@ func (c *EFS) DescribeAccessPointsPagesWithContext(ctx aws.Context, input *Descr
 	return p.Err()
 }
 
+const opDescribeAccountPreferences = "DescribeAccountPreferences"
+
+// DescribeAccountPreferencesRequest generates a "aws/request.Request" representing the
+// client's request for the DescribeAccountPreferences operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See DescribeAccountPreferences for more information on using the DescribeAccountPreferences
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the DescribeAccountPreferencesRequest method.
+//    req, resp := client.DescribeAccountPreferencesRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/elasticfilesystem-2015-02-01/DescribeAccountPreferences
+func (c *EFS) DescribeAccountPreferencesRequest(input *DescribeAccountPreferencesInput) (req *request.Request, output *DescribeAccountPreferencesOutput) {
+	op := &request.Operation{
+		Name:       opDescribeAccountPreferences,
+		HTTPMethod: "GET",
+		HTTPPath:   "/2015-02-01/account-preferences",
+	}
+
+	if input == nil {
+		input = &DescribeAccountPreferencesInput{}
+	}
+
+	output = &DescribeAccountPreferencesOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// DescribeAccountPreferences API operation for Amazon Elastic File System.
+//
+// Returns the account preferences settings for the Amazon Web Services account
+// associated with the user making the request, in the current Amazon Web Services
+// Region. For more information, see Managing Amazon EFS resource IDs (efs/latest/ug/manage-efs-resource-ids.html).
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Elastic File System's
+// API operation DescribeAccountPreferences for usage and error information.
+//
+// Returned Error Types:
+//   * InternalServerError
+//   Returned if an error occurred on the server side.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/elasticfilesystem-2015-02-01/DescribeAccountPreferences
+func (c *EFS) DescribeAccountPreferences(input *DescribeAccountPreferencesInput) (*DescribeAccountPreferencesOutput, error) {
+	req, out := c.DescribeAccountPreferencesRequest(input)
+	return out, req.Send()
+}
+
+// DescribeAccountPreferencesWithContext is the same as DescribeAccountPreferences with the addition of
+// the ability to pass a context and additional request options.
+//
+// See DescribeAccountPreferences for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *EFS) DescribeAccountPreferencesWithContext(ctx aws.Context, input *DescribeAccountPreferencesInput, opts ...request.Option) (*DescribeAccountPreferencesOutput, error) {
+	req, out := c.DescribeAccountPreferencesRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opDescribeBackupPolicy = "DescribeBackupPolicy"
 
 // DescribeBackupPolicyRequest generates a "aws/request.Request" representing the
@@ -1311,7 +1427,7 @@ func (c *EFS) DescribeBackupPolicyRequest(input *DescribeBackupPolicyInput) (req
 //
 //   * FileSystemNotFound
 //   Returned if the specified FileSystemId value doesn't exist in the requester's
-//   AWS account.
+//   Amazon Web Services account.
 //
 //   * InternalServerError
 //   Returned if an error occurred on the server side.
@@ -1321,8 +1437,8 @@ func (c *EFS) DescribeBackupPolicyRequest(input *DescribeBackupPolicyInput) (req
 //   system specified.
 //
 //   * ValidationException
-//   Returned if the AWS Backup service is not available in the region that the
-//   request was made.
+//   Returned if the Backup service is not available in the Amazon Web Services
+//   Region in which the request was made.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/elasticfilesystem-2015-02-01/DescribeBackupPolicy
 func (c *EFS) DescribeBackupPolicy(input *DescribeBackupPolicyInput) (*DescribeBackupPolicyOutput, error) {
@@ -1408,7 +1524,7 @@ func (c *EFS) DescribeFileSystemPolicyRequest(input *DescribeFileSystemPolicyInp
 //
 //   * FileSystemNotFound
 //   Returned if the specified FileSystemId value doesn't exist in the requester's
-//   AWS account.
+//   Amazon Web Services account.
 //
 //   * PolicyNotFound
 //   Returned if the default file system policy is in effect for the EFS file
@@ -1488,8 +1604,9 @@ func (c *EFS) DescribeFileSystemsRequest(input *DescribeFileSystemsInput) (req *
 //
 // Returns the description of a specific Amazon EFS file system if either the
 // file system CreationToken or the FileSystemId is provided. Otherwise, it
-// returns descriptions of all file systems owned by the caller's AWS account
-// in the AWS Region of the endpoint that you're calling.
+// returns descriptions of all file systems owned by the caller's Amazon Web
+// Services account in the Amazon Web Services Region of the endpoint that you're
+// calling.
 //
 // When retrieving all file system descriptions, you can optionally specify
 // the MaxItems parameter to limit the number of descriptions in a response.
@@ -1528,7 +1645,7 @@ func (c *EFS) DescribeFileSystemsRequest(input *DescribeFileSystemsInput) (req *
 //
 //   * FileSystemNotFound
 //   Returned if the specified FileSystemId value doesn't exist in the requester's
-//   AWS account.
+//   Amazon Web Services account.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/elasticfilesystem-2015-02-01/DescribeFileSystems
 func (c *EFS) DescribeFileSystems(input *DescribeFileSystemsInput) (*DescribeFileSystemsOutput, error) {
@@ -1654,6 +1771,9 @@ func (c *EFS) DescribeLifecycleConfigurationRequest(input *DescribeLifecycleConf
 // storage class. For a file system without a LifecycleConfiguration object,
 // the call returns an empty array in the response.
 //
+// When EFS Intelligent Tiering is enabled, TransitionToPrimaryStorageClass
+// has a value of AFTER_1_ACCESS.
+//
 // This operation requires permissions for the elasticfilesystem:DescribeLifecycleConfiguration
 // operation.
 //
@@ -1674,7 +1794,7 @@ func (c *EFS) DescribeLifecycleConfigurationRequest(input *DescribeLifecycleConf
 //
 //   * FileSystemNotFound
 //   Returned if the specified FileSystemId value doesn't exist in the requester's
-//   AWS account.
+//   Amazon Web Services account.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/elasticfilesystem-2015-02-01/DescribeLifecycleConfiguration
 func (c *EFS) DescribeLifecycleConfiguration(input *DescribeLifecycleConfigurationInput) (*DescribeLifecycleConfigurationOutput, error) {
@@ -1771,7 +1891,7 @@ func (c *EFS) DescribeMountTargetSecurityGroupsRequest(input *DescribeMountTarge
 //
 //   * MountTargetNotFound
 //   Returned if there is no mount target with the specified ID found in the caller's
-//   account.
+//   Amazon Web Services account.
 //
 //   * IncorrectMountTargetState
 //   Returned if the mount target is not in the correct state for the operation.
@@ -1867,15 +1987,15 @@ func (c *EFS) DescribeMountTargetsRequest(input *DescribeMountTargetsInput) (req
 //
 //   * FileSystemNotFound
 //   Returned if the specified FileSystemId value doesn't exist in the requester's
-//   AWS account.
+//   Amazon Web Services account.
 //
 //   * MountTargetNotFound
 //   Returned if there is no mount target with the specified ID found in the caller's
-//   account.
+//   Amazon Web Services account.
 //
 //   * AccessPointNotFound
 //   Returned if the specified AccessPointId value doesn't exist in the requester's
-//   AWS account.
+//   Amazon Web Services account.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/elasticfilesystem-2015-02-01/DescribeMountTargets
 func (c *EFS) DescribeMountTargets(input *DescribeMountTargetsInput) (*DescribeMountTargetsOutput, error) {
@@ -1954,6 +2074,10 @@ func (c *EFS) DescribeTagsRequest(input *DescribeTagsInput) (req *request.Reques
 
 // DescribeTags API operation for Amazon Elastic File System.
 //
+//
+// DEPRECATED - The DeleteTags action is deprecated and not maintained. Please
+// use the API action to remove tags from EFS resources.
+//
 // Returns the tags associated with a file system. The order of tags returned
 // in the response of one DescribeTags call and the order of tags returned across
 // the responses of a multiple-call iteration (when using pagination) is unspecified.
@@ -1978,7 +2102,7 @@ func (c *EFS) DescribeTagsRequest(input *DescribeTagsInput) (req *request.Reques
 //
 //   * FileSystemNotFound
 //   Returned if the specified FileSystemId value doesn't exist in the requester's
-//   AWS account.
+//   Amazon Web Services account.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/elasticfilesystem-2015-02-01/DescribeTags
 //
@@ -2135,11 +2259,11 @@ func (c *EFS) ListTagsForResourceRequest(input *ListTagsForResourceInput) (req *
 //
 //   * FileSystemNotFound
 //   Returned if the specified FileSystemId value doesn't exist in the requester's
-//   AWS account.
+//   Amazon Web Services account.
 //
 //   * AccessPointNotFound
 //   Returned if the specified AccessPointId value doesn't exist in the requester's
-//   AWS account.
+//   Amazon Web Services account.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/elasticfilesystem-2015-02-01/ListTagsForResource
 func (c *EFS) ListTagsForResource(input *ListTagsForResourceInput) (*ListTagsForResourceOutput, error) {
@@ -2294,7 +2418,7 @@ func (c *EFS) ModifyMountTargetSecurityGroupsRequest(input *ModifyMountTargetSec
 //
 //   * MountTargetNotFound
 //   Returned if there is no mount target with the specified ID found in the caller's
-//   account.
+//   Amazon Web Services account.
 //
 //   * IncorrectMountTargetState
 //   Returned if the mount target is not in the correct state for the operation.
@@ -2324,6 +2448,99 @@ func (c *EFS) ModifyMountTargetSecurityGroups(input *ModifyMountTargetSecurityGr
 // for more information on using Contexts.
 func (c *EFS) ModifyMountTargetSecurityGroupsWithContext(ctx aws.Context, input *ModifyMountTargetSecurityGroupsInput, opts ...request.Option) (*ModifyMountTargetSecurityGroupsOutput, error) {
 	req, out := c.ModifyMountTargetSecurityGroupsRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opPutAccountPreferences = "PutAccountPreferences"
+
+// PutAccountPreferencesRequest generates a "aws/request.Request" representing the
+// client's request for the PutAccountPreferences operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See PutAccountPreferences for more information on using the PutAccountPreferences
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the PutAccountPreferencesRequest method.
+//    req, resp := client.PutAccountPreferencesRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/elasticfilesystem-2015-02-01/PutAccountPreferences
+func (c *EFS) PutAccountPreferencesRequest(input *PutAccountPreferencesInput) (req *request.Request, output *PutAccountPreferencesOutput) {
+	op := &request.Operation{
+		Name:       opPutAccountPreferences,
+		HTTPMethod: "PUT",
+		HTTPPath:   "/2015-02-01/account-preferences",
+	}
+
+	if input == nil {
+		input = &PutAccountPreferencesInput{}
+	}
+
+	output = &PutAccountPreferencesOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// PutAccountPreferences API operation for Amazon Elastic File System.
+//
+// Use this operation to set the account preference in the current Amazon Web
+// Services Region to use long 17 character (63 bit) or short 8 character (32
+// bit) resource IDs for new EFS file system and mount target resources. All
+// existing resource IDs are not affected by any changes you make. You can set
+// the ID preference during the opt-in period as EFS transitions to long resource
+// IDs. For more information, see Managing Amazon EFS resource IDs (https://docs.aws.amazon.com/efs/latest/ug/manage-efs-resource-ids.html).
+//
+// Starting in October, 2021, you will receive an error if you try to set the
+// account preference to use the short 8 character format resource ID. Contact
+// Amazon Web Services support if you receive an error and need to use short
+// IDs for file system and mount target resources.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Elastic File System's
+// API operation PutAccountPreferences for usage and error information.
+//
+// Returned Error Types:
+//   * BadRequest
+//   Returned if the request is malformed or contains an error such as an invalid
+//   parameter value or a missing required parameter.
+//
+//   * InternalServerError
+//   Returned if an error occurred on the server side.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/elasticfilesystem-2015-02-01/PutAccountPreferences
+func (c *EFS) PutAccountPreferences(input *PutAccountPreferencesInput) (*PutAccountPreferencesOutput, error) {
+	req, out := c.PutAccountPreferencesRequest(input)
+	return out, req.Send()
+}
+
+// PutAccountPreferencesWithContext is the same as PutAccountPreferences with the addition of
+// the ability to pass a context and additional request options.
+//
+// See PutAccountPreferences for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *EFS) PutAccountPreferencesWithContext(ctx aws.Context, input *PutAccountPreferencesInput, opts ...request.Option) (*PutAccountPreferencesOutput, error) {
+	req, out := c.PutAccountPreferencesRequest(input)
 	req.SetContext(ctx)
 	req.ApplyOptions(opts...)
 	return out, req.Send()
@@ -2390,7 +2607,7 @@ func (c *EFS) PutBackupPolicyRequest(input *PutBackupPolicyInput) (req *request.
 //
 //   * FileSystemNotFound
 //   Returned if the specified FileSystemId value doesn't exist in the requester's
-//   AWS account.
+//   Amazon Web Services account.
 //
 //   * IncorrectFileSystemLifeCycleState
 //   Returned if the file system's lifecycle state is not "available".
@@ -2399,8 +2616,8 @@ func (c *EFS) PutBackupPolicyRequest(input *PutBackupPolicyInput) (req *request.
 //   Returned if an error occurred on the server side.
 //
 //   * ValidationException
-//   Returned if the AWS Backup service is not available in the region that the
-//   request was made.
+//   Returned if the Backup service is not available in the Amazon Web Services
+//   Region in which the request was made.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/elasticfilesystem-2015-02-01/PutBackupPolicy
 func (c *EFS) PutBackupPolicy(input *PutBackupPolicyInput) (*PutBackupPolicyOutput, error) {
@@ -2472,9 +2689,12 @@ func (c *EFS) PutFileSystemPolicyRequest(input *PutFileSystemPolicyInput) (req *
 // system policy is an IAM resource-based policy and can contain multiple policy
 // statements. A file system always has exactly one file system policy, which
 // can be the default policy or an explicit policy set or updated using this
-// API operation. When an explicit policy is set, it overrides the default policy.
-// For more information about the default file system policy, see Default EFS
-// File System Policy (https://docs.aws.amazon.com/efs/latest/ug/iam-access-control-nfs-efs.html#default-filesystempolicy).
+// API operation. EFS file system policies have a 20,000 character limit. When
+// an explicit policy is set, it overrides the default policy. For more information
+// about the default file system policy, see Default EFS File System Policy
+// (https://docs.aws.amazon.com/efs/latest/ug/iam-access-control-nfs-efs.html#default-filesystempolicy).
+//
+// EFS file system policies have a 20,000 character limit.
 //
 // This operation requires permissions for the elasticfilesystem:PutFileSystemPolicy
 // action.
@@ -2492,7 +2712,7 @@ func (c *EFS) PutFileSystemPolicyRequest(input *PutFileSystemPolicyInput) (req *
 //
 //   * FileSystemNotFound
 //   Returned if the specified FileSystemId value doesn't exist in the requester's
-//   AWS account.
+//   Amazon Web Services account.
 //
 //   * InvalidPolicyException
 //   Returned if the FileSystemPolicy is is malformed or contains an error such
@@ -2571,15 +2791,15 @@ func (c *EFS) PutLifecycleConfigurationRequest(input *PutLifecycleConfigurationI
 // Enables lifecycle management by creating a new LifecycleConfiguration object.
 // A LifecycleConfiguration object defines when files in an Amazon EFS file
 // system are automatically transitioned to the lower-cost EFS Infrequent Access
-// (IA) storage class. A LifecycleConfiguration applies to all files in a file
-// system.
+// (IA) storage class. To enable EFS Intelligent Tiering, set the value of TransitionToPrimaryStorageClass
+// to AFTER_1_ACCESS. For more information, see EFS Lifecycle Management (https://docs.aws.amazon.com/efs/latest/ug/lifecycle-management-efs.html).
 //
 // Each Amazon EFS file system supports one lifecycle configuration, which applies
 // to all files in the file system. If a LifecycleConfiguration object already
 // exists for the specified file system, a PutLifecycleConfiguration call modifies
 // the existing configuration. A PutLifecycleConfiguration call with an empty
 // LifecyclePolicies array in the request body deletes any existing LifecycleConfiguration
-// and disables lifecycle management.
+// and turns off lifecycle management for the file system.
 //
 // In the request, specify the following:
 //
@@ -2587,15 +2807,17 @@ func (c *EFS) PutLifecycleConfigurationRequest(input *PutLifecycleConfigurationI
 //    modifying lifecycle management.
 //
 //    * A LifecyclePolicies array of LifecyclePolicy objects that define when
-//    files are moved to the IA storage class. The array can contain only one
-//    LifecyclePolicy item.
+//    files are moved to the IA storage class. Amazon EFS requires that each
+//    LifecyclePolicy object have only have a single transition, so the LifecyclePolicies
+//    array needs to be structured with separate LifecyclePolicy objects. See
+//    the example requests in the following section for more information.
 //
 // This operation requires permissions for the elasticfilesystem:PutLifecycleConfiguration
 // operation.
 //
 // To apply a LifecycleConfiguration object to an encrypted file system, you
-// need the same AWS Key Management Service (AWS KMS) permissions as when you
-// created the encrypted file system.
+// need the same Key Management Service permissions as when you created the
+// encrypted file system.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -2614,7 +2836,7 @@ func (c *EFS) PutLifecycleConfigurationRequest(input *PutLifecycleConfigurationI
 //
 //   * FileSystemNotFound
 //   Returned if the specified FileSystemId value doesn't exist in the requester's
-//   AWS account.
+//   Amazon Web Services account.
 //
 //   * IncorrectFileSystemLifeCycleState
 //   Returned if the file system's lifecycle state is not "available".
@@ -2709,11 +2931,11 @@ func (c *EFS) TagResourceRequest(input *TagResourceInput) (req *request.Request,
 //
 //   * FileSystemNotFound
 //   Returned if the specified FileSystemId value doesn't exist in the requester's
-//   AWS account.
+//   Amazon Web Services account.
 //
 //   * AccessPointNotFound
 //   Returned if the specified AccessPointId value doesn't exist in the requester's
-//   AWS account.
+//   Amazon Web Services account.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/elasticfilesystem-2015-02-01/TagResource
 func (c *EFS) TagResource(input *TagResourceInput) (*TagResourceOutput, error) {
@@ -2805,11 +3027,11 @@ func (c *EFS) UntagResourceRequest(input *UntagResourceInput) (req *request.Requ
 //
 //   * FileSystemNotFound
 //   Returned if the specified FileSystemId value doesn't exist in the requester's
-//   AWS account.
+//   Amazon Web Services account.
 //
 //   * AccessPointNotFound
 //   Returned if the specified AccessPointId value doesn't exist in the requester's
-//   AWS account.
+//   Amazon Web Services account.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/elasticfilesystem-2015-02-01/UntagResource
 func (c *EFS) UntagResource(input *UntagResourceInput) (*UntagResourceOutput, error) {
@@ -2894,7 +3116,7 @@ func (c *EFS) UpdateFileSystemRequest(input *UpdateFileSystemInput) (req *reques
 //
 //   * FileSystemNotFound
 //   Returned if the specified FileSystemId value doesn't exist in the requester's
-//   AWS account.
+//   Amazon Web Services account.
 //
 //   * IncorrectFileSystemLifeCycleState
 //   Returned if the file system's lifecycle state is not "available".
@@ -2904,7 +3126,7 @@ func (c *EFS) UpdateFileSystemRequest(input *UpdateFileSystemInput) (req *reques
 //   This value might be returned when you try to create a file system in provisioned
 //   throughput mode, when you attempt to increase the provisioned throughput
 //   of an existing file system, or when you attempt to change an existing file
-//   system from bursting to provisioned throughput mode.
+//   system from bursting to provisioned throughput mode. Try again later.
 //
 //   * InternalServerError
 //   Returned if an error occurred on the server side.
@@ -2954,12 +3176,20 @@ type AccessPointAlreadyExists struct {
 	Message_ *string `locationName:"Message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AccessPointAlreadyExists) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AccessPointAlreadyExists) GoString() string {
 	return s.String()
 }
@@ -3024,7 +3254,7 @@ type AccessPointDescription struct {
 	// The name of the access point. This is the value of the Name tag.
 	Name *string `type:"string"`
 
-	// Identified the AWS account that owns the access point resource.
+	// Identified the Amazon Web Services account that owns the access point resource.
 	OwnerId *string `type:"string"`
 
 	// The full POSIX identity, including the user ID, group ID, and secondary group
@@ -3040,12 +3270,20 @@ type AccessPointDescription struct {
 	Tags []*Tag `type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AccessPointDescription) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AccessPointDescription) GoString() string {
 	return s.String()
 }
@@ -3110,8 +3348,8 @@ func (s *AccessPointDescription) SetTags(v []*Tag) *AccessPointDescription {
 	return s
 }
 
-// Returned if the AWS account has already created the maximum number of access
-// points allowed per file system.
+// Returned if the Amazon Web Services account has already created the maximum
+// number of access points allowed per file system.
 type AccessPointLimitExceeded struct {
 	_            struct{}                  `type:"structure"`
 	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
@@ -3122,12 +3360,20 @@ type AccessPointLimitExceeded struct {
 	Message_ *string `locationName:"Message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AccessPointLimitExceeded) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AccessPointLimitExceeded) GoString() string {
 	return s.String()
 }
@@ -3171,7 +3417,7 @@ func (s *AccessPointLimitExceeded) RequestID() string {
 }
 
 // Returned if the specified AccessPointId value doesn't exist in the requester's
-// AWS account.
+// Amazon Web Services account.
 type AccessPointNotFound struct {
 	_            struct{}                  `type:"structure"`
 	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
@@ -3182,12 +3428,20 @@ type AccessPointNotFound struct {
 	Message_ *string `locationName:"Message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AccessPointNotFound) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AccessPointNotFound) GoString() string {
 	return s.String()
 }
@@ -3230,8 +3484,78 @@ func (s *AccessPointNotFound) RequestID() string {
 	return s.RespMetadata.RequestID
 }
 
-// The backup policy for the file system, showing the curent status. If ENABLED,
-// the file system is being backed up.
+// Returned if the Availability Zone that was specified for a mount target is
+// different from the Availability Zone that was specified for One Zone storage
+// classes. For more information, see Regional and One Zone storage redundancy
+// (https://docs.aws.amazon.com/efs/latest/ug/availability-durability.html).
+type AvailabilityZonesMismatch struct {
+	_            struct{}                  `type:"structure"`
+	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
+
+	ErrorCode *string `min:"1" type:"string"`
+
+	Message_ *string `locationName:"Message" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s AvailabilityZonesMismatch) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s AvailabilityZonesMismatch) GoString() string {
+	return s.String()
+}
+
+func newErrorAvailabilityZonesMismatch(v protocol.ResponseMetadata) error {
+	return &AvailabilityZonesMismatch{
+		RespMetadata: v,
+	}
+}
+
+// Code returns the exception type name.
+func (s *AvailabilityZonesMismatch) Code() string {
+	return "AvailabilityZonesMismatch"
+}
+
+// Message returns the exception's message.
+func (s *AvailabilityZonesMismatch) Message() string {
+	if s.Message_ != nil {
+		return *s.Message_
+	}
+	return ""
+}
+
+// OrigErr always returns nil, satisfies awserr.Error interface.
+func (s *AvailabilityZonesMismatch) OrigErr() error {
+	return nil
+}
+
+func (s *AvailabilityZonesMismatch) Error() string {
+	return fmt.Sprintf("%s: %s\n%s", s.Code(), s.Message(), s.String())
+}
+
+// Status code returns the HTTP status code for the request's response error.
+func (s *AvailabilityZonesMismatch) StatusCode() int {
+	return s.RespMetadata.StatusCode
+}
+
+// RequestID returns the service's response RequestID for request.
+func (s *AvailabilityZonesMismatch) RequestID() string {
+	return s.RespMetadata.RequestID
+}
+
+// The backup policy for the file system used to create automatic daily backups.
+// If status has a value of ENABLED, the file system is being automatically
+// backed up. For more information, see Automatic backups (https://docs.aws.amazon.com/efs/latest/ug/awsbackup.html#automatic-backups).
 type BackupPolicy struct {
 	_ struct{} `type:"structure"`
 
@@ -3243,18 +3567,26 @@ type BackupPolicy struct {
 	//
 	//    * DISABLED - automatic back ups are turned off for the file system.
 	//
-	//    * DISABLED - EFS is turning off automatic backups for the file system.
+	//    * DISABLING - EFS is turning off automatic backups for the file system.
 	//
 	// Status is a required field
 	Status *string `type:"string" required:"true" enum:"Status"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s BackupPolicy) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s BackupPolicy) GoString() string {
 	return s.String()
 }
@@ -3290,12 +3622,20 @@ type BadRequest struct {
 	Message_ *string `locationName:"Message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s BadRequest) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s BadRequest) GoString() string {
 	return s.String()
 }
@@ -3360,19 +3700,35 @@ type CreateAccessPointInput struct {
 	// directory and below. If the RootDirectory > Path specified does not exist,
 	// EFS creates it and applies the CreationInfo settings when a client connects
 	// to an access point. When specifying a RootDirectory, you need to provide
-	// the Path, and the CreationInfo is optional.
+	// the Path, and the CreationInfo.
+	//
+	// Amazon EFS creates a root directory only if you have provided the CreationInfo:
+	// OwnUid, OwnGID, and permissions for the directory. If you do not provide
+	// this information, Amazon EFS does not create the root directory. If the root
+	// directory does not exist, attempts to mount using the access point will fail.
 	RootDirectory *RootDirectory `type:"structure"`
 
-	// Creates tags associated with the access point. Each tag is a key-value pair.
+	// Creates tags associated with the access point. Each tag is a key-value pair,
+	// each key must be unique. For more information, see Tagging Amazon Web Services
+	// resources (https://docs.aws.amazon.com/general/latest/gr/aws_tagging.html)
+	// in the Amazon Web Services General Reference Guide.
 	Tags []*Tag `type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateAccessPointInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateAccessPointInput) GoString() string {
 	return s.String()
 }
@@ -3465,7 +3821,7 @@ type CreateAccessPointOutput struct {
 	// The name of the access point. This is the value of the Name tag.
 	Name *string `type:"string"`
 
-	// Identified the AWS account that owns the access point resource.
+	// Identified the Amazon Web Services account that owns the access point resource.
 	OwnerId *string `type:"string"`
 
 	// The full POSIX identity, including the user ID, group ID, and secondary group
@@ -3481,12 +3837,20 @@ type CreateAccessPointOutput struct {
 	Tags []*Tag `type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateAccessPointOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateAccessPointOutput) GoString() string {
 	return s.String()
 }
@@ -3554,21 +3918,44 @@ func (s *CreateAccessPointOutput) SetTags(v []*Tag) *CreateAccessPointOutput {
 type CreateFileSystemInput struct {
 	_ struct{} `type:"structure"`
 
+	// Used to create a file system that uses One Zone storage classes. It specifies
+	// the Amazon Web Services Availability Zone in which to create the file system.
+	// Use the format us-east-1a to specify the Availability Zone. For more information
+	// about One Zone storage classes, see Using EFS storage classes (https://docs.aws.amazon.com/efs/latest/ug/storage-classes.html)
+	// in the Amazon EFS User Guide.
+	//
+	// One Zone storage classes are not available in all Availability Zones in Amazon
+	// Web Services Regions where Amazon EFS is available.
+	AvailabilityZoneName *string `min:"1" type:"string"`
+
+	// Specifies whether automatic backups are enabled on the file system that you
+	// are creating. Set the value to true to enable automatic backups. If you are
+	// creating a file system that uses One Zone storage classes, automatic backups
+	// are enabled by default. For more information, see Automatic backups (https://docs.aws.amazon.com/efs/latest/ug/awsbackup.html#automatic-backups)
+	// in the Amazon EFS User Guide.
+	//
+	// Default is false. However, if you specify an AvailabilityZoneName, the default
+	// is true.
+	//
+	// Backup is not available in all Amazon Web Services Regionswhere Amazon EFS
+	// is available.
+	Backup *bool `type:"boolean"`
+
 	// A string of up to 64 ASCII characters. Amazon EFS uses this to ensure idempotent
 	// creation.
 	CreationToken *string `min:"1" type:"string" idempotencyToken:"true"`
 
 	// A Boolean value that, if true, creates an encrypted file system. When creating
 	// an encrypted file system, you have the option of specifying CreateFileSystemRequest$KmsKeyId
-	// for an existing AWS Key Management Service (AWS KMS) customer master key
-	// (CMK). If you don't specify a CMK, then the default CMK for Amazon EFS, /aws/elasticfilesystem,
+	// for an existing Key Management Service (KMS customer master key (CMK). If
+	// you don't specify a CMK, then the default CMK for Amazon EFS, /aws/elasticfilesystem,
 	// is used to protect the encrypted file system.
 	Encrypted *bool `type:"boolean"`
 
-	// The ID of the AWS KMS CMK to be used to protect the encrypted file system.
-	// This parameter is only required if you want to use a nondefault CMK. If this
-	// parameter is not specified, the default CMK for Amazon EFS is used. This
-	// ID can be in one of the following formats:
+	// The ID of the KMS CMK that you want to use to protect the encrypted file
+	// system. This parameter is only required if you want to use a non-default
+	// KMS key. If this parameter is not specified, the default CMK for Amazon EFS
+	// is used. This ID can be in one of the following formats:
 	//
 	//    * Key ID - A unique identifier of the key, for example 1234abcd-12ab-34cd-56ef-1234567890ab.
 	//
@@ -3582,8 +3969,8 @@ type CreateFileSystemInput struct {
 	// If KmsKeyId is specified, the CreateFileSystemRequest$Encrypted parameter
 	// must be set to true.
 	//
-	// EFS accepts only symmetric CMKs. You cannot use asymmetric CMKs with EFS
-	// file systems.
+	// EFS accepts only symmetric KMS keys. You cannot use asymmetric KMS keys with
+	// EFS file systems.
 	KmsKeyId *string `type:"string"`
 
 	// The performance mode of the file system. We recommend generalPurpose performance
@@ -3591,38 +3978,52 @@ type CreateFileSystemInput struct {
 	// can scale to higher levels of aggregate throughput and operations per second
 	// with a tradeoff of slightly higher latencies for most file operations. The
 	// performance mode can't be changed after the file system has been created.
+	//
+	// The maxIO mode is not supported on file systems using One Zone storage classes.
 	PerformanceMode *string `type:"string" enum:"PerformanceMode"`
 
 	// The throughput, measured in MiB/s, that you want to provision for a file
 	// system that you're creating. Valid values are 1-1024. Required if ThroughputMode
-	// is set to provisioned. The upper limit for throughput is 1024 MiB/s. You
-	// can get this limit increased by contacting AWS Support. For more information,
-	// see Amazon EFS Limits That You Can Increase (https://docs.aws.amazon.com/efs/latest/ug/limits.html#soft-limits)
+	// is set to provisioned. The upper limit for throughput is 1024 MiB/s. To increase
+	// this limit, contact Amazon Web Services Support. For more information, see
+	// Amazon EFS quotas that you can increase (https://docs.aws.amazon.com/efs/latest/ug/limits.html#soft-limits)
 	// in the Amazon EFS User Guide.
 	ProvisionedThroughputInMibps *float64 `min:"1" type:"double"`
 
-	// A value that specifies to create one or more tags associated with the file
-	// system. Each tag is a user-defined key-value pair. Name your file system
-	// on creation by including a "Key":"Name","Value":"{value}" key-value pair.
+	// Use to create one or more tags associated with the file system. Each tag
+	// is a user-defined key-value pair. Name your file system on creation by including
+	// a "Key":"Name","Value":"{value}" key-value pair. Each key must be unique.
+	// For more information, see Tagging Amazon Web Services resources (https://docs.aws.amazon.com/general/latest/gr/aws_tagging.html)
+	// in the Amazon Web Services General Reference Guide.
 	Tags []*Tag `type:"list"`
 
-	// The throughput mode for the file system to be created. There are two throughput
-	// modes to choose from for your file system: bursting and provisioned. If you
-	// set ThroughputMode to provisioned, you must also set a value for ProvisionedThroughPutInMibps.
-	// You can decrease your file system's throughput in Provisioned Throughput
-	// mode or change between the throughput modes as long as it’s been more than
-	// 24 hours since the last decrease or throughput mode change. For more, see
-	// Specifying Throughput with Provisioned Mode (https://docs.aws.amazon.com/efs/latest/ug/performance.html#provisioned-throughput)
+	// Specifies the throughput mode for the file system, either bursting or provisioned.
+	// If you set ThroughputMode to provisioned, you must also set a value for ProvisionedThroughputInMibps.
+	// After you create the file system, you can decrease your file system's throughput
+	// in Provisioned Throughput mode or change between the throughput modes, as
+	// long as it’s been more than 24 hours since the last decrease or throughput
+	// mode change. For more information, see Specifying throughput with provisioned
+	// mode (https://docs.aws.amazon.com/efs/latest/ug/performance.html#provisioned-throughput)
 	// in the Amazon EFS User Guide.
+	//
+	// Default is bursting.
 	ThroughputMode *string `type:"string" enum:"ThroughputMode"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateFileSystemInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateFileSystemInput) GoString() string {
 	return s.String()
 }
@@ -3630,6 +4031,9 @@ func (s CreateFileSystemInput) GoString() string {
 // Validate inspects the fields of the type to determine if they are valid.
 func (s *CreateFileSystemInput) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "CreateFileSystemInput"}
+	if s.AvailabilityZoneName != nil && len(*s.AvailabilityZoneName) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("AvailabilityZoneName", 1))
+	}
 	if s.CreationToken != nil && len(*s.CreationToken) < 1 {
 		invalidParams.Add(request.NewErrParamMinLen("CreationToken", 1))
 	}
@@ -3651,6 +4055,18 @@ func (s *CreateFileSystemInput) Validate() error {
 		return invalidParams
 	}
 	return nil
+}
+
+// SetAvailabilityZoneName sets the AvailabilityZoneName field's value.
+func (s *CreateFileSystemInput) SetAvailabilityZoneName(v string) *CreateFileSystemInput {
+	s.AvailabilityZoneName = &v
+	return s
+}
+
+// SetBackup sets the Backup field's value.
+func (s *CreateFileSystemInput) SetBackup(v bool) *CreateFileSystemInput {
+	s.Backup = &v
+	return s
 }
 
 // SetCreationToken sets the CreationToken field's value.
@@ -3710,18 +4126,28 @@ type CreateMountTargetInput struct {
 	// for the same VPC as subnet specified.
 	SecurityGroups []*string `type:"list"`
 
-	// The ID of the subnet to add the mount target in.
+	// The ID of the subnet to add the mount target in. For file systems that use
+	// One Zone storage classes, use the subnet that is associated with the file
+	// system's Availability Zone.
 	//
 	// SubnetId is a required field
 	SubnetId *string `min:"15" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateMountTargetInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateMountTargetInput) GoString() string {
 	return s.String()
 }
@@ -3787,12 +4213,20 @@ type CreateTagsInput struct {
 	Tags []*Tag `type:"list" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateTagsInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateTagsInput) GoString() string {
 	return s.String()
 }
@@ -3839,15 +4273,23 @@ func (s *CreateTagsInput) SetTags(v []*Tag) *CreateTagsInput {
 }
 
 type CreateTagsOutput struct {
-	_ struct{} `type:"structure"`
+	_ struct{} `type:"structure" nopayload:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateTagsOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateTagsOutput) GoString() string {
 	return s.String()
 }
@@ -3857,6 +4299,11 @@ func (s CreateTagsOutput) GoString() string {
 // > Path. If the access point root directory does not exist, EFS creates it
 // with these settings when a client connects to the access point. When specifying
 // CreationInfo, you must include values for all properties.
+//
+// Amazon EFS creates a root directory only if you have provided the CreationInfo:
+// OwnUid, OwnGID, and permissions for the directory. If you do not provide
+// this information, Amazon EFS does not create the root directory. If the root
+// directory does not exist, attempts to mount using the access point will fail.
 //
 // If you do not provide CreationInfo and the specified RootDirectory does not
 // exist, attempts to mount the file system using the access point will fail.
@@ -3879,15 +4326,23 @@ type CreationInfo struct {
 	// of an octal number representing the file's mode bits.
 	//
 	// Permissions is a required field
-	Permissions *string `type:"string" required:"true"`
+	Permissions *string `min:"3" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreationInfo) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreationInfo) GoString() string {
 	return s.String()
 }
@@ -3903,6 +4358,9 @@ func (s *CreationInfo) Validate() error {
 	}
 	if s.Permissions == nil {
 		invalidParams.Add(request.NewErrParamRequired("Permissions"))
+	}
+	if s.Permissions != nil && len(*s.Permissions) < 3 {
+		invalidParams.Add(request.NewErrParamMinLen("Permissions", 3))
 	}
 
 	if invalidParams.Len() > 0 {
@@ -3930,7 +4388,7 @@ func (s *CreationInfo) SetPermissions(v string) *CreationInfo {
 }
 
 type DeleteAccessPointInput struct {
-	_ struct{} `type:"structure"`
+	_ struct{} `type:"structure" nopayload:"true"`
 
 	// The ID of the access point that you want to delete.
 	//
@@ -3938,12 +4396,20 @@ type DeleteAccessPointInput struct {
 	AccessPointId *string `location:"uri" locationName:"AccessPointId" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteAccessPointInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteAccessPointInput) GoString() string {
 	return s.String()
 }
@@ -3971,21 +4437,29 @@ func (s *DeleteAccessPointInput) SetAccessPointId(v string) *DeleteAccessPointIn
 }
 
 type DeleteAccessPointOutput struct {
-	_ struct{} `type:"structure"`
+	_ struct{} `type:"structure" nopayload:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteAccessPointOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteAccessPointOutput) GoString() string {
 	return s.String()
 }
 
 type DeleteFileSystemInput struct {
-	_ struct{} `type:"structure"`
+	_ struct{} `type:"structure" nopayload:"true"`
 
 	// The ID of the file system you want to delete.
 	//
@@ -3993,12 +4467,20 @@ type DeleteFileSystemInput struct {
 	FileSystemId *string `location:"uri" locationName:"FileSystemId" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteFileSystemInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteFileSystemInput) GoString() string {
 	return s.String()
 }
@@ -4026,21 +4508,29 @@ func (s *DeleteFileSystemInput) SetFileSystemId(v string) *DeleteFileSystemInput
 }
 
 type DeleteFileSystemOutput struct {
-	_ struct{} `type:"structure"`
+	_ struct{} `type:"structure" nopayload:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteFileSystemOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteFileSystemOutput) GoString() string {
 	return s.String()
 }
 
 type DeleteFileSystemPolicyInput struct {
-	_ struct{} `type:"structure"`
+	_ struct{} `type:"structure" nopayload:"true"`
 
 	// Specifies the EFS file system for which to delete the FileSystemPolicy.
 	//
@@ -4048,12 +4538,20 @@ type DeleteFileSystemPolicyInput struct {
 	FileSystemId *string `location:"uri" locationName:"FileSystemId" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteFileSystemPolicyInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteFileSystemPolicyInput) GoString() string {
 	return s.String()
 }
@@ -4081,21 +4579,29 @@ func (s *DeleteFileSystemPolicyInput) SetFileSystemId(v string) *DeleteFileSyste
 }
 
 type DeleteFileSystemPolicyOutput struct {
-	_ struct{} `type:"structure"`
+	_ struct{} `type:"structure" nopayload:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteFileSystemPolicyOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteFileSystemPolicyOutput) GoString() string {
 	return s.String()
 }
 
 type DeleteMountTargetInput struct {
-	_ struct{} `type:"structure"`
+	_ struct{} `type:"structure" nopayload:"true"`
 
 	// The ID of the mount target to delete (String).
 	//
@@ -4103,12 +4609,20 @@ type DeleteMountTargetInput struct {
 	MountTargetId *string `location:"uri" locationName:"MountTargetId" min:"13" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteMountTargetInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteMountTargetInput) GoString() string {
 	return s.String()
 }
@@ -4136,15 +4650,23 @@ func (s *DeleteMountTargetInput) SetMountTargetId(v string) *DeleteMountTargetIn
 }
 
 type DeleteMountTargetOutput struct {
-	_ struct{} `type:"structure"`
+	_ struct{} `type:"structure" nopayload:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteMountTargetOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteMountTargetOutput) GoString() string {
 	return s.String()
 }
@@ -4163,12 +4685,20 @@ type DeleteTagsInput struct {
 	TagKeys []*string `min:"1" type:"list" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteTagsInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteTagsInput) GoString() string {
 	return s.String()
 }
@@ -4208,15 +4738,23 @@ func (s *DeleteTagsInput) SetTagKeys(v []*string) *DeleteTagsInput {
 }
 
 type DeleteTagsOutput struct {
-	_ struct{} `type:"structure"`
+	_ struct{} `type:"structure" nopayload:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteTagsOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteTagsOutput) GoString() string {
 	return s.String()
 }
@@ -4233,12 +4771,20 @@ type DependencyTimeout struct {
 	Message_ *string `locationName:"Message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DependencyTimeout) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DependencyTimeout) GoString() string {
 	return s.String()
 }
@@ -4282,7 +4828,7 @@ func (s *DependencyTimeout) RequestID() string {
 }
 
 type DescribeAccessPointsInput struct {
-	_ struct{} `type:"structure"`
+	_ struct{} `type:"structure" nopayload:"true"`
 
 	// (Optional) Specifies an EFS access point to describe in the response; mutually
 	// exclusive with FileSystemId.
@@ -4299,15 +4845,23 @@ type DescribeAccessPointsInput struct {
 
 	// NextToken is present if the response is paginated. You can use NextMarker
 	// in the subsequent request to fetch the next page of access point descriptions.
-	NextToken *string `location:"querystring" locationName:"NextToken" type:"string"`
+	NextToken *string `location:"querystring" locationName:"NextToken" min:"1" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeAccessPointsInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeAccessPointsInput) GoString() string {
 	return s.String()
 }
@@ -4317,6 +4871,9 @@ func (s *DescribeAccessPointsInput) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "DescribeAccessPointsInput"}
 	if s.MaxResults != nil && *s.MaxResults < 1 {
 		invalidParams.Add(request.NewErrParamMinValue("MaxResults", 1))
+	}
+	if s.NextToken != nil && len(*s.NextToken) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("NextToken", 1))
 	}
 
 	if invalidParams.Len() > 0 {
@@ -4358,15 +4915,23 @@ type DescribeAccessPointsOutput struct {
 	// Present if there are more access points than returned in the response. You
 	// can use the NextMarker in the subsequent request to fetch the additional
 	// descriptions.
-	NextToken *string `type:"string"`
+	NextToken *string `min:"1" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeAccessPointsOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeAccessPointsOutput) GoString() string {
 	return s.String()
 }
@@ -4383,8 +4948,111 @@ func (s *DescribeAccessPointsOutput) SetNextToken(v string) *DescribeAccessPoint
 	return s
 }
 
-type DescribeBackupPolicyInput struct {
+type DescribeAccountPreferencesInput struct {
 	_ struct{} `type:"structure"`
+
+	// (Optional) When retrieving account preferences, you can optionally specify
+	// the MaxItems parameter to limit the number of objects returned in a response.
+	// The default value is 100.
+	MaxResults *int64 `min:"1" type:"integer"`
+
+	// (Optional) You can use NextToken in a subsequent request to fetch the next
+	// page of Amazon Web Services account preferences if the response payload was
+	// paginated.
+	NextToken *string `min:"1" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DescribeAccountPreferencesInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DescribeAccountPreferencesInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DescribeAccountPreferencesInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DescribeAccountPreferencesInput"}
+	if s.MaxResults != nil && *s.MaxResults < 1 {
+		invalidParams.Add(request.NewErrParamMinValue("MaxResults", 1))
+	}
+	if s.NextToken != nil && len(*s.NextToken) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("NextToken", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetMaxResults sets the MaxResults field's value.
+func (s *DescribeAccountPreferencesInput) SetMaxResults(v int64) *DescribeAccountPreferencesInput {
+	s.MaxResults = &v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *DescribeAccountPreferencesInput) SetNextToken(v string) *DescribeAccountPreferencesInput {
+	s.NextToken = &v
+	return s
+}
+
+type DescribeAccountPreferencesOutput struct {
+	_ struct{} `type:"structure"`
+
+	// Present if there are more records than returned in the response. You can
+	// use the NextToken in the subsequent request to fetch the additional descriptions.
+	NextToken *string `min:"1" type:"string"`
+
+	// Describes the resource ID preference setting for the Amazon Web Services
+	// account associated with the user making the request, in the current Amazon
+	// Web Services Region.
+	ResourceIdPreference *ResourceIdPreference `type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DescribeAccountPreferencesOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DescribeAccountPreferencesOutput) GoString() string {
+	return s.String()
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *DescribeAccountPreferencesOutput) SetNextToken(v string) *DescribeAccountPreferencesOutput {
+	s.NextToken = &v
+	return s
+}
+
+// SetResourceIdPreference sets the ResourceIdPreference field's value.
+func (s *DescribeAccountPreferencesOutput) SetResourceIdPreference(v *ResourceIdPreference) *DescribeAccountPreferencesOutput {
+	s.ResourceIdPreference = v
+	return s
+}
+
+type DescribeBackupPolicyInput struct {
+	_ struct{} `type:"structure" nopayload:"true"`
 
 	// Specifies which EFS file system to retrieve the BackupPolicy for.
 	//
@@ -4392,12 +5060,20 @@ type DescribeBackupPolicyInput struct {
 	FileSystemId *string `location:"uri" locationName:"FileSystemId" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeBackupPolicyInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeBackupPolicyInput) GoString() string {
 	return s.String()
 }
@@ -4432,12 +5108,20 @@ type DescribeBackupPolicyOutput struct {
 	BackupPolicy *BackupPolicy `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeBackupPolicyOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeBackupPolicyOutput) GoString() string {
 	return s.String()
 }
@@ -4449,7 +5133,7 @@ func (s *DescribeBackupPolicyOutput) SetBackupPolicy(v *BackupPolicy) *DescribeB
 }
 
 type DescribeFileSystemPolicyInput struct {
-	_ struct{} `type:"structure"`
+	_ struct{} `type:"structure" nopayload:"true"`
 
 	// Specifies which EFS file system to retrieve the FileSystemPolicy for.
 	//
@@ -4457,12 +5141,20 @@ type DescribeFileSystemPolicyInput struct {
 	FileSystemId *string `location:"uri" locationName:"FileSystemId" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeFileSystemPolicyInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeFileSystemPolicyInput) GoString() string {
 	return s.String()
 }
@@ -4496,15 +5188,23 @@ type DescribeFileSystemPolicyOutput struct {
 	FileSystemId *string `type:"string"`
 
 	// The JSON formatted FileSystemPolicy for the EFS file system.
-	Policy *string `type:"string"`
+	Policy *string `min:"1" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeFileSystemPolicyOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeFileSystemPolicyOutput) GoString() string {
 	return s.String()
 }
@@ -4522,7 +5222,7 @@ func (s *DescribeFileSystemPolicyOutput) SetPolicy(v string) *DescribeFileSystem
 }
 
 type DescribeFileSystemsInput struct {
-	_ struct{} `type:"structure"`
+	_ struct{} `type:"structure" nopayload:"true"`
 
 	// (Optional) Restricts the list to the file system with this creation token
 	// (String). You specify a creation token when you create an Amazon EFS file
@@ -4543,12 +5243,20 @@ type DescribeFileSystemsInput struct {
 	MaxItems *int64 `location:"querystring" locationName:"MaxItems" min:"1" type:"integer"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeFileSystemsInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeFileSystemsInput) GoString() string {
 	return s.String()
 }
@@ -4610,12 +5318,20 @@ type DescribeFileSystemsOutput struct {
 	NextMarker *string `min:"1" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeFileSystemsOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeFileSystemsOutput) GoString() string {
 	return s.String()
 }
@@ -4639,7 +5355,7 @@ func (s *DescribeFileSystemsOutput) SetNextMarker(v string) *DescribeFileSystems
 }
 
 type DescribeLifecycleConfigurationInput struct {
-	_ struct{} `type:"structure"`
+	_ struct{} `type:"structure" nopayload:"true"`
 
 	// The ID of the file system whose LifecycleConfiguration object you want to
 	// retrieve (String).
@@ -4648,12 +5364,20 @@ type DescribeLifecycleConfigurationInput struct {
 	FileSystemId *string `location:"uri" locationName:"FileSystemId" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeLifecycleConfigurationInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeLifecycleConfigurationInput) GoString() string {
 	return s.String()
 }
@@ -4683,17 +5407,25 @@ func (s *DescribeLifecycleConfigurationInput) SetFileSystemId(v string) *Describ
 type DescribeLifecycleConfigurationOutput struct {
 	_ struct{} `type:"structure"`
 
-	// An array of lifecycle management policies. Currently, EFS supports a maximum
-	// of one policy per file system.
+	// An array of lifecycle management policies. EFS supports a maximum of one
+	// policy per file system.
 	LifecyclePolicies []*LifecyclePolicy `type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeLifecycleConfigurationOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeLifecycleConfigurationOutput) GoString() string {
 	return s.String()
 }
@@ -4705,7 +5437,7 @@ func (s *DescribeLifecycleConfigurationOutput) SetLifecyclePolicies(v []*Lifecyc
 }
 
 type DescribeMountTargetSecurityGroupsInput struct {
-	_ struct{} `type:"structure"`
+	_ struct{} `type:"structure" nopayload:"true"`
 
 	// The ID of the mount target whose security groups you want to retrieve.
 	//
@@ -4713,12 +5445,20 @@ type DescribeMountTargetSecurityGroupsInput struct {
 	MountTargetId *string `location:"uri" locationName:"MountTargetId" min:"13" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeMountTargetSecurityGroupsInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeMountTargetSecurityGroupsInput) GoString() string {
 	return s.String()
 }
@@ -4754,12 +5494,20 @@ type DescribeMountTargetSecurityGroupsOutput struct {
 	SecurityGroups []*string `type:"list" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeMountTargetSecurityGroupsOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeMountTargetSecurityGroupsOutput) GoString() string {
 	return s.String()
 }
@@ -4771,7 +5519,7 @@ func (s *DescribeMountTargetSecurityGroupsOutput) SetSecurityGroups(v []*string)
 }
 
 type DescribeMountTargetsInput struct {
-	_ struct{} `type:"structure"`
+	_ struct{} `type:"structure" nopayload:"true"`
 
 	// (Optional) The ID of the access point whose mount targets that you want to
 	// list. It must be included in your request if a FileSystemId or MountTargetId
@@ -4800,12 +5548,20 @@ type DescribeMountTargetsInput struct {
 	MountTargetId *string `location:"querystring" locationName:"MountTargetId" min:"13" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeMountTargetsInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeMountTargetsInput) GoString() string {
 	return s.String()
 }
@@ -4876,12 +5632,20 @@ type DescribeMountTargetsOutput struct {
 	NextMarker *string `min:"1" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeMountTargetsOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeMountTargetsOutput) GoString() string {
 	return s.String()
 }
@@ -4905,7 +5669,7 @@ func (s *DescribeMountTargetsOutput) SetNextMarker(v string) *DescribeMountTarge
 }
 
 type DescribeTagsInput struct {
-	_ struct{} `type:"structure"`
+	_ struct{} `type:"structure" nopayload:"true"`
 
 	// The ID of the file system whose tag set you want to retrieve.
 	//
@@ -4924,12 +5688,20 @@ type DescribeTagsInput struct {
 	MaxItems *int64 `location:"querystring" locationName:"MaxItems" min:"1" type:"integer"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeTagsInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeTagsInput) GoString() string {
 	return s.String()
 }
@@ -4992,12 +5764,20 @@ type DescribeTagsOutput struct {
 	Tags []*Tag `type:"list" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeTagsOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeTagsOutput) GoString() string {
 	return s.String()
 }
@@ -5035,12 +5815,20 @@ type FileSystemAlreadyExists struct {
 	Message_ *string `locationName:"Message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s FileSystemAlreadyExists) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s FileSystemAlreadyExists) GoString() string {
 	return s.String()
 }
@@ -5087,6 +5875,18 @@ func (s *FileSystemAlreadyExists) RequestID() string {
 type FileSystemDescription struct {
 	_ struct{} `type:"structure"`
 
+	// The unique and consistent identifier of the Availability Zone in which the
+	// file system's One Zone storage classes exist. For example, use1-az1 is an
+	// Availability Zone ID for the us-east-1 Amazon Web Services Region, and it
+	// has the same location in every Amazon Web Services account.
+	AvailabilityZoneId *string `type:"string"`
+
+	// Describes the Amazon Web Services Availability Zone in which the file system
+	// is located, and is valid only for file systems using One Zone storage classes.
+	// For more information, see Using EFS storage classes (https://docs.aws.amazon.com/efs/latest/ug/storage-classes.html)
+	// in the Amazon EFS User Guide.
+	AvailabilityZoneName *string `min:"1" type:"string"`
+
 	// The time that the file system was created, in seconds (since 1970-01-01T00:00:00Z).
 	//
 	// CreationTime is a required field
@@ -5109,8 +5909,8 @@ type FileSystemDescription struct {
 	// FileSystemId is a required field
 	FileSystemId *string `type:"string" required:"true"`
 
-	// The ID of an AWS Key Management Service (AWS KMS) customer master key (CMK)
-	// that was used to protect the encrypted file system.
+	// The ID of an Key Management Service customer master key (CMK) that was used
+	// to protect the encrypted file system.
 	KmsKeyId *string `type:"string"`
 
 	// The lifecycle phase of the file system.
@@ -5129,8 +5929,9 @@ type FileSystemDescription struct {
 	// NumberOfMountTargets is a required field
 	NumberOfMountTargets *int64 `type:"integer" required:"true"`
 
-	// The AWS account that created the file system. If the file system was created
-	// by an IAM user, the parent account to which the user belongs is the owner.
+	// The Amazon Web Services account that created the file system. If the file
+	// system was created by an IAM user, the parent account to which the user belongs
+	// is the owner.
 	//
 	// OwnerId is a required field
 	OwnerId *string `type:"string" required:"true"`
@@ -5140,12 +5941,8 @@ type FileSystemDescription struct {
 	// PerformanceMode is a required field
 	PerformanceMode *string `type:"string" required:"true" enum:"PerformanceMode"`
 
-	// The throughput, measured in MiB/s, that you want to provision for a file
-	// system. Valid values are 1-1024. Required if ThroughputMode is set to provisioned.
-	// The limit on throughput is 1024 MiB/s. You can get these limits increased
-	// by contacting AWS Support. For more information, see Amazon EFS Limits That
-	// You Can Increase (https://docs.aws.amazon.com/efs/latest/ug/limits.html#soft-limits)
-	// in the Amazon EFS User Guide.
+	// The amount of provisioned throughput, measured in MiB/s, for the file system.
+	// Valid for file systems using ThroughputMode set to provisioned.
 	ProvisionedThroughputInMibps *float64 `min:"1" type:"double"`
 
 	// The latest known metered size (in bytes) of data stored in the file system,
@@ -5166,23 +5963,40 @@ type FileSystemDescription struct {
 	// Tags is a required field
 	Tags []*Tag `type:"list" required:"true"`
 
-	// The throughput mode for a file system. There are two throughput modes to
-	// choose from for your file system: bursting and provisioned. If you set ThroughputMode
-	// to provisioned, you must also set a value for ProvisionedThroughPutInMibps.
-	// You can decrease your file system's throughput in Provisioned Throughput
-	// mode or change between the throughput modes as long as it’s been more than
-	// 24 hours since the last decrease or throughput mode change.
+	// Displays the file system's throughput mode. For more information, see Throughput
+	// modes (https://docs.aws.amazon.com/efs/latest/ug/performance.html#throughput-modes)
+	// in the Amazon EFS User Guide.
 	ThroughputMode *string `type:"string" enum:"ThroughputMode"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s FileSystemDescription) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s FileSystemDescription) GoString() string {
 	return s.String()
+}
+
+// SetAvailabilityZoneId sets the AvailabilityZoneId field's value.
+func (s *FileSystemDescription) SetAvailabilityZoneId(v string) *FileSystemDescription {
+	s.AvailabilityZoneId = &v
+	return s
+}
+
+// SetAvailabilityZoneName sets the AvailabilityZoneName field's value.
+func (s *FileSystemDescription) SetAvailabilityZoneName(v string) *FileSystemDescription {
+	s.AvailabilityZoneName = &v
+	return s
 }
 
 // SetCreationTime sets the CreationTime field's value.
@@ -5286,12 +6100,20 @@ type FileSystemInUse struct {
 	Message_ *string `locationName:"Message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s FileSystemInUse) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s FileSystemInUse) GoString() string {
 	return s.String()
 }
@@ -5334,8 +6156,8 @@ func (s *FileSystemInUse) RequestID() string {
 	return s.RespMetadata.RequestID
 }
 
-// Returned if the AWS account has already created the maximum number of file
-// systems allowed per account.
+// Returned if the Amazon Web Services account has already created the maximum
+// number of file systems allowed per account.
 type FileSystemLimitExceeded struct {
 	_            struct{}                  `type:"structure"`
 	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
@@ -5346,12 +6168,20 @@ type FileSystemLimitExceeded struct {
 	Message_ *string `locationName:"Message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s FileSystemLimitExceeded) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s FileSystemLimitExceeded) GoString() string {
 	return s.String()
 }
@@ -5395,7 +6225,7 @@ func (s *FileSystemLimitExceeded) RequestID() string {
 }
 
 // Returned if the specified FileSystemId value doesn't exist in the requester's
-// AWS account.
+// Amazon Web Services account.
 type FileSystemNotFound struct {
 	_            struct{}                  `type:"structure"`
 	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
@@ -5406,12 +6236,20 @@ type FileSystemNotFound struct {
 	Message_ *string `locationName:"Message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s FileSystemNotFound) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s FileSystemNotFound) GoString() string {
 	return s.String()
 }
@@ -5483,12 +6321,20 @@ type FileSystemSize struct {
 	ValueInStandard *int64 `type:"long"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s FileSystemSize) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s FileSystemSize) GoString() string {
 	return s.String()
 }
@@ -5528,12 +6374,20 @@ type IncorrectFileSystemLifeCycleState struct {
 	Message_ *string `locationName:"Message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s IncorrectFileSystemLifeCycleState) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s IncorrectFileSystemLifeCycleState) GoString() string {
 	return s.String()
 }
@@ -5587,12 +6441,20 @@ type IncorrectMountTargetState struct {
 	Message_ *string `locationName:"Message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s IncorrectMountTargetState) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s IncorrectMountTargetState) GoString() string {
 	return s.String()
 }
@@ -5639,7 +6501,7 @@ func (s *IncorrectMountTargetState) RequestID() string {
 // This value might be returned when you try to create a file system in provisioned
 // throughput mode, when you attempt to increase the provisioned throughput
 // of an existing file system, or when you attempt to change an existing file
-// system from bursting to provisioned throughput mode.
+// system from bursting to provisioned throughput mode. Try again later.
 type InsufficientThroughputCapacity struct {
 	_            struct{}                  `type:"structure"`
 	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
@@ -5650,12 +6512,20 @@ type InsufficientThroughputCapacity struct {
 	Message_ *string `locationName:"Message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s InsufficientThroughputCapacity) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s InsufficientThroughputCapacity) GoString() string {
 	return s.String()
 }
@@ -5709,12 +6579,20 @@ type InternalServerError struct {
 	Message_ *string `locationName:"Message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s InternalServerError) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s InternalServerError) GoString() string {
 	return s.String()
 }
@@ -5769,12 +6647,20 @@ type InvalidPolicyException struct {
 	Message_ *string `locationName:"Message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s InvalidPolicyException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s InvalidPolicyException) GoString() string {
 	return s.String()
 }
@@ -5829,12 +6715,20 @@ type IpAddressInUse struct {
 	Message_ *string `locationName:"Message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s IpAddressInUse) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s IpAddressInUse) GoString() string {
 	return s.String()
 }
@@ -5877,23 +6771,45 @@ func (s *IpAddressInUse) RequestID() string {
 	return s.RespMetadata.RequestID
 }
 
-// Describes a policy used by EFS lifecycle management to transition files to
-// the Infrequent Access (IA) storage class.
+// Describes a policy used by EFS lifecycle management and EFS intelligent tiering
+// that specifies when to transition files into and out of the file system's
+// Infrequent Access (IA) storage class. For more information, see EFS Intelligent‐Tiering
+// and EFS Lifecycle Management (https://docs.aws.amazon.com/efs/latest/ug/lifecycle-management-efs.html).
+//
+// When using the put-lifecycle-configuration CLI command or the PutLifecycleConfiguration
+// API action, Amazon EFS requires that each LifecyclePolicy object have only
+// a single transition. This means that in a request body, LifecyclePolicies
+// needs to be structured as an array of LifecyclePolicy objects, one object
+// for each transition, TransitionToIA, TransitionToPrimaryStorageClass. For
+// more information, see the request examples in PutLifecycleConfiguration.
 type LifecyclePolicy struct {
 	_ struct{} `type:"structure"`
 
-	// A value that describes the period of time that a file is not accessed, after
-	// which it transitions to the IA storage class. Metadata operations such as
-	// listing the contents of a directory don't count as file access events.
+	// Describes the period of time that a file is not accessed, after which it
+	// transitions to IA storage. Metadata operations such as listing the contents
+	// of a directory don't count as file access events.
 	TransitionToIA *string `type:"string" enum:"TransitionToIARules"`
+
+	// Describes when to transition a file from IA storage to primary storage. Metadata
+	// operations such as listing the contents of a directory don't count as file
+	// access events.
+	TransitionToPrimaryStorageClass *string `type:"string" enum:"TransitionToPrimaryStorageClassRules"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s LifecyclePolicy) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s LifecyclePolicy) GoString() string {
 	return s.String()
 }
@@ -5904,16 +6820,22 @@ func (s *LifecyclePolicy) SetTransitionToIA(v string) *LifecyclePolicy {
 	return s
 }
 
+// SetTransitionToPrimaryStorageClass sets the TransitionToPrimaryStorageClass field's value.
+func (s *LifecyclePolicy) SetTransitionToPrimaryStorageClass(v string) *LifecyclePolicy {
+	s.TransitionToPrimaryStorageClass = &v
+	return s
+}
+
 type ListTagsForResourceInput struct {
-	_ struct{} `type:"structure"`
+	_ struct{} `type:"structure" nopayload:"true"`
 
 	// (Optional) Specifies the maximum number of tag objects to return in the response.
 	// The default value is 100.
 	MaxResults *int64 `location:"querystring" locationName:"MaxResults" min:"1" type:"integer"`
 
-	// You can use NextToken in a subsequent request to fetch the next page of access
-	// point descriptions if the response payload was paginated.
-	NextToken *string `location:"querystring" locationName:"NextToken" type:"string"`
+	// (Optional) You can use NextToken in a subsequent request to fetch the next
+	// page of access point descriptions if the response payload was paginated.
+	NextToken *string `location:"querystring" locationName:"NextToken" min:"1" type:"string"`
 
 	// Specifies the EFS resource you want to retrieve tags for. You can retrieve
 	// tags for EFS file systems and access points using this API endpoint.
@@ -5922,12 +6844,20 @@ type ListTagsForResourceInput struct {
 	ResourceId *string `location:"uri" locationName:"ResourceId" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListTagsForResourceInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListTagsForResourceInput) GoString() string {
 	return s.String()
 }
@@ -5937,6 +6867,9 @@ func (s *ListTagsForResourceInput) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "ListTagsForResourceInput"}
 	if s.MaxResults != nil && *s.MaxResults < 1 {
 		invalidParams.Add(request.NewErrParamMinValue("MaxResults", 1))
+	}
+	if s.NextToken != nil && len(*s.NextToken) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("NextToken", 1))
 	}
 	if s.ResourceId == nil {
 		invalidParams.Add(request.NewErrParamRequired("ResourceId"))
@@ -5974,18 +6907,26 @@ type ListTagsForResourceOutput struct {
 
 	// NextToken is present if the response payload is paginated. You can use NextToken
 	// in a subsequent request to fetch the next page of access point descriptions.
-	NextToken *string `type:"string"`
+	NextToken *string `min:"1" type:"string"`
 
 	// An array of the tags for the specified EFS resource.
 	Tags []*Tag `type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListTagsForResourceOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListTagsForResourceOutput) GoString() string {
 	return s.String()
 }
@@ -6014,12 +6955,20 @@ type ModifyMountTargetSecurityGroupsInput struct {
 	SecurityGroups []*string `type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ModifyMountTargetSecurityGroupsInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ModifyMountTargetSecurityGroupsInput) GoString() string {
 	return s.String()
 }
@@ -6053,15 +7002,23 @@ func (s *ModifyMountTargetSecurityGroupsInput) SetSecurityGroups(v []*string) *M
 }
 
 type ModifyMountTargetSecurityGroupsOutput struct {
-	_ struct{} `type:"structure"`
+	_ struct{} `type:"structure" nopayload:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ModifyMountTargetSecurityGroupsOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ModifyMountTargetSecurityGroupsOutput) GoString() string {
 	return s.String()
 }
@@ -6078,12 +7035,20 @@ type MountTargetConflict struct {
 	Message_ *string `locationName:"Message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s MountTargetConflict) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s MountTargetConflict) GoString() string {
 	return s.String()
 }
@@ -6130,16 +7095,17 @@ func (s *MountTargetConflict) RequestID() string {
 type MountTargetDescription struct {
 	_ struct{} `type:"structure"`
 
-	// The unique and consistent identifier of the Availability Zone (AZ) that the
-	// mount target resides in. For example, use1-az1 is an AZ ID for the us-east-1
-	// Region and it has the same location in every AWS account.
+	// The unique and consistent identifier of the Availability Zone that the mount
+	// target resides in. For example, use1-az1 is an AZ ID for the us-east-1 Region
+	// and it has the same location in every Amazon Web Services account.
 	AvailabilityZoneId *string `type:"string"`
 
-	// The name of the Availability Zone (AZ) that the mount target resides in.
-	// AZs are independently mapped to names for each AWS account. For example,
-	// the Availability Zone us-east-1a for your AWS account might not be the same
-	// location as us-east-1a for another AWS account.
-	AvailabilityZoneName *string `type:"string"`
+	// The name of the Availability Zone in which the mount target is located. Availability
+	// Zones are independently mapped to names for each Amazon Web Services account.
+	// For example, the Availability Zone us-east-1a for your Amazon Web Services
+	// account might not be the same location as us-east-1a for another Amazon Web
+	// Services account.
+	AvailabilityZoneName *string `min:"1" type:"string"`
 
 	// The ID of the file system for which the mount target is intended.
 	//
@@ -6163,7 +7129,7 @@ type MountTargetDescription struct {
 	// mount target.
 	NetworkInterfaceId *string `type:"string"`
 
-	// AWS account ID that owns the resource.
+	// Amazon Web Services account ID that owns the resource.
 	OwnerId *string `type:"string"`
 
 	// The ID of the mount target's subnet.
@@ -6171,16 +7137,24 @@ type MountTargetDescription struct {
 	// SubnetId is a required field
 	SubnetId *string `min:"15" type:"string" required:"true"`
 
-	// The Virtual Private Cloud (VPC) ID that the mount target is configured in.
+	// The virtual private cloud (VPC) ID that the mount target is configured in.
 	VpcId *string `type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s MountTargetDescription) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s MountTargetDescription) GoString() string {
 	return s.String()
 }
@@ -6246,7 +7220,7 @@ func (s *MountTargetDescription) SetVpcId(v string) *MountTargetDescription {
 }
 
 // Returned if there is no mount target with the specified ID found in the caller's
-// account.
+// Amazon Web Services account.
 type MountTargetNotFound struct {
 	_            struct{}                  `type:"structure"`
 	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
@@ -6257,12 +7231,20 @@ type MountTargetNotFound struct {
 	Message_ *string `locationName:"Message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s MountTargetNotFound) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s MountTargetNotFound) GoString() string {
 	return s.String()
 }
@@ -6306,9 +7288,9 @@ func (s *MountTargetNotFound) RequestID() string {
 }
 
 // The calling account has reached the limit for elastic network interfaces
-// for the specific AWS Region. The client should try to delete some elastic
-// network interfaces or get the account limit raised. For more information,
-// see Amazon VPC Limits (https://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_Appendix_Limits.html)
+// for the specific Amazon Web Services Region. The client should try to delete
+// some elastic network interfaces or get the account limit raised. For more
+// information, see Amazon VPC Limits (https://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_Appendix_Limits.html)
 // in the Amazon VPC User Guide (see the Network interfaces per VPC entry in
 // the table).
 type NetworkInterfaceLimitExceeded struct {
@@ -6321,12 +7303,20 @@ type NetworkInterfaceLimitExceeded struct {
 	Message_ *string `locationName:"Message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s NetworkInterfaceLimitExceeded) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s NetworkInterfaceLimitExceeded) GoString() string {
 	return s.String()
 }
@@ -6381,12 +7371,20 @@ type NoFreeAddressesInSubnet struct {
 	Message_ *string `locationName:"Message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s NoFreeAddressesInSubnet) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s NoFreeAddressesInSubnet) GoString() string {
 	return s.String()
 }
@@ -6440,12 +7438,20 @@ type PolicyNotFound struct {
 	Message_ *string `locationName:"Message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s PolicyNotFound) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s PolicyNotFound) GoString() string {
 	return s.String()
 }
@@ -6510,12 +7516,20 @@ type PosixUser struct {
 	Uid *int64 `type:"long" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s PosixUser) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s PosixUser) GoString() string {
 	return s.String()
 }
@@ -6554,6 +7568,90 @@ func (s *PosixUser) SetUid(v int64) *PosixUser {
 	return s
 }
 
+type PutAccountPreferencesInput struct {
+	_ struct{} `type:"structure"`
+
+	// Specifies the EFS resource ID preference to set for the user's Amazon Web
+	// Services account, in the current Amazon Web Services Region, either LONG_ID
+	// (17 characters), or SHORT_ID (8 characters).
+	//
+	// Starting in October, 2021, you will receive an error when setting the account
+	// preference to SHORT_ID. Contact Amazon Web Services support if you receive
+	// an error and need to use short IDs for file system and mount target resources.
+	//
+	// ResourceIdType is a required field
+	ResourceIdType *string `type:"string" required:"true" enum:"ResourceIdType"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s PutAccountPreferencesInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s PutAccountPreferencesInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *PutAccountPreferencesInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "PutAccountPreferencesInput"}
+	if s.ResourceIdType == nil {
+		invalidParams.Add(request.NewErrParamRequired("ResourceIdType"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetResourceIdType sets the ResourceIdType field's value.
+func (s *PutAccountPreferencesInput) SetResourceIdType(v string) *PutAccountPreferencesInput {
+	s.ResourceIdType = &v
+	return s
+}
+
+type PutAccountPreferencesOutput struct {
+	_ struct{} `type:"structure"`
+
+	// Describes the resource type and its ID preference for the user's Amazon Web
+	// Services account, in the current Amazon Web Services Region.
+	ResourceIdPreference *ResourceIdPreference `type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s PutAccountPreferencesOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s PutAccountPreferencesOutput) GoString() string {
+	return s.String()
+}
+
+// SetResourceIdPreference sets the ResourceIdPreference field's value.
+func (s *PutAccountPreferencesOutput) SetResourceIdPreference(v *ResourceIdPreference) *PutAccountPreferencesOutput {
+	s.ResourceIdPreference = v
+	return s
+}
+
 type PutBackupPolicyInput struct {
 	_ struct{} `type:"structure"`
 
@@ -6568,12 +7666,20 @@ type PutBackupPolicyInput struct {
 	FileSystemId *string `location:"uri" locationName:"FileSystemId" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s PutBackupPolicyInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s PutBackupPolicyInput) GoString() string {
 	return s.String()
 }
@@ -6622,12 +7728,20 @@ type PutBackupPolicyOutput struct {
 	BackupPolicy *BackupPolicy `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s PutBackupPolicyOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s PutBackupPolicyOutput) GoString() string {
 	return s.String()
 }
@@ -6657,19 +7771,28 @@ type PutFileSystemPolicyInput struct {
 	FileSystemId *string `location:"uri" locationName:"FileSystemId" type:"string" required:"true"`
 
 	// The FileSystemPolicy that you're creating. Accepts a JSON formatted policy
-	// definition. To find out more about the elements that make up a file system
-	// policy, see EFS Resource-based Policies (https://docs.aws.amazon.com/efs/latest/ug/access-control-overview.html#access-control-manage-access-intro-resource-policies).
+	// definition. EFS file system policies have a 20,000 character limit. To find
+	// out more about the elements that make up a file system policy, see EFS Resource-based
+	// Policies (https://docs.aws.amazon.com/efs/latest/ug/access-control-overview.html#access-control-manage-access-intro-resource-policies).
 	//
 	// Policy is a required field
-	Policy *string `type:"string" required:"true"`
+	Policy *string `min:"1" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s PutFileSystemPolicyInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s PutFileSystemPolicyInput) GoString() string {
 	return s.String()
 }
@@ -6685,6 +7808,9 @@ func (s *PutFileSystemPolicyInput) Validate() error {
 	}
 	if s.Policy == nil {
 		invalidParams.Add(request.NewErrParamRequired("Policy"))
+	}
+	if s.Policy != nil && len(*s.Policy) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Policy", 1))
 	}
 
 	if invalidParams.Len() > 0 {
@@ -6718,15 +7844,23 @@ type PutFileSystemPolicyOutput struct {
 	FileSystemId *string `type:"string"`
 
 	// The JSON formatted FileSystemPolicy for the EFS file system.
-	Policy *string `type:"string"`
+	Policy *string `min:"1" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s PutFileSystemPolicyOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s PutFileSystemPolicyOutput) GoString() string {
 	return s.String()
 }
@@ -6753,20 +7887,39 @@ type PutLifecycleConfigurationInput struct {
 	FileSystemId *string `location:"uri" locationName:"FileSystemId" type:"string" required:"true"`
 
 	// An array of LifecyclePolicy objects that define the file system's LifecycleConfiguration
-	// object. A LifecycleConfiguration object tells lifecycle management when to
-	// transition files from the Standard storage class to the Infrequent Access
-	// storage class.
+	// object. A LifecycleConfiguration object informs EFS lifecycle management
+	// and intelligent tiering of the following:
+	//
+	//    * When to move files in the file system from primary storage to the IA
+	//    storage class.
+	//
+	//    * When to move files that are in IA storage to primary storage.
+	//
+	// When using the put-lifecycle-configuration CLI command or the PutLifecycleConfiguration
+	// API action, Amazon EFS requires that each LifecyclePolicy object have only
+	// a single transition. This means that in a request body, LifecyclePolicies
+	// needs to be structured as an array of LifecyclePolicy objects, one object
+	// for each transition, TransitionToIA, TransitionToPrimaryStorageClass. See
+	// the example requests in the following section for more information.
 	//
 	// LifecyclePolicies is a required field
 	LifecyclePolicies []*LifecyclePolicy `type:"list" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s PutLifecycleConfigurationInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s PutLifecycleConfigurationInput) GoString() string {
 	return s.String()
 }
@@ -6805,17 +7958,25 @@ func (s *PutLifecycleConfigurationInput) SetLifecyclePolicies(v []*LifecyclePoli
 type PutLifecycleConfigurationOutput struct {
 	_ struct{} `type:"structure"`
 
-	// An array of lifecycle management policies. Currently, EFS supports a maximum
-	// of one policy per file system.
+	// An array of lifecycle management policies. EFS supports a maximum of one
+	// policy per file system.
 	LifecyclePolicies []*LifecyclePolicy `type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s PutLifecycleConfigurationOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s PutLifecycleConfigurationOutput) GoString() string {
 	return s.String()
 }
@@ -6823,6 +7984,50 @@ func (s PutLifecycleConfigurationOutput) GoString() string {
 // SetLifecyclePolicies sets the LifecyclePolicies field's value.
 func (s *PutLifecycleConfigurationOutput) SetLifecyclePolicies(v []*LifecyclePolicy) *PutLifecycleConfigurationOutput {
 	s.LifecyclePolicies = v
+	return s
+}
+
+// Describes the resource type and its ID preference for the user's Amazon Web
+// Services account, in the current Amazon Web Services Region.
+type ResourceIdPreference struct {
+	_ struct{} `type:"structure"`
+
+	// Identifies the EFS resource ID preference, either LONG_ID (17 characters)
+	// or SHORT_ID (8 characters).
+	ResourceIdType *string `type:"string" enum:"ResourceIdType"`
+
+	// Identifies the Amazon EFS resources to which the ID preference setting applies,
+	// FILE_SYSTEM and MOUNT_TARGET.
+	Resources []*string `type:"list"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ResourceIdPreference) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ResourceIdPreference) GoString() string {
+	return s.String()
+}
+
+// SetResourceIdType sets the ResourceIdType field's value.
+func (s *ResourceIdPreference) SetResourceIdType(v string) *ResourceIdPreference {
+	s.ResourceIdType = &v
+	return s
+}
+
+// SetResources sets the Resources field's value.
+func (s *ResourceIdPreference) SetResources(v []*string) *ResourceIdPreference {
+	s.Resources = v
 	return s
 }
 
@@ -6852,12 +8057,20 @@ type RootDirectory struct {
 	Path *string `min:"1" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s RootDirectory) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s RootDirectory) GoString() string {
 	return s.String()
 }
@@ -6904,12 +8117,20 @@ type SecurityGroupLimitExceeded struct {
 	Message_ *string `locationName:"Message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s SecurityGroupLimitExceeded) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s SecurityGroupLimitExceeded) GoString() string {
 	return s.String()
 }
@@ -6964,12 +8185,20 @@ type SecurityGroupNotFound struct {
 	Message_ *string `locationName:"Message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s SecurityGroupNotFound) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s SecurityGroupNotFound) GoString() string {
 	return s.String()
 }
@@ -7023,12 +8252,20 @@ type SubnetNotFound struct {
 	Message_ *string `locationName:"Message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s SubnetNotFound) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s SubnetNotFound) GoString() string {
 	return s.String()
 }
@@ -7073,7 +8310,7 @@ func (s *SubnetNotFound) RequestID() string {
 
 // A tag is a key-value pair. Allowed characters are letters, white space, and
 // numbers that can be represented in UTF-8, and the following characters:+
-// - = . _ : /
+// - = . _ : /.
 type Tag struct {
 	_ struct{} `type:"structure"`
 
@@ -7088,12 +8325,20 @@ type Tag struct {
 	Value *string `type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s Tag) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s Tag) GoString() string {
 	return s.String()
 }
@@ -7137,16 +8382,26 @@ type TagResourceInput struct {
 	// ResourceId is a required field
 	ResourceId *string `location:"uri" locationName:"ResourceId" type:"string" required:"true"`
 
+	// An array of Tag objects to add. Each Tag object is a key-value pair.
+	//
 	// Tags is a required field
 	Tags []*Tag `type:"list" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s TagResourceInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s TagResourceInput) GoString() string {
 	return s.String()
 }
@@ -7193,15 +8448,23 @@ func (s *TagResourceInput) SetTags(v []*Tag) *TagResourceInput {
 }
 
 type TagResourceOutput struct {
-	_ struct{} `type:"structure"`
+	_ struct{} `type:"structure" nopayload:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s TagResourceOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s TagResourceOutput) GoString() string {
 	return s.String()
 }
@@ -7218,12 +8481,20 @@ type ThroughputLimitExceeded struct {
 	Message_ *string `locationName:"Message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ThroughputLimitExceeded) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ThroughputLimitExceeded) GoString() string {
 	return s.String()
 }
@@ -7278,12 +8549,20 @@ type TooManyRequests struct {
 	Message_ *string `locationName:"Message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s TooManyRequests) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s TooManyRequests) GoString() string {
 	return s.String()
 }
@@ -7326,6 +8605,8 @@ func (s *TooManyRequests) RequestID() string {
 	return s.RespMetadata.RequestID
 }
 
+// Returned if the requested Amazon EFS functionality is not available in the
+// specified Availability Zone.
 type UnsupportedAvailabilityZone struct {
 	_            struct{}                  `type:"structure"`
 	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
@@ -7336,12 +8617,20 @@ type UnsupportedAvailabilityZone struct {
 	Message_ *string `locationName:"Message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UnsupportedAvailabilityZone) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UnsupportedAvailabilityZone) GoString() string {
 	return s.String()
 }
@@ -7385,26 +8674,34 @@ func (s *UnsupportedAvailabilityZone) RequestID() string {
 }
 
 type UntagResourceInput struct {
-	_ struct{} `type:"structure"`
+	_ struct{} `type:"structure" nopayload:"true"`
 
 	// Specifies the EFS resource that you want to remove tags from.
 	//
 	// ResourceId is a required field
 	ResourceId *string `location:"uri" locationName:"ResourceId" type:"string" required:"true"`
 
-	// The keys of the key:value tag pairs that you want to remove from the specified
+	// The keys of the key-value tag pairs that you want to remove from the specified
 	// EFS resource.
 	//
 	// TagKeys is a required field
 	TagKeys []*string `location:"querystring" locationName:"tagKeys" min:"1" type:"list" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UntagResourceInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UntagResourceInput) GoString() string {
 	return s.String()
 }
@@ -7444,15 +8741,23 @@ func (s *UntagResourceInput) SetTagKeys(v []*string) *UntagResourceInput {
 }
 
 type UntagResourceOutput struct {
-	_ struct{} `type:"structure"`
+	_ struct{} `type:"structure" nopayload:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UntagResourceOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UntagResourceOutput) GoString() string {
 	return s.String()
 }
@@ -7465,26 +8770,33 @@ type UpdateFileSystemInput struct {
 	// FileSystemId is a required field
 	FileSystemId *string `location:"uri" locationName:"FileSystemId" type:"string" required:"true"`
 
-	// (Optional) The amount of throughput, in MiB/s, that you want to provision
-	// for your file system. Valid values are 1-1024. Required if ThroughputMode
-	// is changed to provisioned on update. If you're not updating the amount of
-	// provisioned throughput for your file system, you don't need to provide this
-	// value in your request.
+	// (Optional) Sets the amount of provisioned throughput, in MiB/s, for the file
+	// system. Valid values are 1-1024. If you are changing the throughput mode
+	// to provisioned, you must also provide the amount of provisioned throughput.
+	// Required if ThroughputMode is changed to provisioned on update.
 	ProvisionedThroughputInMibps *float64 `min:"1" type:"double"`
 
-	// (Optional) The throughput mode that you want your file system to use. If
-	// you're not updating your throughput mode, you don't need to provide this
-	// value in your request. If you are changing the ThroughputMode to provisioned,
-	// you must also set a value for ProvisionedThroughputInMibps.
+	// (Optional) Updates the file system's throughput mode. If you're not updating
+	// your throughput mode, you don't need to provide this value in your request.
+	// If you are changing the ThroughputMode to provisioned, you must also set
+	// a value for ProvisionedThroughputInMibps.
 	ThroughputMode *string `type:"string" enum:"ThroughputMode"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpdateFileSystemInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpdateFileSystemInput) GoString() string {
 	return s.String()
 }
@@ -7530,6 +8842,18 @@ func (s *UpdateFileSystemInput) SetThroughputMode(v string) *UpdateFileSystemInp
 type UpdateFileSystemOutput struct {
 	_ struct{} `type:"structure"`
 
+	// The unique and consistent identifier of the Availability Zone in which the
+	// file system's One Zone storage classes exist. For example, use1-az1 is an
+	// Availability Zone ID for the us-east-1 Amazon Web Services Region, and it
+	// has the same location in every Amazon Web Services account.
+	AvailabilityZoneId *string `type:"string"`
+
+	// Describes the Amazon Web Services Availability Zone in which the file system
+	// is located, and is valid only for file systems using One Zone storage classes.
+	// For more information, see Using EFS storage classes (https://docs.aws.amazon.com/efs/latest/ug/storage-classes.html)
+	// in the Amazon EFS User Guide.
+	AvailabilityZoneName *string `min:"1" type:"string"`
+
 	// The time that the file system was created, in seconds (since 1970-01-01T00:00:00Z).
 	//
 	// CreationTime is a required field
@@ -7552,8 +8876,8 @@ type UpdateFileSystemOutput struct {
 	// FileSystemId is a required field
 	FileSystemId *string `type:"string" required:"true"`
 
-	// The ID of an AWS Key Management Service (AWS KMS) customer master key (CMK)
-	// that was used to protect the encrypted file system.
+	// The ID of an Key Management Service customer master key (CMK) that was used
+	// to protect the encrypted file system.
 	KmsKeyId *string `type:"string"`
 
 	// The lifecycle phase of the file system.
@@ -7572,8 +8896,9 @@ type UpdateFileSystemOutput struct {
 	// NumberOfMountTargets is a required field
 	NumberOfMountTargets *int64 `type:"integer" required:"true"`
 
-	// The AWS account that created the file system. If the file system was created
-	// by an IAM user, the parent account to which the user belongs is the owner.
+	// The Amazon Web Services account that created the file system. If the file
+	// system was created by an IAM user, the parent account to which the user belongs
+	// is the owner.
 	//
 	// OwnerId is a required field
 	OwnerId *string `type:"string" required:"true"`
@@ -7583,12 +8908,8 @@ type UpdateFileSystemOutput struct {
 	// PerformanceMode is a required field
 	PerformanceMode *string `type:"string" required:"true" enum:"PerformanceMode"`
 
-	// The throughput, measured in MiB/s, that you want to provision for a file
-	// system. Valid values are 1-1024. Required if ThroughputMode is set to provisioned.
-	// The limit on throughput is 1024 MiB/s. You can get these limits increased
-	// by contacting AWS Support. For more information, see Amazon EFS Limits That
-	// You Can Increase (https://docs.aws.amazon.com/efs/latest/ug/limits.html#soft-limits)
-	// in the Amazon EFS User Guide.
+	// The amount of provisioned throughput, measured in MiB/s, for the file system.
+	// Valid for file systems using ThroughputMode set to provisioned.
 	ProvisionedThroughputInMibps *float64 `min:"1" type:"double"`
 
 	// The latest known metered size (in bytes) of data stored in the file system,
@@ -7609,23 +8930,40 @@ type UpdateFileSystemOutput struct {
 	// Tags is a required field
 	Tags []*Tag `type:"list" required:"true"`
 
-	// The throughput mode for a file system. There are two throughput modes to
-	// choose from for your file system: bursting and provisioned. If you set ThroughputMode
-	// to provisioned, you must also set a value for ProvisionedThroughPutInMibps.
-	// You can decrease your file system's throughput in Provisioned Throughput
-	// mode or change between the throughput modes as long as it’s been more than
-	// 24 hours since the last decrease or throughput mode change.
+	// Displays the file system's throughput mode. For more information, see Throughput
+	// modes (https://docs.aws.amazon.com/efs/latest/ug/performance.html#throughput-modes)
+	// in the Amazon EFS User Guide.
 	ThroughputMode *string `type:"string" enum:"ThroughputMode"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpdateFileSystemOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpdateFileSystemOutput) GoString() string {
 	return s.String()
+}
+
+// SetAvailabilityZoneId sets the AvailabilityZoneId field's value.
+func (s *UpdateFileSystemOutput) SetAvailabilityZoneId(v string) *UpdateFileSystemOutput {
+	s.AvailabilityZoneId = &v
+	return s
+}
+
+// SetAvailabilityZoneName sets the AvailabilityZoneName field's value.
+func (s *UpdateFileSystemOutput) SetAvailabilityZoneName(v string) *UpdateFileSystemOutput {
+	s.AvailabilityZoneName = &v
+	return s
 }
 
 // SetCreationTime sets the CreationTime field's value.
@@ -7718,8 +9056,8 @@ func (s *UpdateFileSystemOutput) SetThroughputMode(v string) *UpdateFileSystemOu
 	return s
 }
 
-// Returned if the AWS Backup service is not available in the region that the
-// request was made.
+// Returned if the Backup service is not available in the Amazon Web Services
+// Region in which the request was made.
 type ValidationException struct {
 	_            struct{}                  `type:"structure"`
 	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
@@ -7730,12 +9068,20 @@ type ValidationException struct {
 	Message_ *string `locationName:"Message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ValidationException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ValidationException) GoString() string {
 	return s.String()
 }
@@ -7793,6 +9139,9 @@ const (
 
 	// LifeCycleStateDeleted is a LifeCycleState enum value
 	LifeCycleStateDeleted = "deleted"
+
+	// LifeCycleStateError is a LifeCycleState enum value
+	LifeCycleStateError = "error"
 )
 
 // LifeCycleState_Values returns all elements of the LifeCycleState enum
@@ -7803,6 +9152,7 @@ func LifeCycleState_Values() []string {
 		LifeCycleStateUpdating,
 		LifeCycleStateDeleting,
 		LifeCycleStateDeleted,
+		LifeCycleStateError,
 	}
 }
 
@@ -7819,6 +9169,41 @@ func PerformanceMode_Values() []string {
 	return []string{
 		PerformanceModeGeneralPurpose,
 		PerformanceModeMaxIo,
+	}
+}
+
+// An EFS resource, for example a file system or a mount target.
+const (
+	// ResourceFileSystem is a Resource enum value
+	ResourceFileSystem = "FILE_SYSTEM"
+
+	// ResourceMountTarget is a Resource enum value
+	ResourceMountTarget = "MOUNT_TARGET"
+)
+
+// Resource_Values returns all elements of the Resource enum
+func Resource_Values() []string {
+	return []string{
+		ResourceFileSystem,
+		ResourceMountTarget,
+	}
+}
+
+// A preference indicating a choice to use 63bit/32bit IDs for all applicable
+// resources.
+const (
+	// ResourceIdTypeLongId is a ResourceIdType enum value
+	ResourceIdTypeLongId = "LONG_ID"
+
+	// ResourceIdTypeShortId is a ResourceIdType enum value
+	ResourceIdTypeShortId = "SHORT_ID"
+)
+
+// ResourceIdType_Values returns all elements of the ResourceIdType enum
+func ResourceIdType_Values() []string {
+	return []string{
+		ResourceIdTypeLongId,
+		ResourceIdTypeShortId,
 	}
 }
 
@@ -7887,5 +9272,17 @@ func TransitionToIARules_Values() []string {
 		TransitionToIARulesAfter30Days,
 		TransitionToIARulesAfter60Days,
 		TransitionToIARulesAfter90Days,
+	}
+}
+
+const (
+	// TransitionToPrimaryStorageClassRulesAfter1Access is a TransitionToPrimaryStorageClassRules enum value
+	TransitionToPrimaryStorageClassRulesAfter1Access = "AFTER_1_ACCESS"
+)
+
+// TransitionToPrimaryStorageClassRules_Values returns all elements of the TransitionToPrimaryStorageClassRules enum
+func TransitionToPrimaryStorageClassRules_Values() []string {
+	return []string{
+		TransitionToPrimaryStorageClassRulesAfter1Access,
 	}
 }

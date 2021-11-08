@@ -84,6 +84,10 @@ type MediaLiveAPI interface {
 	CancelInputDeviceTransferWithContext(aws.Context, *medialive.CancelInputDeviceTransferInput, ...request.Option) (*medialive.CancelInputDeviceTransferOutput, error)
 	CancelInputDeviceTransferRequest(*medialive.CancelInputDeviceTransferInput) (*request.Request, *medialive.CancelInputDeviceTransferOutput)
 
+	ClaimDevice(*medialive.ClaimDeviceInput) (*medialive.ClaimDeviceOutput, error)
+	ClaimDeviceWithContext(aws.Context, *medialive.ClaimDeviceInput, ...request.Option) (*medialive.ClaimDeviceOutput, error)
+	ClaimDeviceRequest(*medialive.ClaimDeviceInput) (*request.Request, *medialive.ClaimDeviceOutput)
+
 	CreateChannel(*medialive.CreateChannelInput) (*medialive.CreateChannelOutput, error)
 	CreateChannelWithContext(aws.Context, *medialive.CreateChannelInput, ...request.Option) (*medialive.CreateChannelOutput, error)
 	CreateChannelRequest(*medialive.CreateChannelInput) (*request.Request, *medialive.CreateChannelOutput)
@@ -103,6 +107,10 @@ type MediaLiveAPI interface {
 	CreateMultiplexProgram(*medialive.CreateMultiplexProgramInput) (*medialive.CreateMultiplexProgramOutput, error)
 	CreateMultiplexProgramWithContext(aws.Context, *medialive.CreateMultiplexProgramInput, ...request.Option) (*medialive.CreateMultiplexProgramOutput, error)
 	CreateMultiplexProgramRequest(*medialive.CreateMultiplexProgramInput) (*request.Request, *medialive.CreateMultiplexProgramOutput)
+
+	CreatePartnerInput(*medialive.CreatePartnerInputInput) (*medialive.CreatePartnerInputOutput, error)
+	CreatePartnerInputWithContext(aws.Context, *medialive.CreatePartnerInputInput, ...request.Option) (*medialive.CreatePartnerInputOutput, error)
+	CreatePartnerInputRequest(*medialive.CreatePartnerInputInput) (*request.Request, *medialive.CreatePartnerInputOutput)
 
 	CreateTags(*medialive.CreateTagsInput) (*medialive.CreateTagsOutput, error)
 	CreateTagsWithContext(aws.Context, *medialive.CreateTagsInput, ...request.Option) (*medialive.CreateTagsOutput, error)

@@ -71,7 +71,7 @@ func (c *ComputeOptimizer) DescribeRecommendationExportJobsRequest(input *Descri
 //
 // Returned Error Types:
 //   * OptInRequiredException
-//   The account is not opted in to AWS Compute Optimizer.
+//   The account is not opted in to Compute Optimizer.
 //
 //   * InternalServerException
 //   An internal error has occurred. Try your call again.
@@ -83,14 +83,14 @@ func (c *ComputeOptimizer) DescribeRecommendationExportJobsRequest(input *Descri
 //   You do not have sufficient access to perform this action.
 //
 //   * InvalidParameterValueException
-//   An invalid or out-of-range value was supplied for the input parameter.
+//   The value supplied for the input parameter is out of range or not valid.
 //
 //   * ResourceNotFoundException
 //   A resource that is required for the action doesn't exist.
 //
 //   * MissingAuthenticationToken
-//   The request must contain either a valid (registered) AWS access key ID or
-//   X.509 certificate.
+//   The request must contain either a valid (registered) Amazon Web Services
+//   access key ID or X.509 certificate.
 //
 //   * ThrottlingException
 //   The request was denied due to request throttling.
@@ -164,12 +164,13 @@ func (c *ComputeOptimizer) ExportAutoScalingGroupRecommendationsRequest(input *E
 // Exports optimization recommendations for Auto Scaling groups.
 //
 // Recommendations are exported in a comma-separated values (.csv) file, and
-// its metadata in a JavaScript Object Notation (.json) file, to an existing
+// its metadata in a JavaScript Object Notation (JSON) (.json) file, to an existing
 // Amazon Simple Storage Service (Amazon S3) bucket that you specify. For more
 // information, see Exporting Recommendations (https://docs.aws.amazon.com/compute-optimizer/latest/ug/exporting-recommendations.html)
 // in the Compute Optimizer User Guide.
 //
-// You can have only one Auto Scaling group export job in progress per AWS Region.
+// You can have only one Auto Scaling group export job in progress per Amazon
+// Web Services Region.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -180,7 +181,7 @@ func (c *ComputeOptimizer) ExportAutoScalingGroupRecommendationsRequest(input *E
 //
 // Returned Error Types:
 //   * OptInRequiredException
-//   The account is not opted in to AWS Compute Optimizer.
+//   The account is not opted in to Compute Optimizer.
 //
 //   * InternalServerException
 //   An internal error has occurred. Try your call again.
@@ -192,11 +193,11 @@ func (c *ComputeOptimizer) ExportAutoScalingGroupRecommendationsRequest(input *E
 //   You do not have sufficient access to perform this action.
 //
 //   * InvalidParameterValueException
-//   An invalid or out-of-range value was supplied for the input parameter.
+//   The value supplied for the input parameter is out of range or not valid.
 //
 //   * MissingAuthenticationToken
-//   The request must contain either a valid (registered) AWS access key ID or
-//   X.509 certificate.
+//   The request must contain either a valid (registered) Amazon Web Services
+//   access key ID or X.509 certificate.
 //
 //   * ThrottlingException
 //   The request was denied due to request throttling.
@@ -221,6 +222,116 @@ func (c *ComputeOptimizer) ExportAutoScalingGroupRecommendations(input *ExportAu
 // for more information on using Contexts.
 func (c *ComputeOptimizer) ExportAutoScalingGroupRecommendationsWithContext(ctx aws.Context, input *ExportAutoScalingGroupRecommendationsInput, opts ...request.Option) (*ExportAutoScalingGroupRecommendationsOutput, error) {
 	req, out := c.ExportAutoScalingGroupRecommendationsRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opExportEBSVolumeRecommendations = "ExportEBSVolumeRecommendations"
+
+// ExportEBSVolumeRecommendationsRequest generates a "aws/request.Request" representing the
+// client's request for the ExportEBSVolumeRecommendations operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See ExportEBSVolumeRecommendations for more information on using the ExportEBSVolumeRecommendations
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the ExportEBSVolumeRecommendationsRequest method.
+//    req, resp := client.ExportEBSVolumeRecommendationsRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/compute-optimizer-2019-11-01/ExportEBSVolumeRecommendations
+func (c *ComputeOptimizer) ExportEBSVolumeRecommendationsRequest(input *ExportEBSVolumeRecommendationsInput) (req *request.Request, output *ExportEBSVolumeRecommendationsOutput) {
+	op := &request.Operation{
+		Name:       opExportEBSVolumeRecommendations,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &ExportEBSVolumeRecommendationsInput{}
+	}
+
+	output = &ExportEBSVolumeRecommendationsOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// ExportEBSVolumeRecommendations API operation for AWS Compute Optimizer.
+//
+// Exports optimization recommendations for Amazon EBS volumes.
+//
+// Recommendations are exported in a comma-separated values (.csv) file, and
+// its metadata in a JavaScript Object Notation (JSON) (.json) file, to an existing
+// Amazon Simple Storage Service (Amazon S3) bucket that you specify. For more
+// information, see Exporting Recommendations (https://docs.aws.amazon.com/compute-optimizer/latest/ug/exporting-recommendations.html)
+// in the Compute Optimizer User Guide.
+//
+// You can have only one Amazon EBS volume export job in progress per Amazon
+// Web Services Region.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Compute Optimizer's
+// API operation ExportEBSVolumeRecommendations for usage and error information.
+//
+// Returned Error Types:
+//   * OptInRequiredException
+//   The account is not opted in to Compute Optimizer.
+//
+//   * InternalServerException
+//   An internal error has occurred. Try your call again.
+//
+//   * ServiceUnavailableException
+//   The request has failed due to a temporary failure of the server.
+//
+//   * AccessDeniedException
+//   You do not have sufficient access to perform this action.
+//
+//   * InvalidParameterValueException
+//   The value supplied for the input parameter is out of range or not valid.
+//
+//   * MissingAuthenticationToken
+//   The request must contain either a valid (registered) Amazon Web Services
+//   access key ID or X.509 certificate.
+//
+//   * ThrottlingException
+//   The request was denied due to request throttling.
+//
+//   * LimitExceededException
+//   The request exceeds a limit of the service.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/compute-optimizer-2019-11-01/ExportEBSVolumeRecommendations
+func (c *ComputeOptimizer) ExportEBSVolumeRecommendations(input *ExportEBSVolumeRecommendationsInput) (*ExportEBSVolumeRecommendationsOutput, error) {
+	req, out := c.ExportEBSVolumeRecommendationsRequest(input)
+	return out, req.Send()
+}
+
+// ExportEBSVolumeRecommendationsWithContext is the same as ExportEBSVolumeRecommendations with the addition of
+// the ability to pass a context and additional request options.
+//
+// See ExportEBSVolumeRecommendations for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *ComputeOptimizer) ExportEBSVolumeRecommendationsWithContext(ctx aws.Context, input *ExportEBSVolumeRecommendationsInput, opts ...request.Option) (*ExportEBSVolumeRecommendationsOutput, error) {
+	req, out := c.ExportEBSVolumeRecommendationsRequest(input)
 	req.SetContext(ctx)
 	req.ApplyOptions(opts...)
 	return out, req.Send()
@@ -273,13 +384,13 @@ func (c *ComputeOptimizer) ExportEC2InstanceRecommendationsRequest(input *Export
 // Exports optimization recommendations for Amazon EC2 instances.
 //
 // Recommendations are exported in a comma-separated values (.csv) file, and
-// its metadata in a JavaScript Object Notation (.json) file, to an existing
+// its metadata in a JavaScript Object Notation (JSON) (.json) file, to an existing
 // Amazon Simple Storage Service (Amazon S3) bucket that you specify. For more
 // information, see Exporting Recommendations (https://docs.aws.amazon.com/compute-optimizer/latest/ug/exporting-recommendations.html)
 // in the Compute Optimizer User Guide.
 //
-// You can have only one Amazon EC2 instance export job in progress per AWS
-// Region.
+// You can have only one Amazon EC2 instance export job in progress per Amazon
+// Web Services Region.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -290,7 +401,7 @@ func (c *ComputeOptimizer) ExportEC2InstanceRecommendationsRequest(input *Export
 //
 // Returned Error Types:
 //   * OptInRequiredException
-//   The account is not opted in to AWS Compute Optimizer.
+//   The account is not opted in to Compute Optimizer.
 //
 //   * InternalServerException
 //   An internal error has occurred. Try your call again.
@@ -302,11 +413,11 @@ func (c *ComputeOptimizer) ExportEC2InstanceRecommendationsRequest(input *Export
 //   You do not have sufficient access to perform this action.
 //
 //   * InvalidParameterValueException
-//   An invalid or out-of-range value was supplied for the input parameter.
+//   The value supplied for the input parameter is out of range or not valid.
 //
 //   * MissingAuthenticationToken
-//   The request must contain either a valid (registered) AWS access key ID or
-//   X.509 certificate.
+//   The request must contain either a valid (registered) Amazon Web Services
+//   access key ID or X.509 certificate.
 //
 //   * ThrottlingException
 //   The request was denied due to request throttling.
@@ -331,6 +442,116 @@ func (c *ComputeOptimizer) ExportEC2InstanceRecommendations(input *ExportEC2Inst
 // for more information on using Contexts.
 func (c *ComputeOptimizer) ExportEC2InstanceRecommendationsWithContext(ctx aws.Context, input *ExportEC2InstanceRecommendationsInput, opts ...request.Option) (*ExportEC2InstanceRecommendationsOutput, error) {
 	req, out := c.ExportEC2InstanceRecommendationsRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opExportLambdaFunctionRecommendations = "ExportLambdaFunctionRecommendations"
+
+// ExportLambdaFunctionRecommendationsRequest generates a "aws/request.Request" representing the
+// client's request for the ExportLambdaFunctionRecommendations operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See ExportLambdaFunctionRecommendations for more information on using the ExportLambdaFunctionRecommendations
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the ExportLambdaFunctionRecommendationsRequest method.
+//    req, resp := client.ExportLambdaFunctionRecommendationsRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/compute-optimizer-2019-11-01/ExportLambdaFunctionRecommendations
+func (c *ComputeOptimizer) ExportLambdaFunctionRecommendationsRequest(input *ExportLambdaFunctionRecommendationsInput) (req *request.Request, output *ExportLambdaFunctionRecommendationsOutput) {
+	op := &request.Operation{
+		Name:       opExportLambdaFunctionRecommendations,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &ExportLambdaFunctionRecommendationsInput{}
+	}
+
+	output = &ExportLambdaFunctionRecommendationsOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// ExportLambdaFunctionRecommendations API operation for AWS Compute Optimizer.
+//
+// Exports optimization recommendations for Lambda functions.
+//
+// Recommendations are exported in a comma-separated values (.csv) file, and
+// its metadata in a JavaScript Object Notation (JSON) (.json) file, to an existing
+// Amazon Simple Storage Service (Amazon S3) bucket that you specify. For more
+// information, see Exporting Recommendations (https://docs.aws.amazon.com/compute-optimizer/latest/ug/exporting-recommendations.html)
+// in the Compute Optimizer User Guide.
+//
+// You can have only one Lambda function export job in progress per Amazon Web
+// Services Region.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Compute Optimizer's
+// API operation ExportLambdaFunctionRecommendations for usage and error information.
+//
+// Returned Error Types:
+//   * OptInRequiredException
+//   The account is not opted in to Compute Optimizer.
+//
+//   * InternalServerException
+//   An internal error has occurred. Try your call again.
+//
+//   * ServiceUnavailableException
+//   The request has failed due to a temporary failure of the server.
+//
+//   * AccessDeniedException
+//   You do not have sufficient access to perform this action.
+//
+//   * InvalidParameterValueException
+//   The value supplied for the input parameter is out of range or not valid.
+//
+//   * MissingAuthenticationToken
+//   The request must contain either a valid (registered) Amazon Web Services
+//   access key ID or X.509 certificate.
+//
+//   * ThrottlingException
+//   The request was denied due to request throttling.
+//
+//   * LimitExceededException
+//   The request exceeds a limit of the service.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/compute-optimizer-2019-11-01/ExportLambdaFunctionRecommendations
+func (c *ComputeOptimizer) ExportLambdaFunctionRecommendations(input *ExportLambdaFunctionRecommendationsInput) (*ExportLambdaFunctionRecommendationsOutput, error) {
+	req, out := c.ExportLambdaFunctionRecommendationsRequest(input)
+	return out, req.Send()
+}
+
+// ExportLambdaFunctionRecommendationsWithContext is the same as ExportLambdaFunctionRecommendations with the addition of
+// the ability to pass a context and additional request options.
+//
+// See ExportLambdaFunctionRecommendations for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *ComputeOptimizer) ExportLambdaFunctionRecommendationsWithContext(ctx aws.Context, input *ExportLambdaFunctionRecommendationsInput, opts ...request.Option) (*ExportLambdaFunctionRecommendationsOutput, error) {
+	req, out := c.ExportLambdaFunctionRecommendationsRequest(input)
 	req.SetContext(ctx)
 	req.ApplyOptions(opts...)
 	return out, req.Send()
@@ -382,10 +603,10 @@ func (c *ComputeOptimizer) GetAutoScalingGroupRecommendationsRequest(input *GetA
 //
 // Returns Auto Scaling group recommendations.
 //
-// AWS Compute Optimizer generates recommendations for Amazon EC2 Auto Scaling
-// groups that meet a specific set of requirements. For more information, see
-// the Supported resources and requirements (https://docs.aws.amazon.com/compute-optimizer/latest/ug/requirements.html)
-// in the AWS Compute Optimizer User Guide.
+// Compute Optimizer generates recommendations for Amazon EC2 Auto Scaling groups
+// that meet a specific set of requirements. For more information, see the Supported
+// resources and requirements (https://docs.aws.amazon.com/compute-optimizer/latest/ug/requirements.html)
+// in the Compute Optimizer User Guide.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -396,7 +617,7 @@ func (c *ComputeOptimizer) GetAutoScalingGroupRecommendationsRequest(input *GetA
 //
 // Returned Error Types:
 //   * OptInRequiredException
-//   The account is not opted in to AWS Compute Optimizer.
+//   The account is not opted in to Compute Optimizer.
 //
 //   * InternalServerException
 //   An internal error has occurred. Try your call again.
@@ -408,14 +629,14 @@ func (c *ComputeOptimizer) GetAutoScalingGroupRecommendationsRequest(input *GetA
 //   You do not have sufficient access to perform this action.
 //
 //   * InvalidParameterValueException
-//   An invalid or out-of-range value was supplied for the input parameter.
+//   The value supplied for the input parameter is out of range or not valid.
 //
 //   * ResourceNotFoundException
 //   A resource that is required for the action doesn't exist.
 //
 //   * MissingAuthenticationToken
-//   The request must contain either a valid (registered) AWS access key ID or
-//   X.509 certificate.
+//   The request must contain either a valid (registered) Amazon Web Services
+//   access key ID or X.509 certificate.
 //
 //   * ThrottlingException
 //   The request was denied due to request throttling.
@@ -437,6 +658,112 @@ func (c *ComputeOptimizer) GetAutoScalingGroupRecommendations(input *GetAutoScal
 // for more information on using Contexts.
 func (c *ComputeOptimizer) GetAutoScalingGroupRecommendationsWithContext(ctx aws.Context, input *GetAutoScalingGroupRecommendationsInput, opts ...request.Option) (*GetAutoScalingGroupRecommendationsOutput, error) {
 	req, out := c.GetAutoScalingGroupRecommendationsRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opGetEBSVolumeRecommendations = "GetEBSVolumeRecommendations"
+
+// GetEBSVolumeRecommendationsRequest generates a "aws/request.Request" representing the
+// client's request for the GetEBSVolumeRecommendations operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See GetEBSVolumeRecommendations for more information on using the GetEBSVolumeRecommendations
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the GetEBSVolumeRecommendationsRequest method.
+//    req, resp := client.GetEBSVolumeRecommendationsRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/compute-optimizer-2019-11-01/GetEBSVolumeRecommendations
+func (c *ComputeOptimizer) GetEBSVolumeRecommendationsRequest(input *GetEBSVolumeRecommendationsInput) (req *request.Request, output *GetEBSVolumeRecommendationsOutput) {
+	op := &request.Operation{
+		Name:       opGetEBSVolumeRecommendations,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &GetEBSVolumeRecommendationsInput{}
+	}
+
+	output = &GetEBSVolumeRecommendationsOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// GetEBSVolumeRecommendations API operation for AWS Compute Optimizer.
+//
+// Returns Amazon Elastic Block Store (Amazon EBS) volume recommendations.
+//
+// Compute Optimizer generates recommendations for Amazon EBS volumes that meet
+// a specific set of requirements. For more information, see the Supported resources
+// and requirements (https://docs.aws.amazon.com/compute-optimizer/latest/ug/requirements.html)
+// in the Compute Optimizer User Guide.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Compute Optimizer's
+// API operation GetEBSVolumeRecommendations for usage and error information.
+//
+// Returned Error Types:
+//   * OptInRequiredException
+//   The account is not opted in to Compute Optimizer.
+//
+//   * InternalServerException
+//   An internal error has occurred. Try your call again.
+//
+//   * ServiceUnavailableException
+//   The request has failed due to a temporary failure of the server.
+//
+//   * AccessDeniedException
+//   You do not have sufficient access to perform this action.
+//
+//   * InvalidParameterValueException
+//   The value supplied for the input parameter is out of range or not valid.
+//
+//   * ResourceNotFoundException
+//   A resource that is required for the action doesn't exist.
+//
+//   * MissingAuthenticationToken
+//   The request must contain either a valid (registered) Amazon Web Services
+//   access key ID or X.509 certificate.
+//
+//   * ThrottlingException
+//   The request was denied due to request throttling.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/compute-optimizer-2019-11-01/GetEBSVolumeRecommendations
+func (c *ComputeOptimizer) GetEBSVolumeRecommendations(input *GetEBSVolumeRecommendationsInput) (*GetEBSVolumeRecommendationsOutput, error) {
+	req, out := c.GetEBSVolumeRecommendationsRequest(input)
+	return out, req.Send()
+}
+
+// GetEBSVolumeRecommendationsWithContext is the same as GetEBSVolumeRecommendations with the addition of
+// the ability to pass a context and additional request options.
+//
+// See GetEBSVolumeRecommendations for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *ComputeOptimizer) GetEBSVolumeRecommendationsWithContext(ctx aws.Context, input *GetEBSVolumeRecommendationsInput, opts ...request.Option) (*GetEBSVolumeRecommendationsOutput, error) {
+	req, out := c.GetEBSVolumeRecommendationsRequest(input)
 	req.SetContext(ctx)
 	req.ApplyOptions(opts...)
 	return out, req.Send()
@@ -488,10 +815,10 @@ func (c *ComputeOptimizer) GetEC2InstanceRecommendationsRequest(input *GetEC2Ins
 //
 // Returns Amazon EC2 instance recommendations.
 //
-// AWS Compute Optimizer generates recommendations for Amazon Elastic Compute
-// Cloud (Amazon EC2) instances that meet a specific set of requirements. For
-// more information, see the Supported resources and requirements (https://docs.aws.amazon.com/compute-optimizer/latest/ug/requirements.html)
-// in the AWS Compute Optimizer User Guide.
+// Compute Optimizer generates recommendations for Amazon Elastic Compute Cloud
+// (Amazon EC2) instances that meet a specific set of requirements. For more
+// information, see the Supported resources and requirements (https://docs.aws.amazon.com/compute-optimizer/latest/ug/requirements.html)
+// in the Compute Optimizer User Guide.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -502,7 +829,7 @@ func (c *ComputeOptimizer) GetEC2InstanceRecommendationsRequest(input *GetEC2Ins
 //
 // Returned Error Types:
 //   * OptInRequiredException
-//   The account is not opted in to AWS Compute Optimizer.
+//   The account is not opted in to Compute Optimizer.
 //
 //   * InternalServerException
 //   An internal error has occurred. Try your call again.
@@ -514,14 +841,14 @@ func (c *ComputeOptimizer) GetEC2InstanceRecommendationsRequest(input *GetEC2Ins
 //   You do not have sufficient access to perform this action.
 //
 //   * InvalidParameterValueException
-//   An invalid or out-of-range value was supplied for the input parameter.
+//   The value supplied for the input parameter is out of range or not valid.
 //
 //   * ResourceNotFoundException
 //   A resource that is required for the action doesn't exist.
 //
 //   * MissingAuthenticationToken
-//   The request must contain either a valid (registered) AWS access key ID or
-//   X.509 certificate.
+//   The request must contain either a valid (registered) Amazon Web Services
+//   access key ID or X.509 certificate.
 //
 //   * ThrottlingException
 //   The request was denied due to request throttling.
@@ -609,7 +936,7 @@ func (c *ComputeOptimizer) GetEC2RecommendationProjectedMetricsRequest(input *Ge
 //
 // Returned Error Types:
 //   * OptInRequiredException
-//   The account is not opted in to AWS Compute Optimizer.
+//   The account is not opted in to Compute Optimizer.
 //
 //   * InternalServerException
 //   An internal error has occurred. Try your call again.
@@ -621,14 +948,14 @@ func (c *ComputeOptimizer) GetEC2RecommendationProjectedMetricsRequest(input *Ge
 //   You do not have sufficient access to perform this action.
 //
 //   * InvalidParameterValueException
-//   An invalid or out-of-range value was supplied for the input parameter.
+//   The value supplied for the input parameter is out of range or not valid.
 //
 //   * ResourceNotFoundException
 //   A resource that is required for the action doesn't exist.
 //
 //   * MissingAuthenticationToken
-//   The request must contain either a valid (registered) AWS access key ID or
-//   X.509 certificate.
+//   The request must contain either a valid (registered) Amazon Web Services
+//   access key ID or X.509 certificate.
 //
 //   * ThrottlingException
 //   The request was denied due to request throttling.
@@ -699,11 +1026,13 @@ func (c *ComputeOptimizer) GetEnrollmentStatusRequest(input *GetEnrollmentStatus
 
 // GetEnrollmentStatus API operation for AWS Compute Optimizer.
 //
-// Returns the enrollment (opt in) status of an account to the AWS Compute Optimizer
+// Returns the enrollment (opt in) status of an account to the Compute Optimizer
 // service.
 //
-// If the account is the master account of an organization, this action also
-// confirms the enrollment status of member accounts within the organization.
+// If the account is the management account of an organization, this action
+// also confirms the enrollment status of member accounts of the organization.
+// Use the GetEnrollmentStatusesForOrganization action to get detailed information
+// about the enrollment status of member accounts of an organization.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -723,11 +1052,11 @@ func (c *ComputeOptimizer) GetEnrollmentStatusRequest(input *GetEnrollmentStatus
 //   You do not have sufficient access to perform this action.
 //
 //   * InvalidParameterValueException
-//   An invalid or out-of-range value was supplied for the input parameter.
+//   The value supplied for the input parameter is out of range or not valid.
 //
 //   * MissingAuthenticationToken
-//   The request must contain either a valid (registered) AWS access key ID or
-//   X.509 certificate.
+//   The request must contain either a valid (registered) Amazon Web Services
+//   access key ID or X.509 certificate.
 //
 //   * ThrottlingException
 //   The request was denied due to request throttling.
@@ -749,6 +1078,211 @@ func (c *ComputeOptimizer) GetEnrollmentStatus(input *GetEnrollmentStatusInput) 
 // for more information on using Contexts.
 func (c *ComputeOptimizer) GetEnrollmentStatusWithContext(ctx aws.Context, input *GetEnrollmentStatusInput, opts ...request.Option) (*GetEnrollmentStatusOutput, error) {
 	req, out := c.GetEnrollmentStatusRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opGetEnrollmentStatusesForOrganization = "GetEnrollmentStatusesForOrganization"
+
+// GetEnrollmentStatusesForOrganizationRequest generates a "aws/request.Request" representing the
+// client's request for the GetEnrollmentStatusesForOrganization operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See GetEnrollmentStatusesForOrganization for more information on using the GetEnrollmentStatusesForOrganization
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the GetEnrollmentStatusesForOrganizationRequest method.
+//    req, resp := client.GetEnrollmentStatusesForOrganizationRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/compute-optimizer-2019-11-01/GetEnrollmentStatusesForOrganization
+func (c *ComputeOptimizer) GetEnrollmentStatusesForOrganizationRequest(input *GetEnrollmentStatusesForOrganizationInput) (req *request.Request, output *GetEnrollmentStatusesForOrganizationOutput) {
+	op := &request.Operation{
+		Name:       opGetEnrollmentStatusesForOrganization,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &GetEnrollmentStatusesForOrganizationInput{}
+	}
+
+	output = &GetEnrollmentStatusesForOrganizationOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// GetEnrollmentStatusesForOrganization API operation for AWS Compute Optimizer.
+//
+// Returns the Compute Optimizer enrollment (opt-in) status of organization
+// member accounts, if your account is an organization management account.
+//
+// To get the enrollment status of standalone accounts, use the GetEnrollmentStatus
+// action.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Compute Optimizer's
+// API operation GetEnrollmentStatusesForOrganization for usage and error information.
+//
+// Returned Error Types:
+//   * InternalServerException
+//   An internal error has occurred. Try your call again.
+//
+//   * ServiceUnavailableException
+//   The request has failed due to a temporary failure of the server.
+//
+//   * AccessDeniedException
+//   You do not have sufficient access to perform this action.
+//
+//   * InvalidParameterValueException
+//   The value supplied for the input parameter is out of range or not valid.
+//
+//   * MissingAuthenticationToken
+//   The request must contain either a valid (registered) Amazon Web Services
+//   access key ID or X.509 certificate.
+//
+//   * ThrottlingException
+//   The request was denied due to request throttling.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/compute-optimizer-2019-11-01/GetEnrollmentStatusesForOrganization
+func (c *ComputeOptimizer) GetEnrollmentStatusesForOrganization(input *GetEnrollmentStatusesForOrganizationInput) (*GetEnrollmentStatusesForOrganizationOutput, error) {
+	req, out := c.GetEnrollmentStatusesForOrganizationRequest(input)
+	return out, req.Send()
+}
+
+// GetEnrollmentStatusesForOrganizationWithContext is the same as GetEnrollmentStatusesForOrganization with the addition of
+// the ability to pass a context and additional request options.
+//
+// See GetEnrollmentStatusesForOrganization for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *ComputeOptimizer) GetEnrollmentStatusesForOrganizationWithContext(ctx aws.Context, input *GetEnrollmentStatusesForOrganizationInput, opts ...request.Option) (*GetEnrollmentStatusesForOrganizationOutput, error) {
+	req, out := c.GetEnrollmentStatusesForOrganizationRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opGetLambdaFunctionRecommendations = "GetLambdaFunctionRecommendations"
+
+// GetLambdaFunctionRecommendationsRequest generates a "aws/request.Request" representing the
+// client's request for the GetLambdaFunctionRecommendations operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See GetLambdaFunctionRecommendations for more information on using the GetLambdaFunctionRecommendations
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the GetLambdaFunctionRecommendationsRequest method.
+//    req, resp := client.GetLambdaFunctionRecommendationsRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/compute-optimizer-2019-11-01/GetLambdaFunctionRecommendations
+func (c *ComputeOptimizer) GetLambdaFunctionRecommendationsRequest(input *GetLambdaFunctionRecommendationsInput) (req *request.Request, output *GetLambdaFunctionRecommendationsOutput) {
+	op := &request.Operation{
+		Name:       opGetLambdaFunctionRecommendations,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &GetLambdaFunctionRecommendationsInput{}
+	}
+
+	output = &GetLambdaFunctionRecommendationsOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// GetLambdaFunctionRecommendations API operation for AWS Compute Optimizer.
+//
+// Returns Lambda function recommendations.
+//
+// Compute Optimizer generates recommendations for functions that meet a specific
+// set of requirements. For more information, see the Supported resources and
+// requirements (https://docs.aws.amazon.com/compute-optimizer/latest/ug/requirements.html)
+// in the Compute Optimizer User Guide.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Compute Optimizer's
+// API operation GetLambdaFunctionRecommendations for usage and error information.
+//
+// Returned Error Types:
+//   * OptInRequiredException
+//   The account is not opted in to Compute Optimizer.
+//
+//   * InternalServerException
+//   An internal error has occurred. Try your call again.
+//
+//   * ServiceUnavailableException
+//   The request has failed due to a temporary failure of the server.
+//
+//   * AccessDeniedException
+//   You do not have sufficient access to perform this action.
+//
+//   * InvalidParameterValueException
+//   The value supplied for the input parameter is out of range or not valid.
+//
+//   * MissingAuthenticationToken
+//   The request must contain either a valid (registered) Amazon Web Services
+//   access key ID or X.509 certificate.
+//
+//   * ThrottlingException
+//   The request was denied due to request throttling.
+//
+//   * LimitExceededException
+//   The request exceeds a limit of the service.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/compute-optimizer-2019-11-01/GetLambdaFunctionRecommendations
+func (c *ComputeOptimizer) GetLambdaFunctionRecommendations(input *GetLambdaFunctionRecommendationsInput) (*GetLambdaFunctionRecommendationsOutput, error) {
+	req, out := c.GetLambdaFunctionRecommendationsRequest(input)
+	return out, req.Send()
+}
+
+// GetLambdaFunctionRecommendationsWithContext is the same as GetLambdaFunctionRecommendations with the addition of
+// the ability to pass a context and additional request options.
+//
+// See GetLambdaFunctionRecommendations for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *ComputeOptimizer) GetLambdaFunctionRecommendationsWithContext(ctx aws.Context, input *GetLambdaFunctionRecommendationsInput, opts ...request.Option) (*GetLambdaFunctionRecommendationsOutput, error) {
+	req, out := c.GetLambdaFunctionRecommendationsRequest(input)
 	req.SetContext(ctx)
 	req.ApplyOptions(opts...)
 	return out, req.Send()
@@ -800,10 +1334,16 @@ func (c *ComputeOptimizer) GetRecommendationSummariesRequest(input *GetRecommend
 //
 // Returns the optimization findings for an account.
 //
-// For example, it returns the number of Amazon EC2 instances in an account
-// that are under-provisioned, over-provisioned, or optimized. It also returns
-// the number of Auto Scaling groups in an account that are not optimized, or
-// optimized.
+// It returns the number of:
+//
+//    * Amazon EC2 instances in an account that are Underprovisioned, Overprovisioned,
+//    or Optimized.
+//
+//    * Auto Scaling groups in an account that are NotOptimized, or Optimized.
+//
+//    * Amazon EBS volumes in an account that are NotOptimized, or Optimized.
+//
+//    * Lambda functions in an account that are NotOptimized, or Optimized.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -814,7 +1354,7 @@ func (c *ComputeOptimizer) GetRecommendationSummariesRequest(input *GetRecommend
 //
 // Returned Error Types:
 //   * OptInRequiredException
-//   The account is not opted in to AWS Compute Optimizer.
+//   The account is not opted in to Compute Optimizer.
 //
 //   * InternalServerException
 //   An internal error has occurred. Try your call again.
@@ -826,11 +1366,11 @@ func (c *ComputeOptimizer) GetRecommendationSummariesRequest(input *GetRecommend
 //   You do not have sufficient access to perform this action.
 //
 //   * InvalidParameterValueException
-//   An invalid or out-of-range value was supplied for the input parameter.
+//   The value supplied for the input parameter is out of range or not valid.
 //
 //   * MissingAuthenticationToken
-//   The request must contain either a valid (registered) AWS access key ID or
-//   X.509 certificate.
+//   The request must contain either a valid (registered) Amazon Web Services
+//   access key ID or X.509 certificate.
 //
 //   * ThrottlingException
 //   The request was denied due to request throttling.
@@ -901,11 +1441,21 @@ func (c *ComputeOptimizer) UpdateEnrollmentStatusRequest(input *UpdateEnrollment
 
 // UpdateEnrollmentStatus API operation for AWS Compute Optimizer.
 //
-// Updates the enrollment (opt in) status of an account to the AWS Compute Optimizer
-// service.
+// Updates the enrollment (opt in and opt out) status of an account to the Compute
+// Optimizer service.
 //
-// If the account is a master account of an organization, this action can also
-// be used to enroll member accounts within the organization.
+// If the account is a management account of an organization, this action can
+// also be used to enroll member accounts of the organization.
+//
+// You must have the appropriate permissions to opt in to Compute Optimizer,
+// to view its recommendations, and to opt out. For more information, see Controlling
+// access with Amazon Web Services Identity and Access Management (https://docs.aws.amazon.com/compute-optimizer/latest/ug/security-iam.html)
+// in the Compute Optimizer User Guide.
+//
+// When you opt in, Compute Optimizer automatically creates a service-linked
+// role in your account to access its data. For more information, see Using
+// Service-Linked Roles for Compute Optimizer (https://docs.aws.amazon.com/compute-optimizer/latest/ug/using-service-linked-roles.html)
+// in the Compute Optimizer User Guide.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -925,11 +1475,11 @@ func (c *ComputeOptimizer) UpdateEnrollmentStatusRequest(input *UpdateEnrollment
 //   You do not have sufficient access to perform this action.
 //
 //   * InvalidParameterValueException
-//   An invalid or out-of-range value was supplied for the input parameter.
+//   The value supplied for the input parameter is out of range or not valid.
 //
 //   * MissingAuthenticationToken
-//   The request must contain either a valid (registered) AWS access key ID or
-//   X.509 certificate.
+//   The request must contain either a valid (registered) Amazon Web Services
+//   access key ID or X.509 certificate.
 //
 //   * ThrottlingException
 //   The request was denied due to request throttling.
@@ -964,12 +1514,20 @@ type AccessDeniedException struct {
 	Message_ *string `locationName:"message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AccessDeniedException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AccessDeniedException) GoString() string {
 	return s.String()
 }
@@ -1012,6 +1570,70 @@ func (s *AccessDeniedException) RequestID() string {
 	return s.RespMetadata.RequestID
 }
 
+// Describes the enrollment status of an organization's member accounts in Compute
+// Optimizer.
+type AccountEnrollmentStatus struct {
+	_ struct{} `type:"structure"`
+
+	// The Amazon Web Services account ID.
+	AccountId *string `locationName:"accountId" type:"string"`
+
+	// The Unix epoch timestamp, in seconds, of when the account enrollment status
+	// was last updated.
+	LastUpdatedTimestamp *time.Time `locationName:"lastUpdatedTimestamp" type:"timestamp"`
+
+	// The account enrollment status.
+	Status *string `locationName:"status" type:"string" enum:"Status"`
+
+	// The reason for the account enrollment status.
+	//
+	// For example, an account might show a status of Pending because member accounts
+	// of an organization require more time to be enrolled in the service.
+	StatusReason *string `locationName:"statusReason" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s AccountEnrollmentStatus) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s AccountEnrollmentStatus) GoString() string {
+	return s.String()
+}
+
+// SetAccountId sets the AccountId field's value.
+func (s *AccountEnrollmentStatus) SetAccountId(v string) *AccountEnrollmentStatus {
+	s.AccountId = &v
+	return s
+}
+
+// SetLastUpdatedTimestamp sets the LastUpdatedTimestamp field's value.
+func (s *AccountEnrollmentStatus) SetLastUpdatedTimestamp(v time.Time) *AccountEnrollmentStatus {
+	s.LastUpdatedTimestamp = &v
+	return s
+}
+
+// SetStatus sets the Status field's value.
+func (s *AccountEnrollmentStatus) SetStatus(v string) *AccountEnrollmentStatus {
+	s.Status = &v
+	return s
+}
+
+// SetStatusReason sets the StatusReason field's value.
+func (s *AccountEnrollmentStatus) SetStatusReason(v string) *AccountEnrollmentStatus {
+	s.StatusReason = &v
+	return s
+}
+
 // Describes the configuration of an Auto Scaling group.
 type AutoScalingGroupConfiguration struct {
 	_ struct{} `type:"structure"`
@@ -1029,12 +1651,20 @@ type AutoScalingGroupConfiguration struct {
 	MinSize *int64 `locationName:"minSize" type:"integer"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AutoScalingGroupConfiguration) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AutoScalingGroupConfiguration) GoString() string {
 	return s.String()
 }
@@ -1067,7 +1697,7 @@ func (s *AutoScalingGroupConfiguration) SetMinSize(v int64) *AutoScalingGroupCon
 type AutoScalingGroupRecommendation struct {
 	_ struct{} `type:"structure"`
 
-	// The AWS account ID of the Auto Scaling group.
+	// The Amazon Web Services account ID of the Auto Scaling group.
 	AccountId *string `locationName:"accountId" type:"string"`
 
 	// The Amazon Resource Name (ARN) of the Auto Scaling group.
@@ -1080,23 +1710,21 @@ type AutoScalingGroupRecommendation struct {
 	// group.
 	CurrentConfiguration *AutoScalingGroupConfiguration `locationName:"currentConfiguration" type:"structure"`
 
-	// The finding classification for the Auto Scaling group.
+	// The finding classification of the Auto Scaling group.
 	//
 	// Findings for Auto Scaling groups include:
 	//
 	//    * NotOptimized —An Auto Scaling group is considered not optimized when
-	//    AWS Compute Optimizer identifies a recommendation that can provide better
+	//    Compute Optimizer identifies a recommendation that can provide better
 	//    performance for your workload.
 	//
 	//    * Optimized —An Auto Scaling group is considered optimized when Compute
 	//    Optimizer determines that the group is correctly provisioned to run your
 	//    workload based on the chosen instance type. For optimized resources, Compute
 	//    Optimizer might recommend a new generation instance type.
-	//
-	// The values that are returned might be NOT_OPTIMIZED or OPTIMIZED.
 	Finding *string `locationName:"finding" type:"string" enum:"Finding"`
 
-	// The time stamp of when the Auto Scaling group recommendation was last refreshed.
+	// The timestamp of when the Auto Scaling group recommendation was last refreshed.
 	LastRefreshTimestamp *time.Time `locationName:"lastRefreshTimestamp" type:"timestamp"`
 
 	// The number of days for which utilization metrics were analyzed for the Auto
@@ -1112,12 +1740,20 @@ type AutoScalingGroupRecommendation struct {
 	UtilizationMetrics []*UtilizationMetric `locationName:"utilizationMetrics" type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AutoScalingGroupRecommendation) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AutoScalingGroupRecommendation) GoString() string {
 	return s.String()
 }
@@ -1185,10 +1821,19 @@ type AutoScalingGroupRecommendationOption struct {
 
 	// The performance risk of the Auto Scaling group configuration recommendation.
 	//
-	// Performance risk is the likelihood of the recommended instance type not meeting
-	// the performance requirement of your workload.
+	// Performance risk indicates the likelihood of the recommended instance type
+	// not meeting the resource needs of your workload. Compute Optimizer calculates
+	// an individual performance risk score for each specification of the recommended
+	// instance, including CPU, memory, EBS throughput, EBS IOPS, disk throughput,
+	// disk IOPS, network throughput, and network PPS. The performance risk of the
+	// recommended instance is calculated as the maximum performance risk score
+	// across the analyzed resource specifications.
 	//
-	// The lowest performance risk is categorized as 0, and the highest as 5.
+	// The value ranges from 0 - 4, with 0 meaning that the recommended resource
+	// is predicted to always provide enough hardware capability. The higher the
+	// performance risk is, the more likely you should validate whether the recommendation
+	// will meet the performance requirements of your workload before migrating
+	// your resource.
 	PerformanceRisk *float64 `locationName:"performanceRisk" type:"double"`
 
 	// An array of objects that describe the projected utilization metrics of the
@@ -1206,12 +1851,20 @@ type AutoScalingGroupRecommendationOption struct {
 	Rank *int64 `locationName:"rank" type:"integer"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AutoScalingGroupRecommendationOption) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AutoScalingGroupRecommendationOption) GoString() string {
 	return s.String()
 }
@@ -1243,7 +1896,7 @@ func (s *AutoScalingGroupRecommendationOption) SetRank(v int64) *AutoScalingGrou
 type DescribeRecommendationExportJobsInput struct {
 	_ struct{} `type:"structure"`
 
-	// An array of objects that describe a filter to return a more specific list
+	// An array of objects to specify a filter that returns a more specific list
 	// of export jobs.
 	Filters []*JobFilter `locationName:"filters" type:"list"`
 
@@ -1259,19 +1912,27 @@ type DescribeRecommendationExportJobsInput struct {
 	// The maximum number of export jobs to return with a single request.
 	//
 	// To retrieve the remaining results, make another request with the returned
-	// NextToken value.
+	// nextToken value.
 	MaxResults *int64 `locationName:"maxResults" type:"integer"`
 
 	// The token to advance to the next page of export jobs.
 	NextToken *string `locationName:"nextToken" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeRecommendationExportJobsInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeRecommendationExportJobsInput) GoString() string {
 	return s.String()
 }
@@ -1312,12 +1973,20 @@ type DescribeRecommendationExportJobsOutput struct {
 	RecommendationExportJobs []*RecommendationExportJob `locationName:"recommendationExportJobs" type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeRecommendationExportJobsOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeRecommendationExportJobsOutput) GoString() string {
 	return s.String()
 }
@@ -1334,13 +2003,195 @@ func (s *DescribeRecommendationExportJobsOutput) SetRecommendationExportJobs(v [
 	return s
 }
 
+// Describes a filter that returns a more specific list of Amazon Elastic Block
+// Store (Amazon EBS) volume recommendations. Use this filter with the GetEBSVolumeRecommendations
+// action.
+//
+// You can use LambdaFunctionRecommendationFilter with the GetLambdaFunctionRecommendations
+// action, JobFilter with the DescribeRecommendationExportJobs action, and Filter
+// with the GetAutoScalingGroupRecommendations and GetEC2InstanceRecommendations
+// actions.
+type EBSFilter struct {
+	_ struct{} `type:"structure"`
+
+	// The name of the filter.
+	//
+	// Specify Finding to return recommendations with a specific finding classification
+	// (for example, NotOptimized).
+	Name *string `locationName:"name" type:"string" enum:"EBSFilterName"`
+
+	// The value of the filter.
+	//
+	// The valid values are Optimized, or NotOptimized.
+	Values []*string `locationName:"values" type:"list"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s EBSFilter) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s EBSFilter) GoString() string {
+	return s.String()
+}
+
+// SetName sets the Name field's value.
+func (s *EBSFilter) SetName(v string) *EBSFilter {
+	s.Name = &v
+	return s
+}
+
+// SetValues sets the Values field's value.
+func (s *EBSFilter) SetValues(v []*string) *EBSFilter {
+	s.Values = v
+	return s
+}
+
+// Describes a utilization metric of an Amazon Elastic Block Store (Amazon EBS)
+// volume.
+//
+// Compare the utilization metric data of your resource against its projected
+// utilization metric data to determine the performance difference between your
+// current resource and the recommended option.
+type EBSUtilizationMetric struct {
+	_ struct{} `type:"structure"`
+
+	// The name of the utilization metric.
+	//
+	// The following utilization metrics are available:
+	//
+	//    * VolumeReadOpsPerSecond - The completed read operations per second from
+	//    the volume in a specified period of time. Unit: Count
+	//
+	//    * VolumeWriteOpsPerSecond - The completed write operations per second
+	//    to the volume in a specified period of time. Unit: Count
+	//
+	//    * VolumeReadBytesPerSecond - The bytes read per second from the volume
+	//    in a specified period of time. Unit: Bytes
+	//
+	//    * VolumeWriteBytesPerSecond - The bytes written to the volume in a specified
+	//    period of time. Unit: Bytes
+	Name *string `locationName:"name" type:"string" enum:"EBSMetricName"`
+
+	// The statistic of the utilization metric.
+	//
+	// The Compute Optimizer API, Command Line Interface (CLI), and SDKs return
+	// utilization metrics using only the Maximum statistic, which is the highest
+	// value observed during the specified period.
+	//
+	// The Compute Optimizer console displays graphs for some utilization metrics
+	// using the Average statistic, which is the value of Sum / SampleCount during
+	// the specified period. For more information, see Viewing resource recommendations
+	// (https://docs.aws.amazon.com/compute-optimizer/latest/ug/viewing-recommendations.html)
+	// in the Compute Optimizer User Guide. You can also get averaged utilization
+	// metric data for your resources using Amazon CloudWatch. For more information,
+	// see the Amazon CloudWatch User Guide (https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/WhatIsCloudWatch.html).
+	Statistic *string `locationName:"statistic" type:"string" enum:"MetricStatistic"`
+
+	// The value of the utilization metric.
+	Value *float64 `locationName:"value" type:"double"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s EBSUtilizationMetric) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s EBSUtilizationMetric) GoString() string {
+	return s.String()
+}
+
+// SetName sets the Name field's value.
+func (s *EBSUtilizationMetric) SetName(v string) *EBSUtilizationMetric {
+	s.Name = &v
+	return s
+}
+
+// SetStatistic sets the Statistic field's value.
+func (s *EBSUtilizationMetric) SetStatistic(v string) *EBSUtilizationMetric {
+	s.Statistic = &v
+	return s
+}
+
+// SetValue sets the Value field's value.
+func (s *EBSUtilizationMetric) SetValue(v float64) *EBSUtilizationMetric {
+	s.Value = &v
+	return s
+}
+
+// Describes a filter that returns a more specific list of account enrollment
+// statuses. Use this filter with the GetEnrollmentStatusesForOrganization action.
+type EnrollmentFilter struct {
+	_ struct{} `type:"structure"`
+
+	// The name of the filter.
+	//
+	// Specify Status to return accounts with a specific enrollment status (for
+	// example, Active).
+	Name *string `locationName:"name" type:"string" enum:"EnrollmentFilterName"`
+
+	// The value of the filter.
+	//
+	// The valid values are Active, Inactive, Pending, and Failed.
+	Values []*string `locationName:"values" type:"list"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s EnrollmentFilter) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s EnrollmentFilter) GoString() string {
+	return s.String()
+}
+
+// SetName sets the Name field's value.
+func (s *EnrollmentFilter) SetName(v string) *EnrollmentFilter {
+	s.Name = &v
+	return s
+}
+
+// SetValues sets the Values field's value.
+func (s *EnrollmentFilter) SetValues(v []*string) *EnrollmentFilter {
+	s.Values = v
+	return s
+}
+
 type ExportAutoScalingGroupRecommendationsInput struct {
 	_ struct{} `type:"structure"`
 
-	// The IDs of the AWS accounts for which to export Auto Scaling group recommendations.
+	// The IDs of the Amazon Web Services accounts for which to export Auto Scaling
+	// group recommendations.
 	//
-	// If your account is the master account of an organization, use this parameter
-	// to specify the member accounts for which you want to export recommendations.
+	// If your account is the management account of an organization, use this parameter
+	// to specify the member account for which you want to export recommendations.
 	//
 	// This parameter cannot be specified together with the include member accounts
 	// parameter. The parameters are mutually exclusive.
@@ -1361,15 +2212,19 @@ type ExportAutoScalingGroupRecommendationsInput struct {
 	// The only export file format currently supported is Csv.
 	FileFormat *string `locationName:"fileFormat" type:"string" enum:"FileFormat"`
 
-	// An array of objects that describe a filter to export a more specific set
+	// An array of objects to specify a filter that exports a more specific set
 	// of Auto Scaling group recommendations.
 	Filters []*Filter `locationName:"filters" type:"list"`
 
 	// Indicates whether to include recommendations for resources in all member
-	// accounts of the organization if your account is the master account of an
-	// organization.
+	// accounts of the organization if your account is the management account of
+	// an organization.
 	//
-	// The member accounts must also be opted in to Compute Optimizer.
+	// The member accounts must also be opted in to Compute Optimizer, and trusted
+	// access for Compute Optimizer must be enabled in the organization account.
+	// For more information, see Compute Optimizer and Amazon Web Services Organizations
+	// trusted access (https://docs.aws.amazon.com/compute-optimizer/latest/ug/security-iam.html#trusted-service-access)
+	// in the Compute Optimizer User Guide.
 	//
 	// Recommendations for member accounts of the organization are not included
 	// in the export file if this parameter is omitted.
@@ -1381,29 +2236,41 @@ type ExportAutoScalingGroupRecommendationsInput struct {
 	// parameter, or the account IDs parameter, is omitted.
 	IncludeMemberAccounts *bool `locationName:"includeMemberAccounts" type:"boolean"`
 
+	// An object to specify the preferences for the Auto Scaling group recommendations
+	// to export.
+	RecommendationPreferences *RecommendationPreferences `locationName:"recommendationPreferences" type:"structure"`
+
 	// An object to specify the destination Amazon Simple Storage Service (Amazon
 	// S3) bucket name and key prefix for the export job.
 	//
 	// You must create the destination Amazon S3 bucket for your recommendations
 	// export before you create the export job. Compute Optimizer does not create
 	// the S3 bucket for you. After you create the S3 bucket, ensure that it has
-	// the required permission policy to allow Compute Optimizer to write the export
+	// the required permissions policy to allow Compute Optimizer to write the export
 	// file to it. If you plan to specify an object prefix when you create the export
 	// job, you must include the object prefix in the policy that you add to the
 	// S3 bucket. For more information, see Amazon S3 Bucket Policy for Compute
 	// Optimizer (https://docs.aws.amazon.com/compute-optimizer/latest/ug/create-s3-bucket-policy-for-compute-optimizer.html)
-	// in the Compute Optimizer user guide.
+	// in the Compute Optimizer User Guide.
 	//
 	// S3DestinationConfig is a required field
 	S3DestinationConfig *S3DestinationConfig `locationName:"s3DestinationConfig" type:"structure" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ExportAutoScalingGroupRecommendationsInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ExportAutoScalingGroupRecommendationsInput) GoString() string {
 	return s.String()
 }
@@ -1451,6 +2318,12 @@ func (s *ExportAutoScalingGroupRecommendationsInput) SetIncludeMemberAccounts(v 
 	return s
 }
 
+// SetRecommendationPreferences sets the RecommendationPreferences field's value.
+func (s *ExportAutoScalingGroupRecommendationsInput) SetRecommendationPreferences(v *RecommendationPreferences) *ExportAutoScalingGroupRecommendationsInput {
+	s.RecommendationPreferences = v
+	return s
+}
+
 // SetS3DestinationConfig sets the S3DestinationConfig field's value.
 func (s *ExportAutoScalingGroupRecommendationsInput) SetS3DestinationConfig(v *S3DestinationConfig) *ExportAutoScalingGroupRecommendationsInput {
 	s.S3DestinationConfig = v
@@ -1471,12 +2344,20 @@ type ExportAutoScalingGroupRecommendationsOutput struct {
 	S3Destination *S3Destination `locationName:"s3Destination" type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ExportAutoScalingGroupRecommendationsOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ExportAutoScalingGroupRecommendationsOutput) GoString() string {
 	return s.String()
 }
@@ -1503,12 +2384,20 @@ type ExportDestination struct {
 	S3 *S3Destination `locationName:"s3" type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ExportDestination) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ExportDestination) GoString() string {
 	return s.String()
 }
@@ -1519,13 +2408,14 @@ func (s *ExportDestination) SetS3(v *S3Destination) *ExportDestination {
 	return s
 }
 
-type ExportEC2InstanceRecommendationsInput struct {
+type ExportEBSVolumeRecommendationsInput struct {
 	_ struct{} `type:"structure"`
 
-	// The IDs of the AWS accounts for which to export instance recommendations.
+	// The IDs of the Amazon Web Services accounts for which to export Amazon EBS
+	// volume recommendations.
 	//
-	// If your account is the master account of an organization, use this parameter
-	// to specify the member accounts for which you want to export recommendations.
+	// If your account is the management account of an organization, use this parameter
+	// to specify the member account for which you want to export recommendations.
 	//
 	// This parameter cannot be specified together with the include member accounts
 	// parameter. The parameters are mutually exclusive.
@@ -1546,25 +2436,32 @@ type ExportEC2InstanceRecommendationsInput struct {
 	// The only export file format currently supported is Csv.
 	FileFormat *string `locationName:"fileFormat" type:"string" enum:"FileFormat"`
 
-	// An array of objects that describe a filter to export a more specific set
-	// of instance recommendations.
-	Filters []*Filter `locationName:"filters" type:"list"`
+	// An array of objects to specify a filter that exports a more specific set
+	// of Amazon EBS volume recommendations.
+	Filters []*EBSFilter `locationName:"filters" type:"list"`
 
 	// Indicates whether to include recommendations for resources in all member
-	// accounts of the organization if your account is the master account of an
-	// organization.
+	// accounts of the organization if your account is the management account of
+	// an organization.
 	//
-	// The member accounts must also be opted in to Compute Optimizer.
+	// The member accounts must also be opted in to Compute Optimizer, and trusted
+	// access for Compute Optimizer must be enabled in the organization account.
+	// For more information, see Compute Optimizer and Amazon Web Services Organizations
+	// trusted access (https://docs.aws.amazon.com/compute-optimizer/latest/ug/security-iam.html#trusted-service-access)
+	// in the Compute Optimizer User Guide.
 	//
 	// Recommendations for member accounts of the organization are not included
 	// in the export file if this parameter is omitted.
+	//
+	// This parameter cannot be specified together with the account IDs parameter.
+	// The parameters are mutually exclusive.
 	//
 	// Recommendations for member accounts are not included in the export if this
 	// parameter, or the account IDs parameter, is omitted.
 	IncludeMemberAccounts *bool `locationName:"includeMemberAccounts" type:"boolean"`
 
-	// An object to specify the destination Amazon Simple Storage Service (Amazon
-	// S3) bucket name and key prefix for the export job.
+	// Describes the destination Amazon Simple Storage Service (Amazon S3) bucket
+	// name and key prefix for a recommendations export job.
 	//
 	// You must create the destination Amazon S3 bucket for your recommendations
 	// export before you create the export job. Compute Optimizer does not create
@@ -1574,18 +2471,208 @@ type ExportEC2InstanceRecommendationsInput struct {
 	// job, you must include the object prefix in the policy that you add to the
 	// S3 bucket. For more information, see Amazon S3 Bucket Policy for Compute
 	// Optimizer (https://docs.aws.amazon.com/compute-optimizer/latest/ug/create-s3-bucket-policy-for-compute-optimizer.html)
-	// in the Compute Optimizer user guide.
+	// in the Compute Optimizer User Guide.
 	//
 	// S3DestinationConfig is a required field
 	S3DestinationConfig *S3DestinationConfig `locationName:"s3DestinationConfig" type:"structure" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ExportEBSVolumeRecommendationsInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ExportEBSVolumeRecommendationsInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ExportEBSVolumeRecommendationsInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ExportEBSVolumeRecommendationsInput"}
+	if s.S3DestinationConfig == nil {
+		invalidParams.Add(request.NewErrParamRequired("S3DestinationConfig"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetAccountIds sets the AccountIds field's value.
+func (s *ExportEBSVolumeRecommendationsInput) SetAccountIds(v []*string) *ExportEBSVolumeRecommendationsInput {
+	s.AccountIds = v
+	return s
+}
+
+// SetFieldsToExport sets the FieldsToExport field's value.
+func (s *ExportEBSVolumeRecommendationsInput) SetFieldsToExport(v []*string) *ExportEBSVolumeRecommendationsInput {
+	s.FieldsToExport = v
+	return s
+}
+
+// SetFileFormat sets the FileFormat field's value.
+func (s *ExportEBSVolumeRecommendationsInput) SetFileFormat(v string) *ExportEBSVolumeRecommendationsInput {
+	s.FileFormat = &v
+	return s
+}
+
+// SetFilters sets the Filters field's value.
+func (s *ExportEBSVolumeRecommendationsInput) SetFilters(v []*EBSFilter) *ExportEBSVolumeRecommendationsInput {
+	s.Filters = v
+	return s
+}
+
+// SetIncludeMemberAccounts sets the IncludeMemberAccounts field's value.
+func (s *ExportEBSVolumeRecommendationsInput) SetIncludeMemberAccounts(v bool) *ExportEBSVolumeRecommendationsInput {
+	s.IncludeMemberAccounts = &v
+	return s
+}
+
+// SetS3DestinationConfig sets the S3DestinationConfig field's value.
+func (s *ExportEBSVolumeRecommendationsInput) SetS3DestinationConfig(v *S3DestinationConfig) *ExportEBSVolumeRecommendationsInput {
+	s.S3DestinationConfig = v
+	return s
+}
+
+type ExportEBSVolumeRecommendationsOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The identification number of the export job.
+	//
+	// Use the DescribeRecommendationExportJobs action, and specify the job ID to
+	// view the status of an export job.
+	JobId *string `locationName:"jobId" type:"string"`
+
+	// Describes the destination Amazon Simple Storage Service (Amazon S3) bucket
+	// name and object keys of a recommendations export file, and its associated
+	// metadata file.
+	S3Destination *S3Destination `locationName:"s3Destination" type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ExportEBSVolumeRecommendationsOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ExportEBSVolumeRecommendationsOutput) GoString() string {
+	return s.String()
+}
+
+// SetJobId sets the JobId field's value.
+func (s *ExportEBSVolumeRecommendationsOutput) SetJobId(v string) *ExportEBSVolumeRecommendationsOutput {
+	s.JobId = &v
+	return s
+}
+
+// SetS3Destination sets the S3Destination field's value.
+func (s *ExportEBSVolumeRecommendationsOutput) SetS3Destination(v *S3Destination) *ExportEBSVolumeRecommendationsOutput {
+	s.S3Destination = v
+	return s
+}
+
+type ExportEC2InstanceRecommendationsInput struct {
+	_ struct{} `type:"structure"`
+
+	// The IDs of the Amazon Web Services accounts for which to export instance
+	// recommendations.
+	//
+	// If your account is the management account of an organization, use this parameter
+	// to specify the member account for which you want to export recommendations.
+	//
+	// This parameter cannot be specified together with the include member accounts
+	// parameter. The parameters are mutually exclusive.
+	//
+	// Recommendations for member accounts are not included in the export if this
+	// parameter, or the include member accounts parameter, is omitted.
+	//
+	// You can specify multiple account IDs per request.
+	AccountIds []*string `locationName:"accountIds" type:"list"`
+
+	// The recommendations data to include in the export file. For more information
+	// about the fields that can be exported, see Exported files (https://docs.aws.amazon.com/compute-optimizer/latest/ug/exporting-recommendations.html#exported-files)
+	// in the Compute Optimizer User Guide.
+	FieldsToExport []*string `locationName:"fieldsToExport" type:"list"`
+
+	// The format of the export file.
+	//
+	// The only export file format currently supported is Csv.
+	FileFormat *string `locationName:"fileFormat" type:"string" enum:"FileFormat"`
+
+	// An array of objects to specify a filter that exports a more specific set
+	// of instance recommendations.
+	Filters []*Filter `locationName:"filters" type:"list"`
+
+	// Indicates whether to include recommendations for resources in all member
+	// accounts of the organization if your account is the management account of
+	// an organization.
+	//
+	// The member accounts must also be opted in to Compute Optimizer, and trusted
+	// access for Compute Optimizer must be enabled in the organization account.
+	// For more information, see Compute Optimizer and Amazon Web Services Organizations
+	// trusted access (https://docs.aws.amazon.com/compute-optimizer/latest/ug/security-iam.html#trusted-service-access)
+	// in the Compute Optimizer User Guide.
+	//
+	// Recommendations for member accounts of the organization are not included
+	// in the export file if this parameter is omitted.
+	//
+	// Recommendations for member accounts are not included in the export if this
+	// parameter, or the account IDs parameter, is omitted.
+	IncludeMemberAccounts *bool `locationName:"includeMemberAccounts" type:"boolean"`
+
+	// An object to specify the preferences for the Amazon EC2 instance recommendations
+	// to export.
+	RecommendationPreferences *RecommendationPreferences `locationName:"recommendationPreferences" type:"structure"`
+
+	// An object to specify the destination Amazon Simple Storage Service (Amazon
+	// S3) bucket name and key prefix for the export job.
+	//
+	// You must create the destination Amazon S3 bucket for your recommendations
+	// export before you create the export job. Compute Optimizer does not create
+	// the S3 bucket for you. After you create the S3 bucket, ensure that it has
+	// the required permissions policy policy to allow Compute Optimizer to write
+	// the export file to it. If you plan to specify an object prefix when you create
+	// the export job, you must include the object prefix in the that you add to
+	// the S3 bucket. For more information, see Amazon S3 Bucket Policy for Compute
+	// Optimizer (https://docs.aws.amazon.com/compute-optimizer/latest/ug/create-s3-bucket-policy-for-compute-optimizer.html)
+	// in the Compute Optimizer User Guide.
+	//
+	// S3DestinationConfig is a required field
+	S3DestinationConfig *S3DestinationConfig `locationName:"s3DestinationConfig" type:"structure" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ExportEC2InstanceRecommendationsInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ExportEC2InstanceRecommendationsInput) GoString() string {
 	return s.String()
 }
@@ -1633,6 +2720,12 @@ func (s *ExportEC2InstanceRecommendationsInput) SetIncludeMemberAccounts(v bool)
 	return s
 }
 
+// SetRecommendationPreferences sets the RecommendationPreferences field's value.
+func (s *ExportEC2InstanceRecommendationsInput) SetRecommendationPreferences(v *RecommendationPreferences) *ExportEC2InstanceRecommendationsInput {
+	s.RecommendationPreferences = v
+	return s
+}
+
 // SetS3DestinationConfig sets the S3DestinationConfig field's value.
 func (s *ExportEC2InstanceRecommendationsInput) SetS3DestinationConfig(v *S3DestinationConfig) *ExportEC2InstanceRecommendationsInput {
 	s.S3DestinationConfig = v
@@ -1653,12 +2746,20 @@ type ExportEC2InstanceRecommendationsOutput struct {
 	S3Destination *S3Destination `locationName:"s3Destination" type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ExportEC2InstanceRecommendationsOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ExportEC2InstanceRecommendationsOutput) GoString() string {
 	return s.String()
 }
@@ -1675,39 +2776,284 @@ func (s *ExportEC2InstanceRecommendationsOutput) SetS3Destination(v *S3Destinati
 	return s
 }
 
+type ExportLambdaFunctionRecommendationsInput struct {
+	_ struct{} `type:"structure"`
+
+	// The IDs of the Amazon Web Services accounts for which to export Lambda function
+	// recommendations.
+	//
+	// If your account is the management account of an organization, use this parameter
+	// to specify the member account for which you want to export recommendations.
+	//
+	// This parameter cannot be specified together with the include member accounts
+	// parameter. The parameters are mutually exclusive.
+	//
+	// Recommendations for member accounts are not included in the export if this
+	// parameter, or the include member accounts parameter, is omitted.
+	//
+	// You can specify multiple account IDs per request.
+	AccountIds []*string `locationName:"accountIds" type:"list"`
+
+	// The recommendations data to include in the export file. For more information
+	// about the fields that can be exported, see Exported files (https://docs.aws.amazon.com/compute-optimizer/latest/ug/exporting-recommendations.html#exported-files)
+	// in the Compute Optimizer User Guide.
+	FieldsToExport []*string `locationName:"fieldsToExport" type:"list"`
+
+	// The format of the export file.
+	//
+	// The only export file format currently supported is Csv.
+	FileFormat *string `locationName:"fileFormat" type:"string" enum:"FileFormat"`
+
+	// An array of objects to specify a filter that exports a more specific set
+	// of Lambda function recommendations.
+	Filters []*LambdaFunctionRecommendationFilter `locationName:"filters" type:"list"`
+
+	// Indicates whether to include recommendations for resources in all member
+	// accounts of the organization if your account is the management account of
+	// an organization.
+	//
+	// The member accounts must also be opted in to Compute Optimizer, and trusted
+	// access for Compute Optimizer must be enabled in the organization account.
+	// For more information, see Compute Optimizer and Amazon Web Services Organizations
+	// trusted access (https://docs.aws.amazon.com/compute-optimizer/latest/ug/security-iam.html#trusted-service-access)
+	// in the Compute Optimizer User Guide.
+	//
+	// Recommendations for member accounts of the organization are not included
+	// in the export file if this parameter is omitted.
+	//
+	// This parameter cannot be specified together with the account IDs parameter.
+	// The parameters are mutually exclusive.
+	//
+	// Recommendations for member accounts are not included in the export if this
+	// parameter, or the account IDs parameter, is omitted.
+	IncludeMemberAccounts *bool `locationName:"includeMemberAccounts" type:"boolean"`
+
+	// Describes the destination Amazon Simple Storage Service (Amazon S3) bucket
+	// name and key prefix for a recommendations export job.
+	//
+	// You must create the destination Amazon S3 bucket for your recommendations
+	// export before you create the export job. Compute Optimizer does not create
+	// the S3 bucket for you. After you create the S3 bucket, ensure that it has
+	// the required permission policy to allow Compute Optimizer to write the export
+	// file to it. If you plan to specify an object prefix when you create the export
+	// job, you must include the object prefix in the policy that you add to the
+	// S3 bucket. For more information, see Amazon S3 Bucket Policy for Compute
+	// Optimizer (https://docs.aws.amazon.com/compute-optimizer/latest/ug/create-s3-bucket-policy-for-compute-optimizer.html)
+	// in the Compute Optimizer User Guide.
+	//
+	// S3DestinationConfig is a required field
+	S3DestinationConfig *S3DestinationConfig `locationName:"s3DestinationConfig" type:"structure" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ExportLambdaFunctionRecommendationsInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ExportLambdaFunctionRecommendationsInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ExportLambdaFunctionRecommendationsInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ExportLambdaFunctionRecommendationsInput"}
+	if s.S3DestinationConfig == nil {
+		invalidParams.Add(request.NewErrParamRequired("S3DestinationConfig"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetAccountIds sets the AccountIds field's value.
+func (s *ExportLambdaFunctionRecommendationsInput) SetAccountIds(v []*string) *ExportLambdaFunctionRecommendationsInput {
+	s.AccountIds = v
+	return s
+}
+
+// SetFieldsToExport sets the FieldsToExport field's value.
+func (s *ExportLambdaFunctionRecommendationsInput) SetFieldsToExport(v []*string) *ExportLambdaFunctionRecommendationsInput {
+	s.FieldsToExport = v
+	return s
+}
+
+// SetFileFormat sets the FileFormat field's value.
+func (s *ExportLambdaFunctionRecommendationsInput) SetFileFormat(v string) *ExportLambdaFunctionRecommendationsInput {
+	s.FileFormat = &v
+	return s
+}
+
+// SetFilters sets the Filters field's value.
+func (s *ExportLambdaFunctionRecommendationsInput) SetFilters(v []*LambdaFunctionRecommendationFilter) *ExportLambdaFunctionRecommendationsInput {
+	s.Filters = v
+	return s
+}
+
+// SetIncludeMemberAccounts sets the IncludeMemberAccounts field's value.
+func (s *ExportLambdaFunctionRecommendationsInput) SetIncludeMemberAccounts(v bool) *ExportLambdaFunctionRecommendationsInput {
+	s.IncludeMemberAccounts = &v
+	return s
+}
+
+// SetS3DestinationConfig sets the S3DestinationConfig field's value.
+func (s *ExportLambdaFunctionRecommendationsInput) SetS3DestinationConfig(v *S3DestinationConfig) *ExportLambdaFunctionRecommendationsInput {
+	s.S3DestinationConfig = v
+	return s
+}
+
+type ExportLambdaFunctionRecommendationsOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The identification number of the export job.
+	//
+	// Use the DescribeRecommendationExportJobs action, and specify the job ID to
+	// view the status of an export job.
+	JobId *string `locationName:"jobId" type:"string"`
+
+	// Describes the destination Amazon Simple Storage Service (Amazon S3) bucket
+	// name and object keys of a recommendations export file, and its associated
+	// metadata file.
+	S3Destination *S3Destination `locationName:"s3Destination" type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ExportLambdaFunctionRecommendationsOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ExportLambdaFunctionRecommendationsOutput) GoString() string {
+	return s.String()
+}
+
+// SetJobId sets the JobId field's value.
+func (s *ExportLambdaFunctionRecommendationsOutput) SetJobId(v string) *ExportLambdaFunctionRecommendationsOutput {
+	s.JobId = &v
+	return s
+}
+
+// SetS3Destination sets the S3Destination field's value.
+func (s *ExportLambdaFunctionRecommendationsOutput) SetS3Destination(v *S3Destination) *ExportLambdaFunctionRecommendationsOutput {
+	s.S3Destination = v
+	return s
+}
+
 // Describes a filter that returns a more specific list of recommendations.
+// Use this filter with the GetAutoScalingGroupRecommendations and GetEC2InstanceRecommendations
+// actions.
+//
+// You can use EBSFilter with the GetEBSVolumeRecommendations action, LambdaFunctionRecommendationFilter
+// with the GetLambdaFunctionRecommendations action, and JobFilter with the
+// DescribeRecommendationExportJobs action.
 type Filter struct {
 	_ struct{} `type:"structure"`
 
 	// The name of the filter.
 	//
-	// Specify Finding to return recommendations with a specific findings classification
-	// (e.g., Overprovisioned).
+	// Specify Finding to return recommendations with a specific finding classification
+	// (for example, Underprovisioned).
 	//
 	// Specify RecommendationSourceType to return recommendations of a specific
-	// resource type (e.g., AutoScalingGroup).
+	// resource type (for example, Ec2Instance).
+	//
+	// Specify FindingReasonCodes to return recommendations with a specific finding
+	// reason code (for example, CPUUnderprovisioned).
 	Name *string `locationName:"name" type:"string" enum:"FilterName"`
 
 	// The value of the filter.
 	//
-	// If you specify the name parameter as Finding, and you request recommendations
-	// for an instance, then the valid values are Underprovisioned, Overprovisioned,
-	// NotOptimized, or Optimized.
+	// The valid values for this parameter are as follows, depending on what you
+	// specify for the name parameter and the resource type that you wish to filter
+	// results for:
 	//
-	// If you specify the name parameter as Finding, and you request recommendations
-	// for an Auto Scaling group, then the valid values are Optimized, or NotOptimized.
+	//    * Specify Optimized or NotOptimized if you specify the name parameter
+	//    as Finding and you want to filter results for Auto Scaling groups.
 	//
-	// If you specify the name parameter as RecommendationSourceType, then the valid
-	// values are Ec2Instance, or AutoScalingGroup.
+	//    * Specify Underprovisioned, Overprovisioned, or Optimized if you specify
+	//    the name parameter as Finding and you want to filter results for EC2 instances.
+	//
+	//    * Specify Ec2Instance or AutoScalingGroup if you specify the name parameter
+	//    as RecommendationSourceType.
+	//
+	//    * Specify one of the following options if you specify the name parameter
+	//    as FindingReasonCodes: CPUOverprovisioned — The instance’s CPU configuration
+	//    can be sized down while still meeting the performance requirements of
+	//    your workload. CPUUnderprovisioned — The instance’s CPU configuration
+	//    doesn't meet the performance requirements of your workload and there is
+	//    an alternative instance type that provides better CPU performance. MemoryOverprovisioned
+	//    — The instance’s memory configuration can be sized down while still
+	//    meeting the performance requirements of your workload. MemoryUnderprovisioned
+	//    — The instance’s memory configuration doesn't meet the performance
+	//    requirements of your workload and there is an alternative instance type
+	//    that provides better memory performance. EBSThroughputOverprovisioned
+	//    — The instance’s EBS throughput configuration can be sized down while
+	//    still meeting the performance requirements of your workload. EBSThroughputUnderprovisioned
+	//    — The instance’s EBS throughput configuration doesn't meet the performance
+	//    requirements of your workload and there is an alternative instance type
+	//    that provides better EBS throughput performance. EBSIOPSOverprovisioned
+	//    — The instance’s EBS IOPS configuration can be sized down while still
+	//    meeting the performance requirements of your workload. EBSIOPSUnderprovisioned
+	//    — The instance’s EBS IOPS configuration doesn't meet the performance
+	//    requirements of your workload and there is an alternative instance type
+	//    that provides better EBS IOPS performance. NetworkBandwidthOverprovisioned
+	//    — The instance’s network bandwidth configuration can be sized down
+	//    while still meeting the performance requirements of your workload. NetworkBandwidthUnderprovisioned
+	//    — The instance’s network bandwidth configuration doesn't meet the
+	//    performance requirements of your workload and there is an alternative
+	//    instance type that provides better network bandwidth performance. This
+	//    finding reason happens when the NetworkIn or NetworkOut performance of
+	//    an instance is impacted. NetworkPPSOverprovisioned — The instance’s
+	//    network PPS (packets per second) configuration can be sized down while
+	//    still meeting the performance requirements of your workload. NetworkPPSUnderprovisioned
+	//    — The instance’s network PPS (packets per second) configuration doesn't
+	//    meet the performance requirements of your workload and there is an alternative
+	//    instance type that provides better network PPS performance. DiskIOPSOverprovisioned
+	//    — The instance’s disk IOPS configuration can be sized down while still
+	//    meeting the performance requirements of your workload. DiskIOPSUnderprovisioned
+	//    — The instance’s disk IOPS configuration doesn't meet the performance
+	//    requirements of your workload and there is an alternative instance type
+	//    that provides better disk IOPS performance. DiskThroughputOverprovisioned
+	//    — The instance’s disk throughput configuration can be sized down while
+	//    still meeting the performance requirements of your workload. DiskThroughputUnderprovisioned
+	//    — The instance’s disk throughput configuration doesn't meet the performance
+	//    requirements of your workload and there is an alternative instance type
+	//    that provides better disk throughput performance.
 	Values []*string `locationName:"values" type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s Filter) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s Filter) GoString() string {
 	return s.String()
 }
@@ -1727,11 +3073,12 @@ func (s *Filter) SetValues(v []*string) *Filter {
 type GetAutoScalingGroupRecommendationsInput struct {
 	_ struct{} `type:"structure"`
 
-	// The IDs of the AWS accounts for which to return Auto Scaling group recommendations.
-	//
-	// If your account is the master account of an organization, use this parameter
-	// to specify the member accounts for which you want to return Auto Scaling
+	// The ID of the Amazon Web Services account for which to return Auto Scaling
 	// group recommendations.
+	//
+	// If your account is the management account of an organization, use this parameter
+	// to specify the member account for which you want to return Auto Scaling group
+	// recommendations.
 	//
 	// Only one account ID can be specified per request.
 	AccountIds []*string `locationName:"accountIds" type:"list"`
@@ -1740,7 +3087,7 @@ type GetAutoScalingGroupRecommendationsInput struct {
 	// recommendations.
 	AutoScalingGroupArns []*string `locationName:"autoScalingGroupArns" type:"list"`
 
-	// An array of objects that describe a filter that returns a more specific list
+	// An array of objects to specify a filter that returns a more specific list
 	// of Auto Scaling group recommendations.
 	Filters []*Filter `locationName:"filters" type:"list"`
 
@@ -1748,19 +3095,31 @@ type GetAutoScalingGroupRecommendationsInput struct {
 	// single request.
 	//
 	// To retrieve the remaining results, make another request with the returned
-	// NextToken value.
+	// nextToken value.
 	MaxResults *int64 `locationName:"maxResults" type:"integer"`
 
 	// The token to advance to the next page of Auto Scaling group recommendations.
 	NextToken *string `locationName:"nextToken" type:"string"`
+
+	// An object to specify the preferences for the Auto Scaling group recommendations
+	// to return in the response.
+	RecommendationPreferences *RecommendationPreferences `locationName:"recommendationPreferences" type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetAutoScalingGroupRecommendationsInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetAutoScalingGroupRecommendationsInput) GoString() string {
 	return s.String()
 }
@@ -1795,6 +3154,12 @@ func (s *GetAutoScalingGroupRecommendationsInput) SetNextToken(v string) *GetAut
 	return s
 }
 
+// SetRecommendationPreferences sets the RecommendationPreferences field's value.
+func (s *GetAutoScalingGroupRecommendationsInput) SetRecommendationPreferences(v *RecommendationPreferences) *GetAutoScalingGroupRecommendationsInput {
+	s.RecommendationPreferences = v
+	return s
+}
+
 type GetAutoScalingGroupRecommendationsOutput struct {
 	_ struct{} `type:"structure"`
 
@@ -1814,12 +3179,20 @@ type GetAutoScalingGroupRecommendationsOutput struct {
 	NextToken *string `locationName:"nextToken" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetAutoScalingGroupRecommendationsOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetAutoScalingGroupRecommendationsOutput) GoString() string {
 	return s.String()
 }
@@ -1842,18 +3215,149 @@ func (s *GetAutoScalingGroupRecommendationsOutput) SetNextToken(v string) *GetAu
 	return s
 }
 
-type GetEC2InstanceRecommendationsInput struct {
+type GetEBSVolumeRecommendationsInput struct {
 	_ struct{} `type:"structure"`
 
-	// The IDs of the AWS accounts for which to return instance recommendations.
+	// The ID of the Amazon Web Services account for which to return volume recommendations.
 	//
-	// If your account is the master account of an organization, use this parameter
-	// to specify the member accounts for which you want to return instance recommendations.
+	// If your account is the management account of an organization, use this parameter
+	// to specify the member account for which you want to return volume recommendations.
 	//
 	// Only one account ID can be specified per request.
 	AccountIds []*string `locationName:"accountIds" type:"list"`
 
-	// An array of objects that describe a filter that returns a more specific list
+	// An array of objects to specify a filter that returns a more specific list
+	// of volume recommendations.
+	Filters []*EBSFilter `locationName:"filters" type:"list"`
+
+	// The maximum number of volume recommendations to return with a single request.
+	//
+	// To retrieve the remaining results, make another request with the returned
+	// nextToken value.
+	MaxResults *int64 `locationName:"maxResults" type:"integer"`
+
+	// The token to advance to the next page of volume recommendations.
+	NextToken *string `locationName:"nextToken" type:"string"`
+
+	// The Amazon Resource Name (ARN) of the volumes for which to return recommendations.
+	VolumeArns []*string `locationName:"volumeArns" type:"list"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetEBSVolumeRecommendationsInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetEBSVolumeRecommendationsInput) GoString() string {
+	return s.String()
+}
+
+// SetAccountIds sets the AccountIds field's value.
+func (s *GetEBSVolumeRecommendationsInput) SetAccountIds(v []*string) *GetEBSVolumeRecommendationsInput {
+	s.AccountIds = v
+	return s
+}
+
+// SetFilters sets the Filters field's value.
+func (s *GetEBSVolumeRecommendationsInput) SetFilters(v []*EBSFilter) *GetEBSVolumeRecommendationsInput {
+	s.Filters = v
+	return s
+}
+
+// SetMaxResults sets the MaxResults field's value.
+func (s *GetEBSVolumeRecommendationsInput) SetMaxResults(v int64) *GetEBSVolumeRecommendationsInput {
+	s.MaxResults = &v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *GetEBSVolumeRecommendationsInput) SetNextToken(v string) *GetEBSVolumeRecommendationsInput {
+	s.NextToken = &v
+	return s
+}
+
+// SetVolumeArns sets the VolumeArns field's value.
+func (s *GetEBSVolumeRecommendationsInput) SetVolumeArns(v []*string) *GetEBSVolumeRecommendationsInput {
+	s.VolumeArns = v
+	return s
+}
+
+type GetEBSVolumeRecommendationsOutput struct {
+	_ struct{} `type:"structure"`
+
+	// An array of objects that describe errors of the request.
+	//
+	// For example, an error is returned if you request recommendations for an unsupported
+	// volume.
+	Errors []*GetRecommendationError `locationName:"errors" type:"list"`
+
+	// The token to use to advance to the next page of volume recommendations.
+	//
+	// This value is null when there are no more pages of volume recommendations
+	// to return.
+	NextToken *string `locationName:"nextToken" type:"string"`
+
+	// An array of objects that describe volume recommendations.
+	VolumeRecommendations []*VolumeRecommendation `locationName:"volumeRecommendations" type:"list"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetEBSVolumeRecommendationsOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetEBSVolumeRecommendationsOutput) GoString() string {
+	return s.String()
+}
+
+// SetErrors sets the Errors field's value.
+func (s *GetEBSVolumeRecommendationsOutput) SetErrors(v []*GetRecommendationError) *GetEBSVolumeRecommendationsOutput {
+	s.Errors = v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *GetEBSVolumeRecommendationsOutput) SetNextToken(v string) *GetEBSVolumeRecommendationsOutput {
+	s.NextToken = &v
+	return s
+}
+
+// SetVolumeRecommendations sets the VolumeRecommendations field's value.
+func (s *GetEBSVolumeRecommendationsOutput) SetVolumeRecommendations(v []*VolumeRecommendation) *GetEBSVolumeRecommendationsOutput {
+	s.VolumeRecommendations = v
+	return s
+}
+
+type GetEC2InstanceRecommendationsInput struct {
+	_ struct{} `type:"structure"`
+
+	// The ID of the Amazon Web Services account for which to return instance recommendations.
+	//
+	// If your account is the management account of an organization, use this parameter
+	// to specify the member account for which you want to return instance recommendations.
+	//
+	// Only one account ID can be specified per request.
+	AccountIds []*string `locationName:"accountIds" type:"list"`
+
+	// An array of objects to specify a filter that returns a more specific list
 	// of instance recommendations.
 	Filters []*Filter `locationName:"filters" type:"list"`
 
@@ -1863,19 +3367,31 @@ type GetEC2InstanceRecommendationsInput struct {
 	// The maximum number of instance recommendations to return with a single request.
 	//
 	// To retrieve the remaining results, make another request with the returned
-	// NextToken value.
+	// nextToken value.
 	MaxResults *int64 `locationName:"maxResults" type:"integer"`
 
 	// The token to advance to the next page of instance recommendations.
 	NextToken *string `locationName:"nextToken" type:"string"`
+
+	// An object to specify the preferences for the Amazon EC2 instance recommendations
+	// to return in the response.
+	RecommendationPreferences *RecommendationPreferences `locationName:"recommendationPreferences" type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetEC2InstanceRecommendationsInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetEC2InstanceRecommendationsInput) GoString() string {
 	return s.String()
 }
@@ -1910,6 +3426,12 @@ func (s *GetEC2InstanceRecommendationsInput) SetNextToken(v string) *GetEC2Insta
 	return s
 }
 
+// SetRecommendationPreferences sets the RecommendationPreferences field's value.
+func (s *GetEC2InstanceRecommendationsInput) SetRecommendationPreferences(v *RecommendationPreferences) *GetEC2InstanceRecommendationsInput {
+	s.RecommendationPreferences = v
+	return s
+}
+
 type GetEC2InstanceRecommendationsOutput struct {
 	_ struct{} `type:"structure"`
 
@@ -1929,12 +3451,20 @@ type GetEC2InstanceRecommendationsOutput struct {
 	NextToken *string `locationName:"nextToken" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetEC2InstanceRecommendationsOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetEC2InstanceRecommendationsOutput) GoString() string {
 	return s.String()
 }
@@ -1960,7 +3490,7 @@ func (s *GetEC2InstanceRecommendationsOutput) SetNextToken(v string) *GetEC2Inst
 type GetEC2RecommendationProjectedMetricsInput struct {
 	_ struct{} `type:"structure"`
 
-	// The time stamp of the last projected metrics data point to return.
+	// The timestamp of the last projected metrics data point to return.
 	//
 	// EndTime is a required field
 	EndTime *time.Time `locationName:"endTime" type:"timestamp" required:"true"`
@@ -1976,7 +3506,11 @@ type GetEC2RecommendationProjectedMetricsInput struct {
 	// Period is a required field
 	Period *int64 `locationName:"period" type:"integer" required:"true"`
 
-	// The time stamp of the first projected metrics data point to return.
+	// An object to specify the preferences for the Amazon EC2 recommendation projected
+	// metrics to return in the response.
+	RecommendationPreferences *RecommendationPreferences `locationName:"recommendationPreferences" type:"structure"`
+
+	// The timestamp of the first projected metrics data point to return.
 	//
 	// StartTime is a required field
 	StartTime *time.Time `locationName:"startTime" type:"timestamp" required:"true"`
@@ -1987,12 +3521,20 @@ type GetEC2RecommendationProjectedMetricsInput struct {
 	Stat *string `locationName:"stat" type:"string" required:"true" enum:"MetricStatistic"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetEC2RecommendationProjectedMetricsInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetEC2RecommendationProjectedMetricsInput) GoString() string {
 	return s.String()
 }
@@ -2040,6 +3582,12 @@ func (s *GetEC2RecommendationProjectedMetricsInput) SetPeriod(v int64) *GetEC2Re
 	return s
 }
 
+// SetRecommendationPreferences sets the RecommendationPreferences field's value.
+func (s *GetEC2RecommendationProjectedMetricsInput) SetRecommendationPreferences(v *RecommendationPreferences) *GetEC2RecommendationProjectedMetricsInput {
+	s.RecommendationPreferences = v
+	return s
+}
+
 // SetStartTime sets the StartTime field's value.
 func (s *GetEC2RecommendationProjectedMetricsInput) SetStartTime(v time.Time) *GetEC2RecommendationProjectedMetricsInput {
 	s.StartTime = &v
@@ -2055,16 +3603,24 @@ func (s *GetEC2RecommendationProjectedMetricsInput) SetStat(v string) *GetEC2Rec
 type GetEC2RecommendationProjectedMetricsOutput struct {
 	_ struct{} `type:"structure"`
 
-	// An array of objects that describe a projected metrics.
+	// An array of objects that describes projected metrics.
 	RecommendedOptionProjectedMetrics []*RecommendedOptionProjectedMetric `locationName:"recommendedOptionProjectedMetrics" type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetEC2RecommendationProjectedMetricsOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetEC2RecommendationProjectedMetricsOutput) GoString() string {
 	return s.String()
 }
@@ -2079,12 +3635,20 @@ type GetEnrollmentStatusInput struct {
 	_ struct{} `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetEnrollmentStatusInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetEnrollmentStatusInput) GoString() string {
 	return s.String()
 }
@@ -2092,9 +3656,17 @@ func (s GetEnrollmentStatusInput) GoString() string {
 type GetEnrollmentStatusOutput struct {
 	_ struct{} `type:"structure"`
 
-	// Confirms the enrollment status of member accounts within the organization,
-	// if the account is a master account of an organization.
+	// The Unix epoch timestamp, in seconds, of when the account enrollment status
+	// was last updated.
+	LastUpdatedTimestamp *time.Time `locationName:"lastUpdatedTimestamp" type:"timestamp"`
+
+	// Confirms the enrollment status of member accounts of the organization, if
+	// the account is a management account of an organization.
 	MemberAccountsEnrolled *bool `locationName:"memberAccountsEnrolled" type:"boolean"`
+
+	// The count of organization member accounts that are opted in to the service,
+	// if your account is an organization management account.
+	NumberOfMemberAccountsOptedIn *int64 `locationName:"numberOfMemberAccountsOptedIn" type:"integer"`
 
 	// The enrollment status of the account.
 	Status *string `locationName:"status" type:"string" enum:"Status"`
@@ -2106,19 +3678,39 @@ type GetEnrollmentStatusOutput struct {
 	StatusReason *string `locationName:"statusReason" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetEnrollmentStatusOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetEnrollmentStatusOutput) GoString() string {
 	return s.String()
+}
+
+// SetLastUpdatedTimestamp sets the LastUpdatedTimestamp field's value.
+func (s *GetEnrollmentStatusOutput) SetLastUpdatedTimestamp(v time.Time) *GetEnrollmentStatusOutput {
+	s.LastUpdatedTimestamp = &v
+	return s
 }
 
 // SetMemberAccountsEnrolled sets the MemberAccountsEnrolled field's value.
 func (s *GetEnrollmentStatusOutput) SetMemberAccountsEnrolled(v bool) *GetEnrollmentStatusOutput {
 	s.MemberAccountsEnrolled = &v
+	return s
+}
+
+// SetNumberOfMemberAccountsOptedIn sets the NumberOfMemberAccountsOptedIn field's value.
+func (s *GetEnrollmentStatusOutput) SetNumberOfMemberAccountsOptedIn(v int64) *GetEnrollmentStatusOutput {
+	s.NumberOfMemberAccountsOptedIn = &v
 	return s
 }
 
@@ -2131,6 +3723,231 @@ func (s *GetEnrollmentStatusOutput) SetStatus(v string) *GetEnrollmentStatusOutp
 // SetStatusReason sets the StatusReason field's value.
 func (s *GetEnrollmentStatusOutput) SetStatusReason(v string) *GetEnrollmentStatusOutput {
 	s.StatusReason = &v
+	return s
+}
+
+type GetEnrollmentStatusesForOrganizationInput struct {
+	_ struct{} `type:"structure"`
+
+	// An array of objects to specify a filter that returns a more specific list
+	// of account enrollment statuses.
+	Filters []*EnrollmentFilter `locationName:"filters" type:"list"`
+
+	// The maximum number of account enrollment statuses to return with a single
+	// request. You can specify up to 100 statuses to return with each request.
+	//
+	// To retrieve the remaining results, make another request with the returned
+	// nextToken value.
+	MaxResults *int64 `locationName:"maxResults" type:"integer"`
+
+	// The token to advance to the next page of account enrollment statuses.
+	NextToken *string `locationName:"nextToken" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetEnrollmentStatusesForOrganizationInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetEnrollmentStatusesForOrganizationInput) GoString() string {
+	return s.String()
+}
+
+// SetFilters sets the Filters field's value.
+func (s *GetEnrollmentStatusesForOrganizationInput) SetFilters(v []*EnrollmentFilter) *GetEnrollmentStatusesForOrganizationInput {
+	s.Filters = v
+	return s
+}
+
+// SetMaxResults sets the MaxResults field's value.
+func (s *GetEnrollmentStatusesForOrganizationInput) SetMaxResults(v int64) *GetEnrollmentStatusesForOrganizationInput {
+	s.MaxResults = &v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *GetEnrollmentStatusesForOrganizationInput) SetNextToken(v string) *GetEnrollmentStatusesForOrganizationInput {
+	s.NextToken = &v
+	return s
+}
+
+type GetEnrollmentStatusesForOrganizationOutput struct {
+	_ struct{} `type:"structure"`
+
+	// An array of objects that describe the enrollment statuses of organization
+	// member accounts.
+	AccountEnrollmentStatuses []*AccountEnrollmentStatus `locationName:"accountEnrollmentStatuses" type:"list"`
+
+	// The token to use to advance to the next page of account enrollment statuses.
+	//
+	// This value is null when there are no more pages of account enrollment statuses
+	// to return.
+	NextToken *string `locationName:"nextToken" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetEnrollmentStatusesForOrganizationOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetEnrollmentStatusesForOrganizationOutput) GoString() string {
+	return s.String()
+}
+
+// SetAccountEnrollmentStatuses sets the AccountEnrollmentStatuses field's value.
+func (s *GetEnrollmentStatusesForOrganizationOutput) SetAccountEnrollmentStatuses(v []*AccountEnrollmentStatus) *GetEnrollmentStatusesForOrganizationOutput {
+	s.AccountEnrollmentStatuses = v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *GetEnrollmentStatusesForOrganizationOutput) SetNextToken(v string) *GetEnrollmentStatusesForOrganizationOutput {
+	s.NextToken = &v
+	return s
+}
+
+type GetLambdaFunctionRecommendationsInput struct {
+	_ struct{} `type:"structure"`
+
+	// The ID of the Amazon Web Services account for which to return function recommendations.
+	//
+	// If your account is the management account of an organization, use this parameter
+	// to specify the member account for which you want to return function recommendations.
+	//
+	// Only one account ID can be specified per request.
+	AccountIds []*string `locationName:"accountIds" type:"list"`
+
+	// An array of objects to specify a filter that returns a more specific list
+	// of function recommendations.
+	Filters []*LambdaFunctionRecommendationFilter `locationName:"filters" type:"list"`
+
+	// The Amazon Resource Name (ARN) of the functions for which to return recommendations.
+	//
+	// You can specify a qualified or unqualified ARN. If you specify an unqualified
+	// ARN without a function version suffix, Compute Optimizer will return recommendations
+	// for the latest ($LATEST) version of the function. If you specify a qualified
+	// ARN with a version suffix, Compute Optimizer will return recommendations
+	// for the specified function version. For more information about using function
+	// versions, see Using versions (https://docs.aws.amazon.com/lambda/latest/dg/configuration-versions.html#versioning-versions-using)
+	// in the Lambda Developer Guide.
+	FunctionArns []*string `locationName:"functionArns" type:"list"`
+
+	// The maximum number of function recommendations to return with a single request.
+	//
+	// To retrieve the remaining results, make another request with the returned
+	// nextToken value.
+	MaxResults *int64 `locationName:"maxResults" type:"integer"`
+
+	// The token to advance to the next page of function recommendations.
+	NextToken *string `locationName:"nextToken" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetLambdaFunctionRecommendationsInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetLambdaFunctionRecommendationsInput) GoString() string {
+	return s.String()
+}
+
+// SetAccountIds sets the AccountIds field's value.
+func (s *GetLambdaFunctionRecommendationsInput) SetAccountIds(v []*string) *GetLambdaFunctionRecommendationsInput {
+	s.AccountIds = v
+	return s
+}
+
+// SetFilters sets the Filters field's value.
+func (s *GetLambdaFunctionRecommendationsInput) SetFilters(v []*LambdaFunctionRecommendationFilter) *GetLambdaFunctionRecommendationsInput {
+	s.Filters = v
+	return s
+}
+
+// SetFunctionArns sets the FunctionArns field's value.
+func (s *GetLambdaFunctionRecommendationsInput) SetFunctionArns(v []*string) *GetLambdaFunctionRecommendationsInput {
+	s.FunctionArns = v
+	return s
+}
+
+// SetMaxResults sets the MaxResults field's value.
+func (s *GetLambdaFunctionRecommendationsInput) SetMaxResults(v int64) *GetLambdaFunctionRecommendationsInput {
+	s.MaxResults = &v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *GetLambdaFunctionRecommendationsInput) SetNextToken(v string) *GetLambdaFunctionRecommendationsInput {
+	s.NextToken = &v
+	return s
+}
+
+type GetLambdaFunctionRecommendationsOutput struct {
+	_ struct{} `type:"structure"`
+
+	// An array of objects that describe function recommendations.
+	LambdaFunctionRecommendations []*LambdaFunctionRecommendation `locationName:"lambdaFunctionRecommendations" type:"list"`
+
+	// The token to use to advance to the next page of function recommendations.
+	//
+	// This value is null when there are no more pages of function recommendations
+	// to return.
+	NextToken *string `locationName:"nextToken" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetLambdaFunctionRecommendationsOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetLambdaFunctionRecommendationsOutput) GoString() string {
+	return s.String()
+}
+
+// SetLambdaFunctionRecommendations sets the LambdaFunctionRecommendations field's value.
+func (s *GetLambdaFunctionRecommendationsOutput) SetLambdaFunctionRecommendations(v []*LambdaFunctionRecommendation) *GetLambdaFunctionRecommendationsOutput {
+	s.LambdaFunctionRecommendations = v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *GetLambdaFunctionRecommendationsOutput) SetNextToken(v string) *GetLambdaFunctionRecommendationsOutput {
+	s.NextToken = &v
 	return s
 }
 
@@ -2152,12 +3969,20 @@ type GetRecommendationError struct {
 	Message *string `locationName:"message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetRecommendationError) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetRecommendationError) GoString() string {
 	return s.String()
 }
@@ -2183,10 +4008,11 @@ func (s *GetRecommendationError) SetMessage(v string) *GetRecommendationError {
 type GetRecommendationSummariesInput struct {
 	_ struct{} `type:"structure"`
 
-	// The IDs of the AWS accounts for which to return recommendation summaries.
+	// The ID of the Amazon Web Services account for which to return recommendation
+	// summaries.
 	//
-	// If your account is the master account of an organization, use this parameter
-	// to specify the member accounts for which you want to return recommendation
+	// If your account is the management account of an organization, use this parameter
+	// to specify the member account for which you want to return recommendation
 	// summaries.
 	//
 	// Only one account ID can be specified per request.
@@ -2195,19 +4021,27 @@ type GetRecommendationSummariesInput struct {
 	// The maximum number of recommendation summaries to return with a single request.
 	//
 	// To retrieve the remaining results, make another request with the returned
-	// NextToken value.
+	// nextToken value.
 	MaxResults *int64 `locationName:"maxResults" type:"integer"`
 
 	// The token to advance to the next page of recommendation summaries.
 	NextToken *string `locationName:"nextToken" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetRecommendationSummariesInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetRecommendationSummariesInput) GoString() string {
 	return s.String()
 }
@@ -2243,12 +4077,20 @@ type GetRecommendationSummariesOutput struct {
 	RecommendationSummaries []*RecommendationSummary `locationName:"recommendationSummaries" type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetRecommendationSummariesOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetRecommendationSummariesOutput) GoString() string {
 	return s.String()
 }
@@ -2269,13 +4111,13 @@ func (s *GetRecommendationSummariesOutput) SetRecommendationSummaries(v []*Recom
 type InstanceRecommendation struct {
 	_ struct{} `type:"structure"`
 
-	// The AWS account ID of the instance.
+	// The Amazon Web Services account ID of the instance.
 	AccountId *string `locationName:"accountId" type:"string"`
 
 	// The instance type of the current instance.
 	CurrentInstanceType *string `locationName:"currentInstanceType" type:"string"`
 
-	// The finding classification for the instance.
+	// The finding classification of the instance.
 	//
 	// Findings for instances include:
 	//
@@ -2292,14 +4134,123 @@ type InstanceRecommendation struct {
 	//
 	//    * Optimized —An instance is considered optimized when all specifications
 	//    of your instance, such as CPU, memory, and network, meet the performance
-	//    requirements of your workload and is not over provisioned. An optimized
-	//    instance runs your workloads with optimal performance and infrastructure
-	//    cost. For optimized resources, AWS Compute Optimizer might recommend a
-	//    new generation instance type.
-	//
-	// The values that are returned might be UNDER_PROVISIONED, OVER_PROVISIONED,
-	// or OPTIMIZED.
+	//    requirements of your workload and is not over provisioned. For optimized
+	//    resources, Compute Optimizer might recommend a new generation instance
+	//    type.
 	Finding *string `locationName:"finding" type:"string" enum:"Finding"`
+
+	// The reason for the finding classification of the instance.
+	//
+	// Finding reason codes for instances include:
+	//
+	//    * CPUOverprovisioned — The instance’s CPU configuration can be sized
+	//    down while still meeting the performance requirements of your workload.
+	//    This is identified by analyzing the CPUUtilization metric of the current
+	//    instance during the look-back period.
+	//
+	//    * CPUUnderprovisioned — The instance’s CPU configuration doesn't meet
+	//    the performance requirements of your workload and there is an alternative
+	//    instance type that provides better CPU performance. This is identified
+	//    by analyzing the CPUUtilization metric of the current instance during
+	//    the look-back period.
+	//
+	//    * MemoryOverprovisioned — The instance’s memory configuration can
+	//    be sized down while still meeting the performance requirements of your
+	//    workload. This is identified by analyzing the memory utilization metric
+	//    of the current instance during the look-back period.
+	//
+	//    * MemoryUnderprovisioned — The instance’s memory configuration doesn't
+	//    meet the performance requirements of your workload and there is an alternative
+	//    instance type that provides better memory performance. This is identified
+	//    by analyzing the memory utilization metric of the current instance during
+	//    the look-back period. Memory utilization is analyzed only for resources
+	//    that have the unified CloudWatch agent installed on them. For more information,
+	//    see Enabling memory utilization with the Amazon CloudWatch Agent (https://docs.aws.amazon.com/compute-optimizer/latest/ug/metrics.html#cw-agent)
+	//    in the Compute Optimizer User Guide. On Linux instances, Compute Optimizer
+	//    analyses the mem_used_percent metric in the CWAgent namespace, or the
+	//    legacy MemoryUtilization metric in the System/Linux namespace. On Windows
+	//    instances, Compute Optimizer analyses the Memory % Committed Bytes In
+	//    Use metric in the CWAgent namespace.
+	//
+	//    * EBSThroughputOverprovisioned — The instance’s EBS throughput configuration
+	//    can be sized down while still meeting the performance requirements of
+	//    your workload. This is identified by analyzing the VolumeReadOps and VolumeWriteOps
+	//    metrics of EBS volumes attached to the current instance during the look-back
+	//    period.
+	//
+	//    * EBSThroughputUnderprovisioned — The instance’s EBS throughput configuration
+	//    doesn't meet the performance requirements of your workload and there is
+	//    an alternative instance type that provides better EBS throughput performance.
+	//    This is identified by analyzing the VolumeReadOps and VolumeWriteOps metrics
+	//    of EBS volumes attached to the current instance during the look-back period.
+	//
+	//    * EBSIOPSOverprovisioned — The instance’s EBS IOPS configuration can
+	//    be sized down while still meeting the performance requirements of your
+	//    workload. This is identified by analyzing the VolumeReadBytes and VolumeWriteBytes
+	//    metric of EBS volumes attached to the current instance during the look-back
+	//    period.
+	//
+	//    * EBSIOPSUnderprovisioned — The instance’s EBS IOPS configuration
+	//    doesn't meet the performance requirements of your workload and there is
+	//    an alternative instance type that provides better EBS IOPS performance.
+	//    This is identified by analyzing the VolumeReadBytes and VolumeWriteBytes
+	//    metric of EBS volumes attached to the current instance during the look-back
+	//    period.
+	//
+	//    * NetworkBandwidthOverprovisioned — The instance’s network bandwidth
+	//    configuration can be sized down while still meeting the performance requirements
+	//    of your workload. This is identified by analyzing the NetworkIn and NetworkOut
+	//    metrics of the current instance during the look-back period.
+	//
+	//    * NetworkBandwidthUnderprovisioned — The instance’s network bandwidth
+	//    configuration doesn't meet the performance requirements of your workload
+	//    and there is an alternative instance type that provides better network
+	//    bandwidth performance. This is identified by analyzing the NetworkIn and
+	//    NetworkOut metrics of the current instance during the look-back period.
+	//    This finding reason happens when the NetworkIn or NetworkOut performance
+	//    of an instance is impacted.
+	//
+	//    * NetworkPPSOverprovisioned — The instance’s network PPS (packets
+	//    per second) configuration can be sized down while still meeting the performance
+	//    requirements of your workload. This is identified by analyzing the NetworkPacketsIn
+	//    and NetworkPacketsIn metrics of the current instance during the look-back
+	//    period.
+	//
+	//    * NetworkPPSUnderprovisioned — The instance’s network PPS (packets
+	//    per second) configuration doesn't meet the performance requirements of
+	//    your workload and there is an alternative instance type that provides
+	//    better network PPS performance. This is identified by analyzing the NetworkPacketsIn
+	//    and NetworkPacketsIn metrics of the current instance during the look-back
+	//    period.
+	//
+	//    * DiskIOPSOverprovisioned — The instance’s disk IOPS configuration
+	//    can be sized down while still meeting the performance requirements of
+	//    your workload. This is identified by analyzing the DiskReadOps and DiskWriteOps
+	//    metrics of the current instance during the look-back period.
+	//
+	//    * DiskIOPSUnderprovisioned — The instance’s disk IOPS configuration
+	//    doesn't meet the performance requirements of your workload and there is
+	//    an alternative instance type that provides better disk IOPS performance.
+	//    This is identified by analyzing the DiskReadOps and DiskWriteOps metrics
+	//    of the current instance during the look-back period.
+	//
+	//    * DiskThroughputOverprovisioned — The instance’s disk throughput configuration
+	//    can be sized down while still meeting the performance requirements of
+	//    your workload. This is identified by analyzing the DiskReadBytes and DiskWriteBytes
+	//    metrics of the current instance during the look-back period.
+	//
+	//    * DiskThroughputUnderprovisioned — The instance’s disk throughput
+	//    configuration doesn't meet the performance requirements of your workload
+	//    and there is an alternative instance type that provides better disk throughput
+	//    performance. This is identified by analyzing the DiskReadBytes and DiskWriteBytes
+	//    metrics of the current instance during the look-back period.
+	//
+	// For more information about instance metrics, see List the available CloudWatch
+	// metrics for your instances (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/viewing_metrics_with_cloudwatch.html)
+	// in the Amazon Elastic Compute Cloud User Guide. For more information about
+	// EBS volume metrics, see Amazon CloudWatch metrics for Amazon EBS (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using_cloudwatch_ebs.html)
+	// in the Amazon Elastic Compute Cloud User Guide.
+	FindingReasonCodes []*string `locationName:"findingReasonCodes" type:"list"`
 
 	// The Amazon Resource Name (ARN) of the current instance.
 	InstanceArn *string `locationName:"instanceArn" type:"string"`
@@ -2307,7 +4258,7 @@ type InstanceRecommendation struct {
 	// The name of the current instance.
 	InstanceName *string `locationName:"instanceName" type:"string"`
 
-	// The time stamp of when the instance recommendation was last refreshed.
+	// The timestamp of when the instance recommendation was last refreshed.
 	LastRefreshTimestamp *time.Time `locationName:"lastRefreshTimestamp" type:"timestamp"`
 
 	// The number of days for which utilization metrics were analyzed for the instance.
@@ -2323,12 +4274,20 @@ type InstanceRecommendation struct {
 	UtilizationMetrics []*UtilizationMetric `locationName:"utilizationMetrics" type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s InstanceRecommendation) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s InstanceRecommendation) GoString() string {
 	return s.String()
 }
@@ -2348,6 +4307,12 @@ func (s *InstanceRecommendation) SetCurrentInstanceType(v string) *InstanceRecom
 // SetFinding sets the Finding field's value.
 func (s *InstanceRecommendation) SetFinding(v string) *InstanceRecommendation {
 	s.Finding = &v
+	return s
+}
+
+// SetFindingReasonCodes sets the FindingReasonCodes field's value.
+func (s *InstanceRecommendation) SetFindingReasonCodes(v []*string) *InstanceRecommendation {
+	s.FindingReasonCodes = v
 	return s
 }
 
@@ -2402,11 +4367,97 @@ type InstanceRecommendationOption struct {
 
 	// The performance risk of the instance recommendation option.
 	//
-	// Performance risk is the likelihood of the recommended instance type not meeting
-	// the performance requirement of your workload.
+	// Performance risk indicates the likelihood of the recommended instance type
+	// not meeting the resource needs of your workload. Compute Optimizer calculates
+	// an individual performance risk score for each specification of the recommended
+	// instance, including CPU, memory, EBS throughput, EBS IOPS, disk throughput,
+	// disk IOPS, network throughput, and network PPS. The performance risk of the
+	// recommended instance is calculated as the maximum performance risk score
+	// across the analyzed resource specifications.
 	//
-	// The lowest performance risk is categorized as 0, and the highest as 5.
+	// The value ranges from 0 - 4, with 0 meaning that the recommended resource
+	// is predicted to always provide enough hardware capability. The higher the
+	// performance risk is, the more likely you should validate whether the recommendation
+	// will meet the performance requirements of your workload before migrating
+	// your resource.
 	PerformanceRisk *float64 `locationName:"performanceRisk" type:"double"`
+
+	// Describes the configuration differences between the current instance and
+	// the recommended instance type. You should consider the configuration differences
+	// before migrating your workloads from the current instance to the recommended
+	// instance type. The Change the instance type guide for Linux (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-instance-resize.html)
+	// and Change the instance type guide for Windows (https://docs.aws.amazon.com/AWSEC2/latest/WindowsGuide/ec2-instance-resize.html)
+	// provide general guidance for getting started with an instance migration.
+	//
+	// Platform differences include:
+	//
+	//    * Hypervisor — The hypervisor of the recommended instance type is different
+	//    than that of the current instance. For example, the recommended instance
+	//    type uses a Nitro hypervisor and the current instance uses a Xen hypervisor.
+	//    The differences that you should consider between these hypervisors are
+	//    covered in the Nitro Hypervisor (http://aws.amazon.com/ec2/faqs/#Nitro_Hypervisor)
+	//    section of the Amazon EC2 frequently asked questions. For more information,
+	//    see Instances built on the Nitro System (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/instance-types.html#ec2-nitro-instances)
+	//    in the Amazon EC2 User Guide for Linux, or Instances built on the Nitro
+	//    System (https://docs.aws.amazon.com/AWSEC2/latest/WindowsGuide/instance-types.html#ec2-nitro-instances)
+	//    in the Amazon EC2 User Guide for Windows.
+	//
+	//    * NetworkInterface — The network interface of the recommended instance
+	//    type is different than that of the current instance. For example, the
+	//    recommended instance type supports enhanced networking and the current
+	//    instance might not. To enable enhanced networking for the recommended
+	//    instance type, you must install the Elastic Network Adapter (ENA) driver
+	//    or the Intel 82599 Virtual Function driver. For more information, see
+	//    Networking and storage features (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/instance-types.html#instance-networking-storage)
+	//    and Enhanced networking on Linux (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/enhanced-networking.html)
+	//    in the Amazon EC2 User Guide for Linux, or Networking and storage features
+	//    (https://docs.aws.amazon.com/AWSEC2/latest/WindowsGuide/instance-types.html#instance-networking-storage)
+	//    and Enhanced networking on Windows (https://docs.aws.amazon.com/AWSEC2/latest/WindowsGuide/enhanced-networking.html)
+	//    in the Amazon EC2 User Guide for Windows.
+	//
+	//    * StorageInterface — The storage interface of the recommended instance
+	//    type is different than that of the current instance. For example, the
+	//    recommended instance type uses an NVMe storage interface and the current
+	//    instance does not. To access NVMe volumes for the recommended instance
+	//    type, you will need to install or upgrade the NVMe driver. For more information,
+	//    see Networking and storage features (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/instance-types.html#instance-networking-storage)
+	//    and Amazon EBS and NVMe on Linux instances (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/nvme-ebs-volumes.html)
+	//    in the Amazon EC2 User Guide for Linux, or Networking and storage features
+	//    (https://docs.aws.amazon.com/AWSEC2/latest/WindowsGuide/instance-types.html#instance-networking-storage)
+	//    and Amazon EBS and NVMe on Windows instances (https://docs.aws.amazon.com/AWSEC2/latest/WindowsGuide/nvme-ebs-volumes.html)
+	//    in the Amazon EC2 User Guide for Windows.
+	//
+	//    * InstanceStoreAvailability — The recommended instance type does not
+	//    support instance store volumes and the current instance does. Before migrating,
+	//    you might need to back up the data on your instance store volumes if you
+	//    want to preserve them. For more information, see How do I back up an instance
+	//    store volume on my Amazon EC2 instance to Amazon EBS? (https://aws.amazon.com/premiumsupport/knowledge-center/back-up-instance-store-ebs/)
+	//    in the Amazon Web Services Premium Support Knowledge Base. For more information,
+	//    see Networking and storage features (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/instance-types.html#instance-networking-storage)
+	//    and Amazon EC2 instance store (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/InstanceStorage.html)
+	//    in the Amazon EC2 User Guide for Linux, or see Networking and storage
+	//    features (https://docs.aws.amazon.com/AWSEC2/latest/WindowsGuide/instance-types.html#instance-networking-storage)
+	//    and Amazon EC2 instance store (https://docs.aws.amazon.com/AWSEC2/latest/WindowsGuide/InstanceStorage.html)
+	//    in the Amazon EC2 User Guide for Windows.
+	//
+	//    * VirtualizationType — The recommended instance type uses the hardware
+	//    virtual machine (HVM) virtualization type and the current instance uses
+	//    the paravirtual (PV) virtualization type. For more information about the
+	//    differences between these virtualization types, see Linux AMI virtualization
+	//    types (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/virtualization_types.html)
+	//    in the Amazon EC2 User Guide for Linux, or Windows AMI virtualization
+	//    types (https://docs.aws.amazon.com/AWSEC2/latest/WindowsGuide/windows-ami-version-history.html#virtualization-types)
+	//    in the Amazon EC2 User Guide for Windows.
+	//
+	//    * Architecture — The CPU architecture between the recommended instance
+	//    type and the current instance is different. For example, the recommended
+	//    instance type might use an Arm CPU architecture and the current instance
+	//    type might use a different one, such as x86. Before migrating, you should
+	//    consider recompiling the software on your instance for the new architecture.
+	//    Alternatively, you might switch to an Amazon Machine Image (AMI) that
+	//    supports the new architecture. For more information about the CPU architecture
+	//    for each instance type, see Amazon EC2 Instance Types (http://aws.amazon.com/ec2/instance-types/).
+	PlatformDifferences []*string `locationName:"platformDifferences" type:"list"`
 
 	// An array of objects that describe the projected utilization metrics of the
 	// instance recommendation option.
@@ -2423,12 +4474,20 @@ type InstanceRecommendationOption struct {
 	Rank *int64 `locationName:"rank" type:"integer"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s InstanceRecommendationOption) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s InstanceRecommendationOption) GoString() string {
 	return s.String()
 }
@@ -2442,6 +4501,12 @@ func (s *InstanceRecommendationOption) SetInstanceType(v string) *InstanceRecomm
 // SetPerformanceRisk sets the PerformanceRisk field's value.
 func (s *InstanceRecommendationOption) SetPerformanceRisk(v float64) *InstanceRecommendationOption {
 	s.PerformanceRisk = &v
+	return s
+}
+
+// SetPlatformDifferences sets the PlatformDifferences field's value.
+func (s *InstanceRecommendationOption) SetPlatformDifferences(v []*string) *InstanceRecommendationOption {
+	s.PlatformDifferences = v
 	return s
 }
 
@@ -2465,12 +4530,20 @@ type InternalServerException struct {
 	Message_ *string `locationName:"message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s InternalServerException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s InternalServerException) GoString() string {
 	return s.String()
 }
@@ -2513,7 +4586,7 @@ func (s *InternalServerException) RequestID() string {
 	return s.RespMetadata.RequestID
 }
 
-// An invalid or out-of-range value was supplied for the input parameter.
+// The value supplied for the input parameter is out of range or not valid.
 type InvalidParameterValueException struct {
 	_            struct{}                  `type:"structure"`
 	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
@@ -2521,12 +4594,20 @@ type InvalidParameterValueException struct {
 	Message_ *string `locationName:"message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s InvalidParameterValueException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s InvalidParameterValueException) GoString() string {
 	return s.String()
 }
@@ -2570,36 +4651,50 @@ func (s *InvalidParameterValueException) RequestID() string {
 }
 
 // Describes a filter that returns a more specific list of recommendation export
-// jobs.
+// jobs. Use this filter with the DescribeRecommendationExportJobs action.
 //
-// This filter is used with the DescribeRecommendationExportJobs action.
+// You can use EBSFilter with the GetEBSVolumeRecommendations action, LambdaFunctionRecommendationFilter
+// with the GetLambdaFunctionRecommendations action, and Filter with the GetAutoScalingGroupRecommendations
+// and GetEC2InstanceRecommendations actions.
 type JobFilter struct {
 	_ struct{} `type:"structure"`
 
 	// The name of the filter.
 	//
-	// Specify ResourceType to return export jobs of a specific resource type (e.g.,
-	// Ec2Instance).
+	// Specify ResourceType to return export jobs of a specific resource type (for
+	// example, Ec2Instance).
 	//
 	// Specify JobStatus to return export jobs with a specific status (e.g, Complete).
 	Name *string `locationName:"name" type:"string" enum:"JobFilterName"`
 
 	// The value of the filter.
 	//
-	// If you specify the name parameter as ResourceType, the valid values are Ec2Instance
-	// or AutoScalingGroup.
+	// The valid values for this parameter are as follows, depending on what you
+	// specify for the name parameter:
 	//
-	// If you specify the name parameter as JobStatus, the valid values are Queued,
-	// InProgress, Complete, or Failed.
+	//    * Specify Ec2Instance or AutoScalingGroup if you specify the name parameter
+	//    as ResourceType. There is no filter for EBS volumes because volume recommendations
+	//    cannot be exported at this time.
+	//
+	//    * Specify Queued, InProgress, Complete, or Failed if you specify the name
+	//    parameter as JobStatus.
 	Values []*string `locationName:"values" type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s JobFilter) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s JobFilter) GoString() string {
 	return s.String()
 }
@@ -2616,6 +4711,413 @@ func (s *JobFilter) SetValues(v []*string) *JobFilter {
 	return s
 }
 
+// Describes a projected utilization metric of an Lambda function recommendation
+// option.
+type LambdaFunctionMemoryProjectedMetric struct {
+	_ struct{} `type:"structure"`
+
+	// The name of the projected utilization metric.
+	Name *string `locationName:"name" type:"string" enum:"LambdaFunctionMemoryMetricName"`
+
+	// The statistic of the projected utilization metric.
+	Statistic *string `locationName:"statistic" type:"string" enum:"LambdaFunctionMemoryMetricStatistic"`
+
+	// The values of the projected utilization metrics.
+	Value *float64 `locationName:"value" type:"double"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s LambdaFunctionMemoryProjectedMetric) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s LambdaFunctionMemoryProjectedMetric) GoString() string {
+	return s.String()
+}
+
+// SetName sets the Name field's value.
+func (s *LambdaFunctionMemoryProjectedMetric) SetName(v string) *LambdaFunctionMemoryProjectedMetric {
+	s.Name = &v
+	return s
+}
+
+// SetStatistic sets the Statistic field's value.
+func (s *LambdaFunctionMemoryProjectedMetric) SetStatistic(v string) *LambdaFunctionMemoryProjectedMetric {
+	s.Statistic = &v
+	return s
+}
+
+// SetValue sets the Value field's value.
+func (s *LambdaFunctionMemoryProjectedMetric) SetValue(v float64) *LambdaFunctionMemoryProjectedMetric {
+	s.Value = &v
+	return s
+}
+
+// Describes a recommendation option for an Lambda function.
+type LambdaFunctionMemoryRecommendationOption struct {
+	_ struct{} `type:"structure"`
+
+	// The memory size, in MB, of the function recommendation option.
+	MemorySize *int64 `locationName:"memorySize" type:"integer"`
+
+	// An array of objects that describe the projected utilization metrics of the
+	// function recommendation option.
+	ProjectedUtilizationMetrics []*LambdaFunctionMemoryProjectedMetric `locationName:"projectedUtilizationMetrics" type:"list"`
+
+	// The rank of the function recommendation option.
+	//
+	// The top recommendation option is ranked as 1.
+	Rank *int64 `locationName:"rank" type:"integer"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s LambdaFunctionMemoryRecommendationOption) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s LambdaFunctionMemoryRecommendationOption) GoString() string {
+	return s.String()
+}
+
+// SetMemorySize sets the MemorySize field's value.
+func (s *LambdaFunctionMemoryRecommendationOption) SetMemorySize(v int64) *LambdaFunctionMemoryRecommendationOption {
+	s.MemorySize = &v
+	return s
+}
+
+// SetProjectedUtilizationMetrics sets the ProjectedUtilizationMetrics field's value.
+func (s *LambdaFunctionMemoryRecommendationOption) SetProjectedUtilizationMetrics(v []*LambdaFunctionMemoryProjectedMetric) *LambdaFunctionMemoryRecommendationOption {
+	s.ProjectedUtilizationMetrics = v
+	return s
+}
+
+// SetRank sets the Rank field's value.
+func (s *LambdaFunctionMemoryRecommendationOption) SetRank(v int64) *LambdaFunctionMemoryRecommendationOption {
+	s.Rank = &v
+	return s
+}
+
+// Describes an Lambda function recommendation.
+type LambdaFunctionRecommendation struct {
+	_ struct{} `type:"structure"`
+
+	// The Amazon Web Services account ID of the function.
+	AccountId *string `locationName:"accountId" type:"string"`
+
+	// The amount of memory, in MB, that's allocated to the current function.
+	CurrentMemorySize *int64 `locationName:"currentMemorySize" type:"integer"`
+
+	// The finding classification of the function.
+	//
+	// Findings for functions include:
+	//
+	//    * Optimized — The function is correctly provisioned to run your workload
+	//    based on its current configuration and its utilization history. This finding
+	//    classification does not include finding reason codes.
+	//
+	//    * NotOptimized — The function is performing at a higher level (over-provisioned)
+	//    or at a lower level (under-provisioned) than required for your workload
+	//    because its current configuration is not optimal. Over-provisioned resources
+	//    might lead to unnecessary infrastructure cost, and under-provisioned resources
+	//    might lead to poor application performance. This finding classification
+	//    can include the MemoryUnderprovisioned and MemoryUnderprovisioned finding
+	//    reason codes.
+	//
+	//    * Unavailable — Compute Optimizer was unable to generate a recommendation
+	//    for the function. This could be because the function has not accumulated
+	//    sufficient metric data, or the function does not qualify for a recommendation.
+	//    This finding classification can include the InsufficientData and Inconclusive
+	//    finding reason codes. Functions with a finding of unavailable are not
+	//    returned unless you specify the filter parameter with a value of Unavailable
+	//    in your GetLambdaFunctionRecommendations request.
+	Finding *string `locationName:"finding" type:"string" enum:"LambdaFunctionRecommendationFinding"`
+
+	// The reason for the finding classification of the function.
+	//
+	// Functions that have a finding classification of Optimized don't have a finding
+	// reason code.
+	//
+	// Finding reason codes for functions include:
+	//
+	//    * MemoryOverprovisioned — The function is over-provisioned when its
+	//    memory configuration can be sized down while still meeting the performance
+	//    requirements of your workload. An over-provisioned function might lead
+	//    to unnecessary infrastructure cost. This finding reason code is part of
+	//    the NotOptimized finding classification.
+	//
+	//    * MemoryUnderprovisioned — The function is under-provisioned when its
+	//    memory configuration doesn't meet the performance requirements of the
+	//    workload. An under-provisioned function might lead to poor application
+	//    performance. This finding reason code is part of the NotOptimized finding
+	//    classification.
+	//
+	//    * InsufficientData — The function does not have sufficient metric data
+	//    for Compute Optimizer to generate a recommendation. For more information,
+	//    see the Supported resources and requirements (https://docs.aws.amazon.com/compute-optimizer/latest/ug/requirements.html)
+	//    in the Compute Optimizer User Guide. This finding reason code is part
+	//    of the Unavailable finding classification.
+	//
+	//    * Inconclusive — The function does not qualify for a recommendation
+	//    because Compute Optimizer cannot generate a recommendation with a high
+	//    degree of confidence. This finding reason code is part of the Unavailable
+	//    finding classification.
+	FindingReasonCodes []*string `locationName:"findingReasonCodes" type:"list"`
+
+	// The Amazon Resource Name (ARN) of the current function.
+	FunctionArn *string `locationName:"functionArn" type:"string"`
+
+	// The version number of the current function.
+	FunctionVersion *string `locationName:"functionVersion" type:"string"`
+
+	// The timestamp of when the function recommendation was last refreshed.
+	LastRefreshTimestamp *time.Time `locationName:"lastRefreshTimestamp" type:"timestamp"`
+
+	// The number of days for which utilization metrics were analyzed for the function.
+	LookbackPeriodInDays *float64 `locationName:"lookbackPeriodInDays" type:"double"`
+
+	// An array of objects that describe the memory configuration recommendation
+	// options for the function.
+	MemorySizeRecommendationOptions []*LambdaFunctionMemoryRecommendationOption `locationName:"memorySizeRecommendationOptions" type:"list"`
+
+	// The number of times your function code was applied during the look-back period.
+	NumberOfInvocations *int64 `locationName:"numberOfInvocations" type:"long"`
+
+	// An array of objects that describe the utilization metrics of the function.
+	UtilizationMetrics []*LambdaFunctionUtilizationMetric `locationName:"utilizationMetrics" type:"list"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s LambdaFunctionRecommendation) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s LambdaFunctionRecommendation) GoString() string {
+	return s.String()
+}
+
+// SetAccountId sets the AccountId field's value.
+func (s *LambdaFunctionRecommendation) SetAccountId(v string) *LambdaFunctionRecommendation {
+	s.AccountId = &v
+	return s
+}
+
+// SetCurrentMemorySize sets the CurrentMemorySize field's value.
+func (s *LambdaFunctionRecommendation) SetCurrentMemorySize(v int64) *LambdaFunctionRecommendation {
+	s.CurrentMemorySize = &v
+	return s
+}
+
+// SetFinding sets the Finding field's value.
+func (s *LambdaFunctionRecommendation) SetFinding(v string) *LambdaFunctionRecommendation {
+	s.Finding = &v
+	return s
+}
+
+// SetFindingReasonCodes sets the FindingReasonCodes field's value.
+func (s *LambdaFunctionRecommendation) SetFindingReasonCodes(v []*string) *LambdaFunctionRecommendation {
+	s.FindingReasonCodes = v
+	return s
+}
+
+// SetFunctionArn sets the FunctionArn field's value.
+func (s *LambdaFunctionRecommendation) SetFunctionArn(v string) *LambdaFunctionRecommendation {
+	s.FunctionArn = &v
+	return s
+}
+
+// SetFunctionVersion sets the FunctionVersion field's value.
+func (s *LambdaFunctionRecommendation) SetFunctionVersion(v string) *LambdaFunctionRecommendation {
+	s.FunctionVersion = &v
+	return s
+}
+
+// SetLastRefreshTimestamp sets the LastRefreshTimestamp field's value.
+func (s *LambdaFunctionRecommendation) SetLastRefreshTimestamp(v time.Time) *LambdaFunctionRecommendation {
+	s.LastRefreshTimestamp = &v
+	return s
+}
+
+// SetLookbackPeriodInDays sets the LookbackPeriodInDays field's value.
+func (s *LambdaFunctionRecommendation) SetLookbackPeriodInDays(v float64) *LambdaFunctionRecommendation {
+	s.LookbackPeriodInDays = &v
+	return s
+}
+
+// SetMemorySizeRecommendationOptions sets the MemorySizeRecommendationOptions field's value.
+func (s *LambdaFunctionRecommendation) SetMemorySizeRecommendationOptions(v []*LambdaFunctionMemoryRecommendationOption) *LambdaFunctionRecommendation {
+	s.MemorySizeRecommendationOptions = v
+	return s
+}
+
+// SetNumberOfInvocations sets the NumberOfInvocations field's value.
+func (s *LambdaFunctionRecommendation) SetNumberOfInvocations(v int64) *LambdaFunctionRecommendation {
+	s.NumberOfInvocations = &v
+	return s
+}
+
+// SetUtilizationMetrics sets the UtilizationMetrics field's value.
+func (s *LambdaFunctionRecommendation) SetUtilizationMetrics(v []*LambdaFunctionUtilizationMetric) *LambdaFunctionRecommendation {
+	s.UtilizationMetrics = v
+	return s
+}
+
+// Describes a filter that returns a more specific list of Lambda function recommendations.
+// Use this filter with the GetLambdaFunctionRecommendations action.
+//
+// You can use EBSFilter with the GetEBSVolumeRecommendations action, JobFilter
+// with the DescribeRecommendationExportJobs action, and Filter with the GetAutoScalingGroupRecommendations
+// and GetEC2InstanceRecommendations actions.
+type LambdaFunctionRecommendationFilter struct {
+	_ struct{} `type:"structure"`
+
+	// The name of the filter.
+	//
+	// Specify Finding to return recommendations with a specific finding classification
+	// (for example, NotOptimized).
+	//
+	// Specify FindingReasonCode to return recommendations with a specific finding
+	// reason code (for example, MemoryUnderprovisioned).
+	Name *string `locationName:"name" type:"string" enum:"LambdaFunctionRecommendationFilterName"`
+
+	// The value of the filter.
+	//
+	// The valid values for this parameter are as follows, depending on what you
+	// specify for the name parameter:
+	//
+	//    * Specify Optimized, NotOptimized, or Unavailable if you specify the name
+	//    parameter as Finding.
+	//
+	//    * Specify MemoryOverprovisioned, MemoryUnderprovisioned, InsufficientData,
+	//    or Inconclusive if you specify the name parameter as FindingReasonCode.
+	Values []*string `locationName:"values" type:"list"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s LambdaFunctionRecommendationFilter) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s LambdaFunctionRecommendationFilter) GoString() string {
+	return s.String()
+}
+
+// SetName sets the Name field's value.
+func (s *LambdaFunctionRecommendationFilter) SetName(v string) *LambdaFunctionRecommendationFilter {
+	s.Name = &v
+	return s
+}
+
+// SetValues sets the Values field's value.
+func (s *LambdaFunctionRecommendationFilter) SetValues(v []*string) *LambdaFunctionRecommendationFilter {
+	s.Values = v
+	return s
+}
+
+// Describes a utilization metric of an Lambda function.
+type LambdaFunctionUtilizationMetric struct {
+	_ struct{} `type:"structure"`
+
+	// The name of the utilization metric.
+	//
+	// The following utilization metrics are available:
+	//
+	//    * Duration - The amount of time that your function code spends processing
+	//    an event.
+	//
+	//    * Memory - The amount of memory used per invocation.
+	Name *string `locationName:"name" type:"string" enum:"LambdaFunctionMetricName"`
+
+	// The statistic of the utilization metric.
+	//
+	// The Compute Optimizer API, Command Line Interface (CLI), and SDKs return
+	// utilization metrics using only the Maximum statistic, which is the highest
+	// value observed during the specified period.
+	//
+	// The Compute Optimizer console displays graphs for some utilization metrics
+	// using the Average statistic, which is the value of Sum / SampleCount during
+	// the specified period. For more information, see Viewing resource recommendations
+	// (https://docs.aws.amazon.com/compute-optimizer/latest/ug/viewing-recommendations.html)
+	// in the Compute Optimizer User Guide. You can also get averaged utilization
+	// metric data for your resources using Amazon CloudWatch. For more information,
+	// see the Amazon CloudWatch User Guide (https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/WhatIsCloudWatch.html).
+	Statistic *string `locationName:"statistic" type:"string" enum:"LambdaFunctionMetricStatistic"`
+
+	// The value of the utilization metric.
+	Value *float64 `locationName:"value" type:"double"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s LambdaFunctionUtilizationMetric) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s LambdaFunctionUtilizationMetric) GoString() string {
+	return s.String()
+}
+
+// SetName sets the Name field's value.
+func (s *LambdaFunctionUtilizationMetric) SetName(v string) *LambdaFunctionUtilizationMetric {
+	s.Name = &v
+	return s
+}
+
+// SetStatistic sets the Statistic field's value.
+func (s *LambdaFunctionUtilizationMetric) SetStatistic(v string) *LambdaFunctionUtilizationMetric {
+	s.Statistic = &v
+	return s
+}
+
+// SetValue sets the Value field's value.
+func (s *LambdaFunctionUtilizationMetric) SetValue(v float64) *LambdaFunctionUtilizationMetric {
+	s.Value = &v
+	return s
+}
+
 // The request exceeds a limit of the service.
 type LimitExceededException struct {
 	_            struct{}                  `type:"structure"`
@@ -2624,12 +5126,20 @@ type LimitExceededException struct {
 	Message_ *string `locationName:"message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s LimitExceededException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s LimitExceededException) GoString() string {
 	return s.String()
 }
@@ -2672,8 +5182,8 @@ func (s *LimitExceededException) RequestID() string {
 	return s.RespMetadata.RequestID
 }
 
-// The request must contain either a valid (registered) AWS access key ID or
-// X.509 certificate.
+// The request must contain either a valid (registered) Amazon Web Services
+// access key ID or X.509 certificate.
 type MissingAuthenticationToken struct {
 	_            struct{}                  `type:"structure"`
 	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
@@ -2681,12 +5191,20 @@ type MissingAuthenticationToken struct {
 	Message_ *string `locationName:"message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s MissingAuthenticationToken) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s MissingAuthenticationToken) GoString() string {
 	return s.String()
 }
@@ -2729,7 +5247,7 @@ func (s *MissingAuthenticationToken) RequestID() string {
 	return s.RespMetadata.RequestID
 }
 
-// The account is not opted in to AWS Compute Optimizer.
+// The account is not opted in to Compute Optimizer.
 type OptInRequiredException struct {
 	_            struct{}                  `type:"structure"`
 	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
@@ -2737,12 +5255,20 @@ type OptInRequiredException struct {
 	Message_ *string `locationName:"message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s OptInRequiredException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s OptInRequiredException) GoString() string {
 	return s.String()
 }
@@ -2786,7 +5312,12 @@ func (s *OptInRequiredException) RequestID() string {
 }
 
 // Describes a projected utilization metric of a recommendation option, such
-// as an Amazon EC2 instance.
+// as an Amazon EC2 instance. This represents the projected utilization of a
+// recommendation option had you used that resource during the analyzed period.
+//
+// Compare the utilization metric data of your resource against its projected
+// utilization metric data to determine the performance difference between your
+// current resource and the recommended option.
 //
 // The Cpu and Memory metrics are the only projected utilization metrics returned
 // when you run the GetEC2RecommendationProjectedMetrics action. Additionally,
@@ -2797,21 +5328,47 @@ type ProjectedMetric struct {
 	_ struct{} `type:"structure"`
 
 	// The name of the projected utilization metric.
+	//
+	// The following projected utilization metrics are returned:
+	//
+	//    * Cpu - The projected percentage of allocated EC2 compute units that would
+	//    be in use on the recommendation option had you used that resource during
+	//    the analyzed period. This metric identifies the processing power required
+	//    to run an application on the recommendation option. Depending on the instance
+	//    type, tools in your operating system can show a lower percentage than
+	//    CloudWatch when the instance is not allocated a full processor core. Units:
+	//    Percent
+	//
+	//    * Memory - The percentage of memory that would be in use on the recommendation
+	//    option had you used that resource during the analyzed period. This metric
+	//    identifies the amount of memory required to run an application on the
+	//    recommendation option. Units: Percent The Memory metric is returned only
+	//    for resources that have the unified CloudWatch agent installed on them.
+	//    For more information, see Enabling Memory Utilization with the CloudWatch
+	//    Agent (https://docs.aws.amazon.com/compute-optimizer/latest/ug/metrics.html#cw-agent).
 	Name *string `locationName:"name" type:"string" enum:"MetricName"`
 
-	// The time stamps of the projected utilization metric.
+	// The timestamps of the projected utilization metric.
 	Timestamps []*time.Time `locationName:"timestamps" type:"list"`
 
 	// The values of the projected utilization metrics.
 	Values []*float64 `locationName:"values" type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ProjectedMetric) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ProjectedMetric) GoString() string {
 	return s.String()
 }
@@ -2831,6 +5388,47 @@ func (s *ProjectedMetric) SetTimestamps(v []*time.Time) *ProjectedMetric {
 // SetValues sets the Values field's value.
 func (s *ProjectedMetric) SetValues(v []*float64) *ProjectedMetric {
 	s.Values = v
+	return s
+}
+
+// A summary of a finding reason code.
+type ReasonCodeSummary struct {
+	_ struct{} `type:"structure"`
+
+	// The name of the finding reason code.
+	Name *string `locationName:"name" type:"string" enum:"FindingReasonCode"`
+
+	// The value of the finding reason code summary.
+	Value *float64 `locationName:"value" type:"double"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ReasonCodeSummary) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ReasonCodeSummary) GoString() string {
+	return s.String()
+}
+
+// SetName sets the Name field's value.
+func (s *ReasonCodeSummary) SetName(v string) *ReasonCodeSummary {
+	s.Name = &v
+	return s
+}
+
+// SetValue sets the Value field's value.
+func (s *ReasonCodeSummary) SetValue(v float64) *ReasonCodeSummary {
+	s.Value = &v
 	return s
 }
 
@@ -2866,12 +5464,20 @@ type RecommendationExportJob struct {
 	Status *string `locationName:"status" type:"string" enum:"JobStatus"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s RecommendationExportJob) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s RecommendationExportJob) GoString() string {
 	return s.String()
 }
@@ -2918,6 +5524,53 @@ func (s *RecommendationExportJob) SetStatus(v string) *RecommendationExportJob {
 	return s
 }
 
+// Describes preferences for recommendations.
+type RecommendationPreferences struct {
+	_ struct{} `type:"structure"`
+
+	// Specifies the CPU vendor and architecture for Amazon EC2 instance and Auto
+	// Scaling group recommendations.
+	//
+	// For example, when you specify AWS_ARM64 with:
+	//
+	//    * A GetEC2InstanceRecommendations or GetAutoScalingGroupRecommendations
+	//    request, Compute Optimizer returns recommendations that consist of Graviton2
+	//    instance types only.
+	//
+	//    * A GetEC2RecommendationProjectedMetrics request, Compute Optimizer returns
+	//    projected utilization metrics for Graviton2 instance type recommendations
+	//    only.
+	//
+	//    * A ExportEC2InstanceRecommendations or ExportAutoScalingGroupRecommendations
+	//    request, Compute Optimizer exports recommendations that consist of Graviton2
+	//    instance types only.
+	CpuVendorArchitectures []*string `locationName:"cpuVendorArchitectures" type:"list"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s RecommendationPreferences) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s RecommendationPreferences) GoString() string {
+	return s.String()
+}
+
+// SetCpuVendorArchitectures sets the CpuVendorArchitectures field's value.
+func (s *RecommendationPreferences) SetCpuVendorArchitectures(v []*string) *RecommendationPreferences {
+	s.CpuVendorArchitectures = v
+	return s
+}
+
 // Describes the source of a recommendation, such as an Amazon EC2 instance
 // or Auto Scaling group.
 type RecommendationSource struct {
@@ -2930,12 +5583,20 @@ type RecommendationSource struct {
 	RecommendationSourceType *string `locationName:"recommendationSourceType" type:"string" enum:"RecommendationSourceType"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s RecommendationSource) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s RecommendationSource) GoString() string {
 	return s.String()
 }
@@ -2956,7 +5617,7 @@ func (s *RecommendationSource) SetRecommendationSourceType(v string) *Recommenda
 type RecommendationSummary struct {
 	_ struct{} `type:"structure"`
 
-	// The AWS account ID of the recommendation summary.
+	// The Amazon Web Services account ID of the recommendation summary.
 	AccountId *string `locationName:"accountId" type:"string"`
 
 	// The resource type of the recommendation.
@@ -2966,12 +5627,20 @@ type RecommendationSummary struct {
 	Summaries []*Summary `locationName:"summaries" type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s RecommendationSummary) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s RecommendationSummary) GoString() string {
 	return s.String()
 }
@@ -3020,12 +5689,20 @@ type RecommendedOptionProjectedMetric struct {
 	RecommendedInstanceType *string `locationName:"recommendedInstanceType" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s RecommendedOptionProjectedMetric) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s RecommendedOptionProjectedMetric) GoString() string {
 	return s.String()
 }
@@ -3056,12 +5733,20 @@ type ResourceNotFoundException struct {
 	Message_ *string `locationName:"message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ResourceNotFoundException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ResourceNotFoundException) GoString() string {
 	return s.String()
 }
@@ -3124,12 +5809,20 @@ type S3Destination struct {
 	MetadataKey *string `locationName:"metadataKey" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s S3Destination) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s S3Destination) GoString() string {
 	return s.String()
 }
@@ -3163,7 +5856,7 @@ func (s *S3Destination) SetMetadataKey(v string) *S3Destination {
 // job, you must include the object prefix in the policy that you add to the
 // S3 bucket. For more information, see Amazon S3 Bucket Policy for Compute
 // Optimizer (https://docs.aws.amazon.com/compute-optimizer/latest/ug/create-s3-bucket-policy-for-compute-optimizer.html)
-// in the Compute Optimizer user guide.
+// in the Compute Optimizer User Guide.
 type S3DestinationConfig struct {
 	_ struct{} `type:"structure"`
 
@@ -3175,12 +5868,20 @@ type S3DestinationConfig struct {
 	KeyPrefix *string `locationName:"keyPrefix" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s S3DestinationConfig) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s S3DestinationConfig) GoString() string {
 	return s.String()
 }
@@ -3205,12 +5906,20 @@ type ServiceUnavailableException struct {
 	Message_ *string `locationName:"message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ServiceUnavailableException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ServiceUnavailableException) GoString() string {
 	return s.String()
 }
@@ -3260,16 +5969,27 @@ type Summary struct {
 	// The finding classification of the recommendation.
 	Name *string `locationName:"name" type:"string" enum:"Finding"`
 
+	// An array of objects that summarize a finding reason code.
+	ReasonCodeSummaries []*ReasonCodeSummary `locationName:"reasonCodeSummaries" type:"list"`
+
 	// The value of the recommendation summary.
 	Value *float64 `locationName:"value" type:"double"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s Summary) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s Summary) GoString() string {
 	return s.String()
 }
@@ -3277,6 +5997,12 @@ func (s Summary) GoString() string {
 // SetName sets the Name field's value.
 func (s *Summary) SetName(v string) *Summary {
 	s.Name = &v
+	return s
+}
+
+// SetReasonCodeSummaries sets the ReasonCodeSummaries field's value.
+func (s *Summary) SetReasonCodeSummaries(v []*ReasonCodeSummary) *Summary {
+	s.ReasonCodeSummaries = v
 	return s
 }
 
@@ -3294,12 +6020,20 @@ type ThrottlingException struct {
 	Message_ *string `locationName:"message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ThrottlingException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ThrottlingException) GoString() string {
 	return s.String()
 }
@@ -3345,25 +6079,46 @@ func (s *ThrottlingException) RequestID() string {
 type UpdateEnrollmentStatusInput struct {
 	_ struct{} `type:"structure"`
 
-	// Indicates whether to enroll member accounts of the organization if the your
-	// account is the master account of an organization.
+	// Indicates whether to enroll member accounts of the organization if the account
+	// is the management account of an organization.
 	IncludeMemberAccounts *bool `locationName:"includeMemberAccounts" type:"boolean"`
 
 	// The new enrollment status of the account.
 	//
-	// Accepted options are Active or Inactive. You will get an error if Pending
-	// or Failed are specified.
+	// The following status options are available:
+	//
+	//    * Active - Opts in your account to the Compute Optimizer service. Compute
+	//    Optimizer begins analyzing the configuration and utilization metrics of
+	//    your Amazon Web Services resources after you opt in. For more information,
+	//    see Metrics analyzed by Compute Optimizer (https://docs.aws.amazon.com/compute-optimizer/latest/ug/metrics.html)
+	//    in the Compute Optimizer User Guide.
+	//
+	//    * Inactive - Opts out your account from the Compute Optimizer service.
+	//    Your account's recommendations and related metrics data will be deleted
+	//    from Compute Optimizer after you opt out.
+	//
+	// The Pending and Failed options cannot be used to update the enrollment status
+	// of an account. They are returned in the response of a request to update the
+	// enrollment status of an account.
 	//
 	// Status is a required field
 	Status *string `locationName:"status" type:"string" required:"true" enum:"Status"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpdateEnrollmentStatusInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpdateEnrollmentStatusInput) GoString() string {
 	return s.String()
 }
@@ -3405,12 +6160,20 @@ type UpdateEnrollmentStatusOutput struct {
 	StatusReason *string `locationName:"statusReason" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpdateEnrollmentStatusOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpdateEnrollmentStatusOutput) GoString() string {
 	return s.String()
 }
@@ -3428,29 +6191,118 @@ func (s *UpdateEnrollmentStatusOutput) SetStatusReason(v string) *UpdateEnrollme
 }
 
 // Describes a utilization metric of a resource, such as an Amazon EC2 instance.
+//
+// Compare the utilization metric data of your resource against its projected
+// utilization metric data to determine the performance difference between your
+// current resource and the recommended option.
 type UtilizationMetric struct {
 	_ struct{} `type:"structure"`
 
 	// The name of the utilization metric.
 	//
-	// The Memory metric is returned only for resources that have the unified CloudWatch
-	// agent installed on them. For more information, see Enabling Memory Utilization
-	// with the CloudWatch Agent (https://docs.aws.amazon.com/compute-optimizer/latest/ug/metrics.html#cw-agent).
+	// The following utilization metrics are available:
+	//
+	//    * Cpu - The percentage of allocated EC2 compute units that are currently
+	//    in use on the instance. This metric identifies the processing power required
+	//    to run an application on the instance. Depending on the instance type,
+	//    tools in your operating system can show a lower percentage than CloudWatch
+	//    when the instance is not allocated a full processor core. Units: Percent
+	//
+	//    * Memory - The percentage of memory that is currently in use on the instance.
+	//    This metric identifies the amount of memory required to run an application
+	//    on the instance. Units: Percent The Memory metric is returned only for
+	//    resources that have the unified CloudWatch agent installed on them. For
+	//    more information, see Enabling Memory Utilization with the CloudWatch
+	//    Agent (https://docs.aws.amazon.com/compute-optimizer/latest/ug/metrics.html#cw-agent).
+	//
+	//    * EBS_READ_OPS_PER_SECOND - The completed read operations from all EBS
+	//    volumes attached to the instance in a specified period of time. Unit:
+	//    Count
+	//
+	//    * EBS_WRITE_OPS_PER_SECOND - The completed write operations to all EBS
+	//    volumes attached to the instance in a specified period of time. Unit:
+	//    Count
+	//
+	//    * EBS_READ_BYTES_PER_SECOND - The bytes read from all EBS volumes attached
+	//    to the instance in a specified period of time. Unit: Bytes
+	//
+	//    * EBS_WRITE_BYTES_PER_SECOND - The bytes written to all EBS volumes attached
+	//    to the instance in a specified period of time. Unit: Bytes
+	//
+	//    * DISK_READ_OPS_PER_SECOND - The completed read operations from all instance
+	//    store volumes available to the instance in a specified period of time.
+	//    If there are no instance store volumes, either the value is 0 or the metric
+	//    is not reported.
+	//
+	//    * DISK_WRITE_OPS_PER_SECOND - The completed write operations from all
+	//    instance store volumes available to the instance in a specified period
+	//    of time. If there are no instance store volumes, either the value is 0
+	//    or the metric is not reported.
+	//
+	//    * DISK_READ_BYTES_PER_SECOND - The bytes read from all instance store
+	//    volumes available to the instance. This metric is used to determine the
+	//    volume of the data the application reads from the disk of the instance.
+	//    This can be used to determine the speed of the application. If there are
+	//    no instance store volumes, either the value is 0 or the metric is not
+	//    reported.
+	//
+	//    * DISK_WRITE_BYTES_PER_SECOND - The bytes written to all instance store
+	//    volumes available to the instance. This metric is used to determine the
+	//    volume of the data the application writes onto the disk of the instance.
+	//    This can be used to determine the speed of the application. If there are
+	//    no instance store volumes, either the value is 0 or the metric is not
+	//    reported.
+	//
+	//    * NETWORK_IN_BYTES_PER_SECOND - The number of bytes received by the instance
+	//    on all network interfaces. This metric identifies the volume of incoming
+	//    network traffic to a single instance.
+	//
+	//    * NETWORK_OUT_BYTES_PER_SECOND - The number of bytes sent out by the instance
+	//    on all network interfaces. This metric identifies the volume of outgoing
+	//    network traffic from a single instance.
+	//
+	//    * NETWORK_PACKETS_IN_PER_SECOND - The number of packets received by the
+	//    instance on all network interfaces. This metric identifies the volume
+	//    of incoming traffic in terms of the number of packets on a single instance.
+	//
+	//    * NETWORK_PACKETS_OUT_PER_SECOND - The number of packets sent out by the
+	//    instance on all network interfaces. This metric identifies the volume
+	//    of outgoing traffic in terms of the number of packets on a single instance.
 	Name *string `locationName:"name" type:"string" enum:"MetricName"`
 
 	// The statistic of the utilization metric.
+	//
+	// The Compute Optimizer API, Command Line Interface (CLI), and SDKs return
+	// utilization metrics using only the Maximum statistic, which is the highest
+	// value observed during the specified period.
+	//
+	// The Compute Optimizer console displays graphs for some utilization metrics
+	// using the Average statistic, which is the value of Sum / SampleCount during
+	// the specified period. For more information, see Viewing resource recommendations
+	// (https://docs.aws.amazon.com/compute-optimizer/latest/ug/viewing-recommendations.html)
+	// in the Compute Optimizer User Guide. You can also get averaged utilization
+	// metric data for your resources using Amazon CloudWatch. For more information,
+	// see the Amazon CloudWatch User Guide (https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/WhatIsCloudWatch.html).
 	Statistic *string `locationName:"statistic" type:"string" enum:"MetricStatistic"`
 
 	// The value of the utilization metric.
 	Value *float64 `locationName:"value" type:"double"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UtilizationMetric) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UtilizationMetric) GoString() string {
 	return s.String()
 }
@@ -3471,6 +6323,336 @@ func (s *UtilizationMetric) SetStatistic(v string) *UtilizationMetric {
 func (s *UtilizationMetric) SetValue(v float64) *UtilizationMetric {
 	s.Value = &v
 	return s
+}
+
+// Describes the configuration of an Amazon Elastic Block Store (Amazon EBS)
+// volume.
+type VolumeConfiguration struct {
+	_ struct{} `type:"structure"`
+
+	// The baseline IOPS of the volume.
+	VolumeBaselineIOPS *int64 `locationName:"volumeBaselineIOPS" type:"integer"`
+
+	// The baseline throughput of the volume.
+	VolumeBaselineThroughput *int64 `locationName:"volumeBaselineThroughput" type:"integer"`
+
+	// The burst IOPS of the volume.
+	VolumeBurstIOPS *int64 `locationName:"volumeBurstIOPS" type:"integer"`
+
+	// The burst throughput of the volume.
+	VolumeBurstThroughput *int64 `locationName:"volumeBurstThroughput" type:"integer"`
+
+	// The size of the volume, in GiB.
+	VolumeSize *int64 `locationName:"volumeSize" type:"integer"`
+
+	// The volume type.
+	//
+	// This can be gp2 for General Purpose SSD, io1 or io2 for Provisioned IOPS
+	// SSD, st1 for Throughput Optimized HDD, sc1 for Cold HDD, or standard for
+	// Magnetic volumes.
+	VolumeType *string `locationName:"volumeType" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s VolumeConfiguration) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s VolumeConfiguration) GoString() string {
+	return s.String()
+}
+
+// SetVolumeBaselineIOPS sets the VolumeBaselineIOPS field's value.
+func (s *VolumeConfiguration) SetVolumeBaselineIOPS(v int64) *VolumeConfiguration {
+	s.VolumeBaselineIOPS = &v
+	return s
+}
+
+// SetVolumeBaselineThroughput sets the VolumeBaselineThroughput field's value.
+func (s *VolumeConfiguration) SetVolumeBaselineThroughput(v int64) *VolumeConfiguration {
+	s.VolumeBaselineThroughput = &v
+	return s
+}
+
+// SetVolumeBurstIOPS sets the VolumeBurstIOPS field's value.
+func (s *VolumeConfiguration) SetVolumeBurstIOPS(v int64) *VolumeConfiguration {
+	s.VolumeBurstIOPS = &v
+	return s
+}
+
+// SetVolumeBurstThroughput sets the VolumeBurstThroughput field's value.
+func (s *VolumeConfiguration) SetVolumeBurstThroughput(v int64) *VolumeConfiguration {
+	s.VolumeBurstThroughput = &v
+	return s
+}
+
+// SetVolumeSize sets the VolumeSize field's value.
+func (s *VolumeConfiguration) SetVolumeSize(v int64) *VolumeConfiguration {
+	s.VolumeSize = &v
+	return s
+}
+
+// SetVolumeType sets the VolumeType field's value.
+func (s *VolumeConfiguration) SetVolumeType(v string) *VolumeConfiguration {
+	s.VolumeType = &v
+	return s
+}
+
+// Describes an Amazon Elastic Block Store (Amazon EBS) volume recommendation.
+type VolumeRecommendation struct {
+	_ struct{} `type:"structure"`
+
+	// The Amazon Web Services account ID of the volume.
+	AccountId *string `locationName:"accountId" type:"string"`
+
+	// An array of objects that describe the current configuration of the volume.
+	CurrentConfiguration *VolumeConfiguration `locationName:"currentConfiguration" type:"structure"`
+
+	// The finding classification of the volume.
+	//
+	// Findings for volumes include:
+	//
+	//    * NotOptimized —A volume is considered not optimized when Compute Optimizer
+	//    identifies a recommendation that can provide better performance for your
+	//    workload.
+	//
+	//    * Optimized —An volume is considered optimized when Compute Optimizer
+	//    determines that the volume is correctly provisioned to run your workload
+	//    based on the chosen volume type. For optimized resources, Compute Optimizer
+	//    might recommend a new generation volume type.
+	Finding *string `locationName:"finding" type:"string" enum:"EBSFinding"`
+
+	// The timestamp of when the volume recommendation was last refreshed.
+	LastRefreshTimestamp *time.Time `locationName:"lastRefreshTimestamp" type:"timestamp"`
+
+	// The number of days for which utilization metrics were analyzed for the volume.
+	LookBackPeriodInDays *float64 `locationName:"lookBackPeriodInDays" type:"double"`
+
+	// An array of objects that describe the utilization metrics of the volume.
+	UtilizationMetrics []*EBSUtilizationMetric `locationName:"utilizationMetrics" type:"list"`
+
+	// The Amazon Resource Name (ARN) of the current volume.
+	VolumeArn *string `locationName:"volumeArn" type:"string"`
+
+	// An array of objects that describe the recommendation options for the volume.
+	VolumeRecommendationOptions []*VolumeRecommendationOption `locationName:"volumeRecommendationOptions" type:"list"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s VolumeRecommendation) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s VolumeRecommendation) GoString() string {
+	return s.String()
+}
+
+// SetAccountId sets the AccountId field's value.
+func (s *VolumeRecommendation) SetAccountId(v string) *VolumeRecommendation {
+	s.AccountId = &v
+	return s
+}
+
+// SetCurrentConfiguration sets the CurrentConfiguration field's value.
+func (s *VolumeRecommendation) SetCurrentConfiguration(v *VolumeConfiguration) *VolumeRecommendation {
+	s.CurrentConfiguration = v
+	return s
+}
+
+// SetFinding sets the Finding field's value.
+func (s *VolumeRecommendation) SetFinding(v string) *VolumeRecommendation {
+	s.Finding = &v
+	return s
+}
+
+// SetLastRefreshTimestamp sets the LastRefreshTimestamp field's value.
+func (s *VolumeRecommendation) SetLastRefreshTimestamp(v time.Time) *VolumeRecommendation {
+	s.LastRefreshTimestamp = &v
+	return s
+}
+
+// SetLookBackPeriodInDays sets the LookBackPeriodInDays field's value.
+func (s *VolumeRecommendation) SetLookBackPeriodInDays(v float64) *VolumeRecommendation {
+	s.LookBackPeriodInDays = &v
+	return s
+}
+
+// SetUtilizationMetrics sets the UtilizationMetrics field's value.
+func (s *VolumeRecommendation) SetUtilizationMetrics(v []*EBSUtilizationMetric) *VolumeRecommendation {
+	s.UtilizationMetrics = v
+	return s
+}
+
+// SetVolumeArn sets the VolumeArn field's value.
+func (s *VolumeRecommendation) SetVolumeArn(v string) *VolumeRecommendation {
+	s.VolumeArn = &v
+	return s
+}
+
+// SetVolumeRecommendationOptions sets the VolumeRecommendationOptions field's value.
+func (s *VolumeRecommendation) SetVolumeRecommendationOptions(v []*VolumeRecommendationOption) *VolumeRecommendation {
+	s.VolumeRecommendationOptions = v
+	return s
+}
+
+// Describes a recommendation option for an Amazon Elastic Block Store (Amazon
+// EBS) instance.
+type VolumeRecommendationOption struct {
+	_ struct{} `type:"structure"`
+
+	// An array of objects that describe a volume configuration.
+	Configuration *VolumeConfiguration `locationName:"configuration" type:"structure"`
+
+	// The performance risk of the volume recommendation option.
+	//
+	// Performance risk is the likelihood of the recommended volume type meeting
+	// the performance requirement of your workload.
+	//
+	// The value ranges from 0 - 4, with 0 meaning that the recommended resource
+	// is predicted to always provide enough hardware capability. The higher the
+	// performance risk is, the more likely you should validate whether the recommendation
+	// will meet the performance requirements of your workload before migrating
+	// your resource.
+	PerformanceRisk *float64 `locationName:"performanceRisk" type:"double"`
+
+	// The rank of the volume recommendation option.
+	//
+	// The top recommendation option is ranked as 1.
+	Rank *int64 `locationName:"rank" type:"integer"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s VolumeRecommendationOption) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s VolumeRecommendationOption) GoString() string {
+	return s.String()
+}
+
+// SetConfiguration sets the Configuration field's value.
+func (s *VolumeRecommendationOption) SetConfiguration(v *VolumeConfiguration) *VolumeRecommendationOption {
+	s.Configuration = v
+	return s
+}
+
+// SetPerformanceRisk sets the PerformanceRisk field's value.
+func (s *VolumeRecommendationOption) SetPerformanceRisk(v float64) *VolumeRecommendationOption {
+	s.PerformanceRisk = &v
+	return s
+}
+
+// SetRank sets the Rank field's value.
+func (s *VolumeRecommendationOption) SetRank(v int64) *VolumeRecommendationOption {
+	s.Rank = &v
+	return s
+}
+
+const (
+	// CpuVendorArchitectureAwsArm64 is a CpuVendorArchitecture enum value
+	CpuVendorArchitectureAwsArm64 = "AWS_ARM64"
+
+	// CpuVendorArchitectureCurrent is a CpuVendorArchitecture enum value
+	CpuVendorArchitectureCurrent = "CURRENT"
+)
+
+// CpuVendorArchitecture_Values returns all elements of the CpuVendorArchitecture enum
+func CpuVendorArchitecture_Values() []string {
+	return []string{
+		CpuVendorArchitectureAwsArm64,
+		CpuVendorArchitectureCurrent,
+	}
+}
+
+const (
+	// EBSFilterNameFinding is a EBSFilterName enum value
+	EBSFilterNameFinding = "Finding"
+)
+
+// EBSFilterName_Values returns all elements of the EBSFilterName enum
+func EBSFilterName_Values() []string {
+	return []string{
+		EBSFilterNameFinding,
+	}
+}
+
+const (
+	// EBSFindingOptimized is a EBSFinding enum value
+	EBSFindingOptimized = "Optimized"
+
+	// EBSFindingNotOptimized is a EBSFinding enum value
+	EBSFindingNotOptimized = "NotOptimized"
+)
+
+// EBSFinding_Values returns all elements of the EBSFinding enum
+func EBSFinding_Values() []string {
+	return []string{
+		EBSFindingOptimized,
+		EBSFindingNotOptimized,
+	}
+}
+
+const (
+	// EBSMetricNameVolumeReadOpsPerSecond is a EBSMetricName enum value
+	EBSMetricNameVolumeReadOpsPerSecond = "VolumeReadOpsPerSecond"
+
+	// EBSMetricNameVolumeWriteOpsPerSecond is a EBSMetricName enum value
+	EBSMetricNameVolumeWriteOpsPerSecond = "VolumeWriteOpsPerSecond"
+
+	// EBSMetricNameVolumeReadBytesPerSecond is a EBSMetricName enum value
+	EBSMetricNameVolumeReadBytesPerSecond = "VolumeReadBytesPerSecond"
+
+	// EBSMetricNameVolumeWriteBytesPerSecond is a EBSMetricName enum value
+	EBSMetricNameVolumeWriteBytesPerSecond = "VolumeWriteBytesPerSecond"
+)
+
+// EBSMetricName_Values returns all elements of the EBSMetricName enum
+func EBSMetricName_Values() []string {
+	return []string{
+		EBSMetricNameVolumeReadOpsPerSecond,
+		EBSMetricNameVolumeWriteOpsPerSecond,
+		EBSMetricNameVolumeReadBytesPerSecond,
+		EBSMetricNameVolumeWriteBytesPerSecond,
+	}
+}
+
+const (
+	// EnrollmentFilterNameStatus is a EnrollmentFilterName enum value
+	EnrollmentFilterNameStatus = "Status"
+)
+
+// EnrollmentFilterName_Values returns all elements of the EnrollmentFilterName enum
+func EnrollmentFilterName_Values() []string {
+	return []string{
+		EnrollmentFilterNameStatus,
+	}
 }
 
 const (
@@ -3503,6 +6685,30 @@ const (
 
 	// ExportableAutoScalingGroupFieldUtilizationMetricsEbsWriteBytesPerSecondMaximum is a ExportableAutoScalingGroupField enum value
 	ExportableAutoScalingGroupFieldUtilizationMetricsEbsWriteBytesPerSecondMaximum = "UtilizationMetricsEbsWriteBytesPerSecondMaximum"
+
+	// ExportableAutoScalingGroupFieldUtilizationMetricsDiskReadOpsPerSecondMaximum is a ExportableAutoScalingGroupField enum value
+	ExportableAutoScalingGroupFieldUtilizationMetricsDiskReadOpsPerSecondMaximum = "UtilizationMetricsDiskReadOpsPerSecondMaximum"
+
+	// ExportableAutoScalingGroupFieldUtilizationMetricsDiskWriteOpsPerSecondMaximum is a ExportableAutoScalingGroupField enum value
+	ExportableAutoScalingGroupFieldUtilizationMetricsDiskWriteOpsPerSecondMaximum = "UtilizationMetricsDiskWriteOpsPerSecondMaximum"
+
+	// ExportableAutoScalingGroupFieldUtilizationMetricsDiskReadBytesPerSecondMaximum is a ExportableAutoScalingGroupField enum value
+	ExportableAutoScalingGroupFieldUtilizationMetricsDiskReadBytesPerSecondMaximum = "UtilizationMetricsDiskReadBytesPerSecondMaximum"
+
+	// ExportableAutoScalingGroupFieldUtilizationMetricsDiskWriteBytesPerSecondMaximum is a ExportableAutoScalingGroupField enum value
+	ExportableAutoScalingGroupFieldUtilizationMetricsDiskWriteBytesPerSecondMaximum = "UtilizationMetricsDiskWriteBytesPerSecondMaximum"
+
+	// ExportableAutoScalingGroupFieldUtilizationMetricsNetworkInBytesPerSecondMaximum is a ExportableAutoScalingGroupField enum value
+	ExportableAutoScalingGroupFieldUtilizationMetricsNetworkInBytesPerSecondMaximum = "UtilizationMetricsNetworkInBytesPerSecondMaximum"
+
+	// ExportableAutoScalingGroupFieldUtilizationMetricsNetworkOutBytesPerSecondMaximum is a ExportableAutoScalingGroupField enum value
+	ExportableAutoScalingGroupFieldUtilizationMetricsNetworkOutBytesPerSecondMaximum = "UtilizationMetricsNetworkOutBytesPerSecondMaximum"
+
+	// ExportableAutoScalingGroupFieldUtilizationMetricsNetworkPacketsInPerSecondMaximum is a ExportableAutoScalingGroupField enum value
+	ExportableAutoScalingGroupFieldUtilizationMetricsNetworkPacketsInPerSecondMaximum = "UtilizationMetricsNetworkPacketsInPerSecondMaximum"
+
+	// ExportableAutoScalingGroupFieldUtilizationMetricsNetworkPacketsOutPerSecondMaximum is a ExportableAutoScalingGroupField enum value
+	ExportableAutoScalingGroupFieldUtilizationMetricsNetworkPacketsOutPerSecondMaximum = "UtilizationMetricsNetworkPacketsOutPerSecondMaximum"
 
 	// ExportableAutoScalingGroupFieldLookbackPeriodInDays is a ExportableAutoScalingGroupField enum value
 	ExportableAutoScalingGroupFieldLookbackPeriodInDays = "LookbackPeriodInDays"
@@ -3599,6 +6805,14 @@ func ExportableAutoScalingGroupField_Values() []string {
 		ExportableAutoScalingGroupFieldUtilizationMetricsEbsWriteOpsPerSecondMaximum,
 		ExportableAutoScalingGroupFieldUtilizationMetricsEbsReadBytesPerSecondMaximum,
 		ExportableAutoScalingGroupFieldUtilizationMetricsEbsWriteBytesPerSecondMaximum,
+		ExportableAutoScalingGroupFieldUtilizationMetricsDiskReadOpsPerSecondMaximum,
+		ExportableAutoScalingGroupFieldUtilizationMetricsDiskWriteOpsPerSecondMaximum,
+		ExportableAutoScalingGroupFieldUtilizationMetricsDiskReadBytesPerSecondMaximum,
+		ExportableAutoScalingGroupFieldUtilizationMetricsDiskWriteBytesPerSecondMaximum,
+		ExportableAutoScalingGroupFieldUtilizationMetricsNetworkInBytesPerSecondMaximum,
+		ExportableAutoScalingGroupFieldUtilizationMetricsNetworkOutBytesPerSecondMaximum,
+		ExportableAutoScalingGroupFieldUtilizationMetricsNetworkPacketsInPerSecondMaximum,
+		ExportableAutoScalingGroupFieldUtilizationMetricsNetworkPacketsOutPerSecondMaximum,
 		ExportableAutoScalingGroupFieldLookbackPeriodInDays,
 		ExportableAutoScalingGroupFieldCurrentConfigurationInstanceType,
 		ExportableAutoScalingGroupFieldCurrentConfigurationDesiredCapacity,
@@ -3642,6 +6856,9 @@ const (
 	// ExportableInstanceFieldFinding is a ExportableInstanceField enum value
 	ExportableInstanceFieldFinding = "Finding"
 
+	// ExportableInstanceFieldFindingReasonCodes is a ExportableInstanceField enum value
+	ExportableInstanceFieldFindingReasonCodes = "FindingReasonCodes"
+
 	// ExportableInstanceFieldLookbackPeriodInDays is a ExportableInstanceField enum value
 	ExportableInstanceFieldLookbackPeriodInDays = "LookbackPeriodInDays"
 
@@ -3665,6 +6882,30 @@ const (
 
 	// ExportableInstanceFieldUtilizationMetricsEbsWriteBytesPerSecondMaximum is a ExportableInstanceField enum value
 	ExportableInstanceFieldUtilizationMetricsEbsWriteBytesPerSecondMaximum = "UtilizationMetricsEbsWriteBytesPerSecondMaximum"
+
+	// ExportableInstanceFieldUtilizationMetricsDiskReadOpsPerSecondMaximum is a ExportableInstanceField enum value
+	ExportableInstanceFieldUtilizationMetricsDiskReadOpsPerSecondMaximum = "UtilizationMetricsDiskReadOpsPerSecondMaximum"
+
+	// ExportableInstanceFieldUtilizationMetricsDiskWriteOpsPerSecondMaximum is a ExportableInstanceField enum value
+	ExportableInstanceFieldUtilizationMetricsDiskWriteOpsPerSecondMaximum = "UtilizationMetricsDiskWriteOpsPerSecondMaximum"
+
+	// ExportableInstanceFieldUtilizationMetricsDiskReadBytesPerSecondMaximum is a ExportableInstanceField enum value
+	ExportableInstanceFieldUtilizationMetricsDiskReadBytesPerSecondMaximum = "UtilizationMetricsDiskReadBytesPerSecondMaximum"
+
+	// ExportableInstanceFieldUtilizationMetricsDiskWriteBytesPerSecondMaximum is a ExportableInstanceField enum value
+	ExportableInstanceFieldUtilizationMetricsDiskWriteBytesPerSecondMaximum = "UtilizationMetricsDiskWriteBytesPerSecondMaximum"
+
+	// ExportableInstanceFieldUtilizationMetricsNetworkInBytesPerSecondMaximum is a ExportableInstanceField enum value
+	ExportableInstanceFieldUtilizationMetricsNetworkInBytesPerSecondMaximum = "UtilizationMetricsNetworkInBytesPerSecondMaximum"
+
+	// ExportableInstanceFieldUtilizationMetricsNetworkOutBytesPerSecondMaximum is a ExportableInstanceField enum value
+	ExportableInstanceFieldUtilizationMetricsNetworkOutBytesPerSecondMaximum = "UtilizationMetricsNetworkOutBytesPerSecondMaximum"
+
+	// ExportableInstanceFieldUtilizationMetricsNetworkPacketsInPerSecondMaximum is a ExportableInstanceField enum value
+	ExportableInstanceFieldUtilizationMetricsNetworkPacketsInPerSecondMaximum = "UtilizationMetricsNetworkPacketsInPerSecondMaximum"
+
+	// ExportableInstanceFieldUtilizationMetricsNetworkPacketsOutPerSecondMaximum is a ExportableInstanceField enum value
+	ExportableInstanceFieldUtilizationMetricsNetworkPacketsOutPerSecondMaximum = "UtilizationMetricsNetworkPacketsOutPerSecondMaximum"
 
 	// ExportableInstanceFieldCurrentOnDemandPrice is a ExportableInstanceField enum value
 	ExportableInstanceFieldCurrentOnDemandPrice = "CurrentOnDemandPrice"
@@ -3695,6 +6936,9 @@ const (
 
 	// ExportableInstanceFieldRecommendationOptionsProjectedUtilizationMetricsMemoryMaximum is a ExportableInstanceField enum value
 	ExportableInstanceFieldRecommendationOptionsProjectedUtilizationMetricsMemoryMaximum = "RecommendationOptionsProjectedUtilizationMetricsMemoryMaximum"
+
+	// ExportableInstanceFieldRecommendationOptionsPlatformDifferences is a ExportableInstanceField enum value
+	ExportableInstanceFieldRecommendationOptionsPlatformDifferences = "RecommendationOptionsPlatformDifferences"
 
 	// ExportableInstanceFieldRecommendationOptionsPerformanceRisk is a ExportableInstanceField enum value
 	ExportableInstanceFieldRecommendationOptionsPerformanceRisk = "RecommendationOptionsPerformanceRisk"
@@ -3737,6 +6981,7 @@ func ExportableInstanceField_Values() []string {
 		ExportableInstanceFieldInstanceArn,
 		ExportableInstanceFieldInstanceName,
 		ExportableInstanceFieldFinding,
+		ExportableInstanceFieldFindingReasonCodes,
 		ExportableInstanceFieldLookbackPeriodInDays,
 		ExportableInstanceFieldCurrentInstanceType,
 		ExportableInstanceFieldUtilizationMetricsCpuMaximum,
@@ -3745,6 +6990,14 @@ func ExportableInstanceField_Values() []string {
 		ExportableInstanceFieldUtilizationMetricsEbsWriteOpsPerSecondMaximum,
 		ExportableInstanceFieldUtilizationMetricsEbsReadBytesPerSecondMaximum,
 		ExportableInstanceFieldUtilizationMetricsEbsWriteBytesPerSecondMaximum,
+		ExportableInstanceFieldUtilizationMetricsDiskReadOpsPerSecondMaximum,
+		ExportableInstanceFieldUtilizationMetricsDiskWriteOpsPerSecondMaximum,
+		ExportableInstanceFieldUtilizationMetricsDiskReadBytesPerSecondMaximum,
+		ExportableInstanceFieldUtilizationMetricsDiskWriteBytesPerSecondMaximum,
+		ExportableInstanceFieldUtilizationMetricsNetworkInBytesPerSecondMaximum,
+		ExportableInstanceFieldUtilizationMetricsNetworkOutBytesPerSecondMaximum,
+		ExportableInstanceFieldUtilizationMetricsNetworkPacketsInPerSecondMaximum,
+		ExportableInstanceFieldUtilizationMetricsNetworkPacketsOutPerSecondMaximum,
 		ExportableInstanceFieldCurrentOnDemandPrice,
 		ExportableInstanceFieldCurrentStandardOneYearNoUpfrontReservedPrice,
 		ExportableInstanceFieldCurrentStandardThreeYearNoUpfrontReservedPrice,
@@ -3755,6 +7008,7 @@ func ExportableInstanceField_Values() []string {
 		ExportableInstanceFieldRecommendationOptionsInstanceType,
 		ExportableInstanceFieldRecommendationOptionsProjectedUtilizationMetricsCpuMaximum,
 		ExportableInstanceFieldRecommendationOptionsProjectedUtilizationMetricsMemoryMaximum,
+		ExportableInstanceFieldRecommendationOptionsPlatformDifferences,
 		ExportableInstanceFieldRecommendationOptionsPerformanceRisk,
 		ExportableInstanceFieldRecommendationOptionsVcpus,
 		ExportableInstanceFieldRecommendationOptionsMemory,
@@ -3766,6 +7020,206 @@ func ExportableInstanceField_Values() []string {
 		ExportableInstanceFieldRecommendationsSourcesRecommendationSourceArn,
 		ExportableInstanceFieldRecommendationsSourcesRecommendationSourceType,
 		ExportableInstanceFieldLastRefreshTimestamp,
+	}
+}
+
+const (
+	// ExportableLambdaFunctionFieldAccountId is a ExportableLambdaFunctionField enum value
+	ExportableLambdaFunctionFieldAccountId = "AccountId"
+
+	// ExportableLambdaFunctionFieldFunctionArn is a ExportableLambdaFunctionField enum value
+	ExportableLambdaFunctionFieldFunctionArn = "FunctionArn"
+
+	// ExportableLambdaFunctionFieldFunctionVersion is a ExportableLambdaFunctionField enum value
+	ExportableLambdaFunctionFieldFunctionVersion = "FunctionVersion"
+
+	// ExportableLambdaFunctionFieldFinding is a ExportableLambdaFunctionField enum value
+	ExportableLambdaFunctionFieldFinding = "Finding"
+
+	// ExportableLambdaFunctionFieldFindingReasonCodes is a ExportableLambdaFunctionField enum value
+	ExportableLambdaFunctionFieldFindingReasonCodes = "FindingReasonCodes"
+
+	// ExportableLambdaFunctionFieldNumberOfInvocations is a ExportableLambdaFunctionField enum value
+	ExportableLambdaFunctionFieldNumberOfInvocations = "NumberOfInvocations"
+
+	// ExportableLambdaFunctionFieldUtilizationMetricsDurationMaximum is a ExportableLambdaFunctionField enum value
+	ExportableLambdaFunctionFieldUtilizationMetricsDurationMaximum = "UtilizationMetricsDurationMaximum"
+
+	// ExportableLambdaFunctionFieldUtilizationMetricsDurationAverage is a ExportableLambdaFunctionField enum value
+	ExportableLambdaFunctionFieldUtilizationMetricsDurationAverage = "UtilizationMetricsDurationAverage"
+
+	// ExportableLambdaFunctionFieldUtilizationMetricsMemoryMaximum is a ExportableLambdaFunctionField enum value
+	ExportableLambdaFunctionFieldUtilizationMetricsMemoryMaximum = "UtilizationMetricsMemoryMaximum"
+
+	// ExportableLambdaFunctionFieldUtilizationMetricsMemoryAverage is a ExportableLambdaFunctionField enum value
+	ExportableLambdaFunctionFieldUtilizationMetricsMemoryAverage = "UtilizationMetricsMemoryAverage"
+
+	// ExportableLambdaFunctionFieldLookbackPeriodInDays is a ExportableLambdaFunctionField enum value
+	ExportableLambdaFunctionFieldLookbackPeriodInDays = "LookbackPeriodInDays"
+
+	// ExportableLambdaFunctionFieldCurrentConfigurationMemorySize is a ExportableLambdaFunctionField enum value
+	ExportableLambdaFunctionFieldCurrentConfigurationMemorySize = "CurrentConfigurationMemorySize"
+
+	// ExportableLambdaFunctionFieldCurrentConfigurationTimeout is a ExportableLambdaFunctionField enum value
+	ExportableLambdaFunctionFieldCurrentConfigurationTimeout = "CurrentConfigurationTimeout"
+
+	// ExportableLambdaFunctionFieldCurrentCostTotal is a ExportableLambdaFunctionField enum value
+	ExportableLambdaFunctionFieldCurrentCostTotal = "CurrentCostTotal"
+
+	// ExportableLambdaFunctionFieldCurrentCostAverage is a ExportableLambdaFunctionField enum value
+	ExportableLambdaFunctionFieldCurrentCostAverage = "CurrentCostAverage"
+
+	// ExportableLambdaFunctionFieldRecommendationOptionsConfigurationMemorySize is a ExportableLambdaFunctionField enum value
+	ExportableLambdaFunctionFieldRecommendationOptionsConfigurationMemorySize = "RecommendationOptionsConfigurationMemorySize"
+
+	// ExportableLambdaFunctionFieldRecommendationOptionsCostLow is a ExportableLambdaFunctionField enum value
+	ExportableLambdaFunctionFieldRecommendationOptionsCostLow = "RecommendationOptionsCostLow"
+
+	// ExportableLambdaFunctionFieldRecommendationOptionsCostHigh is a ExportableLambdaFunctionField enum value
+	ExportableLambdaFunctionFieldRecommendationOptionsCostHigh = "RecommendationOptionsCostHigh"
+
+	// ExportableLambdaFunctionFieldRecommendationOptionsProjectedUtilizationMetricsDurationLowerBound is a ExportableLambdaFunctionField enum value
+	ExportableLambdaFunctionFieldRecommendationOptionsProjectedUtilizationMetricsDurationLowerBound = "RecommendationOptionsProjectedUtilizationMetricsDurationLowerBound"
+
+	// ExportableLambdaFunctionFieldRecommendationOptionsProjectedUtilizationMetricsDurationUpperBound is a ExportableLambdaFunctionField enum value
+	ExportableLambdaFunctionFieldRecommendationOptionsProjectedUtilizationMetricsDurationUpperBound = "RecommendationOptionsProjectedUtilizationMetricsDurationUpperBound"
+
+	// ExportableLambdaFunctionFieldRecommendationOptionsProjectedUtilizationMetricsDurationExpected is a ExportableLambdaFunctionField enum value
+	ExportableLambdaFunctionFieldRecommendationOptionsProjectedUtilizationMetricsDurationExpected = "RecommendationOptionsProjectedUtilizationMetricsDurationExpected"
+
+	// ExportableLambdaFunctionFieldLastRefreshTimestamp is a ExportableLambdaFunctionField enum value
+	ExportableLambdaFunctionFieldLastRefreshTimestamp = "LastRefreshTimestamp"
+)
+
+// ExportableLambdaFunctionField_Values returns all elements of the ExportableLambdaFunctionField enum
+func ExportableLambdaFunctionField_Values() []string {
+	return []string{
+		ExportableLambdaFunctionFieldAccountId,
+		ExportableLambdaFunctionFieldFunctionArn,
+		ExportableLambdaFunctionFieldFunctionVersion,
+		ExportableLambdaFunctionFieldFinding,
+		ExportableLambdaFunctionFieldFindingReasonCodes,
+		ExportableLambdaFunctionFieldNumberOfInvocations,
+		ExportableLambdaFunctionFieldUtilizationMetricsDurationMaximum,
+		ExportableLambdaFunctionFieldUtilizationMetricsDurationAverage,
+		ExportableLambdaFunctionFieldUtilizationMetricsMemoryMaximum,
+		ExportableLambdaFunctionFieldUtilizationMetricsMemoryAverage,
+		ExportableLambdaFunctionFieldLookbackPeriodInDays,
+		ExportableLambdaFunctionFieldCurrentConfigurationMemorySize,
+		ExportableLambdaFunctionFieldCurrentConfigurationTimeout,
+		ExportableLambdaFunctionFieldCurrentCostTotal,
+		ExportableLambdaFunctionFieldCurrentCostAverage,
+		ExportableLambdaFunctionFieldRecommendationOptionsConfigurationMemorySize,
+		ExportableLambdaFunctionFieldRecommendationOptionsCostLow,
+		ExportableLambdaFunctionFieldRecommendationOptionsCostHigh,
+		ExportableLambdaFunctionFieldRecommendationOptionsProjectedUtilizationMetricsDurationLowerBound,
+		ExportableLambdaFunctionFieldRecommendationOptionsProjectedUtilizationMetricsDurationUpperBound,
+		ExportableLambdaFunctionFieldRecommendationOptionsProjectedUtilizationMetricsDurationExpected,
+		ExportableLambdaFunctionFieldLastRefreshTimestamp,
+	}
+}
+
+const (
+	// ExportableVolumeFieldAccountId is a ExportableVolumeField enum value
+	ExportableVolumeFieldAccountId = "AccountId"
+
+	// ExportableVolumeFieldVolumeArn is a ExportableVolumeField enum value
+	ExportableVolumeFieldVolumeArn = "VolumeArn"
+
+	// ExportableVolumeFieldFinding is a ExportableVolumeField enum value
+	ExportableVolumeFieldFinding = "Finding"
+
+	// ExportableVolumeFieldUtilizationMetricsVolumeReadOpsPerSecondMaximum is a ExportableVolumeField enum value
+	ExportableVolumeFieldUtilizationMetricsVolumeReadOpsPerSecondMaximum = "UtilizationMetricsVolumeReadOpsPerSecondMaximum"
+
+	// ExportableVolumeFieldUtilizationMetricsVolumeWriteOpsPerSecondMaximum is a ExportableVolumeField enum value
+	ExportableVolumeFieldUtilizationMetricsVolumeWriteOpsPerSecondMaximum = "UtilizationMetricsVolumeWriteOpsPerSecondMaximum"
+
+	// ExportableVolumeFieldUtilizationMetricsVolumeReadBytesPerSecondMaximum is a ExportableVolumeField enum value
+	ExportableVolumeFieldUtilizationMetricsVolumeReadBytesPerSecondMaximum = "UtilizationMetricsVolumeReadBytesPerSecondMaximum"
+
+	// ExportableVolumeFieldUtilizationMetricsVolumeWriteBytesPerSecondMaximum is a ExportableVolumeField enum value
+	ExportableVolumeFieldUtilizationMetricsVolumeWriteBytesPerSecondMaximum = "UtilizationMetricsVolumeWriteBytesPerSecondMaximum"
+
+	// ExportableVolumeFieldLookbackPeriodInDays is a ExportableVolumeField enum value
+	ExportableVolumeFieldLookbackPeriodInDays = "LookbackPeriodInDays"
+
+	// ExportableVolumeFieldCurrentConfigurationVolumeType is a ExportableVolumeField enum value
+	ExportableVolumeFieldCurrentConfigurationVolumeType = "CurrentConfigurationVolumeType"
+
+	// ExportableVolumeFieldCurrentConfigurationVolumeBaselineIops is a ExportableVolumeField enum value
+	ExportableVolumeFieldCurrentConfigurationVolumeBaselineIops = "CurrentConfigurationVolumeBaselineIOPS"
+
+	// ExportableVolumeFieldCurrentConfigurationVolumeBaselineThroughput is a ExportableVolumeField enum value
+	ExportableVolumeFieldCurrentConfigurationVolumeBaselineThroughput = "CurrentConfigurationVolumeBaselineThroughput"
+
+	// ExportableVolumeFieldCurrentConfigurationVolumeBurstIops is a ExportableVolumeField enum value
+	ExportableVolumeFieldCurrentConfigurationVolumeBurstIops = "CurrentConfigurationVolumeBurstIOPS"
+
+	// ExportableVolumeFieldCurrentConfigurationVolumeBurstThroughput is a ExportableVolumeField enum value
+	ExportableVolumeFieldCurrentConfigurationVolumeBurstThroughput = "CurrentConfigurationVolumeBurstThroughput"
+
+	// ExportableVolumeFieldCurrentConfigurationVolumeSize is a ExportableVolumeField enum value
+	ExportableVolumeFieldCurrentConfigurationVolumeSize = "CurrentConfigurationVolumeSize"
+
+	// ExportableVolumeFieldCurrentMonthlyPrice is a ExportableVolumeField enum value
+	ExportableVolumeFieldCurrentMonthlyPrice = "CurrentMonthlyPrice"
+
+	// ExportableVolumeFieldRecommendationOptionsConfigurationVolumeType is a ExportableVolumeField enum value
+	ExportableVolumeFieldRecommendationOptionsConfigurationVolumeType = "RecommendationOptionsConfigurationVolumeType"
+
+	// ExportableVolumeFieldRecommendationOptionsConfigurationVolumeBaselineIops is a ExportableVolumeField enum value
+	ExportableVolumeFieldRecommendationOptionsConfigurationVolumeBaselineIops = "RecommendationOptionsConfigurationVolumeBaselineIOPS"
+
+	// ExportableVolumeFieldRecommendationOptionsConfigurationVolumeBaselineThroughput is a ExportableVolumeField enum value
+	ExportableVolumeFieldRecommendationOptionsConfigurationVolumeBaselineThroughput = "RecommendationOptionsConfigurationVolumeBaselineThroughput"
+
+	// ExportableVolumeFieldRecommendationOptionsConfigurationVolumeBurstIops is a ExportableVolumeField enum value
+	ExportableVolumeFieldRecommendationOptionsConfigurationVolumeBurstIops = "RecommendationOptionsConfigurationVolumeBurstIOPS"
+
+	// ExportableVolumeFieldRecommendationOptionsConfigurationVolumeBurstThroughput is a ExportableVolumeField enum value
+	ExportableVolumeFieldRecommendationOptionsConfigurationVolumeBurstThroughput = "RecommendationOptionsConfigurationVolumeBurstThroughput"
+
+	// ExportableVolumeFieldRecommendationOptionsConfigurationVolumeSize is a ExportableVolumeField enum value
+	ExportableVolumeFieldRecommendationOptionsConfigurationVolumeSize = "RecommendationOptionsConfigurationVolumeSize"
+
+	// ExportableVolumeFieldRecommendationOptionsMonthlyPrice is a ExportableVolumeField enum value
+	ExportableVolumeFieldRecommendationOptionsMonthlyPrice = "RecommendationOptionsMonthlyPrice"
+
+	// ExportableVolumeFieldRecommendationOptionsPerformanceRisk is a ExportableVolumeField enum value
+	ExportableVolumeFieldRecommendationOptionsPerformanceRisk = "RecommendationOptionsPerformanceRisk"
+
+	// ExportableVolumeFieldLastRefreshTimestamp is a ExportableVolumeField enum value
+	ExportableVolumeFieldLastRefreshTimestamp = "LastRefreshTimestamp"
+)
+
+// ExportableVolumeField_Values returns all elements of the ExportableVolumeField enum
+func ExportableVolumeField_Values() []string {
+	return []string{
+		ExportableVolumeFieldAccountId,
+		ExportableVolumeFieldVolumeArn,
+		ExportableVolumeFieldFinding,
+		ExportableVolumeFieldUtilizationMetricsVolumeReadOpsPerSecondMaximum,
+		ExportableVolumeFieldUtilizationMetricsVolumeWriteOpsPerSecondMaximum,
+		ExportableVolumeFieldUtilizationMetricsVolumeReadBytesPerSecondMaximum,
+		ExportableVolumeFieldUtilizationMetricsVolumeWriteBytesPerSecondMaximum,
+		ExportableVolumeFieldLookbackPeriodInDays,
+		ExportableVolumeFieldCurrentConfigurationVolumeType,
+		ExportableVolumeFieldCurrentConfigurationVolumeBaselineIops,
+		ExportableVolumeFieldCurrentConfigurationVolumeBaselineThroughput,
+		ExportableVolumeFieldCurrentConfigurationVolumeBurstIops,
+		ExportableVolumeFieldCurrentConfigurationVolumeBurstThroughput,
+		ExportableVolumeFieldCurrentConfigurationVolumeSize,
+		ExportableVolumeFieldCurrentMonthlyPrice,
+		ExportableVolumeFieldRecommendationOptionsConfigurationVolumeType,
+		ExportableVolumeFieldRecommendationOptionsConfigurationVolumeBaselineIops,
+		ExportableVolumeFieldRecommendationOptionsConfigurationVolumeBaselineThroughput,
+		ExportableVolumeFieldRecommendationOptionsConfigurationVolumeBurstIops,
+		ExportableVolumeFieldRecommendationOptionsConfigurationVolumeBurstThroughput,
+		ExportableVolumeFieldRecommendationOptionsConfigurationVolumeSize,
+		ExportableVolumeFieldRecommendationOptionsMonthlyPrice,
+		ExportableVolumeFieldRecommendationOptionsPerformanceRisk,
+		ExportableVolumeFieldLastRefreshTimestamp,
 	}
 }
 
@@ -3785,6 +7239,9 @@ const (
 	// FilterNameFinding is a FilterName enum value
 	FilterNameFinding = "Finding"
 
+	// FilterNameFindingReasonCodes is a FilterName enum value
+	FilterNameFindingReasonCodes = "FindingReasonCodes"
+
 	// FilterNameRecommendationSourceType is a FilterName enum value
 	FilterNameRecommendationSourceType = "RecommendationSourceType"
 )
@@ -3793,6 +7250,7 @@ const (
 func FilterName_Values() []string {
 	return []string{
 		FilterNameFinding,
+		FilterNameFindingReasonCodes,
 		FilterNameRecommendationSourceType,
 	}
 }
@@ -3818,6 +7276,94 @@ func Finding_Values() []string {
 		FindingOverprovisioned,
 		FindingOptimized,
 		FindingNotOptimized,
+	}
+}
+
+const (
+	// FindingReasonCodeMemoryOverprovisioned is a FindingReasonCode enum value
+	FindingReasonCodeMemoryOverprovisioned = "MemoryOverprovisioned"
+
+	// FindingReasonCodeMemoryUnderprovisioned is a FindingReasonCode enum value
+	FindingReasonCodeMemoryUnderprovisioned = "MemoryUnderprovisioned"
+)
+
+// FindingReasonCode_Values returns all elements of the FindingReasonCode enum
+func FindingReasonCode_Values() []string {
+	return []string{
+		FindingReasonCodeMemoryOverprovisioned,
+		FindingReasonCodeMemoryUnderprovisioned,
+	}
+}
+
+const (
+	// InstanceRecommendationFindingReasonCodeCpuoverprovisioned is a InstanceRecommendationFindingReasonCode enum value
+	InstanceRecommendationFindingReasonCodeCpuoverprovisioned = "CPUOverprovisioned"
+
+	// InstanceRecommendationFindingReasonCodeCpuunderprovisioned is a InstanceRecommendationFindingReasonCode enum value
+	InstanceRecommendationFindingReasonCodeCpuunderprovisioned = "CPUUnderprovisioned"
+
+	// InstanceRecommendationFindingReasonCodeMemoryOverprovisioned is a InstanceRecommendationFindingReasonCode enum value
+	InstanceRecommendationFindingReasonCodeMemoryOverprovisioned = "MemoryOverprovisioned"
+
+	// InstanceRecommendationFindingReasonCodeMemoryUnderprovisioned is a InstanceRecommendationFindingReasonCode enum value
+	InstanceRecommendationFindingReasonCodeMemoryUnderprovisioned = "MemoryUnderprovisioned"
+
+	// InstanceRecommendationFindingReasonCodeEbsthroughputOverprovisioned is a InstanceRecommendationFindingReasonCode enum value
+	InstanceRecommendationFindingReasonCodeEbsthroughputOverprovisioned = "EBSThroughputOverprovisioned"
+
+	// InstanceRecommendationFindingReasonCodeEbsthroughputUnderprovisioned is a InstanceRecommendationFindingReasonCode enum value
+	InstanceRecommendationFindingReasonCodeEbsthroughputUnderprovisioned = "EBSThroughputUnderprovisioned"
+
+	// InstanceRecommendationFindingReasonCodeEbsiopsoverprovisioned is a InstanceRecommendationFindingReasonCode enum value
+	InstanceRecommendationFindingReasonCodeEbsiopsoverprovisioned = "EBSIOPSOverprovisioned"
+
+	// InstanceRecommendationFindingReasonCodeEbsiopsunderprovisioned is a InstanceRecommendationFindingReasonCode enum value
+	InstanceRecommendationFindingReasonCodeEbsiopsunderprovisioned = "EBSIOPSUnderprovisioned"
+
+	// InstanceRecommendationFindingReasonCodeNetworkBandwidthOverprovisioned is a InstanceRecommendationFindingReasonCode enum value
+	InstanceRecommendationFindingReasonCodeNetworkBandwidthOverprovisioned = "NetworkBandwidthOverprovisioned"
+
+	// InstanceRecommendationFindingReasonCodeNetworkBandwidthUnderprovisioned is a InstanceRecommendationFindingReasonCode enum value
+	InstanceRecommendationFindingReasonCodeNetworkBandwidthUnderprovisioned = "NetworkBandwidthUnderprovisioned"
+
+	// InstanceRecommendationFindingReasonCodeNetworkPpsoverprovisioned is a InstanceRecommendationFindingReasonCode enum value
+	InstanceRecommendationFindingReasonCodeNetworkPpsoverprovisioned = "NetworkPPSOverprovisioned"
+
+	// InstanceRecommendationFindingReasonCodeNetworkPpsunderprovisioned is a InstanceRecommendationFindingReasonCode enum value
+	InstanceRecommendationFindingReasonCodeNetworkPpsunderprovisioned = "NetworkPPSUnderprovisioned"
+
+	// InstanceRecommendationFindingReasonCodeDiskIopsoverprovisioned is a InstanceRecommendationFindingReasonCode enum value
+	InstanceRecommendationFindingReasonCodeDiskIopsoverprovisioned = "DiskIOPSOverprovisioned"
+
+	// InstanceRecommendationFindingReasonCodeDiskIopsunderprovisioned is a InstanceRecommendationFindingReasonCode enum value
+	InstanceRecommendationFindingReasonCodeDiskIopsunderprovisioned = "DiskIOPSUnderprovisioned"
+
+	// InstanceRecommendationFindingReasonCodeDiskThroughputOverprovisioned is a InstanceRecommendationFindingReasonCode enum value
+	InstanceRecommendationFindingReasonCodeDiskThroughputOverprovisioned = "DiskThroughputOverprovisioned"
+
+	// InstanceRecommendationFindingReasonCodeDiskThroughputUnderprovisioned is a InstanceRecommendationFindingReasonCode enum value
+	InstanceRecommendationFindingReasonCodeDiskThroughputUnderprovisioned = "DiskThroughputUnderprovisioned"
+)
+
+// InstanceRecommendationFindingReasonCode_Values returns all elements of the InstanceRecommendationFindingReasonCode enum
+func InstanceRecommendationFindingReasonCode_Values() []string {
+	return []string{
+		InstanceRecommendationFindingReasonCodeCpuoverprovisioned,
+		InstanceRecommendationFindingReasonCodeCpuunderprovisioned,
+		InstanceRecommendationFindingReasonCodeMemoryOverprovisioned,
+		InstanceRecommendationFindingReasonCodeMemoryUnderprovisioned,
+		InstanceRecommendationFindingReasonCodeEbsthroughputOverprovisioned,
+		InstanceRecommendationFindingReasonCodeEbsthroughputUnderprovisioned,
+		InstanceRecommendationFindingReasonCodeEbsiopsoverprovisioned,
+		InstanceRecommendationFindingReasonCodeEbsiopsunderprovisioned,
+		InstanceRecommendationFindingReasonCodeNetworkBandwidthOverprovisioned,
+		InstanceRecommendationFindingReasonCodeNetworkBandwidthUnderprovisioned,
+		InstanceRecommendationFindingReasonCodeNetworkPpsoverprovisioned,
+		InstanceRecommendationFindingReasonCodeNetworkPpsunderprovisioned,
+		InstanceRecommendationFindingReasonCodeDiskIopsoverprovisioned,
+		InstanceRecommendationFindingReasonCodeDiskIopsunderprovisioned,
+		InstanceRecommendationFindingReasonCodeDiskThroughputOverprovisioned,
+		InstanceRecommendationFindingReasonCodeDiskThroughputUnderprovisioned,
 	}
 }
 
@@ -3862,6 +7408,130 @@ func JobStatus_Values() []string {
 }
 
 const (
+	// LambdaFunctionMemoryMetricNameDuration is a LambdaFunctionMemoryMetricName enum value
+	LambdaFunctionMemoryMetricNameDuration = "Duration"
+)
+
+// LambdaFunctionMemoryMetricName_Values returns all elements of the LambdaFunctionMemoryMetricName enum
+func LambdaFunctionMemoryMetricName_Values() []string {
+	return []string{
+		LambdaFunctionMemoryMetricNameDuration,
+	}
+}
+
+const (
+	// LambdaFunctionMemoryMetricStatisticLowerBound is a LambdaFunctionMemoryMetricStatistic enum value
+	LambdaFunctionMemoryMetricStatisticLowerBound = "LowerBound"
+
+	// LambdaFunctionMemoryMetricStatisticUpperBound is a LambdaFunctionMemoryMetricStatistic enum value
+	LambdaFunctionMemoryMetricStatisticUpperBound = "UpperBound"
+
+	// LambdaFunctionMemoryMetricStatisticExpected is a LambdaFunctionMemoryMetricStatistic enum value
+	LambdaFunctionMemoryMetricStatisticExpected = "Expected"
+)
+
+// LambdaFunctionMemoryMetricStatistic_Values returns all elements of the LambdaFunctionMemoryMetricStatistic enum
+func LambdaFunctionMemoryMetricStatistic_Values() []string {
+	return []string{
+		LambdaFunctionMemoryMetricStatisticLowerBound,
+		LambdaFunctionMemoryMetricStatisticUpperBound,
+		LambdaFunctionMemoryMetricStatisticExpected,
+	}
+}
+
+const (
+	// LambdaFunctionMetricNameDuration is a LambdaFunctionMetricName enum value
+	LambdaFunctionMetricNameDuration = "Duration"
+
+	// LambdaFunctionMetricNameMemory is a LambdaFunctionMetricName enum value
+	LambdaFunctionMetricNameMemory = "Memory"
+)
+
+// LambdaFunctionMetricName_Values returns all elements of the LambdaFunctionMetricName enum
+func LambdaFunctionMetricName_Values() []string {
+	return []string{
+		LambdaFunctionMetricNameDuration,
+		LambdaFunctionMetricNameMemory,
+	}
+}
+
+const (
+	// LambdaFunctionMetricStatisticMaximum is a LambdaFunctionMetricStatistic enum value
+	LambdaFunctionMetricStatisticMaximum = "Maximum"
+
+	// LambdaFunctionMetricStatisticAverage is a LambdaFunctionMetricStatistic enum value
+	LambdaFunctionMetricStatisticAverage = "Average"
+)
+
+// LambdaFunctionMetricStatistic_Values returns all elements of the LambdaFunctionMetricStatistic enum
+func LambdaFunctionMetricStatistic_Values() []string {
+	return []string{
+		LambdaFunctionMetricStatisticMaximum,
+		LambdaFunctionMetricStatisticAverage,
+	}
+}
+
+const (
+	// LambdaFunctionRecommendationFilterNameFinding is a LambdaFunctionRecommendationFilterName enum value
+	LambdaFunctionRecommendationFilterNameFinding = "Finding"
+
+	// LambdaFunctionRecommendationFilterNameFindingReasonCode is a LambdaFunctionRecommendationFilterName enum value
+	LambdaFunctionRecommendationFilterNameFindingReasonCode = "FindingReasonCode"
+)
+
+// LambdaFunctionRecommendationFilterName_Values returns all elements of the LambdaFunctionRecommendationFilterName enum
+func LambdaFunctionRecommendationFilterName_Values() []string {
+	return []string{
+		LambdaFunctionRecommendationFilterNameFinding,
+		LambdaFunctionRecommendationFilterNameFindingReasonCode,
+	}
+}
+
+const (
+	// LambdaFunctionRecommendationFindingOptimized is a LambdaFunctionRecommendationFinding enum value
+	LambdaFunctionRecommendationFindingOptimized = "Optimized"
+
+	// LambdaFunctionRecommendationFindingNotOptimized is a LambdaFunctionRecommendationFinding enum value
+	LambdaFunctionRecommendationFindingNotOptimized = "NotOptimized"
+
+	// LambdaFunctionRecommendationFindingUnavailable is a LambdaFunctionRecommendationFinding enum value
+	LambdaFunctionRecommendationFindingUnavailable = "Unavailable"
+)
+
+// LambdaFunctionRecommendationFinding_Values returns all elements of the LambdaFunctionRecommendationFinding enum
+func LambdaFunctionRecommendationFinding_Values() []string {
+	return []string{
+		LambdaFunctionRecommendationFindingOptimized,
+		LambdaFunctionRecommendationFindingNotOptimized,
+		LambdaFunctionRecommendationFindingUnavailable,
+	}
+}
+
+const (
+	// LambdaFunctionRecommendationFindingReasonCodeMemoryOverprovisioned is a LambdaFunctionRecommendationFindingReasonCode enum value
+	LambdaFunctionRecommendationFindingReasonCodeMemoryOverprovisioned = "MemoryOverprovisioned"
+
+	// LambdaFunctionRecommendationFindingReasonCodeMemoryUnderprovisioned is a LambdaFunctionRecommendationFindingReasonCode enum value
+	LambdaFunctionRecommendationFindingReasonCodeMemoryUnderprovisioned = "MemoryUnderprovisioned"
+
+	// LambdaFunctionRecommendationFindingReasonCodeInsufficientData is a LambdaFunctionRecommendationFindingReasonCode enum value
+	LambdaFunctionRecommendationFindingReasonCodeInsufficientData = "InsufficientData"
+
+	// LambdaFunctionRecommendationFindingReasonCodeInconclusive is a LambdaFunctionRecommendationFindingReasonCode enum value
+	LambdaFunctionRecommendationFindingReasonCodeInconclusive = "Inconclusive"
+)
+
+// LambdaFunctionRecommendationFindingReasonCode_Values returns all elements of the LambdaFunctionRecommendationFindingReasonCode enum
+func LambdaFunctionRecommendationFindingReasonCode_Values() []string {
+	return []string{
+		LambdaFunctionRecommendationFindingReasonCodeMemoryOverprovisioned,
+		LambdaFunctionRecommendationFindingReasonCodeMemoryUnderprovisioned,
+		LambdaFunctionRecommendationFindingReasonCodeInsufficientData,
+		LambdaFunctionRecommendationFindingReasonCodeInconclusive,
+	}
+}
+
+const (
 	// MetricNameCpu is a MetricName enum value
 	MetricNameCpu = "Cpu"
 
@@ -3879,6 +7549,30 @@ const (
 
 	// MetricNameEbsWriteBytesPerSecond is a MetricName enum value
 	MetricNameEbsWriteBytesPerSecond = "EBS_WRITE_BYTES_PER_SECOND"
+
+	// MetricNameDiskReadOpsPerSecond is a MetricName enum value
+	MetricNameDiskReadOpsPerSecond = "DISK_READ_OPS_PER_SECOND"
+
+	// MetricNameDiskWriteOpsPerSecond is a MetricName enum value
+	MetricNameDiskWriteOpsPerSecond = "DISK_WRITE_OPS_PER_SECOND"
+
+	// MetricNameDiskReadBytesPerSecond is a MetricName enum value
+	MetricNameDiskReadBytesPerSecond = "DISK_READ_BYTES_PER_SECOND"
+
+	// MetricNameDiskWriteBytesPerSecond is a MetricName enum value
+	MetricNameDiskWriteBytesPerSecond = "DISK_WRITE_BYTES_PER_SECOND"
+
+	// MetricNameNetworkInBytesPerSecond is a MetricName enum value
+	MetricNameNetworkInBytesPerSecond = "NETWORK_IN_BYTES_PER_SECOND"
+
+	// MetricNameNetworkOutBytesPerSecond is a MetricName enum value
+	MetricNameNetworkOutBytesPerSecond = "NETWORK_OUT_BYTES_PER_SECOND"
+
+	// MetricNameNetworkPacketsInPerSecond is a MetricName enum value
+	MetricNameNetworkPacketsInPerSecond = "NETWORK_PACKETS_IN_PER_SECOND"
+
+	// MetricNameNetworkPacketsOutPerSecond is a MetricName enum value
+	MetricNameNetworkPacketsOutPerSecond = "NETWORK_PACKETS_OUT_PER_SECOND"
 )
 
 // MetricName_Values returns all elements of the MetricName enum
@@ -3890,6 +7584,14 @@ func MetricName_Values() []string {
 		MetricNameEbsWriteOpsPerSecond,
 		MetricNameEbsReadBytesPerSecond,
 		MetricNameEbsWriteBytesPerSecond,
+		MetricNameDiskReadOpsPerSecond,
+		MetricNameDiskWriteOpsPerSecond,
+		MetricNameDiskReadBytesPerSecond,
+		MetricNameDiskWriteBytesPerSecond,
+		MetricNameNetworkInBytesPerSecond,
+		MetricNameNetworkOutBytesPerSecond,
+		MetricNameNetworkPacketsInPerSecond,
+		MetricNameNetworkPacketsOutPerSecond,
 	}
 }
 
@@ -3910,11 +7612,49 @@ func MetricStatistic_Values() []string {
 }
 
 const (
+	// PlatformDifferenceHypervisor is a PlatformDifference enum value
+	PlatformDifferenceHypervisor = "Hypervisor"
+
+	// PlatformDifferenceNetworkInterface is a PlatformDifference enum value
+	PlatformDifferenceNetworkInterface = "NetworkInterface"
+
+	// PlatformDifferenceStorageInterface is a PlatformDifference enum value
+	PlatformDifferenceStorageInterface = "StorageInterface"
+
+	// PlatformDifferenceInstanceStoreAvailability is a PlatformDifference enum value
+	PlatformDifferenceInstanceStoreAvailability = "InstanceStoreAvailability"
+
+	// PlatformDifferenceVirtualizationType is a PlatformDifference enum value
+	PlatformDifferenceVirtualizationType = "VirtualizationType"
+
+	// PlatformDifferenceArchitecture is a PlatformDifference enum value
+	PlatformDifferenceArchitecture = "Architecture"
+)
+
+// PlatformDifference_Values returns all elements of the PlatformDifference enum
+func PlatformDifference_Values() []string {
+	return []string{
+		PlatformDifferenceHypervisor,
+		PlatformDifferenceNetworkInterface,
+		PlatformDifferenceStorageInterface,
+		PlatformDifferenceInstanceStoreAvailability,
+		PlatformDifferenceVirtualizationType,
+		PlatformDifferenceArchitecture,
+	}
+}
+
+const (
 	// RecommendationSourceTypeEc2instance is a RecommendationSourceType enum value
 	RecommendationSourceTypeEc2instance = "Ec2Instance"
 
 	// RecommendationSourceTypeAutoScalingGroup is a RecommendationSourceType enum value
 	RecommendationSourceTypeAutoScalingGroup = "AutoScalingGroup"
+
+	// RecommendationSourceTypeEbsVolume is a RecommendationSourceType enum value
+	RecommendationSourceTypeEbsVolume = "EbsVolume"
+
+	// RecommendationSourceTypeLambdaFunction is a RecommendationSourceType enum value
+	RecommendationSourceTypeLambdaFunction = "LambdaFunction"
 )
 
 // RecommendationSourceType_Values returns all elements of the RecommendationSourceType enum
@@ -3922,6 +7662,8 @@ func RecommendationSourceType_Values() []string {
 	return []string{
 		RecommendationSourceTypeEc2instance,
 		RecommendationSourceTypeAutoScalingGroup,
+		RecommendationSourceTypeEbsVolume,
+		RecommendationSourceTypeLambdaFunction,
 	}
 }
 
@@ -3931,6 +7673,12 @@ const (
 
 	// ResourceTypeAutoScalingGroup is a ResourceType enum value
 	ResourceTypeAutoScalingGroup = "AutoScalingGroup"
+
+	// ResourceTypeEbsVolume is a ResourceType enum value
+	ResourceTypeEbsVolume = "EbsVolume"
+
+	// ResourceTypeLambdaFunction is a ResourceType enum value
+	ResourceTypeLambdaFunction = "LambdaFunction"
 )
 
 // ResourceType_Values returns all elements of the ResourceType enum
@@ -3938,6 +7686,8 @@ func ResourceType_Values() []string {
 	return []string{
 		ResourceTypeEc2instance,
 		ResourceTypeAutoScalingGroup,
+		ResourceTypeEbsVolume,
+		ResourceTypeLambdaFunction,
 	}
 }
 

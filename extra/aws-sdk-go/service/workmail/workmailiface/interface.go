@@ -80,6 +80,10 @@ type WorkMailAPI interface {
 	CreateGroupWithContext(aws.Context, *workmail.CreateGroupInput, ...request.Option) (*workmail.CreateGroupOutput, error)
 	CreateGroupRequest(*workmail.CreateGroupInput) (*request.Request, *workmail.CreateGroupOutput)
 
+	CreateMobileDeviceAccessRule(*workmail.CreateMobileDeviceAccessRuleInput) (*workmail.CreateMobileDeviceAccessRuleOutput, error)
+	CreateMobileDeviceAccessRuleWithContext(aws.Context, *workmail.CreateMobileDeviceAccessRuleInput, ...request.Option) (*workmail.CreateMobileDeviceAccessRuleOutput, error)
+	CreateMobileDeviceAccessRuleRequest(*workmail.CreateMobileDeviceAccessRuleInput) (*request.Request, *workmail.CreateMobileDeviceAccessRuleOutput)
+
 	CreateOrganization(*workmail.CreateOrganizationInput) (*workmail.CreateOrganizationOutput, error)
 	CreateOrganizationWithContext(aws.Context, *workmail.CreateOrganizationInput, ...request.Option) (*workmail.CreateOrganizationOutput, error)
 	CreateOrganizationRequest(*workmail.CreateOrganizationInput) (*request.Request, *workmail.CreateOrganizationOutput)
@@ -108,6 +112,14 @@ type WorkMailAPI interface {
 	DeleteMailboxPermissionsWithContext(aws.Context, *workmail.DeleteMailboxPermissionsInput, ...request.Option) (*workmail.DeleteMailboxPermissionsOutput, error)
 	DeleteMailboxPermissionsRequest(*workmail.DeleteMailboxPermissionsInput) (*request.Request, *workmail.DeleteMailboxPermissionsOutput)
 
+	DeleteMobileDeviceAccessOverride(*workmail.DeleteMobileDeviceAccessOverrideInput) (*workmail.DeleteMobileDeviceAccessOverrideOutput, error)
+	DeleteMobileDeviceAccessOverrideWithContext(aws.Context, *workmail.DeleteMobileDeviceAccessOverrideInput, ...request.Option) (*workmail.DeleteMobileDeviceAccessOverrideOutput, error)
+	DeleteMobileDeviceAccessOverrideRequest(*workmail.DeleteMobileDeviceAccessOverrideInput) (*request.Request, *workmail.DeleteMobileDeviceAccessOverrideOutput)
+
+	DeleteMobileDeviceAccessRule(*workmail.DeleteMobileDeviceAccessRuleInput) (*workmail.DeleteMobileDeviceAccessRuleOutput, error)
+	DeleteMobileDeviceAccessRuleWithContext(aws.Context, *workmail.DeleteMobileDeviceAccessRuleInput, ...request.Option) (*workmail.DeleteMobileDeviceAccessRuleOutput, error)
+	DeleteMobileDeviceAccessRuleRequest(*workmail.DeleteMobileDeviceAccessRuleInput) (*request.Request, *workmail.DeleteMobileDeviceAccessRuleOutput)
+
 	DeleteOrganization(*workmail.DeleteOrganizationInput) (*workmail.DeleteOrganizationOutput, error)
 	DeleteOrganizationWithContext(aws.Context, *workmail.DeleteOrganizationInput, ...request.Option) (*workmail.DeleteOrganizationOutput, error)
 	DeleteOrganizationRequest(*workmail.DeleteOrganizationInput) (*request.Request, *workmail.DeleteOrganizationOutput)
@@ -128,9 +140,17 @@ type WorkMailAPI interface {
 	DeregisterFromWorkMailWithContext(aws.Context, *workmail.DeregisterFromWorkMailInput, ...request.Option) (*workmail.DeregisterFromWorkMailOutput, error)
 	DeregisterFromWorkMailRequest(*workmail.DeregisterFromWorkMailInput) (*request.Request, *workmail.DeregisterFromWorkMailOutput)
 
+	DeregisterMailDomain(*workmail.DeregisterMailDomainInput) (*workmail.DeregisterMailDomainOutput, error)
+	DeregisterMailDomainWithContext(aws.Context, *workmail.DeregisterMailDomainInput, ...request.Option) (*workmail.DeregisterMailDomainOutput, error)
+	DeregisterMailDomainRequest(*workmail.DeregisterMailDomainInput) (*request.Request, *workmail.DeregisterMailDomainOutput)
+
 	DescribeGroup(*workmail.DescribeGroupInput) (*workmail.DescribeGroupOutput, error)
 	DescribeGroupWithContext(aws.Context, *workmail.DescribeGroupInput, ...request.Option) (*workmail.DescribeGroupOutput, error)
 	DescribeGroupRequest(*workmail.DescribeGroupInput) (*request.Request, *workmail.DescribeGroupOutput)
+
+	DescribeInboundDmarcSettings(*workmail.DescribeInboundDmarcSettingsInput) (*workmail.DescribeInboundDmarcSettingsOutput, error)
+	DescribeInboundDmarcSettingsWithContext(aws.Context, *workmail.DescribeInboundDmarcSettingsInput, ...request.Option) (*workmail.DescribeInboundDmarcSettingsOutput, error)
+	DescribeInboundDmarcSettingsRequest(*workmail.DescribeInboundDmarcSettingsInput) (*request.Request, *workmail.DescribeInboundDmarcSettingsOutput)
 
 	DescribeMailboxExportJob(*workmail.DescribeMailboxExportJobInput) (*workmail.DescribeMailboxExportJobOutput, error)
 	DescribeMailboxExportJobWithContext(aws.Context, *workmail.DescribeMailboxExportJobInput, ...request.Option) (*workmail.DescribeMailboxExportJobOutput, error)
@@ -164,9 +184,21 @@ type WorkMailAPI interface {
 	GetDefaultRetentionPolicyWithContext(aws.Context, *workmail.GetDefaultRetentionPolicyInput, ...request.Option) (*workmail.GetDefaultRetentionPolicyOutput, error)
 	GetDefaultRetentionPolicyRequest(*workmail.GetDefaultRetentionPolicyInput) (*request.Request, *workmail.GetDefaultRetentionPolicyOutput)
 
+	GetMailDomain(*workmail.GetMailDomainInput) (*workmail.GetMailDomainOutput, error)
+	GetMailDomainWithContext(aws.Context, *workmail.GetMailDomainInput, ...request.Option) (*workmail.GetMailDomainOutput, error)
+	GetMailDomainRequest(*workmail.GetMailDomainInput) (*request.Request, *workmail.GetMailDomainOutput)
+
 	GetMailboxDetails(*workmail.GetMailboxDetailsInput) (*workmail.GetMailboxDetailsOutput, error)
 	GetMailboxDetailsWithContext(aws.Context, *workmail.GetMailboxDetailsInput, ...request.Option) (*workmail.GetMailboxDetailsOutput, error)
 	GetMailboxDetailsRequest(*workmail.GetMailboxDetailsInput) (*request.Request, *workmail.GetMailboxDetailsOutput)
+
+	GetMobileDeviceAccessEffect(*workmail.GetMobileDeviceAccessEffectInput) (*workmail.GetMobileDeviceAccessEffectOutput, error)
+	GetMobileDeviceAccessEffectWithContext(aws.Context, *workmail.GetMobileDeviceAccessEffectInput, ...request.Option) (*workmail.GetMobileDeviceAccessEffectOutput, error)
+	GetMobileDeviceAccessEffectRequest(*workmail.GetMobileDeviceAccessEffectInput) (*request.Request, *workmail.GetMobileDeviceAccessEffectOutput)
+
+	GetMobileDeviceAccessOverride(*workmail.GetMobileDeviceAccessOverrideInput) (*workmail.GetMobileDeviceAccessOverrideOutput, error)
+	GetMobileDeviceAccessOverrideWithContext(aws.Context, *workmail.GetMobileDeviceAccessOverrideInput, ...request.Option) (*workmail.GetMobileDeviceAccessOverrideOutput, error)
+	GetMobileDeviceAccessOverrideRequest(*workmail.GetMobileDeviceAccessOverrideInput) (*request.Request, *workmail.GetMobileDeviceAccessOverrideOutput)
 
 	ListAccessControlRules(*workmail.ListAccessControlRulesInput) (*workmail.ListAccessControlRulesOutput, error)
 	ListAccessControlRulesWithContext(aws.Context, *workmail.ListAccessControlRulesInput, ...request.Option) (*workmail.ListAccessControlRulesOutput, error)
@@ -193,6 +225,13 @@ type WorkMailAPI interface {
 	ListGroupsPages(*workmail.ListGroupsInput, func(*workmail.ListGroupsOutput, bool) bool) error
 	ListGroupsPagesWithContext(aws.Context, *workmail.ListGroupsInput, func(*workmail.ListGroupsOutput, bool) bool, ...request.Option) error
 
+	ListMailDomains(*workmail.ListMailDomainsInput) (*workmail.ListMailDomainsOutput, error)
+	ListMailDomainsWithContext(aws.Context, *workmail.ListMailDomainsInput, ...request.Option) (*workmail.ListMailDomainsOutput, error)
+	ListMailDomainsRequest(*workmail.ListMailDomainsInput) (*request.Request, *workmail.ListMailDomainsOutput)
+
+	ListMailDomainsPages(*workmail.ListMailDomainsInput, func(*workmail.ListMailDomainsOutput, bool) bool) error
+	ListMailDomainsPagesWithContext(aws.Context, *workmail.ListMailDomainsInput, func(*workmail.ListMailDomainsOutput, bool) bool, ...request.Option) error
+
 	ListMailboxExportJobs(*workmail.ListMailboxExportJobsInput) (*workmail.ListMailboxExportJobsOutput, error)
 	ListMailboxExportJobsWithContext(aws.Context, *workmail.ListMailboxExportJobsInput, ...request.Option) (*workmail.ListMailboxExportJobsOutput, error)
 	ListMailboxExportJobsRequest(*workmail.ListMailboxExportJobsInput) (*request.Request, *workmail.ListMailboxExportJobsOutput)
@@ -206,6 +245,17 @@ type WorkMailAPI interface {
 
 	ListMailboxPermissionsPages(*workmail.ListMailboxPermissionsInput, func(*workmail.ListMailboxPermissionsOutput, bool) bool) error
 	ListMailboxPermissionsPagesWithContext(aws.Context, *workmail.ListMailboxPermissionsInput, func(*workmail.ListMailboxPermissionsOutput, bool) bool, ...request.Option) error
+
+	ListMobileDeviceAccessOverrides(*workmail.ListMobileDeviceAccessOverridesInput) (*workmail.ListMobileDeviceAccessOverridesOutput, error)
+	ListMobileDeviceAccessOverridesWithContext(aws.Context, *workmail.ListMobileDeviceAccessOverridesInput, ...request.Option) (*workmail.ListMobileDeviceAccessOverridesOutput, error)
+	ListMobileDeviceAccessOverridesRequest(*workmail.ListMobileDeviceAccessOverridesInput) (*request.Request, *workmail.ListMobileDeviceAccessOverridesOutput)
+
+	ListMobileDeviceAccessOverridesPages(*workmail.ListMobileDeviceAccessOverridesInput, func(*workmail.ListMobileDeviceAccessOverridesOutput, bool) bool) error
+	ListMobileDeviceAccessOverridesPagesWithContext(aws.Context, *workmail.ListMobileDeviceAccessOverridesInput, func(*workmail.ListMobileDeviceAccessOverridesOutput, bool) bool, ...request.Option) error
+
+	ListMobileDeviceAccessRules(*workmail.ListMobileDeviceAccessRulesInput) (*workmail.ListMobileDeviceAccessRulesOutput, error)
+	ListMobileDeviceAccessRulesWithContext(aws.Context, *workmail.ListMobileDeviceAccessRulesInput, ...request.Option) (*workmail.ListMobileDeviceAccessRulesOutput, error)
+	ListMobileDeviceAccessRulesRequest(*workmail.ListMobileDeviceAccessRulesInput) (*request.Request, *workmail.ListMobileDeviceAccessRulesOutput)
 
 	ListOrganizations(*workmail.ListOrganizationsInput) (*workmail.ListOrganizationsOutput, error)
 	ListOrganizationsWithContext(aws.Context, *workmail.ListOrganizationsInput, ...request.Option) (*workmail.ListOrganizationsOutput, error)
@@ -243,13 +293,25 @@ type WorkMailAPI interface {
 	PutAccessControlRuleWithContext(aws.Context, *workmail.PutAccessControlRuleInput, ...request.Option) (*workmail.PutAccessControlRuleOutput, error)
 	PutAccessControlRuleRequest(*workmail.PutAccessControlRuleInput) (*request.Request, *workmail.PutAccessControlRuleOutput)
 
+	PutInboundDmarcSettings(*workmail.PutInboundDmarcSettingsInput) (*workmail.PutInboundDmarcSettingsOutput, error)
+	PutInboundDmarcSettingsWithContext(aws.Context, *workmail.PutInboundDmarcSettingsInput, ...request.Option) (*workmail.PutInboundDmarcSettingsOutput, error)
+	PutInboundDmarcSettingsRequest(*workmail.PutInboundDmarcSettingsInput) (*request.Request, *workmail.PutInboundDmarcSettingsOutput)
+
 	PutMailboxPermissions(*workmail.PutMailboxPermissionsInput) (*workmail.PutMailboxPermissionsOutput, error)
 	PutMailboxPermissionsWithContext(aws.Context, *workmail.PutMailboxPermissionsInput, ...request.Option) (*workmail.PutMailboxPermissionsOutput, error)
 	PutMailboxPermissionsRequest(*workmail.PutMailboxPermissionsInput) (*request.Request, *workmail.PutMailboxPermissionsOutput)
 
+	PutMobileDeviceAccessOverride(*workmail.PutMobileDeviceAccessOverrideInput) (*workmail.PutMobileDeviceAccessOverrideOutput, error)
+	PutMobileDeviceAccessOverrideWithContext(aws.Context, *workmail.PutMobileDeviceAccessOverrideInput, ...request.Option) (*workmail.PutMobileDeviceAccessOverrideOutput, error)
+	PutMobileDeviceAccessOverrideRequest(*workmail.PutMobileDeviceAccessOverrideInput) (*request.Request, *workmail.PutMobileDeviceAccessOverrideOutput)
+
 	PutRetentionPolicy(*workmail.PutRetentionPolicyInput) (*workmail.PutRetentionPolicyOutput, error)
 	PutRetentionPolicyWithContext(aws.Context, *workmail.PutRetentionPolicyInput, ...request.Option) (*workmail.PutRetentionPolicyOutput, error)
 	PutRetentionPolicyRequest(*workmail.PutRetentionPolicyInput) (*request.Request, *workmail.PutRetentionPolicyOutput)
+
+	RegisterMailDomain(*workmail.RegisterMailDomainInput) (*workmail.RegisterMailDomainOutput, error)
+	RegisterMailDomainWithContext(aws.Context, *workmail.RegisterMailDomainInput, ...request.Option) (*workmail.RegisterMailDomainOutput, error)
+	RegisterMailDomainRequest(*workmail.RegisterMailDomainInput) (*request.Request, *workmail.RegisterMailDomainOutput)
 
 	RegisterToWorkMail(*workmail.RegisterToWorkMailInput) (*workmail.RegisterToWorkMailOutput, error)
 	RegisterToWorkMailWithContext(aws.Context, *workmail.RegisterToWorkMailInput, ...request.Option) (*workmail.RegisterToWorkMailOutput, error)
@@ -271,9 +333,17 @@ type WorkMailAPI interface {
 	UntagResourceWithContext(aws.Context, *workmail.UntagResourceInput, ...request.Option) (*workmail.UntagResourceOutput, error)
 	UntagResourceRequest(*workmail.UntagResourceInput) (*request.Request, *workmail.UntagResourceOutput)
 
+	UpdateDefaultMailDomain(*workmail.UpdateDefaultMailDomainInput) (*workmail.UpdateDefaultMailDomainOutput, error)
+	UpdateDefaultMailDomainWithContext(aws.Context, *workmail.UpdateDefaultMailDomainInput, ...request.Option) (*workmail.UpdateDefaultMailDomainOutput, error)
+	UpdateDefaultMailDomainRequest(*workmail.UpdateDefaultMailDomainInput) (*request.Request, *workmail.UpdateDefaultMailDomainOutput)
+
 	UpdateMailboxQuota(*workmail.UpdateMailboxQuotaInput) (*workmail.UpdateMailboxQuotaOutput, error)
 	UpdateMailboxQuotaWithContext(aws.Context, *workmail.UpdateMailboxQuotaInput, ...request.Option) (*workmail.UpdateMailboxQuotaOutput, error)
 	UpdateMailboxQuotaRequest(*workmail.UpdateMailboxQuotaInput) (*request.Request, *workmail.UpdateMailboxQuotaOutput)
+
+	UpdateMobileDeviceAccessRule(*workmail.UpdateMobileDeviceAccessRuleInput) (*workmail.UpdateMobileDeviceAccessRuleOutput, error)
+	UpdateMobileDeviceAccessRuleWithContext(aws.Context, *workmail.UpdateMobileDeviceAccessRuleInput, ...request.Option) (*workmail.UpdateMobileDeviceAccessRuleOutput, error)
+	UpdateMobileDeviceAccessRuleRequest(*workmail.UpdateMobileDeviceAccessRuleInput) (*request.Request, *workmail.UpdateMobileDeviceAccessRuleOutput)
 
 	UpdatePrimaryEmailAddress(*workmail.UpdatePrimaryEmailAddressInput) (*workmail.UpdatePrimaryEmailAddressOutput, error)
 	UpdatePrimaryEmailAddressWithContext(aws.Context, *workmail.UpdatePrimaryEmailAddressInput, ...request.Option) (*workmail.UpdatePrimaryEmailAddressOutput, error)

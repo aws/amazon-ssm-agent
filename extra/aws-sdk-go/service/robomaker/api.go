@@ -5907,12 +5907,20 @@ type BatchDeleteWorldsInput struct {
 	Worlds []*string `locationName:"worlds" min:"1" type:"list" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s BatchDeleteWorldsInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s BatchDeleteWorldsInput) GoString() string {
 	return s.String()
 }
@@ -5947,12 +5955,20 @@ type BatchDeleteWorldsOutput struct {
 	UnprocessedWorlds []*string `locationName:"unprocessedWorlds" min:"1" type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s BatchDeleteWorldsOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s BatchDeleteWorldsOutput) GoString() string {
 	return s.String()
 }
@@ -5972,12 +5988,20 @@ type BatchDescribeSimulationJobInput struct {
 	Jobs []*string `locationName:"jobs" min:"1" type:"list" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s BatchDescribeSimulationJobInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s BatchDescribeSimulationJobInput) GoString() string {
 	return s.String()
 }
@@ -6014,12 +6038,20 @@ type BatchDescribeSimulationJobOutput struct {
 	UnprocessedJobs []*string `locationName:"unprocessedJobs" min:"1" type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s BatchDescribeSimulationJobOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s BatchDescribeSimulationJobOutput) GoString() string {
 	return s.String()
 }
@@ -6057,12 +6089,20 @@ type BatchPolicy struct {
 	TimeoutInSeconds *int64 `locationName:"timeoutInSeconds" type:"long"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s BatchPolicy) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s BatchPolicy) GoString() string {
 	return s.String()
 }
@@ -6088,12 +6128,20 @@ type CancelDeploymentJobInput struct {
 	Job *string `locationName:"job" min:"1" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CancelDeploymentJobInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CancelDeploymentJobInput) GoString() string {
 	return s.String()
 }
@@ -6121,15 +6169,23 @@ func (s *CancelDeploymentJobInput) SetJob(v string) *CancelDeploymentJobInput {
 }
 
 type CancelDeploymentJobOutput struct {
-	_ struct{} `type:"structure"`
+	_ struct{} `type:"structure" nopayload:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CancelDeploymentJobOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CancelDeploymentJobOutput) GoString() string {
 	return s.String()
 }
@@ -6143,12 +6199,20 @@ type CancelSimulationJobBatchInput struct {
 	Batch *string `locationName:"batch" min:"1" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CancelSimulationJobBatchInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CancelSimulationJobBatchInput) GoString() string {
 	return s.String()
 }
@@ -6176,15 +6240,23 @@ func (s *CancelSimulationJobBatchInput) SetBatch(v string) *CancelSimulationJobB
 }
 
 type CancelSimulationJobBatchOutput struct {
-	_ struct{} `type:"structure"`
+	_ struct{} `type:"structure" nopayload:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CancelSimulationJobBatchOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CancelSimulationJobBatchOutput) GoString() string {
 	return s.String()
 }
@@ -6198,12 +6270,20 @@ type CancelSimulationJobInput struct {
 	Job *string `locationName:"job" min:"1" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CancelSimulationJobInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CancelSimulationJobInput) GoString() string {
 	return s.String()
 }
@@ -6231,15 +6311,23 @@ func (s *CancelSimulationJobInput) SetJob(v string) *CancelSimulationJobInput {
 }
 
 type CancelSimulationJobOutput struct {
-	_ struct{} `type:"structure"`
+	_ struct{} `type:"structure" nopayload:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CancelSimulationJobOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CancelSimulationJobOutput) GoString() string {
 	return s.String()
 }
@@ -6253,12 +6341,20 @@ type CancelWorldExportJobInput struct {
 	Job *string `locationName:"job" min:"1" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CancelWorldExportJobInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CancelWorldExportJobInput) GoString() string {
 	return s.String()
 }
@@ -6286,15 +6382,23 @@ func (s *CancelWorldExportJobInput) SetJob(v string) *CancelWorldExportJobInput 
 }
 
 type CancelWorldExportJobOutput struct {
-	_ struct{} `type:"structure"`
+	_ struct{} `type:"structure" nopayload:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CancelWorldExportJobOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CancelWorldExportJobOutput) GoString() string {
 	return s.String()
 }
@@ -6308,12 +6412,20 @@ type CancelWorldGenerationJobInput struct {
 	Job *string `locationName:"job" min:"1" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CancelWorldGenerationJobInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CancelWorldGenerationJobInput) GoString() string {
 	return s.String()
 }
@@ -6341,15 +6453,23 @@ func (s *CancelWorldGenerationJobInput) SetJob(v string) *CancelWorldGenerationJ
 }
 
 type CancelWorldGenerationJobOutput struct {
-	_ struct{} `type:"structure"`
+	_ struct{} `type:"structure" nopayload:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CancelWorldGenerationJobOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CancelWorldGenerationJobOutput) GoString() string {
 	return s.String()
 }
@@ -6358,19 +6478,34 @@ func (s CancelWorldGenerationJobOutput) GoString() string {
 type Compute struct {
 	_ struct{} `type:"structure"`
 
+	// Compute type information for the simulation job.
+	ComputeType *string `locationName:"computeType" type:"string" enum:"ComputeType"`
+
+	// Compute GPU unit limit for the simulation job. It is the same as the number
+	// of GPUs allocated to the SimulationJob.
+	GpuUnitLimit *int64 `locationName:"gpuUnitLimit" type:"integer"`
+
 	// The simulation unit limit. Your simulation is allocated CPU and memory proportional
 	// to the supplied simulation unit limit. A simulation unit is 1 vcpu and 2GB
 	// of memory. You are only billed for the SU utilization you consume up to the
-	// maximim value provided. The default is 15.
+	// maximum value provided. The default is 15.
 	SimulationUnitLimit *int64 `locationName:"simulationUnitLimit" min:"1" type:"integer"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s Compute) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s Compute) GoString() string {
 	return s.String()
 }
@@ -6388,6 +6523,18 @@ func (s *Compute) Validate() error {
 	return nil
 }
 
+// SetComputeType sets the ComputeType field's value.
+func (s *Compute) SetComputeType(v string) *Compute {
+	s.ComputeType = &v
+	return s
+}
+
+// SetGpuUnitLimit sets the GpuUnitLimit field's value.
+func (s *Compute) SetGpuUnitLimit(v int64) *Compute {
+	s.GpuUnitLimit = &v
+	return s
+}
+
 // SetSimulationUnitLimit sets the SimulationUnitLimit field's value.
 func (s *Compute) SetSimulationUnitLimit(v int64) *Compute {
 	s.SimulationUnitLimit = &v
@@ -6398,21 +6545,48 @@ func (s *Compute) SetSimulationUnitLimit(v int64) *Compute {
 type ComputeResponse struct {
 	_ struct{} `type:"structure"`
 
+	// Compute type response information for the simulation job.
+	ComputeType *string `locationName:"computeType" type:"string" enum:"ComputeType"`
+
+	// Compute GPU unit limit for the simulation job. It is the same as the number
+	// of GPUs allocated to the SimulationJob.
+	GpuUnitLimit *int64 `locationName:"gpuUnitLimit" type:"integer"`
+
 	// The simulation unit limit. Your simulation is allocated CPU and memory proportional
 	// to the supplied simulation unit limit. A simulation unit is 1 vcpu and 2GB
 	// of memory. You are only billed for the SU utilization you consume up to the
-	// maximim value provided. The default is 15.
+	// maximum value provided. The default is 15.
 	SimulationUnitLimit *int64 `locationName:"simulationUnitLimit" min:"1" type:"integer"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ComputeResponse) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ComputeResponse) GoString() string {
 	return s.String()
+}
+
+// SetComputeType sets the ComputeType field's value.
+func (s *ComputeResponse) SetComputeType(v string) *ComputeResponse {
+	s.ComputeType = &v
+	return s
+}
+
+// SetGpuUnitLimit sets the GpuUnitLimit field's value.
+func (s *ComputeResponse) SetGpuUnitLimit(v int64) *ComputeResponse {
+	s.GpuUnitLimit = &v
+	return s
 }
 
 // SetSimulationUnitLimit sets the SimulationUnitLimit field's value.
@@ -6429,12 +6603,20 @@ type ConcurrentDeploymentException struct {
 	Message_ *string `locationName:"message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ConcurrentDeploymentException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ConcurrentDeploymentException) GoString() string {
 	return s.String()
 }
@@ -6502,12 +6684,20 @@ type CreateDeploymentJobInput struct {
 	Tags map[string]*string `locationName:"tags" type:"map"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateDeploymentJobInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateDeploymentJobInput) GoString() string {
 	return s.String()
 }
@@ -6670,12 +6860,20 @@ type CreateDeploymentJobOutput struct {
 	Tags map[string]*string `locationName:"tags" type:"map"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateDeploymentJobOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateDeploymentJobOutput) GoString() string {
 	return s.String()
 }
@@ -6746,12 +6944,20 @@ type CreateFleetInput struct {
 	Tags map[string]*string `locationName:"tags" type:"map"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateFleetInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateFleetInput) GoString() string {
 	return s.String()
 }
@@ -6800,12 +7006,20 @@ type CreateFleetOutput struct {
 	Tags map[string]*string `locationName:"tags" type:"map"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateFleetOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateFleetOutput) GoString() string {
 	return s.String()
 }
@@ -6837,6 +7051,10 @@ func (s *CreateFleetOutput) SetTags(v map[string]*string) *CreateFleetOutput {
 type CreateRobotApplicationInput struct {
 	_ struct{} `type:"structure"`
 
+	// The object that contains that URI of the Docker image that you use for your
+	// robot application.
+	Environment *Environment `locationName:"environment" type:"structure"`
+
 	// The name of the robot application.
 	//
 	// Name is a required field
@@ -6848,21 +7066,27 @@ type CreateRobotApplicationInput struct {
 	RobotSoftwareSuite *RobotSoftwareSuite `locationName:"robotSoftwareSuite" type:"structure" required:"true"`
 
 	// The sources of the robot application.
-	//
-	// Sources is a required field
-	Sources []*SourceConfig `locationName:"sources" type:"list" required:"true"`
+	Sources []*SourceConfig `locationName:"sources" type:"list"`
 
 	// A map that contains tag keys and tag values that are attached to the robot
 	// application.
 	Tags map[string]*string `locationName:"tags" type:"map"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateRobotApplicationInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateRobotApplicationInput) GoString() string {
 	return s.String()
 }
@@ -6879,8 +7103,10 @@ func (s *CreateRobotApplicationInput) Validate() error {
 	if s.RobotSoftwareSuite == nil {
 		invalidParams.Add(request.NewErrParamRequired("RobotSoftwareSuite"))
 	}
-	if s.Sources == nil {
-		invalidParams.Add(request.NewErrParamRequired("Sources"))
+	if s.Environment != nil {
+		if err := s.Environment.Validate(); err != nil {
+			invalidParams.AddNested("Environment", err.(request.ErrInvalidParams))
+		}
 	}
 	if s.Sources != nil {
 		for i, v := range s.Sources {
@@ -6897,6 +7123,12 @@ func (s *CreateRobotApplicationInput) Validate() error {
 		return invalidParams
 	}
 	return nil
+}
+
+// SetEnvironment sets the Environment field's value.
+func (s *CreateRobotApplicationInput) SetEnvironment(v *Environment) *CreateRobotApplicationInput {
+	s.Environment = v
+	return s
 }
 
 // SetName sets the Name field's value.
@@ -6929,6 +7161,10 @@ type CreateRobotApplicationOutput struct {
 	// The Amazon Resource Name (ARN) of the robot application.
 	Arn *string `locationName:"arn" min:"1" type:"string"`
 
+	// An object that contains the Docker image URI used to a create your robot
+	// application.
+	Environment *Environment `locationName:"environment" type:"structure"`
+
 	// The time, in milliseconds since the epoch, when the robot application was
 	// last updated.
 	LastUpdatedAt *time.Time `locationName:"lastUpdatedAt" type:"timestamp"`
@@ -6952,12 +7188,20 @@ type CreateRobotApplicationOutput struct {
 	Version *string `locationName:"version" min:"1" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateRobotApplicationOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateRobotApplicationOutput) GoString() string {
 	return s.String()
 }
@@ -6965,6 +7209,12 @@ func (s CreateRobotApplicationOutput) GoString() string {
 // SetArn sets the Arn field's value.
 func (s *CreateRobotApplicationOutput) SetArn(v string) *CreateRobotApplicationOutput {
 	s.Arn = &v
+	return s
+}
+
+// SetEnvironment sets the Environment field's value.
+func (s *CreateRobotApplicationOutput) SetEnvironment(v *Environment) *CreateRobotApplicationOutput {
+	s.Environment = v
 	return s
 }
 
@@ -7021,14 +7271,29 @@ type CreateRobotApplicationVersionInput struct {
 	// The current revision id for the robot application. If you provide a value
 	// and it matches the latest revision ID, a new version will be created.
 	CurrentRevisionId *string `locationName:"currentRevisionId" min:"1" type:"string"`
+
+	// A SHA256 identifier for the Docker image that you use for your robot application.
+	ImageDigest *string `locationName:"imageDigest" type:"string"`
+
+	// The Amazon S3 identifier for the zip file bundle that you use for your robot
+	// application.
+	S3Etags []*string `locationName:"s3Etags" type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateRobotApplicationVersionInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateRobotApplicationVersionInput) GoString() string {
 	return s.String()
 }
@@ -7064,11 +7329,26 @@ func (s *CreateRobotApplicationVersionInput) SetCurrentRevisionId(v string) *Cre
 	return s
 }
 
+// SetImageDigest sets the ImageDigest field's value.
+func (s *CreateRobotApplicationVersionInput) SetImageDigest(v string) *CreateRobotApplicationVersionInput {
+	s.ImageDigest = &v
+	return s
+}
+
+// SetS3Etags sets the S3Etags field's value.
+func (s *CreateRobotApplicationVersionInput) SetS3Etags(v []*string) *CreateRobotApplicationVersionInput {
+	s.S3Etags = v
+	return s
+}
+
 type CreateRobotApplicationVersionOutput struct {
 	_ struct{} `type:"structure"`
 
 	// The Amazon Resource Name (ARN) of the robot application.
 	Arn *string `locationName:"arn" min:"1" type:"string"`
+
+	// The object that contains the Docker image URI used to create your robot application.
+	Environment *Environment `locationName:"environment" type:"structure"`
 
 	// The time, in milliseconds since the epoch, when the robot application was
 	// last updated.
@@ -7090,12 +7370,20 @@ type CreateRobotApplicationVersionOutput struct {
 	Version *string `locationName:"version" min:"1" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateRobotApplicationVersionOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateRobotApplicationVersionOutput) GoString() string {
 	return s.String()
 }
@@ -7103,6 +7391,12 @@ func (s CreateRobotApplicationVersionOutput) GoString() string {
 // SetArn sets the Arn field's value.
 func (s *CreateRobotApplicationVersionOutput) SetArn(v string) *CreateRobotApplicationVersionOutput {
 	s.Arn = &v
+	return s
+}
+
+// SetEnvironment sets the Environment field's value.
+func (s *CreateRobotApplicationVersionOutput) SetEnvironment(v *Environment) *CreateRobotApplicationVersionOutput {
+	s.Environment = v
 	return s
 }
 
@@ -7164,12 +7458,20 @@ type CreateRobotInput struct {
 	Tags map[string]*string `locationName:"tags" type:"map"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateRobotInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateRobotInput) GoString() string {
 	return s.String()
 }
@@ -7246,12 +7548,20 @@ type CreateRobotOutput struct {
 	Tags map[string]*string `locationName:"tags" type:"map"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateRobotOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateRobotOutput) GoString() string {
 	return s.String()
 }
@@ -7295,6 +7605,10 @@ func (s *CreateRobotOutput) SetTags(v map[string]*string) *CreateRobotOutput {
 type CreateSimulationApplicationInput struct {
 	_ struct{} `type:"structure"`
 
+	// The object that contains the Docker image URI used to create your simulation
+	// application.
+	Environment *Environment `locationName:"environment" type:"structure"`
+
 	// The name of the simulation application.
 	//
 	// Name is a required field
@@ -7314,21 +7628,27 @@ type CreateSimulationApplicationInput struct {
 	SimulationSoftwareSuite *SimulationSoftwareSuite `locationName:"simulationSoftwareSuite" type:"structure" required:"true"`
 
 	// The sources of the simulation application.
-	//
-	// Sources is a required field
-	Sources []*SourceConfig `locationName:"sources" type:"list" required:"true"`
+	Sources []*SourceConfig `locationName:"sources" type:"list"`
 
 	// A map that contains tag keys and tag values that are attached to the simulation
 	// application.
 	Tags map[string]*string `locationName:"tags" type:"map"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateSimulationApplicationInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateSimulationApplicationInput) GoString() string {
 	return s.String()
 }
@@ -7348,8 +7668,10 @@ func (s *CreateSimulationApplicationInput) Validate() error {
 	if s.SimulationSoftwareSuite == nil {
 		invalidParams.Add(request.NewErrParamRequired("SimulationSoftwareSuite"))
 	}
-	if s.Sources == nil {
-		invalidParams.Add(request.NewErrParamRequired("Sources"))
+	if s.Environment != nil {
+		if err := s.Environment.Validate(); err != nil {
+			invalidParams.AddNested("Environment", err.(request.ErrInvalidParams))
+		}
 	}
 	if s.RenderingEngine != nil {
 		if err := s.RenderingEngine.Validate(); err != nil {
@@ -7371,6 +7693,12 @@ func (s *CreateSimulationApplicationInput) Validate() error {
 		return invalidParams
 	}
 	return nil
+}
+
+// SetEnvironment sets the Environment field's value.
+func (s *CreateSimulationApplicationInput) SetEnvironment(v *Environment) *CreateSimulationApplicationInput {
+	s.Environment = v
+	return s
 }
 
 // SetName sets the Name field's value.
@@ -7415,6 +7743,10 @@ type CreateSimulationApplicationOutput struct {
 	// The Amazon Resource Name (ARN) of the simulation application.
 	Arn *string `locationName:"arn" min:"1" type:"string"`
 
+	// The object that contains the Docker image URI that you used to create your
+	// simulation application.
+	Environment *Environment `locationName:"environment" type:"structure"`
+
 	// The time, in milliseconds since the epoch, when the simulation application
 	// was last updated.
 	LastUpdatedAt *time.Time `locationName:"lastUpdatedAt" type:"timestamp"`
@@ -7444,12 +7776,20 @@ type CreateSimulationApplicationOutput struct {
 	Version *string `locationName:"version" min:"1" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateSimulationApplicationOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateSimulationApplicationOutput) GoString() string {
 	return s.String()
 }
@@ -7457,6 +7797,12 @@ func (s CreateSimulationApplicationOutput) GoString() string {
 // SetArn sets the Arn field's value.
 func (s *CreateSimulationApplicationOutput) SetArn(v string) *CreateSimulationApplicationOutput {
 	s.Arn = &v
+	return s
+}
+
+// SetEnvironment sets the Environment field's value.
+func (s *CreateSimulationApplicationOutput) SetEnvironment(v *Environment) *CreateSimulationApplicationOutput {
+	s.Environment = v
 	return s
 }
 
@@ -7525,14 +7871,30 @@ type CreateSimulationApplicationVersionInput struct {
 	// The current revision id for the simulation application. If you provide a
 	// value and it matches the latest revision ID, a new version will be created.
 	CurrentRevisionId *string `locationName:"currentRevisionId" min:"1" type:"string"`
+
+	// The SHA256 digest used to identify the Docker image URI used to created the
+	// simulation application.
+	ImageDigest *string `locationName:"imageDigest" type:"string"`
+
+	// The Amazon S3 eTag identifier for the zip file bundle that you use to create
+	// the simulation application.
+	S3Etags []*string `locationName:"s3Etags" type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateSimulationApplicationVersionInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateSimulationApplicationVersionInput) GoString() string {
 	return s.String()
 }
@@ -7568,11 +7930,27 @@ func (s *CreateSimulationApplicationVersionInput) SetCurrentRevisionId(v string)
 	return s
 }
 
+// SetImageDigest sets the ImageDigest field's value.
+func (s *CreateSimulationApplicationVersionInput) SetImageDigest(v string) *CreateSimulationApplicationVersionInput {
+	s.ImageDigest = &v
+	return s
+}
+
+// SetS3Etags sets the S3Etags field's value.
+func (s *CreateSimulationApplicationVersionInput) SetS3Etags(v []*string) *CreateSimulationApplicationVersionInput {
+	s.S3Etags = v
+	return s
+}
+
 type CreateSimulationApplicationVersionOutput struct {
 	_ struct{} `type:"structure"`
 
 	// The Amazon Resource Name (ARN) of the simulation application.
 	Arn *string `locationName:"arn" min:"1" type:"string"`
+
+	// The object that contains the Docker image URI used to create the simulation
+	// application.
+	Environment *Environment `locationName:"environment" type:"structure"`
 
 	// The time, in milliseconds since the epoch, when the simulation application
 	// was last updated.
@@ -7600,12 +7978,20 @@ type CreateSimulationApplicationVersionOutput struct {
 	Version *string `locationName:"version" min:"1" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateSimulationApplicationVersionOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateSimulationApplicationVersionOutput) GoString() string {
 	return s.String()
 }
@@ -7613,6 +7999,12 @@ func (s CreateSimulationApplicationVersionOutput) GoString() string {
 // SetArn sets the Arn field's value.
 func (s *CreateSimulationApplicationVersionOutput) SetArn(v string) *CreateSimulationApplicationVersionOutput {
 	s.Arn = &v
+	return s
+}
+
+// SetEnvironment sets the Environment field's value.
+func (s *CreateSimulationApplicationVersionOutput) SetEnvironment(v *Environment) *CreateSimulationApplicationVersionOutput {
+	s.Environment = v
 	return s
 }
 
@@ -7685,7 +8077,8 @@ type CreateSimulationJobInput struct {
 	//
 	// Continue
 	//
-	// Restart the simulation job in the same host instance.
+	// Leaves the instance running for its maximum timeout duration after a 4XX
+	// error code.
 	//
 	// Fail
 	//
@@ -7729,12 +8122,20 @@ type CreateSimulationJobInput struct {
 	VpcConfig *VPCConfig `locationName:"vpcConfig" type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateSimulationJobInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateSimulationJobInput) GoString() string {
 	return s.String()
 }
@@ -8012,12 +8413,20 @@ type CreateSimulationJobOutput struct {
 	VpcConfig *VPCConfigResponse `locationName:"vpcConfig" type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateSimulationJobOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateSimulationJobOutput) GoString() string {
 	return s.String()
 }
@@ -8158,12 +8567,20 @@ type CreateWorldExportJobInput struct {
 	Worlds []*string `locationName:"worlds" min:"1" type:"list" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateWorldExportJobInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateWorldExportJobInput) GoString() string {
 	return s.String()
 }
@@ -8267,6 +8684,14 @@ type CreateWorldExportJobOutput struct {
 	// InvalidInput
 	//
 	// An input parameter in the request is not valid.
+	//
+	// AllWorldGenerationFailed
+	//
+	// All of the worlds in the world generation job failed. This can happen if
+	// your worldCount is greater than 50 or less than 1.
+	//
+	// For more information about troubleshooting WorldForge, see Troubleshooting
+	// Simulation WorldForge (https://docs.aws.amazon.com/robomaker/latest/dg/troubleshooting-worldforge.html).
 	FailureCode *string `locationName:"failureCode" type:"string" enum:"WorldExportJobErrorCode"`
 
 	// The IAM role that the world export process uses to access the Amazon S3 bucket
@@ -8308,12 +8733,20 @@ type CreateWorldExportJobOutput struct {
 	Tags map[string]*string `locationName:"tags" type:"map"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateWorldExportJobOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateWorldExportJobOutput) GoString() string {
 	return s.String()
 }
@@ -8387,14 +8820,26 @@ type CreateWorldGenerationJobInput struct {
 	//
 	// WorldCount is a required field
 	WorldCount *WorldCount `locationName:"worldCount" type:"structure" required:"true"`
+
+	// A map that contains tag keys and tag values that are attached to the generated
+	// worlds.
+	WorldTags map[string]*string `locationName:"worldTags" type:"map"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateWorldGenerationJobInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateWorldGenerationJobInput) GoString() string {
 	return s.String()
 }
@@ -8442,6 +8887,12 @@ func (s *CreateWorldGenerationJobInput) SetTemplate(v string) *CreateWorldGenera
 // SetWorldCount sets the WorldCount field's value.
 func (s *CreateWorldGenerationJobInput) SetWorldCount(v *WorldCount) *CreateWorldGenerationJobInput {
 	s.WorldCount = v
+	return s
+}
+
+// SetWorldTags sets the WorldTags field's value.
+func (s *CreateWorldGenerationJobInput) SetWorldTags(v map[string]*string) *CreateWorldGenerationJobInput {
+	s.WorldTags = v
 	return s
 }
 
@@ -8523,14 +8974,26 @@ type CreateWorldGenerationJobOutput struct {
 
 	// Information about the world count.
 	WorldCount *WorldCount `locationName:"worldCount" type:"structure"`
+
+	// A map that contains tag keys and tag values that are attached to the generated
+	// worlds.
+	WorldTags map[string]*string `locationName:"worldTags" type:"map"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateWorldGenerationJobOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateWorldGenerationJobOutput) GoString() string {
 	return s.String()
 }
@@ -8583,6 +9046,12 @@ func (s *CreateWorldGenerationJobOutput) SetWorldCount(v *WorldCount) *CreateWor
 	return s
 }
 
+// SetWorldTags sets the WorldTags field's value.
+func (s *CreateWorldGenerationJobOutput) SetWorldTags(v map[string]*string) *CreateWorldGenerationJobOutput {
+	s.WorldTags = v
+	return s
+}
+
 type CreateWorldTemplateInput struct {
 	_ struct{} `type:"structure"`
 
@@ -8604,12 +9073,20 @@ type CreateWorldTemplateInput struct {
 	TemplateLocation *TemplateLocation `locationName:"templateLocation" type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateWorldTemplateInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateWorldTemplateInput) GoString() string {
 	return s.String()
 }
@@ -8686,12 +9163,20 @@ type CreateWorldTemplateOutput struct {
 	Tags map[string]*string `locationName:"tags" type:"map"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateWorldTemplateOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateWorldTemplateOutput) GoString() string {
 	return s.String()
 }
@@ -8730,6 +9215,20 @@ func (s *CreateWorldTemplateOutput) SetTags(v map[string]*string) *CreateWorldTe
 type DataSource struct {
 	_ struct{} `type:"structure"`
 
+	// The location where your files are mounted in the container image.
+	//
+	// If you've specified the type of the data source as an Archive, you must provide
+	// an Amazon S3 object key to your archive. The object key must point to either
+	// a .zip or .tar.gz file.
+	//
+	// If you've specified the type of the data source as a Prefix, you provide
+	// the Amazon S3 prefix that points to the files that you are using for your
+	// data source.
+	//
+	// If you've specified the type of the data source as a File, you provide the
+	// Amazon S3 path to the file that you're using as your data source.
+	Destination *string `locationName:"destination" min:"1" type:"string"`
+
 	// The name of the data source.
 	Name *string `locationName:"name" min:"1" type:"string"`
 
@@ -8738,16 +9237,37 @@ type DataSource struct {
 
 	// The list of S3 keys identifying the data source files.
 	S3Keys []*S3KeyOutput `locationName:"s3Keys" type:"list"`
+
+	// The data type for the data source that you're using for your container image
+	// or simulation job. You can use this field to specify whether your data source
+	// is an Archive, an Amazon S3 prefix, or a file.
+	//
+	// If you don't specify a field, the default value is File.
+	Type *string `locationName:"type" type:"string" enum:"DataSourceType"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DataSource) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DataSource) GoString() string {
 	return s.String()
+}
+
+// SetDestination sets the Destination field's value.
+func (s *DataSource) SetDestination(v string) *DataSource {
+	s.Destination = &v
+	return s
 }
 
 // SetName sets the Name field's value.
@@ -8768,9 +9288,29 @@ func (s *DataSource) SetS3Keys(v []*S3KeyOutput) *DataSource {
 	return s
 }
 
+// SetType sets the Type field's value.
+func (s *DataSource) SetType(v string) *DataSource {
+	s.Type = &v
+	return s
+}
+
 // Information about a data source.
 type DataSourceConfig struct {
 	_ struct{} `type:"structure"`
+
+	// The location where your files are mounted in the container image.
+	//
+	// If you've specified the type of the data source as an Archive, you must provide
+	// an Amazon S3 object key to your archive. The object key must point to either
+	// a .zip or .tar.gz file.
+	//
+	// If you've specified the type of the data source as a Prefix, you provide
+	// the Amazon S3 prefix that points to the files that you are using for your
+	// data source.
+	//
+	// If you've specified the type of the data source as a File, you provide the
+	// Amazon S3 path to the file that you're using as your data source.
+	Destination *string `locationName:"destination" min:"1" type:"string"`
 
 	// The name of the data source.
 	//
@@ -8786,14 +9326,29 @@ type DataSourceConfig struct {
 	//
 	// S3Keys is a required field
 	S3Keys []*string `locationName:"s3Keys" min:"1" type:"list" required:"true"`
+
+	// The data type for the data source that you're using for your container image
+	// or simulation job. You can use this field to specify whether your data source
+	// is an Archive, an Amazon S3 prefix, or a file.
+	//
+	// If you don't specify a field, the default value is File.
+	Type *string `locationName:"type" type:"string" enum:"DataSourceType"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DataSourceConfig) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DataSourceConfig) GoString() string {
 	return s.String()
 }
@@ -8801,6 +9356,9 @@ func (s DataSourceConfig) GoString() string {
 // Validate inspects the fields of the type to determine if they are valid.
 func (s *DataSourceConfig) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "DataSourceConfig"}
+	if s.Destination != nil && len(*s.Destination) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Destination", 1))
+	}
 	if s.Name == nil {
 		invalidParams.Add(request.NewErrParamRequired("Name"))
 	}
@@ -8826,6 +9384,12 @@ func (s *DataSourceConfig) Validate() error {
 	return nil
 }
 
+// SetDestination sets the Destination field's value.
+func (s *DataSourceConfig) SetDestination(v string) *DataSourceConfig {
+	s.Destination = &v
+	return s
+}
+
 // SetName sets the Name field's value.
 func (s *DataSourceConfig) SetName(v string) *DataSourceConfig {
 	s.Name = &v
@@ -8844,6 +9408,12 @@ func (s *DataSourceConfig) SetS3Keys(v []*string) *DataSourceConfig {
 	return s
 }
 
+// SetType sets the Type field's value.
+func (s *DataSourceConfig) SetType(v string) *DataSourceConfig {
+	s.Type = &v
+	return s
+}
+
 type DeleteFleetInput struct {
 	_ struct{} `type:"structure"`
 
@@ -8853,12 +9423,20 @@ type DeleteFleetInput struct {
 	Fleet *string `locationName:"fleet" min:"1" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteFleetInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteFleetInput) GoString() string {
 	return s.String()
 }
@@ -8886,15 +9464,23 @@ func (s *DeleteFleetInput) SetFleet(v string) *DeleteFleetInput {
 }
 
 type DeleteFleetOutput struct {
-	_ struct{} `type:"structure"`
+	_ struct{} `type:"structure" nopayload:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteFleetOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteFleetOutput) GoString() string {
 	return s.String()
 }
@@ -8911,12 +9497,20 @@ type DeleteRobotApplicationInput struct {
 	ApplicationVersion *string `locationName:"applicationVersion" min:"1" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteRobotApplicationInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteRobotApplicationInput) GoString() string {
 	return s.String()
 }
@@ -8953,15 +9547,23 @@ func (s *DeleteRobotApplicationInput) SetApplicationVersion(v string) *DeleteRob
 }
 
 type DeleteRobotApplicationOutput struct {
-	_ struct{} `type:"structure"`
+	_ struct{} `type:"structure" nopayload:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteRobotApplicationOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteRobotApplicationOutput) GoString() string {
 	return s.String()
 }
@@ -8975,12 +9577,20 @@ type DeleteRobotInput struct {
 	Robot *string `locationName:"robot" min:"1" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteRobotInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteRobotInput) GoString() string {
 	return s.String()
 }
@@ -9008,15 +9618,23 @@ func (s *DeleteRobotInput) SetRobot(v string) *DeleteRobotInput {
 }
 
 type DeleteRobotOutput struct {
-	_ struct{} `type:"structure"`
+	_ struct{} `type:"structure" nopayload:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteRobotOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteRobotOutput) GoString() string {
 	return s.String()
 }
@@ -9033,12 +9651,20 @@ type DeleteSimulationApplicationInput struct {
 	ApplicationVersion *string `locationName:"applicationVersion" min:"1" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteSimulationApplicationInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteSimulationApplicationInput) GoString() string {
 	return s.String()
 }
@@ -9075,15 +9701,23 @@ func (s *DeleteSimulationApplicationInput) SetApplicationVersion(v string) *Dele
 }
 
 type DeleteSimulationApplicationOutput struct {
-	_ struct{} `type:"structure"`
+	_ struct{} `type:"structure" nopayload:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteSimulationApplicationOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteSimulationApplicationOutput) GoString() string {
 	return s.String()
 }
@@ -9097,12 +9731,20 @@ type DeleteWorldTemplateInput struct {
 	Template *string `locationName:"template" min:"1" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteWorldTemplateInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteWorldTemplateInput) GoString() string {
 	return s.String()
 }
@@ -9130,15 +9772,23 @@ func (s *DeleteWorldTemplateInput) SetTemplate(v string) *DeleteWorldTemplateInp
 }
 
 type DeleteWorldTemplateOutput struct {
-	_ struct{} `type:"structure"`
+	_ struct{} `type:"structure" nopayload:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteWorldTemplateOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteWorldTemplateOutput) GoString() string {
 	return s.String()
 }
@@ -9163,12 +9813,20 @@ type DeploymentApplicationConfig struct {
 	LaunchConfig *DeploymentLaunchConfig `locationName:"launchConfig" type:"structure" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeploymentApplicationConfig) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeploymentApplicationConfig) GoString() string {
 	return s.String()
 }
@@ -9240,12 +9898,20 @@ type DeploymentConfig struct {
 	RobotDeploymentTimeoutInSeconds *int64 `locationName:"robotDeploymentTimeoutInSeconds" type:"long"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeploymentConfig) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeploymentConfig) GoString() string {
 	return s.String()
 }
@@ -9324,12 +9990,20 @@ type DeploymentJob struct {
 	Status *string `locationName:"status" type:"string" enum:"DeploymentStatus"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeploymentJob) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeploymentJob) GoString() string {
 	return s.String()
 }
@@ -9409,12 +10083,20 @@ type DeploymentLaunchConfig struct {
 	PreLaunchFile *string `locationName:"preLaunchFile" min:"1" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeploymentLaunchConfig) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeploymentLaunchConfig) GoString() string {
 	return s.String()
 }
@@ -9491,12 +10173,20 @@ type DeregisterRobotInput struct {
 	Robot *string `locationName:"robot" min:"1" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeregisterRobotInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeregisterRobotInput) GoString() string {
 	return s.String()
 }
@@ -9545,12 +10235,20 @@ type DeregisterRobotOutput struct {
 	Robot *string `locationName:"robot" min:"1" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeregisterRobotOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeregisterRobotOutput) GoString() string {
 	return s.String()
 }
@@ -9576,12 +10274,20 @@ type DescribeDeploymentJobInput struct {
 	Job *string `locationName:"job" min:"1" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeDeploymentJobInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeDeploymentJobInput) GoString() string {
 	return s.String()
 }
@@ -9642,12 +10348,20 @@ type DescribeDeploymentJobOutput struct {
 	Tags map[string]*string `locationName:"tags" type:"map"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeDeploymentJobOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeDeploymentJobOutput) GoString() string {
 	return s.String()
 }
@@ -9721,12 +10435,20 @@ type DescribeFleetInput struct {
 	Fleet *string `locationName:"fleet" min:"1" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeFleetInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeFleetInput) GoString() string {
 	return s.String()
 }
@@ -9781,12 +10503,20 @@ type DescribeFleetOutput struct {
 	Tags map[string]*string `locationName:"tags" type:"map"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeFleetOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeFleetOutput) GoString() string {
 	return s.String()
 }
@@ -9851,12 +10581,20 @@ type DescribeRobotApplicationInput struct {
 	ApplicationVersion *string `locationName:"applicationVersion" min:"1" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeRobotApplicationInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeRobotApplicationInput) GoString() string {
 	return s.String()
 }
@@ -9898,6 +10636,12 @@ type DescribeRobotApplicationOutput struct {
 	// The Amazon Resource Name (ARN) of the robot application.
 	Arn *string `locationName:"arn" min:"1" type:"string"`
 
+	// The object that contains the Docker image URI used to create the robot application.
+	Environment *Environment `locationName:"environment" type:"structure"`
+
+	// A SHA256 identifier for the Docker image that you use for your robot application.
+	ImageDigest *string `locationName:"imageDigest" type:"string"`
+
 	// The time, in milliseconds since the epoch, when the robot application was
 	// last updated.
 	LastUpdatedAt *time.Time `locationName:"lastUpdatedAt" type:"timestamp"`
@@ -9921,12 +10665,20 @@ type DescribeRobotApplicationOutput struct {
 	Version *string `locationName:"version" min:"1" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeRobotApplicationOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeRobotApplicationOutput) GoString() string {
 	return s.String()
 }
@@ -9934,6 +10686,18 @@ func (s DescribeRobotApplicationOutput) GoString() string {
 // SetArn sets the Arn field's value.
 func (s *DescribeRobotApplicationOutput) SetArn(v string) *DescribeRobotApplicationOutput {
 	s.Arn = &v
+	return s
+}
+
+// SetEnvironment sets the Environment field's value.
+func (s *DescribeRobotApplicationOutput) SetEnvironment(v *Environment) *DescribeRobotApplicationOutput {
+	s.Environment = v
+	return s
+}
+
+// SetImageDigest sets the ImageDigest field's value.
+func (s *DescribeRobotApplicationOutput) SetImageDigest(v string) *DescribeRobotApplicationOutput {
+	s.ImageDigest = &v
 	return s
 }
 
@@ -9988,12 +10752,20 @@ type DescribeRobotInput struct {
 	Robot *string `locationName:"robot" min:"1" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeRobotInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeRobotInput) GoString() string {
 	return s.String()
 }
@@ -10054,12 +10826,20 @@ type DescribeRobotOutput struct {
 	Tags map[string]*string `locationName:"tags" type:"map"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeRobotOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeRobotOutput) GoString() string {
 	return s.String()
 }
@@ -10136,12 +10916,20 @@ type DescribeSimulationApplicationInput struct {
 	ApplicationVersion *string `locationName:"applicationVersion" min:"1" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeSimulationApplicationInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeSimulationApplicationInput) GoString() string {
 	return s.String()
 }
@@ -10183,6 +10971,14 @@ type DescribeSimulationApplicationOutput struct {
 	// The Amazon Resource Name (ARN) of the robot simulation application.
 	Arn *string `locationName:"arn" min:"1" type:"string"`
 
+	// The object that contains the Docker image URI used to create the simulation
+	// application.
+	Environment *Environment `locationName:"environment" type:"structure"`
+
+	// A SHA256 identifier for the Docker image that you use for your simulation
+	// application.
+	ImageDigest *string `locationName:"imageDigest" type:"string"`
+
 	// The time, in milliseconds since the epoch, when the simulation application
 	// was last updated.
 	LastUpdatedAt *time.Time `locationName:"lastUpdatedAt" type:"timestamp"`
@@ -10212,12 +11008,20 @@ type DescribeSimulationApplicationOutput struct {
 	Version *string `locationName:"version" min:"1" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeSimulationApplicationOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeSimulationApplicationOutput) GoString() string {
 	return s.String()
 }
@@ -10225,6 +11029,18 @@ func (s DescribeSimulationApplicationOutput) GoString() string {
 // SetArn sets the Arn field's value.
 func (s *DescribeSimulationApplicationOutput) SetArn(v string) *DescribeSimulationApplicationOutput {
 	s.Arn = &v
+	return s
+}
+
+// SetEnvironment sets the Environment field's value.
+func (s *DescribeSimulationApplicationOutput) SetEnvironment(v *Environment) *DescribeSimulationApplicationOutput {
+	s.Environment = v
+	return s
+}
+
+// SetImageDigest sets the ImageDigest field's value.
+func (s *DescribeSimulationApplicationOutput) SetImageDigest(v string) *DescribeSimulationApplicationOutput {
+	s.ImageDigest = &v
 	return s
 }
 
@@ -10291,12 +11107,20 @@ type DescribeSimulationJobBatchInput struct {
 	Batch *string `locationName:"batch" min:"1" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeSimulationJobBatchInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeSimulationJobBatchInput) GoString() string {
 	return s.String()
 }
@@ -10416,12 +11240,20 @@ type DescribeSimulationJobBatchOutput struct {
 	Tags map[string]*string `locationName:"tags" type:"map"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeSimulationJobBatchOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeSimulationJobBatchOutput) GoString() string {
 	return s.String()
 }
@@ -10507,12 +11339,20 @@ type DescribeSimulationJobInput struct {
 	Job *string `locationName:"job" min:"1" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeSimulationJobInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeSimulationJobInput) GoString() string {
 	return s.String()
 }
@@ -10670,12 +11510,20 @@ type DescribeSimulationJobOutput struct {
 	VpcConfig *VPCConfigResponse `locationName:"vpcConfig" type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeSimulationJobOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeSimulationJobOutput) GoString() string {
 	return s.String()
 }
@@ -10815,12 +11663,20 @@ type DescribeWorldExportJobInput struct {
 	Job *string `locationName:"job" min:"1" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeWorldExportJobInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeWorldExportJobInput) GoString() string {
 	return s.String()
 }
@@ -10930,12 +11786,20 @@ type DescribeWorldExportJobOutput struct {
 	Worlds []*string `locationName:"worlds" min:"1" type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeWorldExportJobOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeWorldExportJobOutput) GoString() string {
 	return s.String()
 }
@@ -11009,12 +11873,20 @@ type DescribeWorldGenerationJobInput struct {
 	Job *string `locationName:"job" min:"1" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeWorldGenerationJobInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeWorldGenerationJobInput) GoString() string {
 	return s.String()
 }
@@ -11125,14 +11997,26 @@ type DescribeWorldGenerationJobOutput struct {
 
 	// Information about the world count.
 	WorldCount *WorldCount `locationName:"worldCount" type:"structure"`
+
+	// A map that contains tag keys and tag values that are attached to the generated
+	// worlds.
+	WorldTags map[string]*string `locationName:"worldTags" type:"map"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeWorldGenerationJobOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeWorldGenerationJobOutput) GoString() string {
 	return s.String()
 }
@@ -11197,6 +12081,12 @@ func (s *DescribeWorldGenerationJobOutput) SetWorldCount(v *WorldCount) *Describ
 	return s
 }
 
+// SetWorldTags sets the WorldTags field's value.
+func (s *DescribeWorldGenerationJobOutput) SetWorldTags(v map[string]*string) *DescribeWorldGenerationJobOutput {
+	s.WorldTags = v
+	return s
+}
+
 type DescribeWorldInput struct {
 	_ struct{} `type:"structure"`
 
@@ -11206,12 +12096,20 @@ type DescribeWorldInput struct {
 	World *string `locationName:"world" min:"1" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeWorldInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeWorldInput) GoString() string {
 	return s.String()
 }
@@ -11256,14 +12154,25 @@ type DescribeWorldOutput struct {
 
 	// The world template.
 	Template *string `locationName:"template" min:"1" type:"string"`
+
+	// Returns the JSON formatted string that describes the contents of your world.
+	WorldDescriptionBody *string `locationName:"worldDescriptionBody" min:"1" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeWorldOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeWorldOutput) GoString() string {
 	return s.String()
 }
@@ -11298,6 +12207,12 @@ func (s *DescribeWorldOutput) SetTemplate(v string) *DescribeWorldOutput {
 	return s
 }
 
+// SetWorldDescriptionBody sets the WorldDescriptionBody field's value.
+func (s *DescribeWorldOutput) SetWorldDescriptionBody(v string) *DescribeWorldOutput {
+	s.WorldDescriptionBody = &v
+	return s
+}
+
 type DescribeWorldTemplateInput struct {
 	_ struct{} `type:"structure"`
 
@@ -11307,12 +12222,20 @@ type DescribeWorldTemplateInput struct {
 	Template *string `locationName:"template" min:"1" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeWorldTemplateInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeWorldTemplateInput) GoString() string {
 	return s.String()
 }
@@ -11362,14 +12285,25 @@ type DescribeWorldTemplateOutput struct {
 	// A map that contains tag keys and tag values that are attached to the world
 	// template.
 	Tags map[string]*string `locationName:"tags" type:"map"`
+
+	// The version of the world template that you're using.
+	Version *string `locationName:"version" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeWorldTemplateOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeWorldTemplateOutput) GoString() string {
 	return s.String()
 }
@@ -11410,6 +12344,58 @@ func (s *DescribeWorldTemplateOutput) SetTags(v map[string]*string) *DescribeWor
 	return s
 }
 
+// SetVersion sets the Version field's value.
+func (s *DescribeWorldTemplateOutput) SetVersion(v string) *DescribeWorldTemplateOutput {
+	s.Version = &v
+	return s
+}
+
+// The object that contains the Docker image URI for either your robot or simulation
+// applications.
+type Environment struct {
+	_ struct{} `type:"structure"`
+
+	// The Docker image URI for either your robot or simulation applications.
+	Uri *string `locationName:"uri" min:"1" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s Environment) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s Environment) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *Environment) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "Environment"}
+	if s.Uri != nil && len(*s.Uri) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Uri", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetUri sets the Uri field's value.
+func (s *Environment) SetUri(v string) *Environment {
+	s.Uri = &v
+	return s
+}
+
 // Information about a failed create simulation job request.
 type FailedCreateSimulationJobRequest struct {
 	_ struct{} `type:"structure"`
@@ -11428,12 +12414,20 @@ type FailedCreateSimulationJobRequest struct {
 	Request *SimulationJobRequest `locationName:"request" type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s FailedCreateSimulationJobRequest) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s FailedCreateSimulationJobRequest) GoString() string {
 	return s.String()
 }
@@ -11473,12 +12467,20 @@ type FailureSummary struct {
 	TotalFailureCount *int64 `locationName:"totalFailureCount" type:"integer"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s FailureSummary) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s FailureSummary) GoString() string {
 	return s.String()
 }
@@ -11506,12 +12508,20 @@ type Filter struct {
 	Values []*string `locationName:"values" min:"1" type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s Filter) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s Filter) GoString() string {
 	return s.String()
 }
@@ -11558,12 +12568,20 @@ type FinishedWorldsSummary struct {
 	SucceededWorlds []*string `locationName:"succeededWorlds" min:"1" type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s FinishedWorldsSummary) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s FinishedWorldsSummary) GoString() string {
 	return s.String()
 }
@@ -11609,12 +12627,20 @@ type Fleet struct {
 	Name *string `locationName:"name" min:"1" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s Fleet) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s Fleet) GoString() string {
 	return s.String()
 }
@@ -11665,12 +12691,20 @@ type GetWorldTemplateBodyInput struct {
 	Template *string `locationName:"template" min:"1" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetWorldTemplateBodyInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetWorldTemplateBodyInput) GoString() string {
 	return s.String()
 }
@@ -11710,12 +12744,20 @@ type GetWorldTemplateBodyOutput struct {
 	TemplateBody *string `locationName:"templateBody" min:"1" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetWorldTemplateBodyOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetWorldTemplateBodyOutput) GoString() string {
 	return s.String()
 }
@@ -11736,12 +12778,20 @@ type IdempotentParameterMismatchException struct {
 	Message_ *string `locationName:"message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s IdempotentParameterMismatchException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s IdempotentParameterMismatchException) GoString() string {
 	return s.String()
 }
@@ -11792,12 +12842,20 @@ type InternalServerException struct {
 	Message_ *string `locationName:"message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s InternalServerException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s InternalServerException) GoString() string {
 	return s.String()
 }
@@ -11849,12 +12907,20 @@ type InvalidParameterException struct {
 	Message_ *string `locationName:"message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s InvalidParameterException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s InvalidParameterException) GoString() string {
 	return s.String()
 }
@@ -11901,18 +12967,21 @@ func (s *InvalidParameterException) RequestID() string {
 type LaunchConfig struct {
 	_ struct{} `type:"structure"`
 
+	// If you've specified General as the value for your RobotSoftwareSuite, you
+	// can use this field to specify a list of commands for your container image.
+	//
+	// If you've specified SimulationRuntime as the value for your SimulationSoftwareSuite,
+	// you can use this field to specify a list of commands for your container image.
+	Command []*string `locationName:"command" type:"list"`
+
 	// The environment variables for the application launch.
 	EnvironmentVariables map[string]*string `locationName:"environmentVariables" type:"map"`
 
 	// The launch file name.
-	//
-	// LaunchFile is a required field
-	LaunchFile *string `locationName:"launchFile" min:"1" type:"string" required:"true"`
+	LaunchFile *string `locationName:"launchFile" min:"1" type:"string"`
 
 	// The package name.
-	//
-	// PackageName is a required field
-	PackageName *string `locationName:"packageName" min:"1" type:"string" required:"true"`
+	PackageName *string `locationName:"packageName" min:"1" type:"string"`
 
 	// The port forwarding configuration.
 	PortForwardingConfig *PortForwardingConfig `locationName:"portForwardingConfig" type:"structure"`
@@ -11920,16 +12989,24 @@ type LaunchConfig struct {
 	// Boolean indicating whether a streaming session will be configured for the
 	// application. If True, AWS RoboMaker will configure a connection so you can
 	// interact with your application as it is running in the simulation. You must
-	// configure and luanch the component. It must have a graphical user interface.
+	// configure and launch the component. It must have a graphical user interface.
 	StreamUI *bool `locationName:"streamUI" type:"boolean"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s LaunchConfig) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s LaunchConfig) GoString() string {
 	return s.String()
 }
@@ -11937,14 +13014,8 @@ func (s LaunchConfig) GoString() string {
 // Validate inspects the fields of the type to determine if they are valid.
 func (s *LaunchConfig) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "LaunchConfig"}
-	if s.LaunchFile == nil {
-		invalidParams.Add(request.NewErrParamRequired("LaunchFile"))
-	}
 	if s.LaunchFile != nil && len(*s.LaunchFile) < 1 {
 		invalidParams.Add(request.NewErrParamMinLen("LaunchFile", 1))
-	}
-	if s.PackageName == nil {
-		invalidParams.Add(request.NewErrParamRequired("PackageName"))
 	}
 	if s.PackageName != nil && len(*s.PackageName) < 1 {
 		invalidParams.Add(request.NewErrParamMinLen("PackageName", 1))
@@ -11959,6 +13030,12 @@ func (s *LaunchConfig) Validate() error {
 		return invalidParams
 	}
 	return nil
+}
+
+// SetCommand sets the Command field's value.
+func (s *LaunchConfig) SetCommand(v []*string) *LaunchConfig {
+	s.Command = v
+	return s
 }
 
 // SetEnvironmentVariables sets the EnvironmentVariables field's value.
@@ -12000,12 +13077,20 @@ type LimitExceededException struct {
 	Message_ *string `locationName:"message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s LimitExceededException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s LimitExceededException) GoString() string {
 	return s.String()
 }
@@ -12075,12 +13160,20 @@ type ListDeploymentJobsInput struct {
 	NextToken *string `locationName:"nextToken" min:"1" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListDeploymentJobsInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListDeploymentJobsInput) GoString() string {
 	return s.String()
 }
@@ -12143,12 +13236,20 @@ type ListDeploymentJobsOutput struct {
 	NextToken *string `locationName:"nextToken" min:"1" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListDeploymentJobsOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListDeploymentJobsOutput) GoString() string {
 	return s.String()
 }
@@ -12193,12 +13294,20 @@ type ListFleetsInput struct {
 	NextToken *string `locationName:"nextToken" min:"1" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListFleetsInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListFleetsInput) GoString() string {
 	return s.String()
 }
@@ -12261,12 +13370,20 @@ type ListFleetsOutput struct {
 	NextToken *string `locationName:"nextToken" min:"1" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListFleetsOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListFleetsOutput) GoString() string {
 	return s.String()
 }
@@ -12311,12 +13428,20 @@ type ListRobotApplicationsInput struct {
 	VersionQualifier *string `locationName:"versionQualifier" min:"1" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListRobotApplicationsInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListRobotApplicationsInput) GoString() string {
 	return s.String()
 }
@@ -12388,12 +13513,20 @@ type ListRobotApplicationsOutput struct {
 	RobotApplicationSummaries []*RobotApplicationSummary `locationName:"robotApplicationSummaries" type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListRobotApplicationsOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListRobotApplicationsOutput) GoString() string {
 	return s.String()
 }
@@ -12437,12 +13570,20 @@ type ListRobotsInput struct {
 	NextToken *string `locationName:"nextToken" min:"1" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListRobotsInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListRobotsInput) GoString() string {
 	return s.String()
 }
@@ -12505,12 +13646,20 @@ type ListRobotsOutput struct {
 	Robots []*Robot `locationName:"robots" type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListRobotsOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListRobotsOutput) GoString() string {
 	return s.String()
 }
@@ -12555,12 +13704,20 @@ type ListSimulationApplicationsInput struct {
 	VersionQualifier *string `locationName:"versionQualifier" min:"1" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListSimulationApplicationsInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListSimulationApplicationsInput) GoString() string {
 	return s.String()
 }
@@ -12633,12 +13790,20 @@ type ListSimulationApplicationsOutput struct {
 	SimulationApplicationSummaries []*SimulationApplicationSummary `locationName:"simulationApplicationSummaries" type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListSimulationApplicationsOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListSimulationApplicationsOutput) GoString() string {
 	return s.String()
 }
@@ -12675,12 +13840,20 @@ type ListSimulationJobBatchesInput struct {
 	NextToken *string `locationName:"nextToken" min:"1" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListSimulationJobBatchesInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListSimulationJobBatchesInput) GoString() string {
 	return s.String()
 }
@@ -12743,12 +13916,20 @@ type ListSimulationJobBatchesOutput struct {
 	SimulationJobBatchSummaries []*SimulationJobBatchSummary `locationName:"simulationJobBatchSummaries" type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListSimulationJobBatchesOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListSimulationJobBatchesOutput) GoString() string {
 	return s.String()
 }
@@ -12793,12 +13974,20 @@ type ListSimulationJobsInput struct {
 	NextToken *string `locationName:"nextToken" min:"1" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListSimulationJobsInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListSimulationJobsInput) GoString() string {
 	return s.String()
 }
@@ -12863,12 +14052,20 @@ type ListSimulationJobsOutput struct {
 	SimulationJobSummaries []*SimulationJobSummary `locationName:"simulationJobSummaries" type:"list" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListSimulationJobsOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListSimulationJobsOutput) GoString() string {
 	return s.String()
 }
@@ -12886,7 +14083,7 @@ func (s *ListSimulationJobsOutput) SetSimulationJobSummaries(v []*SimulationJobS
 }
 
 type ListTagsForResourceInput struct {
-	_ struct{} `type:"structure"`
+	_ struct{} `type:"structure" nopayload:"true"`
 
 	// The AWS RoboMaker Amazon Resource Name (ARN) with tags to be listed.
 	//
@@ -12894,12 +14091,20 @@ type ListTagsForResourceInput struct {
 	ResourceArn *string `location:"uri" locationName:"resourceArn" min:"1" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListTagsForResourceInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListTagsForResourceInput) GoString() string {
 	return s.String()
 }
@@ -12933,12 +14138,20 @@ type ListTagsForResourceOutput struct {
 	Tags map[string]*string `locationName:"tags" type:"map"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListTagsForResourceOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListTagsForResourceOutput) GoString() string {
 	return s.String()
 }
@@ -12971,12 +14184,20 @@ type ListWorldExportJobsInput struct {
 	NextToken *string `locationName:"nextToken" min:"1" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListWorldExportJobsInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListWorldExportJobsInput) GoString() string {
 	return s.String()
 }
@@ -13041,12 +14262,20 @@ type ListWorldExportJobsOutput struct {
 	WorldExportJobSummaries []*WorldExportJobSummary `locationName:"worldExportJobSummaries" type:"list" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListWorldExportJobsOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListWorldExportJobsOutput) GoString() string {
 	return s.String()
 }
@@ -13085,12 +14314,20 @@ type ListWorldGenerationJobsInput struct {
 	NextToken *string `locationName:"nextToken" min:"1" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListWorldGenerationJobsInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListWorldGenerationJobsInput) GoString() string {
 	return s.String()
 }
@@ -13155,12 +14392,20 @@ type ListWorldGenerationJobsOutput struct {
 	WorldGenerationJobSummaries []*WorldGenerationJobSummary `locationName:"worldGenerationJobSummaries" type:"list" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListWorldGenerationJobsOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListWorldGenerationJobsOutput) GoString() string {
 	return s.String()
 }
@@ -13196,12 +14441,20 @@ type ListWorldTemplatesInput struct {
 	NextToken *string `locationName:"nextToken" min:"1" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListWorldTemplatesInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListWorldTemplatesInput) GoString() string {
 	return s.String()
 }
@@ -13245,12 +14498,20 @@ type ListWorldTemplatesOutput struct {
 	TemplateSummaries []*TemplateSummary `locationName:"templateSummaries" type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListWorldTemplatesOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListWorldTemplatesOutput) GoString() string {
 	return s.String()
 }
@@ -13289,12 +14550,20 @@ type ListWorldsInput struct {
 	NextToken *string `locationName:"nextToken" min:"1" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListWorldsInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListWorldsInput) GoString() string {
 	return s.String()
 }
@@ -13357,12 +14626,20 @@ type ListWorldsOutput struct {
 	WorldSummaries []*WorldSummary `locationName:"worldSummaries" type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListWorldsOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListWorldsOutput) GoString() string {
 	return s.String()
 }
@@ -13389,12 +14666,20 @@ type LoggingConfig struct {
 	RecordAllRosTopics *bool `locationName:"recordAllRosTopics" type:"boolean" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s LoggingConfig) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s LoggingConfig) GoString() string {
 	return s.String()
 }
@@ -13432,12 +14717,20 @@ type NetworkInterface struct {
 	PublicIpAddress *string `locationName:"publicIpAddress" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s NetworkInterface) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s NetworkInterface) GoString() string {
 	return s.String()
 }
@@ -13471,12 +14764,20 @@ type OutputLocation struct {
 	S3Prefix *string `locationName:"s3Prefix" min:"1" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s OutputLocation) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s OutputLocation) GoString() string {
 	return s.String()
 }
@@ -13517,12 +14818,20 @@ type PortForwardingConfig struct {
 	PortMappings []*PortMapping `locationName:"portMappings" type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s PortForwardingConfig) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s PortForwardingConfig) GoString() string {
 	return s.String()
 }
@@ -13572,12 +14881,20 @@ type PortMapping struct {
 	JobPort *int64 `locationName:"jobPort" min:"1" type:"integer" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s PortMapping) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s PortMapping) GoString() string {
 	return s.String()
 }
@@ -13666,12 +14983,20 @@ type ProgressDetail struct {
 	TargetResource *string `locationName:"targetResource" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ProgressDetail) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ProgressDetail) GoString() string {
 	return s.String()
 }
@@ -13714,12 +15039,20 @@ type RegisterRobotInput struct {
 	Robot *string `locationName:"robot" min:"1" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s RegisterRobotInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s RegisterRobotInput) GoString() string {
 	return s.String()
 }
@@ -13768,12 +15101,20 @@ type RegisterRobotOutput struct {
 	Robot *string `locationName:"robot" min:"1" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s RegisterRobotOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s RegisterRobotOutput) GoString() string {
 	return s.String()
 }
@@ -13801,12 +15142,20 @@ type RenderingEngine struct {
 	Version *string `locationName:"version" min:"1" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s RenderingEngine) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s RenderingEngine) GoString() string {
 	return s.String()
 }
@@ -13844,12 +15193,20 @@ type ResourceAlreadyExistsException struct {
 	Message_ *string `locationName:"message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ResourceAlreadyExistsException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ResourceAlreadyExistsException) GoString() string {
 	return s.String()
 }
@@ -13900,12 +15257,20 @@ type ResourceNotFoundException struct {
 	Message_ *string `locationName:"message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ResourceNotFoundException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ResourceNotFoundException) GoString() string {
 	return s.String()
 }
@@ -13957,12 +15322,20 @@ type RestartSimulationJobInput struct {
 	Job *string `locationName:"job" min:"1" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s RestartSimulationJobInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s RestartSimulationJobInput) GoString() string {
 	return s.String()
 }
@@ -13990,15 +15363,23 @@ func (s *RestartSimulationJobInput) SetJob(v string) *RestartSimulationJobInput 
 }
 
 type RestartSimulationJobOutput struct {
-	_ struct{} `type:"structure"`
+	_ struct{} `type:"structure" nopayload:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s RestartSimulationJobOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s RestartSimulationJobOutput) GoString() string {
 	return s.String()
 }
@@ -14035,12 +15416,20 @@ type Robot struct {
 	Status *string `locationName:"status" type:"string" enum:"RobotStatus"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s Robot) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s Robot) GoString() string {
 	return s.String()
 }
@@ -14115,14 +15504,39 @@ type RobotApplicationConfig struct {
 	//
 	// LaunchConfig is a required field
 	LaunchConfig *LaunchConfig `locationName:"launchConfig" type:"structure" required:"true"`
+
+	// Information about tools configured for the robot application.
+	Tools []*Tool `locationName:"tools" type:"list"`
+
+	// The upload configurations for the robot application.
+	UploadConfigurations []*UploadConfiguration `locationName:"uploadConfigurations" type:"list"`
+
+	// A Boolean indicating whether to use default robot application tools. The
+	// default tools are rviz, rqt, terminal and rosbag record. The default is False.
+	UseDefaultTools *bool `locationName:"useDefaultTools" type:"boolean"`
+
+	// A Boolean indicating whether to use default upload configurations. By default,
+	// .ros and .gazebo files are uploaded when the application terminates and all
+	// ROS topics will be recorded.
+	//
+	// If you set this value, you must specify an outputLocation.
+	UseDefaultUploadConfigurations *bool `locationName:"useDefaultUploadConfigurations" type:"boolean"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s RobotApplicationConfig) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s RobotApplicationConfig) GoString() string {
 	return s.String()
 }
@@ -14145,6 +15559,26 @@ func (s *RobotApplicationConfig) Validate() error {
 	if s.LaunchConfig != nil {
 		if err := s.LaunchConfig.Validate(); err != nil {
 			invalidParams.AddNested("LaunchConfig", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.Tools != nil {
+		for i, v := range s.Tools {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "Tools", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+	if s.UploadConfigurations != nil {
+		for i, v := range s.UploadConfigurations {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "UploadConfigurations", i), err.(request.ErrInvalidParams))
+			}
 		}
 	}
 
@@ -14172,6 +15606,30 @@ func (s *RobotApplicationConfig) SetLaunchConfig(v *LaunchConfig) *RobotApplicat
 	return s
 }
 
+// SetTools sets the Tools field's value.
+func (s *RobotApplicationConfig) SetTools(v []*Tool) *RobotApplicationConfig {
+	s.Tools = v
+	return s
+}
+
+// SetUploadConfigurations sets the UploadConfigurations field's value.
+func (s *RobotApplicationConfig) SetUploadConfigurations(v []*UploadConfiguration) *RobotApplicationConfig {
+	s.UploadConfigurations = v
+	return s
+}
+
+// SetUseDefaultTools sets the UseDefaultTools field's value.
+func (s *RobotApplicationConfig) SetUseDefaultTools(v bool) *RobotApplicationConfig {
+	s.UseDefaultTools = &v
+	return s
+}
+
+// SetUseDefaultUploadConfigurations sets the UseDefaultUploadConfigurations field's value.
+func (s *RobotApplicationConfig) SetUseDefaultUploadConfigurations(v bool) *RobotApplicationConfig {
+	s.UseDefaultUploadConfigurations = &v
+	return s
+}
+
 // Summary information for a robot application.
 type RobotApplicationSummary struct {
 	_ struct{} `type:"structure"`
@@ -14193,12 +15651,20 @@ type RobotApplicationSummary struct {
 	Version *string `locationName:"version" min:"1" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s RobotApplicationSummary) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s RobotApplicationSummary) GoString() string {
 	return s.String()
 }
@@ -14259,12 +15725,20 @@ type RobotDeployment struct {
 	Status *string `locationName:"status" type:"string" enum:"RobotStatus"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s RobotDeployment) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s RobotDeployment) GoString() string {
 	return s.String()
 }
@@ -14322,12 +15796,20 @@ type RobotSoftwareSuite struct {
 	Version *string `locationName:"version" type:"string" enum:"RobotSoftwareSuiteVersionType"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s RobotSoftwareSuite) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s RobotSoftwareSuite) GoString() string {
 	return s.String()
 }
@@ -14352,15 +15834,23 @@ type S3KeyOutput struct {
 	Etag *string `locationName:"etag" type:"string"`
 
 	// The S3 key.
-	S3Key *string `locationName:"s3Key" min:"1" type:"string"`
+	S3Key *string `locationName:"s3Key" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s S3KeyOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s S3KeyOutput) GoString() string {
 	return s.String()
 }
@@ -14395,12 +15885,20 @@ type S3Object struct {
 	Key *string `locationName:"key" min:"1" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s S3Object) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s S3Object) GoString() string {
 	return s.String()
 }
@@ -14453,12 +15951,20 @@ type ServiceUnavailableException struct {
 	Message_ *string `locationName:"message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ServiceUnavailableException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ServiceUnavailableException) GoString() string {
 	return s.String()
 }
@@ -14518,16 +16024,42 @@ type SimulationApplicationConfig struct {
 	// LaunchConfig is a required field
 	LaunchConfig *LaunchConfig `locationName:"launchConfig" type:"structure" required:"true"`
 
+	// Information about tools configured for the simulation application.
+	Tools []*Tool `locationName:"tools" type:"list"`
+
+	// Information about upload configurations for the simulation application.
+	UploadConfigurations []*UploadConfiguration `locationName:"uploadConfigurations" type:"list"`
+
+	// A Boolean indicating whether to use default simulation application tools.
+	// The default tools are rviz, rqt, terminal and rosbag record. The default
+	// is False.
+	UseDefaultTools *bool `locationName:"useDefaultTools" type:"boolean"`
+
+	// A Boolean indicating whether to use default upload configurations. By default,
+	// .ros and .gazebo files are uploaded when the application terminates and all
+	// ROS topics will be recorded.
+	//
+	// If you set this value, you must specify an outputLocation.
+	UseDefaultUploadConfigurations *bool `locationName:"useDefaultUploadConfigurations" type:"boolean"`
+
 	// A list of world configurations.
 	WorldConfigs []*WorldConfig `locationName:"worldConfigs" type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s SimulationApplicationConfig) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s SimulationApplicationConfig) GoString() string {
 	return s.String()
 }
@@ -14550,6 +16082,26 @@ func (s *SimulationApplicationConfig) Validate() error {
 	if s.LaunchConfig != nil {
 		if err := s.LaunchConfig.Validate(); err != nil {
 			invalidParams.AddNested("LaunchConfig", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.Tools != nil {
+		for i, v := range s.Tools {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "Tools", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+	if s.UploadConfigurations != nil {
+		for i, v := range s.UploadConfigurations {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "UploadConfigurations", i), err.(request.ErrInvalidParams))
+			}
 		}
 	}
 	if s.WorldConfigs != nil {
@@ -14587,6 +16139,30 @@ func (s *SimulationApplicationConfig) SetLaunchConfig(v *LaunchConfig) *Simulati
 	return s
 }
 
+// SetTools sets the Tools field's value.
+func (s *SimulationApplicationConfig) SetTools(v []*Tool) *SimulationApplicationConfig {
+	s.Tools = v
+	return s
+}
+
+// SetUploadConfigurations sets the UploadConfigurations field's value.
+func (s *SimulationApplicationConfig) SetUploadConfigurations(v []*UploadConfiguration) *SimulationApplicationConfig {
+	s.UploadConfigurations = v
+	return s
+}
+
+// SetUseDefaultTools sets the UseDefaultTools field's value.
+func (s *SimulationApplicationConfig) SetUseDefaultTools(v bool) *SimulationApplicationConfig {
+	s.UseDefaultTools = &v
+	return s
+}
+
+// SetUseDefaultUploadConfigurations sets the UseDefaultUploadConfigurations field's value.
+func (s *SimulationApplicationConfig) SetUseDefaultUploadConfigurations(v bool) *SimulationApplicationConfig {
+	s.UseDefaultUploadConfigurations = &v
+	return s
+}
+
 // SetWorldConfigs sets the WorldConfigs field's value.
 func (s *SimulationApplicationConfig) SetWorldConfigs(v []*WorldConfig) *SimulationApplicationConfig {
 	s.WorldConfigs = v
@@ -14617,12 +16193,20 @@ type SimulationApplicationSummary struct {
 	Version *string `locationName:"version" min:"1" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s SimulationApplicationSummary) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s SimulationApplicationSummary) GoString() string {
 	return s.String()
 }
@@ -14683,7 +16267,8 @@ type SimulationJob struct {
 	//
 	// Continue
 	//
-	// Restart the simulation job in the same host instance.
+	// Leaves the host running for its maximum timeout duration after a 4XX error
+	// code.
 	//
 	// Fail
 	//
@@ -14745,12 +16330,20 @@ type SimulationJob struct {
 	VpcConfig *VPCConfigResponse `locationName:"vpcConfig" type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s SimulationJob) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s SimulationJob) GoString() string {
 	return s.String()
 }
@@ -14955,12 +16548,20 @@ type SimulationJobBatchSummary struct {
 	Status *string `locationName:"status" type:"string" enum:"SimulationJobBatchStatus"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s SimulationJobBatchSummary) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s SimulationJobBatchSummary) GoString() string {
 	return s.String()
 }
@@ -15025,7 +16626,8 @@ type SimulationJobRequest struct {
 	//
 	// Continue
 	//
-	// Restart the simulation job in the same host instance.
+	// Leaves the host running for its maximum timeout duration after a 4XX error
+	// code.
 	//
 	// Fail
 	//
@@ -15059,7 +16661,8 @@ type SimulationJobRequest struct {
 	// job request.
 	Tags map[string]*string `locationName:"tags" type:"map"`
 
-	// Boolean indicating whether to use default simulation tool applications.
+	// A Boolean indicating whether to use default applications in the simulation
+	// job. Default applications include Gazebo, rqt, rviz and terminal access.
 	UseDefaultApplications *bool `locationName:"useDefaultApplications" type:"boolean"`
 
 	// If your simulation job accesses resources in a VPC, you provide this parameter
@@ -15069,12 +16672,20 @@ type SimulationJobRequest struct {
 	VpcConfig *VPCConfig `locationName:"vpcConfig" type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s SimulationJobRequest) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s SimulationJobRequest) GoString() string {
 	return s.String()
 }
@@ -15233,6 +16844,9 @@ type SimulationJobSummary struct {
 	// The Amazon Resource Name (ARN) of the simulation job.
 	Arn *string `locationName:"arn" min:"1" type:"string"`
 
+	// The compute type for the simulation job summary.
+	ComputeType *string `locationName:"computeType" type:"string" enum:"ComputeType"`
+
 	// The names of the data sources.
 	DataSourceNames []*string `locationName:"dataSourceNames" type:"list"`
 
@@ -15253,12 +16867,20 @@ type SimulationJobSummary struct {
 	Status *string `locationName:"status" type:"string" enum:"SimulationJobStatus"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s SimulationJobSummary) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s SimulationJobSummary) GoString() string {
 	return s.String()
 }
@@ -15266,6 +16888,12 @@ func (s SimulationJobSummary) GoString() string {
 // SetArn sets the Arn field's value.
 func (s *SimulationJobSummary) SetArn(v string) *SimulationJobSummary {
 	s.Arn = &v
+	return s
+}
+
+// SetComputeType sets the ComputeType field's value.
+func (s *SimulationJobSummary) SetComputeType(v string) *SimulationJobSummary {
+	s.ComputeType = &v
 	return s
 }
 
@@ -15316,12 +16944,20 @@ type SimulationSoftwareSuite struct {
 	Version *string `locationName:"version" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s SimulationSoftwareSuite) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s SimulationSoftwareSuite) GoString() string {
 	return s.String()
 }
@@ -15355,12 +16991,20 @@ type Source struct {
 	S3Key *string `locationName:"s3Key" min:"1" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s Source) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s Source) GoString() string {
 	return s.String()
 }
@@ -15403,12 +17047,20 @@ type SourceConfig struct {
 	S3Key *string `locationName:"s3Key" min:"1" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s SourceConfig) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s SourceConfig) GoString() string {
 	return s.String()
 }
@@ -15467,12 +17119,20 @@ type StartSimulationJobBatchInput struct {
 	Tags map[string]*string `locationName:"tags" type:"map"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s StartSimulationJobBatchInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s StartSimulationJobBatchInput) GoString() string {
 	return s.String()
 }
@@ -15618,12 +17278,20 @@ type StartSimulationJobBatchOutput struct {
 	Tags map[string]*string `locationName:"tags" type:"map"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s StartSimulationJobBatchOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s StartSimulationJobBatchOutput) GoString() string {
 	return s.String()
 }
@@ -15707,12 +17375,20 @@ type SyncDeploymentJobInput struct {
 	Fleet *string `locationName:"fleet" min:"1" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s SyncDeploymentJobInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s SyncDeploymentJobInput) GoString() string {
 	return s.String()
 }
@@ -15834,12 +17510,20 @@ type SyncDeploymentJobOutput struct {
 	Status *string `locationName:"status" type:"string" enum:"DeploymentStatus"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s SyncDeploymentJobOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s SyncDeploymentJobOutput) GoString() string {
 	return s.String()
 }
@@ -15906,12 +17590,20 @@ type TagResourceInput struct {
 	Tags map[string]*string `locationName:"tags" type:"map" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s TagResourceInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s TagResourceInput) GoString() string {
 	return s.String()
 }
@@ -15948,15 +17640,23 @@ func (s *TagResourceInput) SetTags(v map[string]*string) *TagResourceInput {
 }
 
 type TagResourceOutput struct {
-	_ struct{} `type:"structure"`
+	_ struct{} `type:"structure" nopayload:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s TagResourceOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s TagResourceOutput) GoString() string {
 	return s.String()
 }
@@ -15976,12 +17676,20 @@ type TemplateLocation struct {
 	S3Key *string `locationName:"s3Key" min:"1" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s TemplateLocation) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s TemplateLocation) GoString() string {
 	return s.String()
 }
@@ -16035,14 +17743,25 @@ type TemplateSummary struct {
 
 	// The name of the template.
 	Name *string `locationName:"name" type:"string"`
+
+	// The version of the template that you're using.
+	Version *string `locationName:"version" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s TemplateSummary) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s TemplateSummary) GoString() string {
 	return s.String()
 }
@@ -16071,6 +17790,12 @@ func (s *TemplateSummary) SetName(v string) *TemplateSummary {
 	return s
 }
 
+// SetVersion sets the Version field's value.
+func (s *TemplateSummary) SetVersion(v string) *TemplateSummary {
+	s.Version = &v
+	return s
+}
+
 // AWS RoboMaker is temporarily unable to process the request. Try your call
 // again.
 type ThrottlingException struct {
@@ -16080,12 +17805,20 @@ type ThrottlingException struct {
 	Message_ *string `locationName:"message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ThrottlingException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ThrottlingException) GoString() string {
 	return s.String()
 }
@@ -16128,8 +17861,109 @@ func (s *ThrottlingException) RequestID() string {
 	return s.RespMetadata.RequestID
 }
 
-type UntagResourceInput struct {
+// Information about a tool. Tools are used in a simulation job.
+type Tool struct {
 	_ struct{} `type:"structure"`
+
+	// Command-line arguments for the tool. It must include the tool executable
+	// name.
+	//
+	// Command is a required field
+	Command *string `locationName:"command" min:"1" type:"string" required:"true"`
+
+	// Exit behavior determines what happens when your tool quits running. RESTART
+	// will cause your tool to be restarted. FAIL will cause your job to exit. The
+	// default is RESTART.
+	ExitBehavior *string `locationName:"exitBehavior" type:"string" enum:"ExitBehavior"`
+
+	// The name of the tool.
+	//
+	// Name is a required field
+	Name *string `locationName:"name" min:"1" type:"string" required:"true"`
+
+	// Boolean indicating whether logs will be recorded in CloudWatch for the tool.
+	// The default is False.
+	StreamOutputToCloudWatch *bool `locationName:"streamOutputToCloudWatch" type:"boolean"`
+
+	// Boolean indicating whether a streaming session will be configured for the
+	// tool. If True, AWS RoboMaker will configure a connection so you can interact
+	// with the tool as it is running in the simulation. It must have a graphical
+	// user interface. The default is False.
+	StreamUI *bool `locationName:"streamUI" type:"boolean"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s Tool) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s Tool) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *Tool) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "Tool"}
+	if s.Command == nil {
+		invalidParams.Add(request.NewErrParamRequired("Command"))
+	}
+	if s.Command != nil && len(*s.Command) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Command", 1))
+	}
+	if s.Name == nil {
+		invalidParams.Add(request.NewErrParamRequired("Name"))
+	}
+	if s.Name != nil && len(*s.Name) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Name", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetCommand sets the Command field's value.
+func (s *Tool) SetCommand(v string) *Tool {
+	s.Command = &v
+	return s
+}
+
+// SetExitBehavior sets the ExitBehavior field's value.
+func (s *Tool) SetExitBehavior(v string) *Tool {
+	s.ExitBehavior = &v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *Tool) SetName(v string) *Tool {
+	s.Name = &v
+	return s
+}
+
+// SetStreamOutputToCloudWatch sets the StreamOutputToCloudWatch field's value.
+func (s *Tool) SetStreamOutputToCloudWatch(v bool) *Tool {
+	s.StreamOutputToCloudWatch = &v
+	return s
+}
+
+// SetStreamUI sets the StreamUI field's value.
+func (s *Tool) SetStreamUI(v bool) *Tool {
+	s.StreamUI = &v
+	return s
+}
+
+type UntagResourceInput struct {
+	_ struct{} `type:"structure" nopayload:"true"`
 
 	// The Amazon Resource Name (ARN) of the AWS RoboMaker resource you are removing
 	// tags.
@@ -16144,12 +17978,20 @@ type UntagResourceInput struct {
 	TagKeys []*string `location:"querystring" locationName:"tagKeys" type:"list" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UntagResourceInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UntagResourceInput) GoString() string {
 	return s.String()
 }
@@ -16186,15 +18028,23 @@ func (s *UntagResourceInput) SetTagKeys(v []*string) *UntagResourceInput {
 }
 
 type UntagResourceOutput struct {
-	_ struct{} `type:"structure"`
+	_ struct{} `type:"structure" nopayload:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UntagResourceOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UntagResourceOutput) GoString() string {
 	return s.String()
 }
@@ -16210,23 +18060,32 @@ type UpdateRobotApplicationInput struct {
 	// The revision id for the robot application.
 	CurrentRevisionId *string `locationName:"currentRevisionId" min:"1" type:"string"`
 
+	// The object that contains the Docker image URI for your robot application.
+	Environment *Environment `locationName:"environment" type:"structure"`
+
 	// The robot software suite (ROS distribution) used by the robot application.
 	//
 	// RobotSoftwareSuite is a required field
 	RobotSoftwareSuite *RobotSoftwareSuite `locationName:"robotSoftwareSuite" type:"structure" required:"true"`
 
 	// The sources of the robot application.
-	//
-	// Sources is a required field
-	Sources []*SourceConfig `locationName:"sources" type:"list" required:"true"`
+	Sources []*SourceConfig `locationName:"sources" type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpdateRobotApplicationInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpdateRobotApplicationInput) GoString() string {
 	return s.String()
 }
@@ -16246,8 +18105,10 @@ func (s *UpdateRobotApplicationInput) Validate() error {
 	if s.RobotSoftwareSuite == nil {
 		invalidParams.Add(request.NewErrParamRequired("RobotSoftwareSuite"))
 	}
-	if s.Sources == nil {
-		invalidParams.Add(request.NewErrParamRequired("Sources"))
+	if s.Environment != nil {
+		if err := s.Environment.Validate(); err != nil {
+			invalidParams.AddNested("Environment", err.(request.ErrInvalidParams))
+		}
 	}
 	if s.Sources != nil {
 		for i, v := range s.Sources {
@@ -16278,6 +18139,12 @@ func (s *UpdateRobotApplicationInput) SetCurrentRevisionId(v string) *UpdateRobo
 	return s
 }
 
+// SetEnvironment sets the Environment field's value.
+func (s *UpdateRobotApplicationInput) SetEnvironment(v *Environment) *UpdateRobotApplicationInput {
+	s.Environment = v
+	return s
+}
+
 // SetRobotSoftwareSuite sets the RobotSoftwareSuite field's value.
 func (s *UpdateRobotApplicationInput) SetRobotSoftwareSuite(v *RobotSoftwareSuite) *UpdateRobotApplicationInput {
 	s.RobotSoftwareSuite = v
@@ -16295,6 +18162,9 @@ type UpdateRobotApplicationOutput struct {
 
 	// The Amazon Resource Name (ARN) of the updated robot application.
 	Arn *string `locationName:"arn" min:"1" type:"string"`
+
+	// The object that contains the Docker image URI for your robot application.
+	Environment *Environment `locationName:"environment" type:"structure"`
 
 	// The time, in milliseconds since the epoch, when the robot application was
 	// last updated.
@@ -16316,12 +18186,20 @@ type UpdateRobotApplicationOutput struct {
 	Version *string `locationName:"version" min:"1" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpdateRobotApplicationOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpdateRobotApplicationOutput) GoString() string {
 	return s.String()
 }
@@ -16329,6 +18207,12 @@ func (s UpdateRobotApplicationOutput) GoString() string {
 // SetArn sets the Arn field's value.
 func (s *UpdateRobotApplicationOutput) SetArn(v string) *UpdateRobotApplicationOutput {
 	s.Arn = &v
+	return s
+}
+
+// SetEnvironment sets the Environment field's value.
+func (s *UpdateRobotApplicationOutput) SetEnvironment(v *Environment) *UpdateRobotApplicationOutput {
+	s.Environment = v
 	return s
 }
 
@@ -16379,6 +18263,9 @@ type UpdateSimulationApplicationInput struct {
 	// The revision id for the robot application.
 	CurrentRevisionId *string `locationName:"currentRevisionId" min:"1" type:"string"`
 
+	// The object that contains the Docker image URI for your simulation application.
+	Environment *Environment `locationName:"environment" type:"structure"`
+
 	// The rendering engine for the simulation application.
 	RenderingEngine *RenderingEngine `locationName:"renderingEngine" type:"structure"`
 
@@ -16393,17 +18280,23 @@ type UpdateSimulationApplicationInput struct {
 	SimulationSoftwareSuite *SimulationSoftwareSuite `locationName:"simulationSoftwareSuite" type:"structure" required:"true"`
 
 	// The sources of the simulation application.
-	//
-	// Sources is a required field
-	Sources []*SourceConfig `locationName:"sources" type:"list" required:"true"`
+	Sources []*SourceConfig `locationName:"sources" type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpdateSimulationApplicationInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpdateSimulationApplicationInput) GoString() string {
 	return s.String()
 }
@@ -16426,8 +18319,10 @@ func (s *UpdateSimulationApplicationInput) Validate() error {
 	if s.SimulationSoftwareSuite == nil {
 		invalidParams.Add(request.NewErrParamRequired("SimulationSoftwareSuite"))
 	}
-	if s.Sources == nil {
-		invalidParams.Add(request.NewErrParamRequired("Sources"))
+	if s.Environment != nil {
+		if err := s.Environment.Validate(); err != nil {
+			invalidParams.AddNested("Environment", err.(request.ErrInvalidParams))
+		}
 	}
 	if s.RenderingEngine != nil {
 		if err := s.RenderingEngine.Validate(); err != nil {
@@ -16463,6 +18358,12 @@ func (s *UpdateSimulationApplicationInput) SetCurrentRevisionId(v string) *Updat
 	return s
 }
 
+// SetEnvironment sets the Environment field's value.
+func (s *UpdateSimulationApplicationInput) SetEnvironment(v *Environment) *UpdateSimulationApplicationInput {
+	s.Environment = v
+	return s
+}
+
 // SetRenderingEngine sets the RenderingEngine field's value.
 func (s *UpdateSimulationApplicationInput) SetRenderingEngine(v *RenderingEngine) *UpdateSimulationApplicationInput {
 	s.RenderingEngine = v
@@ -16493,6 +18394,9 @@ type UpdateSimulationApplicationOutput struct {
 	// The Amazon Resource Name (ARN) of the updated simulation application.
 	Arn *string `locationName:"arn" min:"1" type:"string"`
 
+	// The object that contains the Docker image URI used for your simulation application.
+	Environment *Environment `locationName:"environment" type:"structure"`
+
 	// The time, in milliseconds since the epoch, when the simulation application
 	// was last updated.
 	LastUpdatedAt *time.Time `locationName:"lastUpdatedAt" type:"timestamp"`
@@ -16519,12 +18423,20 @@ type UpdateSimulationApplicationOutput struct {
 	Version *string `locationName:"version" min:"1" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpdateSimulationApplicationOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpdateSimulationApplicationOutput) GoString() string {
 	return s.String()
 }
@@ -16532,6 +18444,12 @@ func (s UpdateSimulationApplicationOutput) GoString() string {
 // SetArn sets the Arn field's value.
 func (s *UpdateSimulationApplicationOutput) SetArn(v string) *UpdateSimulationApplicationOutput {
 	s.Arn = &v
+	return s
+}
+
+// SetEnvironment sets the Environment field's value.
+func (s *UpdateSimulationApplicationOutput) SetEnvironment(v *Environment) *UpdateSimulationApplicationOutput {
+	s.Environment = v
 	return s
 }
 
@@ -16601,12 +18519,20 @@ type UpdateWorldTemplateInput struct {
 	TemplateLocation *TemplateLocation `locationName:"templateLocation" type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpdateWorldTemplateInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpdateWorldTemplateInput) GoString() string {
 	return s.String()
 }
@@ -16676,12 +18602,20 @@ type UpdateWorldTemplateOutput struct {
 	Name *string `locationName:"name" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpdateWorldTemplateOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpdateWorldTemplateOutput) GoString() string {
 	return s.String()
 }
@@ -16710,6 +18644,110 @@ func (s *UpdateWorldTemplateOutput) SetName(v string) *UpdateWorldTemplateOutput
 	return s
 }
 
+// Provides upload configuration information. Files are uploaded from the simulation
+// job to a location you specify.
+type UploadConfiguration struct {
+	_ struct{} `type:"structure"`
+
+	// A prefix that specifies where files will be uploaded in Amazon S3. It is
+	// appended to the simulation output location to determine the final path.
+	//
+	// For example, if your simulation output location is s3://my-bucket and your
+	// upload configuration name is robot-test, your files will be uploaded to s3://my-bucket/<simid>/<runid>/robot-test.
+	//
+	// Name is a required field
+	Name *string `locationName:"name" min:"1" type:"string" required:"true"`
+
+	// Specifies the path of the file(s) to upload. Standard Unix glob matching
+	// rules are accepted, with the addition of ** as a super asterisk. For example,
+	// specifying /var/log/**.log causes all .log files in the /var/log directory
+	// tree to be collected. For more examples, see Glob Library (https://github.com/gobwas/glob).
+	//
+	// Path is a required field
+	Path *string `locationName:"path" min:"1" type:"string" required:"true"`
+
+	// Specifies when to upload the files:
+	//
+	// UPLOAD_ON_TERMINATE
+	//
+	// Matching files are uploaded once the simulation enters the TERMINATING state.
+	// Matching files are not uploaded until all of your code (including tools)
+	// have stopped.
+	//
+	// If there is a problem uploading a file, the upload is retried. If problems
+	// persist, no further upload attempts will be made.
+	//
+	// UPLOAD_ROLLING_AUTO_REMOVE
+	//
+	// Matching files are uploaded as they are created. They are deleted after they
+	// are uploaded. The specified path is checked every 5 seconds. A final check
+	// is made when all of your code (including tools) have stopped.
+	//
+	// UploadBehavior is a required field
+	UploadBehavior *string `locationName:"uploadBehavior" type:"string" required:"true" enum:"UploadBehavior"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UploadConfiguration) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UploadConfiguration) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *UploadConfiguration) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "UploadConfiguration"}
+	if s.Name == nil {
+		invalidParams.Add(request.NewErrParamRequired("Name"))
+	}
+	if s.Name != nil && len(*s.Name) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Name", 1))
+	}
+	if s.Path == nil {
+		invalidParams.Add(request.NewErrParamRequired("Path"))
+	}
+	if s.Path != nil && len(*s.Path) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Path", 1))
+	}
+	if s.UploadBehavior == nil {
+		invalidParams.Add(request.NewErrParamRequired("UploadBehavior"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetName sets the Name field's value.
+func (s *UploadConfiguration) SetName(v string) *UploadConfiguration {
+	s.Name = &v
+	return s
+}
+
+// SetPath sets the Path field's value.
+func (s *UploadConfiguration) SetPath(v string) *UploadConfiguration {
+	s.Path = &v
+	return s
+}
+
+// SetUploadBehavior sets the UploadBehavior field's value.
+func (s *UploadConfiguration) SetUploadBehavior(v string) *UploadConfiguration {
+	s.UploadBehavior = &v
+	return s
+}
+
 // If your simulation job accesses resources in a VPC, you provide this parameter
 // identifying the list of security group IDs and subnet IDs. These must belong
 // to the same VPC. You must provide at least one security group and two subnet
@@ -16729,12 +18767,20 @@ type VPCConfig struct {
 	Subnets []*string `locationName:"subnets" min:"1" type:"list" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s VPCConfig) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s VPCConfig) GoString() string {
 	return s.String()
 }
@@ -16793,12 +18839,20 @@ type VPCConfigResponse struct {
 	VpcId *string `locationName:"vpcId" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s VPCConfigResponse) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s VPCConfigResponse) GoString() string {
 	return s.String()
 }
@@ -16835,12 +18889,20 @@ type WorldConfig struct {
 	World *string `locationName:"world" min:"1" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s WorldConfig) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s WorldConfig) GoString() string {
 	return s.String()
 }
@@ -16882,12 +18944,20 @@ type WorldCount struct {
 	InteriorCountPerFloorplan *int64 `locationName:"interiorCountPerFloorplan" type:"integer"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s WorldCount) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s WorldCount) GoString() string {
 	return s.String()
 }
@@ -16946,12 +19016,20 @@ type WorldExportJobSummary struct {
 	Worlds []*string `locationName:"worlds" min:"1" type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s WorldExportJobSummary) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s WorldExportJobSummary) GoString() string {
 	return s.String()
 }
@@ -17016,12 +19094,20 @@ type WorldFailure struct {
 	SampleFailureReason *string `locationName:"sampleFailureReason" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s WorldFailure) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s WorldFailure) GoString() string {
 	return s.String()
 }
@@ -17099,12 +19185,20 @@ type WorldGenerationJobSummary struct {
 	WorldCount *WorldCount `locationName:"worldCount" type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s WorldGenerationJobSummary) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s WorldGenerationJobSummary) GoString() string {
 	return s.String()
 }
@@ -17168,12 +19262,20 @@ type WorldSummary struct {
 	Template *string `locationName:"template" min:"1" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s WorldSummary) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s WorldSummary) GoString() string {
 	return s.String()
 }
@@ -17219,6 +19321,42 @@ func Architecture_Values() []string {
 		ArchitectureX8664,
 		ArchitectureArm64,
 		ArchitectureArmhf,
+	}
+}
+
+const (
+	// ComputeTypeCpu is a ComputeType enum value
+	ComputeTypeCpu = "CPU"
+
+	// ComputeTypeGpuAndCpu is a ComputeType enum value
+	ComputeTypeGpuAndCpu = "GPU_AND_CPU"
+)
+
+// ComputeType_Values returns all elements of the ComputeType enum
+func ComputeType_Values() []string {
+	return []string{
+		ComputeTypeCpu,
+		ComputeTypeGpuAndCpu,
+	}
+}
+
+const (
+	// DataSourceTypePrefix is a DataSourceType enum value
+	DataSourceTypePrefix = "Prefix"
+
+	// DataSourceTypeArchive is a DataSourceType enum value
+	DataSourceTypeArchive = "Archive"
+
+	// DataSourceTypeFile is a DataSourceType enum value
+	DataSourceTypeFile = "File"
+)
+
+// DataSourceType_Values returns all elements of the DataSourceType enum
+func DataSourceType_Values() []string {
+	return []string{
+		DataSourceTypePrefix,
+		DataSourceTypeArchive,
+		DataSourceTypeFile,
 	}
 }
 
@@ -17280,8 +19418,20 @@ const (
 	// DeploymentJobErrorCodeDownloadConditionFailed is a DeploymentJobErrorCode enum value
 	DeploymentJobErrorCodeDownloadConditionFailed = "DownloadConditionFailed"
 
+	// DeploymentJobErrorCodeBadLambdaAssociated is a DeploymentJobErrorCode enum value
+	DeploymentJobErrorCodeBadLambdaAssociated = "BadLambdaAssociated"
+
 	// DeploymentJobErrorCodeInternalServerError is a DeploymentJobErrorCode enum value
 	DeploymentJobErrorCodeInternalServerError = "InternalServerError"
+
+	// DeploymentJobErrorCodeRobotApplicationDoesNotExist is a DeploymentJobErrorCode enum value
+	DeploymentJobErrorCodeRobotApplicationDoesNotExist = "RobotApplicationDoesNotExist"
+
+	// DeploymentJobErrorCodeDeploymentFleetDoesNotExist is a DeploymentJobErrorCode enum value
+	DeploymentJobErrorCodeDeploymentFleetDoesNotExist = "DeploymentFleetDoesNotExist"
+
+	// DeploymentJobErrorCodeFleetDeploymentTimeout is a DeploymentJobErrorCode enum value
+	DeploymentJobErrorCodeFleetDeploymentTimeout = "FleetDeploymentTimeout"
 )
 
 // DeploymentJobErrorCode_Values returns all elements of the DeploymentJobErrorCode enum
@@ -17306,7 +19456,11 @@ func DeploymentJobErrorCode_Values() []string {
 		DeploymentJobErrorCodePostLaunchFileFailure,
 		DeploymentJobErrorCodeBadPermissionError,
 		DeploymentJobErrorCodeDownloadConditionFailed,
+		DeploymentJobErrorCodeBadLambdaAssociated,
 		DeploymentJobErrorCodeInternalServerError,
+		DeploymentJobErrorCodeRobotApplicationDoesNotExist,
+		DeploymentJobErrorCodeDeploymentFleetDoesNotExist,
+		DeploymentJobErrorCodeFleetDeploymentTimeout,
 	}
 }
 
@@ -17339,6 +19493,22 @@ func DeploymentStatus_Values() []string {
 		DeploymentStatusFailed,
 		DeploymentStatusSucceeded,
 		DeploymentStatusCanceled,
+	}
+}
+
+const (
+	// ExitBehaviorFail is a ExitBehavior enum value
+	ExitBehaviorFail = "FAIL"
+
+	// ExitBehaviorRestart is a ExitBehavior enum value
+	ExitBehaviorRestart = "RESTART"
+)
+
+// ExitBehavior_Values returns all elements of the ExitBehavior enum
+func ExitBehavior_Values() []string {
+	return []string{
+		ExitBehaviorFail,
+		ExitBehaviorRestart,
 	}
 }
 
@@ -17412,6 +19582,9 @@ const (
 
 	// RobotSoftwareSuiteTypeRos2 is a RobotSoftwareSuiteType enum value
 	RobotSoftwareSuiteTypeRos2 = "ROS2"
+
+	// RobotSoftwareSuiteTypeGeneral is a RobotSoftwareSuiteType enum value
+	RobotSoftwareSuiteTypeGeneral = "General"
 )
 
 // RobotSoftwareSuiteType_Values returns all elements of the RobotSoftwareSuiteType enum
@@ -17419,6 +19592,7 @@ func RobotSoftwareSuiteType_Values() []string {
 	return []string{
 		RobotSoftwareSuiteTypeRos,
 		RobotSoftwareSuiteTypeRos2,
+		RobotSoftwareSuiteTypeGeneral,
 	}
 }
 
@@ -17431,6 +19605,9 @@ const (
 
 	// RobotSoftwareSuiteVersionTypeDashing is a RobotSoftwareSuiteVersionType enum value
 	RobotSoftwareSuiteVersionTypeDashing = "Dashing"
+
+	// RobotSoftwareSuiteVersionTypeFoxy is a RobotSoftwareSuiteVersionType enum value
+	RobotSoftwareSuiteVersionTypeFoxy = "Foxy"
 )
 
 // RobotSoftwareSuiteVersionType_Values returns all elements of the RobotSoftwareSuiteVersionType enum
@@ -17439,6 +19616,7 @@ func RobotSoftwareSuiteVersionType_Values() []string {
 		RobotSoftwareSuiteVersionTypeKinetic,
 		RobotSoftwareSuiteVersionTypeMelodic,
 		RobotSoftwareSuiteVersionTypeDashing,
+		RobotSoftwareSuiteVersionTypeFoxy,
 	}
 }
 
@@ -17544,6 +19722,12 @@ const (
 	// SimulationJobErrorCodeSimulationApplicationCrash is a SimulationJobErrorCode enum value
 	SimulationJobErrorCodeSimulationApplicationCrash = "SimulationApplicationCrash"
 
+	// SimulationJobErrorCodeRobotApplicationHealthCheckFailure is a SimulationJobErrorCode enum value
+	SimulationJobErrorCodeRobotApplicationHealthCheckFailure = "RobotApplicationHealthCheckFailure"
+
+	// SimulationJobErrorCodeSimulationApplicationHealthCheckFailure is a SimulationJobErrorCode enum value
+	SimulationJobErrorCodeSimulationApplicationHealthCheckFailure = "SimulationApplicationHealthCheckFailure"
+
 	// SimulationJobErrorCodeBadPermissionsRobotApplication is a SimulationJobErrorCode enum value
 	SimulationJobErrorCodeBadPermissionsRobotApplication = "BadPermissionsRobotApplication"
 
@@ -17576,6 +19760,9 @@ const (
 
 	// SimulationJobErrorCodeInvalidS3resource is a SimulationJobErrorCode enum value
 	SimulationJobErrorCodeInvalidS3resource = "InvalidS3Resource"
+
+	// SimulationJobErrorCodeThrottlingError is a SimulationJobErrorCode enum value
+	SimulationJobErrorCodeThrottlingError = "ThrottlingError"
 
 	// SimulationJobErrorCodeLimitExceeded is a SimulationJobErrorCode enum value
 	SimulationJobErrorCodeLimitExceeded = "LimitExceeded"
@@ -17615,6 +19802,9 @@ const (
 
 	// SimulationJobErrorCodeWrongRegionSimulationApplication is a SimulationJobErrorCode enum value
 	SimulationJobErrorCodeWrongRegionSimulationApplication = "WrongRegionSimulationApplication"
+
+	// SimulationJobErrorCodeUploadContentMismatchError is a SimulationJobErrorCode enum value
+	SimulationJobErrorCodeUploadContentMismatchError = "UploadContentMismatchError"
 )
 
 // SimulationJobErrorCode_Values returns all elements of the SimulationJobErrorCode enum
@@ -17623,6 +19813,8 @@ func SimulationJobErrorCode_Values() []string {
 		SimulationJobErrorCodeInternalServiceError,
 		SimulationJobErrorCodeRobotApplicationCrash,
 		SimulationJobErrorCodeSimulationApplicationCrash,
+		SimulationJobErrorCodeRobotApplicationHealthCheckFailure,
+		SimulationJobErrorCodeSimulationApplicationHealthCheckFailure,
 		SimulationJobErrorCodeBadPermissionsRobotApplication,
 		SimulationJobErrorCodeBadPermissionsSimulationApplication,
 		SimulationJobErrorCodeBadPermissionsS3object,
@@ -17634,6 +19826,7 @@ func SimulationJobErrorCode_Values() []string {
 		SimulationJobErrorCodeInvalidBundleRobotApplication,
 		SimulationJobErrorCodeInvalidBundleSimulationApplication,
 		SimulationJobErrorCodeInvalidS3resource,
+		SimulationJobErrorCodeThrottlingError,
 		SimulationJobErrorCodeLimitExceeded,
 		SimulationJobErrorCodeMismatchedEtag,
 		SimulationJobErrorCodeRobotApplicationVersionMismatchedEtag,
@@ -17647,6 +19840,7 @@ func SimulationJobErrorCode_Values() []string {
 		SimulationJobErrorCodeWrongRegionS3output,
 		SimulationJobErrorCodeWrongRegionRobotApplication,
 		SimulationJobErrorCodeWrongRegionSimulationApplication,
+		SimulationJobErrorCodeUploadContentMismatchError,
 	}
 }
 
@@ -17704,6 +19898,9 @@ const (
 
 	// SimulationSoftwareSuiteTypeRosbagPlay is a SimulationSoftwareSuiteType enum value
 	SimulationSoftwareSuiteTypeRosbagPlay = "RosbagPlay"
+
+	// SimulationSoftwareSuiteTypeSimulationRuntime is a SimulationSoftwareSuiteType enum value
+	SimulationSoftwareSuiteTypeSimulationRuntime = "SimulationRuntime"
 )
 
 // SimulationSoftwareSuiteType_Values returns all elements of the SimulationSoftwareSuiteType enum
@@ -17711,6 +19908,23 @@ func SimulationSoftwareSuiteType_Values() []string {
 	return []string{
 		SimulationSoftwareSuiteTypeGazebo,
 		SimulationSoftwareSuiteTypeRosbagPlay,
+		SimulationSoftwareSuiteTypeSimulationRuntime,
+	}
+}
+
+const (
+	// UploadBehaviorUploadOnTerminate is a UploadBehavior enum value
+	UploadBehaviorUploadOnTerminate = "UPLOAD_ON_TERMINATE"
+
+	// UploadBehaviorUploadRollingAutoRemove is a UploadBehavior enum value
+	UploadBehaviorUploadRollingAutoRemove = "UPLOAD_ROLLING_AUTO_REMOVE"
+)
+
+// UploadBehavior_Values returns all elements of the UploadBehavior enum
+func UploadBehavior_Values() []string {
+	return []string{
+		UploadBehaviorUploadOnTerminate,
+		UploadBehaviorUploadRollingAutoRemove,
 	}
 }
 

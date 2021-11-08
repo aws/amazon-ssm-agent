@@ -106,6 +106,193 @@ func (c *AccessAnalyzer) ApplyArchiveRuleWithContext(ctx aws.Context, input *App
 	return out, req.Send()
 }
 
+const opCancelPolicyGeneration = "CancelPolicyGeneration"
+
+// CancelPolicyGenerationRequest generates a "aws/request.Request" representing the
+// client's request for the CancelPolicyGeneration operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See CancelPolicyGeneration for more information on using the CancelPolicyGeneration
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the CancelPolicyGenerationRequest method.
+//    req, resp := client.CancelPolicyGenerationRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/accessanalyzer-2019-11-01/CancelPolicyGeneration
+func (c *AccessAnalyzer) CancelPolicyGenerationRequest(input *CancelPolicyGenerationInput) (req *request.Request, output *CancelPolicyGenerationOutput) {
+	op := &request.Operation{
+		Name:       opCancelPolicyGeneration,
+		HTTPMethod: "PUT",
+		HTTPPath:   "/policy/generation/{jobId}",
+	}
+
+	if input == nil {
+		input = &CancelPolicyGenerationInput{}
+	}
+
+	output = &CancelPolicyGenerationOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(restjson.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
+	return
+}
+
+// CancelPolicyGeneration API operation for Access Analyzer.
+//
+// Cancels the requested policy generation.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Access Analyzer's
+// API operation CancelPolicyGeneration for usage and error information.
+//
+// Returned Error Types:
+//   * ValidationException
+//   Validation exception error.
+//
+//   * InternalServerException
+//   Internal server error.
+//
+//   * ThrottlingException
+//   Throttling limit exceeded error.
+//
+//   * AccessDeniedException
+//   You do not have sufficient access to perform this action.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/accessanalyzer-2019-11-01/CancelPolicyGeneration
+func (c *AccessAnalyzer) CancelPolicyGeneration(input *CancelPolicyGenerationInput) (*CancelPolicyGenerationOutput, error) {
+	req, out := c.CancelPolicyGenerationRequest(input)
+	return out, req.Send()
+}
+
+// CancelPolicyGenerationWithContext is the same as CancelPolicyGeneration with the addition of
+// the ability to pass a context and additional request options.
+//
+// See CancelPolicyGeneration for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *AccessAnalyzer) CancelPolicyGenerationWithContext(ctx aws.Context, input *CancelPolicyGenerationInput, opts ...request.Option) (*CancelPolicyGenerationOutput, error) {
+	req, out := c.CancelPolicyGenerationRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opCreateAccessPreview = "CreateAccessPreview"
+
+// CreateAccessPreviewRequest generates a "aws/request.Request" representing the
+// client's request for the CreateAccessPreview operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See CreateAccessPreview for more information on using the CreateAccessPreview
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the CreateAccessPreviewRequest method.
+//    req, resp := client.CreateAccessPreviewRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/accessanalyzer-2019-11-01/CreateAccessPreview
+func (c *AccessAnalyzer) CreateAccessPreviewRequest(input *CreateAccessPreviewInput) (req *request.Request, output *CreateAccessPreviewOutput) {
+	op := &request.Operation{
+		Name:       opCreateAccessPreview,
+		HTTPMethod: "PUT",
+		HTTPPath:   "/access-preview",
+	}
+
+	if input == nil {
+		input = &CreateAccessPreviewInput{}
+	}
+
+	output = &CreateAccessPreviewOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// CreateAccessPreview API operation for Access Analyzer.
+//
+// Creates an access preview that allows you to preview IAM Access Analyzer
+// findings for your resource before deploying resource permissions.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Access Analyzer's
+// API operation CreateAccessPreview for usage and error information.
+//
+// Returned Error Types:
+//   * ResourceNotFoundException
+//   The specified resource could not be found.
+//
+//   * ConflictException
+//   A conflict exception error.
+//
+//   * ValidationException
+//   Validation exception error.
+//
+//   * InternalServerException
+//   Internal server error.
+//
+//   * ServiceQuotaExceededException
+//   Service quote met error.
+//
+//   * ThrottlingException
+//   Throttling limit exceeded error.
+//
+//   * AccessDeniedException
+//   You do not have sufficient access to perform this action.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/accessanalyzer-2019-11-01/CreateAccessPreview
+func (c *AccessAnalyzer) CreateAccessPreview(input *CreateAccessPreviewInput) (*CreateAccessPreviewOutput, error) {
+	req, out := c.CreateAccessPreviewRequest(input)
+	return out, req.Send()
+}
+
+// CreateAccessPreviewWithContext is the same as CreateAccessPreview with the addition of
+// the ability to pass a context and additional request options.
+//
+// See CreateAccessPreview for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *AccessAnalyzer) CreateAccessPreviewWithContext(ctx aws.Context, input *CreateAccessPreviewInput, opts ...request.Option) (*CreateAccessPreviewOutput, error) {
+	req, out := c.CreateAccessPreviewRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opCreateAnalyzer = "CreateAnalyzer"
 
 // CreateAnalyzerRequest generates a "aws/request.Request" representing the
@@ -249,6 +436,10 @@ func (c *AccessAnalyzer) CreateArchiveRuleRequest(input *CreateArchiveRuleInput)
 // archive new findings that meet the criteria you define when you create the
 // rule.
 //
+// To learn about filter keys that you can use to create an archive rule, see
+// IAM Access Analyzer filter keys (https://docs.aws.amazon.com/IAM/latest/UserGuide/access-analyzer-reference-filter-keys.html)
+// in the IAM User Guide.
+//
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
 // the error.
@@ -345,9 +536,10 @@ func (c *AccessAnalyzer) DeleteAnalyzerRequest(input *DeleteAnalyzerInput) (req 
 
 // DeleteAnalyzer API operation for Access Analyzer.
 //
-// Deletes the specified analyzer. When you delete an analyzer, Access Analyzer
-// is disabled for the account in the current or specific Region. All findings
-// that were generated by the analyzer are deleted. You cannot undo this action.
+// Deletes the specified analyzer. When you delete an analyzer, IAM Access Analyzer
+// is disabled for the account or organization in the current or specific Region.
+// All findings that were generated by the analyzer are deleted. You cannot
+// undo this action.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -481,6 +673,97 @@ func (c *AccessAnalyzer) DeleteArchiveRule(input *DeleteArchiveRuleInput) (*Dele
 // for more information on using Contexts.
 func (c *AccessAnalyzer) DeleteArchiveRuleWithContext(ctx aws.Context, input *DeleteArchiveRuleInput, opts ...request.Option) (*DeleteArchiveRuleOutput, error) {
 	req, out := c.DeleteArchiveRuleRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opGetAccessPreview = "GetAccessPreview"
+
+// GetAccessPreviewRequest generates a "aws/request.Request" representing the
+// client's request for the GetAccessPreview operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See GetAccessPreview for more information on using the GetAccessPreview
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the GetAccessPreviewRequest method.
+//    req, resp := client.GetAccessPreviewRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/accessanalyzer-2019-11-01/GetAccessPreview
+func (c *AccessAnalyzer) GetAccessPreviewRequest(input *GetAccessPreviewInput) (req *request.Request, output *GetAccessPreviewOutput) {
+	op := &request.Operation{
+		Name:       opGetAccessPreview,
+		HTTPMethod: "GET",
+		HTTPPath:   "/access-preview/{accessPreviewId}",
+	}
+
+	if input == nil {
+		input = &GetAccessPreviewInput{}
+	}
+
+	output = &GetAccessPreviewOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// GetAccessPreview API operation for Access Analyzer.
+//
+// Retrieves information about an access preview for the specified analyzer.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Access Analyzer's
+// API operation GetAccessPreview for usage and error information.
+//
+// Returned Error Types:
+//   * ResourceNotFoundException
+//   The specified resource could not be found.
+//
+//   * ValidationException
+//   Validation exception error.
+//
+//   * InternalServerException
+//   Internal server error.
+//
+//   * ThrottlingException
+//   Throttling limit exceeded error.
+//
+//   * AccessDeniedException
+//   You do not have sufficient access to perform this action.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/accessanalyzer-2019-11-01/GetAccessPreview
+func (c *AccessAnalyzer) GetAccessPreview(input *GetAccessPreviewInput) (*GetAccessPreviewOutput, error) {
+	req, out := c.GetAccessPreviewRequest(input)
+	return out, req.Send()
+}
+
+// GetAccessPreviewWithContext is the same as GetAccessPreview with the addition of
+// the ability to pass a context and additional request options.
+//
+// See GetAccessPreview for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *AccessAnalyzer) GetAccessPreviewWithContext(ctx aws.Context, input *GetAccessPreviewInput, opts ...request.Option) (*GetAccessPreviewOutput, error) {
+	req, out := c.GetAccessPreviewRequest(input)
 	req.SetContext(ctx)
 	req.ApplyOptions(opts...)
 	return out, req.Send()
@@ -715,7 +998,7 @@ func (c *AccessAnalyzer) GetArchiveRuleRequest(input *GetArchiveRuleInput) (req 
 // Retrieves information about an archive rule.
 //
 // To learn about filter keys that you can use to create an archive rule, see
-// Access Analyzer filter keys (https://docs.aws.amazon.com/IAM/latest/UserGuide/access-analyzer-reference-filter-keys.html)
+// IAM Access Analyzer filter keys (https://docs.aws.amazon.com/IAM/latest/UserGuide/access-analyzer-reference-filter-keys.html)
 // in the IAM User Guide.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
@@ -852,6 +1135,396 @@ func (c *AccessAnalyzer) GetFindingWithContext(ctx aws.Context, input *GetFindin
 	req.SetContext(ctx)
 	req.ApplyOptions(opts...)
 	return out, req.Send()
+}
+
+const opGetGeneratedPolicy = "GetGeneratedPolicy"
+
+// GetGeneratedPolicyRequest generates a "aws/request.Request" representing the
+// client's request for the GetGeneratedPolicy operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See GetGeneratedPolicy for more information on using the GetGeneratedPolicy
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the GetGeneratedPolicyRequest method.
+//    req, resp := client.GetGeneratedPolicyRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/accessanalyzer-2019-11-01/GetGeneratedPolicy
+func (c *AccessAnalyzer) GetGeneratedPolicyRequest(input *GetGeneratedPolicyInput) (req *request.Request, output *GetGeneratedPolicyOutput) {
+	op := &request.Operation{
+		Name:       opGetGeneratedPolicy,
+		HTTPMethod: "GET",
+		HTTPPath:   "/policy/generation/{jobId}",
+	}
+
+	if input == nil {
+		input = &GetGeneratedPolicyInput{}
+	}
+
+	output = &GetGeneratedPolicyOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// GetGeneratedPolicy API operation for Access Analyzer.
+//
+// Retrieves the policy that was generated using StartPolicyGeneration.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Access Analyzer's
+// API operation GetGeneratedPolicy for usage and error information.
+//
+// Returned Error Types:
+//   * ValidationException
+//   Validation exception error.
+//
+//   * InternalServerException
+//   Internal server error.
+//
+//   * ThrottlingException
+//   Throttling limit exceeded error.
+//
+//   * AccessDeniedException
+//   You do not have sufficient access to perform this action.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/accessanalyzer-2019-11-01/GetGeneratedPolicy
+func (c *AccessAnalyzer) GetGeneratedPolicy(input *GetGeneratedPolicyInput) (*GetGeneratedPolicyOutput, error) {
+	req, out := c.GetGeneratedPolicyRequest(input)
+	return out, req.Send()
+}
+
+// GetGeneratedPolicyWithContext is the same as GetGeneratedPolicy with the addition of
+// the ability to pass a context and additional request options.
+//
+// See GetGeneratedPolicy for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *AccessAnalyzer) GetGeneratedPolicyWithContext(ctx aws.Context, input *GetGeneratedPolicyInput, opts ...request.Option) (*GetGeneratedPolicyOutput, error) {
+	req, out := c.GetGeneratedPolicyRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opListAccessPreviewFindings = "ListAccessPreviewFindings"
+
+// ListAccessPreviewFindingsRequest generates a "aws/request.Request" representing the
+// client's request for the ListAccessPreviewFindings operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See ListAccessPreviewFindings for more information on using the ListAccessPreviewFindings
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the ListAccessPreviewFindingsRequest method.
+//    req, resp := client.ListAccessPreviewFindingsRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/accessanalyzer-2019-11-01/ListAccessPreviewFindings
+func (c *AccessAnalyzer) ListAccessPreviewFindingsRequest(input *ListAccessPreviewFindingsInput) (req *request.Request, output *ListAccessPreviewFindingsOutput) {
+	op := &request.Operation{
+		Name:       opListAccessPreviewFindings,
+		HTTPMethod: "POST",
+		HTTPPath:   "/access-preview/{accessPreviewId}",
+		Paginator: &request.Paginator{
+			InputTokens:     []string{"nextToken"},
+			OutputTokens:    []string{"nextToken"},
+			LimitToken:      "maxResults",
+			TruncationToken: "",
+		},
+	}
+
+	if input == nil {
+		input = &ListAccessPreviewFindingsInput{}
+	}
+
+	output = &ListAccessPreviewFindingsOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// ListAccessPreviewFindings API operation for Access Analyzer.
+//
+// Retrieves a list of access preview findings generated by the specified access
+// preview.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Access Analyzer's
+// API operation ListAccessPreviewFindings for usage and error information.
+//
+// Returned Error Types:
+//   * ResourceNotFoundException
+//   The specified resource could not be found.
+//
+//   * ConflictException
+//   A conflict exception error.
+//
+//   * ValidationException
+//   Validation exception error.
+//
+//   * InternalServerException
+//   Internal server error.
+//
+//   * ThrottlingException
+//   Throttling limit exceeded error.
+//
+//   * AccessDeniedException
+//   You do not have sufficient access to perform this action.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/accessanalyzer-2019-11-01/ListAccessPreviewFindings
+func (c *AccessAnalyzer) ListAccessPreviewFindings(input *ListAccessPreviewFindingsInput) (*ListAccessPreviewFindingsOutput, error) {
+	req, out := c.ListAccessPreviewFindingsRequest(input)
+	return out, req.Send()
+}
+
+// ListAccessPreviewFindingsWithContext is the same as ListAccessPreviewFindings with the addition of
+// the ability to pass a context and additional request options.
+//
+// See ListAccessPreviewFindings for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *AccessAnalyzer) ListAccessPreviewFindingsWithContext(ctx aws.Context, input *ListAccessPreviewFindingsInput, opts ...request.Option) (*ListAccessPreviewFindingsOutput, error) {
+	req, out := c.ListAccessPreviewFindingsRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+// ListAccessPreviewFindingsPages iterates over the pages of a ListAccessPreviewFindings operation,
+// calling the "fn" function with the response data for each page. To stop
+// iterating, return false from the fn function.
+//
+// See ListAccessPreviewFindings method for more information on how to use this operation.
+//
+// Note: This operation can generate multiple requests to a service.
+//
+//    // Example iterating over at most 3 pages of a ListAccessPreviewFindings operation.
+//    pageNum := 0
+//    err := client.ListAccessPreviewFindingsPages(params,
+//        func(page *accessanalyzer.ListAccessPreviewFindingsOutput, lastPage bool) bool {
+//            pageNum++
+//            fmt.Println(page)
+//            return pageNum <= 3
+//        })
+//
+func (c *AccessAnalyzer) ListAccessPreviewFindingsPages(input *ListAccessPreviewFindingsInput, fn func(*ListAccessPreviewFindingsOutput, bool) bool) error {
+	return c.ListAccessPreviewFindingsPagesWithContext(aws.BackgroundContext(), input, fn)
+}
+
+// ListAccessPreviewFindingsPagesWithContext same as ListAccessPreviewFindingsPages except
+// it takes a Context and allows setting request options on the pages.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *AccessAnalyzer) ListAccessPreviewFindingsPagesWithContext(ctx aws.Context, input *ListAccessPreviewFindingsInput, fn func(*ListAccessPreviewFindingsOutput, bool) bool, opts ...request.Option) error {
+	p := request.Pagination{
+		NewRequest: func() (*request.Request, error) {
+			var inCpy *ListAccessPreviewFindingsInput
+			if input != nil {
+				tmp := *input
+				inCpy = &tmp
+			}
+			req, _ := c.ListAccessPreviewFindingsRequest(inCpy)
+			req.SetContext(ctx)
+			req.ApplyOptions(opts...)
+			return req, nil
+		},
+	}
+
+	for p.Next() {
+		if !fn(p.Page().(*ListAccessPreviewFindingsOutput), !p.HasNextPage()) {
+			break
+		}
+	}
+
+	return p.Err()
+}
+
+const opListAccessPreviews = "ListAccessPreviews"
+
+// ListAccessPreviewsRequest generates a "aws/request.Request" representing the
+// client's request for the ListAccessPreviews operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See ListAccessPreviews for more information on using the ListAccessPreviews
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the ListAccessPreviewsRequest method.
+//    req, resp := client.ListAccessPreviewsRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/accessanalyzer-2019-11-01/ListAccessPreviews
+func (c *AccessAnalyzer) ListAccessPreviewsRequest(input *ListAccessPreviewsInput) (req *request.Request, output *ListAccessPreviewsOutput) {
+	op := &request.Operation{
+		Name:       opListAccessPreviews,
+		HTTPMethod: "GET",
+		HTTPPath:   "/access-preview",
+		Paginator: &request.Paginator{
+			InputTokens:     []string{"nextToken"},
+			OutputTokens:    []string{"nextToken"},
+			LimitToken:      "maxResults",
+			TruncationToken: "",
+		},
+	}
+
+	if input == nil {
+		input = &ListAccessPreviewsInput{}
+	}
+
+	output = &ListAccessPreviewsOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// ListAccessPreviews API operation for Access Analyzer.
+//
+// Retrieves a list of access previews for the specified analyzer.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Access Analyzer's
+// API operation ListAccessPreviews for usage and error information.
+//
+// Returned Error Types:
+//   * ResourceNotFoundException
+//   The specified resource could not be found.
+//
+//   * ValidationException
+//   Validation exception error.
+//
+//   * InternalServerException
+//   Internal server error.
+//
+//   * ThrottlingException
+//   Throttling limit exceeded error.
+//
+//   * AccessDeniedException
+//   You do not have sufficient access to perform this action.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/accessanalyzer-2019-11-01/ListAccessPreviews
+func (c *AccessAnalyzer) ListAccessPreviews(input *ListAccessPreviewsInput) (*ListAccessPreviewsOutput, error) {
+	req, out := c.ListAccessPreviewsRequest(input)
+	return out, req.Send()
+}
+
+// ListAccessPreviewsWithContext is the same as ListAccessPreviews with the addition of
+// the ability to pass a context and additional request options.
+//
+// See ListAccessPreviews for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *AccessAnalyzer) ListAccessPreviewsWithContext(ctx aws.Context, input *ListAccessPreviewsInput, opts ...request.Option) (*ListAccessPreviewsOutput, error) {
+	req, out := c.ListAccessPreviewsRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+// ListAccessPreviewsPages iterates over the pages of a ListAccessPreviews operation,
+// calling the "fn" function with the response data for each page. To stop
+// iterating, return false from the fn function.
+//
+// See ListAccessPreviews method for more information on how to use this operation.
+//
+// Note: This operation can generate multiple requests to a service.
+//
+//    // Example iterating over at most 3 pages of a ListAccessPreviews operation.
+//    pageNum := 0
+//    err := client.ListAccessPreviewsPages(params,
+//        func(page *accessanalyzer.ListAccessPreviewsOutput, lastPage bool) bool {
+//            pageNum++
+//            fmt.Println(page)
+//            return pageNum <= 3
+//        })
+//
+func (c *AccessAnalyzer) ListAccessPreviewsPages(input *ListAccessPreviewsInput, fn func(*ListAccessPreviewsOutput, bool) bool) error {
+	return c.ListAccessPreviewsPagesWithContext(aws.BackgroundContext(), input, fn)
+}
+
+// ListAccessPreviewsPagesWithContext same as ListAccessPreviewsPages except
+// it takes a Context and allows setting request options on the pages.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *AccessAnalyzer) ListAccessPreviewsPagesWithContext(ctx aws.Context, input *ListAccessPreviewsInput, fn func(*ListAccessPreviewsOutput, bool) bool, opts ...request.Option) error {
+	p := request.Pagination{
+		NewRequest: func() (*request.Request, error) {
+			var inCpy *ListAccessPreviewsInput
+			if input != nil {
+				tmp := *input
+				inCpy = &tmp
+			}
+			req, _ := c.ListAccessPreviewsRequest(inCpy)
+			req.SetContext(ctx)
+			req.ApplyOptions(opts...)
+			return req, nil
+		},
+	}
+
+	for p.Next() {
+		if !fn(p.Page().(*ListAccessPreviewsOutput), !p.HasNextPage()) {
+			break
+		}
+	}
+
+	return p.Err()
 }
 
 const opListAnalyzedResources = "ListAnalyzedResources"
@@ -1348,8 +2021,8 @@ func (c *AccessAnalyzer) ListFindingsRequest(input *ListFindingsInput) (req *req
 //
 // Retrieves a list of findings generated by the specified analyzer.
 //
-// To learn about filter keys that you can use to create an archive rule, see
-// Access Analyzer filter keys (https://docs.aws.amazon.com/IAM/latest/UserGuide/access-analyzer-reference-filter-keys.html)
+// To learn about filter keys that you can use to retrieve a list of findings,
+// see IAM Access Analyzer filter keys (https://docs.aws.amazon.com/IAM/latest/UserGuide/access-analyzer-reference-filter-keys.html)
 // in the IAM User Guide.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
@@ -1449,6 +2122,152 @@ func (c *AccessAnalyzer) ListFindingsPagesWithContext(ctx aws.Context, input *Li
 	return p.Err()
 }
 
+const opListPolicyGenerations = "ListPolicyGenerations"
+
+// ListPolicyGenerationsRequest generates a "aws/request.Request" representing the
+// client's request for the ListPolicyGenerations operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See ListPolicyGenerations for more information on using the ListPolicyGenerations
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the ListPolicyGenerationsRequest method.
+//    req, resp := client.ListPolicyGenerationsRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/accessanalyzer-2019-11-01/ListPolicyGenerations
+func (c *AccessAnalyzer) ListPolicyGenerationsRequest(input *ListPolicyGenerationsInput) (req *request.Request, output *ListPolicyGenerationsOutput) {
+	op := &request.Operation{
+		Name:       opListPolicyGenerations,
+		HTTPMethod: "GET",
+		HTTPPath:   "/policy/generation",
+		Paginator: &request.Paginator{
+			InputTokens:     []string{"nextToken"},
+			OutputTokens:    []string{"nextToken"},
+			LimitToken:      "maxResults",
+			TruncationToken: "",
+		},
+	}
+
+	if input == nil {
+		input = &ListPolicyGenerationsInput{}
+	}
+
+	output = &ListPolicyGenerationsOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// ListPolicyGenerations API operation for Access Analyzer.
+//
+// Lists all of the policy generations requested in the last seven days.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Access Analyzer's
+// API operation ListPolicyGenerations for usage and error information.
+//
+// Returned Error Types:
+//   * ValidationException
+//   Validation exception error.
+//
+//   * InternalServerException
+//   Internal server error.
+//
+//   * ThrottlingException
+//   Throttling limit exceeded error.
+//
+//   * AccessDeniedException
+//   You do not have sufficient access to perform this action.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/accessanalyzer-2019-11-01/ListPolicyGenerations
+func (c *AccessAnalyzer) ListPolicyGenerations(input *ListPolicyGenerationsInput) (*ListPolicyGenerationsOutput, error) {
+	req, out := c.ListPolicyGenerationsRequest(input)
+	return out, req.Send()
+}
+
+// ListPolicyGenerationsWithContext is the same as ListPolicyGenerations with the addition of
+// the ability to pass a context and additional request options.
+//
+// See ListPolicyGenerations for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *AccessAnalyzer) ListPolicyGenerationsWithContext(ctx aws.Context, input *ListPolicyGenerationsInput, opts ...request.Option) (*ListPolicyGenerationsOutput, error) {
+	req, out := c.ListPolicyGenerationsRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+// ListPolicyGenerationsPages iterates over the pages of a ListPolicyGenerations operation,
+// calling the "fn" function with the response data for each page. To stop
+// iterating, return false from the fn function.
+//
+// See ListPolicyGenerations method for more information on how to use this operation.
+//
+// Note: This operation can generate multiple requests to a service.
+//
+//    // Example iterating over at most 3 pages of a ListPolicyGenerations operation.
+//    pageNum := 0
+//    err := client.ListPolicyGenerationsPages(params,
+//        func(page *accessanalyzer.ListPolicyGenerationsOutput, lastPage bool) bool {
+//            pageNum++
+//            fmt.Println(page)
+//            return pageNum <= 3
+//        })
+//
+func (c *AccessAnalyzer) ListPolicyGenerationsPages(input *ListPolicyGenerationsInput, fn func(*ListPolicyGenerationsOutput, bool) bool) error {
+	return c.ListPolicyGenerationsPagesWithContext(aws.BackgroundContext(), input, fn)
+}
+
+// ListPolicyGenerationsPagesWithContext same as ListPolicyGenerationsPages except
+// it takes a Context and allows setting request options on the pages.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *AccessAnalyzer) ListPolicyGenerationsPagesWithContext(ctx aws.Context, input *ListPolicyGenerationsInput, fn func(*ListPolicyGenerationsOutput, bool) bool, opts ...request.Option) error {
+	p := request.Pagination{
+		NewRequest: func() (*request.Request, error) {
+			var inCpy *ListPolicyGenerationsInput
+			if input != nil {
+				tmp := *input
+				inCpy = &tmp
+			}
+			req, _ := c.ListPolicyGenerationsRequest(inCpy)
+			req.SetContext(ctx)
+			req.ApplyOptions(opts...)
+			return req, nil
+		},
+	}
+
+	for p.Next() {
+		if !fn(p.Page().(*ListPolicyGenerationsOutput), !p.HasNextPage()) {
+			break
+		}
+	}
+
+	return p.Err()
+}
+
 const opListTagsForResource = "ListTagsForResource"
 
 // ListTagsForResourceRequest generates a "aws/request.Request" representing the
@@ -1535,6 +2354,100 @@ func (c *AccessAnalyzer) ListTagsForResource(input *ListTagsForResourceInput) (*
 // for more information on using Contexts.
 func (c *AccessAnalyzer) ListTagsForResourceWithContext(ctx aws.Context, input *ListTagsForResourceInput, opts ...request.Option) (*ListTagsForResourceOutput, error) {
 	req, out := c.ListTagsForResourceRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opStartPolicyGeneration = "StartPolicyGeneration"
+
+// StartPolicyGenerationRequest generates a "aws/request.Request" representing the
+// client's request for the StartPolicyGeneration operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See StartPolicyGeneration for more information on using the StartPolicyGeneration
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the StartPolicyGenerationRequest method.
+//    req, resp := client.StartPolicyGenerationRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/accessanalyzer-2019-11-01/StartPolicyGeneration
+func (c *AccessAnalyzer) StartPolicyGenerationRequest(input *StartPolicyGenerationInput) (req *request.Request, output *StartPolicyGenerationOutput) {
+	op := &request.Operation{
+		Name:       opStartPolicyGeneration,
+		HTTPMethod: "PUT",
+		HTTPPath:   "/policy/generation",
+	}
+
+	if input == nil {
+		input = &StartPolicyGenerationInput{}
+	}
+
+	output = &StartPolicyGenerationOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// StartPolicyGeneration API operation for Access Analyzer.
+//
+// Starts the policy generation request.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Access Analyzer's
+// API operation StartPolicyGeneration for usage and error information.
+//
+// Returned Error Types:
+//   * ConflictException
+//   A conflict exception error.
+//
+//   * ValidationException
+//   Validation exception error.
+//
+//   * InternalServerException
+//   Internal server error.
+//
+//   * ServiceQuotaExceededException
+//   Service quote met error.
+//
+//   * ThrottlingException
+//   Throttling limit exceeded error.
+//
+//   * AccessDeniedException
+//   You do not have sufficient access to perform this action.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/accessanalyzer-2019-11-01/StartPolicyGeneration
+func (c *AccessAnalyzer) StartPolicyGeneration(input *StartPolicyGenerationInput) (*StartPolicyGenerationOutput, error) {
+	req, out := c.StartPolicyGenerationRequest(input)
+	return out, req.Send()
+}
+
+// StartPolicyGenerationWithContext is the same as StartPolicyGeneration with the addition of
+// the ability to pass a context and additional request options.
+//
+// See StartPolicyGeneration for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *AccessAnalyzer) StartPolicyGenerationWithContext(ctx aws.Context, input *StartPolicyGenerationInput, opts ...request.Option) (*StartPolicyGenerationOutput, error) {
+	req, out := c.StartPolicyGenerationRequest(input)
 	req.SetContext(ctx)
 	req.ApplyOptions(opts...)
 	return out, req.Send()
@@ -2000,6 +2913,155 @@ func (c *AccessAnalyzer) UpdateFindingsWithContext(ctx aws.Context, input *Updat
 	return out, req.Send()
 }
 
+const opValidatePolicy = "ValidatePolicy"
+
+// ValidatePolicyRequest generates a "aws/request.Request" representing the
+// client's request for the ValidatePolicy operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See ValidatePolicy for more information on using the ValidatePolicy
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the ValidatePolicyRequest method.
+//    req, resp := client.ValidatePolicyRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/accessanalyzer-2019-11-01/ValidatePolicy
+func (c *AccessAnalyzer) ValidatePolicyRequest(input *ValidatePolicyInput) (req *request.Request, output *ValidatePolicyOutput) {
+	op := &request.Operation{
+		Name:       opValidatePolicy,
+		HTTPMethod: "POST",
+		HTTPPath:   "/policy/validation",
+		Paginator: &request.Paginator{
+			InputTokens:     []string{"nextToken"},
+			OutputTokens:    []string{"nextToken"},
+			LimitToken:      "maxResults",
+			TruncationToken: "",
+		},
+	}
+
+	if input == nil {
+		input = &ValidatePolicyInput{}
+	}
+
+	output = &ValidatePolicyOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// ValidatePolicy API operation for Access Analyzer.
+//
+// Requests the validation of a policy and returns a list of findings. The findings
+// help you identify issues and provide actionable recommendations to resolve
+// the issue and enable you to author functional policies that meet security
+// best practices.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Access Analyzer's
+// API operation ValidatePolicy for usage and error information.
+//
+// Returned Error Types:
+//   * ValidationException
+//   Validation exception error.
+//
+//   * InternalServerException
+//   Internal server error.
+//
+//   * ThrottlingException
+//   Throttling limit exceeded error.
+//
+//   * AccessDeniedException
+//   You do not have sufficient access to perform this action.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/accessanalyzer-2019-11-01/ValidatePolicy
+func (c *AccessAnalyzer) ValidatePolicy(input *ValidatePolicyInput) (*ValidatePolicyOutput, error) {
+	req, out := c.ValidatePolicyRequest(input)
+	return out, req.Send()
+}
+
+// ValidatePolicyWithContext is the same as ValidatePolicy with the addition of
+// the ability to pass a context and additional request options.
+//
+// See ValidatePolicy for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *AccessAnalyzer) ValidatePolicyWithContext(ctx aws.Context, input *ValidatePolicyInput, opts ...request.Option) (*ValidatePolicyOutput, error) {
+	req, out := c.ValidatePolicyRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+// ValidatePolicyPages iterates over the pages of a ValidatePolicy operation,
+// calling the "fn" function with the response data for each page. To stop
+// iterating, return false from the fn function.
+//
+// See ValidatePolicy method for more information on how to use this operation.
+//
+// Note: This operation can generate multiple requests to a service.
+//
+//    // Example iterating over at most 3 pages of a ValidatePolicy operation.
+//    pageNum := 0
+//    err := client.ValidatePolicyPages(params,
+//        func(page *accessanalyzer.ValidatePolicyOutput, lastPage bool) bool {
+//            pageNum++
+//            fmt.Println(page)
+//            return pageNum <= 3
+//        })
+//
+func (c *AccessAnalyzer) ValidatePolicyPages(input *ValidatePolicyInput, fn func(*ValidatePolicyOutput, bool) bool) error {
+	return c.ValidatePolicyPagesWithContext(aws.BackgroundContext(), input, fn)
+}
+
+// ValidatePolicyPagesWithContext same as ValidatePolicyPages except
+// it takes a Context and allows setting request options on the pages.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *AccessAnalyzer) ValidatePolicyPagesWithContext(ctx aws.Context, input *ValidatePolicyInput, fn func(*ValidatePolicyOutput, bool) bool, opts ...request.Option) error {
+	p := request.Pagination{
+		NewRequest: func() (*request.Request, error) {
+			var inCpy *ValidatePolicyInput
+			if input != nil {
+				tmp := *input
+				inCpy = &tmp
+			}
+			req, _ := c.ValidatePolicyRequest(inCpy)
+			req.SetContext(ctx)
+			req.ApplyOptions(opts...)
+			return req, nil
+		},
+	}
+
+	for p.Next() {
+		if !fn(p.Page().(*ValidatePolicyOutput), !p.HasNextPage()) {
+			break
+		}
+	}
+
+	return p.Err()
+}
+
 // You do not have sufficient access to perform this action.
 type AccessDeniedException struct {
 	_            struct{}                  `type:"structure"`
@@ -2008,12 +3070,20 @@ type AccessDeniedException struct {
 	Message_ *string `locationName:"message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AccessDeniedException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AccessDeniedException) GoString() string {
 	return s.String()
 }
@@ -2056,6 +3126,466 @@ func (s *AccessDeniedException) RequestID() string {
 	return s.RespMetadata.RequestID
 }
 
+// Contains information about an access preview.
+type AccessPreview struct {
+	_ struct{} `type:"structure"`
+
+	// The ARN of the analyzer used to generate the access preview.
+	//
+	// AnalyzerArn is a required field
+	AnalyzerArn *string `locationName:"analyzerArn" type:"string" required:"true"`
+
+	// A map of resource ARNs for the proposed resource configuration.
+	//
+	// Configurations is a required field
+	Configurations map[string]*Configuration `locationName:"configurations" type:"map" required:"true"`
+
+	// The time at which the access preview was created.
+	//
+	// CreatedAt is a required field
+	CreatedAt *time.Time `locationName:"createdAt" type:"timestamp" timestampFormat:"iso8601" required:"true"`
+
+	// The unique ID for the access preview.
+	//
+	// Id is a required field
+	Id *string `locationName:"id" type:"string" required:"true"`
+
+	// The status of the access preview.
+	//
+	//    * Creating - The access preview creation is in progress.
+	//
+	//    * Completed - The access preview is complete. You can preview findings
+	//    for external access to the resource.
+	//
+	//    * Failed - The access preview creation has failed.
+	//
+	// Status is a required field
+	Status *string `locationName:"status" type:"string" required:"true" enum:"AccessPreviewStatus"`
+
+	// Provides more details about the current status of the access preview.
+	//
+	// For example, if the creation of the access preview fails, a Failed status
+	// is returned. This failure can be due to an internal issue with the analysis
+	// or due to an invalid resource configuration.
+	StatusReason *AccessPreviewStatusReason `locationName:"statusReason" type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s AccessPreview) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s AccessPreview) GoString() string {
+	return s.String()
+}
+
+// SetAnalyzerArn sets the AnalyzerArn field's value.
+func (s *AccessPreview) SetAnalyzerArn(v string) *AccessPreview {
+	s.AnalyzerArn = &v
+	return s
+}
+
+// SetConfigurations sets the Configurations field's value.
+func (s *AccessPreview) SetConfigurations(v map[string]*Configuration) *AccessPreview {
+	s.Configurations = v
+	return s
+}
+
+// SetCreatedAt sets the CreatedAt field's value.
+func (s *AccessPreview) SetCreatedAt(v time.Time) *AccessPreview {
+	s.CreatedAt = &v
+	return s
+}
+
+// SetId sets the Id field's value.
+func (s *AccessPreview) SetId(v string) *AccessPreview {
+	s.Id = &v
+	return s
+}
+
+// SetStatus sets the Status field's value.
+func (s *AccessPreview) SetStatus(v string) *AccessPreview {
+	s.Status = &v
+	return s
+}
+
+// SetStatusReason sets the StatusReason field's value.
+func (s *AccessPreview) SetStatusReason(v *AccessPreviewStatusReason) *AccessPreview {
+	s.StatusReason = v
+	return s
+}
+
+// An access preview finding generated by the access preview.
+type AccessPreviewFinding struct {
+	_ struct{} `type:"structure"`
+
+	// The action in the analyzed policy statement that an external principal has
+	// permission to perform.
+	Action []*string `locationName:"action" type:"list"`
+
+	// Provides context on how the access preview finding compares to existing access
+	// identified in IAM Access Analyzer.
+	//
+	//    * New - The finding is for newly-introduced access.
+	//
+	//    * Unchanged - The preview finding is an existing finding that would remain
+	//    unchanged.
+	//
+	//    * Changed - The preview finding is an existing finding with a change in
+	//    status.
+	//
+	// For example, a Changed finding with preview status Resolved and existing
+	// status Active indicates the existing Active finding would become Resolved
+	// as a result of the proposed permissions change.
+	//
+	// ChangeType is a required field
+	ChangeType *string `locationName:"changeType" type:"string" required:"true" enum:"FindingChangeType"`
+
+	// The condition in the analyzed policy statement that resulted in a finding.
+	Condition map[string]*string `locationName:"condition" type:"map"`
+
+	// The time at which the access preview finding was created.
+	//
+	// CreatedAt is a required field
+	CreatedAt *time.Time `locationName:"createdAt" type:"timestamp" timestampFormat:"iso8601" required:"true"`
+
+	// An error.
+	Error *string `locationName:"error" type:"string"`
+
+	// The existing ID of the finding in IAM Access Analyzer, provided only for
+	// existing findings.
+	ExistingFindingId *string `locationName:"existingFindingId" type:"string"`
+
+	// The existing status of the finding, provided only for existing findings.
+	ExistingFindingStatus *string `locationName:"existingFindingStatus" type:"string" enum:"FindingStatus"`
+
+	// The ID of the access preview finding. This ID uniquely identifies the element
+	// in the list of access preview findings and is not related to the finding
+	// ID in Access Analyzer.
+	//
+	// Id is a required field
+	Id *string `locationName:"id" type:"string" required:"true"`
+
+	// Indicates whether the policy that generated the finding allows public access
+	// to the resource.
+	IsPublic *bool `locationName:"isPublic" type:"boolean"`
+
+	// The external principal that has access to a resource within the zone of trust.
+	Principal map[string]*string `locationName:"principal" type:"map"`
+
+	// The resource that an external principal has access to. This is the resource
+	// associated with the access preview.
+	Resource *string `locationName:"resource" type:"string"`
+
+	// The Amazon Web Services account ID that owns the resource. For most Amazon
+	// Web Services resources, the owning account is the account in which the resource
+	// was created.
+	//
+	// ResourceOwnerAccount is a required field
+	ResourceOwnerAccount *string `locationName:"resourceOwnerAccount" type:"string" required:"true"`
+
+	// The type of the resource that can be accessed in the finding.
+	//
+	// ResourceType is a required field
+	ResourceType *string `locationName:"resourceType" type:"string" required:"true" enum:"ResourceType"`
+
+	// The sources of the finding. This indicates how the access that generated
+	// the finding is granted. It is populated for Amazon S3 bucket findings.
+	Sources []*FindingSource `locationName:"sources" type:"list"`
+
+	// The preview status of the finding. This is what the status of the finding
+	// would be after permissions deployment. For example, a Changed finding with
+	// preview status Resolved and existing status Active indicates the existing
+	// Active finding would become Resolved as a result of the proposed permissions
+	// change.
+	//
+	// Status is a required field
+	Status *string `locationName:"status" type:"string" required:"true" enum:"FindingStatus"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s AccessPreviewFinding) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s AccessPreviewFinding) GoString() string {
+	return s.String()
+}
+
+// SetAction sets the Action field's value.
+func (s *AccessPreviewFinding) SetAction(v []*string) *AccessPreviewFinding {
+	s.Action = v
+	return s
+}
+
+// SetChangeType sets the ChangeType field's value.
+func (s *AccessPreviewFinding) SetChangeType(v string) *AccessPreviewFinding {
+	s.ChangeType = &v
+	return s
+}
+
+// SetCondition sets the Condition field's value.
+func (s *AccessPreviewFinding) SetCondition(v map[string]*string) *AccessPreviewFinding {
+	s.Condition = v
+	return s
+}
+
+// SetCreatedAt sets the CreatedAt field's value.
+func (s *AccessPreviewFinding) SetCreatedAt(v time.Time) *AccessPreviewFinding {
+	s.CreatedAt = &v
+	return s
+}
+
+// SetError sets the Error field's value.
+func (s *AccessPreviewFinding) SetError(v string) *AccessPreviewFinding {
+	s.Error = &v
+	return s
+}
+
+// SetExistingFindingId sets the ExistingFindingId field's value.
+func (s *AccessPreviewFinding) SetExistingFindingId(v string) *AccessPreviewFinding {
+	s.ExistingFindingId = &v
+	return s
+}
+
+// SetExistingFindingStatus sets the ExistingFindingStatus field's value.
+func (s *AccessPreviewFinding) SetExistingFindingStatus(v string) *AccessPreviewFinding {
+	s.ExistingFindingStatus = &v
+	return s
+}
+
+// SetId sets the Id field's value.
+func (s *AccessPreviewFinding) SetId(v string) *AccessPreviewFinding {
+	s.Id = &v
+	return s
+}
+
+// SetIsPublic sets the IsPublic field's value.
+func (s *AccessPreviewFinding) SetIsPublic(v bool) *AccessPreviewFinding {
+	s.IsPublic = &v
+	return s
+}
+
+// SetPrincipal sets the Principal field's value.
+func (s *AccessPreviewFinding) SetPrincipal(v map[string]*string) *AccessPreviewFinding {
+	s.Principal = v
+	return s
+}
+
+// SetResource sets the Resource field's value.
+func (s *AccessPreviewFinding) SetResource(v string) *AccessPreviewFinding {
+	s.Resource = &v
+	return s
+}
+
+// SetResourceOwnerAccount sets the ResourceOwnerAccount field's value.
+func (s *AccessPreviewFinding) SetResourceOwnerAccount(v string) *AccessPreviewFinding {
+	s.ResourceOwnerAccount = &v
+	return s
+}
+
+// SetResourceType sets the ResourceType field's value.
+func (s *AccessPreviewFinding) SetResourceType(v string) *AccessPreviewFinding {
+	s.ResourceType = &v
+	return s
+}
+
+// SetSources sets the Sources field's value.
+func (s *AccessPreviewFinding) SetSources(v []*FindingSource) *AccessPreviewFinding {
+	s.Sources = v
+	return s
+}
+
+// SetStatus sets the Status field's value.
+func (s *AccessPreviewFinding) SetStatus(v string) *AccessPreviewFinding {
+	s.Status = &v
+	return s
+}
+
+// Provides more details about the current status of the access preview. For
+// example, if the creation of the access preview fails, a Failed status is
+// returned. This failure can be due to an internal issue with the analysis
+// or due to an invalid proposed resource configuration.
+type AccessPreviewStatusReason struct {
+	_ struct{} `type:"structure"`
+
+	// The reason code for the current status of the access preview.
+	//
+	// Code is a required field
+	Code *string `locationName:"code" type:"string" required:"true" enum:"AccessPreviewStatusReasonCode"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s AccessPreviewStatusReason) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s AccessPreviewStatusReason) GoString() string {
+	return s.String()
+}
+
+// SetCode sets the Code field's value.
+func (s *AccessPreviewStatusReason) SetCode(v string) *AccessPreviewStatusReason {
+	s.Code = &v
+	return s
+}
+
+// Contains a summary of information about an access preview.
+type AccessPreviewSummary struct {
+	_ struct{} `type:"structure"`
+
+	// The ARN of the analyzer used to generate the access preview.
+	//
+	// AnalyzerArn is a required field
+	AnalyzerArn *string `locationName:"analyzerArn" type:"string" required:"true"`
+
+	// The time at which the access preview was created.
+	//
+	// CreatedAt is a required field
+	CreatedAt *time.Time `locationName:"createdAt" type:"timestamp" timestampFormat:"iso8601" required:"true"`
+
+	// The unique ID for the access preview.
+	//
+	// Id is a required field
+	Id *string `locationName:"id" type:"string" required:"true"`
+
+	// The status of the access preview.
+	//
+	//    * Creating - The access preview creation is in progress.
+	//
+	//    * Completed - The access preview is complete and previews the findings
+	//    for external access to the resource.
+	//
+	//    * Failed - The access preview creation has failed.
+	//
+	// Status is a required field
+	Status *string `locationName:"status" type:"string" required:"true" enum:"AccessPreviewStatus"`
+
+	// Provides more details about the current status of the access preview. For
+	// example, if the creation of the access preview fails, a Failed status is
+	// returned. This failure can be due to an internal issue with the analysis
+	// or due to an invalid proposed resource configuration.
+	StatusReason *AccessPreviewStatusReason `locationName:"statusReason" type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s AccessPreviewSummary) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s AccessPreviewSummary) GoString() string {
+	return s.String()
+}
+
+// SetAnalyzerArn sets the AnalyzerArn field's value.
+func (s *AccessPreviewSummary) SetAnalyzerArn(v string) *AccessPreviewSummary {
+	s.AnalyzerArn = &v
+	return s
+}
+
+// SetCreatedAt sets the CreatedAt field's value.
+func (s *AccessPreviewSummary) SetCreatedAt(v time.Time) *AccessPreviewSummary {
+	s.CreatedAt = &v
+	return s
+}
+
+// SetId sets the Id field's value.
+func (s *AccessPreviewSummary) SetId(v string) *AccessPreviewSummary {
+	s.Id = &v
+	return s
+}
+
+// SetStatus sets the Status field's value.
+func (s *AccessPreviewSummary) SetStatus(v string) *AccessPreviewSummary {
+	s.Status = &v
+	return s
+}
+
+// SetStatusReason sets the StatusReason field's value.
+func (s *AccessPreviewSummary) SetStatusReason(v *AccessPreviewStatusReason) *AccessPreviewSummary {
+	s.StatusReason = v
+	return s
+}
+
+// You specify each grantee as a type-value pair using one of these types. You
+// can specify only one type of grantee. For more information, see PutBucketAcl
+// (https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutBucketAcl.html).
+type AclGrantee struct {
+	_ struct{} `type:"structure"`
+
+	// The value specified is the canonical user ID of an Amazon Web Services account.
+	Id *string `locationName:"id" type:"string"`
+
+	// Used for granting permissions to a predefined group.
+	Uri *string `locationName:"uri" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s AclGrantee) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s AclGrantee) GoString() string {
+	return s.String()
+}
+
+// SetId sets the Id field's value.
+func (s *AclGrantee) SetId(v string) *AclGrantee {
+	s.Id = &v
+	return s
+}
+
+// SetUri sets the Uri field's value.
+func (s *AclGrantee) SetUri(v string) *AclGrantee {
+	s.Uri = &v
+	return s
+}
+
 // Contains details about the analyzed resource.
 type AnalyzedResource struct {
 	_ struct{} `type:"structure"`
@@ -2088,7 +3618,7 @@ type AnalyzedResource struct {
 	// ResourceArn is a required field
 	ResourceArn *string `locationName:"resourceArn" type:"string" required:"true"`
 
-	// The AWS account ID that owns the resource.
+	// The Amazon Web Services account ID that owns the resource.
 	//
 	// ResourceOwnerAccount is a required field
 	ResourceOwnerAccount *string `locationName:"resourceOwnerAccount" type:"string" required:"true"`
@@ -2111,12 +3641,20 @@ type AnalyzedResource struct {
 	UpdatedAt *time.Time `locationName:"updatedAt" type:"timestamp" timestampFormat:"iso8601" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AnalyzedResource) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AnalyzedResource) GoString() string {
 	return s.String()
 }
@@ -2196,7 +3734,7 @@ type AnalyzedResourceSummary struct {
 	// ResourceArn is a required field
 	ResourceArn *string `locationName:"resourceArn" type:"string" required:"true"`
 
-	// The AWS account ID that owns the resource.
+	// The Amazon Web Services account ID that owns the resource.
 	//
 	// ResourceOwnerAccount is a required field
 	ResourceOwnerAccount *string `locationName:"resourceOwnerAccount" type:"string" required:"true"`
@@ -2207,12 +3745,20 @@ type AnalyzedResourceSummary struct {
 	ResourceType *string `locationName:"resourceType" type:"string" required:"true" enum:"ResourceType"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AnalyzedResourceSummary) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AnalyzedResourceSummary) GoString() string {
 	return s.String()
 }
@@ -2262,19 +3808,19 @@ type AnalyzerSummary struct {
 
 	// The status of the analyzer. An Active analyzer successfully monitors supported
 	// resources and generates new findings. The analyzer is Disabled when a user
-	// action, such as removing trusted access for IAM Access Analyzer from AWS
-	// Organizations, causes the analyzer to stop generating new findings. The status
-	// is Creating when the analyzer creation is in progress and Failed when the
-	// analyzer creation has failed.
+	// action, such as removing trusted access for Identity and Access Management
+	// Access Analyzer from Organizations, causes the analyzer to stop generating
+	// new findings. The status is Creating when the analyzer creation is in progress
+	// and Failed when the analyzer creation has failed.
 	//
 	// Status is a required field
 	Status *string `locationName:"status" type:"string" required:"true" enum:"AnalyzerStatus"`
 
 	// The statusReason provides more details about the current status of the analyzer.
-	// For example, if the creation for the analyzer fails, a Failed status is displayed.
+	// For example, if the creation for the analyzer fails, a Failed status is returned.
 	// For an analyzer with organization as the type, this failure can be due to
 	// an issue with creating the service-linked roles required in the member accounts
-	// of the AWS organization.
+	// of the Amazon Web Services organization.
 	StatusReason *StatusReason `locationName:"statusReason" type:"structure"`
 
 	// The tags added to the analyzer.
@@ -2287,12 +3833,20 @@ type AnalyzerSummary struct {
 	Type *string `locationName:"type" type:"string" required:"true" enum:"Type"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AnalyzerSummary) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AnalyzerSummary) GoString() string {
 	return s.String()
 }
@@ -2369,12 +3923,20 @@ type ApplyArchiveRuleInput struct {
 	RuleName *string `locationName:"ruleName" min:"1" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ApplyArchiveRuleInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ApplyArchiveRuleInput) GoString() string {
 	return s.String()
 }
@@ -2417,15 +3979,23 @@ func (s *ApplyArchiveRuleInput) SetRuleName(v string) *ApplyArchiveRuleInput {
 }
 
 type ApplyArchiveRuleOutput struct {
-	_ struct{} `type:"structure"`
+	_ struct{} `type:"structure" nopayload:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ApplyArchiveRuleOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ApplyArchiveRuleOutput) GoString() string {
 	return s.String()
 }
@@ -2455,12 +4025,20 @@ type ArchiveRuleSummary struct {
 	UpdatedAt *time.Time `locationName:"updatedAt" type:"timestamp" timestampFormat:"iso8601" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ArchiveRuleSummary) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ArchiveRuleSummary) GoString() string {
 	return s.String()
 }
@@ -2489,6 +4067,330 @@ func (s *ArchiveRuleSummary) SetUpdatedAt(v time.Time) *ArchiveRuleSummary {
 	return s
 }
 
+type CancelPolicyGenerationInput struct {
+	_ struct{} `type:"structure" nopayload:"true"`
+
+	// The JobId that is returned by the StartPolicyGeneration operation. The JobId
+	// can be used with GetGeneratedPolicy to retrieve the generated policies or
+	// used with CancelPolicyGeneration to cancel the policy generation request.
+	//
+	// JobId is a required field
+	JobId *string `location:"uri" locationName:"jobId" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CancelPolicyGenerationInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CancelPolicyGenerationInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *CancelPolicyGenerationInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "CancelPolicyGenerationInput"}
+	if s.JobId == nil {
+		invalidParams.Add(request.NewErrParamRequired("JobId"))
+	}
+	if s.JobId != nil && len(*s.JobId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("JobId", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetJobId sets the JobId field's value.
+func (s *CancelPolicyGenerationInput) SetJobId(v string) *CancelPolicyGenerationInput {
+	s.JobId = &v
+	return s
+}
+
+type CancelPolicyGenerationOutput struct {
+	_ struct{} `type:"structure" nopayload:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CancelPolicyGenerationOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CancelPolicyGenerationOutput) GoString() string {
+	return s.String()
+}
+
+// Contains information about CloudTrail access.
+type CloudTrailDetails struct {
+	_ struct{} `type:"structure"`
+
+	// The ARN of the service role that IAM Access Analyzer uses to access your
+	// CloudTrail trail and service last accessed information.
+	//
+	// AccessRole is a required field
+	AccessRole *string `locationName:"accessRole" type:"string" required:"true"`
+
+	// The end of the time range for which IAM Access Analyzer reviews your CloudTrail
+	// events. Events with a timestamp after this time are not considered to generate
+	// a policy. If this is not included in the request, the default value is the
+	// current time.
+	EndTime *time.Time `locationName:"endTime" type:"timestamp" timestampFormat:"iso8601"`
+
+	// The start of the time range for which IAM Access Analyzer reviews your CloudTrail
+	// events. Events with a timestamp before this time are not considered to generate
+	// a policy.
+	//
+	// StartTime is a required field
+	StartTime *time.Time `locationName:"startTime" type:"timestamp" timestampFormat:"iso8601" required:"true"`
+
+	// A Trail object that contains settings for a trail.
+	//
+	// Trails is a required field
+	Trails []*Trail `locationName:"trails" type:"list" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CloudTrailDetails) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CloudTrailDetails) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *CloudTrailDetails) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "CloudTrailDetails"}
+	if s.AccessRole == nil {
+		invalidParams.Add(request.NewErrParamRequired("AccessRole"))
+	}
+	if s.StartTime == nil {
+		invalidParams.Add(request.NewErrParamRequired("StartTime"))
+	}
+	if s.Trails == nil {
+		invalidParams.Add(request.NewErrParamRequired("Trails"))
+	}
+	if s.Trails != nil {
+		for i, v := range s.Trails {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "Trails", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetAccessRole sets the AccessRole field's value.
+func (s *CloudTrailDetails) SetAccessRole(v string) *CloudTrailDetails {
+	s.AccessRole = &v
+	return s
+}
+
+// SetEndTime sets the EndTime field's value.
+func (s *CloudTrailDetails) SetEndTime(v time.Time) *CloudTrailDetails {
+	s.EndTime = &v
+	return s
+}
+
+// SetStartTime sets the StartTime field's value.
+func (s *CloudTrailDetails) SetStartTime(v time.Time) *CloudTrailDetails {
+	s.StartTime = &v
+	return s
+}
+
+// SetTrails sets the Trails field's value.
+func (s *CloudTrailDetails) SetTrails(v []*Trail) *CloudTrailDetails {
+	s.Trails = v
+	return s
+}
+
+// Contains information about CloudTrail access.
+type CloudTrailProperties struct {
+	_ struct{} `type:"structure"`
+
+	// The end of the time range for which IAM Access Analyzer reviews your CloudTrail
+	// events. Events with a timestamp after this time are not considered to generate
+	// a policy. If this is not included in the request, the default value is the
+	// current time.
+	//
+	// EndTime is a required field
+	EndTime *time.Time `locationName:"endTime" type:"timestamp" timestampFormat:"iso8601" required:"true"`
+
+	// The start of the time range for which IAM Access Analyzer reviews your CloudTrail
+	// events. Events with a timestamp before this time are not considered to generate
+	// a policy.
+	//
+	// StartTime is a required field
+	StartTime *time.Time `locationName:"startTime" type:"timestamp" timestampFormat:"iso8601" required:"true"`
+
+	// A TrailProperties object that contains settings for trail properties.
+	//
+	// TrailProperties is a required field
+	TrailProperties []*TrailProperties `locationName:"trailProperties" type:"list" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CloudTrailProperties) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CloudTrailProperties) GoString() string {
+	return s.String()
+}
+
+// SetEndTime sets the EndTime field's value.
+func (s *CloudTrailProperties) SetEndTime(v time.Time) *CloudTrailProperties {
+	s.EndTime = &v
+	return s
+}
+
+// SetStartTime sets the StartTime field's value.
+func (s *CloudTrailProperties) SetStartTime(v time.Time) *CloudTrailProperties {
+	s.StartTime = &v
+	return s
+}
+
+// SetTrailProperties sets the TrailProperties field's value.
+func (s *CloudTrailProperties) SetTrailProperties(v []*TrailProperties) *CloudTrailProperties {
+	s.TrailProperties = v
+	return s
+}
+
+// Access control configuration structures for your resource. You specify the
+// configuration as a type-value pair. You can specify only one type of access
+// control configuration.
+type Configuration struct {
+	_ struct{} `type:"structure"`
+
+	// The access control configuration is for an IAM role.
+	IamRole *IamRoleConfiguration `locationName:"iamRole" type:"structure"`
+
+	// The access control configuration is for a KMS key.
+	KmsKey *KmsKeyConfiguration `locationName:"kmsKey" type:"structure"`
+
+	// The access control configuration is for an Amazon S3 Bucket.
+	S3Bucket *S3BucketConfiguration `locationName:"s3Bucket" type:"structure"`
+
+	// The access control configuration is for a Secrets Manager secret.
+	SecretsManagerSecret *SecretsManagerSecretConfiguration `locationName:"secretsManagerSecret" type:"structure"`
+
+	// The access control configuration is for an Amazon SQS queue.
+	SqsQueue *SqsQueueConfiguration `locationName:"sqsQueue" type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s Configuration) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s Configuration) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *Configuration) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "Configuration"}
+	if s.KmsKey != nil {
+		if err := s.KmsKey.Validate(); err != nil {
+			invalidParams.AddNested("KmsKey", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.S3Bucket != nil {
+		if err := s.S3Bucket.Validate(); err != nil {
+			invalidParams.AddNested("S3Bucket", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetIamRole sets the IamRole field's value.
+func (s *Configuration) SetIamRole(v *IamRoleConfiguration) *Configuration {
+	s.IamRole = v
+	return s
+}
+
+// SetKmsKey sets the KmsKey field's value.
+func (s *Configuration) SetKmsKey(v *KmsKeyConfiguration) *Configuration {
+	s.KmsKey = v
+	return s
+}
+
+// SetS3Bucket sets the S3Bucket field's value.
+func (s *Configuration) SetS3Bucket(v *S3BucketConfiguration) *Configuration {
+	s.S3Bucket = v
+	return s
+}
+
+// SetSecretsManagerSecret sets the SecretsManagerSecret field's value.
+func (s *Configuration) SetSecretsManagerSecret(v *SecretsManagerSecretConfiguration) *Configuration {
+	s.SecretsManagerSecret = v
+	return s
+}
+
+// SetSqsQueue sets the SqsQueue field's value.
+func (s *Configuration) SetSqsQueue(v *SqsQueueConfiguration) *Configuration {
+	s.SqsQueue = v
+	return s
+}
+
 // A conflict exception error.
 type ConflictException struct {
 	_            struct{}                  `type:"structure"`
@@ -2507,12 +4409,20 @@ type ConflictException struct {
 	ResourceType *string `locationName:"resourceType" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ConflictException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ConflictException) GoString() string {
 	return s.String()
 }
@@ -2555,6 +4465,123 @@ func (s *ConflictException) RequestID() string {
 	return s.RespMetadata.RequestID
 }
 
+type CreateAccessPreviewInput struct {
+	_ struct{} `type:"structure"`
+
+	// The ARN of the account analyzer (https://docs.aws.amazon.com/IAM/latest/UserGuide/access-analyzer-getting-started.html#permission-resources)
+	// used to generate the access preview. You can only create an access preview
+	// for analyzers with an Account type and Active status.
+	//
+	// AnalyzerArn is a required field
+	AnalyzerArn *string `locationName:"analyzerArn" type:"string" required:"true"`
+
+	// A client token.
+	ClientToken *string `locationName:"clientToken" type:"string" idempotencyToken:"true"`
+
+	// Access control configuration for your resource that is used to generate the
+	// access preview. The access preview includes findings for external access
+	// allowed to the resource with the proposed access control configuration. The
+	// configuration must contain exactly one element.
+	//
+	// Configurations is a required field
+	Configurations map[string]*Configuration `locationName:"configurations" type:"map" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateAccessPreviewInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateAccessPreviewInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *CreateAccessPreviewInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "CreateAccessPreviewInput"}
+	if s.AnalyzerArn == nil {
+		invalidParams.Add(request.NewErrParamRequired("AnalyzerArn"))
+	}
+	if s.Configurations == nil {
+		invalidParams.Add(request.NewErrParamRequired("Configurations"))
+	}
+	if s.Configurations != nil {
+		for i, v := range s.Configurations {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "Configurations", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetAnalyzerArn sets the AnalyzerArn field's value.
+func (s *CreateAccessPreviewInput) SetAnalyzerArn(v string) *CreateAccessPreviewInput {
+	s.AnalyzerArn = &v
+	return s
+}
+
+// SetClientToken sets the ClientToken field's value.
+func (s *CreateAccessPreviewInput) SetClientToken(v string) *CreateAccessPreviewInput {
+	s.ClientToken = &v
+	return s
+}
+
+// SetConfigurations sets the Configurations field's value.
+func (s *CreateAccessPreviewInput) SetConfigurations(v map[string]*Configuration) *CreateAccessPreviewInput {
+	s.Configurations = v
+	return s
+}
+
+type CreateAccessPreviewOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The unique ID for the access preview.
+	//
+	// Id is a required field
+	Id *string `locationName:"id" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateAccessPreviewOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateAccessPreviewOutput) GoString() string {
+	return s.String()
+}
+
+// SetId sets the Id field's value.
+func (s *CreateAccessPreviewOutput) SetId(v string) *CreateAccessPreviewOutput {
+	s.Id = &v
+	return s
+}
+
 // Creates an analyzer.
 type CreateAnalyzerInput struct {
 	_ struct{} `type:"structure"`
@@ -2574,19 +4601,28 @@ type CreateAnalyzerInput struct {
 	// The tags to apply to the analyzer.
 	Tags map[string]*string `locationName:"tags" type:"map"`
 
-	// The type of analyzer to create. Only ACCOUNT analyzers are supported. You
-	// can create only one analyzer per account per Region.
+	// The type of analyzer to create. Only ACCOUNT and ORGANIZATION analyzers are
+	// supported. You can create only one analyzer per account per Region. You can
+	// create up to 5 analyzers per organization per Region.
 	//
 	// Type is a required field
 	Type *string `locationName:"type" type:"string" required:"true" enum:"Type"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateAnalyzerInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateAnalyzerInput) GoString() string {
 	return s.String()
 }
@@ -2658,12 +4694,20 @@ type CreateAnalyzerOutput struct {
 	Arn *string `locationName:"arn" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateAnalyzerOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateAnalyzerOutput) GoString() string {
 	return s.String()
 }
@@ -2697,12 +4741,20 @@ type CreateArchiveRuleInput struct {
 	RuleName *string `locationName:"ruleName" min:"1" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateArchiveRuleInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateArchiveRuleInput) GoString() string {
 	return s.String()
 }
@@ -2767,15 +4819,23 @@ func (s *CreateArchiveRuleInput) SetRuleName(v string) *CreateArchiveRuleInput {
 }
 
 type CreateArchiveRuleOutput struct {
-	_ struct{} `type:"structure"`
+	_ struct{} `type:"structure" nopayload:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateArchiveRuleOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateArchiveRuleOutput) GoString() string {
 	return s.String()
 }
@@ -2797,12 +4857,20 @@ type Criterion struct {
 	Neq []*string `locationName:"neq" min:"1" type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s Criterion) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s Criterion) GoString() string {
 	return s.String()
 }
@@ -2852,7 +4920,7 @@ func (s *Criterion) SetNeq(v []*string) *Criterion {
 
 // Deletes an analyzer.
 type DeleteAnalyzerInput struct {
-	_ struct{} `type:"structure"`
+	_ struct{} `type:"structure" nopayload:"true"`
 
 	// The name of the analyzer to delete.
 	//
@@ -2863,12 +4931,20 @@ type DeleteAnalyzerInput struct {
 	ClientToken *string `location:"querystring" locationName:"clientToken" type:"string" idempotencyToken:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteAnalyzerInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteAnalyzerInput) GoString() string {
 	return s.String()
 }
@@ -2902,22 +4978,30 @@ func (s *DeleteAnalyzerInput) SetClientToken(v string) *DeleteAnalyzerInput {
 }
 
 type DeleteAnalyzerOutput struct {
-	_ struct{} `type:"structure"`
+	_ struct{} `type:"structure" nopayload:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteAnalyzerOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteAnalyzerOutput) GoString() string {
 	return s.String()
 }
 
 // Deletes an archive rule.
 type DeleteArchiveRuleInput struct {
-	_ struct{} `type:"structure"`
+	_ struct{} `type:"structure" nopayload:"true"`
 
 	// The name of the analyzer that associated with the archive rule to delete.
 	//
@@ -2933,12 +5017,20 @@ type DeleteArchiveRuleInput struct {
 	RuleName *string `location:"uri" locationName:"ruleName" min:"1" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteArchiveRuleInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteArchiveRuleInput) GoString() string {
 	return s.String()
 }
@@ -2984,15 +5076,23 @@ func (s *DeleteArchiveRuleInput) SetRuleName(v string) *DeleteArchiveRuleInput {
 }
 
 type DeleteArchiveRuleOutput struct {
-	_ struct{} `type:"structure"`
+	_ struct{} `type:"structure" nopayload:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteArchiveRuleOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteArchiveRuleOutput) GoString() string {
 	return s.String()
 }
@@ -3038,12 +5138,12 @@ type Finding struct {
 	// The resource that an external principal has access to.
 	Resource *string `locationName:"resource" type:"string"`
 
-	// The AWS account ID that owns the resource.
+	// The Amazon Web Services account ID that owns the resource.
 	//
 	// ResourceOwnerAccount is a required field
 	ResourceOwnerAccount *string `locationName:"resourceOwnerAccount" type:"string" required:"true"`
 
-	// The type of the resource reported in the finding.
+	// The type of the resource identified in the finding.
 	//
 	// ResourceType is a required field
 	ResourceType *string `locationName:"resourceType" type:"string" required:"true" enum:"ResourceType"`
@@ -3063,12 +5163,20 @@ type Finding struct {
 	UpdatedAt *time.Time `locationName:"updatedAt" type:"timestamp" timestampFormat:"iso8601" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s Finding) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s Finding) GoString() string {
 	return s.String()
 }
@@ -3172,12 +5280,20 @@ type FindingSource struct {
 	Type *string `locationName:"type" type:"string" required:"true" enum:"FindingSourceType"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s FindingSource) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s FindingSource) GoString() string {
 	return s.String()
 }
@@ -3199,16 +5315,25 @@ func (s *FindingSource) SetType(v string) *FindingSource {
 type FindingSourceDetail struct {
 	_ struct{} `type:"structure"`
 
-	// The ARN of the access point that generated the finding.
+	// The ARN of the access point that generated the finding. The ARN format depends
+	// on whether the ARN represents an access point or a multi-region access point.
 	AccessPointArn *string `locationName:"accessPointArn" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s FindingSourceDetail) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s FindingSourceDetail) GoString() string {
 	return s.String()
 }
@@ -3261,7 +5386,7 @@ type FindingSummary struct {
 	// The resource that the external principal has access to.
 	Resource *string `locationName:"resource" type:"string"`
 
-	// The AWS account ID that owns the resource.
+	// The Amazon Web Services account ID that owns the resource.
 	//
 	// ResourceOwnerAccount is a required field
 	ResourceOwnerAccount *string `locationName:"resourceOwnerAccount" type:"string" required:"true"`
@@ -3286,12 +5411,20 @@ type FindingSummary struct {
 	UpdatedAt *time.Time `locationName:"updatedAt" type:"timestamp" timestampFormat:"iso8601" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s FindingSummary) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s FindingSummary) GoString() string {
 	return s.String()
 }
@@ -3380,11 +5513,245 @@ func (s *FindingSummary) SetUpdatedAt(v time.Time) *FindingSummary {
 	return s
 }
 
-// Retrieves an analyzed resource.
-type GetAnalyzedResourceInput struct {
+// Contains the text for the generated policy.
+type GeneratedPolicy struct {
 	_ struct{} `type:"structure"`
 
-	// The ARN of the analyzer to retrieve information from.
+	// The text to use as the content for the new policy. The policy is created
+	// using the CreatePolicy (https://docs.aws.amazon.com/IAM/latest/APIReference/API_CreatePolicy.html)
+	// action.
+	//
+	// Policy is a required field
+	Policy *string `locationName:"policy" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GeneratedPolicy) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GeneratedPolicy) GoString() string {
+	return s.String()
+}
+
+// SetPolicy sets the Policy field's value.
+func (s *GeneratedPolicy) SetPolicy(v string) *GeneratedPolicy {
+	s.Policy = &v
+	return s
+}
+
+// Contains the generated policy details.
+type GeneratedPolicyProperties struct {
+	_ struct{} `type:"structure"`
+
+	// Lists details about the Trail used to generated policy.
+	CloudTrailProperties *CloudTrailProperties `locationName:"cloudTrailProperties" type:"structure"`
+
+	// This value is set to true if the generated policy contains all possible actions
+	// for a service that IAM Access Analyzer identified from the CloudTrail trail
+	// that you specified, and false otherwise.
+	IsComplete *bool `locationName:"isComplete" type:"boolean"`
+
+	// The ARN of the IAM entity (user or role) for which you are generating a policy.
+	//
+	// PrincipalArn is a required field
+	PrincipalArn *string `locationName:"principalArn" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GeneratedPolicyProperties) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GeneratedPolicyProperties) GoString() string {
+	return s.String()
+}
+
+// SetCloudTrailProperties sets the CloudTrailProperties field's value.
+func (s *GeneratedPolicyProperties) SetCloudTrailProperties(v *CloudTrailProperties) *GeneratedPolicyProperties {
+	s.CloudTrailProperties = v
+	return s
+}
+
+// SetIsComplete sets the IsComplete field's value.
+func (s *GeneratedPolicyProperties) SetIsComplete(v bool) *GeneratedPolicyProperties {
+	s.IsComplete = &v
+	return s
+}
+
+// SetPrincipalArn sets the PrincipalArn field's value.
+func (s *GeneratedPolicyProperties) SetPrincipalArn(v string) *GeneratedPolicyProperties {
+	s.PrincipalArn = &v
+	return s
+}
+
+// Contains the text for the generated policy and its details.
+type GeneratedPolicyResult struct {
+	_ struct{} `type:"structure"`
+
+	// The text to use as the content for the new policy. The policy is created
+	// using the CreatePolicy (https://docs.aws.amazon.com/IAM/latest/APIReference/API_CreatePolicy.html)
+	// action.
+	GeneratedPolicies []*GeneratedPolicy `locationName:"generatedPolicies" type:"list"`
+
+	// A GeneratedPolicyProperties object that contains properties of the generated
+	// policy.
+	//
+	// Properties is a required field
+	Properties *GeneratedPolicyProperties `locationName:"properties" type:"structure" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GeneratedPolicyResult) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GeneratedPolicyResult) GoString() string {
+	return s.String()
+}
+
+// SetGeneratedPolicies sets the GeneratedPolicies field's value.
+func (s *GeneratedPolicyResult) SetGeneratedPolicies(v []*GeneratedPolicy) *GeneratedPolicyResult {
+	s.GeneratedPolicies = v
+	return s
+}
+
+// SetProperties sets the Properties field's value.
+func (s *GeneratedPolicyResult) SetProperties(v *GeneratedPolicyProperties) *GeneratedPolicyResult {
+	s.Properties = v
+	return s
+}
+
+type GetAccessPreviewInput struct {
+	_ struct{} `type:"structure" nopayload:"true"`
+
+	// The unique ID for the access preview.
+	//
+	// AccessPreviewId is a required field
+	AccessPreviewId *string `location:"uri" locationName:"accessPreviewId" type:"string" required:"true"`
+
+	// The ARN of the analyzer (https://docs.aws.amazon.com/IAM/latest/UserGuide/access-analyzer-getting-started.html#permission-resources)
+	// used to generate the access preview.
+	//
+	// AnalyzerArn is a required field
+	AnalyzerArn *string `location:"querystring" locationName:"analyzerArn" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetAccessPreviewInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetAccessPreviewInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *GetAccessPreviewInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "GetAccessPreviewInput"}
+	if s.AccessPreviewId == nil {
+		invalidParams.Add(request.NewErrParamRequired("AccessPreviewId"))
+	}
+	if s.AccessPreviewId != nil && len(*s.AccessPreviewId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("AccessPreviewId", 1))
+	}
+	if s.AnalyzerArn == nil {
+		invalidParams.Add(request.NewErrParamRequired("AnalyzerArn"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetAccessPreviewId sets the AccessPreviewId field's value.
+func (s *GetAccessPreviewInput) SetAccessPreviewId(v string) *GetAccessPreviewInput {
+	s.AccessPreviewId = &v
+	return s
+}
+
+// SetAnalyzerArn sets the AnalyzerArn field's value.
+func (s *GetAccessPreviewInput) SetAnalyzerArn(v string) *GetAccessPreviewInput {
+	s.AnalyzerArn = &v
+	return s
+}
+
+type GetAccessPreviewOutput struct {
+	_ struct{} `type:"structure"`
+
+	// An object that contains information about the access preview.
+	//
+	// AccessPreview is a required field
+	AccessPreview *AccessPreview `locationName:"accessPreview" type:"structure" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetAccessPreviewOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetAccessPreviewOutput) GoString() string {
+	return s.String()
+}
+
+// SetAccessPreview sets the AccessPreview field's value.
+func (s *GetAccessPreviewOutput) SetAccessPreview(v *AccessPreview) *GetAccessPreviewOutput {
+	s.AccessPreview = v
+	return s
+}
+
+// Retrieves an analyzed resource.
+type GetAnalyzedResourceInput struct {
+	_ struct{} `type:"structure" nopayload:"true"`
+
+	// The ARN of the analyzer (https://docs.aws.amazon.com/IAM/latest/UserGuide/access-analyzer-getting-started.html#permission-resources)
+	// to retrieve information from.
 	//
 	// AnalyzerArn is a required field
 	AnalyzerArn *string `location:"querystring" locationName:"analyzerArn" type:"string" required:"true"`
@@ -3395,12 +5762,20 @@ type GetAnalyzedResourceInput struct {
 	ResourceArn *string `location:"querystring" locationName:"resourceArn" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetAnalyzedResourceInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetAnalyzedResourceInput) GoString() string {
 	return s.String()
 }
@@ -3437,17 +5812,25 @@ func (s *GetAnalyzedResourceInput) SetResourceArn(v string) *GetAnalyzedResource
 type GetAnalyzedResourceOutput struct {
 	_ struct{} `type:"structure"`
 
-	// An AnalyedResource object that contains information that Access Analyzer
+	// An AnalyzedResource object that contains information that IAM Access Analyzer
 	// found when it analyzed the resource.
 	Resource *AnalyzedResource `locationName:"resource" type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetAnalyzedResourceOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetAnalyzedResourceOutput) GoString() string {
 	return s.String()
 }
@@ -3460,7 +5843,7 @@ func (s *GetAnalyzedResourceOutput) SetResource(v *AnalyzedResource) *GetAnalyze
 
 // Retrieves an analyzer.
 type GetAnalyzerInput struct {
-	_ struct{} `type:"structure"`
+	_ struct{} `type:"structure" nopayload:"true"`
 
 	// The name of the analyzer retrieved.
 	//
@@ -3468,12 +5851,20 @@ type GetAnalyzerInput struct {
 	AnalyzerName *string `location:"uri" locationName:"analyzerName" min:"1" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetAnalyzerInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetAnalyzerInput) GoString() string {
 	return s.String()
 }
@@ -3510,12 +5901,20 @@ type GetAnalyzerOutput struct {
 	Analyzer *AnalyzerSummary `locationName:"analyzer" type:"structure" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetAnalyzerOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetAnalyzerOutput) GoString() string {
 	return s.String()
 }
@@ -3528,7 +5927,7 @@ func (s *GetAnalyzerOutput) SetAnalyzer(v *AnalyzerSummary) *GetAnalyzerOutput {
 
 // Retrieves an archive rule.
 type GetArchiveRuleInput struct {
-	_ struct{} `type:"structure"`
+	_ struct{} `type:"structure" nopayload:"true"`
 
 	// The name of the analyzer to retrieve rules from.
 	//
@@ -3541,12 +5940,20 @@ type GetArchiveRuleInput struct {
 	RuleName *string `location:"uri" locationName:"ruleName" min:"1" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetArchiveRuleInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetArchiveRuleInput) GoString() string {
 	return s.String()
 }
@@ -3595,12 +6002,20 @@ type GetArchiveRuleOutput struct {
 	ArchiveRule *ArchiveRuleSummary `locationName:"archiveRule" type:"structure" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetArchiveRuleOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetArchiveRuleOutput) GoString() string {
 	return s.String()
 }
@@ -3613,9 +6028,10 @@ func (s *GetArchiveRuleOutput) SetArchiveRule(v *ArchiveRuleSummary) *GetArchive
 
 // Retrieves a finding.
 type GetFindingInput struct {
-	_ struct{} `type:"structure"`
+	_ struct{} `type:"structure" nopayload:"true"`
 
-	// The ARN of the analyzer that generated the finding.
+	// The ARN of the analyzer (https://docs.aws.amazon.com/IAM/latest/UserGuide/access-analyzer-getting-started.html#permission-resources)
+	// that generated the finding.
 	//
 	// AnalyzerArn is a required field
 	AnalyzerArn *string `location:"querystring" locationName:"analyzerArn" type:"string" required:"true"`
@@ -3626,12 +6042,20 @@ type GetFindingInput struct {
 	Id *string `location:"uri" locationName:"id" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetFindingInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetFindingInput) GoString() string {
 	return s.String()
 }
@@ -3675,12 +6099,20 @@ type GetFindingOutput struct {
 	Finding *Finding `locationName:"finding" type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetFindingOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetFindingOutput) GoString() string {
 	return s.String()
 }
@@ -3688,6 +6120,169 @@ func (s GetFindingOutput) GoString() string {
 // SetFinding sets the Finding field's value.
 func (s *GetFindingOutput) SetFinding(v *Finding) *GetFindingOutput {
 	s.Finding = v
+	return s
+}
+
+type GetGeneratedPolicyInput struct {
+	_ struct{} `type:"structure" nopayload:"true"`
+
+	// The level of detail that you want to generate. You can specify whether to
+	// generate policies with placeholders for resource ARNs for actions that support
+	// resource level granularity in policies.
+	//
+	// For example, in the resource section of a policy, you can receive a placeholder
+	// such as "Resource":"arn:aws:s3:::${BucketName}" instead of "*".
+	IncludeResourcePlaceholders *bool `location:"querystring" locationName:"includeResourcePlaceholders" type:"boolean"`
+
+	// The level of detail that you want to generate. You can specify whether to
+	// generate service-level policies.
+	//
+	// IAM Access Analyzer uses iam:servicelastaccessed to identify services that
+	// have been used recently to create this service-level template.
+	IncludeServiceLevelTemplate *bool `location:"querystring" locationName:"includeServiceLevelTemplate" type:"boolean"`
+
+	// The JobId that is returned by the StartPolicyGeneration operation. The JobId
+	// can be used with GetGeneratedPolicy to retrieve the generated policies or
+	// used with CancelPolicyGeneration to cancel the policy generation request.
+	//
+	// JobId is a required field
+	JobId *string `location:"uri" locationName:"jobId" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetGeneratedPolicyInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetGeneratedPolicyInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *GetGeneratedPolicyInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "GetGeneratedPolicyInput"}
+	if s.JobId == nil {
+		invalidParams.Add(request.NewErrParamRequired("JobId"))
+	}
+	if s.JobId != nil && len(*s.JobId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("JobId", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetIncludeResourcePlaceholders sets the IncludeResourcePlaceholders field's value.
+func (s *GetGeneratedPolicyInput) SetIncludeResourcePlaceholders(v bool) *GetGeneratedPolicyInput {
+	s.IncludeResourcePlaceholders = &v
+	return s
+}
+
+// SetIncludeServiceLevelTemplate sets the IncludeServiceLevelTemplate field's value.
+func (s *GetGeneratedPolicyInput) SetIncludeServiceLevelTemplate(v bool) *GetGeneratedPolicyInput {
+	s.IncludeServiceLevelTemplate = &v
+	return s
+}
+
+// SetJobId sets the JobId field's value.
+func (s *GetGeneratedPolicyInput) SetJobId(v string) *GetGeneratedPolicyInput {
+	s.JobId = &v
+	return s
+}
+
+type GetGeneratedPolicyOutput struct {
+	_ struct{} `type:"structure"`
+
+	// A GeneratedPolicyResult object that contains the generated policies and associated
+	// details.
+	//
+	// GeneratedPolicyResult is a required field
+	GeneratedPolicyResult *GeneratedPolicyResult `locationName:"generatedPolicyResult" type:"structure" required:"true"`
+
+	// A GeneratedPolicyDetails object that contains details about the generated
+	// policy.
+	//
+	// JobDetails is a required field
+	JobDetails *JobDetails `locationName:"jobDetails" type:"structure" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetGeneratedPolicyOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetGeneratedPolicyOutput) GoString() string {
+	return s.String()
+}
+
+// SetGeneratedPolicyResult sets the GeneratedPolicyResult field's value.
+func (s *GetGeneratedPolicyOutput) SetGeneratedPolicyResult(v *GeneratedPolicyResult) *GetGeneratedPolicyOutput {
+	s.GeneratedPolicyResult = v
+	return s
+}
+
+// SetJobDetails sets the JobDetails field's value.
+func (s *GetGeneratedPolicyOutput) SetJobDetails(v *JobDetails) *GetGeneratedPolicyOutput {
+	s.JobDetails = v
+	return s
+}
+
+// The proposed access control configuration for an IAM role. You can propose
+// a configuration for a new IAM role or an existing IAM role that you own by
+// specifying the trust policy. If the configuration is for a new IAM role,
+// you must specify the trust policy. If the configuration is for an existing
+// IAM role that you own and you do not propose the trust policy, the access
+// preview uses the existing trust policy for the role. The proposed trust policy
+// cannot be an empty string. For more information about role trust policy limits,
+// see IAM and STS quotas (https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_iam-quotas.html).
+type IamRoleConfiguration struct {
+	_ struct{} `type:"structure"`
+
+	// The proposed trust policy for the IAM role.
+	TrustPolicy *string `locationName:"trustPolicy" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s IamRoleConfiguration) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s IamRoleConfiguration) GoString() string {
+	return s.String()
+}
+
+// SetTrustPolicy sets the TrustPolicy field's value.
+func (s *IamRoleConfiguration) SetTrustPolicy(v string) *IamRoleConfiguration {
+	s.TrustPolicy = &v
 	return s
 }
 
@@ -3707,12 +6302,20 @@ type InlineArchiveRule struct {
 	RuleName *string `locationName:"ruleName" min:"1" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s InlineArchiveRule) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s InlineArchiveRule) GoString() string {
 	return s.String()
 }
@@ -3769,12 +6372,20 @@ type InternalServerException struct {
 	RetryAfterSeconds *int64 `location:"header" locationName:"Retry-After" type:"integer"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s InternalServerException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s InternalServerException) GoString() string {
 	return s.String()
 }
@@ -3817,11 +6428,635 @@ func (s *InternalServerException) RequestID() string {
 	return s.RespMetadata.RequestID
 }
 
+// This configuration sets the network origin for the Amazon S3 access point
+// or multi-region access point to Internet.
+type InternetConfiguration struct {
+	_ struct{} `type:"structure" nopayload:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s InternetConfiguration) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s InternetConfiguration) GoString() string {
+	return s.String()
+}
+
+// Contains details about the policy generation request.
+type JobDetails struct {
+	_ struct{} `type:"structure"`
+
+	// A timestamp of when the job was completed.
+	CompletedOn *time.Time `locationName:"completedOn" type:"timestamp" timestampFormat:"iso8601"`
+
+	// The job error for the policy generation request.
+	JobError *JobError `locationName:"jobError" type:"structure"`
+
+	// The JobId that is returned by the StartPolicyGeneration operation. The JobId
+	// can be used with GetGeneratedPolicy to retrieve the generated policies or
+	// used with CancelPolicyGeneration to cancel the policy generation request.
+	//
+	// JobId is a required field
+	JobId *string `locationName:"jobId" type:"string" required:"true"`
+
+	// A timestamp of when the job was started.
+	//
+	// StartedOn is a required field
+	StartedOn *time.Time `locationName:"startedOn" type:"timestamp" timestampFormat:"iso8601" required:"true"`
+
+	// The status of the job request.
+	//
+	// Status is a required field
+	Status *string `locationName:"status" type:"string" required:"true" enum:"JobStatus"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s JobDetails) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s JobDetails) GoString() string {
+	return s.String()
+}
+
+// SetCompletedOn sets the CompletedOn field's value.
+func (s *JobDetails) SetCompletedOn(v time.Time) *JobDetails {
+	s.CompletedOn = &v
+	return s
+}
+
+// SetJobError sets the JobError field's value.
+func (s *JobDetails) SetJobError(v *JobError) *JobDetails {
+	s.JobError = v
+	return s
+}
+
+// SetJobId sets the JobId field's value.
+func (s *JobDetails) SetJobId(v string) *JobDetails {
+	s.JobId = &v
+	return s
+}
+
+// SetStartedOn sets the StartedOn field's value.
+func (s *JobDetails) SetStartedOn(v time.Time) *JobDetails {
+	s.StartedOn = &v
+	return s
+}
+
+// SetStatus sets the Status field's value.
+func (s *JobDetails) SetStatus(v string) *JobDetails {
+	s.Status = &v
+	return s
+}
+
+// Contains the details about the policy generation error.
+type JobError struct {
+	_ struct{} `type:"structure"`
+
+	// The job error code.
+	//
+	// Code is a required field
+	Code *string `locationName:"code" type:"string" required:"true" enum:"JobErrorCode"`
+
+	// Specific information about the error. For example, which service quota was
+	// exceeded or which resource was not found.
+	//
+	// Message is a required field
+	Message *string `locationName:"message" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s JobError) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s JobError) GoString() string {
+	return s.String()
+}
+
+// SetCode sets the Code field's value.
+func (s *JobError) SetCode(v string) *JobError {
+	s.Code = &v
+	return s
+}
+
+// SetMessage sets the Message field's value.
+func (s *JobError) SetMessage(v string) *JobError {
+	s.Message = &v
+	return s
+}
+
+// A proposed grant configuration for a KMS key. For more information, see CreateGrant
+// (https://docs.aws.amazon.com/kms/latest/APIReference/API_CreateGrant.html).
+type KmsGrantConfiguration struct {
+	_ struct{} `type:"structure"`
+
+	// Use this structure to propose allowing cryptographic operations (https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#cryptographic-operations)
+	// in the grant only when the operation request includes the specified encryption
+	// context (https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#encrypt_context).
+	Constraints *KmsGrantConstraints `locationName:"constraints" type:"structure"`
+
+	// The principal that is given permission to perform the operations that the
+	// grant permits.
+	//
+	// GranteePrincipal is a required field
+	GranteePrincipal *string `locationName:"granteePrincipal" type:"string" required:"true"`
+
+	// The Amazon Web Services account under which the grant was issued. The account
+	// is used to propose KMS grants issued by accounts other than the owner of
+	// the key.
+	//
+	// IssuingAccount is a required field
+	IssuingAccount *string `locationName:"issuingAccount" type:"string" required:"true"`
+
+	// A list of operations that the grant permits.
+	//
+	// Operations is a required field
+	Operations []*string `locationName:"operations" type:"list" required:"true"`
+
+	// The principal that is given permission to retire the grant by using RetireGrant
+	// (https://docs.aws.amazon.com/kms/latest/APIReference/API_RetireGrant.html)
+	// operation.
+	RetiringPrincipal *string `locationName:"retiringPrincipal" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s KmsGrantConfiguration) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s KmsGrantConfiguration) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *KmsGrantConfiguration) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "KmsGrantConfiguration"}
+	if s.GranteePrincipal == nil {
+		invalidParams.Add(request.NewErrParamRequired("GranteePrincipal"))
+	}
+	if s.IssuingAccount == nil {
+		invalidParams.Add(request.NewErrParamRequired("IssuingAccount"))
+	}
+	if s.Operations == nil {
+		invalidParams.Add(request.NewErrParamRequired("Operations"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetConstraints sets the Constraints field's value.
+func (s *KmsGrantConfiguration) SetConstraints(v *KmsGrantConstraints) *KmsGrantConfiguration {
+	s.Constraints = v
+	return s
+}
+
+// SetGranteePrincipal sets the GranteePrincipal field's value.
+func (s *KmsGrantConfiguration) SetGranteePrincipal(v string) *KmsGrantConfiguration {
+	s.GranteePrincipal = &v
+	return s
+}
+
+// SetIssuingAccount sets the IssuingAccount field's value.
+func (s *KmsGrantConfiguration) SetIssuingAccount(v string) *KmsGrantConfiguration {
+	s.IssuingAccount = &v
+	return s
+}
+
+// SetOperations sets the Operations field's value.
+func (s *KmsGrantConfiguration) SetOperations(v []*string) *KmsGrantConfiguration {
+	s.Operations = v
+	return s
+}
+
+// SetRetiringPrincipal sets the RetiringPrincipal field's value.
+func (s *KmsGrantConfiguration) SetRetiringPrincipal(v string) *KmsGrantConfiguration {
+	s.RetiringPrincipal = &v
+	return s
+}
+
+// Use this structure to propose allowing cryptographic operations (https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#cryptographic-operations)
+// in the grant only when the operation request includes the specified encryption
+// context (https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#encrypt_context).
+// You can specify only one type of encryption context. An empty map is treated
+// as not specified. For more information, see GrantConstraints (https://docs.aws.amazon.com/kms/latest/APIReference/API_GrantConstraints.html).
+type KmsGrantConstraints struct {
+	_ struct{} `type:"structure"`
+
+	// A list of key-value pairs that must match the encryption context in the cryptographic
+	// operation (https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#cryptographic-operations)
+	// request. The grant allows the operation only when the encryption context
+	// in the request is the same as the encryption context specified in this constraint.
+	EncryptionContextEquals map[string]*string `locationName:"encryptionContextEquals" type:"map"`
+
+	// A list of key-value pairs that must be included in the encryption context
+	// of the cryptographic operation (https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#cryptographic-operations)
+	// request. The grant allows the cryptographic operation only when the encryption
+	// context in the request includes the key-value pairs specified in this constraint,
+	// although it can include additional key-value pairs.
+	EncryptionContextSubset map[string]*string `locationName:"encryptionContextSubset" type:"map"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s KmsGrantConstraints) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s KmsGrantConstraints) GoString() string {
+	return s.String()
+}
+
+// SetEncryptionContextEquals sets the EncryptionContextEquals field's value.
+func (s *KmsGrantConstraints) SetEncryptionContextEquals(v map[string]*string) *KmsGrantConstraints {
+	s.EncryptionContextEquals = v
+	return s
+}
+
+// SetEncryptionContextSubset sets the EncryptionContextSubset field's value.
+func (s *KmsGrantConstraints) SetEncryptionContextSubset(v map[string]*string) *KmsGrantConstraints {
+	s.EncryptionContextSubset = v
+	return s
+}
+
+// Proposed access control configuration for a KMS key. You can propose a configuration
+// for a new KMS key or an existing KMS key that you own by specifying the key
+// policy and KMS grant configuration. If the configuration is for an existing
+// key and you do not specify the key policy, the access preview uses the existing
+// policy for the key. If the access preview is for a new resource and you do
+// not specify the key policy, then the access preview uses the default key
+// policy. The proposed key policy cannot be an empty string. For more information,
+// see Default key policy (https://docs.aws.amazon.com/kms/latest/developerguide/key-policies.html#key-policy-default).
+// For more information about key policy limits, see Resource quotas (https://docs.aws.amazon.com/kms/latest/developerguide/resource-limits.html).
+type KmsKeyConfiguration struct {
+	_ struct{} `type:"structure"`
+
+	// A list of proposed grant configurations for the KMS key. If the proposed
+	// grant configuration is for an existing key, the access preview uses the proposed
+	// list of grant configurations in place of the existing grants. Otherwise,
+	// the access preview uses the existing grants for the key.
+	Grants []*KmsGrantConfiguration `locationName:"grants" type:"list"`
+
+	// Resource policy configuration for the KMS key. The only valid value for the
+	// name of the key policy is default. For more information, see Default key
+	// policy (https://docs.aws.amazon.com/kms/latest/developerguide/key-policies.html#key-policy-default).
+	KeyPolicies map[string]*string `locationName:"keyPolicies" type:"map"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s KmsKeyConfiguration) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s KmsKeyConfiguration) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *KmsKeyConfiguration) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "KmsKeyConfiguration"}
+	if s.Grants != nil {
+		for i, v := range s.Grants {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "Grants", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetGrants sets the Grants field's value.
+func (s *KmsKeyConfiguration) SetGrants(v []*KmsGrantConfiguration) *KmsKeyConfiguration {
+	s.Grants = v
+	return s
+}
+
+// SetKeyPolicies sets the KeyPolicies field's value.
+func (s *KmsKeyConfiguration) SetKeyPolicies(v map[string]*string) *KmsKeyConfiguration {
+	s.KeyPolicies = v
+	return s
+}
+
+type ListAccessPreviewFindingsInput struct {
+	_ struct{} `type:"structure"`
+
+	// The unique ID for the access preview.
+	//
+	// AccessPreviewId is a required field
+	AccessPreviewId *string `location:"uri" locationName:"accessPreviewId" type:"string" required:"true"`
+
+	// The ARN of the analyzer (https://docs.aws.amazon.com/IAM/latest/UserGuide/access-analyzer-getting-started.html#permission-resources)
+	// used to generate the access.
+	//
+	// AnalyzerArn is a required field
+	AnalyzerArn *string `locationName:"analyzerArn" type:"string" required:"true"`
+
+	// Criteria to filter the returned findings.
+	Filter map[string]*Criterion `locationName:"filter" type:"map"`
+
+	// The maximum number of results to return in the response.
+	MaxResults *int64 `locationName:"maxResults" type:"integer"`
+
+	// A token used for pagination of results returned.
+	NextToken *string `locationName:"nextToken" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListAccessPreviewFindingsInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListAccessPreviewFindingsInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ListAccessPreviewFindingsInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ListAccessPreviewFindingsInput"}
+	if s.AccessPreviewId == nil {
+		invalidParams.Add(request.NewErrParamRequired("AccessPreviewId"))
+	}
+	if s.AccessPreviewId != nil && len(*s.AccessPreviewId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("AccessPreviewId", 1))
+	}
+	if s.AnalyzerArn == nil {
+		invalidParams.Add(request.NewErrParamRequired("AnalyzerArn"))
+	}
+	if s.Filter != nil {
+		for i, v := range s.Filter {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "Filter", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetAccessPreviewId sets the AccessPreviewId field's value.
+func (s *ListAccessPreviewFindingsInput) SetAccessPreviewId(v string) *ListAccessPreviewFindingsInput {
+	s.AccessPreviewId = &v
+	return s
+}
+
+// SetAnalyzerArn sets the AnalyzerArn field's value.
+func (s *ListAccessPreviewFindingsInput) SetAnalyzerArn(v string) *ListAccessPreviewFindingsInput {
+	s.AnalyzerArn = &v
+	return s
+}
+
+// SetFilter sets the Filter field's value.
+func (s *ListAccessPreviewFindingsInput) SetFilter(v map[string]*Criterion) *ListAccessPreviewFindingsInput {
+	s.Filter = v
+	return s
+}
+
+// SetMaxResults sets the MaxResults field's value.
+func (s *ListAccessPreviewFindingsInput) SetMaxResults(v int64) *ListAccessPreviewFindingsInput {
+	s.MaxResults = &v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListAccessPreviewFindingsInput) SetNextToken(v string) *ListAccessPreviewFindingsInput {
+	s.NextToken = &v
+	return s
+}
+
+type ListAccessPreviewFindingsOutput struct {
+	_ struct{} `type:"structure"`
+
+	// A list of access preview findings that match the specified filter criteria.
+	//
+	// Findings is a required field
+	Findings []*AccessPreviewFinding `locationName:"findings" type:"list" required:"true"`
+
+	// A token used for pagination of results returned.
+	NextToken *string `locationName:"nextToken" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListAccessPreviewFindingsOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListAccessPreviewFindingsOutput) GoString() string {
+	return s.String()
+}
+
+// SetFindings sets the Findings field's value.
+func (s *ListAccessPreviewFindingsOutput) SetFindings(v []*AccessPreviewFinding) *ListAccessPreviewFindingsOutput {
+	s.Findings = v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListAccessPreviewFindingsOutput) SetNextToken(v string) *ListAccessPreviewFindingsOutput {
+	s.NextToken = &v
+	return s
+}
+
+type ListAccessPreviewsInput struct {
+	_ struct{} `type:"structure" nopayload:"true"`
+
+	// The ARN of the analyzer (https://docs.aws.amazon.com/IAM/latest/UserGuide/access-analyzer-getting-started.html#permission-resources)
+	// used to generate the access preview.
+	//
+	// AnalyzerArn is a required field
+	AnalyzerArn *string `location:"querystring" locationName:"analyzerArn" type:"string" required:"true"`
+
+	// The maximum number of results to return in the response.
+	MaxResults *int64 `location:"querystring" locationName:"maxResults" type:"integer"`
+
+	// A token used for pagination of results returned.
+	NextToken *string `location:"querystring" locationName:"nextToken" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListAccessPreviewsInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListAccessPreviewsInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ListAccessPreviewsInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ListAccessPreviewsInput"}
+	if s.AnalyzerArn == nil {
+		invalidParams.Add(request.NewErrParamRequired("AnalyzerArn"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetAnalyzerArn sets the AnalyzerArn field's value.
+func (s *ListAccessPreviewsInput) SetAnalyzerArn(v string) *ListAccessPreviewsInput {
+	s.AnalyzerArn = &v
+	return s
+}
+
+// SetMaxResults sets the MaxResults field's value.
+func (s *ListAccessPreviewsInput) SetMaxResults(v int64) *ListAccessPreviewsInput {
+	s.MaxResults = &v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListAccessPreviewsInput) SetNextToken(v string) *ListAccessPreviewsInput {
+	s.NextToken = &v
+	return s
+}
+
+type ListAccessPreviewsOutput struct {
+	_ struct{} `type:"structure"`
+
+	// A list of access previews retrieved for the analyzer.
+	//
+	// AccessPreviews is a required field
+	AccessPreviews []*AccessPreviewSummary `locationName:"accessPreviews" type:"list" required:"true"`
+
+	// A token used for pagination of results returned.
+	NextToken *string `locationName:"nextToken" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListAccessPreviewsOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListAccessPreviewsOutput) GoString() string {
+	return s.String()
+}
+
+// SetAccessPreviews sets the AccessPreviews field's value.
+func (s *ListAccessPreviewsOutput) SetAccessPreviews(v []*AccessPreviewSummary) *ListAccessPreviewsOutput {
+	s.AccessPreviews = v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListAccessPreviewsOutput) SetNextToken(v string) *ListAccessPreviewsOutput {
+	s.NextToken = &v
+	return s
+}
+
 // Retrieves a list of resources that have been analyzed.
 type ListAnalyzedResourcesInput struct {
 	_ struct{} `type:"structure"`
 
-	// The ARN of the analyzer to retrieve a list of analyzed resources from.
+	// The ARN of the analyzer (https://docs.aws.amazon.com/IAM/latest/UserGuide/access-analyzer-getting-started.html#permission-resources)
+	// to retrieve a list of analyzed resources from.
 	//
 	// AnalyzerArn is a required field
 	AnalyzerArn *string `locationName:"analyzerArn" type:"string" required:"true"`
@@ -3836,12 +7071,20 @@ type ListAnalyzedResourcesInput struct {
 	ResourceType *string `locationName:"resourceType" type:"string" enum:"ResourceType"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListAnalyzedResourcesInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListAnalyzedResourcesInput) GoString() string {
 	return s.String()
 }
@@ -3896,12 +7139,20 @@ type ListAnalyzedResourcesOutput struct {
 	NextToken *string `locationName:"nextToken" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListAnalyzedResourcesOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListAnalyzedResourcesOutput) GoString() string {
 	return s.String()
 }
@@ -3920,7 +7171,7 @@ func (s *ListAnalyzedResourcesOutput) SetNextToken(v string) *ListAnalyzedResour
 
 // Retrieves a list of analyzers.
 type ListAnalyzersInput struct {
-	_ struct{} `type:"structure"`
+	_ struct{} `type:"structure" nopayload:"true"`
 
 	// The maximum number of results to return in the response.
 	MaxResults *int64 `location:"querystring" locationName:"maxResults" type:"integer"`
@@ -3932,12 +7183,20 @@ type ListAnalyzersInput struct {
 	Type *string `location:"querystring" locationName:"type" type:"string" enum:"Type"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListAnalyzersInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListAnalyzersInput) GoString() string {
 	return s.String()
 }
@@ -3973,12 +7232,20 @@ type ListAnalyzersOutput struct {
 	NextToken *string `locationName:"nextToken" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListAnalyzersOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListAnalyzersOutput) GoString() string {
 	return s.String()
 }
@@ -3997,7 +7264,7 @@ func (s *ListAnalyzersOutput) SetNextToken(v string) *ListAnalyzersOutput {
 
 // Retrieves a list of archive rules created for the specified analyzer.
 type ListArchiveRulesInput struct {
-	_ struct{} `type:"structure"`
+	_ struct{} `type:"structure" nopayload:"true"`
 
 	// The name of the analyzer to retrieve rules from.
 	//
@@ -4011,12 +7278,20 @@ type ListArchiveRulesInput struct {
 	NextToken *string `location:"querystring" locationName:"nextToken" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListArchiveRulesInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListArchiveRulesInput) GoString() string {
 	return s.String()
 }
@@ -4068,12 +7343,20 @@ type ListArchiveRulesOutput struct {
 	NextToken *string `locationName:"nextToken" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListArchiveRulesOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListArchiveRulesOutput) GoString() string {
 	return s.String()
 }
@@ -4094,7 +7377,8 @@ func (s *ListArchiveRulesOutput) SetNextToken(v string) *ListArchiveRulesOutput 
 type ListFindingsInput struct {
 	_ struct{} `type:"structure"`
 
-	// The ARN of the analyzer to retrieve findings from.
+	// The ARN of the analyzer (https://docs.aws.amazon.com/IAM/latest/UserGuide/access-analyzer-getting-started.html#permission-resources)
+	// to retrieve findings from.
 	//
 	// AnalyzerArn is a required field
 	AnalyzerArn *string `locationName:"analyzerArn" type:"string" required:"true"`
@@ -4112,12 +7396,20 @@ type ListFindingsInput struct {
 	Sort *SortCriteria `locationName:"sort" type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListFindingsInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListFindingsInput) GoString() string {
 	return s.String()
 }
@@ -4189,12 +7481,20 @@ type ListFindingsOutput struct {
 	NextToken *string `locationName:"nextToken" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListFindingsOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListFindingsOutput) GoString() string {
 	return s.String()
 }
@@ -4211,9 +7511,115 @@ func (s *ListFindingsOutput) SetNextToken(v string) *ListFindingsOutput {
 	return s
 }
 
+type ListPolicyGenerationsInput struct {
+	_ struct{} `type:"structure" nopayload:"true"`
+
+	// The maximum number of results to return in the response.
+	MaxResults *int64 `location:"querystring" locationName:"maxResults" min:"1" type:"integer"`
+
+	// A token used for pagination of results returned.
+	NextToken *string `location:"querystring" locationName:"nextToken" type:"string"`
+
+	// The ARN of the IAM entity (user or role) for which you are generating a policy.
+	// Use this with ListGeneratedPolicies to filter the results to only include
+	// results for a specific principal.
+	PrincipalArn *string `location:"querystring" locationName:"principalArn" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListPolicyGenerationsInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListPolicyGenerationsInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ListPolicyGenerationsInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ListPolicyGenerationsInput"}
+	if s.MaxResults != nil && *s.MaxResults < 1 {
+		invalidParams.Add(request.NewErrParamMinValue("MaxResults", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetMaxResults sets the MaxResults field's value.
+func (s *ListPolicyGenerationsInput) SetMaxResults(v int64) *ListPolicyGenerationsInput {
+	s.MaxResults = &v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListPolicyGenerationsInput) SetNextToken(v string) *ListPolicyGenerationsInput {
+	s.NextToken = &v
+	return s
+}
+
+// SetPrincipalArn sets the PrincipalArn field's value.
+func (s *ListPolicyGenerationsInput) SetPrincipalArn(v string) *ListPolicyGenerationsInput {
+	s.PrincipalArn = &v
+	return s
+}
+
+type ListPolicyGenerationsOutput struct {
+	_ struct{} `type:"structure"`
+
+	// A token used for pagination of results returned.
+	NextToken *string `locationName:"nextToken" type:"string"`
+
+	// A PolicyGeneration object that contains details about the generated policy.
+	//
+	// PolicyGenerations is a required field
+	PolicyGenerations []*PolicyGeneration `locationName:"policyGenerations" type:"list" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListPolicyGenerationsOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListPolicyGenerationsOutput) GoString() string {
+	return s.String()
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListPolicyGenerationsOutput) SetNextToken(v string) *ListPolicyGenerationsOutput {
+	s.NextToken = &v
+	return s
+}
+
+// SetPolicyGenerations sets the PolicyGenerations field's value.
+func (s *ListPolicyGenerationsOutput) SetPolicyGenerations(v []*PolicyGeneration) *ListPolicyGenerationsOutput {
+	s.PolicyGenerations = v
+	return s
+}
+
 // Retrieves a list of tags applied to the specified resource.
 type ListTagsForResourceInput struct {
-	_ struct{} `type:"structure"`
+	_ struct{} `type:"structure" nopayload:"true"`
 
 	// The ARN of the resource to retrieve tags from.
 	//
@@ -4221,12 +7627,20 @@ type ListTagsForResourceInput struct {
 	ResourceArn *string `location:"uri" locationName:"resourceArn" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListTagsForResourceInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListTagsForResourceInput) GoString() string {
 	return s.String()
 }
@@ -4261,12 +7675,20 @@ type ListTagsForResourceOutput struct {
 	Tags map[string]*string `locationName:"tags" type:"map"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListTagsForResourceOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListTagsForResourceOutput) GoString() string {
 	return s.String()
 }
@@ -4274,6 +7696,357 @@ func (s ListTagsForResourceOutput) GoString() string {
 // SetTags sets the Tags field's value.
 func (s *ListTagsForResourceOutput) SetTags(v map[string]*string) *ListTagsForResourceOutput {
 	s.Tags = v
+	return s
+}
+
+// A location in a policy that is represented as a path through the JSON representation
+// and a corresponding span.
+type Location struct {
+	_ struct{} `type:"structure"`
+
+	// A path in a policy, represented as a sequence of path elements.
+	//
+	// Path is a required field
+	Path []*PathElement `locationName:"path" type:"list" required:"true"`
+
+	// A span in a policy.
+	//
+	// Span is a required field
+	Span *Span `locationName:"span" type:"structure" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s Location) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s Location) GoString() string {
+	return s.String()
+}
+
+// SetPath sets the Path field's value.
+func (s *Location) SetPath(v []*PathElement) *Location {
+	s.Path = v
+	return s
+}
+
+// SetSpan sets the Span field's value.
+func (s *Location) SetSpan(v *Span) *Location {
+	s.Span = v
+	return s
+}
+
+// The proposed InternetConfiguration or VpcConfiguration to apply to the Amazon
+// S3 access point. VpcConfiguration does not apply to multi-region access points.
+// You can make the access point accessible from the internet, or you can specify
+// that all requests made through that access point must originate from a specific
+// virtual private cloud (VPC). You can specify only one type of network configuration.
+// For more information, see Creating access points (https://docs.aws.amazon.com/AmazonS3/latest/dev/creating-access-points.html).
+type NetworkOriginConfiguration struct {
+	_ struct{} `type:"structure"`
+
+	// The configuration for the Amazon S3 access point or multi-region access point
+	// with an Internet origin.
+	InternetConfiguration *InternetConfiguration `locationName:"internetConfiguration" type:"structure"`
+
+	// The proposed virtual private cloud (VPC) configuration for the Amazon S3
+	// access point. VPC configuration does not apply to multi-region access points.
+	// For more information, see VpcConfiguration (https://docs.aws.amazon.com/AmazonS3/latest/API/API_control_VpcConfiguration.html).
+	VpcConfiguration *VpcConfiguration `locationName:"vpcConfiguration" type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s NetworkOriginConfiguration) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s NetworkOriginConfiguration) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *NetworkOriginConfiguration) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "NetworkOriginConfiguration"}
+	if s.VpcConfiguration != nil {
+		if err := s.VpcConfiguration.Validate(); err != nil {
+			invalidParams.AddNested("VpcConfiguration", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetInternetConfiguration sets the InternetConfiguration field's value.
+func (s *NetworkOriginConfiguration) SetInternetConfiguration(v *InternetConfiguration) *NetworkOriginConfiguration {
+	s.InternetConfiguration = v
+	return s
+}
+
+// SetVpcConfiguration sets the VpcConfiguration field's value.
+func (s *NetworkOriginConfiguration) SetVpcConfiguration(v *VpcConfiguration) *NetworkOriginConfiguration {
+	s.VpcConfiguration = v
+	return s
+}
+
+// A single element in a path through the JSON representation of a policy.
+type PathElement struct {
+	_ struct{} `type:"structure"`
+
+	// Refers to an index in a JSON array.
+	Index *int64 `locationName:"index" type:"integer"`
+
+	// Refers to a key in a JSON object.
+	Key *string `locationName:"key" type:"string"`
+
+	// Refers to a substring of a literal string in a JSON object.
+	Substring *Substring `locationName:"substring" type:"structure"`
+
+	// Refers to the value associated with a given key in a JSON object.
+	Value *string `locationName:"value" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s PathElement) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s PathElement) GoString() string {
+	return s.String()
+}
+
+// SetIndex sets the Index field's value.
+func (s *PathElement) SetIndex(v int64) *PathElement {
+	s.Index = &v
+	return s
+}
+
+// SetKey sets the Key field's value.
+func (s *PathElement) SetKey(v string) *PathElement {
+	s.Key = &v
+	return s
+}
+
+// SetSubstring sets the Substring field's value.
+func (s *PathElement) SetSubstring(v *Substring) *PathElement {
+	s.Substring = v
+	return s
+}
+
+// SetValue sets the Value field's value.
+func (s *PathElement) SetValue(v string) *PathElement {
+	s.Value = &v
+	return s
+}
+
+// Contains details about the policy generation status and properties.
+type PolicyGeneration struct {
+	_ struct{} `type:"structure"`
+
+	// A timestamp of when the policy generation was completed.
+	CompletedOn *time.Time `locationName:"completedOn" type:"timestamp" timestampFormat:"iso8601"`
+
+	// The JobId that is returned by the StartPolicyGeneration operation. The JobId
+	// can be used with GetGeneratedPolicy to retrieve the generated policies or
+	// used with CancelPolicyGeneration to cancel the policy generation request.
+	//
+	// JobId is a required field
+	JobId *string `locationName:"jobId" type:"string" required:"true"`
+
+	// The ARN of the IAM entity (user or role) for which you are generating a policy.
+	//
+	// PrincipalArn is a required field
+	PrincipalArn *string `locationName:"principalArn" type:"string" required:"true"`
+
+	// A timestamp of when the policy generation started.
+	//
+	// StartedOn is a required field
+	StartedOn *time.Time `locationName:"startedOn" type:"timestamp" timestampFormat:"iso8601" required:"true"`
+
+	// The status of the policy generation request.
+	//
+	// Status is a required field
+	Status *string `locationName:"status" type:"string" required:"true" enum:"JobStatus"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s PolicyGeneration) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s PolicyGeneration) GoString() string {
+	return s.String()
+}
+
+// SetCompletedOn sets the CompletedOn field's value.
+func (s *PolicyGeneration) SetCompletedOn(v time.Time) *PolicyGeneration {
+	s.CompletedOn = &v
+	return s
+}
+
+// SetJobId sets the JobId field's value.
+func (s *PolicyGeneration) SetJobId(v string) *PolicyGeneration {
+	s.JobId = &v
+	return s
+}
+
+// SetPrincipalArn sets the PrincipalArn field's value.
+func (s *PolicyGeneration) SetPrincipalArn(v string) *PolicyGeneration {
+	s.PrincipalArn = &v
+	return s
+}
+
+// SetStartedOn sets the StartedOn field's value.
+func (s *PolicyGeneration) SetStartedOn(v time.Time) *PolicyGeneration {
+	s.StartedOn = &v
+	return s
+}
+
+// SetStatus sets the Status field's value.
+func (s *PolicyGeneration) SetStatus(v string) *PolicyGeneration {
+	s.Status = &v
+	return s
+}
+
+// Contains the ARN details about the IAM entity for which the policy is generated.
+type PolicyGenerationDetails struct {
+	_ struct{} `type:"structure"`
+
+	// The ARN of the IAM entity (user or role) for which you are generating a policy.
+	//
+	// PrincipalArn is a required field
+	PrincipalArn *string `locationName:"principalArn" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s PolicyGenerationDetails) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s PolicyGenerationDetails) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *PolicyGenerationDetails) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "PolicyGenerationDetails"}
+	if s.PrincipalArn == nil {
+		invalidParams.Add(request.NewErrParamRequired("PrincipalArn"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetPrincipalArn sets the PrincipalArn field's value.
+func (s *PolicyGenerationDetails) SetPrincipalArn(v string) *PolicyGenerationDetails {
+	s.PrincipalArn = &v
+	return s
+}
+
+// A position in a policy.
+type Position struct {
+	_ struct{} `type:"structure"`
+
+	// The column of the position, starting from 0.
+	//
+	// Column is a required field
+	Column *int64 `locationName:"column" type:"integer" required:"true"`
+
+	// The line of the position, starting from 1.
+	//
+	// Line is a required field
+	Line *int64 `locationName:"line" type:"integer" required:"true"`
+
+	// The offset within the policy that corresponds to the position, starting from
+	// 0.
+	//
+	// Offset is a required field
+	Offset *int64 `locationName:"offset" type:"integer" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s Position) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s Position) GoString() string {
+	return s.String()
+}
+
+// SetColumn sets the Column field's value.
+func (s *Position) SetColumn(v int64) *Position {
+	s.Column = &v
+	return s
+}
+
+// SetLine sets the Line field's value.
+func (s *Position) SetLine(v int64) *Position {
+	s.Line = &v
+	return s
+}
+
+// SetOffset sets the Offset field's value.
+func (s *Position) SetOffset(v int64) *Position {
+	s.Offset = &v
 	return s
 }
 
@@ -4295,12 +8068,20 @@ type ResourceNotFoundException struct {
 	ResourceType *string `locationName:"resourceType" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ResourceNotFoundException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ResourceNotFoundException) GoString() string {
 	return s.String()
 }
@@ -4343,6 +8124,386 @@ func (s *ResourceNotFoundException) RequestID() string {
 	return s.RespMetadata.RequestID
 }
 
+// The configuration for an Amazon S3 access point or multi-region access point
+// for the bucket. You can propose up to 10 access points or multi-region access
+// points per bucket. If the proposed Amazon S3 access point configuration is
+// for an existing bucket, the access preview uses the proposed access point
+// configuration in place of the existing access points. To propose an access
+// point without a policy, you can provide an empty string as the access point
+// policy. For more information, see Creating access points (https://docs.aws.amazon.com/https:/docs.aws.amazon.com/AmazonS3/latest/dev/creating-access-points.html).
+// For more information about access point policy limits, see Access points
+// restrictions and limitations (https://docs.aws.amazon.com/AmazonS3/latest/dev/access-points-restrictions-limitations.html).
+type S3AccessPointConfiguration struct {
+	_ struct{} `type:"structure"`
+
+	// The access point or multi-region access point policy.
+	AccessPointPolicy *string `locationName:"accessPointPolicy" type:"string"`
+
+	// The proposed Internet and VpcConfiguration to apply to this Amazon S3 access
+	// point. VpcConfiguration does not apply to multi-region access points. If
+	// the access preview is for a new resource and neither is specified, the access
+	// preview uses Internet for the network origin. If the access preview is for
+	// an existing resource and neither is specified, the access preview uses the
+	// exiting network origin.
+	NetworkOrigin *NetworkOriginConfiguration `locationName:"networkOrigin" type:"structure"`
+
+	// The proposed S3PublicAccessBlock configuration to apply to this Amazon S3
+	// access point or multi-region access point.
+	PublicAccessBlock *S3PublicAccessBlockConfiguration `locationName:"publicAccessBlock" type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s S3AccessPointConfiguration) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s S3AccessPointConfiguration) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *S3AccessPointConfiguration) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "S3AccessPointConfiguration"}
+	if s.NetworkOrigin != nil {
+		if err := s.NetworkOrigin.Validate(); err != nil {
+			invalidParams.AddNested("NetworkOrigin", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.PublicAccessBlock != nil {
+		if err := s.PublicAccessBlock.Validate(); err != nil {
+			invalidParams.AddNested("PublicAccessBlock", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetAccessPointPolicy sets the AccessPointPolicy field's value.
+func (s *S3AccessPointConfiguration) SetAccessPointPolicy(v string) *S3AccessPointConfiguration {
+	s.AccessPointPolicy = &v
+	return s
+}
+
+// SetNetworkOrigin sets the NetworkOrigin field's value.
+func (s *S3AccessPointConfiguration) SetNetworkOrigin(v *NetworkOriginConfiguration) *S3AccessPointConfiguration {
+	s.NetworkOrigin = v
+	return s
+}
+
+// SetPublicAccessBlock sets the PublicAccessBlock field's value.
+func (s *S3AccessPointConfiguration) SetPublicAccessBlock(v *S3PublicAccessBlockConfiguration) *S3AccessPointConfiguration {
+	s.PublicAccessBlock = v
+	return s
+}
+
+// A proposed access control list grant configuration for an Amazon S3 bucket.
+// For more information, see How to Specify an ACL (https://docs.aws.amazon.com/AmazonS3/latest/dev/acl-overview.html#setting-acls).
+type S3BucketAclGrantConfiguration struct {
+	_ struct{} `type:"structure"`
+
+	// The grantee to whom you’re assigning access rights.
+	//
+	// Grantee is a required field
+	Grantee *AclGrantee `locationName:"grantee" type:"structure" required:"true"`
+
+	// The permissions being granted.
+	//
+	// Permission is a required field
+	Permission *string `locationName:"permission" type:"string" required:"true" enum:"AclPermission"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s S3BucketAclGrantConfiguration) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s S3BucketAclGrantConfiguration) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *S3BucketAclGrantConfiguration) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "S3BucketAclGrantConfiguration"}
+	if s.Grantee == nil {
+		invalidParams.Add(request.NewErrParamRequired("Grantee"))
+	}
+	if s.Permission == nil {
+		invalidParams.Add(request.NewErrParamRequired("Permission"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetGrantee sets the Grantee field's value.
+func (s *S3BucketAclGrantConfiguration) SetGrantee(v *AclGrantee) *S3BucketAclGrantConfiguration {
+	s.Grantee = v
+	return s
+}
+
+// SetPermission sets the Permission field's value.
+func (s *S3BucketAclGrantConfiguration) SetPermission(v string) *S3BucketAclGrantConfiguration {
+	s.Permission = &v
+	return s
+}
+
+// Proposed access control configuration for an Amazon S3 bucket. You can propose
+// a configuration for a new Amazon S3 bucket or an existing Amazon S3 bucket
+// that you own by specifying the Amazon S3 bucket policy, bucket ACLs, bucket
+// BPA settings, Amazon S3 access points, and multi-region access points attached
+// to the bucket. If the configuration is for an existing Amazon S3 bucket and
+// you do not specify the Amazon S3 bucket policy, the access preview uses the
+// existing policy attached to the bucket. If the access preview is for a new
+// resource and you do not specify the Amazon S3 bucket policy, the access preview
+// assumes a bucket without a policy. To propose deletion of an existing bucket
+// policy, you can specify an empty string. For more information about bucket
+// policy limits, see Bucket Policy Examples (https://docs.aws.amazon.com/AmazonS3/latest/dev/example-bucket-policies.html).
+type S3BucketConfiguration struct {
+	_ struct{} `type:"structure"`
+
+	// The configuration of Amazon S3 access points or multi-region access points
+	// for the bucket. You can propose up to 10 new access points per bucket.
+	AccessPoints map[string]*S3AccessPointConfiguration `locationName:"accessPoints" type:"map"`
+
+	// The proposed list of ACL grants for the Amazon S3 bucket. You can propose
+	// up to 100 ACL grants per bucket. If the proposed grant configuration is for
+	// an existing bucket, the access preview uses the proposed list of grant configurations
+	// in place of the existing grants. Otherwise, the access preview uses the existing
+	// grants for the bucket.
+	BucketAclGrants []*S3BucketAclGrantConfiguration `locationName:"bucketAclGrants" type:"list"`
+
+	// The proposed bucket policy for the Amazon S3 bucket.
+	BucketPolicy *string `locationName:"bucketPolicy" type:"string"`
+
+	// The proposed block public access configuration for the Amazon S3 bucket.
+	BucketPublicAccessBlock *S3PublicAccessBlockConfiguration `locationName:"bucketPublicAccessBlock" type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s S3BucketConfiguration) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s S3BucketConfiguration) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *S3BucketConfiguration) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "S3BucketConfiguration"}
+	if s.AccessPoints != nil {
+		for i, v := range s.AccessPoints {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "AccessPoints", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+	if s.BucketAclGrants != nil {
+		for i, v := range s.BucketAclGrants {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "BucketAclGrants", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+	if s.BucketPublicAccessBlock != nil {
+		if err := s.BucketPublicAccessBlock.Validate(); err != nil {
+			invalidParams.AddNested("BucketPublicAccessBlock", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetAccessPoints sets the AccessPoints field's value.
+func (s *S3BucketConfiguration) SetAccessPoints(v map[string]*S3AccessPointConfiguration) *S3BucketConfiguration {
+	s.AccessPoints = v
+	return s
+}
+
+// SetBucketAclGrants sets the BucketAclGrants field's value.
+func (s *S3BucketConfiguration) SetBucketAclGrants(v []*S3BucketAclGrantConfiguration) *S3BucketConfiguration {
+	s.BucketAclGrants = v
+	return s
+}
+
+// SetBucketPolicy sets the BucketPolicy field's value.
+func (s *S3BucketConfiguration) SetBucketPolicy(v string) *S3BucketConfiguration {
+	s.BucketPolicy = &v
+	return s
+}
+
+// SetBucketPublicAccessBlock sets the BucketPublicAccessBlock field's value.
+func (s *S3BucketConfiguration) SetBucketPublicAccessBlock(v *S3PublicAccessBlockConfiguration) *S3BucketConfiguration {
+	s.BucketPublicAccessBlock = v
+	return s
+}
+
+// The PublicAccessBlock configuration to apply to this Amazon S3 bucket. If
+// the proposed configuration is for an existing Amazon S3 bucket and the configuration
+// is not specified, the access preview uses the existing setting. If the proposed
+// configuration is for a new bucket and the configuration is not specified,
+// the access preview uses false. If the proposed configuration is for a new
+// access point or multi-region access point and the access point BPA configuration
+// is not specified, the access preview uses true. For more information, see
+// PublicAccessBlockConfiguration (https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-s3-bucket-publicaccessblockconfiguration.html).
+type S3PublicAccessBlockConfiguration struct {
+	_ struct{} `type:"structure"`
+
+	// Specifies whether Amazon S3 should ignore public ACLs for this bucket and
+	// objects in this bucket.
+	//
+	// IgnorePublicAcls is a required field
+	IgnorePublicAcls *bool `locationName:"ignorePublicAcls" type:"boolean" required:"true"`
+
+	// Specifies whether Amazon S3 should restrict public bucket policies for this
+	// bucket.
+	//
+	// RestrictPublicBuckets is a required field
+	RestrictPublicBuckets *bool `locationName:"restrictPublicBuckets" type:"boolean" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s S3PublicAccessBlockConfiguration) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s S3PublicAccessBlockConfiguration) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *S3PublicAccessBlockConfiguration) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "S3PublicAccessBlockConfiguration"}
+	if s.IgnorePublicAcls == nil {
+		invalidParams.Add(request.NewErrParamRequired("IgnorePublicAcls"))
+	}
+	if s.RestrictPublicBuckets == nil {
+		invalidParams.Add(request.NewErrParamRequired("RestrictPublicBuckets"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetIgnorePublicAcls sets the IgnorePublicAcls field's value.
+func (s *S3PublicAccessBlockConfiguration) SetIgnorePublicAcls(v bool) *S3PublicAccessBlockConfiguration {
+	s.IgnorePublicAcls = &v
+	return s
+}
+
+// SetRestrictPublicBuckets sets the RestrictPublicBuckets field's value.
+func (s *S3PublicAccessBlockConfiguration) SetRestrictPublicBuckets(v bool) *S3PublicAccessBlockConfiguration {
+	s.RestrictPublicBuckets = &v
+	return s
+}
+
+// The configuration for a Secrets Manager secret. For more information, see
+// CreateSecret (https://docs.aws.amazon.com/secretsmanager/latest/apireference/API_CreateSecret.html).
+//
+// You can propose a configuration for a new secret or an existing secret that
+// you own by specifying the secret policy and optional KMS encryption key.
+// If the configuration is for an existing secret and you do not specify the
+// secret policy, the access preview uses the existing policy for the secret.
+// If the access preview is for a new resource and you do not specify the policy,
+// the access preview assumes a secret without a policy. To propose deletion
+// of an existing policy, you can specify an empty string. If the proposed configuration
+// is for a new secret and you do not specify the KMS key ID, the access preview
+// uses the default CMK of the Amazon Web Services account. If you specify an
+// empty string for the KMS key ID, the access preview uses the default CMK
+// of the Amazon Web Services account. For more information about secret policy
+// limits, see Quotas for Secrets Manager. (https://docs.aws.amazon.com/secretsmanager/latest/userguide/reference_limits.html).
+type SecretsManagerSecretConfiguration struct {
+	_ struct{} `type:"structure"`
+
+	// The proposed ARN, key ID, or alias of the KMS customer master key (CMK).
+	KmsKeyId *string `locationName:"kmsKeyId" type:"string"`
+
+	// The proposed resource policy defining who can access or manage the secret.
+	SecretPolicy *string `locationName:"secretPolicy" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s SecretsManagerSecretConfiguration) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s SecretsManagerSecretConfiguration) GoString() string {
+	return s.String()
+}
+
+// SetKmsKeyId sets the KmsKeyId field's value.
+func (s *SecretsManagerSecretConfiguration) SetKmsKeyId(v string) *SecretsManagerSecretConfiguration {
+	s.KmsKeyId = &v
+	return s
+}
+
+// SetSecretPolicy sets the SecretPolicy field's value.
+func (s *SecretsManagerSecretConfiguration) SetSecretPolicy(v string) *SecretsManagerSecretConfiguration {
+	s.SecretPolicy = &v
+	return s
+}
+
 // Service quote met error.
 type ServiceQuotaExceededException struct {
 	_            struct{}                  `type:"structure"`
@@ -4361,12 +8522,20 @@ type ServiceQuotaExceededException struct {
 	ResourceType *string `locationName:"resourceType" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ServiceQuotaExceededException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ServiceQuotaExceededException) GoString() string {
 	return s.String()
 }
@@ -4420,12 +8589,20 @@ type SortCriteria struct {
 	OrderBy *string `locationName:"orderBy" type:"string" enum:"OrderBy"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s SortCriteria) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s SortCriteria) GoString() string {
 	return s.String()
 }
@@ -4442,12 +8619,217 @@ func (s *SortCriteria) SetOrderBy(v string) *SortCriteria {
 	return s
 }
 
+// A span in a policy. The span consists of a start position (inclusive) and
+// end position (exclusive).
+type Span struct {
+	_ struct{} `type:"structure"`
+
+	// The end position of the span (exclusive).
+	//
+	// End is a required field
+	End *Position `locationName:"end" type:"structure" required:"true"`
+
+	// The start position of the span (inclusive).
+	//
+	// Start is a required field
+	Start *Position `locationName:"start" type:"structure" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s Span) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s Span) GoString() string {
+	return s.String()
+}
+
+// SetEnd sets the End field's value.
+func (s *Span) SetEnd(v *Position) *Span {
+	s.End = v
+	return s
+}
+
+// SetStart sets the Start field's value.
+func (s *Span) SetStart(v *Position) *Span {
+	s.Start = v
+	return s
+}
+
+// The proposed access control configuration for an Amazon SQS queue. You can
+// propose a configuration for a new Amazon SQS queue or an existing Amazon
+// SQS queue that you own by specifying the Amazon SQS policy. If the configuration
+// is for an existing Amazon SQS queue and you do not specify the Amazon SQS
+// policy, the access preview uses the existing Amazon SQS policy for the queue.
+// If the access preview is for a new resource and you do not specify the policy,
+// the access preview assumes an Amazon SQS queue without a policy. To propose
+// deletion of an existing Amazon SQS queue policy, you can specify an empty
+// string for the Amazon SQS policy. For more information about Amazon SQS policy
+// limits, see Quotas related to policies (https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/quotas-policies.html).
+type SqsQueueConfiguration struct {
+	_ struct{} `type:"structure"`
+
+	// The proposed resource policy for the Amazon SQS queue.
+	QueuePolicy *string `locationName:"queuePolicy" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s SqsQueueConfiguration) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s SqsQueueConfiguration) GoString() string {
+	return s.String()
+}
+
+// SetQueuePolicy sets the QueuePolicy field's value.
+func (s *SqsQueueConfiguration) SetQueuePolicy(v string) *SqsQueueConfiguration {
+	s.QueuePolicy = &v
+	return s
+}
+
+type StartPolicyGenerationInput struct {
+	_ struct{} `type:"structure"`
+
+	// A unique, case-sensitive identifier that you provide to ensure the idempotency
+	// of the request. Idempotency ensures that an API request completes only once.
+	// With an idempotent request, if the original request completes successfully,
+	// the subsequent retries with the same client token return the result from
+	// the original successful request and they have no additional effect.
+	//
+	// If you do not specify a client token, one is automatically generated by the
+	// Amazon Web Services SDK.
+	ClientToken *string `locationName:"clientToken" type:"string" idempotencyToken:"true"`
+
+	// A CloudTrailDetails object that contains details about a Trail that you want
+	// to analyze to generate policies.
+	CloudTrailDetails *CloudTrailDetails `locationName:"cloudTrailDetails" type:"structure"`
+
+	// Contains the ARN of the IAM entity (user or role) for which you are generating
+	// a policy.
+	//
+	// PolicyGenerationDetails is a required field
+	PolicyGenerationDetails *PolicyGenerationDetails `locationName:"policyGenerationDetails" type:"structure" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s StartPolicyGenerationInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s StartPolicyGenerationInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *StartPolicyGenerationInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "StartPolicyGenerationInput"}
+	if s.PolicyGenerationDetails == nil {
+		invalidParams.Add(request.NewErrParamRequired("PolicyGenerationDetails"))
+	}
+	if s.CloudTrailDetails != nil {
+		if err := s.CloudTrailDetails.Validate(); err != nil {
+			invalidParams.AddNested("CloudTrailDetails", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.PolicyGenerationDetails != nil {
+		if err := s.PolicyGenerationDetails.Validate(); err != nil {
+			invalidParams.AddNested("PolicyGenerationDetails", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetClientToken sets the ClientToken field's value.
+func (s *StartPolicyGenerationInput) SetClientToken(v string) *StartPolicyGenerationInput {
+	s.ClientToken = &v
+	return s
+}
+
+// SetCloudTrailDetails sets the CloudTrailDetails field's value.
+func (s *StartPolicyGenerationInput) SetCloudTrailDetails(v *CloudTrailDetails) *StartPolicyGenerationInput {
+	s.CloudTrailDetails = v
+	return s
+}
+
+// SetPolicyGenerationDetails sets the PolicyGenerationDetails field's value.
+func (s *StartPolicyGenerationInput) SetPolicyGenerationDetails(v *PolicyGenerationDetails) *StartPolicyGenerationInput {
+	s.PolicyGenerationDetails = v
+	return s
+}
+
+type StartPolicyGenerationOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The JobId that is returned by the StartPolicyGeneration operation. The JobId
+	// can be used with GetGeneratedPolicy to retrieve the generated policies or
+	// used with CancelPolicyGeneration to cancel the policy generation request.
+	//
+	// JobId is a required field
+	JobId *string `locationName:"jobId" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s StartPolicyGenerationOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s StartPolicyGenerationOutput) GoString() string {
+	return s.String()
+}
+
+// SetJobId sets the JobId field's value.
+func (s *StartPolicyGenerationOutput) SetJobId(v string) *StartPolicyGenerationOutput {
+	s.JobId = &v
+	return s
+}
+
 // Starts a scan of the policies applied to the specified resource.
 type StartResourceScanInput struct {
 	_ struct{} `type:"structure"`
 
-	// The ARN of the analyzer to use to scan the policies applied to the specified
-	// resource.
+	// The ARN of the analyzer (https://docs.aws.amazon.com/IAM/latest/UserGuide/access-analyzer-getting-started.html#permission-resources)
+	// to use to scan the policies applied to the specified resource.
 	//
 	// AnalyzerArn is a required field
 	AnalyzerArn *string `locationName:"analyzerArn" type:"string" required:"true"`
@@ -4458,12 +8840,20 @@ type StartResourceScanInput struct {
 	ResourceArn *string `locationName:"resourceArn" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s StartResourceScanInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s StartResourceScanInput) GoString() string {
 	return s.String()
 }
@@ -4497,24 +8887,32 @@ func (s *StartResourceScanInput) SetResourceArn(v string) *StartResourceScanInpu
 }
 
 type StartResourceScanOutput struct {
-	_ struct{} `type:"structure"`
+	_ struct{} `type:"structure" nopayload:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s StartResourceScanOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s StartResourceScanOutput) GoString() string {
 	return s.String()
 }
 
 // Provides more details about the current status of the analyzer. For example,
-// if the creation for the analyzer fails, a Failed status is displayed. For
+// if the creation for the analyzer fails, a Failed status is returned. For
 // an analyzer with organization as the type, this failure can be due to an
 // issue with creating the service-linked roles required in the member accounts
-// of the AWS organization.
+// of the Amazon Web Services organization.
 type StatusReason struct {
 	_ struct{} `type:"structure"`
 
@@ -4524,12 +8922,20 @@ type StatusReason struct {
 	Code *string `locationName:"code" type:"string" required:"true" enum:"ReasonCode"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s StatusReason) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s StatusReason) GoString() string {
 	return s.String()
 }
@@ -4537,6 +8943,51 @@ func (s StatusReason) GoString() string {
 // SetCode sets the Code field's value.
 func (s *StatusReason) SetCode(v string) *StatusReason {
 	s.Code = &v
+	return s
+}
+
+// A reference to a substring of a literal string in a JSON document.
+type Substring struct {
+	_ struct{} `type:"structure"`
+
+	// The length of the substring.
+	//
+	// Length is a required field
+	Length *int64 `locationName:"length" type:"integer" required:"true"`
+
+	// The start index of the substring, starting from 0.
+	//
+	// Start is a required field
+	Start *int64 `locationName:"start" type:"integer" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s Substring) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s Substring) GoString() string {
+	return s.String()
+}
+
+// SetLength sets the Length field's value.
+func (s *Substring) SetLength(v int64) *Substring {
+	s.Length = &v
+	return s
+}
+
+// SetStart sets the Start field's value.
+func (s *Substring) SetStart(v int64) *Substring {
+	s.Start = &v
 	return s
 }
 
@@ -4555,12 +9006,20 @@ type TagResourceInput struct {
 	Tags map[string]*string `locationName:"tags" type:"map" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s TagResourceInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s TagResourceInput) GoString() string {
 	return s.String()
 }
@@ -4598,15 +9057,23 @@ func (s *TagResourceInput) SetTags(v map[string]*string) *TagResourceInput {
 
 // The response to the request.
 type TagResourceOutput struct {
-	_ struct{} `type:"structure"`
+	_ struct{} `type:"structure" nopayload:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s TagResourceOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s TagResourceOutput) GoString() string {
 	return s.String()
 }
@@ -4622,12 +9089,20 @@ type ThrottlingException struct {
 	RetryAfterSeconds *int64 `location:"header" locationName:"Retry-After" type:"integer"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ThrottlingException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ThrottlingException) GoString() string {
 	return s.String()
 }
@@ -4670,9 +9145,130 @@ func (s *ThrottlingException) RequestID() string {
 	return s.RespMetadata.RequestID
 }
 
+// Contains details about the CloudTrail trail being analyzed to generate a
+// policy.
+type Trail struct {
+	_ struct{} `type:"structure"`
+
+	// Possible values are true or false. If set to true, IAM Access Analyzer retrieves
+	// CloudTrail data from all regions to analyze and generate a policy.
+	AllRegions *bool `locationName:"allRegions" type:"boolean"`
+
+	// Specifies the ARN of the trail. The format of a trail ARN is arn:aws:cloudtrail:us-east-2:123456789012:trail/MyTrail.
+	//
+	// CloudTrailArn is a required field
+	CloudTrailArn *string `locationName:"cloudTrailArn" type:"string" required:"true"`
+
+	// A list of regions to get CloudTrail data from and analyze to generate a policy.
+	Regions []*string `locationName:"regions" type:"list"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s Trail) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s Trail) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *Trail) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "Trail"}
+	if s.CloudTrailArn == nil {
+		invalidParams.Add(request.NewErrParamRequired("CloudTrailArn"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetAllRegions sets the AllRegions field's value.
+func (s *Trail) SetAllRegions(v bool) *Trail {
+	s.AllRegions = &v
+	return s
+}
+
+// SetCloudTrailArn sets the CloudTrailArn field's value.
+func (s *Trail) SetCloudTrailArn(v string) *Trail {
+	s.CloudTrailArn = &v
+	return s
+}
+
+// SetRegions sets the Regions field's value.
+func (s *Trail) SetRegions(v []*string) *Trail {
+	s.Regions = v
+	return s
+}
+
+// Contains details about the CloudTrail trail being analyzed to generate a
+// policy.
+type TrailProperties struct {
+	_ struct{} `type:"structure"`
+
+	// Possible values are true or false. If set to true, IAM Access Analyzer retrieves
+	// CloudTrail data from all regions to analyze and generate a policy.
+	AllRegions *bool `locationName:"allRegions" type:"boolean"`
+
+	// Specifies the ARN of the trail. The format of a trail ARN is arn:aws:cloudtrail:us-east-2:123456789012:trail/MyTrail.
+	//
+	// CloudTrailArn is a required field
+	CloudTrailArn *string `locationName:"cloudTrailArn" type:"string" required:"true"`
+
+	// A list of regions to get CloudTrail data from and analyze to generate a policy.
+	Regions []*string `locationName:"regions" type:"list"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s TrailProperties) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s TrailProperties) GoString() string {
+	return s.String()
+}
+
+// SetAllRegions sets the AllRegions field's value.
+func (s *TrailProperties) SetAllRegions(v bool) *TrailProperties {
+	s.AllRegions = &v
+	return s
+}
+
+// SetCloudTrailArn sets the CloudTrailArn field's value.
+func (s *TrailProperties) SetCloudTrailArn(v string) *TrailProperties {
+	s.CloudTrailArn = &v
+	return s
+}
+
+// SetRegions sets the Regions field's value.
+func (s *TrailProperties) SetRegions(v []*string) *TrailProperties {
+	s.Regions = v
+	return s
+}
+
 // Removes a tag from the specified resource.
 type UntagResourceInput struct {
-	_ struct{} `type:"structure"`
+	_ struct{} `type:"structure" nopayload:"true"`
 
 	// The ARN of the resource to remove the tag from.
 	//
@@ -4685,12 +9281,20 @@ type UntagResourceInput struct {
 	TagKeys []*string `location:"querystring" locationName:"tagKeys" type:"list" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UntagResourceInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UntagResourceInput) GoString() string {
 	return s.String()
 }
@@ -4728,15 +9332,23 @@ func (s *UntagResourceInput) SetTagKeys(v []*string) *UntagResourceInput {
 
 // The response to the request.
 type UntagResourceOutput struct {
-	_ struct{} `type:"structure"`
+	_ struct{} `type:"structure" nopayload:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UntagResourceOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UntagResourceOutput) GoString() string {
 	return s.String()
 }
@@ -4765,12 +9377,20 @@ type UpdateArchiveRuleInput struct {
 	RuleName *string `location:"uri" locationName:"ruleName" min:"1" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpdateArchiveRuleInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpdateArchiveRuleInput) GoString() string {
 	return s.String()
 }
@@ -4835,15 +9455,23 @@ func (s *UpdateArchiveRuleInput) SetRuleName(v string) *UpdateArchiveRuleInput {
 }
 
 type UpdateArchiveRuleOutput struct {
-	_ struct{} `type:"structure"`
+	_ struct{} `type:"structure" nopayload:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpdateArchiveRuleOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpdateArchiveRuleOutput) GoString() string {
 	return s.String()
 }
@@ -4852,7 +9480,8 @@ func (s UpdateArchiveRuleOutput) GoString() string {
 type UpdateFindingsInput struct {
 	_ struct{} `type:"structure"`
 
-	// The ARN of the analyzer that generated the findings to update.
+	// The ARN of the analyzer (https://docs.aws.amazon.com/IAM/latest/UserGuide/access-analyzer-getting-started.html#permission-resources)
+	// that generated the findings to update.
 	//
 	// AnalyzerArn is a required field
 	AnalyzerArn *string `locationName:"analyzerArn" type:"string" required:"true"`
@@ -4874,12 +9503,20 @@ type UpdateFindingsInput struct {
 	Status *string `locationName:"status" type:"string" required:"true" enum:"FindingStatusUpdate"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpdateFindingsInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpdateFindingsInput) GoString() string {
 	return s.String()
 }
@@ -4931,17 +9568,256 @@ func (s *UpdateFindingsInput) SetStatus(v string) *UpdateFindingsInput {
 }
 
 type UpdateFindingsOutput struct {
-	_ struct{} `type:"structure"`
+	_ struct{} `type:"structure" nopayload:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpdateFindingsOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpdateFindingsOutput) GoString() string {
 	return s.String()
+}
+
+// A finding in a policy. Each finding is an actionable recommendation that
+// can be used to improve the policy.
+type ValidatePolicyFinding struct {
+	_ struct{} `type:"structure"`
+
+	// A localized message that explains the finding and provides guidance on how
+	// to address it.
+	//
+	// FindingDetails is a required field
+	FindingDetails *string `locationName:"findingDetails" type:"string" required:"true"`
+
+	// The impact of the finding.
+	//
+	// Security warnings report when the policy allows access that we consider overly
+	// permissive.
+	//
+	// Errors report when a part of the policy is not functional.
+	//
+	// Warnings report non-security issues when a policy does not conform to policy
+	// writing best practices.
+	//
+	// Suggestions recommend stylistic improvements in the policy that do not impact
+	// access.
+	//
+	// FindingType is a required field
+	FindingType *string `locationName:"findingType" type:"string" required:"true" enum:"ValidatePolicyFindingType"`
+
+	// The issue code provides an identifier of the issue associated with this finding.
+	//
+	// IssueCode is a required field
+	IssueCode *string `locationName:"issueCode" type:"string" required:"true"`
+
+	// A link to additional documentation about the type of finding.
+	//
+	// LearnMoreLink is a required field
+	LearnMoreLink *string `locationName:"learnMoreLink" type:"string" required:"true"`
+
+	// The list of locations in the policy document that are related to the finding.
+	// The issue code provides a summary of an issue identified by the finding.
+	//
+	// Locations is a required field
+	Locations []*Location `locationName:"locations" type:"list" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ValidatePolicyFinding) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ValidatePolicyFinding) GoString() string {
+	return s.String()
+}
+
+// SetFindingDetails sets the FindingDetails field's value.
+func (s *ValidatePolicyFinding) SetFindingDetails(v string) *ValidatePolicyFinding {
+	s.FindingDetails = &v
+	return s
+}
+
+// SetFindingType sets the FindingType field's value.
+func (s *ValidatePolicyFinding) SetFindingType(v string) *ValidatePolicyFinding {
+	s.FindingType = &v
+	return s
+}
+
+// SetIssueCode sets the IssueCode field's value.
+func (s *ValidatePolicyFinding) SetIssueCode(v string) *ValidatePolicyFinding {
+	s.IssueCode = &v
+	return s
+}
+
+// SetLearnMoreLink sets the LearnMoreLink field's value.
+func (s *ValidatePolicyFinding) SetLearnMoreLink(v string) *ValidatePolicyFinding {
+	s.LearnMoreLink = &v
+	return s
+}
+
+// SetLocations sets the Locations field's value.
+func (s *ValidatePolicyFinding) SetLocations(v []*Location) *ValidatePolicyFinding {
+	s.Locations = v
+	return s
+}
+
+type ValidatePolicyInput struct {
+	_ struct{} `type:"structure"`
+
+	// The locale to use for localizing the findings.
+	Locale *string `locationName:"locale" type:"string" enum:"Locale"`
+
+	// The maximum number of results to return in the response.
+	MaxResults *int64 `location:"querystring" locationName:"maxResults" type:"integer"`
+
+	// A token used for pagination of results returned.
+	NextToken *string `location:"querystring" locationName:"nextToken" type:"string"`
+
+	// The JSON policy document to use as the content for the policy.
+	//
+	// PolicyDocument is a required field
+	PolicyDocument *string `locationName:"policyDocument" type:"string" required:"true"`
+
+	// The type of policy to validate. Identity policies grant permissions to IAM
+	// principals. Identity policies include managed and inline policies for IAM
+	// roles, users, and groups. They also include service-control policies (SCPs)
+	// that are attached to an Amazon Web Services organization, organizational
+	// unit (OU), or an account.
+	//
+	// Resource policies grant permissions on Amazon Web Services resources. Resource
+	// policies include trust policies for IAM roles and bucket policies for Amazon
+	// S3 buckets. You can provide a generic input such as identity policy or resource
+	// policy or a specific input such as managed policy or Amazon S3 bucket policy.
+	//
+	// PolicyType is a required field
+	PolicyType *string `locationName:"policyType" type:"string" required:"true" enum:"PolicyType"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ValidatePolicyInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ValidatePolicyInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ValidatePolicyInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ValidatePolicyInput"}
+	if s.PolicyDocument == nil {
+		invalidParams.Add(request.NewErrParamRequired("PolicyDocument"))
+	}
+	if s.PolicyType == nil {
+		invalidParams.Add(request.NewErrParamRequired("PolicyType"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetLocale sets the Locale field's value.
+func (s *ValidatePolicyInput) SetLocale(v string) *ValidatePolicyInput {
+	s.Locale = &v
+	return s
+}
+
+// SetMaxResults sets the MaxResults field's value.
+func (s *ValidatePolicyInput) SetMaxResults(v int64) *ValidatePolicyInput {
+	s.MaxResults = &v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ValidatePolicyInput) SetNextToken(v string) *ValidatePolicyInput {
+	s.NextToken = &v
+	return s
+}
+
+// SetPolicyDocument sets the PolicyDocument field's value.
+func (s *ValidatePolicyInput) SetPolicyDocument(v string) *ValidatePolicyInput {
+	s.PolicyDocument = &v
+	return s
+}
+
+// SetPolicyType sets the PolicyType field's value.
+func (s *ValidatePolicyInput) SetPolicyType(v string) *ValidatePolicyInput {
+	s.PolicyType = &v
+	return s
+}
+
+type ValidatePolicyOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The list of findings in a policy returned by IAM Access Analyzer based on
+	// its suite of policy checks.
+	//
+	// Findings is a required field
+	Findings []*ValidatePolicyFinding `locationName:"findings" type:"list" required:"true"`
+
+	// A token used for pagination of results returned.
+	NextToken *string `locationName:"nextToken" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ValidatePolicyOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ValidatePolicyOutput) GoString() string {
+	return s.String()
+}
+
+// SetFindings sets the Findings field's value.
+func (s *ValidatePolicyOutput) SetFindings(v []*ValidatePolicyFinding) *ValidatePolicyOutput {
+	s.Findings = v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ValidatePolicyOutput) SetNextToken(v string) *ValidatePolicyOutput {
+	s.NextToken = &v
+	return s
 }
 
 // Validation exception error.
@@ -4960,12 +9836,20 @@ type ValidationException struct {
 	Reason *string `locationName:"reason" type:"string" required:"true" enum:"ValidationExceptionReason"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ValidationException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ValidationException) GoString() string {
 	return s.String()
 }
@@ -5023,12 +9907,20 @@ type ValidationExceptionField struct {
 	Name *string `locationName:"name" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ValidationExceptionField) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ValidationExceptionField) GoString() string {
 	return s.String()
 }
@@ -5043,6 +9935,120 @@ func (s *ValidationExceptionField) SetMessage(v string) *ValidationExceptionFiel
 func (s *ValidationExceptionField) SetName(v string) *ValidationExceptionField {
 	s.Name = &v
 	return s
+}
+
+// The proposed virtual private cloud (VPC) configuration for the Amazon S3
+// access point. VPC configuration does not apply to multi-region access points.
+// For more information, see VpcConfiguration (https://docs.aws.amazon.com/AmazonS3/latest/API/API_control_VpcConfiguration.html).
+type VpcConfiguration struct {
+	_ struct{} `type:"structure"`
+
+	// If this field is specified, this access point will only allow connections
+	// from the specified VPC ID.
+	//
+	// VpcId is a required field
+	VpcId *string `locationName:"vpcId" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s VpcConfiguration) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s VpcConfiguration) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *VpcConfiguration) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "VpcConfiguration"}
+	if s.VpcId == nil {
+		invalidParams.Add(request.NewErrParamRequired("VpcId"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetVpcId sets the VpcId field's value.
+func (s *VpcConfiguration) SetVpcId(v string) *VpcConfiguration {
+	s.VpcId = &v
+	return s
+}
+
+const (
+	// AccessPreviewStatusCompleted is a AccessPreviewStatus enum value
+	AccessPreviewStatusCompleted = "COMPLETED"
+
+	// AccessPreviewStatusCreating is a AccessPreviewStatus enum value
+	AccessPreviewStatusCreating = "CREATING"
+
+	// AccessPreviewStatusFailed is a AccessPreviewStatus enum value
+	AccessPreviewStatusFailed = "FAILED"
+)
+
+// AccessPreviewStatus_Values returns all elements of the AccessPreviewStatus enum
+func AccessPreviewStatus_Values() []string {
+	return []string{
+		AccessPreviewStatusCompleted,
+		AccessPreviewStatusCreating,
+		AccessPreviewStatusFailed,
+	}
+}
+
+const (
+	// AccessPreviewStatusReasonCodeInternalError is a AccessPreviewStatusReasonCode enum value
+	AccessPreviewStatusReasonCodeInternalError = "INTERNAL_ERROR"
+
+	// AccessPreviewStatusReasonCodeInvalidConfiguration is a AccessPreviewStatusReasonCode enum value
+	AccessPreviewStatusReasonCodeInvalidConfiguration = "INVALID_CONFIGURATION"
+)
+
+// AccessPreviewStatusReasonCode_Values returns all elements of the AccessPreviewStatusReasonCode enum
+func AccessPreviewStatusReasonCode_Values() []string {
+	return []string{
+		AccessPreviewStatusReasonCodeInternalError,
+		AccessPreviewStatusReasonCodeInvalidConfiguration,
+	}
+}
+
+const (
+	// AclPermissionRead is a AclPermission enum value
+	AclPermissionRead = "READ"
+
+	// AclPermissionWrite is a AclPermission enum value
+	AclPermissionWrite = "WRITE"
+
+	// AclPermissionReadAcp is a AclPermission enum value
+	AclPermissionReadAcp = "READ_ACP"
+
+	// AclPermissionWriteAcp is a AclPermission enum value
+	AclPermissionWriteAcp = "WRITE_ACP"
+
+	// AclPermissionFullControl is a AclPermission enum value
+	AclPermissionFullControl = "FULL_CONTROL"
+)
+
+// AclPermission_Values returns all elements of the AclPermission enum
+func AclPermission_Values() []string {
+	return []string{
+		AclPermissionRead,
+		AclPermissionWrite,
+		AclPermissionReadAcp,
+		AclPermissionWriteAcp,
+		AclPermissionFullControl,
+	}
 }
 
 const (
@@ -5066,6 +10072,26 @@ func AnalyzerStatus_Values() []string {
 		AnalyzerStatusCreating,
 		AnalyzerStatusDisabled,
 		AnalyzerStatusFailed,
+	}
+}
+
+const (
+	// FindingChangeTypeChanged is a FindingChangeType enum value
+	FindingChangeTypeChanged = "CHANGED"
+
+	// FindingChangeTypeNew is a FindingChangeType enum value
+	FindingChangeTypeNew = "NEW"
+
+	// FindingChangeTypeUnchanged is a FindingChangeType enum value
+	FindingChangeTypeUnchanged = "UNCHANGED"
+)
+
+// FindingChangeType_Values returns all elements of the FindingChangeType enum
+func FindingChangeType_Values() []string {
+	return []string{
+		FindingChangeTypeChanged,
+		FindingChangeTypeNew,
+		FindingChangeTypeUnchanged,
 	}
 }
 
@@ -5126,6 +10152,166 @@ func FindingStatusUpdate_Values() []string {
 }
 
 const (
+	// JobErrorCodeAuthorizationError is a JobErrorCode enum value
+	JobErrorCodeAuthorizationError = "AUTHORIZATION_ERROR"
+
+	// JobErrorCodeResourceNotFoundError is a JobErrorCode enum value
+	JobErrorCodeResourceNotFoundError = "RESOURCE_NOT_FOUND_ERROR"
+
+	// JobErrorCodeServiceQuotaExceededError is a JobErrorCode enum value
+	JobErrorCodeServiceQuotaExceededError = "SERVICE_QUOTA_EXCEEDED_ERROR"
+
+	// JobErrorCodeServiceError is a JobErrorCode enum value
+	JobErrorCodeServiceError = "SERVICE_ERROR"
+)
+
+// JobErrorCode_Values returns all elements of the JobErrorCode enum
+func JobErrorCode_Values() []string {
+	return []string{
+		JobErrorCodeAuthorizationError,
+		JobErrorCodeResourceNotFoundError,
+		JobErrorCodeServiceQuotaExceededError,
+		JobErrorCodeServiceError,
+	}
+}
+
+const (
+	// JobStatusInProgress is a JobStatus enum value
+	JobStatusInProgress = "IN_PROGRESS"
+
+	// JobStatusSucceeded is a JobStatus enum value
+	JobStatusSucceeded = "SUCCEEDED"
+
+	// JobStatusFailed is a JobStatus enum value
+	JobStatusFailed = "FAILED"
+
+	// JobStatusCanceled is a JobStatus enum value
+	JobStatusCanceled = "CANCELED"
+)
+
+// JobStatus_Values returns all elements of the JobStatus enum
+func JobStatus_Values() []string {
+	return []string{
+		JobStatusInProgress,
+		JobStatusSucceeded,
+		JobStatusFailed,
+		JobStatusCanceled,
+	}
+}
+
+const (
+	// KmsGrantOperationCreateGrant is a KmsGrantOperation enum value
+	KmsGrantOperationCreateGrant = "CreateGrant"
+
+	// KmsGrantOperationDecrypt is a KmsGrantOperation enum value
+	KmsGrantOperationDecrypt = "Decrypt"
+
+	// KmsGrantOperationDescribeKey is a KmsGrantOperation enum value
+	KmsGrantOperationDescribeKey = "DescribeKey"
+
+	// KmsGrantOperationEncrypt is a KmsGrantOperation enum value
+	KmsGrantOperationEncrypt = "Encrypt"
+
+	// KmsGrantOperationGenerateDataKey is a KmsGrantOperation enum value
+	KmsGrantOperationGenerateDataKey = "GenerateDataKey"
+
+	// KmsGrantOperationGenerateDataKeyPair is a KmsGrantOperation enum value
+	KmsGrantOperationGenerateDataKeyPair = "GenerateDataKeyPair"
+
+	// KmsGrantOperationGenerateDataKeyPairWithoutPlaintext is a KmsGrantOperation enum value
+	KmsGrantOperationGenerateDataKeyPairWithoutPlaintext = "GenerateDataKeyPairWithoutPlaintext"
+
+	// KmsGrantOperationGenerateDataKeyWithoutPlaintext is a KmsGrantOperation enum value
+	KmsGrantOperationGenerateDataKeyWithoutPlaintext = "GenerateDataKeyWithoutPlaintext"
+
+	// KmsGrantOperationGetPublicKey is a KmsGrantOperation enum value
+	KmsGrantOperationGetPublicKey = "GetPublicKey"
+
+	// KmsGrantOperationReEncryptFrom is a KmsGrantOperation enum value
+	KmsGrantOperationReEncryptFrom = "ReEncryptFrom"
+
+	// KmsGrantOperationReEncryptTo is a KmsGrantOperation enum value
+	KmsGrantOperationReEncryptTo = "ReEncryptTo"
+
+	// KmsGrantOperationRetireGrant is a KmsGrantOperation enum value
+	KmsGrantOperationRetireGrant = "RetireGrant"
+
+	// KmsGrantOperationSign is a KmsGrantOperation enum value
+	KmsGrantOperationSign = "Sign"
+
+	// KmsGrantOperationVerify is a KmsGrantOperation enum value
+	KmsGrantOperationVerify = "Verify"
+)
+
+// KmsGrantOperation_Values returns all elements of the KmsGrantOperation enum
+func KmsGrantOperation_Values() []string {
+	return []string{
+		KmsGrantOperationCreateGrant,
+		KmsGrantOperationDecrypt,
+		KmsGrantOperationDescribeKey,
+		KmsGrantOperationEncrypt,
+		KmsGrantOperationGenerateDataKey,
+		KmsGrantOperationGenerateDataKeyPair,
+		KmsGrantOperationGenerateDataKeyPairWithoutPlaintext,
+		KmsGrantOperationGenerateDataKeyWithoutPlaintext,
+		KmsGrantOperationGetPublicKey,
+		KmsGrantOperationReEncryptFrom,
+		KmsGrantOperationReEncryptTo,
+		KmsGrantOperationRetireGrant,
+		KmsGrantOperationSign,
+		KmsGrantOperationVerify,
+	}
+}
+
+const (
+	// LocaleDe is a Locale enum value
+	LocaleDe = "DE"
+
+	// LocaleEn is a Locale enum value
+	LocaleEn = "EN"
+
+	// LocaleEs is a Locale enum value
+	LocaleEs = "ES"
+
+	// LocaleFr is a Locale enum value
+	LocaleFr = "FR"
+
+	// LocaleIt is a Locale enum value
+	LocaleIt = "IT"
+
+	// LocaleJa is a Locale enum value
+	LocaleJa = "JA"
+
+	// LocaleKo is a Locale enum value
+	LocaleKo = "KO"
+
+	// LocalePtBr is a Locale enum value
+	LocalePtBr = "PT_BR"
+
+	// LocaleZhCn is a Locale enum value
+	LocaleZhCn = "ZH_CN"
+
+	// LocaleZhTw is a Locale enum value
+	LocaleZhTw = "ZH_TW"
+)
+
+// Locale_Values returns all elements of the Locale enum
+func Locale_Values() []string {
+	return []string{
+		LocaleDe,
+		LocaleEn,
+		LocaleEs,
+		LocaleFr,
+		LocaleIt,
+		LocaleJa,
+		LocaleKo,
+		LocalePtBr,
+		LocaleZhCn,
+		LocaleZhTw,
+	}
+}
+
+const (
 	// OrderByAsc is a OrderBy enum value
 	OrderByAsc = "ASC"
 
@@ -5138,6 +10324,26 @@ func OrderBy_Values() []string {
 	return []string{
 		OrderByAsc,
 		OrderByDesc,
+	}
+}
+
+const (
+	// PolicyTypeIdentityPolicy is a PolicyType enum value
+	PolicyTypeIdentityPolicy = "IDENTITY_POLICY"
+
+	// PolicyTypeResourcePolicy is a PolicyType enum value
+	PolicyTypeResourcePolicy = "RESOURCE_POLICY"
+
+	// PolicyTypeServiceControlPolicy is a PolicyType enum value
+	PolicyTypeServiceControlPolicy = "SERVICE_CONTROL_POLICY"
+)
+
+// PolicyType_Values returns all elements of the PolicyType enum
+func PolicyType_Values() []string {
+	return []string{
+		PolicyTypeIdentityPolicy,
+		PolicyTypeResourcePolicy,
+		PolicyTypeServiceControlPolicy,
 	}
 }
 
@@ -5183,6 +10389,9 @@ const (
 
 	// ResourceTypeAwsKmsKey is a ResourceType enum value
 	ResourceTypeAwsKmsKey = "AWS::KMS::Key"
+
+	// ResourceTypeAwsSecretsManagerSecret is a ResourceType enum value
+	ResourceTypeAwsSecretsManagerSecret = "AWS::SecretsManager::Secret"
 )
 
 // ResourceType_Values returns all elements of the ResourceType enum
@@ -5194,6 +10403,7 @@ func ResourceType_Values() []string {
 		ResourceTypeAwsLambdaFunction,
 		ResourceTypeAwsLambdaLayerVersion,
 		ResourceTypeAwsKmsKey,
+		ResourceTypeAwsSecretsManagerSecret,
 	}
 }
 
@@ -5210,6 +10420,30 @@ func Type_Values() []string {
 	return []string{
 		TypeAccount,
 		TypeOrganization,
+	}
+}
+
+const (
+	// ValidatePolicyFindingTypeError is a ValidatePolicyFindingType enum value
+	ValidatePolicyFindingTypeError = "ERROR"
+
+	// ValidatePolicyFindingTypeSecurityWarning is a ValidatePolicyFindingType enum value
+	ValidatePolicyFindingTypeSecurityWarning = "SECURITY_WARNING"
+
+	// ValidatePolicyFindingTypeSuggestion is a ValidatePolicyFindingType enum value
+	ValidatePolicyFindingTypeSuggestion = "SUGGESTION"
+
+	// ValidatePolicyFindingTypeWarning is a ValidatePolicyFindingType enum value
+	ValidatePolicyFindingTypeWarning = "WARNING"
+)
+
+// ValidatePolicyFindingType_Values returns all elements of the ValidatePolicyFindingType enum
+func ValidatePolicyFindingType_Values() []string {
+	return []string{
+		ValidatePolicyFindingTypeError,
+		ValidatePolicyFindingTypeSecurityWarning,
+		ValidatePolicyFindingTypeSuggestion,
+		ValidatePolicyFindingTypeWarning,
 	}
 }
 

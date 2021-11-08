@@ -1,3 +1,4 @@
+//go:build integration
 // +build integration
 
 package kinesis_test
@@ -52,7 +53,7 @@ func TestInteg_SubscribeToShard(t *testing.T) {
 
 			sub, err := svc.SubscribeToShardWithContext(ctx, params)
 			if err != nil {
-				t.Fatalf("expect no error, %v, %v", err, *s.ShardId)
+				t.Errorf("expect no error, %v, %v", err, *s.ShardId)
 			}
 			defer sub.EventStream.Close()
 
@@ -66,7 +67,7 @@ func TestInteg_SubscribeToShard(t *testing.T) {
 						atomic.AddInt32(&goodCount, 1)
 						for _, r := range e.Records {
 							if len(r.Data) == 0 {
-								t.Fatalf("expect data in record, got none")
+								t.Errorf("expect data in record, got none")
 							}
 						}
 					}
@@ -79,7 +80,7 @@ func TestInteg_SubscribeToShard(t *testing.T) {
 			}
 
 			if err := sub.EventStream.Err(); err != nil {
-				t.Fatalf("expect no error, %v, %v", err, *s.ShardId)
+				t.Errorf("expect no error, %v, %v", err, *s.ShardId)
 			}
 		}(i, shard)
 	}

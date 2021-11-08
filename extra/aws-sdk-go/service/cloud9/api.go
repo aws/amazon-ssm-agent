@@ -57,9 +57,8 @@ func (c *Cloud9) CreateEnvironmentEC2Request(input *CreateEnvironmentEC2Input) (
 
 // CreateEnvironmentEC2 API operation for AWS Cloud9.
 //
-// Creates an AWS Cloud9 development environment, launches an Amazon Elastic
-// Compute Cloud (Amazon EC2) instance, and then connects from the instance
-// to the environment.
+// Creates an Cloud9 development environment, launches an Amazon Elastic Compute
+// Cloud (Amazon EC2) instance, and then connects from the instance to the environment.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -156,7 +155,7 @@ func (c *Cloud9) CreateEnvironmentMembershipRequest(input *CreateEnvironmentMemb
 
 // CreateEnvironmentMembership API operation for AWS Cloud9.
 //
-// Adds an environment member to an AWS Cloud9 development environment.
+// Adds an environment member to an Cloud9 development environment.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -254,8 +253,8 @@ func (c *Cloud9) DeleteEnvironmentRequest(input *DeleteEnvironmentInput) (req *r
 
 // DeleteEnvironment API operation for AWS Cloud9.
 //
-// Deletes an AWS Cloud9 development environment. If an Amazon EC2 instance
-// is connected to the environment, also terminates the instance.
+// Deletes an Cloud9 development environment. If an Amazon EC2 instance is connected
+// to the environment, also terminates the instance.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -353,7 +352,7 @@ func (c *Cloud9) DeleteEnvironmentMembershipRequest(input *DeleteEnvironmentMemb
 
 // DeleteEnvironmentMembership API operation for AWS Cloud9.
 //
-// Deletes an environment member from an AWS Cloud9 development environment.
+// Deletes an environment member from an Cloud9 development environment.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -456,8 +455,7 @@ func (c *Cloud9) DescribeEnvironmentMembershipsRequest(input *DescribeEnvironmen
 
 // DescribeEnvironmentMemberships API operation for AWS Cloud9.
 //
-// Gets information about environment members for an AWS Cloud9 development
-// environment.
+// Gets information about environment members for an Cloud9 development environment.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -606,7 +604,7 @@ func (c *Cloud9) DescribeEnvironmentStatusRequest(input *DescribeEnvironmentStat
 
 // DescribeEnvironmentStatus API operation for AWS Cloud9.
 //
-// Gets status information for an AWS Cloud9 development environment.
+// Gets status information for an Cloud9 development environment.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -703,7 +701,7 @@ func (c *Cloud9) DescribeEnvironmentsRequest(input *DescribeEnvironmentsInput) (
 
 // DescribeEnvironments API operation for AWS Cloud9.
 //
-// Gets information about AWS Cloud9 development environments.
+// Gets information about Cloud9 development environments.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -806,7 +804,7 @@ func (c *Cloud9) ListEnvironmentsRequest(input *ListEnvironmentsInput) (req *req
 
 // ListEnvironments API operation for AWS Cloud9.
 //
-// Gets a list of AWS Cloud9 development environment identifiers.
+// Gets a list of Cloud9 development environment identifiers.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -955,7 +953,7 @@ func (c *Cloud9) ListTagsForResourceRequest(input *ListTagsForResourceInput) (re
 
 // ListTagsForResource API operation for AWS Cloud9.
 //
-// Gets a list of the tags associated with an AWS Cloud9 development environment.
+// Gets a list of the tags associated with an Cloud9 development environment.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -1041,10 +1039,10 @@ func (c *Cloud9) TagResourceRequest(input *TagResourceInput) (req *request.Reque
 
 // TagResource API operation for AWS Cloud9.
 //
-// Adds tags to an AWS Cloud9 development environment.
+// Adds tags to an Cloud9 development environment.
 //
-// Tags that you add to an AWS Cloud9 environment by using this method will
-// NOT be automatically propagated to underlying resources.
+// Tags that you add to an Cloud9 environment by using this method will NOT
+// be automatically propagated to underlying resources.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -1133,7 +1131,7 @@ func (c *Cloud9) UntagResourceRequest(input *UntagResourceInput) (req *request.R
 
 // UntagResource API operation for AWS Cloud9.
 //
-// Removes tags from an AWS Cloud9 development environment.
+// Removes tags from an Cloud9 development environment.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -1222,7 +1220,7 @@ func (c *Cloud9) UpdateEnvironmentRequest(input *UpdateEnvironmentInput) (req *r
 
 // UpdateEnvironment API operation for AWS Cloud9.
 //
-// Changes the settings of an existing AWS Cloud9 development environment.
+// Changes the settings of an existing Cloud9 development environment.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -1319,8 +1317,8 @@ func (c *Cloud9) UpdateEnvironmentMembershipRequest(input *UpdateEnvironmentMemb
 
 // UpdateEnvironmentMembership API operation for AWS Cloud9.
 //
-// Changes the settings of an existing environment member for an AWS Cloud9
-// development environment.
+// Changes the settings of an existing environment member for an Cloud9 development
+// environment.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -1381,12 +1379,20 @@ type BadRequestException struct {
 	Message_ *string `locationName:"message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s BadRequestException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s BadRequestException) GoString() string {
 	return s.String()
 }
@@ -1437,12 +1443,20 @@ type ConcurrentAccessException struct {
 	Message_ *string `locationName:"message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ConcurrentAccessException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ConcurrentAccessException) GoString() string {
 	return s.String()
 }
@@ -1493,12 +1507,20 @@ type ConflictException struct {
 	Message_ *string `locationName:"message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ConflictException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ConflictException) GoString() string {
 	return s.String()
 }
@@ -1548,18 +1570,60 @@ type CreateEnvironmentEC2Input struct {
 	// has last been used.
 	AutomaticStopTimeMinutes *int64 `locationName:"automaticStopTimeMinutes" type:"integer"`
 
-	// A unique, case-sensitive string that helps AWS Cloud9 to ensure this operation
+	// A unique, case-sensitive string that helps Cloud9 to ensure this operation
 	// completes no more than one time.
 	//
-	// For more information, see Client Tokens (http://docs.aws.amazon.com/AWSEC2/latest/APIReference/Run_Instance_Idempotency.html)
+	// For more information, see Client Tokens (https://docs.aws.amazon.com/AWSEC2/latest/APIReference/Run_Instance_Idempotency.html)
 	// in the Amazon EC2 API Reference.
 	ClientRequestToken *string `locationName:"clientRequestToken" type:"string"`
 
-	// The connection type used for connecting to an Amazon EC2 environment.
+	// The connection type used for connecting to an Amazon EC2 environment. Valid
+	// values are CONNECT_SSH (default) and CONNECT_SSM (connected through Amazon
+	// EC2 Systems Manager).
+	//
+	// For more information, see Accessing no-ingress EC2 instances with Amazon
+	// EC2 Systems Manager (https://docs.aws.amazon.com/cloud9/latest/user-guide/ec2-ssm.html)
+	// in the Cloud9 User Guide.
 	ConnectionType *string `locationName:"connectionType" type:"string" enum:"ConnectionType"`
 
 	// The description of the environment to create.
+	//
+	// Description is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by CreateEnvironmentEC2Input's
+	// String and GoString methods.
 	Description *string `locationName:"description" type:"string" sensitive:"true"`
+
+	// Checks whether you have the required permissions for the action, without
+	// actually making the request, and provides an error response. If you have
+	// the required permissions, the error response is DryRunOperation. Otherwise,
+	// it is UnauthorizedOperation.
+	DryRun *bool `locationName:"dryRun" type:"boolean"`
+
+	// The identifier for the Amazon Machine Image (AMI) that's used to create the
+	// EC2 instance. To choose an AMI for the instance, you must specify a valid
+	// AMI alias or a valid Amazon EC2 Systems Manager (SSM) path.
+	//
+	// The default AMI is used if the parameter isn't explicitly assigned a value
+	// in the request. Because Amazon Linux AMI has ended standard support as of
+	// December 31, 2020, we recommend you choose Amazon Linux 2, which includes
+	// long term support through 2023.
+	//
+	// AMI aliases
+	//
+	//    * Amazon Linux (default): amazonlinux-1-x86_64
+	//
+	//    * Amazon Linux 2: amazonlinux-2-x86_64
+	//
+	//    * Ubuntu 18.04: ubuntu-18.04-x86_64
+	//
+	// SSM paths
+	//
+	//    * Amazon Linux (default): resolve:ssm:/aws/service/cloud9/amis/amazonlinux-1-x86_64
+	//
+	//    * Amazon Linux 2: resolve:ssm:/aws/service/cloud9/amis/amazonlinux-2-x86_64
+	//
+	//    * Ubuntu 18.04: resolve:ssm:/aws/service/cloud9/amis/ubuntu-18.04-x86_64
+	ImageId *string `locationName:"imageId" type:"string"`
 
 	// The type of instance to connect to the environment (for example, t2.micro).
 	//
@@ -1568,31 +1632,43 @@ type CreateEnvironmentEC2Input struct {
 
 	// The name of the environment to create.
 	//
-	// This name is visible to other AWS IAM users in the same AWS account.
+	// This name is visible to other IAM users in the same Amazon Web Services account.
 	//
 	// Name is a required field
 	Name *string `locationName:"name" min:"1" type:"string" required:"true"`
 
 	// The Amazon Resource Name (ARN) of the environment owner. This ARN can be
-	// the ARN of any AWS IAM principal. If this value is not specified, the ARN
-	// defaults to this environment's creator.
+	// the ARN of any IAM principal. If this value is not specified, the ARN defaults
+	// to this environment's creator.
 	OwnerArn *string `locationName:"ownerArn" type:"string"`
 
-	// The ID of the subnet in Amazon VPC that AWS Cloud9 will use to communicate
-	// with the Amazon EC2 instance.
-	SubnetId *string `locationName:"subnetId" min:"5" type:"string"`
+	// The ID of the subnet in Amazon VPC that Cloud9 will use to communicate with
+	// the Amazon EC2 instance.
+	SubnetId *string `locationName:"subnetId" min:"15" type:"string"`
 
-	// An array of key-value pairs that will be associated with the new AWS Cloud9
-	// development environment.
-	Tags []*Tag `locationName:"tags" type:"list"`
+	// An array of key-value pairs that will be associated with the new Cloud9 development
+	// environment.
+	//
+	// Tags is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by CreateEnvironmentEC2Input's
+	// String and GoString methods.
+	Tags []*Tag `locationName:"tags" type:"list" sensitive:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateEnvironmentEC2Input) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateEnvironmentEC2Input) GoString() string {
 	return s.String()
 }
@@ -1612,8 +1688,8 @@ func (s *CreateEnvironmentEC2Input) Validate() error {
 	if s.Name != nil && len(*s.Name) < 1 {
 		invalidParams.Add(request.NewErrParamMinLen("Name", 1))
 	}
-	if s.SubnetId != nil && len(*s.SubnetId) < 5 {
-		invalidParams.Add(request.NewErrParamMinLen("SubnetId", 5))
+	if s.SubnetId != nil && len(*s.SubnetId) < 15 {
+		invalidParams.Add(request.NewErrParamMinLen("SubnetId", 15))
 	}
 	if s.Tags != nil {
 		for i, v := range s.Tags {
@@ -1656,6 +1732,18 @@ func (s *CreateEnvironmentEC2Input) SetDescription(v string) *CreateEnvironmentE
 	return s
 }
 
+// SetDryRun sets the DryRun field's value.
+func (s *CreateEnvironmentEC2Input) SetDryRun(v bool) *CreateEnvironmentEC2Input {
+	s.DryRun = &v
+	return s
+}
+
+// SetImageId sets the ImageId field's value.
+func (s *CreateEnvironmentEC2Input) SetImageId(v string) *CreateEnvironmentEC2Input {
+	s.ImageId = &v
+	return s
+}
+
 // SetInstanceType sets the InstanceType field's value.
 func (s *CreateEnvironmentEC2Input) SetInstanceType(v string) *CreateEnvironmentEC2Input {
 	s.InstanceType = &v
@@ -1693,12 +1781,20 @@ type CreateEnvironmentEC2Output struct {
 	EnvironmentId *string `locationName:"environmentId" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateEnvironmentEC2Output) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateEnvironmentEC2Output) GoString() string {
 	return s.String()
 }
@@ -1734,12 +1830,20 @@ type CreateEnvironmentMembershipInput struct {
 	UserArn *string `locationName:"userArn" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateEnvironmentMembershipInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateEnvironmentMembershipInput) GoString() string {
 	return s.String()
 }
@@ -1785,15 +1889,25 @@ type CreateEnvironmentMembershipOutput struct {
 	_ struct{} `type:"structure"`
 
 	// Information about the environment member that was added.
-	Membership *EnvironmentMember `locationName:"membership" type:"structure"`
+	//
+	// Membership is a required field
+	Membership *EnvironmentMember `locationName:"membership" type:"structure" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateEnvironmentMembershipOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateEnvironmentMembershipOutput) GoString() string {
 	return s.String()
 }
@@ -1813,12 +1927,20 @@ type DeleteEnvironmentInput struct {
 	EnvironmentId *string `locationName:"environmentId" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteEnvironmentInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteEnvironmentInput) GoString() string {
 	return s.String()
 }
@@ -1857,12 +1979,20 @@ type DeleteEnvironmentMembershipInput struct {
 	UserArn *string `locationName:"userArn" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteEnvironmentMembershipInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteEnvironmentMembershipInput) GoString() string {
 	return s.String()
 }
@@ -1899,12 +2029,20 @@ type DeleteEnvironmentMembershipOutput struct {
 	_ struct{} `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteEnvironmentMembershipOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteEnvironmentMembershipOutput) GoString() string {
 	return s.String()
 }
@@ -1913,12 +2051,20 @@ type DeleteEnvironmentOutput struct {
 	_ struct{} `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteEnvironmentOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteEnvironmentOutput) GoString() string {
 	return s.String()
 }
@@ -1958,12 +2104,20 @@ type DescribeEnvironmentMembershipsInput struct {
 	UserArn *string `locationName:"userArn" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeEnvironmentMembershipsInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeEnvironmentMembershipsInput) GoString() string {
 	return s.String()
 }
@@ -2011,12 +2165,20 @@ type DescribeEnvironmentMembershipsOutput struct {
 	NextToken *string `locationName:"nextToken" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeEnvironmentMembershipsOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeEnvironmentMembershipsOutput) GoString() string {
 	return s.String()
 }
@@ -2042,12 +2204,20 @@ type DescribeEnvironmentStatusInput struct {
 	EnvironmentId *string `locationName:"environmentId" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeEnvironmentStatusInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeEnvironmentStatusInput) GoString() string {
 	return s.String()
 }
@@ -2075,7 +2245,9 @@ type DescribeEnvironmentStatusOutput struct {
 	_ struct{} `type:"structure"`
 
 	// Any informational message about the status of the environment.
-	Message *string `locationName:"message" type:"string"`
+	//
+	// Message is a required field
+	Message *string `locationName:"message" type:"string" required:"true"`
 
 	// The status of the environment. Available values include:
 	//
@@ -2092,15 +2264,25 @@ type DescribeEnvironmentStatusOutput struct {
 	//    * stopped: The environment is stopped.
 	//
 	//    * stopping: The environment is stopping.
-	Status *string `locationName:"status" type:"string" enum:"EnvironmentStatus"`
+	//
+	// Status is a required field
+	Status *string `locationName:"status" type:"string" required:"true" enum:"EnvironmentStatus"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeEnvironmentStatusOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeEnvironmentStatusOutput) GoString() string {
 	return s.String()
 }
@@ -2126,12 +2308,20 @@ type DescribeEnvironmentsInput struct {
 	EnvironmentIds []*string `locationName:"environmentIds" min:"1" type:"list" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeEnvironmentsInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeEnvironmentsInput) GoString() string {
 	return s.String()
 }
@@ -2165,12 +2355,20 @@ type DescribeEnvironmentsOutput struct {
 	Environments []*Environment `locationName:"environments" type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeEnvironmentsOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeEnvironmentsOutput) GoString() string {
 	return s.String()
 }
@@ -2181,17 +2379,24 @@ func (s *DescribeEnvironmentsOutput) SetEnvironments(v []*Environment) *Describe
 	return s
 }
 
-// Information about an AWS Cloud9 development environment.
+// Information about an Cloud9 development environment.
 type Environment struct {
 	_ struct{} `type:"structure"`
 
 	// The Amazon Resource Name (ARN) of the environment.
-	Arn *string `locationName:"arn" type:"string"`
+	//
+	// Arn is a required field
+	Arn *string `locationName:"arn" type:"string" required:"true"`
 
-	// The connection type used for connecting to an Amazon EC2 environment.
+	// The connection type used for connecting to an Amazon EC2 environment. CONNECT_SSH
+	// is selected by default.
 	ConnectionType *string `locationName:"connectionType" type:"string" enum:"ConnectionType"`
 
 	// The description for the environment.
+	//
+	// Description is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by Environment's
+	// String and GoString methods.
 	Description *string `locationName:"description" type:"string" sensitive:"true"`
 
 	// The ID of the environment.
@@ -2200,11 +2405,37 @@ type Environment struct {
 	// The state of the environment in its creation or deletion lifecycle.
 	Lifecycle *EnvironmentLifecycle `locationName:"lifecycle" type:"structure"`
 
+	// Describes the status of Amazon Web Services managed temporary credentials
+	// for the Cloud9 environment. Available values are:
+	//
+	//    * ENABLED_ON_CREATE
+	//
+	//    * ENABLED_BY_OWNER
+	//
+	//    * DISABLED_BY_DEFAULT
+	//
+	//    * DISABLED_BY_OWNER
+	//
+	//    * DISABLED_BY_COLLABORATOR
+	//
+	//    * PENDING_REMOVAL_BY_COLLABORATOR
+	//
+	//    * PENDING_REMOVAL_BY_OWNER
+	//
+	//    * FAILED_REMOVAL_BY_COLLABORATOR
+	//
+	//    * ENABLED_BY_OWNER
+	//
+	//    * DISABLED_BY_DEFAULT
+	ManagedCredentialsStatus *string `locationName:"managedCredentialsStatus" type:"string" enum:"ManagedCredentialsStatus"`
+
 	// The name of the environment.
 	Name *string `locationName:"name" min:"1" type:"string"`
 
 	// The Amazon Resource Name (ARN) of the environment owner.
-	OwnerArn *string `locationName:"ownerArn" type:"string"`
+	//
+	// OwnerArn is a required field
+	OwnerArn *string `locationName:"ownerArn" type:"string" required:"true"`
 
 	// The type of environment. Valid values include the following:
 	//
@@ -2212,15 +2443,25 @@ type Environment struct {
 	//    to the environment.
 	//
 	//    * ssh: Your own server connects to the environment.
-	Type *string `locationName:"type" type:"string" enum:"EnvironmentType"`
+	//
+	// Type is a required field
+	Type *string `locationName:"type" type:"string" required:"true" enum:"EnvironmentType"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s Environment) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s Environment) GoString() string {
 	return s.String()
 }
@@ -2255,6 +2496,12 @@ func (s *Environment) SetLifecycle(v *EnvironmentLifecycle) *Environment {
 	return s
 }
 
+// SetManagedCredentialsStatus sets the ManagedCredentialsStatus field's value.
+func (s *Environment) SetManagedCredentialsStatus(v string) *Environment {
+	s.ManagedCredentialsStatus = &v
+	return s
+}
+
 // SetName sets the Name field's value.
 func (s *Environment) SetName(v string) *Environment {
 	s.Name = &v
@@ -2274,12 +2521,12 @@ func (s *Environment) SetType(v string) *Environment {
 }
 
 // Information about the current creation or deletion lifecycle state of an
-// AWS Cloud9 development environment.
+// Cloud9 development environment.
 type EnvironmentLifecycle struct {
 	_ struct{} `type:"structure"`
 
 	// If the environment failed to delete, the Amazon Resource Name (ARN) of the
-	// related AWS resource.
+	// related Amazon Web Services resource.
 	FailureResource *string `locationName:"failureResource" type:"string"`
 
 	// Any informational message about the lifecycle state of the environment.
@@ -2299,12 +2546,20 @@ type EnvironmentLifecycle struct {
 	Status *string `locationName:"status" type:"string" enum:"EnvironmentLifecycleStatus"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s EnvironmentLifecycle) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s EnvironmentLifecycle) GoString() string {
 	return s.String()
 }
@@ -2327,12 +2582,14 @@ func (s *EnvironmentLifecycle) SetStatus(v string) *EnvironmentLifecycle {
 	return s
 }
 
-// Information about an environment member for an AWS Cloud9 development environment.
+// Information about an environment member for an Cloud9 development environment.
 type EnvironmentMember struct {
 	_ struct{} `type:"structure"`
 
 	// The ID of the environment for the environment member.
-	EnvironmentId *string `locationName:"environmentId" type:"string"`
+	//
+	// EnvironmentId is a required field
+	EnvironmentId *string `locationName:"environmentId" type:"string" required:"true"`
 
 	// The time, expressed in epoch time format, when the environment member last
 	// opened the environment.
@@ -2346,22 +2603,35 @@ type EnvironmentMember struct {
 	//    * read-only: Has read-only access to the environment.
 	//
 	//    * read-write: Has read-write access to the environment.
-	Permissions *string `locationName:"permissions" type:"string" enum:"Permissions"`
+	//
+	// Permissions is a required field
+	Permissions *string `locationName:"permissions" type:"string" required:"true" enum:"Permissions"`
 
 	// The Amazon Resource Name (ARN) of the environment member.
-	UserArn *string `locationName:"userArn" type:"string"`
+	//
+	// UserArn is a required field
+	UserArn *string `locationName:"userArn" type:"string" required:"true"`
 
-	// The user ID in AWS Identity and Access Management (AWS IAM) of the environment
-	// member.
-	UserId *string `locationName:"userId" type:"string"`
+	// The user ID in Identity and Access Management (IAM) of the environment member.
+	//
+	// UserId is a required field
+	UserId *string `locationName:"userId" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s EnvironmentMember) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s EnvironmentMember) GoString() string {
 	return s.String()
 }
@@ -2404,12 +2674,20 @@ type ForbiddenException struct {
 	Message_ *string `locationName:"message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ForbiddenException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ForbiddenException) GoString() string {
 	return s.String()
 }
@@ -2460,12 +2738,20 @@ type InternalServerErrorException struct {
 	Message_ *string `locationName:"message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s InternalServerErrorException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s InternalServerErrorException) GoString() string {
 	return s.String()
 }
@@ -2516,12 +2802,20 @@ type LimitExceededException struct {
 	Message_ *string `locationName:"message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s LimitExceededException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s LimitExceededException) GoString() string {
 	return s.String()
 }
@@ -2579,12 +2873,20 @@ type ListEnvironmentsInput struct {
 	NextToken *string `locationName:"nextToken" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListEnvironmentsInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListEnvironmentsInput) GoString() string {
 	return s.String()
 }
@@ -2614,12 +2916,20 @@ type ListEnvironmentsOutput struct {
 	NextToken *string `locationName:"nextToken" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListEnvironmentsOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListEnvironmentsOutput) GoString() string {
 	return s.String()
 }
@@ -2639,19 +2949,27 @@ func (s *ListEnvironmentsOutput) SetNextToken(v string) *ListEnvironmentsOutput 
 type ListTagsForResourceInput struct {
 	_ struct{} `type:"structure"`
 
-	// The Amazon Resource Name (ARN) of the AWS Cloud9 development environment
-	// to get the tags for.
+	// The Amazon Resource Name (ARN) of the Cloud9 development environment to get
+	// the tags for.
 	//
 	// ResourceARN is a required field
 	ResourceARN *string `type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListTagsForResourceInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListTagsForResourceInput) GoString() string {
 	return s.String()
 }
@@ -2678,16 +2996,28 @@ func (s *ListTagsForResourceInput) SetResourceARN(v string) *ListTagsForResource
 type ListTagsForResourceOutput struct {
 	_ struct{} `type:"structure"`
 
-	// The list of tags associated with the AWS Cloud9 development environment.
-	Tags []*Tag `type:"list"`
+	// The list of tags associated with the Cloud9 development environment.
+	//
+	// Tags is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by ListTagsForResourceOutput's
+	// String and GoString methods.
+	Tags []*Tag `type:"list" sensitive:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListTagsForResourceOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListTagsForResourceOutput) GoString() string {
 	return s.String()
 }
@@ -2706,12 +3036,20 @@ type NotFoundException struct {
 	Message_ *string `locationName:"message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s NotFoundException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s NotFoundException) GoString() string {
 	return s.String()
 }
@@ -2754,31 +3092,48 @@ func (s *NotFoundException) RequestID() string {
 	return s.RespMetadata.RequestID
 }
 
-// Metadata that is associated with AWS resources. In particular, a name-value
-// pair that can be associated with an AWS Cloud9 development environment. There
-// are two types of tags: user tags and system tags. A user tag is created by
-// the user. A system tag is automatically created by AWS services. A system
-// tag is prefixed with "aws:" and cannot be modified by the user.
+// Metadata that is associated with Amazon Web Services resources. In particular,
+// a name-value pair that can be associated with an Cloud9 development environment.
+// There are two types of tags: user tags and system tags. A user tag is created
+// by the user. A system tag is automatically created by Amazon Web Services
+// services. A system tag is prefixed with "aws:" and cannot be modified by
+// the user.
 type Tag struct {
-	_ struct{} `type:"structure"`
+	_ struct{} `type:"structure" sensitive:"true"`
 
 	// The name part of a tag.
 	//
+	// Key is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by Tag's
+	// String and GoString methods.
+	//
 	// Key is a required field
-	Key *string `min:"1" type:"string" required:"true"`
+	Key *string `min:"1" type:"string" required:"true" sensitive:"true"`
 
 	// The value part of a tag.
 	//
+	// Value is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by Tag's
+	// String and GoString methods.
+	//
 	// Value is a required field
-	Value *string `type:"string" required:"true"`
+	Value *string `type:"string" required:"true" sensitive:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s Tag) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s Tag) GoString() string {
 	return s.String()
 }
@@ -2817,24 +3172,36 @@ func (s *Tag) SetValue(v string) *Tag {
 type TagResourceInput struct {
 	_ struct{} `type:"structure"`
 
-	// The Amazon Resource Name (ARN) of the AWS Cloud9 development environment
-	// to add tags to.
+	// The Amazon Resource Name (ARN) of the Cloud9 development environment to add
+	// tags to.
 	//
 	// ResourceARN is a required field
 	ResourceARN *string `type:"string" required:"true"`
 
-	// The list of tags to add to the given AWS Cloud9 development environment.
+	// The list of tags to add to the given Cloud9 development environment.
+	//
+	// Tags is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by TagResourceInput's
+	// String and GoString methods.
 	//
 	// Tags is a required field
-	Tags []*Tag `type:"list" required:"true"`
+	Tags []*Tag `type:"list" required:"true" sensitive:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s TagResourceInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s TagResourceInput) GoString() string {
 	return s.String()
 }
@@ -2881,12 +3248,20 @@ type TagResourceOutput struct {
 	_ struct{} `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s TagResourceOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s TagResourceOutput) GoString() string {
 	return s.String()
 }
@@ -2899,12 +3274,20 @@ type TooManyRequestsException struct {
 	Message_ *string `locationName:"message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s TooManyRequestsException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s TooManyRequestsException) GoString() string {
 	return s.String()
 }
@@ -2950,25 +3333,36 @@ func (s *TooManyRequestsException) RequestID() string {
 type UntagResourceInput struct {
 	_ struct{} `type:"structure"`
 
-	// The Amazon Resource Name (ARN) of the AWS Cloud9 development environment
-	// to remove tags from.
+	// The Amazon Resource Name (ARN) of the Cloud9 development environment to remove
+	// tags from.
 	//
 	// ResourceARN is a required field
 	ResourceARN *string `type:"string" required:"true"`
 
-	// The tag names of the tags to remove from the given AWS Cloud9 development
-	// environment.
+	// The tag names of the tags to remove from the given Cloud9 development environment.
+	//
+	// TagKeys is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by UntagResourceInput's
+	// String and GoString methods.
 	//
 	// TagKeys is a required field
-	TagKeys []*string `type:"list" required:"true"`
+	TagKeys []*string `type:"list" required:"true" sensitive:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UntagResourceInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UntagResourceInput) GoString() string {
 	return s.String()
 }
@@ -3005,12 +3399,20 @@ type UntagResourceOutput struct {
 	_ struct{} `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UntagResourceOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UntagResourceOutput) GoString() string {
 	return s.String()
 }
@@ -3019,6 +3421,10 @@ type UpdateEnvironmentInput struct {
 	_ struct{} `type:"structure"`
 
 	// Any new or replacement description for the environment.
+	//
+	// Description is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by UpdateEnvironmentInput's
+	// String and GoString methods.
 	Description *string `locationName:"description" type:"string" sensitive:"true"`
 
 	// The ID of the environment to change settings.
@@ -3026,16 +3432,37 @@ type UpdateEnvironmentInput struct {
 	// EnvironmentId is a required field
 	EnvironmentId *string `locationName:"environmentId" type:"string" required:"true"`
 
+	// Allows the environment owner to turn on or turn off the Amazon Web Services
+	// managed temporary credentials for an Cloud9 environment by using one of the
+	// following values:
+	//
+	//    * ENABLE
+	//
+	//    * DISABLE
+	//
+	// Only the environment owner can change the status of managed temporary credentials.
+	// An AccessDeniedException is thrown if an attempt to turn on or turn off managed
+	// temporary credentials is made by an account that's not the environment owner.
+	ManagedCredentialsAction *string `locationName:"managedCredentialsAction" type:"string" enum:"ManagedCredentialsAction"`
+
 	// A replacement name for the environment.
 	Name *string `locationName:"name" min:"1" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpdateEnvironmentInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpdateEnvironmentInput) GoString() string {
 	return s.String()
 }
@@ -3065,6 +3492,12 @@ func (s *UpdateEnvironmentInput) SetDescription(v string) *UpdateEnvironmentInpu
 // SetEnvironmentId sets the EnvironmentId field's value.
 func (s *UpdateEnvironmentInput) SetEnvironmentId(v string) *UpdateEnvironmentInput {
 	s.EnvironmentId = &v
+	return s
+}
+
+// SetManagedCredentialsAction sets the ManagedCredentialsAction field's value.
+func (s *UpdateEnvironmentInput) SetManagedCredentialsAction(v string) *UpdateEnvironmentInput {
+	s.ManagedCredentialsAction = &v
 	return s
 }
 
@@ -3100,12 +3533,20 @@ type UpdateEnvironmentMembershipInput struct {
 	UserArn *string `locationName:"userArn" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpdateEnvironmentMembershipInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpdateEnvironmentMembershipInput) GoString() string {
 	return s.String()
 }
@@ -3154,12 +3595,20 @@ type UpdateEnvironmentMembershipOutput struct {
 	Membership *EnvironmentMember `locationName:"membership" type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpdateEnvironmentMembershipOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpdateEnvironmentMembershipOutput) GoString() string {
 	return s.String()
 }
@@ -3174,12 +3623,20 @@ type UpdateEnvironmentOutput struct {
 	_ struct{} `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpdateEnvironmentOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpdateEnvironmentOutput) GoString() string {
 	return s.String()
 }
@@ -3277,6 +3734,74 @@ func EnvironmentType_Values() []string {
 	return []string{
 		EnvironmentTypeSsh,
 		EnvironmentTypeEc2,
+	}
+}
+
+const (
+	// ManagedCredentialsActionEnable is a ManagedCredentialsAction enum value
+	ManagedCredentialsActionEnable = "ENABLE"
+
+	// ManagedCredentialsActionDisable is a ManagedCredentialsAction enum value
+	ManagedCredentialsActionDisable = "DISABLE"
+)
+
+// ManagedCredentialsAction_Values returns all elements of the ManagedCredentialsAction enum
+func ManagedCredentialsAction_Values() []string {
+	return []string{
+		ManagedCredentialsActionEnable,
+		ManagedCredentialsActionDisable,
+	}
+}
+
+const (
+	// ManagedCredentialsStatusEnabledOnCreate is a ManagedCredentialsStatus enum value
+	ManagedCredentialsStatusEnabledOnCreate = "ENABLED_ON_CREATE"
+
+	// ManagedCredentialsStatusEnabledByOwner is a ManagedCredentialsStatus enum value
+	ManagedCredentialsStatusEnabledByOwner = "ENABLED_BY_OWNER"
+
+	// ManagedCredentialsStatusDisabledByDefault is a ManagedCredentialsStatus enum value
+	ManagedCredentialsStatusDisabledByDefault = "DISABLED_BY_DEFAULT"
+
+	// ManagedCredentialsStatusDisabledByOwner is a ManagedCredentialsStatus enum value
+	ManagedCredentialsStatusDisabledByOwner = "DISABLED_BY_OWNER"
+
+	// ManagedCredentialsStatusDisabledByCollaborator is a ManagedCredentialsStatus enum value
+	ManagedCredentialsStatusDisabledByCollaborator = "DISABLED_BY_COLLABORATOR"
+
+	// ManagedCredentialsStatusPendingRemovalByCollaborator is a ManagedCredentialsStatus enum value
+	ManagedCredentialsStatusPendingRemovalByCollaborator = "PENDING_REMOVAL_BY_COLLABORATOR"
+
+	// ManagedCredentialsStatusPendingStartRemovalByCollaborator is a ManagedCredentialsStatus enum value
+	ManagedCredentialsStatusPendingStartRemovalByCollaborator = "PENDING_START_REMOVAL_BY_COLLABORATOR"
+
+	// ManagedCredentialsStatusPendingRemovalByOwner is a ManagedCredentialsStatus enum value
+	ManagedCredentialsStatusPendingRemovalByOwner = "PENDING_REMOVAL_BY_OWNER"
+
+	// ManagedCredentialsStatusPendingStartRemovalByOwner is a ManagedCredentialsStatus enum value
+	ManagedCredentialsStatusPendingStartRemovalByOwner = "PENDING_START_REMOVAL_BY_OWNER"
+
+	// ManagedCredentialsStatusFailedRemovalByCollaborator is a ManagedCredentialsStatus enum value
+	ManagedCredentialsStatusFailedRemovalByCollaborator = "FAILED_REMOVAL_BY_COLLABORATOR"
+
+	// ManagedCredentialsStatusFailedRemovalByOwner is a ManagedCredentialsStatus enum value
+	ManagedCredentialsStatusFailedRemovalByOwner = "FAILED_REMOVAL_BY_OWNER"
+)
+
+// ManagedCredentialsStatus_Values returns all elements of the ManagedCredentialsStatus enum
+func ManagedCredentialsStatus_Values() []string {
+	return []string{
+		ManagedCredentialsStatusEnabledOnCreate,
+		ManagedCredentialsStatusEnabledByOwner,
+		ManagedCredentialsStatusDisabledByDefault,
+		ManagedCredentialsStatusDisabledByOwner,
+		ManagedCredentialsStatusDisabledByCollaborator,
+		ManagedCredentialsStatusPendingRemovalByCollaborator,
+		ManagedCredentialsStatusPendingStartRemovalByCollaborator,
+		ManagedCredentialsStatusPendingRemovalByOwner,
+		ManagedCredentialsStatusPendingStartRemovalByOwner,
+		ManagedCredentialsStatusFailedRemovalByCollaborator,
+		ManagedCredentialsStatusFailedRemovalByOwner,
 	}
 }
 

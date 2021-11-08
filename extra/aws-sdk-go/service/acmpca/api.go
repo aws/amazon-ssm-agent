@@ -58,17 +58,19 @@ func (c *ACMPCA) CreateCertificateAuthorityRequest(input *CreateCertificateAutho
 // CreateCertificateAuthority API operation for AWS Certificate Manager Private Certificate Authority.
 //
 // Creates a root or subordinate private certificate authority (CA). You must
-// specify the CA configuration, the certificate revocation list (CRL) configuration,
-// the CA type, and an optional idempotency token to avoid accidental creation
-// of multiple CAs. The CA configuration specifies the name of the algorithm
-// and key size to be used to create the CA private key, the type of signing
-// algorithm that the CA uses, and X.500 subject information. The CRL configuration
-// specifies the CRL expiration period in days (the validity period of the CRL),
-// the Amazon S3 bucket that will contain the CRL, and a CNAME alias for the
-// S3 bucket that is included in certificates issued by the CA. If successful,
-// this action returns the Amazon Resource Name (ARN) of the CA.
+// specify the CA configuration, an optional configuration for Online Certificate
+// Status Protocol (OCSP) and/or a certificate revocation list (CRL), the CA
+// type, and an optional idempotency token to avoid accidental creation of multiple
+// CAs. The CA configuration specifies the name of the algorithm and key size
+// to be used to create the CA private key, the type of signing algorithm that
+// the CA uses, and X.500 subject information. The OCSP configuration can optionally
+// specify a custom URL for the OCSP responder. The CRL configuration specifies
+// the CRL expiration period in days (the validity period of the CRL), the Amazon
+// S3 bucket that will contain the CRL, and a CNAME alias for the S3 bucket
+// that is included in certificates issued by the CA. If successful, this action
+// returns the Amazon Resource Name (ARN) of the CA.
 //
-// ACM Private CAA assets that are stored in Amazon S3 can be protected with
+// ACM Private CA assets that are stored in Amazon S3 can be protected with
 // encryption. For more information, see Encrypting Your CRLs (https://docs.aws.amazon.com/acm-pca/latest/userguide/PcaCreateCa.html#crl-encryption).
 //
 // Both PCA and the IAM principal must have permission to write to the S3 bucket
@@ -90,7 +92,7 @@ func (c *ACMPCA) CreateCertificateAuthorityRequest(input *CreateCertificateAutho
 //   * InvalidPolicyException
 //   The resource policy is invalid or is missing a required statement. For general
 //   information about IAM policy and statement structure, see Overview of JSON
-//   Policies (https://docs.aws.amazon.com/https:/docs.aws.amazon.com/IAM/latest/UserGuide/access_policies.html#access_policies-json).
+//   Policies (https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies.html#access_policies-json).
 //
 //   * InvalidTagException
 //   The tag associated with the CA is not valid. The invalid argument is contained
@@ -177,7 +179,7 @@ func (c *ACMPCA) CreateCertificateAuthorityAuditReportRequest(input *CreateCerti
 // to write to the bucket, then an exception is thrown. For more information,
 // see Configure Access to ACM Private CA (https://docs.aws.amazon.com/acm-pca/latest/userguide/PcaAuthAccess.html).
 //
-// ACM Private CAA assets that are stored in Amazon S3 can be protected with
+// ACM Private CA assets that are stored in Amazon S3 can be protected with
 // encryption. For more information, see Encrypting Your Audit Reports (https://docs.aws.amazon.com/acm-pca/latest/userguide/PcaAuditReport.html#audit-report-encryption).
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
@@ -296,7 +298,7 @@ func (c *ACMPCA) CreatePermissionRequest(input *CreatePermissionInput) (req *req
 //    then permissions cannot be used to enable automatic renewals. Instead,
 //    the ACM certificate owner must set up a resource-based policy to enable
 //    cross-account issuance and renewals. For more information, see Using a
-//    Resource Based Policy with ACM Private CA (acm-pca/latest/userguide/pca-rbp.html).
+//    Resource Based Policy with ACM Private CA (https://docs.aws.amazon.com/acm-pca/latest/userguide/pca-rbp.html).
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -533,7 +535,7 @@ func (c *ACMPCA) DeletePermissionRequest(input *DeletePermissionInput) (req *req
 //    then permissions cannot be used to enable automatic renewals. Instead,
 //    the ACM certificate owner must set up a resource-based policy to enable
 //    cross-account issuance and renewals. For more information, see Using a
-//    Resource Based Policy with ACM Private CA (acm-pca/latest/userguide/pca-rbp.html).
+//    Resource Based Policy with ACM Private CA (https://docs.aws.amazon.com/acm-pca/latest/userguide/pca-rbp.html).
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -641,7 +643,7 @@ func (c *ACMPCA) DeletePolicyRequest(input *DeletePolicyInput) (req *request.Req
 //    * A policy grants access on a private CA to an AWS customer account, to
 //    AWS Organizations, or to an AWS Organizations unit. Policies are under
 //    the control of a CA administrator. For more information, see Using a Resource
-//    Based Policy with ACM Private CA (acm-pca/latest/userguide/pca-rbp.html).
+//    Based Policy with ACM Private CA (https://docs.aws.amazon.com/acm-pca/latest/userguide/pca-rbp.html).
 //
 //    * A policy permits a user of AWS Certificate Manager (ACM) to issue ACM
 //    certificates signed by a CA in another account.
@@ -653,8 +655,7 @@ func (c *ACMPCA) DeletePolicyRequest(input *DeletePolicyInput) (req *request.Req
 //    Role with ACM (https://docs.aws.amazon.com/acm/latest/userguide/acm-slr.html).
 //
 //    * Updates made in AWS Resource Manager (RAM) are reflected in policies.
-//    For more information, see Using AWS Resource Access Manager (RAM) with
-//    ACM Private CA (acm-pca/latest/userguide/pca-ram.html).
+//    For more information, see Attach a Policy for Cross-Account Access (https://docs.aws.amazon.com/acm-pca/latest/userguide/pca-ram.html).
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -769,7 +770,7 @@ func (c *ACMPCA) DescribeCertificateAuthorityRequest(input *DescribeCertificateA
 //    * EXPIRED - Your private CA certificate has expired.
 //
 //    * FAILED - Your private CA has failed. Your CA can fail because of problems
-//    such a network outage or backend AWS failure or other errors. A failed
+//    such a network outage or back-end AWS failure or other errors. A failed
 //    CA can never return to the pending state. You must create a new CA.
 //
 //    * DELETED - Your private CA is within the restoration period, after which
@@ -1241,14 +1242,14 @@ func (c *ACMPCA) GetPolicyRequest(input *GetPolicyInput) (req *request.Request, 
 // ResourceNotFoundException.
 //
 // The policy can be attached or updated with PutPolicy (https://docs.aws.amazon.com/acm-pca/latest/APIReference/API_PutPolicy.html)
-// and removed with DeletePolicy (acm-pca/latest/APIReference/API_DeletePolicy.html).
+// and removed with DeletePolicy (https://docs.aws.amazon.com/acm-pca/latest/APIReference/API_DeletePolicy.html).
 //
 // About Policies
 //
 //    * A policy grants access on a private CA to an AWS customer account, to
 //    AWS Organizations, or to an AWS Organizations unit. Policies are under
 //    the control of a CA administrator. For more information, see Using a Resource
-//    Based Policy with ACM Private CA (acm-pca/latest/userguide/pca-rbp.html).
+//    Based Policy with ACM Private CA (https://docs.aws.amazon.com/acm-pca/latest/userguide/pca-rbp.html).
 //
 //    * A policy permits a user of AWS Certificate Manager (ACM) to issue ACM
 //    certificates signed by a CA in another account.
@@ -1260,8 +1261,7 @@ func (c *ACMPCA) GetPolicyRequest(input *GetPolicyInput) (req *request.Request, 
 //    Role with ACM (https://docs.aws.amazon.com/acm/latest/userguide/acm-slr.html).
 //
 //    * Updates made in AWS Resource Manager (RAM) are reflected in policies.
-//    For more information, see Using AWS Resource Access Manager (RAM) with
-//    ACM Private CA (acm-pca/latest/userguide/pca-ram.html).
+//    For more information, see Attach a Policy for Cross-Account Access (https://docs.aws.amazon.com/acm-pca/latest/userguide/pca-ram.html).
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -1357,8 +1357,7 @@ func (c *ACMPCA) ImportCertificateAuthorityCertificateRequest(input *ImportCerti
 // must in place:
 //
 // In ACM Private CA, call the CreateCertificateAuthority (https://docs.aws.amazon.com/acm-pca/latest/APIReference/API_CreateCertificateAuthority.html)
-// action to create the private CA that that you plan to back with the imported
-// certificate.
+// action to create the private CA that you plan to back with the imported certificate.
 //
 // Call the GetCertificateAuthorityCsr (https://docs.aws.amazon.com/acm-pca/latest/APIReference/API_GetCertificateAuthorityCsr.html)
 // action to generate a certificate signing request (CSR).
@@ -1369,21 +1368,29 @@ func (c *ACMPCA) ImportCertificateAuthorityCertificateRequest(input *ImportCerti
 // Create a certificate chain and copy the signed certificate and the certificate
 // chain to your working directory.
 //
-// The following requirements apply when you import a CA certificate.
+// ACM Private CA supports three scenarios for installing a CA certificate:
 //
-//    * You cannot import a non-self-signed certificate for use as a root CA.
+//    * Installing a certificate for a root CA hosted by ACM Private CA.
 //
-//    * You cannot import a self-signed certificate for use as a subordinate
-//    CA.
+//    * Installing a subordinate CA certificate whose parent authority is hosted
+//    by ACM Private CA.
+//
+//    * Installing a subordinate CA certificate whose parent authority is externally
+//    hosted.
+//
+// The following additional requirements apply when you import a CA certificate.
+//
+//    * Only a self-signed certificate can be imported as a root CA.
+//
+//    * A self-signed certificate cannot be imported as a subordinate CA.
 //
 //    * Your certificate chain must not include the private CA certificate that
 //    you are importing.
 //
-//    * Your ACM Private CA-hosted or on-premises CA certificate must be the
-//    last certificate in your chain. The subordinate certificate, if any, that
-//    your root CA signed must be next to last. The subordinate certificate
-//    signed by the preceding subordinate CA must come next, and so on until
-//    your chain is built.
+//    * Your root CA must be the last certificate in your chain. The subordinate
+//    certificate, if any, that your root CA signed must be next to last. The
+//    subordinate certificate signed by the preceding subordinate CA must come
+//    next, and so on until your chain is built.
 //
 //    * The chain must be PEM-encoded.
 //
@@ -1810,7 +1817,7 @@ func (c *ACMPCA) ListPermissionsRequest(input *ListPermissionsInput) (req *reque
 //    then permissions cannot be used to enable automatic renewals. Instead,
 //    the ACM certificate owner must set up a resource-based policy to enable
 //    cross-account issuance and renewals. For more information, see Using a
-//    Resource Based Policy with ACM Private CA (acm-pca/latest/userguide/pca-rbp.html).
+//    Resource Based Policy with ACM Private CA (https://docs.aws.amazon.com/acm-pca/latest/userguide/pca-rbp.html).
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -2108,8 +2115,9 @@ func (c *ACMPCA) PutPolicyRequest(input *PutPolicyInput) (req *request.Request, 
 //
 // Attaches a resource-based policy to a private CA.
 //
-// A policy can also be applied by sharing (https://docs.aws.amazon.com/acm-pca/latest/userguide/pca-ram.html)
-// a private CA through AWS Resource Access Manager (RAM).
+// A policy can also be applied by sharing a private CA through AWS Resource
+// Access Manager (RAM). For more information, see Attach a Policy for Cross-Account
+// Access (https://docs.aws.amazon.com/acm-pca/latest/userguide/pca-ram.html).
 //
 // The policy can be displayed with GetPolicy (https://docs.aws.amazon.com/acm-pca/latest/APIReference/API_GetPolicy.html)
 // and removed with DeletePolicy (https://docs.aws.amazon.com/acm-pca/latest/APIReference/API_DeletePolicy.html).
@@ -2119,7 +2127,7 @@ func (c *ACMPCA) PutPolicyRequest(input *PutPolicyInput) (req *request.Request, 
 //    * A policy grants access on a private CA to an AWS customer account, to
 //    AWS Organizations, or to an AWS Organizations unit. Policies are under
 //    the control of a CA administrator. For more information, see Using a Resource
-//    Based Policy with ACM Private CA (acm-pca/latest/userguide/pca-rbp.html).
+//    Based Policy with ACM Private CA (https://docs.aws.amazon.com/acm-pca/latest/userguide/pca-rbp.html).
 //
 //    * A policy permits a user of AWS Certificate Manager (ACM) to issue ACM
 //    certificates signed by a CA in another account.
@@ -2131,8 +2139,7 @@ func (c *ACMPCA) PutPolicyRequest(input *PutPolicyInput) (req *request.Request, 
 //    Role with ACM (https://docs.aws.amazon.com/acm/latest/userguide/acm-slr.html).
 //
 //    * Updates made in AWS Resource Manager (RAM) are reflected in policies.
-//    For more information, see Using AWS Resource Access Manager (RAM) with
-//    ACM Private CA (acm-pca/latest/userguide/pca-ram.html).
+//    For more information, see Attach a Policy for Cross-Account Access (https://docs.aws.amazon.com/acm-pca/latest/userguide/pca-ram.html).
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -2154,7 +2161,7 @@ func (c *ACMPCA) PutPolicyRequest(input *PutPolicyInput) (req *request.Request, 
 //   * InvalidPolicyException
 //   The resource policy is invalid or is missing a required statement. For general
 //   information about IAM policy and statement structure, see Overview of JSON
-//   Policies (https://docs.aws.amazon.com/https:/docs.aws.amazon.com/IAM/latest/UserGuide/access_policies.html#access_policies-json).
+//   Policies (https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies.html#access_policies-json).
 //
 //   * LockoutPreventedException
 //   The current action was prevented because it would lock the caller out from
@@ -2699,7 +2706,7 @@ func (c *ACMPCA) UpdateCertificateAuthorityRequest(input *UpdateCertificateAutho
 //   * InvalidPolicyException
 //   The resource policy is invalid or is missing a required statement. For general
 //   information about IAM policy and statement structure, see Overview of JSON
-//   Policies (https://docs.aws.amazon.com/https:/docs.aws.amazon.com/IAM/latest/UserGuide/access_policies.html#access_policies-json).
+//   Policies (https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies.html#access_policies-json).
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/acm-pca-2017-08-22/UpdateCertificateAuthority
 func (c *ACMPCA) UpdateCertificateAuthority(input *UpdateCertificateAuthorityInput) (*UpdateCertificateAuthorityOutput, error) {
@@ -2723,19 +2730,20 @@ func (c *ACMPCA) UpdateCertificateAuthorityWithContext(ctx aws.Context, input *U
 	return out, req.Send()
 }
 
-// Contains information about the certificate subject. The certificate can be
-// one issued by your private certificate authority (CA) or it can be your private
-// CA certificate. The Subject field in the certificate identifies the entity
-// that owns or controls the public key in the certificate. The entity can be
-// a user, computer, device, or service. The Subject must contain an X.500 distinguished
-// name (DN). A DN is a sequence of relative distinguished names (RDNs). The
-// RDNs are separated by commas in the certificate. The DN must be unique for
-// each entity, but your private CA can issue more than one certificate with
-// the same DN to the same entity.
+// Contains information about the certificate subject. The Subject field in
+// the certificate identifies the entity that owns or controls the public key
+// in the certificate. The entity can be a user, computer, device, or service.
+// The Subject must contain an X.500 distinguished name (DN). A DN is a sequence
+// of relative distinguished names (RDNs). The RDNs are separated by commas
+// in the certificate.
 type ASN1Subject struct {
 	_ struct{} `type:"structure"`
 
-	// Fully qualified domain name (FQDN) associated with the certificate subject.
+	// For CA and end-entity certificates in a private PKI, the common name (CN)
+	// can be any string within the length limit.
+	//
+	// Note: In publicly trusted certificates, the common name must be a fully qualified
+	// domain name (FQDN) associated with the certificate subject.
 	CommonName *string `type:"string"`
 
 	// Two-digit code that specifies the country in which the certificate subject
@@ -2754,7 +2762,7 @@ type ASN1Subject struct {
 
 	// Concatenation that typically contains the first letter of the GivenName,
 	// the first letter of the middle name if one exists, and the first letter of
-	// the SurName.
+	// the Surname.
 	Initials *string `type:"string"`
 
 	// The locality (such as a city or town) in which the certificate subject is
@@ -2788,12 +2796,20 @@ type ASN1Subject struct {
 	Title *string `type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ASN1Subject) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ASN1Subject) GoString() string {
 	return s.String()
 }
@@ -2895,6 +2911,189 @@ func (s *ASN1Subject) SetTitle(v string) *ASN1Subject {
 	return s
 }
 
+// Provides access information used by the authorityInfoAccess and subjectInfoAccess
+// extensions described in RFC 5280 (https://tools.ietf.org/html/rfc5280).
+type AccessDescription struct {
+	_ struct{} `type:"structure"`
+
+	// The location of AccessDescription information.
+	//
+	// AccessLocation is a required field
+	AccessLocation *GeneralName `type:"structure" required:"true"`
+
+	// The type and format of AccessDescription information.
+	//
+	// AccessMethod is a required field
+	AccessMethod *AccessMethod `type:"structure" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s AccessDescription) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s AccessDescription) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *AccessDescription) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "AccessDescription"}
+	if s.AccessLocation == nil {
+		invalidParams.Add(request.NewErrParamRequired("AccessLocation"))
+	}
+	if s.AccessMethod == nil {
+		invalidParams.Add(request.NewErrParamRequired("AccessMethod"))
+	}
+	if s.AccessLocation != nil {
+		if err := s.AccessLocation.Validate(); err != nil {
+			invalidParams.AddNested("AccessLocation", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetAccessLocation sets the AccessLocation field's value.
+func (s *AccessDescription) SetAccessLocation(v *GeneralName) *AccessDescription {
+	s.AccessLocation = v
+	return s
+}
+
+// SetAccessMethod sets the AccessMethod field's value.
+func (s *AccessDescription) SetAccessMethod(v *AccessMethod) *AccessDescription {
+	s.AccessMethod = v
+	return s
+}
+
+// Describes the type and format of extension access. Only one of CustomObjectIdentifier
+// or AccessMethodType may be provided. Providing both results in InvalidArgsException.
+type AccessMethod struct {
+	_ struct{} `type:"structure"`
+
+	// Specifies the AccessMethod.
+	AccessMethodType *string `type:"string" enum:"AccessMethodType"`
+
+	// An object identifier (OID) specifying the AccessMethod. The OID must satisfy
+	// the regular expression shown below. For more information, see NIST's definition
+	// of Object Identifier (OID) (https://csrc.nist.gov/glossary/term/Object_Identifier).
+	CustomObjectIdentifier *string `type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s AccessMethod) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s AccessMethod) GoString() string {
+	return s.String()
+}
+
+// SetAccessMethodType sets the AccessMethodType field's value.
+func (s *AccessMethod) SetAccessMethodType(v string) *AccessMethod {
+	s.AccessMethodType = &v
+	return s
+}
+
+// SetCustomObjectIdentifier sets the CustomObjectIdentifier field's value.
+func (s *AccessMethod) SetCustomObjectIdentifier(v string) *AccessMethod {
+	s.CustomObjectIdentifier = &v
+	return s
+}
+
+// Contains X.509 certificate information to be placed in an issued certificate.
+// An APIPassthrough or APICSRPassthrough template variant must be selected,
+// or else this parameter is ignored.
+//
+// If conflicting or duplicate certificate information is supplied from other
+// sources, ACM Private CA applies order of operation rules (https://docs.aws.amazon.com/acm-pca/latest/userguide/UsingTemplates.html#template-order-of-operations)
+// to determine what information is used.
+type ApiPassthrough struct {
+	_ struct{} `type:"structure"`
+
+	// Specifies X.509 extension information for a certificate.
+	Extensions *Extensions `type:"structure"`
+
+	// Contains information about the certificate subject. The Subject field in
+	// the certificate identifies the entity that owns or controls the public key
+	// in the certificate. The entity can be a user, computer, device, or service.
+	// The Subject must contain an X.500 distinguished name (DN). A DN is a sequence
+	// of relative distinguished names (RDNs). The RDNs are separated by commas
+	// in the certificate.
+	Subject *ASN1Subject `type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ApiPassthrough) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ApiPassthrough) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ApiPassthrough) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ApiPassthrough"}
+	if s.Extensions != nil {
+		if err := s.Extensions.Validate(); err != nil {
+			invalidParams.AddNested("Extensions", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.Subject != nil {
+		if err := s.Subject.Validate(); err != nil {
+			invalidParams.AddNested("Subject", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetExtensions sets the Extensions field's value.
+func (s *ApiPassthrough) SetExtensions(v *Extensions) *ApiPassthrough {
+	s.Extensions = v
+	return s
+}
+
+// SetSubject sets the Subject field's value.
+func (s *ApiPassthrough) SetSubject(v *ASN1Subject) *ApiPassthrough {
+	s.Subject = v
+	return s
+}
+
 // Contains information about your private certificate authority (CA). Your
 // private CA can issue and revoke X.509 digital certificates. Digital certificates
 // verify that the entity named in the certificate Subject field owns or controls
@@ -2922,6 +3121,18 @@ type CertificateAuthority struct {
 	// Reason the request to create your private CA failed.
 	FailureReason *string `type:"string" enum:"FailureReason"`
 
+	// Defines a cryptographic key management compliance standard used for handling
+	// CA keys.
+	//
+	// Default: FIPS_140_2_LEVEL_3_OR_HIGHER
+	//
+	// Note: AWS Region ap-northeast-3 supports only FIPS_140_2_LEVEL_2_OR_HIGHER.
+	// You must explicitly specify this parameter and value when creating a CA in
+	// that Region. Specifying a different value (or no value) results in an InvalidArgsException
+	// with the message "A certificate authority cannot be created in this region
+	// with the specified security standard."
+	KeyStorageSecurityStandard *string `type:"string" enum:"KeyStorageSecurityStandard"`
+
 	// Date and time at which your private CA was last updated.
 	LastStateChangeAt *time.Time `type:"timestamp"`
 
@@ -2940,8 +3151,9 @@ type CertificateAuthority struct {
 	// action.
 	RestorableUntil *time.Time `type:"timestamp"`
 
-	// Information about the certificate revocation list (CRL) created and maintained
-	// by your private CA.
+	// Information about the Online Certificate Status Protocol (OCSP) configuration
+	// or certificate revocation list (CRL) created and maintained by your private
+	// CA.
 	RevocationConfiguration *RevocationConfiguration `type:"structure"`
 
 	// Serial number of your private CA.
@@ -2954,12 +3166,20 @@ type CertificateAuthority struct {
 	Type *string `type:"string" enum:"CertificateAuthorityType"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CertificateAuthority) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CertificateAuthority) GoString() string {
 	return s.String()
 }
@@ -2985,6 +3205,12 @@ func (s *CertificateAuthority) SetCreatedAt(v time.Time) *CertificateAuthority {
 // SetFailureReason sets the FailureReason field's value.
 func (s *CertificateAuthority) SetFailureReason(v string) *CertificateAuthority {
 	s.FailureReason = &v
+	return s
+}
+
+// SetKeyStorageSecurityStandard sets the KeyStorageSecurityStandard field's value.
+func (s *CertificateAuthority) SetKeyStorageSecurityStandard(v string) *CertificateAuthority {
+	s.KeyStorageSecurityStandard = &v
 	return s
 }
 
@@ -3052,6 +3278,10 @@ func (s *CertificateAuthority) SetType(v string) *CertificateAuthority {
 type CertificateAuthorityConfiguration struct {
 	_ struct{} `type:"structure"`
 
+	// Specifies information to be added to the extension section of the certificate
+	// signing request (CSR).
+	CsrExtensions *CsrExtensions `type:"structure"`
+
 	// Type of the public key algorithm and size, in bits, of the key pair that
 	// your CA creates when it issues a certificate. When you create a subordinate
 	// CA, you must use a key algorithm supported by the parent CA.
@@ -3074,12 +3304,20 @@ type CertificateAuthorityConfiguration struct {
 	Subject *ASN1Subject `type:"structure" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CertificateAuthorityConfiguration) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CertificateAuthorityConfiguration) GoString() string {
 	return s.String()
 }
@@ -3096,6 +3334,11 @@ func (s *CertificateAuthorityConfiguration) Validate() error {
 	if s.Subject == nil {
 		invalidParams.Add(request.NewErrParamRequired("Subject"))
 	}
+	if s.CsrExtensions != nil {
+		if err := s.CsrExtensions.Validate(); err != nil {
+			invalidParams.AddNested("CsrExtensions", err.(request.ErrInvalidParams))
+		}
+	}
 	if s.Subject != nil {
 		if err := s.Subject.Validate(); err != nil {
 			invalidParams.AddNested("Subject", err.(request.ErrInvalidParams))
@@ -3106,6 +3349,12 @@ func (s *CertificateAuthorityConfiguration) Validate() error {
 		return invalidParams
 	}
 	return nil
+}
+
+// SetCsrExtensions sets the CsrExtensions field's value.
+func (s *CertificateAuthorityConfiguration) SetCsrExtensions(v *CsrExtensions) *CertificateAuthorityConfiguration {
+	s.CsrExtensions = v
+	return s
 }
 
 // SetKeyAlgorithm sets the KeyAlgorithm field's value.
@@ -3135,12 +3384,20 @@ type CertificateMismatchException struct {
 	Message_ *string `locationName:"message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CertificateMismatchException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CertificateMismatchException) GoString() string {
 	return s.String()
 }
@@ -3191,12 +3448,20 @@ type ConcurrentModificationException struct {
 	Message_ *string `locationName:"message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ConcurrentModificationException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ConcurrentModificationException) GoString() string {
 	return s.String()
 }
@@ -3260,12 +3525,20 @@ type CreateCertificateAuthorityAuditReportInput struct {
 	S3BucketName *string `min:"3" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateCertificateAuthorityAuditReportInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateCertificateAuthorityAuditReportInput) GoString() string {
 	return s.String()
 }
@@ -3323,12 +3596,20 @@ type CreateCertificateAuthorityAuditReportOutput struct {
 	S3Key *string `type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateCertificateAuthorityAuditReportOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateCertificateAuthorityAuditReportOutput) GoString() string {
 	return s.String()
 }
@@ -3359,20 +3640,33 @@ type CreateCertificateAuthorityInput struct {
 	// CertificateAuthorityType is a required field
 	CertificateAuthorityType *string `type:"string" required:"true" enum:"CertificateAuthorityType"`
 
-	// Alphanumeric string that can be used to distinguish between calls to CreateCertificateAuthority.
-	// For a given token, ACM Private CA creates exactly one CA. If you issue a
-	// subsequent call using the same token, ACM Private CA returns the ARN of the
-	// existing CA and takes no further action. If you change the idempotency token
-	// across multiple calls, ACM Private CA creates a unique CA for each unique
-	// token.
+	// Custom string that can be used to distinguish between calls to the CreateCertificateAuthority
+	// action. Idempotency tokens for CreateCertificateAuthority time out after
+	// five minutes. Therefore, if you call CreateCertificateAuthority multiple
+	// times with the same idempotency token within five minutes, ACM Private CA
+	// recognizes that you are requesting only certificate authority and will issue
+	// only one. If you change the idempotency token for each call, PCA recognizes
+	// that you are requesting multiple certificate authorities.
 	IdempotencyToken *string `min:"1" type:"string"`
 
-	// Contains a Boolean value that you can use to enable a certification revocation
-	// list (CRL) for the CA, the name of the S3 bucket to which ACM Private CA
-	// will write the CRL, and an optional CNAME alias that you can use to hide
-	// the name of your bucket in the CRL Distribution Points extension of your
-	// CA certificate. For more information, see the CrlConfiguration (https://docs.aws.amazon.com/acm-pca/latest/APIReference/API_CrlConfiguration.html)
-	// structure.
+	// Specifies a cryptographic key management compliance standard used for handling
+	// CA keys.
+	//
+	// Default: FIPS_140_2_LEVEL_3_OR_HIGHER
+	//
+	// Note: FIPS_140_2_LEVEL_3_OR_HIGHER is not supported in Region ap-northeast-3.
+	// When creating a CA in the ap-northeast-3, you must provide FIPS_140_2_LEVEL_2_OR_HIGHER
+	// as the argument for KeyStorageSecurityStandard. Failure to do this results
+	// in an InvalidArgsException with the message, "A certificate authority cannot
+	// be created in this region with the specified security standard."
+	KeyStorageSecurityStandard *string `type:"string" enum:"KeyStorageSecurityStandard"`
+
+	// Contains information to enable Online Certificate Status Protocol (OCSP)
+	// support, to enable a certificate revocation list (CRL), to enable both, or
+	// to enable neither. The default is for both certificate validation mechanisms
+	// to be disabled. For more information, see the OcspConfiguration (https://docs.aws.amazon.com/acm-pca/latest/APIReference/API_OcspConfiguration.html)
+	// and CrlConfiguration (https://docs.aws.amazon.com/acm-pca/latest/APIReference/API_CrlConfiguration.html)
+	// types.
 	RevocationConfiguration *RevocationConfiguration `type:"structure"`
 
 	// Key-value pairs that will be attached to the new private CA. You can associate
@@ -3381,12 +3675,20 @@ type CreateCertificateAuthorityInput struct {
 	Tags []*Tag `min:"1" type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateCertificateAuthorityInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateCertificateAuthorityInput) GoString() string {
 	return s.String()
 }
@@ -3451,6 +3753,12 @@ func (s *CreateCertificateAuthorityInput) SetIdempotencyToken(v string) *CreateC
 	return s
 }
 
+// SetKeyStorageSecurityStandard sets the KeyStorageSecurityStandard field's value.
+func (s *CreateCertificateAuthorityInput) SetKeyStorageSecurityStandard(v string) *CreateCertificateAuthorityInput {
+	s.KeyStorageSecurityStandard = &v
+	return s
+}
+
 // SetRevocationConfiguration sets the RevocationConfiguration field's value.
 func (s *CreateCertificateAuthorityInput) SetRevocationConfiguration(v *RevocationConfiguration) *CreateCertificateAuthorityInput {
 	s.RevocationConfiguration = v
@@ -3473,12 +3781,20 @@ type CreateCertificateAuthorityOutput struct {
 	CertificateAuthorityArn *string `min:"5" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateCertificateAuthorityOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateCertificateAuthorityOutput) GoString() string {
 	return s.String()
 }
@@ -3517,12 +3833,20 @@ type CreatePermissionInput struct {
 	SourceAccount *string `min:"12" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreatePermissionInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreatePermissionInput) GoString() string {
 	return s.String()
 }
@@ -3583,12 +3907,20 @@ type CreatePermissionOutput struct {
 	_ struct{} `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreatePermissionOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreatePermissionOutput) GoString() string {
 	return s.String()
 }
@@ -3603,7 +3935,7 @@ func (s CreatePermissionOutput) GoString() string {
 // Points extension of each certificate it issues. Your S3 bucket policy must
 // give write permission to ACM Private CA.
 //
-// ACM Private CAA assets that are stored in Amazon S3 can be protected with
+// ACM Private CA assets that are stored in Amazon S3 can be protected with
 // encryption. For more information, see Encrypting Your CRLs (https://docs.aws.amazon.com/acm-pca/latest/userguide/PcaCreateCa.html#crl-encryption).
 //
 // Your private CA uses the value in the ExpirationInDays parameter to calculate
@@ -3612,6 +3944,10 @@ func (s CreatePermissionOutput) GoString() string {
 // is recorded in the next CRL that is generated and in the next audit report.
 // Only time valid certificates are listed in the CRL. Expired certificates
 // are not included.
+//
+// A CRL is typically updated approximately 30 minutes after a certificate is
+// revoked. If for any reason a CRL update fails, ACM Private CA makes further
+// attempts every 15 minutes.
 //
 // CRLs contain the following fields:
 //
@@ -3646,6 +3982,9 @@ func (s CreatePermissionOutput) GoString() string {
 // can use the following OpenSSL command to list a CRL.
 //
 // openssl crl -inform DER -text -in crl_path -noout
+//
+// For more information, see Planning a certificate revocation list (CRL) (https://docs.aws.amazon.com/acm-pca/latest/userguide/crl-planning.html)
+// in the AWS Certificate Manager Private Certificate Authority (PCA) User Guide
 type CrlConfiguration struct {
 	_ struct{} `type:"structure"`
 
@@ -3664,24 +4003,49 @@ type CrlConfiguration struct {
 	// Enabled is a required field
 	Enabled *bool `type:"boolean" required:"true"`
 
-	// Number of days until a certificate expires.
+	// Validity period of the CRL in days.
 	ExpirationInDays *int64 `min:"1" type:"integer"`
 
 	// Name of the S3 bucket that contains the CRL. If you do not provide a value
 	// for the CustomCname argument, the name of your S3 bucket is placed into the
 	// CRL Distribution Points extension of the issued certificate. You can change
 	// the name of your bucket by calling the UpdateCertificateAuthority (https://docs.aws.amazon.com/acm-pca/latest/APIReference/API_UpdateCertificateAuthority.html)
-	// action. You must specify a bucket policy that allows ACM Private CA to write
-	// the CRL to your bucket.
+	// operation. You must specify a bucket policy (https://docs.aws.amazon.com/acm-pca/latest/userguide/PcaCreateCa.html#s3-policies)
+	// that allows ACM Private CA to write the CRL to your bucket.
 	S3BucketName *string `min:"3" type:"string"`
+
+	// Determines whether the CRL will be publicly readable or privately held in
+	// the CRL Amazon S3 bucket. If you choose PUBLIC_READ, the CRL will be accessible
+	// over the public internet. If you choose BUCKET_OWNER_FULL_CONTROL, only the
+	// owner of the CRL S3 bucket can access the CRL, and your PKI clients may need
+	// an alternative method of access.
+	//
+	// If no value is specified, the default is PUBLIC_READ.
+	//
+	// Note: This default can cause CA creation to fail in some circumstances. If
+	// you have have enabled the Block Public Access (BPA) feature in your S3 account,
+	// then you must specify the value of this parameter as BUCKET_OWNER_FULL_CONTROL,
+	// and not doing so results in an error. If you have disabled BPA in S3, then
+	// you can specify either BUCKET_OWNER_FULL_CONTROL or PUBLIC_READ as the value.
+	//
+	// For more information, see Blocking public access to the S3 bucket (https://docs.aws.amazon.com/acm-pca/latest/userguide/PcaCreateCa.html#s3-bpa).
+	S3ObjectAcl *string `type:"string" enum:"S3ObjectAcl"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CrlConfiguration) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CrlConfiguration) GoString() string {
 	return s.String()
 }
@@ -3729,6 +4093,78 @@ func (s *CrlConfiguration) SetS3BucketName(v string) *CrlConfiguration {
 	return s
 }
 
+// SetS3ObjectAcl sets the S3ObjectAcl field's value.
+func (s *CrlConfiguration) SetS3ObjectAcl(v string) *CrlConfiguration {
+	s.S3ObjectAcl = &v
+	return s
+}
+
+// Describes the certificate extensions to be added to the certificate signing
+// request (CSR).
+type CsrExtensions struct {
+	_ struct{} `type:"structure"`
+
+	// Indicates the purpose of the certificate and of the key contained in the
+	// certificate.
+	KeyUsage *KeyUsage `type:"structure"`
+
+	// For CA certificates, provides a path to additional information pertaining
+	// to the CA, such as revocation and policy. For more information, see Subject
+	// Information Access (https://tools.ietf.org/html/rfc5280#section-4.2.2.2)
+	// in RFC 5280.
+	SubjectInformationAccess []*AccessDescription `type:"list"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CsrExtensions) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CsrExtensions) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *CsrExtensions) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "CsrExtensions"}
+	if s.SubjectInformationAccess != nil {
+		for i, v := range s.SubjectInformationAccess {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "SubjectInformationAccess", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetKeyUsage sets the KeyUsage field's value.
+func (s *CsrExtensions) SetKeyUsage(v *KeyUsage) *CsrExtensions {
+	s.KeyUsage = v
+	return s
+}
+
+// SetSubjectInformationAccess sets the SubjectInformationAccess field's value.
+func (s *CsrExtensions) SetSubjectInformationAccess(v []*AccessDescription) *CsrExtensions {
+	s.SubjectInformationAccess = v
+	return s
+}
+
 type DeleteCertificateAuthorityInput struct {
 	_ struct{} `type:"structure"`
 
@@ -3746,12 +4182,20 @@ type DeleteCertificateAuthorityInput struct {
 	PermanentDeletionTimeInDays *int64 `min:"7" type:"integer"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteCertificateAuthorityInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteCertificateAuthorityInput) GoString() string {
 	return s.String()
 }
@@ -3791,12 +4235,20 @@ type DeleteCertificateAuthorityOutput struct {
 	_ struct{} `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteCertificateAuthorityOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteCertificateAuthorityOutput) GoString() string {
 	return s.String()
 }
@@ -3823,12 +4275,20 @@ type DeletePermissionInput struct {
 	SourceAccount *string `min:"12" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeletePermissionInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeletePermissionInput) GoString() string {
 	return s.String()
 }
@@ -3877,12 +4337,20 @@ type DeletePermissionOutput struct {
 	_ struct{} `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeletePermissionOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeletePermissionOutput) GoString() string {
 	return s.String()
 }
@@ -3899,12 +4367,20 @@ type DeletePolicyInput struct {
 	ResourceArn *string `min:"5" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeletePolicyInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeletePolicyInput) GoString() string {
 	return s.String()
 }
@@ -3935,12 +4411,20 @@ type DeletePolicyOutput struct {
 	_ struct{} `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeletePolicyOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeletePolicyOutput) GoString() string {
 	return s.String()
 }
@@ -3963,12 +4447,20 @@ type DescribeCertificateAuthorityAuditReportInput struct {
 	CertificateAuthorityArn *string `min:"5" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeCertificateAuthorityAuditReportInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeCertificateAuthorityAuditReportInput) GoString() string {
 	return s.String()
 }
@@ -4023,12 +4515,20 @@ type DescribeCertificateAuthorityAuditReportOutput struct {
 	S3Key *string `type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeCertificateAuthorityAuditReportOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeCertificateAuthorityAuditReportOutput) GoString() string {
 	return s.String()
 }
@@ -4070,12 +4570,20 @@ type DescribeCertificateAuthorityInput struct {
 	CertificateAuthorityArn *string `min:"5" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeCertificateAuthorityInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeCertificateAuthorityInput) GoString() string {
 	return s.String()
 }
@@ -4110,12 +4618,20 @@ type DescribeCertificateAuthorityOutput struct {
 	CertificateAuthority *CertificateAuthority `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeCertificateAuthorityOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeCertificateAuthorityOutput) GoString() string {
 	return s.String()
 }
@@ -4123,6 +4639,343 @@ func (s DescribeCertificateAuthorityOutput) GoString() string {
 // SetCertificateAuthority sets the CertificateAuthority field's value.
 func (s *DescribeCertificateAuthorityOutput) SetCertificateAuthority(v *CertificateAuthority) *DescribeCertificateAuthorityOutput {
 	s.CertificateAuthority = v
+	return s
+}
+
+// Describes an Electronic Data Interchange (EDI) entity as described in as
+// defined in Subject Alternative Name (https://tools.ietf.org/html/rfc5280)
+// in RFC 5280.
+type EdiPartyName struct {
+	_ struct{} `type:"structure"`
+
+	// Specifies the name assigner.
+	NameAssigner *string `type:"string"`
+
+	// Specifies the party name.
+	//
+	// PartyName is a required field
+	PartyName *string `type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s EdiPartyName) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s EdiPartyName) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *EdiPartyName) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "EdiPartyName"}
+	if s.PartyName == nil {
+		invalidParams.Add(request.NewErrParamRequired("PartyName"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetNameAssigner sets the NameAssigner field's value.
+func (s *EdiPartyName) SetNameAssigner(v string) *EdiPartyName {
+	s.NameAssigner = &v
+	return s
+}
+
+// SetPartyName sets the PartyName field's value.
+func (s *EdiPartyName) SetPartyName(v string) *EdiPartyName {
+	s.PartyName = &v
+	return s
+}
+
+// Specifies additional purposes for which the certified public key may be used
+// other than basic purposes indicated in the KeyUsage extension.
+type ExtendedKeyUsage struct {
+	_ struct{} `type:"structure"`
+
+	// Specifies a custom ExtendedKeyUsage with an object identifier (OID).
+	ExtendedKeyUsageObjectIdentifier *string `type:"string"`
+
+	// Specifies a standard ExtendedKeyUsage as defined as in RFC 5280 (https://tools.ietf.org/html/rfc5280#section-4.2.1.12).
+	ExtendedKeyUsageType *string `type:"string" enum:"ExtendedKeyUsageType"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ExtendedKeyUsage) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ExtendedKeyUsage) GoString() string {
+	return s.String()
+}
+
+// SetExtendedKeyUsageObjectIdentifier sets the ExtendedKeyUsageObjectIdentifier field's value.
+func (s *ExtendedKeyUsage) SetExtendedKeyUsageObjectIdentifier(v string) *ExtendedKeyUsage {
+	s.ExtendedKeyUsageObjectIdentifier = &v
+	return s
+}
+
+// SetExtendedKeyUsageType sets the ExtendedKeyUsageType field's value.
+func (s *ExtendedKeyUsage) SetExtendedKeyUsageType(v string) *ExtendedKeyUsage {
+	s.ExtendedKeyUsageType = &v
+	return s
+}
+
+// Contains X.509 extension information for a certificate.
+type Extensions struct {
+	_ struct{} `type:"structure"`
+
+	// Contains a sequence of one or more policy information terms, each of which
+	// consists of an object identifier (OID) and optional qualifiers. For more
+	// information, see NIST's definition of Object Identifier (OID) (https://csrc.nist.gov/glossary/term/Object_Identifier).
+	//
+	// In an end-entity certificate, these terms indicate the policy under which
+	// the certificate was issued and the purposes for which it may be used. In
+	// a CA certificate, these terms limit the set of policies for certification
+	// paths that include this certificate.
+	CertificatePolicies []*PolicyInformation `min:"1" type:"list"`
+
+	// Specifies additional purposes for which the certified public key may be used
+	// other than basic purposes indicated in the KeyUsage extension.
+	ExtendedKeyUsage []*ExtendedKeyUsage `min:"1" type:"list"`
+
+	// Defines one or more purposes for which the key contained in the certificate
+	// can be used. Default value for each option is false.
+	KeyUsage *KeyUsage `type:"structure"`
+
+	// The subject alternative name extension allows identities to be bound to the
+	// subject of the certificate. These identities may be included in addition
+	// to or in place of the identity in the subject field of the certificate.
+	SubjectAlternativeNames []*GeneralName `min:"1" type:"list"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s Extensions) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s Extensions) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *Extensions) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "Extensions"}
+	if s.CertificatePolicies != nil && len(s.CertificatePolicies) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("CertificatePolicies", 1))
+	}
+	if s.ExtendedKeyUsage != nil && len(s.ExtendedKeyUsage) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ExtendedKeyUsage", 1))
+	}
+	if s.SubjectAlternativeNames != nil && len(s.SubjectAlternativeNames) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("SubjectAlternativeNames", 1))
+	}
+	if s.CertificatePolicies != nil {
+		for i, v := range s.CertificatePolicies {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "CertificatePolicies", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+	if s.SubjectAlternativeNames != nil {
+		for i, v := range s.SubjectAlternativeNames {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "SubjectAlternativeNames", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetCertificatePolicies sets the CertificatePolicies field's value.
+func (s *Extensions) SetCertificatePolicies(v []*PolicyInformation) *Extensions {
+	s.CertificatePolicies = v
+	return s
+}
+
+// SetExtendedKeyUsage sets the ExtendedKeyUsage field's value.
+func (s *Extensions) SetExtendedKeyUsage(v []*ExtendedKeyUsage) *Extensions {
+	s.ExtendedKeyUsage = v
+	return s
+}
+
+// SetKeyUsage sets the KeyUsage field's value.
+func (s *Extensions) SetKeyUsage(v *KeyUsage) *Extensions {
+	s.KeyUsage = v
+	return s
+}
+
+// SetSubjectAlternativeNames sets the SubjectAlternativeNames field's value.
+func (s *Extensions) SetSubjectAlternativeNames(v []*GeneralName) *Extensions {
+	s.SubjectAlternativeNames = v
+	return s
+}
+
+// Describes an ASN.1 X.400 GeneralName as defined in RFC 5280 (https://tools.ietf.org/html/rfc5280).
+// Only one of the following naming options should be provided. Providing more
+// than one option results in an InvalidArgsException error.
+type GeneralName struct {
+	_ struct{} `type:"structure"`
+
+	// Contains information about the certificate subject. The Subject field in
+	// the certificate identifies the entity that owns or controls the public key
+	// in the certificate. The entity can be a user, computer, device, or service.
+	// The Subject must contain an X.500 distinguished name (DN). A DN is a sequence
+	// of relative distinguished names (RDNs). The RDNs are separated by commas
+	// in the certificate.
+	DirectoryName *ASN1Subject `type:"structure"`
+
+	// Represents GeneralName as a DNS name.
+	DnsName *string `type:"string"`
+
+	// Represents GeneralName as an EdiPartyName object.
+	EdiPartyName *EdiPartyName `type:"structure"`
+
+	// Represents GeneralName as an IPv4 or IPv6 address.
+	IpAddress *string `type:"string"`
+
+	// Represents GeneralName using an OtherName object.
+	OtherName *OtherName `type:"structure"`
+
+	// Represents GeneralName as an object identifier (OID).
+	RegisteredId *string `type:"string"`
+
+	// Represents GeneralName as an RFC 822 (https://tools.ietf.org/html/rfc822)
+	// email address.
+	Rfc822Name *string `type:"string"`
+
+	// Represents GeneralName as a URI.
+	UniformResourceIdentifier *string `type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GeneralName) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GeneralName) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *GeneralName) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "GeneralName"}
+	if s.DirectoryName != nil {
+		if err := s.DirectoryName.Validate(); err != nil {
+			invalidParams.AddNested("DirectoryName", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.EdiPartyName != nil {
+		if err := s.EdiPartyName.Validate(); err != nil {
+			invalidParams.AddNested("EdiPartyName", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.OtherName != nil {
+		if err := s.OtherName.Validate(); err != nil {
+			invalidParams.AddNested("OtherName", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetDirectoryName sets the DirectoryName field's value.
+func (s *GeneralName) SetDirectoryName(v *ASN1Subject) *GeneralName {
+	s.DirectoryName = v
+	return s
+}
+
+// SetDnsName sets the DnsName field's value.
+func (s *GeneralName) SetDnsName(v string) *GeneralName {
+	s.DnsName = &v
+	return s
+}
+
+// SetEdiPartyName sets the EdiPartyName field's value.
+func (s *GeneralName) SetEdiPartyName(v *EdiPartyName) *GeneralName {
+	s.EdiPartyName = v
+	return s
+}
+
+// SetIpAddress sets the IpAddress field's value.
+func (s *GeneralName) SetIpAddress(v string) *GeneralName {
+	s.IpAddress = &v
+	return s
+}
+
+// SetOtherName sets the OtherName field's value.
+func (s *GeneralName) SetOtherName(v *OtherName) *GeneralName {
+	s.OtherName = v
+	return s
+}
+
+// SetRegisteredId sets the RegisteredId field's value.
+func (s *GeneralName) SetRegisteredId(v string) *GeneralName {
+	s.RegisteredId = &v
+	return s
+}
+
+// SetRfc822Name sets the Rfc822Name field's value.
+func (s *GeneralName) SetRfc822Name(v string) *GeneralName {
+	s.Rfc822Name = &v
+	return s
+}
+
+// SetUniformResourceIdentifier sets the UniformResourceIdentifier field's value.
+func (s *GeneralName) SetUniformResourceIdentifier(v string) *GeneralName {
+	s.UniformResourceIdentifier = &v
 	return s
 }
 
@@ -4137,12 +4990,20 @@ type GetCertificateAuthorityCertificateInput struct {
 	CertificateAuthorityArn *string `min:"5" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetCertificateAuthorityCertificateInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetCertificateAuthorityCertificateInput) GoString() string {
 	return s.String()
 }
@@ -4176,18 +5037,26 @@ type GetCertificateAuthorityCertificateOutput struct {
 	Certificate *string `type:"string"`
 
 	// Base64-encoded certificate chain that includes any intermediate certificates
-	// and chains up to root on-premises certificate that you used to sign your
-	// private CA certificate. The chain does not include your private CA certificate.
-	// If this is a root CA, the value will be null.
+	// and chains up to root certificate that you used to sign your private CA certificate.
+	// The chain does not include your private CA certificate. If this is a root
+	// CA, the value will be null.
 	CertificateChain *string `type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetCertificateAuthorityCertificateOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetCertificateAuthorityCertificateOutput) GoString() string {
 	return s.String()
 }
@@ -4217,12 +5086,20 @@ type GetCertificateAuthorityCsrInput struct {
 	CertificateAuthorityArn *string `min:"5" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetCertificateAuthorityCsrInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetCertificateAuthorityCsrInput) GoString() string {
 	return s.String()
 }
@@ -4257,12 +5134,20 @@ type GetCertificateAuthorityCsrOutput struct {
 	Csr *string `type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetCertificateAuthorityCsrOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetCertificateAuthorityCsrOutput) GoString() string {
 	return s.String()
 }
@@ -4294,12 +5179,20 @@ type GetCertificateInput struct {
 	CertificateAuthorityArn *string `min:"5" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetCertificateInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetCertificateInput) GoString() string {
 	return s.String()
 }
@@ -4344,17 +5237,25 @@ type GetCertificateOutput struct {
 	// The base64 PEM-encoded certificate specified by the CertificateArn parameter.
 	Certificate *string `type:"string"`
 
-	// The base64 PEM-encoded certificate chain that chains up to the on-premises
-	// root CA certificate that you used to sign your private CA certificate.
+	// The base64 PEM-encoded certificate chain that chains up to the root CA certificate
+	// that you used to sign your private CA certificate.
 	CertificateChain *string `type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetCertificateOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetCertificateOutput) GoString() string {
 	return s.String()
 }
@@ -4382,12 +5283,20 @@ type GetPolicyInput struct {
 	ResourceArn *string `min:"5" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetPolicyInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetPolicyInput) GoString() string {
 	return s.String()
 }
@@ -4421,12 +5330,20 @@ type GetPolicyOutput struct {
 	Policy *string `min:"1" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetPolicyOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetPolicyOutput) GoString() string {
 	return s.String()
 }
@@ -4442,7 +5359,6 @@ type ImportCertificateAuthorityCertificateInput struct {
 
 	// The PEM-encoded certificate for a private CA. This may be a self-signed certificate
 	// in the case of a root CA, or it may be signed by another CA that you control.
-	//
 	// Certificate is automatically base64 encoded/decoded by the SDK.
 	//
 	// Certificate is a required field
@@ -4464,17 +5380,24 @@ type ImportCertificateAuthorityCertificateInput struct {
 	//
 	// This parameter must be supplied when you import a subordinate CA. When you
 	// import a root CA, there is no chain.
-	//
 	// CertificateChain is automatically base64 encoded/decoded by the SDK.
 	CertificateChain []byte `type:"blob"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ImportCertificateAuthorityCertificateInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ImportCertificateAuthorityCertificateInput) GoString() string {
 	return s.String()
 }
@@ -4523,12 +5446,20 @@ type ImportCertificateAuthorityCertificateOutput struct {
 	_ struct{} `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ImportCertificateAuthorityCertificateOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ImportCertificateAuthorityCertificateOutput) GoString() string {
 	return s.String()
 }
@@ -4541,12 +5472,20 @@ type InvalidArgsException struct {
 	Message_ *string `locationName:"message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s InvalidArgsException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s InvalidArgsException) GoString() string {
 	return s.String()
 }
@@ -4597,12 +5536,20 @@ type InvalidArnException struct {
 	Message_ *string `locationName:"message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s InvalidArnException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s InvalidArnException) GoString() string {
 	return s.String()
 }
@@ -4654,12 +5601,20 @@ type InvalidNextTokenException struct {
 	Message_ *string `locationName:"message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s InvalidNextTokenException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s InvalidNextTokenException) GoString() string {
 	return s.String()
 }
@@ -4704,7 +5659,7 @@ func (s *InvalidNextTokenException) RequestID() string {
 
 // The resource policy is invalid or is missing a required statement. For general
 // information about IAM policy and statement structure, see Overview of JSON
-// Policies (https://docs.aws.amazon.com/https:/docs.aws.amazon.com/IAM/latest/UserGuide/access_policies.html#access_policies-json).
+// Policies (https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies.html#access_policies-json).
 type InvalidPolicyException struct {
 	_            struct{}                  `type:"structure"`
 	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
@@ -4712,12 +5667,20 @@ type InvalidPolicyException struct {
 	Message_ *string `locationName:"message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s InvalidPolicyException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s InvalidPolicyException) GoString() string {
 	return s.String()
 }
@@ -4768,12 +5731,20 @@ type InvalidRequestException struct {
 	Message_ *string `locationName:"message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s InvalidRequestException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s InvalidRequestException) GoString() string {
 	return s.String()
 }
@@ -4824,12 +5795,20 @@ type InvalidStateException struct {
 	Message_ *string `locationName:"message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s InvalidStateException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s InvalidStateException) GoString() string {
 	return s.String()
 }
@@ -4881,12 +5860,20 @@ type InvalidTagException struct {
 	Message_ *string `locationName:"message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s InvalidTagException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s InvalidTagException) GoString() string {
 	return s.String()
 }
@@ -4932,6 +5919,16 @@ func (s *InvalidTagException) RequestID() string {
 type IssueCertificateInput struct {
 	_ struct{} `type:"structure"`
 
+	// Specifies X.509 certificate information to be included in the issued certificate.
+	// An APIPassthrough or APICSRPassthrough template variant must be selected,
+	// or else this parameter is ignored. For more information about using these
+	// templates, see Understanding Certificate Templates (https://docs.aws.amazon.com/acm-pca/latest/userguide/UsingTemplates.html).
+	//
+	// If conflicting or duplicate certificate information is supplied during certificate
+	// issuance, ACM Private CA applies order of operation rules (https://docs.aws.amazon.com/acm-pca/latest/userguide/UsingTemplates.html#template-order-of-operations)
+	// to determine what information is used.
+	ApiPassthrough *ApiPassthrough `type:"structure"`
+
 	// The Amazon Resource Name (ARN) that was returned when you called CreateCertificateAuthority
 	// (https://docs.aws.amazon.com/acm-pca/latest/APIReference/API_CreateCertificateAuthority.html).
 	// This must be of the form:
@@ -4942,40 +5939,40 @@ type IssueCertificateInput struct {
 	CertificateAuthorityArn *string `min:"5" type:"string" required:"true"`
 
 	// The certificate signing request (CSR) for the certificate you want to issue.
-	// You can use the following OpenSSL command to create the CSR and a 2048 bit
-	// RSA private key.
+	// As an example, you can use the following OpenSSL command to create the CSR
+	// and a 2048 bit RSA private key.
 	//
 	// openssl req -new -newkey rsa:2048 -days 365 -keyout private/test_cert_priv_key.pem
 	// -out csr/test_cert_.csr
 	//
-	// If you have a configuration file, you can use the following OpenSSL command.
-	// The usr_cert block in the configuration file contains your X509 version 3
-	// extensions.
+	// If you have a configuration file, you can then use the following OpenSSL
+	// command. The usr_cert block in the configuration file contains your X509
+	// version 3 extensions.
 	//
 	// openssl req -new -config openssl_rsa.cnf -extensions usr_cert -newkey rsa:2048
 	// -days -365 -keyout private/test_cert_priv_key.pem -out csr/test_cert_.csr
 	//
 	// Note: A CSR must provide either a subject name or a subject alternative name
 	// or the request will be rejected.
-	//
 	// Csr is automatically base64 encoded/decoded by the SDK.
 	//
 	// Csr is a required field
 	Csr []byte `min:"1" type:"blob" required:"true"`
 
-	// Custom string that can be used to distinguish between calls to the IssueCertificate
-	// action. Idempotency tokens time out after one hour. Therefore, if you call
-	// IssueCertificate multiple times with the same idempotency token within 5
-	// minutes, ACM Private CA recognizes that you are requesting only one certificate
-	// and will issue only one. If you change the idempotency token for each call,
-	// PCA recognizes that you are requesting multiple certificates.
+	// Alphanumeric string that can be used to distinguish between calls to the
+	// IssueCertificate action. Idempotency tokens for IssueCertificate time out
+	// after one minute. Therefore, if you call IssueCertificate multiple times
+	// with the same idempotency token within one minute, ACM Private CA recognizes
+	// that you are requesting only one certificate and will issue only one. If
+	// you change the idempotency token for each call, PCA recognizes that you are
+	// requesting multiple certificates.
 	IdempotencyToken *string `min:"1" type:"string"`
 
 	// The name of the algorithm that will be used to sign the certificate to be
 	// issued.
 	//
 	// This parameter should not be confused with the SigningAlgorithm parameter
-	// used to sign a CSR.
+	// used to sign a CSR in the CreateCertificateAuthority action.
 	//
 	// SigningAlgorithm is a required field
 	SigningAlgorithm *string `type:"string" required:"true" enum:"SigningAlgorithm"`
@@ -4989,61 +5986,60 @@ type IssueCertificateInput struct {
 	// Note: The CA depth configured on a subordinate CA certificate must not exceed
 	// the limit set by its parents in the CA hierarchy.
 	//
-	// The following service-owned TemplateArn values are supported by ACM Private
-	// CA:
-	//
-	//    * arn:aws:acm-pca:::template/CodeSigningCertificate/V1
-	//
-	//    * arn:aws:acm-pca:::template/CodeSigningCertificate_CSRPassthrough/V1
-	//
-	//    * arn:aws:acm-pca:::template/EndEntityCertificate/V1
-	//
-	//    * arn:aws:acm-pca:::template/EndEntityCertificate_CSRPassthrough/V1
-	//
-	//    * arn:aws:acm-pca:::template/EndEntityClientAuthCertificate/V1
-	//
-	//    * arn:aws:acm-pca:::template/EndEntityClientAuthCertificate_CSRPassthrough/V1
-	//
-	//    * arn:aws:acm-pca:::template/EndEntityServerAuthCertificate/V1
-	//
-	//    * arn:aws:acm-pca:::template/EndEntityServerAuthCertificate_CSRPassthrough/V1
-	//
-	//    * arn:aws:acm-pca:::template/OCSPSigningCertificate/V1
-	//
-	//    * arn:aws:acm-pca:::template/OCSPSigningCertificate_CSRPassthrough/V1
-	//
-	//    * arn:aws:acm-pca:::template/RootCACertificate/V1
-	//
-	//    * arn:aws:acm-pca:::template/SubordinateCACertificate_PathLen0/V1
-	//
-	//    * arn:aws:acm-pca:::template/SubordinateCACertificate_PathLen1/V1
-	//
-	//    * arn:aws:acm-pca:::template/SubordinateCACertificate_PathLen2/V1
-	//
-	//    * arn:aws:acm-pca:::template/SubordinateCACertificate_PathLen3/V1
-	//
-	// For more information, see Using Templates (https://docs.aws.amazon.com/acm-pca/latest/userguide/UsingTemplates.html).
+	// For a list of TemplateArn values supported by ACM Private CA, see Understanding
+	// Certificate Templates (https://docs.aws.amazon.com/acm-pca/latest/userguide/UsingTemplates.html).
 	TemplateArn *string `min:"5" type:"string"`
 
-	// Information describing the validity period of the certificate.
+	// Information describing the end of the validity period of the certificate.
+	// This parameter sets the “Not After” date for the certificate.
 	//
-	// When issuing a certificate, ACM Private CA sets the "Not Before" date in
-	// the validity field to date and time minus 60 minutes. This is intended to
-	// compensate for time inconsistencies across systems of 60 minutes or less.
+	// Certificate validity is the period of time during which a certificate is
+	// valid. Validity can be expressed as an explicit date and time when the certificate
+	// expires, or as a span of time after issuance, stated in days, months, or
+	// years. For more information, see Validity (https://tools.ietf.org/html/rfc5280#section-4.1.2.5)
+	// in RFC 5280.
 	//
-	// The validity period configured on a certificate must not exceed the limit
-	// set by its parents in the CA hierarchy.
+	// This value is unaffected when ValidityNotBefore is also specified. For example,
+	// if Validity is set to 20 days in the future, the certificate will expire
+	// 20 days from issuance time regardless of the ValidityNotBefore value.
+	//
+	// The end of the validity period configured on a certificate must not exceed
+	// the limit set on its parents in the CA hierarchy.
 	//
 	// Validity is a required field
 	Validity *Validity `type:"structure" required:"true"`
+
+	// Information describing the start of the validity period of the certificate.
+	// This parameter sets the “Not Before" date for the certificate.
+	//
+	// By default, when issuing a certificate, ACM Private CA sets the "Not Before"
+	// date to the issuance time minus 60 minutes. This compensates for clock inconsistencies
+	// across computer systems. The ValidityNotBefore parameter can be used to customize
+	// the “Not Before” value.
+	//
+	// Unlike the Validity parameter, the ValidityNotBefore parameter is optional.
+	//
+	// The ValidityNotBefore value is expressed as an explicit date and time, using
+	// the Validity type value ABSOLUTE. For more information, see Validity (https://docs.aws.amazon.com/acm-pca/latest/APIReference/API_Validity.html)
+	// in this API reference and Validity (https://tools.ietf.org/html/rfc5280#section-4.1.2.5)
+	// in RFC 5280.
+	ValidityNotBefore *Validity `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s IssueCertificateInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s IssueCertificateInput) GoString() string {
 	return s.String()
 }
@@ -5075,9 +6071,19 @@ func (s *IssueCertificateInput) Validate() error {
 	if s.Validity == nil {
 		invalidParams.Add(request.NewErrParamRequired("Validity"))
 	}
+	if s.ApiPassthrough != nil {
+		if err := s.ApiPassthrough.Validate(); err != nil {
+			invalidParams.AddNested("ApiPassthrough", err.(request.ErrInvalidParams))
+		}
+	}
 	if s.Validity != nil {
 		if err := s.Validity.Validate(); err != nil {
 			invalidParams.AddNested("Validity", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.ValidityNotBefore != nil {
+		if err := s.ValidityNotBefore.Validate(); err != nil {
+			invalidParams.AddNested("ValidityNotBefore", err.(request.ErrInvalidParams))
 		}
 	}
 
@@ -5085,6 +6091,12 @@ func (s *IssueCertificateInput) Validate() error {
 		return invalidParams
 	}
 	return nil
+}
+
+// SetApiPassthrough sets the ApiPassthrough field's value.
+func (s *IssueCertificateInput) SetApiPassthrough(v *ApiPassthrough) *IssueCertificateInput {
+	s.ApiPassthrough = v
+	return s
 }
 
 // SetCertificateAuthorityArn sets the CertificateAuthorityArn field's value.
@@ -5123,6 +6135,12 @@ func (s *IssueCertificateInput) SetValidity(v *Validity) *IssueCertificateInput 
 	return s
 }
 
+// SetValidityNotBefore sets the ValidityNotBefore field's value.
+func (s *IssueCertificateInput) SetValidityNotBefore(v *Validity) *IssueCertificateInput {
+	s.ValidityNotBefore = v
+	return s
+}
+
 type IssueCertificateOutput struct {
 	_ struct{} `type:"structure"`
 
@@ -5133,12 +6151,20 @@ type IssueCertificateOutput struct {
 	CertificateArn *string `min:"5" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s IssueCertificateOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s IssueCertificateOutput) GoString() string {
 	return s.String()
 }
@@ -5146,6 +6172,111 @@ func (s IssueCertificateOutput) GoString() string {
 // SetCertificateArn sets the CertificateArn field's value.
 func (s *IssueCertificateOutput) SetCertificateArn(v string) *IssueCertificateOutput {
 	s.CertificateArn = &v
+	return s
+}
+
+// Defines one or more purposes for which the key contained in the certificate
+// can be used. Default value for each option is false.
+type KeyUsage struct {
+	_ struct{} `type:"structure"`
+
+	// Key can be used to sign CRLs.
+	CRLSign *bool `type:"boolean"`
+
+	// Key can be used to decipher data.
+	DataEncipherment *bool `type:"boolean"`
+
+	// Key can be used only to decipher data.
+	DecipherOnly *bool `type:"boolean"`
+
+	// Key can be used for digital signing.
+	DigitalSignature *bool `type:"boolean"`
+
+	// Key can be used only to encipher data.
+	EncipherOnly *bool `type:"boolean"`
+
+	// Key can be used in a key-agreement protocol.
+	KeyAgreement *bool `type:"boolean"`
+
+	// Key can be used to sign certificates.
+	KeyCertSign *bool `type:"boolean"`
+
+	// Key can be used to encipher data.
+	KeyEncipherment *bool `type:"boolean"`
+
+	// Key can be used for non-repudiation.
+	NonRepudiation *bool `type:"boolean"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s KeyUsage) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s KeyUsage) GoString() string {
+	return s.String()
+}
+
+// SetCRLSign sets the CRLSign field's value.
+func (s *KeyUsage) SetCRLSign(v bool) *KeyUsage {
+	s.CRLSign = &v
+	return s
+}
+
+// SetDataEncipherment sets the DataEncipherment field's value.
+func (s *KeyUsage) SetDataEncipherment(v bool) *KeyUsage {
+	s.DataEncipherment = &v
+	return s
+}
+
+// SetDecipherOnly sets the DecipherOnly field's value.
+func (s *KeyUsage) SetDecipherOnly(v bool) *KeyUsage {
+	s.DecipherOnly = &v
+	return s
+}
+
+// SetDigitalSignature sets the DigitalSignature field's value.
+func (s *KeyUsage) SetDigitalSignature(v bool) *KeyUsage {
+	s.DigitalSignature = &v
+	return s
+}
+
+// SetEncipherOnly sets the EncipherOnly field's value.
+func (s *KeyUsage) SetEncipherOnly(v bool) *KeyUsage {
+	s.EncipherOnly = &v
+	return s
+}
+
+// SetKeyAgreement sets the KeyAgreement field's value.
+func (s *KeyUsage) SetKeyAgreement(v bool) *KeyUsage {
+	s.KeyAgreement = &v
+	return s
+}
+
+// SetKeyCertSign sets the KeyCertSign field's value.
+func (s *KeyUsage) SetKeyCertSign(v bool) *KeyUsage {
+	s.KeyCertSign = &v
+	return s
+}
+
+// SetKeyEncipherment sets the KeyEncipherment field's value.
+func (s *KeyUsage) SetKeyEncipherment(v bool) *KeyUsage {
+	s.KeyEncipherment = &v
+	return s
+}
+
+// SetNonRepudiation sets the NonRepudiation field's value.
+func (s *KeyUsage) SetNonRepudiation(v bool) *KeyUsage {
+	s.NonRepudiation = &v
 	return s
 }
 
@@ -5158,12 +6289,20 @@ type LimitExceededException struct {
 	Message_ *string `locationName:"message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s LimitExceededException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s LimitExceededException) GoString() string {
 	return s.String()
 }
@@ -5225,12 +6364,20 @@ type ListCertificateAuthoritiesInput struct {
 	ResourceOwner *string `type:"string" enum:"ResourceOwner"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListCertificateAuthoritiesInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListCertificateAuthoritiesInput) GoString() string {
 	return s.String()
 }
@@ -5280,12 +6427,20 @@ type ListCertificateAuthoritiesOutput struct {
 	NextToken *string `min:"1" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListCertificateAuthoritiesOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListCertificateAuthoritiesOutput) GoString() string {
 	return s.String()
 }
@@ -5327,12 +6482,20 @@ type ListPermissionsInput struct {
 	NextToken *string `min:"1" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListPermissionsInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListPermissionsInput) GoString() string {
 	return s.String()
 }
@@ -5389,12 +6552,20 @@ type ListPermissionsOutput struct {
 	Permissions []*Permission `type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListPermissionsOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListPermissionsOutput) GoString() string {
 	return s.String()
 }
@@ -5435,12 +6606,20 @@ type ListTagsInput struct {
 	NextToken *string `min:"1" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListTagsInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListTagsInput) GoString() string {
 	return s.String()
 }
@@ -5496,12 +6675,20 @@ type ListTagsOutput struct {
 	Tags []*Tag `min:"1" type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListTagsOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListTagsOutput) GoString() string {
 	return s.String()
 }
@@ -5528,12 +6715,20 @@ type LockoutPreventedException struct {
 	Message_ *string `locationName:"message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s LockoutPreventedException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s LockoutPreventedException) GoString() string {
 	return s.String()
 }
@@ -5584,12 +6779,20 @@ type MalformedCSRException struct {
 	Message_ *string `locationName:"message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s MalformedCSRException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s MalformedCSRException) GoString() string {
 	return s.String()
 }
@@ -5640,12 +6843,20 @@ type MalformedCertificateException struct {
 	Message_ *string `locationName:"message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s MalformedCertificateException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s MalformedCertificateException) GoString() string {
 	return s.String()
 }
@@ -5688,6 +6899,140 @@ func (s *MalformedCertificateException) RequestID() string {
 	return s.RespMetadata.RequestID
 }
 
+// Contains information to enable and configure Online Certificate Status Protocol
+// (OCSP) for validating certificate revocation status.
+//
+// When you revoke a certificate, OCSP responses may take up to 60 minutes to
+// reflect the new status.
+type OcspConfiguration struct {
+	_ struct{} `type:"structure"`
+
+	// Flag enabling use of the Online Certificate Status Protocol (OCSP) for validating
+	// certificate revocation status.
+	//
+	// Enabled is a required field
+	Enabled *bool `type:"boolean" required:"true"`
+
+	// By default, ACM Private CA injects an AWS domain into certificates being
+	// validated by the Online Certificate Status Protocol (OCSP). A customer can
+	// alternatively use this object to define a CNAME specifying a customized OCSP
+	// domain.
+	//
+	// Note: The value of the CNAME must not include a protocol prefix such as "http://"
+	// or "https://".
+	//
+	// For more information, see Customizing Online Certificate Status Protocol
+	// (OCSP) (https://docs.aws.amazon.com/acm-pca/latest/userguide/ocsp-customize.html)
+	// in the AWS Certificate Manager Private Certificate Authority (PCA) User Guide.
+	OcspCustomCname *string `type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s OcspConfiguration) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s OcspConfiguration) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *OcspConfiguration) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "OcspConfiguration"}
+	if s.Enabled == nil {
+		invalidParams.Add(request.NewErrParamRequired("Enabled"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetEnabled sets the Enabled field's value.
+func (s *OcspConfiguration) SetEnabled(v bool) *OcspConfiguration {
+	s.Enabled = &v
+	return s
+}
+
+// SetOcspCustomCname sets the OcspCustomCname field's value.
+func (s *OcspConfiguration) SetOcspCustomCname(v string) *OcspConfiguration {
+	s.OcspCustomCname = &v
+	return s
+}
+
+// Defines a custom ASN.1 X.400 GeneralName using an object identifier (OID)
+// and value. The OID must satisfy the regular expression shown below. For more
+// information, see NIST's definition of Object Identifier (OID) (https://csrc.nist.gov/glossary/term/Object_Identifier).
+type OtherName struct {
+	_ struct{} `type:"structure"`
+
+	// Specifies an OID.
+	//
+	// TypeId is a required field
+	TypeId *string `type:"string" required:"true"`
+
+	// Specifies an OID value.
+	//
+	// Value is a required field
+	Value *string `type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s OtherName) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s OtherName) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *OtherName) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "OtherName"}
+	if s.TypeId == nil {
+		invalidParams.Add(request.NewErrParamRequired("TypeId"))
+	}
+	if s.Value == nil {
+		invalidParams.Add(request.NewErrParamRequired("Value"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetTypeId sets the TypeId field's value.
+func (s *OtherName) SetTypeId(v string) *OtherName {
+	s.TypeId = &v
+	return s
+}
+
+// SetValue sets the Value field's value.
+func (s *OtherName) SetValue(v string) *OtherName {
+	s.Value = &v
+	return s
+}
+
 // Permissions designate which private CA actions can be performed by an AWS
 // service or entity. In order for ACM to automatically renew private certificates,
 // you must give the ACM service principal all available permissions (IssueCertificate,
@@ -5720,12 +7065,20 @@ type Permission struct {
 	SourceAccount *string `min:"12" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s Permission) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s Permission) GoString() string {
 	return s.String()
 }
@@ -5774,12 +7127,20 @@ type PermissionAlreadyExistsException struct {
 	Message_ *string `locationName:"message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s PermissionAlreadyExistsException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s PermissionAlreadyExistsException) GoString() string {
 	return s.String()
 }
@@ -5822,10 +7183,150 @@ func (s *PermissionAlreadyExistsException) RequestID() string {
 	return s.RespMetadata.RequestID
 }
 
+// Defines the X.509 CertificatePolicies extension.
+type PolicyInformation struct {
+	_ struct{} `type:"structure"`
+
+	// Specifies the object identifier (OID) of the certificate policy under which
+	// the certificate was issued. For more information, see NIST's definition of
+	// Object Identifier (OID) (https://csrc.nist.gov/glossary/term/Object_Identifier).
+	//
+	// CertPolicyId is a required field
+	CertPolicyId *string `type:"string" required:"true"`
+
+	// Modifies the given CertPolicyId with a qualifier. ACM Private CA supports
+	// the certification practice statement (CPS) qualifier.
+	PolicyQualifiers []*PolicyQualifierInfo `min:"1" type:"list"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s PolicyInformation) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s PolicyInformation) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *PolicyInformation) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "PolicyInformation"}
+	if s.CertPolicyId == nil {
+		invalidParams.Add(request.NewErrParamRequired("CertPolicyId"))
+	}
+	if s.PolicyQualifiers != nil && len(s.PolicyQualifiers) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("PolicyQualifiers", 1))
+	}
+	if s.PolicyQualifiers != nil {
+		for i, v := range s.PolicyQualifiers {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "PolicyQualifiers", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetCertPolicyId sets the CertPolicyId field's value.
+func (s *PolicyInformation) SetCertPolicyId(v string) *PolicyInformation {
+	s.CertPolicyId = &v
+	return s
+}
+
+// SetPolicyQualifiers sets the PolicyQualifiers field's value.
+func (s *PolicyInformation) SetPolicyQualifiers(v []*PolicyQualifierInfo) *PolicyInformation {
+	s.PolicyQualifiers = v
+	return s
+}
+
+// Modifies the CertPolicyId of a PolicyInformation object with a qualifier.
+// ACM Private CA supports the certification practice statement (CPS) qualifier.
+type PolicyQualifierInfo struct {
+	_ struct{} `type:"structure"`
+
+	// Identifies the qualifier modifying a CertPolicyId.
+	//
+	// PolicyQualifierId is a required field
+	PolicyQualifierId *string `type:"string" required:"true" enum:"PolicyQualifierId"`
+
+	// Defines the qualifier type. ACM Private CA supports the use of a URI for
+	// a CPS qualifier in this field.
+	//
+	// Qualifier is a required field
+	Qualifier *Qualifier `type:"structure" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s PolicyQualifierInfo) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s PolicyQualifierInfo) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *PolicyQualifierInfo) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "PolicyQualifierInfo"}
+	if s.PolicyQualifierId == nil {
+		invalidParams.Add(request.NewErrParamRequired("PolicyQualifierId"))
+	}
+	if s.Qualifier == nil {
+		invalidParams.Add(request.NewErrParamRequired("Qualifier"))
+	}
+	if s.Qualifier != nil {
+		if err := s.Qualifier.Validate(); err != nil {
+			invalidParams.AddNested("Qualifier", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetPolicyQualifierId sets the PolicyQualifierId field's value.
+func (s *PolicyQualifierInfo) SetPolicyQualifierId(v string) *PolicyQualifierInfo {
+	s.PolicyQualifierId = &v
+	return s
+}
+
+// SetQualifier sets the Qualifier field's value.
+func (s *PolicyQualifierInfo) SetQualifier(v *Qualifier) *PolicyQualifierInfo {
+	s.Qualifier = v
+	return s
+}
+
 type PutPolicyInput struct {
 	_ struct{} `type:"structure"`
 
-	// The path and filename of a JSON-formatted IAM policy to attach to the specified
+	// The path and file name of a JSON-formatted IAM policy to attach to the specified
 	// private CA resource. If this policy does not contain all required statements
 	// or if it includes any statement that is not allowed, the PutPolicy action
 	// returns an InvalidPolicyException. For information about IAM policy and statement
@@ -5843,12 +7344,20 @@ type PutPolicyInput struct {
 	ResourceArn *string `min:"5" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s PutPolicyInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s PutPolicyInput) GoString() string {
 	return s.String()
 }
@@ -5891,14 +7400,72 @@ type PutPolicyOutput struct {
 	_ struct{} `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s PutPolicyOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s PutPolicyOutput) GoString() string {
 	return s.String()
+}
+
+// Defines a PolicyInformation qualifier. ACM Private CA supports the certification
+// practice statement (CPS) qualifier (https://tools.ietf.org/html/rfc5280#section-4.2.1.4)
+// defined in RFC 5280.
+type Qualifier struct {
+	_ struct{} `type:"structure"`
+
+	// Contains a pointer to a certification practice statement (CPS) published
+	// by the CA.
+	//
+	// CpsUri is a required field
+	CpsUri *string `type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s Qualifier) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s Qualifier) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *Qualifier) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "Qualifier"}
+	if s.CpsUri == nil {
+		invalidParams.Add(request.NewErrParamRequired("CpsUri"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetCpsUri sets the CpsUri field's value.
+func (s *Qualifier) SetCpsUri(v string) *Qualifier {
+	s.CpsUri = &v
+	return s
 }
 
 // Your request has already been completed.
@@ -5909,12 +7476,20 @@ type RequestAlreadyProcessedException struct {
 	Message_ *string `locationName:"message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s RequestAlreadyProcessedException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s RequestAlreadyProcessedException) GoString() string {
 	return s.String()
 }
@@ -5965,12 +7540,20 @@ type RequestFailedException struct {
 	Message_ *string `locationName:"message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s RequestFailedException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s RequestFailedException) GoString() string {
 	return s.String()
 }
@@ -6021,12 +7604,20 @@ type RequestInProgressException struct {
 	Message_ *string `locationName:"message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s RequestInProgressException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s RequestInProgressException) GoString() string {
 	return s.String()
 }
@@ -6078,12 +7669,20 @@ type ResourceNotFoundException struct {
 	Message_ *string `locationName:"message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ResourceNotFoundException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ResourceNotFoundException) GoString() string {
 	return s.String()
 }
@@ -6139,12 +7738,20 @@ type RestoreCertificateAuthorityInput struct {
 	CertificateAuthorityArn *string `min:"5" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s RestoreCertificateAuthorityInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s RestoreCertificateAuthorityInput) GoString() string {
 	return s.String()
 }
@@ -6175,12 +7782,20 @@ type RestoreCertificateAuthorityOutput struct {
 	_ struct{} `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s RestoreCertificateAuthorityOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s RestoreCertificateAuthorityOutput) GoString() string {
 	return s.String()
 }
@@ -6188,23 +7803,42 @@ func (s RestoreCertificateAuthorityOutput) GoString() string {
 // Certificate revocation information used by the CreateCertificateAuthority
 // (https://docs.aws.amazon.com/acm-pca/latest/APIReference/API_CreateCertificateAuthority.html)
 // and UpdateCertificateAuthority (https://docs.aws.amazon.com/acm-pca/latest/APIReference/API_UpdateCertificateAuthority.html)
-// actions. Your private certificate authority (CA) can create and maintain
-// a certificate revocation list (CRL). A CRL contains information about certificates
-// revoked by your CA. For more information, see RevokeCertificate (https://docs.aws.amazon.com/acm-pca/latest/APIReference/API_RevokeCertificate.html).
+// actions. Your private certificate authority (CA) can configure Online Certificate
+// Status Protocol (OCSP) support and/or maintain a certificate revocation list
+// (CRL). OCSP returns validation information about certificates as requested
+// by clients, and a CRL contains an updated list of certificates revoked by
+// your CA. For more information, see RevokeCertificate (https://docs.aws.amazon.com/acm-pca/latest/APIReference/API_RevokeCertificate.html)
+// and Setting up a certificate revocation method (https://docs.aws.amazon.com/acm-pca/latest/userguide/revocation-setup.html)
+// in the AWS Certificate Manager Private Certificate Authority (PCA) User Guide.
 type RevocationConfiguration struct {
 	_ struct{} `type:"structure"`
 
 	// Configuration of the certificate revocation list (CRL), if any, maintained
-	// by your private CA.
+	// by your private CA. A CRL is typically updated approximately 30 minutes after
+	// a certificate is revoked. If for any reason a CRL update fails, ACM Private
+	// CA makes further attempts every 15 minutes.
 	CrlConfiguration *CrlConfiguration `type:"structure"`
+
+	// Configuration of Online Certificate Status Protocol (OCSP) support, if any,
+	// maintained by your private CA. When you revoke a certificate, OCSP responses
+	// may take up to 60 minutes to reflect the new status.
+	OcspConfiguration *OcspConfiguration `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s RevocationConfiguration) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s RevocationConfiguration) GoString() string {
 	return s.String()
 }
@@ -6217,6 +7851,11 @@ func (s *RevocationConfiguration) Validate() error {
 			invalidParams.AddNested("CrlConfiguration", err.(request.ErrInvalidParams))
 		}
 	}
+	if s.OcspConfiguration != nil {
+		if err := s.OcspConfiguration.Validate(); err != nil {
+			invalidParams.AddNested("OcspConfiguration", err.(request.ErrInvalidParams))
+		}
+	}
 
 	if invalidParams.Len() > 0 {
 		return invalidParams
@@ -6227,6 +7866,12 @@ func (s *RevocationConfiguration) Validate() error {
 // SetCrlConfiguration sets the CrlConfiguration field's value.
 func (s *RevocationConfiguration) SetCrlConfiguration(v *CrlConfiguration) *RevocationConfiguration {
 	s.CrlConfiguration = v
+	return s
+}
+
+// SetOcspConfiguration sets the OcspConfiguration field's value.
+func (s *RevocationConfiguration) SetOcspConfiguration(v *OcspConfiguration) *RevocationConfiguration {
+	s.OcspConfiguration = v
 	return s
 }
 
@@ -6263,12 +7908,20 @@ type RevokeCertificateInput struct {
 	RevocationReason *string `type:"string" required:"true" enum:"RevocationReason"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s RevokeCertificateInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s RevokeCertificateInput) GoString() string {
 	return s.String()
 }
@@ -6317,12 +7970,20 @@ type RevokeCertificateOutput struct {
 	_ struct{} `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s RevokeCertificateOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s RevokeCertificateOutput) GoString() string {
 	return s.String()
 }
@@ -6345,12 +8006,20 @@ type Tag struct {
 	Value *string `type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s Tag) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s Tag) GoString() string {
 	return s.String()
 }
@@ -6401,12 +8070,20 @@ type TagCertificateAuthorityInput struct {
 	Tags []*Tag `min:"1" type:"list" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s TagCertificateAuthorityInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s TagCertificateAuthorityInput) GoString() string {
 	return s.String()
 }
@@ -6459,12 +8136,20 @@ type TagCertificateAuthorityOutput struct {
 	_ struct{} `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s TagCertificateAuthorityOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s TagCertificateAuthorityOutput) GoString() string {
 	return s.String()
 }
@@ -6478,12 +8163,20 @@ type TooManyTagsException struct {
 	Message_ *string `locationName:"message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s TooManyTagsException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s TooManyTagsException) GoString() string {
 	return s.String()
 }
@@ -6544,12 +8237,20 @@ type UntagCertificateAuthorityInput struct {
 	Tags []*Tag `min:"1" type:"list" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UntagCertificateAuthorityInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UntagCertificateAuthorityInput) GoString() string {
 	return s.String()
 }
@@ -6602,12 +8303,20 @@ type UntagCertificateAuthorityOutput struct {
 	_ struct{} `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UntagCertificateAuthorityOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UntagCertificateAuthorityOutput) GoString() string {
 	return s.String()
 }
@@ -6623,19 +8332,32 @@ type UpdateCertificateAuthorityInput struct {
 	// CertificateAuthorityArn is a required field
 	CertificateAuthorityArn *string `min:"5" type:"string" required:"true"`
 
-	// Revocation information for your private CA.
+	// Contains information to enable Online Certificate Status Protocol (OCSP)
+	// support, to enable a certificate revocation list (CRL), to enable both, or
+	// to enable neither. If this parameter is not supplied, existing capibilites
+	// remain unchanged. For more information, see the OcspConfiguration (https://docs.aws.amazon.com/acm-pca/latest/APIReference/API_OcspConfiguration.html)
+	// and CrlConfiguration (https://docs.aws.amazon.com/acm-pca/latest/APIReference/API_CrlConfiguration.html)
+	// types.
 	RevocationConfiguration *RevocationConfiguration `type:"structure"`
 
 	// Status of your private CA.
 	Status *string `type:"string" enum:"CertificateAuthorityStatus"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpdateCertificateAuthorityInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpdateCertificateAuthorityInput) GoString() string {
 	return s.String()
 }
@@ -6683,24 +8405,35 @@ type UpdateCertificateAuthorityOutput struct {
 	_ struct{} `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpdateCertificateAuthorityOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpdateCertificateAuthorityOutput) GoString() string {
 	return s.String()
 }
 
 // Validity specifies the period of time during which a certificate is valid.
-// Validity can be expressed as an explicit date and time when the certificate
-// expires, or as a span of time after issuance, stated in days, months, or
-// years. For more information, see Validity (https://tools.ietf.org/html/rfc5280#section-4.1.2.5)
+// Validity can be expressed as an explicit date and time when the validity
+// of a certificate starts or expires, or as a span of time after issuance,
+// stated in days, months, or years. For more information, see Validity (https://tools.ietf.org/html/rfc5280#section-4.1.2.5)
 // in RFC 5280.
 //
-// You can issue a certificate by calling the IssueCertificate (https://docs.aws.amazon.com/acm-pca/latest/APIReference/API_IssueCertificate.html)
-// action.
+// ACM Private CA API consumes the Validity data type differently in two distinct
+// parameters of the IssueCertificate action. The required parameter IssueCertificate:Validity
+// specifies the end of a certificate's validity period. The optional parameter
+// IssueCertificate:ValidityNotBefore specifies a customized starting time for
+// the validity period.
 type Validity struct {
 	_ struct{} `type:"structure"`
 
@@ -6718,8 +8451,8 @@ type Validity struct {
 	//
 	//    * Output expiration date/time: 12/31/2049 23:59:59
 	//
-	// ABSOLUTE: The specific date and time when the certificate will expire, expressed
-	// in seconds since the Unix Epoch.
+	// ABSOLUTE: The specific date and time when the validity of a certificate will
+	// start or expire, expressed in seconds since the Unix Epoch.
 	//
 	//    * Sample input value: 2524608000
 	//
@@ -6734,6 +8467,10 @@ type Validity struct {
 	//
 	//    * Output expiration date: 01/10/2020 12:34:54 UTC
 	//
+	// The minimum validity duration for a certificate using relative time (DAYS)
+	// is one day. The minimum validity for a certificate using absolute time (ABSOLUTE
+	// or END_DATE) is one second.
+	//
 	// Type is a required field
 	Type *string `type:"string" required:"true" enum:"ValidityPeriodType"`
 
@@ -6743,12 +8480,20 @@ type Validity struct {
 	Value *int64 `min:"1" type:"long" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s Validity) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s Validity) GoString() string {
 	return s.String()
 }
@@ -6782,6 +8527,26 @@ func (s *Validity) SetType(v string) *Validity {
 func (s *Validity) SetValue(v int64) *Validity {
 	s.Value = &v
 	return s
+}
+
+const (
+	// AccessMethodTypeCaRepository is a AccessMethodType enum value
+	AccessMethodTypeCaRepository = "CA_REPOSITORY"
+
+	// AccessMethodTypeResourcePkiManifest is a AccessMethodType enum value
+	AccessMethodTypeResourcePkiManifest = "RESOURCE_PKI_MANIFEST"
+
+	// AccessMethodTypeResourcePkiNotify is a AccessMethodType enum value
+	AccessMethodTypeResourcePkiNotify = "RESOURCE_PKI_NOTIFY"
+)
+
+// AccessMethodType_Values returns all elements of the AccessMethodType enum
+func AccessMethodType_Values() []string {
+	return []string{
+		AccessMethodTypeCaRepository,
+		AccessMethodTypeResourcePkiManifest,
+		AccessMethodTypeResourcePkiNotify,
+	}
 }
 
 const (
@@ -6893,6 +8658,50 @@ func CertificateAuthorityType_Values() []string {
 }
 
 const (
+	// ExtendedKeyUsageTypeServerAuth is a ExtendedKeyUsageType enum value
+	ExtendedKeyUsageTypeServerAuth = "SERVER_AUTH"
+
+	// ExtendedKeyUsageTypeClientAuth is a ExtendedKeyUsageType enum value
+	ExtendedKeyUsageTypeClientAuth = "CLIENT_AUTH"
+
+	// ExtendedKeyUsageTypeCodeSigning is a ExtendedKeyUsageType enum value
+	ExtendedKeyUsageTypeCodeSigning = "CODE_SIGNING"
+
+	// ExtendedKeyUsageTypeEmailProtection is a ExtendedKeyUsageType enum value
+	ExtendedKeyUsageTypeEmailProtection = "EMAIL_PROTECTION"
+
+	// ExtendedKeyUsageTypeTimeStamping is a ExtendedKeyUsageType enum value
+	ExtendedKeyUsageTypeTimeStamping = "TIME_STAMPING"
+
+	// ExtendedKeyUsageTypeOcspSigning is a ExtendedKeyUsageType enum value
+	ExtendedKeyUsageTypeOcspSigning = "OCSP_SIGNING"
+
+	// ExtendedKeyUsageTypeSmartCardLogin is a ExtendedKeyUsageType enum value
+	ExtendedKeyUsageTypeSmartCardLogin = "SMART_CARD_LOGIN"
+
+	// ExtendedKeyUsageTypeDocumentSigning is a ExtendedKeyUsageType enum value
+	ExtendedKeyUsageTypeDocumentSigning = "DOCUMENT_SIGNING"
+
+	// ExtendedKeyUsageTypeCertificateTransparency is a ExtendedKeyUsageType enum value
+	ExtendedKeyUsageTypeCertificateTransparency = "CERTIFICATE_TRANSPARENCY"
+)
+
+// ExtendedKeyUsageType_Values returns all elements of the ExtendedKeyUsageType enum
+func ExtendedKeyUsageType_Values() []string {
+	return []string{
+		ExtendedKeyUsageTypeServerAuth,
+		ExtendedKeyUsageTypeClientAuth,
+		ExtendedKeyUsageTypeCodeSigning,
+		ExtendedKeyUsageTypeEmailProtection,
+		ExtendedKeyUsageTypeTimeStamping,
+		ExtendedKeyUsageTypeOcspSigning,
+		ExtendedKeyUsageTypeSmartCardLogin,
+		ExtendedKeyUsageTypeDocumentSigning,
+		ExtendedKeyUsageTypeCertificateTransparency,
+	}
+}
+
+const (
 	// FailureReasonRequestTimedOut is a FailureReason enum value
 	FailureReasonRequestTimedOut = "REQUEST_TIMED_OUT"
 
@@ -6933,6 +8742,34 @@ func KeyAlgorithm_Values() []string {
 		KeyAlgorithmRsa4096,
 		KeyAlgorithmEcPrime256v1,
 		KeyAlgorithmEcSecp384r1,
+	}
+}
+
+const (
+	// KeyStorageSecurityStandardFips1402Level2OrHigher is a KeyStorageSecurityStandard enum value
+	KeyStorageSecurityStandardFips1402Level2OrHigher = "FIPS_140_2_LEVEL_2_OR_HIGHER"
+
+	// KeyStorageSecurityStandardFips1402Level3OrHigher is a KeyStorageSecurityStandard enum value
+	KeyStorageSecurityStandardFips1402Level3OrHigher = "FIPS_140_2_LEVEL_3_OR_HIGHER"
+)
+
+// KeyStorageSecurityStandard_Values returns all elements of the KeyStorageSecurityStandard enum
+func KeyStorageSecurityStandard_Values() []string {
+	return []string{
+		KeyStorageSecurityStandardFips1402Level2OrHigher,
+		KeyStorageSecurityStandardFips1402Level3OrHigher,
+	}
+}
+
+const (
+	// PolicyQualifierIdCps is a PolicyQualifierId enum value
+	PolicyQualifierIdCps = "CPS"
+)
+
+// PolicyQualifierId_Values returns all elements of the PolicyQualifierId enum
+func PolicyQualifierId_Values() []string {
+	return []string{
+		PolicyQualifierIdCps,
 	}
 }
 
@@ -6989,6 +8826,22 @@ func RevocationReason_Values() []string {
 		RevocationReasonCessationOfOperation,
 		RevocationReasonPrivilegeWithdrawn,
 		RevocationReasonAACompromise,
+	}
+}
+
+const (
+	// S3ObjectAclPublicRead is a S3ObjectAcl enum value
+	S3ObjectAclPublicRead = "PUBLIC_READ"
+
+	// S3ObjectAclBucketOwnerFullControl is a S3ObjectAcl enum value
+	S3ObjectAclBucketOwnerFullControl = "BUCKET_OWNER_FULL_CONTROL"
+)
+
+// S3ObjectAcl_Values returns all elements of the S3ObjectAcl enum
+func S3ObjectAcl_Values() []string {
+	return []string{
+		S3ObjectAclPublicRead,
+		S3ObjectAclBucketOwnerFullControl,
 	}
 }
 

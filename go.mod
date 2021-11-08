@@ -9,7 +9,7 @@ replace github.com/nightlyone/lockfile => ./extra/lockfile
 require (
 	github.com/Jeffail/gabs v1.0.0
 	github.com/Workiva/go-datastructures v1.0.53
-	github.com/aws/aws-sdk-go v1.35.23
+	github.com/aws/aws-sdk-go v1.41.4
 	github.com/carlescere/scheduler v0.0.0-20150615230211-9b78eac89dfb
 	github.com/cenkalti/backoff/v4 v4.0.2
 	github.com/cihub/seelog v0.0.0-20170130134532-f561c5e57575
@@ -32,7 +32,7 @@ require (
 	github.com/xtaci/smux v1.5.15
 	go.nanomsg.org/mangos/v3 v3.3.0
 	golang.org/x/crypto v0.0.0-20210506145944-38f3c27a63bf
-	golang.org/x/net v0.0.0-20210508051633-16afe75a6701
+	golang.org/x/net v0.0.0-20210614182718-04defd469f4e
 	golang.org/x/oauth2 v0.0.0-20211005180243-6b3c2da341f1
 	golang.org/x/sync v0.0.0-20210220032951-036812b2e83c
 	golang.org/x/sys v0.0.0-20210630005230-0f9fa26af87c

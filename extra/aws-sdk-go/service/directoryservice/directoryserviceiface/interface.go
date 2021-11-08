@@ -68,6 +68,10 @@ type DirectoryServiceAPI interface {
 	AddIpRoutesWithContext(aws.Context, *directoryservice.AddIpRoutesInput, ...request.Option) (*directoryservice.AddIpRoutesOutput, error)
 	AddIpRoutesRequest(*directoryservice.AddIpRoutesInput) (*request.Request, *directoryservice.AddIpRoutesOutput)
 
+	AddRegion(*directoryservice.AddRegionInput) (*directoryservice.AddRegionOutput, error)
+	AddRegionWithContext(aws.Context, *directoryservice.AddRegionInput, ...request.Option) (*directoryservice.AddRegionOutput, error)
+	AddRegionRequest(*directoryservice.AddRegionInput) (*request.Request, *directoryservice.AddRegionOutput)
+
 	AddTagsToResource(*directoryservice.AddTagsToResourceInput) (*directoryservice.AddTagsToResourceOutput, error)
 	AddTagsToResourceWithContext(aws.Context, *directoryservice.AddTagsToResourceInput, ...request.Option) (*directoryservice.AddTagsToResourceOutput, error)
 	AddTagsToResourceRequest(*directoryservice.AddTagsToResourceInput) (*request.Request, *directoryservice.AddTagsToResourceOutput)
@@ -144,6 +148,10 @@ type DirectoryServiceAPI interface {
 	DescribeCertificateWithContext(aws.Context, *directoryservice.DescribeCertificateInput, ...request.Option) (*directoryservice.DescribeCertificateOutput, error)
 	DescribeCertificateRequest(*directoryservice.DescribeCertificateInput) (*request.Request, *directoryservice.DescribeCertificateOutput)
 
+	DescribeClientAuthenticationSettings(*directoryservice.DescribeClientAuthenticationSettingsInput) (*directoryservice.DescribeClientAuthenticationSettingsOutput, error)
+	DescribeClientAuthenticationSettingsWithContext(aws.Context, *directoryservice.DescribeClientAuthenticationSettingsInput, ...request.Option) (*directoryservice.DescribeClientAuthenticationSettingsOutput, error)
+	DescribeClientAuthenticationSettingsRequest(*directoryservice.DescribeClientAuthenticationSettingsInput) (*request.Request, *directoryservice.DescribeClientAuthenticationSettingsOutput)
+
 	DescribeConditionalForwarders(*directoryservice.DescribeConditionalForwardersInput) (*directoryservice.DescribeConditionalForwardersOutput, error)
 	DescribeConditionalForwardersWithContext(aws.Context, *directoryservice.DescribeConditionalForwardersInput, ...request.Option) (*directoryservice.DescribeConditionalForwardersOutput, error)
 	DescribeConditionalForwardersRequest(*directoryservice.DescribeConditionalForwardersInput) (*request.Request, *directoryservice.DescribeConditionalForwardersOutput)
@@ -167,6 +175,10 @@ type DirectoryServiceAPI interface {
 	DescribeLDAPSSettingsWithContext(aws.Context, *directoryservice.DescribeLDAPSSettingsInput, ...request.Option) (*directoryservice.DescribeLDAPSSettingsOutput, error)
 	DescribeLDAPSSettingsRequest(*directoryservice.DescribeLDAPSSettingsInput) (*request.Request, *directoryservice.DescribeLDAPSSettingsOutput)
 
+	DescribeRegions(*directoryservice.DescribeRegionsInput) (*directoryservice.DescribeRegionsOutput, error)
+	DescribeRegionsWithContext(aws.Context, *directoryservice.DescribeRegionsInput, ...request.Option) (*directoryservice.DescribeRegionsOutput, error)
+	DescribeRegionsRequest(*directoryservice.DescribeRegionsInput) (*request.Request, *directoryservice.DescribeRegionsOutput)
+
 	DescribeSharedDirectories(*directoryservice.DescribeSharedDirectoriesInput) (*directoryservice.DescribeSharedDirectoriesOutput, error)
 	DescribeSharedDirectoriesWithContext(aws.Context, *directoryservice.DescribeSharedDirectoriesInput, ...request.Option) (*directoryservice.DescribeSharedDirectoriesOutput, error)
 	DescribeSharedDirectoriesRequest(*directoryservice.DescribeSharedDirectoriesInput) (*request.Request, *directoryservice.DescribeSharedDirectoriesOutput)
@@ -179,6 +191,10 @@ type DirectoryServiceAPI interface {
 	DescribeTrustsWithContext(aws.Context, *directoryservice.DescribeTrustsInput, ...request.Option) (*directoryservice.DescribeTrustsOutput, error)
 	DescribeTrustsRequest(*directoryservice.DescribeTrustsInput) (*request.Request, *directoryservice.DescribeTrustsOutput)
 
+	DisableClientAuthentication(*directoryservice.DisableClientAuthenticationInput) (*directoryservice.DisableClientAuthenticationOutput, error)
+	DisableClientAuthenticationWithContext(aws.Context, *directoryservice.DisableClientAuthenticationInput, ...request.Option) (*directoryservice.DisableClientAuthenticationOutput, error)
+	DisableClientAuthenticationRequest(*directoryservice.DisableClientAuthenticationInput) (*request.Request, *directoryservice.DisableClientAuthenticationOutput)
+
 	DisableLDAPS(*directoryservice.DisableLDAPSInput) (*directoryservice.DisableLDAPSOutput, error)
 	DisableLDAPSWithContext(aws.Context, *directoryservice.DisableLDAPSInput, ...request.Option) (*directoryservice.DisableLDAPSOutput, error)
 	DisableLDAPSRequest(*directoryservice.DisableLDAPSInput) (*request.Request, *directoryservice.DisableLDAPSOutput)
@@ -190,6 +206,10 @@ type DirectoryServiceAPI interface {
 	DisableSso(*directoryservice.DisableSsoInput) (*directoryservice.DisableSsoOutput, error)
 	DisableSsoWithContext(aws.Context, *directoryservice.DisableSsoInput, ...request.Option) (*directoryservice.DisableSsoOutput, error)
 	DisableSsoRequest(*directoryservice.DisableSsoInput) (*request.Request, *directoryservice.DisableSsoOutput)
+
+	EnableClientAuthentication(*directoryservice.EnableClientAuthenticationInput) (*directoryservice.EnableClientAuthenticationOutput, error)
+	EnableClientAuthenticationWithContext(aws.Context, *directoryservice.EnableClientAuthenticationInput, ...request.Option) (*directoryservice.EnableClientAuthenticationOutput, error)
+	EnableClientAuthenticationRequest(*directoryservice.EnableClientAuthenticationInput) (*request.Request, *directoryservice.EnableClientAuthenticationOutput)
 
 	EnableLDAPS(*directoryservice.EnableLDAPSInput) (*directoryservice.EnableLDAPSOutput, error)
 	EnableLDAPSWithContext(aws.Context, *directoryservice.EnableLDAPSInput, ...request.Option) (*directoryservice.EnableLDAPSOutput, error)
@@ -246,6 +266,10 @@ type DirectoryServiceAPI interface {
 	RemoveIpRoutes(*directoryservice.RemoveIpRoutesInput) (*directoryservice.RemoveIpRoutesOutput, error)
 	RemoveIpRoutesWithContext(aws.Context, *directoryservice.RemoveIpRoutesInput, ...request.Option) (*directoryservice.RemoveIpRoutesOutput, error)
 	RemoveIpRoutesRequest(*directoryservice.RemoveIpRoutesInput) (*request.Request, *directoryservice.RemoveIpRoutesOutput)
+
+	RemoveRegion(*directoryservice.RemoveRegionInput) (*directoryservice.RemoveRegionOutput, error)
+	RemoveRegionWithContext(aws.Context, *directoryservice.RemoveRegionInput, ...request.Option) (*directoryservice.RemoveRegionOutput, error)
+	RemoveRegionRequest(*directoryservice.RemoveRegionInput) (*request.Request, *directoryservice.RemoveRegionOutput)
 
 	RemoveTagsFromResource(*directoryservice.RemoveTagsFromResourceInput) (*directoryservice.RemoveTagsFromResourceOutput, error)
 	RemoveTagsFromResourceWithContext(aws.Context, *directoryservice.RemoveTagsFromResourceInput, ...request.Option) (*directoryservice.RemoveTagsFromResourceOutput, error)

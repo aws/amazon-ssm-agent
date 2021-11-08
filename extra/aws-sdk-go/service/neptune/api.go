@@ -1342,7 +1342,7 @@ func (c *Neptune) CreateDBSubnetGroupRequest(input *CreateDBSubnetGroupInput) (r
 // CreateDBSubnetGroup API operation for Amazon Neptune.
 //
 // Creates a new DB subnet group. DB subnet groups must contain at least one
-// subnet in at least two AZs in the AWS Region.
+// subnet in at least two AZs in the Amazon Region.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -2395,6 +2395,12 @@ func (c *Neptune) DescribeDBClusterParameterGroupsRequest(input *DescribeDBClust
 		Name:       opDescribeDBClusterParameterGroups,
 		HTTPMethod: "POST",
 		HTTPPath:   "/",
+		Paginator: &request.Paginator{
+			InputTokens:     []string{"Marker"},
+			OutputTokens:    []string{"Marker"},
+			LimitToken:      "MaxRecords",
+			TruncationToken: "",
+		},
 	}
 
 	if input == nil {
@@ -2445,6 +2451,58 @@ func (c *Neptune) DescribeDBClusterParameterGroupsWithContext(ctx aws.Context, i
 	return out, req.Send()
 }
 
+// DescribeDBClusterParameterGroupsPages iterates over the pages of a DescribeDBClusterParameterGroups operation,
+// calling the "fn" function with the response data for each page. To stop
+// iterating, return false from the fn function.
+//
+// See DescribeDBClusterParameterGroups method for more information on how to use this operation.
+//
+// Note: This operation can generate multiple requests to a service.
+//
+//    // Example iterating over at most 3 pages of a DescribeDBClusterParameterGroups operation.
+//    pageNum := 0
+//    err := client.DescribeDBClusterParameterGroupsPages(params,
+//        func(page *neptune.DescribeDBClusterParameterGroupsOutput, lastPage bool) bool {
+//            pageNum++
+//            fmt.Println(page)
+//            return pageNum <= 3
+//        })
+//
+func (c *Neptune) DescribeDBClusterParameterGroupsPages(input *DescribeDBClusterParameterGroupsInput, fn func(*DescribeDBClusterParameterGroupsOutput, bool) bool) error {
+	return c.DescribeDBClusterParameterGroupsPagesWithContext(aws.BackgroundContext(), input, fn)
+}
+
+// DescribeDBClusterParameterGroupsPagesWithContext same as DescribeDBClusterParameterGroupsPages except
+// it takes a Context and allows setting request options on the pages.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Neptune) DescribeDBClusterParameterGroupsPagesWithContext(ctx aws.Context, input *DescribeDBClusterParameterGroupsInput, fn func(*DescribeDBClusterParameterGroupsOutput, bool) bool, opts ...request.Option) error {
+	p := request.Pagination{
+		NewRequest: func() (*request.Request, error) {
+			var inCpy *DescribeDBClusterParameterGroupsInput
+			if input != nil {
+				tmp := *input
+				inCpy = &tmp
+			}
+			req, _ := c.DescribeDBClusterParameterGroupsRequest(inCpy)
+			req.SetContext(ctx)
+			req.ApplyOptions(opts...)
+			return req, nil
+		},
+	}
+
+	for p.Next() {
+		if !fn(p.Page().(*DescribeDBClusterParameterGroupsOutput), !p.HasNextPage()) {
+			break
+		}
+	}
+
+	return p.Err()
+}
+
 const opDescribeDBClusterParameters = "DescribeDBClusterParameters"
 
 // DescribeDBClusterParametersRequest generates a "aws/request.Request" representing the
@@ -2476,6 +2534,12 @@ func (c *Neptune) DescribeDBClusterParametersRequest(input *DescribeDBClusterPar
 		Name:       opDescribeDBClusterParameters,
 		HTTPMethod: "POST",
 		HTTPPath:   "/",
+		Paginator: &request.Paginator{
+			InputTokens:     []string{"Marker"},
+			OutputTokens:    []string{"Marker"},
+			LimitToken:      "MaxRecords",
+			TruncationToken: "",
+		},
 	}
 
 	if input == nil {
@@ -2525,6 +2589,58 @@ func (c *Neptune) DescribeDBClusterParametersWithContext(ctx aws.Context, input 
 	return out, req.Send()
 }
 
+// DescribeDBClusterParametersPages iterates over the pages of a DescribeDBClusterParameters operation,
+// calling the "fn" function with the response data for each page. To stop
+// iterating, return false from the fn function.
+//
+// See DescribeDBClusterParameters method for more information on how to use this operation.
+//
+// Note: This operation can generate multiple requests to a service.
+//
+//    // Example iterating over at most 3 pages of a DescribeDBClusterParameters operation.
+//    pageNum := 0
+//    err := client.DescribeDBClusterParametersPages(params,
+//        func(page *neptune.DescribeDBClusterParametersOutput, lastPage bool) bool {
+//            pageNum++
+//            fmt.Println(page)
+//            return pageNum <= 3
+//        })
+//
+func (c *Neptune) DescribeDBClusterParametersPages(input *DescribeDBClusterParametersInput, fn func(*DescribeDBClusterParametersOutput, bool) bool) error {
+	return c.DescribeDBClusterParametersPagesWithContext(aws.BackgroundContext(), input, fn)
+}
+
+// DescribeDBClusterParametersPagesWithContext same as DescribeDBClusterParametersPages except
+// it takes a Context and allows setting request options on the pages.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Neptune) DescribeDBClusterParametersPagesWithContext(ctx aws.Context, input *DescribeDBClusterParametersInput, fn func(*DescribeDBClusterParametersOutput, bool) bool, opts ...request.Option) error {
+	p := request.Pagination{
+		NewRequest: func() (*request.Request, error) {
+			var inCpy *DescribeDBClusterParametersInput
+			if input != nil {
+				tmp := *input
+				inCpy = &tmp
+			}
+			req, _ := c.DescribeDBClusterParametersRequest(inCpy)
+			req.SetContext(ctx)
+			req.ApplyOptions(opts...)
+			return req, nil
+		},
+	}
+
+	for p.Next() {
+		if !fn(p.Page().(*DescribeDBClusterParametersOutput), !p.HasNextPage()) {
+			break
+		}
+	}
+
+	return p.Err()
+}
+
 const opDescribeDBClusterSnapshotAttributes = "DescribeDBClusterSnapshotAttributes"
 
 // DescribeDBClusterSnapshotAttributesRequest generates a "aws/request.Request" representing the
@@ -2572,15 +2688,16 @@ func (c *Neptune) DescribeDBClusterSnapshotAttributesRequest(input *DescribeDBCl
 // Returns a list of DB cluster snapshot attribute names and values for a manual
 // DB cluster snapshot.
 //
-// When sharing snapshots with other AWS accounts, DescribeDBClusterSnapshotAttributes
-// returns the restore attribute and a list of IDs for the AWS accounts that
+// When sharing snapshots with other Amazon accounts, DescribeDBClusterSnapshotAttributes
+// returns the restore attribute and a list of IDs for the Amazon accounts that
 // are authorized to copy or restore the manual DB cluster snapshot. If all
 // is included in the list of values for the restore attribute, then the manual
-// DB cluster snapshot is public and can be copied or restored by all AWS accounts.
+// DB cluster snapshot is public and can be copied or restored by all Amazon
+// accounts.
 //
-// To add or remove access for an AWS account to copy or restore a manual DB
-// cluster snapshot, or to make the manual DB cluster snapshot public or private,
-// use the ModifyDBClusterSnapshotAttribute API action.
+// To add or remove access for an Amazon account to copy or restore a manual
+// DB cluster snapshot, or to make the manual DB cluster snapshot public or
+// private, use the ModifyDBClusterSnapshotAttribute API action.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -2646,6 +2763,12 @@ func (c *Neptune) DescribeDBClusterSnapshotsRequest(input *DescribeDBClusterSnap
 		Name:       opDescribeDBClusterSnapshots,
 		HTTPMethod: "POST",
 		HTTPPath:   "/",
+		Paginator: &request.Paginator{
+			InputTokens:     []string{"Marker"},
+			OutputTokens:    []string{"Marker"},
+			LimitToken:      "MaxRecords",
+			TruncationToken: "",
+		},
 	}
 
 	if input == nil {
@@ -2695,6 +2818,58 @@ func (c *Neptune) DescribeDBClusterSnapshotsWithContext(ctx aws.Context, input *
 	return out, req.Send()
 }
 
+// DescribeDBClusterSnapshotsPages iterates over the pages of a DescribeDBClusterSnapshots operation,
+// calling the "fn" function with the response data for each page. To stop
+// iterating, return false from the fn function.
+//
+// See DescribeDBClusterSnapshots method for more information on how to use this operation.
+//
+// Note: This operation can generate multiple requests to a service.
+//
+//    // Example iterating over at most 3 pages of a DescribeDBClusterSnapshots operation.
+//    pageNum := 0
+//    err := client.DescribeDBClusterSnapshotsPages(params,
+//        func(page *neptune.DescribeDBClusterSnapshotsOutput, lastPage bool) bool {
+//            pageNum++
+//            fmt.Println(page)
+//            return pageNum <= 3
+//        })
+//
+func (c *Neptune) DescribeDBClusterSnapshotsPages(input *DescribeDBClusterSnapshotsInput, fn func(*DescribeDBClusterSnapshotsOutput, bool) bool) error {
+	return c.DescribeDBClusterSnapshotsPagesWithContext(aws.BackgroundContext(), input, fn)
+}
+
+// DescribeDBClusterSnapshotsPagesWithContext same as DescribeDBClusterSnapshotsPages except
+// it takes a Context and allows setting request options on the pages.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Neptune) DescribeDBClusterSnapshotsPagesWithContext(ctx aws.Context, input *DescribeDBClusterSnapshotsInput, fn func(*DescribeDBClusterSnapshotsOutput, bool) bool, opts ...request.Option) error {
+	p := request.Pagination{
+		NewRequest: func() (*request.Request, error) {
+			var inCpy *DescribeDBClusterSnapshotsInput
+			if input != nil {
+				tmp := *input
+				inCpy = &tmp
+			}
+			req, _ := c.DescribeDBClusterSnapshotsRequest(inCpy)
+			req.SetContext(ctx)
+			req.ApplyOptions(opts...)
+			return req, nil
+		},
+	}
+
+	for p.Next() {
+		if !fn(p.Page().(*DescribeDBClusterSnapshotsOutput), !p.HasNextPage()) {
+			break
+		}
+	}
+
+	return p.Err()
+}
+
 const opDescribeDBClusters = "DescribeDBClusters"
 
 // DescribeDBClustersRequest generates a "aws/request.Request" representing the
@@ -2726,6 +2901,12 @@ func (c *Neptune) DescribeDBClustersRequest(input *DescribeDBClustersInput) (req
 		Name:       opDescribeDBClusters,
 		HTTPMethod: "POST",
 		HTTPPath:   "/",
+		Paginator: &request.Paginator{
+			InputTokens:     []string{"Marker"},
+			OutputTokens:    []string{"Marker"},
+			LimitToken:      "MaxRecords",
+			TruncationToken: "",
+		},
 	}
 
 	if input == nil {
@@ -2775,6 +2956,58 @@ func (c *Neptune) DescribeDBClustersWithContext(ctx aws.Context, input *Describe
 	req.SetContext(ctx)
 	req.ApplyOptions(opts...)
 	return out, req.Send()
+}
+
+// DescribeDBClustersPages iterates over the pages of a DescribeDBClusters operation,
+// calling the "fn" function with the response data for each page. To stop
+// iterating, return false from the fn function.
+//
+// See DescribeDBClusters method for more information on how to use this operation.
+//
+// Note: This operation can generate multiple requests to a service.
+//
+//    // Example iterating over at most 3 pages of a DescribeDBClusters operation.
+//    pageNum := 0
+//    err := client.DescribeDBClustersPages(params,
+//        func(page *neptune.DescribeDBClustersOutput, lastPage bool) bool {
+//            pageNum++
+//            fmt.Println(page)
+//            return pageNum <= 3
+//        })
+//
+func (c *Neptune) DescribeDBClustersPages(input *DescribeDBClustersInput, fn func(*DescribeDBClustersOutput, bool) bool) error {
+	return c.DescribeDBClustersPagesWithContext(aws.BackgroundContext(), input, fn)
+}
+
+// DescribeDBClustersPagesWithContext same as DescribeDBClustersPages except
+// it takes a Context and allows setting request options on the pages.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Neptune) DescribeDBClustersPagesWithContext(ctx aws.Context, input *DescribeDBClustersInput, fn func(*DescribeDBClustersOutput, bool) bool, opts ...request.Option) error {
+	p := request.Pagination{
+		NewRequest: func() (*request.Request, error) {
+			var inCpy *DescribeDBClustersInput
+			if input != nil {
+				tmp := *input
+				inCpy = &tmp
+			}
+			req, _ := c.DescribeDBClustersRequest(inCpy)
+			req.SetContext(ctx)
+			req.ApplyOptions(opts...)
+			return req, nil
+		},
+	}
+
+	for p.Next() {
+		if !fn(p.Page().(*DescribeDBClustersOutput), !p.HasNextPage()) {
+			break
+		}
+	}
+
+	return p.Err()
 }
 
 const opDescribeDBEngineVersions = "DescribeDBEngineVersions"
@@ -4188,6 +4421,12 @@ func (c *Neptune) DescribePendingMaintenanceActionsRequest(input *DescribePendin
 		Name:       opDescribePendingMaintenanceActions,
 		HTTPMethod: "POST",
 		HTTPPath:   "/",
+		Paginator: &request.Paginator{
+			InputTokens:     []string{"Marker"},
+			OutputTokens:    []string{"Marker"},
+			LimitToken:      "MaxRecords",
+			TruncationToken: "",
+		},
 	}
 
 	if input == nil {
@@ -4235,6 +4474,58 @@ func (c *Neptune) DescribePendingMaintenanceActionsWithContext(ctx aws.Context, 
 	req.SetContext(ctx)
 	req.ApplyOptions(opts...)
 	return out, req.Send()
+}
+
+// DescribePendingMaintenanceActionsPages iterates over the pages of a DescribePendingMaintenanceActions operation,
+// calling the "fn" function with the response data for each page. To stop
+// iterating, return false from the fn function.
+//
+// See DescribePendingMaintenanceActions method for more information on how to use this operation.
+//
+// Note: This operation can generate multiple requests to a service.
+//
+//    // Example iterating over at most 3 pages of a DescribePendingMaintenanceActions operation.
+//    pageNum := 0
+//    err := client.DescribePendingMaintenanceActionsPages(params,
+//        func(page *neptune.DescribePendingMaintenanceActionsOutput, lastPage bool) bool {
+//            pageNum++
+//            fmt.Println(page)
+//            return pageNum <= 3
+//        })
+//
+func (c *Neptune) DescribePendingMaintenanceActionsPages(input *DescribePendingMaintenanceActionsInput, fn func(*DescribePendingMaintenanceActionsOutput, bool) bool) error {
+	return c.DescribePendingMaintenanceActionsPagesWithContext(aws.BackgroundContext(), input, fn)
+}
+
+// DescribePendingMaintenanceActionsPagesWithContext same as DescribePendingMaintenanceActionsPages except
+// it takes a Context and allows setting request options on the pages.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Neptune) DescribePendingMaintenanceActionsPagesWithContext(ctx aws.Context, input *DescribePendingMaintenanceActionsInput, fn func(*DescribePendingMaintenanceActionsOutput, bool) bool, opts ...request.Option) error {
+	p := request.Pagination{
+		NewRequest: func() (*request.Request, error) {
+			var inCpy *DescribePendingMaintenanceActionsInput
+			if input != nil {
+				tmp := *input
+				inCpy = &tmp
+			}
+			req, _ := c.DescribePendingMaintenanceActionsRequest(inCpy)
+			req.SetContext(ctx)
+			req.ApplyOptions(opts...)
+			return req, nil
+		},
+	}
+
+	for p.Next() {
+		if !fn(p.Page().(*DescribePendingMaintenanceActionsOutput), !p.HasNextPage()) {
+			break
+		}
+	}
+
+	return p.Err()
 }
 
 const opDescribeValidDBInstanceModifications = "DescribeValidDBInstanceModifications"
@@ -4855,20 +5146,20 @@ func (c *Neptune) ModifyDBClusterSnapshotAttributeRequest(input *ModifyDBCluster
 // Adds an attribute and values to, or removes an attribute and values from,
 // a manual DB cluster snapshot.
 //
-// To share a manual DB cluster snapshot with other AWS accounts, specify restore
-// as the AttributeName and use the ValuesToAdd parameter to add a list of IDs
-// of the AWS accounts that are authorized to restore the manual DB cluster
-// snapshot. Use the value all to make the manual DB cluster snapshot public,
-// which means that it can be copied or restored by all AWS accounts. Do not
-// add the all value for any manual DB cluster snapshots that contain private
-// information that you don't want available to all AWS accounts. If a manual
-// DB cluster snapshot is encrypted, it can be shared, but only by specifying
-// a list of authorized AWS account IDs for the ValuesToAdd parameter. You can't
-// use all as a value for that parameter in this case.
+// To share a manual DB cluster snapshot with other Amazon accounts, specify
+// restore as the AttributeName and use the ValuesToAdd parameter to add a list
+// of IDs of the Amazon accounts that are authorized to restore the manual DB
+// cluster snapshot. Use the value all to make the manual DB cluster snapshot
+// public, which means that it can be copied or restored by all Amazon accounts.
+// Do not add the all value for any manual DB cluster snapshots that contain
+// private information that you don't want available to all Amazon accounts.
+// If a manual DB cluster snapshot is encrypted, it can be shared, but only
+// by specifying a list of authorized Amazon account IDs for the ValuesToAdd
+// parameter. You can't use all as a value for that parameter in this case.
 //
-// To view which AWS accounts have access to copy or restore a manual DB cluster
-// snapshot, or whether a manual DB cluster snapshot public or private, use
-// the DescribeDBClusterSnapshotAttributes API action.
+// To view which Amazon accounts have access to copy or restore a manual DB
+// cluster snapshot, or whether a manual DB cluster snapshot public or private,
+// use the DescribeDBClusterSnapshotAttributes API action.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -5190,7 +5481,7 @@ func (c *Neptune) ModifyDBSubnetGroupRequest(input *ModifyDBSubnetGroupInput) (r
 // ModifyDBSubnetGroup API operation for Amazon Neptune.
 //
 // Modifies an existing DB subnet group. DB subnet groups must contain at least
-// one subnet in at least two AZs in the AWS Region.
+// one subnet in at least two AZs in the Amazon Region.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -6285,7 +6576,7 @@ func (c *Neptune) StartDBClusterRequest(input *StartDBClusterInput) (req *reques
 // StartDBCluster API operation for Amazon Neptune.
 //
 // Starts an Amazon Neptune DB cluster that was stopped using the AWS console,
-// the AWS CLI stop-db-cluster command, or the StopDBCluster API.
+// the Amazon CLI stop-db-cluster command, or the StopDBCluster API.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -6434,12 +6725,20 @@ type AddRoleToDBClusterInput struct {
 	RoleArn *string `type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AddRoleToDBClusterInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AddRoleToDBClusterInput) GoString() string {
 	return s.String()
 }
@@ -6482,12 +6781,20 @@ type AddRoleToDBClusterOutput struct {
 	_ struct{} `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AddRoleToDBClusterOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AddRoleToDBClusterOutput) GoString() string {
 	return s.String()
 }
@@ -6521,12 +6828,20 @@ type AddSourceIdentifierToSubscriptionInput struct {
 	SubscriptionName *string `type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AddSourceIdentifierToSubscriptionInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AddSourceIdentifierToSubscriptionInput) GoString() string {
 	return s.String()
 }
@@ -6567,12 +6882,20 @@ type AddSourceIdentifierToSubscriptionOutput struct {
 	EventSubscription *EventSubscription `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AddSourceIdentifierToSubscriptionOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AddSourceIdentifierToSubscriptionOutput) GoString() string {
 	return s.String()
 }
@@ -6599,12 +6922,20 @@ type AddTagsToResourceInput struct {
 	Tags []*Tag `locationNameList:"Tag" type:"list" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AddTagsToResourceInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AddTagsToResourceInput) GoString() string {
 	return s.String()
 }
@@ -6641,12 +6972,20 @@ type AddTagsToResourceOutput struct {
 	_ struct{} `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AddTagsToResourceOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AddTagsToResourceOutput) GoString() string {
 	return s.String()
 }
@@ -6684,12 +7023,20 @@ type ApplyPendingMaintenanceActionInput struct {
 	ResourceIdentifier *string `type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ApplyPendingMaintenanceActionInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ApplyPendingMaintenanceActionInput) GoString() string {
 	return s.String()
 }
@@ -6738,12 +7085,20 @@ type ApplyPendingMaintenanceActionOutput struct {
 	ResourcePendingMaintenanceActions *ResourcePendingMaintenanceActions `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ApplyPendingMaintenanceActionOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ApplyPendingMaintenanceActionOutput) GoString() string {
 	return s.String()
 }
@@ -6762,12 +7117,20 @@ type AvailabilityZone struct {
 	Name *string `type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AvailabilityZone) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AvailabilityZone) GoString() string {
 	return s.String()
 }
@@ -6789,12 +7152,20 @@ type CharacterSet struct {
 	CharacterSetName *string `type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CharacterSet) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CharacterSet) GoString() string {
 	return s.String()
 }
@@ -6826,12 +7197,20 @@ type CloudwatchLogsExportConfiguration struct {
 	EnableLogTypes []*string `type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CloudwatchLogsExportConfiguration) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CloudwatchLogsExportConfiguration) GoString() string {
 	return s.String()
 }
@@ -6859,12 +7238,13 @@ type CopyDBClusterParameterGroupInput struct {
 	//
 	//    * Must specify a valid DB cluster parameter group.
 	//
-	//    * If the source DB cluster parameter group is in the same AWS Region as
-	//    the copy, specify a valid DB parameter group identifier, for example my-db-cluster-param-group,
-	//    or a valid ARN.
+	//    * If the source DB cluster parameter group is in the same Amazon Region
+	//    as the copy, specify a valid DB parameter group identifier, for example
+	//    my-db-cluster-param-group, or a valid ARN.
 	//
-	//    * If the source DB parameter group is in a different AWS Region than the
-	//    copy, specify a valid DB cluster parameter group ARN, for example arn:aws:rds:us-east-1:123456789012:cluster-pg:custom-cluster-group1.
+	//    * If the source DB parameter group is in a different Amazon Region than
+	//    the copy, specify a valid DB cluster parameter group ARN, for example
+	//    arn:aws:rds:us-east-1:123456789012:cluster-pg:custom-cluster-group1.
 	//
 	// SourceDBClusterParameterGroupIdentifier is a required field
 	SourceDBClusterParameterGroupIdentifier *string `type:"string" required:"true"`
@@ -6895,12 +7275,20 @@ type CopyDBClusterParameterGroupInput struct {
 	TargetDBClusterParameterGroupIdentifier *string `type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CopyDBClusterParameterGroupInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CopyDBClusterParameterGroupInput) GoString() string {
 	return s.String()
 }
@@ -6958,12 +7346,20 @@ type CopyDBClusterParameterGroupOutput struct {
 	DBClusterParameterGroup *DBClusterParameterGroup `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CopyDBClusterParameterGroupOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CopyDBClusterParameterGroupOutput) GoString() string {
 	return s.String()
 }
@@ -6981,20 +7377,23 @@ type CopyDBClusterSnapshotInput struct {
 	// cluster snapshot, and otherwise false. The default is false.
 	CopyTags *bool `type:"boolean"`
 
-	// The AWS AWS KMS key ID for an encrypted DB cluster snapshot. The KMS key
-	// ID is the Amazon Resource Name (ARN), KMS key identifier, or the KMS key
-	// alias for the KMS encryption key.
+	// DestinationRegion is used for presigning the request to a given region.
+	DestinationRegion *string `type:"string"`
+
+	// The Amazon Amazon KMS key ID for an encrypted DB cluster snapshot. The KMS
+	// key ID is the Amazon Resource Name (ARN), KMS key identifier, or the KMS
+	// key alias for the KMS encryption key.
 	//
-	// If you copy an encrypted DB cluster snapshot from your AWS account, you can
-	// specify a value for KmsKeyId to encrypt the copy with a new KMS encryption
+	// If you copy an encrypted DB cluster snapshot from your Amazon account, you
+	// can specify a value for KmsKeyId to encrypt the copy with a new KMS encryption
 	// key. If you don't specify a value for KmsKeyId, then the copy of the DB cluster
 	// snapshot is encrypted with the same KMS key as the source DB cluster snapshot.
 	//
 	// If you copy an encrypted DB cluster snapshot that is shared from another
-	// AWS account, then you must specify a value for KmsKeyId.
+	// Amazon account, then you must specify a value for KmsKeyId.
 	//
-	// KMS encryption keys are specific to the AWS Region that they are created
-	// in, and you can't use encryption keys from one AWS Region in another AWS
+	// KMS encryption keys are specific to the Amazon Region that they are created
+	// in, and you can't use encryption keys from one Amazon Region in another Amazon
 	// Region.
 	//
 	// You cannot encrypt an unencrypted DB cluster snapshot when you copy it. If
@@ -7008,8 +7407,6 @@ type CopyDBClusterSnapshotInput struct {
 	// The identifier of the DB cluster snapshot to copy. This parameter is not
 	// case-sensitive.
 	//
-	// You can't copy from one AWS Region to another.
-	//
 	// Constraints:
 	//
 	//    * Must specify a valid system snapshot in the "available" state.
@@ -7020,6 +7417,11 @@ type CopyDBClusterSnapshotInput struct {
 	//
 	// SourceDBClusterSnapshotIdentifier is a required field
 	SourceDBClusterSnapshotIdentifier *string `type:"string" required:"true"`
+
+	// SourceRegion is the source region where the resource exists. This is not
+	// sent over the wire and is only used for presigning. This value should always
+	// have the same region as the source ARN.
+	SourceRegion *string `type:"string" ignore:"true"`
 
 	// The tags to assign to the new DB cluster snapshot copy.
 	Tags []*Tag `locationNameList:"Tag" type:"list"`
@@ -7041,12 +7443,20 @@ type CopyDBClusterSnapshotInput struct {
 	TargetDBClusterSnapshotIdentifier *string `type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CopyDBClusterSnapshotInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CopyDBClusterSnapshotInput) GoString() string {
 	return s.String()
 }
@@ -7073,6 +7483,12 @@ func (s *CopyDBClusterSnapshotInput) SetCopyTags(v bool) *CopyDBClusterSnapshotI
 	return s
 }
 
+// SetDestinationRegion sets the DestinationRegion field's value.
+func (s *CopyDBClusterSnapshotInput) SetDestinationRegion(v string) *CopyDBClusterSnapshotInput {
+	s.DestinationRegion = &v
+	return s
+}
+
 // SetKmsKeyId sets the KmsKeyId field's value.
 func (s *CopyDBClusterSnapshotInput) SetKmsKeyId(v string) *CopyDBClusterSnapshotInput {
 	s.KmsKeyId = &v
@@ -7088,6 +7504,12 @@ func (s *CopyDBClusterSnapshotInput) SetPreSignedUrl(v string) *CopyDBClusterSna
 // SetSourceDBClusterSnapshotIdentifier sets the SourceDBClusterSnapshotIdentifier field's value.
 func (s *CopyDBClusterSnapshotInput) SetSourceDBClusterSnapshotIdentifier(v string) *CopyDBClusterSnapshotInput {
 	s.SourceDBClusterSnapshotIdentifier = &v
+	return s
+}
+
+// SetSourceRegion sets the SourceRegion field's value.
+func (s *CopyDBClusterSnapshotInput) SetSourceRegion(v string) *CopyDBClusterSnapshotInput {
+	s.SourceRegion = &v
 	return s
 }
 
@@ -7113,12 +7535,20 @@ type CopyDBClusterSnapshotOutput struct {
 	DBClusterSnapshot *DBClusterSnapshot `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CopyDBClusterSnapshotOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CopyDBClusterSnapshotOutput) GoString() string {
 	return s.String()
 }
@@ -7171,12 +7601,20 @@ type CopyDBParameterGroupInput struct {
 	TargetDBParameterGroupIdentifier *string `type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CopyDBParameterGroupInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CopyDBParameterGroupInput) GoString() string {
 	return s.String()
 }
@@ -7234,12 +7672,20 @@ type CopyDBParameterGroupOutput struct {
 	DBParameterGroup *DBParameterGroup `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CopyDBParameterGroupOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CopyDBParameterGroupOutput) GoString() string {
 	return s.String()
 }
@@ -7282,12 +7728,20 @@ type CreateDBClusterEndpointInput struct {
 	Tags []*Tag `locationNameList:"Tag" type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateDBClusterEndpointInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateDBClusterEndpointInput) GoString() string {
 	return s.String()
 }
@@ -7403,12 +7857,20 @@ type CreateDBClusterEndpointOutput struct {
 	Status *string `type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateDBClusterEndpointOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateDBClusterEndpointOutput) GoString() string {
 	return s.String()
 }
@@ -7493,6 +7955,10 @@ type CreateDBClusterInput struct {
 	// (Not supported by Neptune)
 	CharacterSetName *string `type:"string"`
 
+	// If set to true, tags are copied to any snapshot of the DB cluster that is
+	// created.
+	CopyTagsToSnapshot *bool `type:"boolean"`
+
 	// The DB cluster identifier. This parameter is stored as a lowercase string.
 	//
 	// Constraints:
@@ -7534,11 +8000,17 @@ type CreateDBClusterInput struct {
 	// deletion protection is enabled.
 	DeletionProtection *bool `type:"boolean"`
 
+	// DestinationRegion is used for presigning the request to a given region.
+	DestinationRegion *string `type:"string"`
+
 	// The list of log types that need to be enabled for exporting to CloudWatch
 	// Logs.
 	EnableCloudwatchLogsExports []*string `type:"list"`
 
-	// Not supported by Neptune.
+	// If set to true, enables Amazon Identity and Access Management (IAM) authentication
+	// for the entire DB cluster (this cannot be set at an instance level).
+	//
+	// Default: false.
 	EnableIAMDatabaseAuthentication *bool `type:"boolean"`
 
 	// The name of the database engine to be used for this DB cluster.
@@ -7553,10 +8025,10 @@ type CreateDBClusterInput struct {
 	// Example: 1.0.2.1
 	EngineVersion *string `type:"string"`
 
-	// The AWS KMS key identifier for an encrypted DB cluster.
+	// The Amazon KMS key identifier for an encrypted DB cluster.
 	//
 	// The KMS key identifier is the Amazon Resource Name (ARN) for the KMS encryption
-	// key. If you are creating a DB cluster with the same AWS account that owns
+	// key. If you are creating a DB cluster with the same Amazon account that owns
 	// the KMS encryption key used to encrypt the new DB cluster, then you can use
 	// the KMS key alias instead of the ARN for the KMS encryption key.
 	//
@@ -7570,29 +8042,19 @@ type CreateDBClusterInput struct {
 	//    is not specified, then Amazon Neptune will use your default encryption
 	//    key.
 	//
-	// AWS KMS creates the default encryption key for your AWS account. Your AWS
-	// account has a different default encryption key for each AWS Region.
+	// Amazon KMS creates the default encryption key for your Amazon account. Your
+	// Amazon account has a different default encryption key for each Amazon Region.
 	//
-	// If you create a Read Replica of an encrypted DB cluster in another AWS Region,
-	// you must set KmsKeyId to a KMS key ID that is valid in the destination AWS
-	// Region. This key is used to encrypt the Read Replica in that AWS Region.
+	// If you create a Read Replica of an encrypted DB cluster in another Amazon
+	// Region, you must set KmsKeyId to a KMS key ID that is valid in the destination
+	// Amazon Region. This key is used to encrypt the Read Replica in that Amazon
+	// Region.
 	KmsKeyId *string `type:"string"`
 
-	// The password for the master database user. This password can contain any
-	// printable ASCII character except "/", """, or "@".
-	//
-	// Constraints: Must contain from 8 to 41 characters.
+	// Not supported by Neptune.
 	MasterUserPassword *string `type:"string"`
 
-	// The name of the master user for the DB cluster.
-	//
-	// Constraints:
-	//
-	//    * Must be 1 to 16 letters or numbers.
-	//
-	//    * First character must be a letter.
-	//
-	//    * Cannot be a reserved word for the chosen database engine.
+	// Not supported by Neptune.
 	MasterUsername *string `type:"string"`
 
 	// (Not supported by Neptune)
@@ -7610,7 +8072,7 @@ type CreateDBClusterInput struct {
 	// backups are enabled using the BackupRetentionPeriod parameter.
 	//
 	// The default is a 30-minute window selected at random from an 8-hour block
-	// of time for each AWS Region. To see the time blocks available, see Adjusting
+	// of time for each Amazon Region. To see the time blocks available, see Adjusting
 	// the Preferred Maintenance Window (https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/AdjustingTheMaintenanceWindow.html)
 	// in the Amazon Neptune User Guide.
 	//
@@ -7631,8 +8093,8 @@ type CreateDBClusterInput struct {
 	// Format: ddd:hh24:mi-ddd:hh24:mi
 	//
 	// The default is a 30-minute window selected at random from an 8-hour block
-	// of time for each AWS Region, occurring on a random day of the week. To see
-	// the time blocks available, see Adjusting the Preferred Maintenance Window
+	// of time for each Amazon Region, occurring on a random day of the week. To
+	// see the time blocks available, see Adjusting the Preferred Maintenance Window
 	// (https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/AdjustingTheMaintenanceWindow.html)
 	// in the Amazon Neptune User Guide.
 	//
@@ -7645,6 +8107,11 @@ type CreateDBClusterInput struct {
 	// this DB cluster is created as a Read Replica.
 	ReplicationSourceIdentifier *string `type:"string"`
 
+	// SourceRegion is the source region where the resource exists. This is not
+	// sent over the wire and is only used for presigning. This value should always
+	// have the same region as the source ARN.
+	SourceRegion *string `type:"string" ignore:"true"`
+
 	// Specifies whether the DB cluster is encrypted.
 	StorageEncrypted *bool `type:"boolean"`
 
@@ -7655,12 +8122,20 @@ type CreateDBClusterInput struct {
 	VpcSecurityGroupIds []*string `locationNameList:"VpcSecurityGroupId" type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateDBClusterInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateDBClusterInput) GoString() string {
 	return s.String()
 }
@@ -7699,6 +8174,12 @@ func (s *CreateDBClusterInput) SetCharacterSetName(v string) *CreateDBClusterInp
 	return s
 }
 
+// SetCopyTagsToSnapshot sets the CopyTagsToSnapshot field's value.
+func (s *CreateDBClusterInput) SetCopyTagsToSnapshot(v bool) *CreateDBClusterInput {
+	s.CopyTagsToSnapshot = &v
+	return s
+}
+
 // SetDBClusterIdentifier sets the DBClusterIdentifier field's value.
 func (s *CreateDBClusterInput) SetDBClusterIdentifier(v string) *CreateDBClusterInput {
 	s.DBClusterIdentifier = &v
@@ -7726,6 +8207,12 @@ func (s *CreateDBClusterInput) SetDatabaseName(v string) *CreateDBClusterInput {
 // SetDeletionProtection sets the DeletionProtection field's value.
 func (s *CreateDBClusterInput) SetDeletionProtection(v bool) *CreateDBClusterInput {
 	s.DeletionProtection = &v
+	return s
+}
+
+// SetDestinationRegion sets the DestinationRegion field's value.
+func (s *CreateDBClusterInput) SetDestinationRegion(v string) *CreateDBClusterInput {
+	s.DestinationRegion = &v
 	return s
 }
 
@@ -7807,6 +8294,12 @@ func (s *CreateDBClusterInput) SetReplicationSourceIdentifier(v string) *CreateD
 	return s
 }
 
+// SetSourceRegion sets the SourceRegion field's value.
+func (s *CreateDBClusterInput) SetSourceRegion(v string) *CreateDBClusterInput {
+	s.SourceRegion = &v
+	return s
+}
+
 // SetStorageEncrypted sets the StorageEncrypted field's value.
 func (s *CreateDBClusterInput) SetStorageEncrypted(v bool) *CreateDBClusterInput {
 	s.StorageEncrypted = &v
@@ -7834,12 +8327,20 @@ type CreateDBClusterOutput struct {
 	DBCluster *DBCluster `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateDBClusterOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateDBClusterOutput) GoString() string {
 	return s.String()
 }
@@ -7881,12 +8382,20 @@ type CreateDBClusterParameterGroupInput struct {
 	Tags []*Tag `locationNameList:"Tag" type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateDBClusterParameterGroupInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateDBClusterParameterGroupInput) GoString() string {
 	return s.String()
 }
@@ -7944,12 +8453,20 @@ type CreateDBClusterParameterGroupOutput struct {
 	DBClusterParameterGroup *DBClusterParameterGroup `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateDBClusterParameterGroupOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateDBClusterParameterGroupOutput) GoString() string {
 	return s.String()
 }
@@ -7995,12 +8512,20 @@ type CreateDBClusterSnapshotInput struct {
 	Tags []*Tag `locationNameList:"Tag" type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateDBClusterSnapshotInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateDBClusterSnapshotInput) GoString() string {
 	return s.String()
 }
@@ -8049,12 +8574,20 @@ type CreateDBClusterSnapshotOutput struct {
 	DBClusterSnapshot *DBClusterSnapshot `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateDBClusterSnapshotOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateDBClusterSnapshotOutput) GoString() string {
 	return s.String()
 }
@@ -8068,13 +8601,7 @@ func (s *CreateDBClusterSnapshotOutput) SetDBClusterSnapshot(v *DBClusterSnapsho
 type CreateDBInstanceInput struct {
 	_ struct{} `type:"structure"`
 
-	// The amount of storage (in gibibytes) to allocate for the DB instance.
-	//
-	// Type: Integer
-	//
-	// Not applicable. Neptune cluster volumes automatically grow as the amount
-	// of data in your database increases, though you are only charged for the space
-	// that you use in a Neptune cluster volume.
+	// Not supported by Neptune.
 	AllocatedStorage *int64 `type:"integer"`
 
 	// Indicates that minor engine upgrades are applied automatically to the DB
@@ -8085,14 +8612,14 @@ type CreateDBInstanceInput struct {
 
 	// The EC2 Availability Zone that the DB instance is created in
 	//
-	// Default: A random, system-chosen Availability Zone in the endpoint's AWS
+	// Default: A random, system-chosen Availability Zone in the endpoint's Amazon
 	// Region.
 	//
 	// Example: us-east-1d
 	//
 	// Constraint: The AvailabilityZone parameter can't be specified if the MultiAZ
 	// parameter is set to true. The specified Availability Zone must be in the
-	// same AWS Region as the current endpoint.
+	// same Amazon Region as the current endpoint.
 	AvailabilityZone *string `type:"string"`
 
 	// The number of days for which automated backups are retained.
@@ -8124,7 +8651,7 @@ type CreateDBInstanceInput struct {
 	DBClusterIdentifier *string `type:"string"`
 
 	// The compute and memory capacity of the DB instance, for example, db.m4.large.
-	// Not all DB instance classes are available in all AWS Regions.
+	// Not all DB instance classes are available in all Amazon Regions.
 	//
 	// DBInstanceClass is a required field
 	DBInstanceClass *string `type:"string" required:"true"`
@@ -8189,10 +8716,7 @@ type CreateDBInstanceInput struct {
 	// Logs.
 	EnableCloudwatchLogsExports []*string `type:"list"`
 
-	// True to enable AWS Identity and Access Management (IAM) authentication for
-	// Neptune.
-	//
-	// Default: false
+	// Not supported by Neptune (ignored).
 	EnableIAMDatabaseAuthentication *bool `type:"boolean"`
 
 	// (Not supported by Neptune)
@@ -8213,20 +8737,21 @@ type CreateDBInstanceInput struct {
 	// initially allocated for the DB instance.
 	Iops *int64 `type:"integer"`
 
-	// The AWS KMS key identifier for an encrypted DB instance.
+	// The Amazon KMS key identifier for an encrypted DB instance.
 	//
 	// The KMS key identifier is the Amazon Resource Name (ARN) for the KMS encryption
-	// key. If you are creating a DB instance with the same AWS account that owns
-	// the KMS encryption key used to encrypt the new DB instance, then you can
-	// use the KMS key alias instead of the ARN for the KM encryption key.
+	// key. If you are creating a DB instance with the same Amazon account that
+	// owns the KMS encryption key used to encrypt the new DB instance, then you
+	// can use the KMS key alias instead of the ARN for the KM encryption key.
 	//
 	// Not applicable. The KMS key identifier is managed by the DB cluster. For
 	// more information, see CreateDBCluster.
 	//
 	// If the StorageEncrypted parameter is true, and you do not specify a value
 	// for the KmsKeyId parameter, then Amazon Neptune will use your default encryption
-	// key. AWS KMS creates the default encryption key for your AWS account. Your
-	// AWS account has a different default encryption key for each AWS Region.
+	// key. Amazon KMS creates the default encryption key for your Amazon account.
+	// Your Amazon account has a different default encryption key for each Amazon
+	// Region.
 	KmsKeyId *string `type:"string"`
 
 	// License model information for this DB instance.
@@ -8234,13 +8759,10 @@ type CreateDBInstanceInput struct {
 	// Valid values: license-included | bring-your-own-license | general-public-license
 	LicenseModel *string `type:"string"`
 
-	// The password for the master user. The password can include any printable
-	// ASCII character except "/", """, or "@".
-	//
-	// Not used.
+	// Not supported by Neptune.
 	MasterUserPassword *string `type:"string"`
 
-	// The name for the master user. Not used.
+	// Not supported by Neptune.
 	MasterUsername *string `type:"string"`
 
 	// The interval, in seconds, between points when Enhanced Monitoring metrics
@@ -8292,7 +8814,7 @@ type CreateDBInstanceInput struct {
 	// Format: ddd:hh24:mi-ddd:hh24:mi
 	//
 	// The default is a 30-minute window selected at random from an 8-hour block
-	// of time for each AWS Region, occurring on a random day of the week.
+	// of time for each Amazon Region, occurring on a random day of the week.
 	//
 	// Valid Days: Mon, Tue, Wed, Thu, Fri, Sat, Sun.
 	//
@@ -8347,12 +8869,20 @@ type CreateDBInstanceInput struct {
 	VpcSecurityGroupIds []*string `locationNameList:"VpcSecurityGroupId" type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateDBInstanceInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateDBInstanceInput) GoString() string {
 	return s.String()
 }
@@ -8643,12 +9173,20 @@ type CreateDBInstanceOutput struct {
 	DBInstance *DBInstance `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateDBInstanceOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateDBInstanceOutput) GoString() string {
 	return s.String()
 }
@@ -8694,12 +9232,20 @@ type CreateDBParameterGroupInput struct {
 	Tags []*Tag `locationNameList:"Tag" type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateDBParameterGroupInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateDBParameterGroupInput) GoString() string {
 	return s.String()
 }
@@ -8757,12 +9303,20 @@ type CreateDBParameterGroupOutput struct {
 	DBParameterGroup *DBParameterGroup `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateDBParameterGroupOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateDBParameterGroupOutput) GoString() string {
 	return s.String()
 }
@@ -8800,12 +9354,20 @@ type CreateDBSubnetGroupInput struct {
 	Tags []*Tag `locationNameList:"Tag" type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateDBSubnetGroupInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateDBSubnetGroupInput) GoString() string {
 	return s.String()
 }
@@ -8863,12 +9425,20 @@ type CreateDBSubnetGroupOutput struct {
 	DBSubnetGroup *DBSubnetGroup `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateDBSubnetGroupOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateDBSubnetGroupOutput) GoString() string {
 	return s.String()
 }
@@ -8939,12 +9509,20 @@ type CreateEventSubscriptionInput struct {
 	Tags []*Tag `locationNameList:"Tag" type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateEventSubscriptionInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateEventSubscriptionInput) GoString() string {
 	return s.String()
 }
@@ -9015,12 +9593,20 @@ type CreateEventSubscriptionOutput struct {
 	EventSubscription *EventSubscription `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateEventSubscriptionOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateEventSubscriptionOutput) GoString() string {
 	return s.String()
 }
@@ -9041,11 +9627,14 @@ type DBCluster struct {
 	// is not fixed, but instead automatically adjusts as needed.
 	AllocatedStorage *int64 `type:"integer"`
 
-	// Provides a list of the AWS Identity and Access Management (IAM) roles that
-	// are associated with the DB cluster. IAM roles that are associated with a
-	// DB cluster grant permission for the DB cluster to access other AWS services
+	// Provides a list of the Amazon Identity and Access Management (IAM) roles
+	// that are associated with the DB cluster. IAM roles that are associated with
+	// a DB cluster grant permission for the DB cluster to access other Amazon services
 	// on your behalf.
 	AssociatedRoles []*DBClusterRole `locationNameList:"DBClusterRole" type:"list"`
+
+	// Time at which the DB cluster will be automatically restarted.
+	AutomaticRestartTime *time.Time `type:"timestamp"`
 
 	// Provides the list of EC2 Availability Zones that instances in the DB cluster
 	// can be created in.
@@ -9054,7 +9643,7 @@ type DBCluster struct {
 	// Specifies the number of days for which automatic DB snapshots are retained.
 	BackupRetentionPeriod *int64 `type:"integer"`
 
-	// (Not supported by Neptune)
+	// Not supported by Neptune.
 	CharacterSetName *string `type:"string"`
 
 	// Identifies the clone group to which the DB cluster is associated.
@@ -9063,6 +9652,13 @@ type DBCluster struct {
 	// Specifies the time when the DB cluster was created, in Universal Coordinated
 	// Time (UTC).
 	ClusterCreateTime *time.Time `type:"timestamp"`
+
+	// If set to true, tags are copied to any snapshot of the DB cluster that is
+	// created.
+	CopyTagsToSnapshot *bool `type:"boolean"`
+
+	// If set to true, the DB cluster can be cloned across accounts.
+	CrossAccountClone *bool `type:"boolean"`
 
 	// The Amazon Resource Name (ARN) for the DB cluster.
 	DBClusterArn *string `type:"string"`
@@ -9074,7 +9670,7 @@ type DBCluster struct {
 	// Provides the list of instances that make up the DB cluster.
 	DBClusterMembers []*DBClusterMember `locationNameList:"DBClusterMember" type:"list"`
 
-	// (Not supported by Neptune)
+	// Not supported by Neptune.
 	DBClusterOptionGroupMemberships []*DBClusterOptionGroupStatus `locationNameList:"DBClusterOptionGroup" type:"list"`
 
 	// Specifies the name of the DB cluster parameter group for the DB cluster.
@@ -9089,9 +9685,9 @@ type DBCluster struct {
 	// same name is returned for the life of the DB cluster.
 	DatabaseName *string `type:"string"`
 
-	// The AWS Region-unique, immutable identifier for the DB cluster. This identifier
-	// is found in AWS CloudTrail log entries whenever the AWS KMS key for the DB
-	// cluster is accessed.
+	// The Amazon Region-unique, immutable identifier for the DB cluster. This identifier
+	// is found in Amazon CloudTrail log entries whenever the Amazon KMS key for
+	// the DB cluster is accessed.
 	DbClusterResourceId *string `type:"string"`
 
 	// Indicates whether or not the DB cluster has deletion protection enabled.
@@ -9118,11 +9714,11 @@ type DBCluster struct {
 	// Specifies the ID that Amazon Route 53 assigns when you create a hosted zone.
 	HostedZoneId *string `type:"string"`
 
-	// True if mapping of AWS Identity and Access Management (IAM) accounts to database
-	// accounts is enabled, and otherwise false.
+	// True if mapping of Amazon Identity and Access Management (IAM) accounts to
+	// database accounts is enabled, and otherwise false.
 	IAMDatabaseAuthenticationEnabled *bool `type:"boolean"`
 
-	// If StorageEncrypted is true, the AWS KMS key identifier for the encrypted
+	// If StorageEncrypted is true, the Amazon KMS key identifier for the encrypted
 	// DB cluster.
 	KmsKeyId *string `type:"string"`
 
@@ -9130,7 +9726,7 @@ type DBCluster struct {
 	// restore.
 	LatestRestorableTime *time.Time `type:"timestamp"`
 
-	// Contains the master username for the DB cluster.
+	// Not supported by Neptune.
 	MasterUsername *string `type:"string"`
 
 	// Specifies whether the DB cluster has instances in multiple Availability Zones.
@@ -9180,12 +9776,20 @@ type DBCluster struct {
 	VpcSecurityGroups []*VpcSecurityGroupMembership `locationNameList:"VpcSecurityGroupMembership" type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DBCluster) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DBCluster) GoString() string {
 	return s.String()
 }
@@ -9199,6 +9803,12 @@ func (s *DBCluster) SetAllocatedStorage(v int64) *DBCluster {
 // SetAssociatedRoles sets the AssociatedRoles field's value.
 func (s *DBCluster) SetAssociatedRoles(v []*DBClusterRole) *DBCluster {
 	s.AssociatedRoles = v
+	return s
+}
+
+// SetAutomaticRestartTime sets the AutomaticRestartTime field's value.
+func (s *DBCluster) SetAutomaticRestartTime(v time.Time) *DBCluster {
+	s.AutomaticRestartTime = &v
 	return s
 }
 
@@ -9229,6 +9839,18 @@ func (s *DBCluster) SetCloneGroupId(v string) *DBCluster {
 // SetClusterCreateTime sets the ClusterCreateTime field's value.
 func (s *DBCluster) SetClusterCreateTime(v time.Time) *DBCluster {
 	s.ClusterCreateTime = &v
+	return s
+}
+
+// SetCopyTagsToSnapshot sets the CopyTagsToSnapshot field's value.
+func (s *DBCluster) SetCopyTagsToSnapshot(v bool) *DBCluster {
+	s.CopyTagsToSnapshot = &v
+	return s
+}
+
+// SetCrossAccountClone sets the CrossAccountClone field's value.
+func (s *DBCluster) SetCrossAccountClone(v bool) *DBCluster {
+	s.CrossAccountClone = &v
 	return s
 }
 
@@ -9468,12 +10090,20 @@ type DBClusterEndpoint struct {
 	Status *string `type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DBClusterEndpoint) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DBClusterEndpoint) GoString() string {
 	return s.String()
 }
@@ -9558,12 +10188,20 @@ type DBClusterMember struct {
 	PromotionTier *int64 `type:"integer"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DBClusterMember) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DBClusterMember) GoString() string {
 	return s.String()
 }
@@ -9592,23 +10230,31 @@ func (s *DBClusterMember) SetPromotionTier(v int64) *DBClusterMember {
 	return s
 }
 
-// Contains status information for a DB cluster option group.
+// Not supported by Neptune.
 type DBClusterOptionGroupStatus struct {
 	_ struct{} `type:"structure"`
 
-	// Specifies the name of the DB cluster option group.
+	// Not supported by Neptune.
 	DBClusterOptionGroupName *string `type:"string"`
 
-	// Specifies the status of the DB cluster option group.
+	// Not supported by Neptune.
 	Status *string `type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DBClusterOptionGroupStatus) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DBClusterOptionGroupStatus) GoString() string {
 	return s.String()
 }
@@ -9647,12 +10293,20 @@ type DBClusterParameterGroup struct {
 	Description *string `type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DBClusterParameterGroup) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DBClusterParameterGroup) GoString() string {
 	return s.String()
 }
@@ -9681,12 +10335,12 @@ func (s *DBClusterParameterGroup) SetDescription(v string) *DBClusterParameterGr
 	return s
 }
 
-// Describes an AWS Identity and Access Management (IAM) role that is associated
+// Describes an Amazon Identity and Access Management (IAM) role that is associated
 // with a DB cluster.
 type DBClusterRole struct {
 	_ struct{} `type:"structure"`
 
-	// The name of the feature associated with the AWS Identity and Access Management
+	// The name of the feature associated with the Amazon Identity and Access Management
 	// (IAM) role. For the list of supported feature names, see DBEngineVersion.
 	FeatureName *string `type:"string"`
 
@@ -9698,22 +10352,30 @@ type DBClusterRole struct {
 	// The Status property returns one of the following values:
 	//
 	//    * ACTIVE - the IAM role ARN is associated with the DB cluster and can
-	//    be used to access other AWS services on your behalf.
+	//    be used to access other Amazon services on your behalf.
 	//
 	//    * PENDING - the IAM role ARN is being associated with the DB cluster.
 	//
 	//    * INVALID - the IAM role ARN is associated with the DB cluster, but the
-	//    DB cluster is unable to assume the IAM role in order to access other AWS
+	//    DB cluster is unable to assume the IAM role in order to access other Amazon
 	//    services on your behalf.
 	Status *string `type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DBClusterRole) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DBClusterRole) GoString() string {
 	return s.String()
 }
@@ -9783,18 +10445,18 @@ type DBClusterSnapshot struct {
 	// Provides the version of the database engine for this DB cluster snapshot.
 	EngineVersion *string `type:"string"`
 
-	// True if mapping of AWS Identity and Access Management (IAM) accounts to database
-	// accounts is enabled, and otherwise false.
+	// True if mapping of Amazon Identity and Access Management (IAM) accounts to
+	// database accounts is enabled, and otherwise false.
 	IAMDatabaseAuthenticationEnabled *bool `type:"boolean"`
 
-	// If StorageEncrypted is true, the AWS KMS key identifier for the encrypted
+	// If StorageEncrypted is true, the Amazon KMS key identifier for the encrypted
 	// DB cluster snapshot.
 	KmsKeyId *string `type:"string"`
 
 	// Provides the license model information for this DB cluster snapshot.
 	LicenseModel *string `type:"string"`
 
-	// Provides the master username for the DB cluster snapshot.
+	// Not supported by Neptune.
 	MasterUsername *string `type:"string"`
 
 	// Specifies the percentage of the estimated data that has been transferred.
@@ -9826,12 +10488,20 @@ type DBClusterSnapshot struct {
 	VpcId *string `type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DBClusterSnapshot) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DBClusterSnapshot) GoString() string {
 	return s.String()
 }
@@ -9958,15 +10628,15 @@ func (s *DBClusterSnapshot) SetVpcId(v string) *DBClusterSnapshot {
 
 // Contains the name and values of a manual DB cluster snapshot attribute.
 //
-// Manual DB cluster snapshot attributes are used to authorize other AWS accounts
-// to restore a manual DB cluster snapshot. For more information, see the ModifyDBClusterSnapshotAttribute
-// API action.
+// Manual DB cluster snapshot attributes are used to authorize other Amazon
+// accounts to restore a manual DB cluster snapshot. For more information, see
+// the ModifyDBClusterSnapshotAttribute API action.
 type DBClusterSnapshotAttribute struct {
 	_ struct{} `type:"structure"`
 
 	// The name of the manual DB cluster snapshot attribute.
 	//
-	// The attribute named restore refers to the list of AWS accounts that have
+	// The attribute named restore refers to the list of Amazon accounts that have
 	// permission to copy or restore the manual DB cluster snapshot. For more information,
 	// see the ModifyDBClusterSnapshotAttribute API action.
 	AttributeName *string `type:"string"`
@@ -9974,19 +10644,27 @@ type DBClusterSnapshotAttribute struct {
 	// The value(s) for the manual DB cluster snapshot attribute.
 	//
 	// If the AttributeName field is set to restore, then this element returns a
-	// list of IDs of the AWS accounts that are authorized to copy or restore the
-	// manual DB cluster snapshot. If a value of all is in the list, then the manual
-	// DB cluster snapshot is public and available for any AWS account to copy or
-	// restore.
+	// list of IDs of the Amazon accounts that are authorized to copy or restore
+	// the manual DB cluster snapshot. If a value of all is in the list, then the
+	// manual DB cluster snapshot is public and available for any Amazon account
+	// to copy or restore.
 	AttributeValues []*string `locationNameList:"AttributeValue" type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DBClusterSnapshotAttribute) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DBClusterSnapshotAttribute) GoString() string {
 	return s.String()
 }
@@ -10006,9 +10684,9 @@ func (s *DBClusterSnapshotAttribute) SetAttributeValues(v []*string) *DBClusterS
 // Contains the results of a successful call to the DescribeDBClusterSnapshotAttributes
 // API action.
 //
-// Manual DB cluster snapshot attributes are used to authorize other AWS accounts
-// to copy or restore a manual DB cluster snapshot. For more information, see
-// the ModifyDBClusterSnapshotAttribute API action.
+// Manual DB cluster snapshot attributes are used to authorize other Amazon
+// accounts to copy or restore a manual DB cluster snapshot. For more information,
+// see the ModifyDBClusterSnapshotAttribute API action.
 type DBClusterSnapshotAttributesResult struct {
 	_ struct{} `type:"structure"`
 
@@ -10020,12 +10698,20 @@ type DBClusterSnapshotAttributesResult struct {
 	DBClusterSnapshotIdentifier *string `type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DBClusterSnapshotAttributesResult) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DBClusterSnapshotAttributesResult) GoString() string {
 	return s.String()
 }
@@ -10087,12 +10773,20 @@ type DBEngineVersion struct {
 	ValidUpgradeTarget []*UpgradeTarget `locationNameList:"UpgradeTarget" type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DBEngineVersion) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DBEngineVersion) GoString() string {
 	return s.String()
 }
@@ -10175,7 +10869,7 @@ func (s *DBEngineVersion) SetValidUpgradeTarget(v []*UpgradeTarget) *DBEngineVer
 type DBInstance struct {
 	_ struct{} `type:"structure"`
 
-	// Specifies the allocated storage size specified in gibibytes.
+	// Not supported by Neptune.
 	AllocatedStorage *int64 `type:"integer"`
 
 	// Indicates that minor version patches are applied automatically.
@@ -10232,9 +10926,9 @@ type DBInstance struct {
 	// part of a DB cluster, this can be a different port than the DB cluster port.
 	DbInstancePort *int64 `type:"integer"`
 
-	// The AWS Region-unique, immutable identifier for the DB instance. This identifier
-	// is found in AWS CloudTrail log entries whenever the AWS KMS key for the DB
-	// instance is accessed.
+	// The Amazon Region-unique, immutable identifier for the DB instance. This
+	// identifier is found in Amazon CloudTrail log entries whenever the Amazon
+	// KMS key for the DB instance is accessed.
 	DbiResourceId *string `type:"string"`
 
 	// Indicates whether or not the DB instance has deletion protection enabled.
@@ -10262,7 +10956,7 @@ type DBInstance struct {
 	// receives the Enhanced Monitoring metrics data for the DB instance.
 	EnhancedMonitoringResourceArn *string `type:"string"`
 
-	// True if AWS Identity and Access Management (IAM) authentication is enabled,
+	// True if Amazon Identity and Access Management (IAM) authentication is enabled,
 	// and otherwise false.
 	IAMDatabaseAuthenticationEnabled *bool `type:"boolean"`
 
@@ -10282,7 +10976,7 @@ type DBInstance struct {
 	// License model information for this DB instance.
 	LicenseModel *string `type:"string"`
 
-	// Contains the master username for the DB instance.
+	// Not supported by Neptune.
 	MasterUsername *string `type:"string"`
 
 	// The interval, in seconds, between points when Enhanced Monitoring metrics
@@ -10364,12 +11058,20 @@ type DBInstance struct {
 	VpcSecurityGroups []*VpcSecurityGroupMembership `locationNameList:"VpcSecurityGroupMembership" type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DBInstance) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DBInstance) GoString() string {
 	return s.String()
 }
@@ -10712,12 +11414,20 @@ type DBInstanceStatusInfo struct {
 	StatusType *string `type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DBInstanceStatusInfo) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DBInstanceStatusInfo) GoString() string {
 	return s.String()
 }
@@ -10767,12 +11477,20 @@ type DBParameterGroup struct {
 	Description *string `type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DBParameterGroup) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DBParameterGroup) GoString() string {
 	return s.String()
 }
@@ -10822,12 +11540,20 @@ type DBParameterGroupStatus struct {
 	ParameterApplyStatus *string `type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DBParameterGroupStatus) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DBParameterGroupStatus) GoString() string {
 	return s.String()
 }
@@ -10855,12 +11581,20 @@ type DBSecurityGroupMembership struct {
 	Status *string `type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DBSecurityGroupMembership) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DBSecurityGroupMembership) GoString() string {
 	return s.String()
 }
@@ -10903,12 +11637,20 @@ type DBSubnetGroup struct {
 	VpcId *string `type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DBSubnetGroup) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DBSubnetGroup) GoString() string {
 	return s.String()
 }
@@ -10959,12 +11701,20 @@ type DeleteDBClusterEndpointInput struct {
 	DBClusterEndpointIdentifier *string `type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteDBClusterEndpointInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteDBClusterEndpointInput) GoString() string {
 	return s.String()
 }
@@ -11044,12 +11794,20 @@ type DeleteDBClusterEndpointOutput struct {
 	Status *string `type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteDBClusterEndpointOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteDBClusterEndpointOutput) GoString() string {
 	return s.String()
 }
@@ -11153,12 +11911,20 @@ type DeleteDBClusterInput struct {
 	SkipFinalSnapshot *bool `type:"boolean"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteDBClusterInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteDBClusterInput) GoString() string {
 	return s.String()
 }
@@ -11203,12 +11969,20 @@ type DeleteDBClusterOutput struct {
 	DBCluster *DBCluster `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteDBClusterOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteDBClusterOutput) GoString() string {
 	return s.String()
 }
@@ -11236,12 +12010,20 @@ type DeleteDBClusterParameterGroupInput struct {
 	DBClusterParameterGroupName *string `type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteDBClusterParameterGroupInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteDBClusterParameterGroupInput) GoString() string {
 	return s.String()
 }
@@ -11269,12 +12051,20 @@ type DeleteDBClusterParameterGroupOutput struct {
 	_ struct{} `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteDBClusterParameterGroupOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteDBClusterParameterGroupOutput) GoString() string {
 	return s.String()
 }
@@ -11291,12 +12081,20 @@ type DeleteDBClusterSnapshotInput struct {
 	DBClusterSnapshotIdentifier *string `type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteDBClusterSnapshotInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteDBClusterSnapshotInput) GoString() string {
 	return s.String()
 }
@@ -11330,12 +12128,20 @@ type DeleteDBClusterSnapshotOutput struct {
 	DBClusterSnapshot *DBClusterSnapshot `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteDBClusterSnapshotOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteDBClusterSnapshotOutput) GoString() string {
 	return s.String()
 }
@@ -11393,12 +12199,20 @@ type DeleteDBInstanceInput struct {
 	SkipFinalSnapshot *bool `type:"boolean"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteDBInstanceInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteDBInstanceInput) GoString() string {
 	return s.String()
 }
@@ -11443,12 +12257,20 @@ type DeleteDBInstanceOutput struct {
 	DBInstance *DBInstance `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteDBInstanceOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteDBInstanceOutput) GoString() string {
 	return s.String()
 }
@@ -11476,12 +12298,20 @@ type DeleteDBParameterGroupInput struct {
 	DBParameterGroupName *string `type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteDBParameterGroupInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteDBParameterGroupInput) GoString() string {
 	return s.String()
 }
@@ -11509,12 +12339,20 @@ type DeleteDBParameterGroupOutput struct {
 	_ struct{} `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteDBParameterGroupOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteDBParameterGroupOutput) GoString() string {
 	return s.String()
 }
@@ -11537,12 +12375,20 @@ type DeleteDBSubnetGroupInput struct {
 	DBSubnetGroupName *string `type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteDBSubnetGroupInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteDBSubnetGroupInput) GoString() string {
 	return s.String()
 }
@@ -11570,12 +12416,20 @@ type DeleteDBSubnetGroupOutput struct {
 	_ struct{} `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteDBSubnetGroupOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteDBSubnetGroupOutput) GoString() string {
 	return s.String()
 }
@@ -11589,12 +12443,20 @@ type DeleteEventSubscriptionInput struct {
 	SubscriptionName *string `type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteEventSubscriptionInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteEventSubscriptionInput) GoString() string {
 	return s.String()
 }
@@ -11626,12 +12488,20 @@ type DeleteEventSubscriptionOutput struct {
 	EventSubscription *EventSubscription `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteEventSubscriptionOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteEventSubscriptionOutput) GoString() string {
 	return s.String()
 }
@@ -11677,12 +12547,20 @@ type DescribeDBClusterEndpointsInput struct {
 	MaxRecords *int64 `type:"integer"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeDBClusterEndpointsInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeDBClusterEndpointsInput) GoString() string {
 	return s.String()
 }
@@ -11750,12 +12628,20 @@ type DescribeDBClusterEndpointsOutput struct {
 	Marker *string `type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeDBClusterEndpointsOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeDBClusterEndpointsOutput) GoString() string {
 	return s.String()
 }
@@ -11800,12 +12686,20 @@ type DescribeDBClusterParameterGroupsInput struct {
 	MaxRecords *int64 `type:"integer"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeDBClusterParameterGroupsInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeDBClusterParameterGroupsInput) GoString() string {
 	return s.String()
 }
@@ -11866,12 +12760,20 @@ type DescribeDBClusterParameterGroupsOutput struct {
 	Marker *string `type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeDBClusterParameterGroupsOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeDBClusterParameterGroupsOutput) GoString() string {
 	return s.String()
 }
@@ -11923,12 +12825,20 @@ type DescribeDBClusterParametersInput struct {
 	Source *string `type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeDBClusterParametersInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeDBClusterParametersInput) GoString() string {
 	return s.String()
 }
@@ -11998,12 +12908,20 @@ type DescribeDBClusterParametersOutput struct {
 	Parameters []*Parameter `locationNameList:"Parameter" type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeDBClusterParametersOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeDBClusterParametersOutput) GoString() string {
 	return s.String()
 }
@@ -12029,12 +12947,20 @@ type DescribeDBClusterSnapshotAttributesInput struct {
 	DBClusterSnapshotIdentifier *string `type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeDBClusterSnapshotAttributesInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeDBClusterSnapshotAttributesInput) GoString() string {
 	return s.String()
 }
@@ -12064,18 +12990,26 @@ type DescribeDBClusterSnapshotAttributesOutput struct {
 	// Contains the results of a successful call to the DescribeDBClusterSnapshotAttributes
 	// API action.
 	//
-	// Manual DB cluster snapshot attributes are used to authorize other AWS accounts
-	// to copy or restore a manual DB cluster snapshot. For more information, see
-	// the ModifyDBClusterSnapshotAttribute API action.
+	// Manual DB cluster snapshot attributes are used to authorize other Amazon
+	// accounts to copy or restore a manual DB cluster snapshot. For more information,
+	// see the ModifyDBClusterSnapshotAttribute API action.
 	DBClusterSnapshotAttributesResult *DBClusterSnapshotAttributesResult `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeDBClusterSnapshotAttributesOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeDBClusterSnapshotAttributesOutput) GoString() string {
 	return s.String()
 }
@@ -12114,19 +13048,20 @@ type DescribeDBClusterSnapshotsInput struct {
 	Filters []*Filter `locationNameList:"Filter" type:"list"`
 
 	// True to include manual DB cluster snapshots that are public and can be copied
-	// or restored by any AWS account, and otherwise false. The default is false.
+	// or restored by any Amazon account, and otherwise false. The default is false.
 	// The default is false.
 	//
 	// You can share a manual DB cluster snapshot as public by using the ModifyDBClusterSnapshotAttribute
 	// API action.
 	IncludePublic *bool `type:"boolean"`
 
-	// True to include shared manual DB cluster snapshots from other AWS accounts
+	// True to include shared manual DB cluster snapshots from other Amazon accounts
 	// that this AWS account has been given permission to copy or restore, and otherwise
 	// false. The default is false.
 	//
-	// You can give an AWS account permission to restore a manual DB cluster snapshot
-	// from another AWS account by the ModifyDBClusterSnapshotAttribute API action.
+	// You can give an Amazon account permission to restore a manual DB cluster
+	// snapshot from another Amazon account by the ModifyDBClusterSnapshotAttribute
+	// API action.
 	IncludeShared *bool `type:"boolean"`
 
 	// An optional pagination token provided by a previous DescribeDBClusterSnapshots
@@ -12147,13 +13082,13 @@ type DescribeDBClusterSnapshotsInput struct {
 	// following values:
 	//
 	//    * automated - Return all DB cluster snapshots that have been automatically
-	//    taken by Amazon Neptune for my AWS account.
+	//    taken by Amazon Neptune for my Amazon account.
 	//
 	//    * manual - Return all DB cluster snapshots that have been taken by my
 	//    AWS account.
 	//
 	//    * shared - Return all manual DB cluster snapshots that have been shared
-	//    to my AWS account.
+	//    to my Amazon account.
 	//
 	//    * public - Return all DB cluster snapshots that have been marked as public.
 	//
@@ -12170,12 +13105,20 @@ type DescribeDBClusterSnapshotsInput struct {
 	SnapshotType *string `type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeDBClusterSnapshotsInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeDBClusterSnapshotsInput) GoString() string {
 	return s.String()
 }
@@ -12260,12 +13203,20 @@ type DescribeDBClusterSnapshotsOutput struct {
 	Marker *string `type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeDBClusterSnapshotsOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeDBClusterSnapshotsOutput) GoString() string {
 	return s.String()
 }
@@ -12305,7 +13256,7 @@ type DescribeDBClustersInput struct {
 	//    * engine - Accepts an engine name (such as neptune), and restricts the
 	//    results list to DB clusters created by that engine.
 	//
-	// For example, to invoke this API from the AWS CLI and filter so that only
+	// For example, to invoke this API from the Amazon CLI and filter so that only
 	// Neptune DB clusters are returned, you could use the following command:
 	Filters []*Filter `locationNameList:"Filter" type:"list"`
 
@@ -12324,12 +13275,20 @@ type DescribeDBClustersInput struct {
 	MaxRecords *int64 `type:"integer"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeDBClustersInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeDBClustersInput) GoString() string {
 	return s.String()
 }
@@ -12388,12 +13347,20 @@ type DescribeDBClustersOutput struct {
 	Marker *string `type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeDBClustersOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeDBClustersOutput) GoString() string {
 	return s.String()
 }
@@ -12460,12 +13427,20 @@ type DescribeDBEngineVersionsInput struct {
 	MaxRecords *int64 `type:"integer"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeDBEngineVersionsInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeDBEngineVersionsInput) GoString() string {
 	return s.String()
 }
@@ -12556,12 +13531,20 @@ type DescribeDBEngineVersionsOutput struct {
 	Marker *string `type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeDBEngineVersionsOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeDBEngineVersionsOutput) GoString() string {
 	return s.String()
 }
@@ -12601,7 +13584,7 @@ type DescribeDBInstancesInput struct {
 	//    * engine - Accepts an engine name (such as neptune), and restricts the
 	//    results list to DB instances created by that engine.
 	//
-	// For example, to invoke this API from the AWS CLI and filter so that only
+	// For example, to invoke this API from the Amazon CLI and filter so that only
 	// Neptune DB instances are returned, you could use the following command:
 	Filters []*Filter `locationNameList:"Filter" type:"list"`
 
@@ -12620,12 +13603,20 @@ type DescribeDBInstancesInput struct {
 	MaxRecords *int64 `type:"integer"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeDBInstancesInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeDBInstancesInput) GoString() string {
 	return s.String()
 }
@@ -12686,12 +13677,20 @@ type DescribeDBInstancesOutput struct {
 	Marker *string `type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeDBInstancesOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeDBInstancesOutput) GoString() string {
 	return s.String()
 }
@@ -12736,12 +13735,20 @@ type DescribeDBParameterGroupsInput struct {
 	MaxRecords *int64 `type:"integer"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeDBParameterGroupsInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeDBParameterGroupsInput) GoString() string {
 	return s.String()
 }
@@ -12802,12 +13809,20 @@ type DescribeDBParameterGroupsOutput struct {
 	Marker *string `type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeDBParameterGroupsOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeDBParameterGroupsOutput) GoString() string {
 	return s.String()
 }
@@ -12861,12 +13876,20 @@ type DescribeDBParametersInput struct {
 	Source *string `type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeDBParametersInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeDBParametersInput) GoString() string {
 	return s.String()
 }
@@ -12936,12 +13959,20 @@ type DescribeDBParametersOutput struct {
 	Parameters []*Parameter `locationNameList:"Parameter" type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeDBParametersOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeDBParametersOutput) GoString() string {
 	return s.String()
 }
@@ -12982,12 +14013,20 @@ type DescribeDBSubnetGroupsInput struct {
 	MaxRecords *int64 `type:"integer"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeDBSubnetGroupsInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeDBSubnetGroupsInput) GoString() string {
 	return s.String()
 }
@@ -13048,12 +14087,20 @@ type DescribeDBSubnetGroupsOutput struct {
 	Marker *string `type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeDBSubnetGroupsOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeDBSubnetGroupsOutput) GoString() string {
 	return s.String()
 }
@@ -13097,12 +14144,20 @@ type DescribeEngineDefaultClusterParametersInput struct {
 	MaxRecords *int64 `type:"integer"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeEngineDefaultClusterParametersInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeEngineDefaultClusterParametersInput) GoString() string {
 	return s.String()
 }
@@ -13162,12 +14217,20 @@ type DescribeEngineDefaultClusterParametersOutput struct {
 	EngineDefaults *EngineDefaults `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeEngineDefaultClusterParametersOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeEngineDefaultClusterParametersOutput) GoString() string {
 	return s.String()
 }
@@ -13204,12 +14267,20 @@ type DescribeEngineDefaultParametersInput struct {
 	MaxRecords *int64 `type:"integer"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeEngineDefaultParametersInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeEngineDefaultParametersInput) GoString() string {
 	return s.String()
 }
@@ -13269,12 +14340,20 @@ type DescribeEngineDefaultParametersOutput struct {
 	EngineDefaults *EngineDefaults `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeEngineDefaultParametersOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeEngineDefaultParametersOutput) GoString() string {
 	return s.String()
 }
@@ -13297,12 +14376,20 @@ type DescribeEventCategoriesInput struct {
 	SourceType *string `type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeEventCategoriesInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeEventCategoriesInput) GoString() string {
 	return s.String()
 }
@@ -13346,12 +14433,20 @@ type DescribeEventCategoriesOutput struct {
 	EventCategoriesMapList []*EventCategoriesMap `locationNameList:"EventCategoriesMap" type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeEventCategoriesOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeEventCategoriesOutput) GoString() string {
 	return s.String()
 }
@@ -13386,12 +14481,20 @@ type DescribeEventSubscriptionsInput struct {
 	SubscriptionName *string `type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeEventSubscriptionsInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeEventSubscriptionsInput) GoString() string {
 	return s.String()
 }
@@ -13452,12 +14555,20 @@ type DescribeEventSubscriptionsOutput struct {
 	Marker *string `type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeEventSubscriptionsOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeEventSubscriptionsOutput) GoString() string {
 	return s.String()
 }
@@ -13543,12 +14654,20 @@ type DescribeEventsInput struct {
 	StartTime *time.Time `type:"timestamp"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeEventsInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeEventsInput) GoString() string {
 	return s.String()
 }
@@ -13639,12 +14758,20 @@ type DescribeEventsOutput struct {
 	Marker *string `type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeEventsOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeEventsOutput) GoString() string {
 	return s.String()
 }
@@ -13703,12 +14830,20 @@ type DescribeOrderableDBInstanceOptionsInput struct {
 	Vpc *bool `type:"boolean"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeOrderableDBInstanceOptionsInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeOrderableDBInstanceOptionsInput) GoString() string {
 	return s.String()
 }
@@ -13797,12 +14932,20 @@ type DescribeOrderableDBInstanceOptionsOutput struct {
 	OrderableDBInstanceOptions []*OrderableDBInstanceOption `locationNameList:"OrderableDBInstanceOption" type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeOrderableDBInstanceOptionsOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeOrderableDBInstanceOptionsOutput) GoString() string {
 	return s.String()
 }
@@ -13854,12 +14997,20 @@ type DescribePendingMaintenanceActionsInput struct {
 	ResourceIdentifier *string `type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribePendingMaintenanceActionsInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribePendingMaintenanceActionsInput) GoString() string {
 	return s.String()
 }
@@ -13920,12 +15071,20 @@ type DescribePendingMaintenanceActionsOutput struct {
 	PendingMaintenanceActions []*ResourcePendingMaintenanceActions `locationNameList:"ResourcePendingMaintenanceActions" type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribePendingMaintenanceActionsOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribePendingMaintenanceActionsOutput) GoString() string {
 	return s.String()
 }
@@ -13951,12 +15110,20 @@ type DescribeValidDBInstanceModificationsInput struct {
 	DBInstanceIdentifier *string `type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeValidDBInstanceModificationsInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeValidDBInstanceModificationsInput) GoString() string {
 	return s.String()
 }
@@ -13989,12 +15156,20 @@ type DescribeValidDBInstanceModificationsOutput struct {
 	ValidDBInstanceModificationsMessage *ValidDBInstanceModificationsMessage `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeValidDBInstanceModificationsOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeValidDBInstanceModificationsOutput) GoString() string {
 	return s.String()
 }
@@ -14024,12 +15199,20 @@ type DomainMembership struct {
 	Status *string `type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DomainMembership) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DomainMembership) GoString() string {
 	return s.String()
 }
@@ -14069,12 +15252,20 @@ type DoubleRange struct {
 	To *float64 `type:"double"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DoubleRange) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DoubleRange) GoString() string {
 	return s.String()
 }
@@ -14108,12 +15299,20 @@ type Endpoint struct {
 	Port *int64 `type:"integer"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s Endpoint) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s Endpoint) GoString() string {
 	return s.String()
 }
@@ -14154,12 +15353,20 @@ type EngineDefaults struct {
 	Parameters []*Parameter `locationNameList:"Parameter" type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s EngineDefaults) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s EngineDefaults) GoString() string {
 	return s.String()
 }
@@ -14205,12 +15412,20 @@ type Event struct {
 	SourceType *string `type:"string" enum:"SourceType"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s Event) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s Event) GoString() string {
 	return s.String()
 }
@@ -14263,12 +15478,20 @@ type EventCategoriesMap struct {
 	SourceType *string `type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s EventCategoriesMap) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s EventCategoriesMap) GoString() string {
 	return s.String()
 }
@@ -14293,7 +15516,7 @@ type EventSubscription struct {
 	// The event notification subscription Id.
 	CustSubscriptionId *string `type:"string"`
 
-	// The AWS customer account associated with the event notification subscription.
+	// The Amazon customer account associated with the event notification subscription.
 	CustomerAwsId *string `type:"string"`
 
 	// A Boolean value indicating if the subscription is enabled. True indicates
@@ -14331,12 +15554,20 @@ type EventSubscription struct {
 	SubscriptionCreationTime *string `type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s EventSubscription) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s EventSubscription) GoString() string {
 	return s.String()
 }
@@ -14418,12 +15649,20 @@ type FailoverDBClusterInput struct {
 	TargetDBInstanceIdentifier *string `type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s FailoverDBClusterInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s FailoverDBClusterInput) GoString() string {
 	return s.String()
 }
@@ -14449,12 +15688,20 @@ type FailoverDBClusterOutput struct {
 	DBCluster *DBCluster `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s FailoverDBClusterOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s FailoverDBClusterOutput) GoString() string {
 	return s.String()
 }
@@ -14480,12 +15727,20 @@ type Filter struct {
 	Values []*string `locationNameList:"Value" type:"list" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s Filter) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s Filter) GoString() string {
 	return s.String()
 }
@@ -14532,12 +15787,20 @@ type ListTagsForResourceInput struct {
 	ResourceName *string `type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListTagsForResourceInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListTagsForResourceInput) GoString() string {
 	return s.String()
 }
@@ -14584,12 +15847,20 @@ type ListTagsForResourceOutput struct {
 	TagList []*Tag `locationNameList:"Tag" type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListTagsForResourceOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListTagsForResourceOutput) GoString() string {
 	return s.String()
 }
@@ -14621,12 +15892,20 @@ type ModifyDBClusterEndpointInput struct {
 	StaticMembers []*string `type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ModifyDBClusterEndpointInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ModifyDBClusterEndpointInput) GoString() string {
 	return s.String()
 }
@@ -14724,12 +16003,20 @@ type ModifyDBClusterEndpointOutput struct {
 	Status *string `type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ModifyDBClusterEndpointOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ModifyDBClusterEndpointOutput) GoString() string {
 	return s.String()
 }
@@ -14803,12 +16090,11 @@ type ModifyDBClusterInput struct {
 	// is set to false, changes to the DB cluster are applied during the next maintenance
 	// window.
 	//
-	// The ApplyImmediately parameter only affects the NewDBClusterIdentifier and
-	// MasterUserPassword values. If you set the ApplyImmediately parameter value
-	// to false, then changes to the NewDBClusterIdentifier and MasterUserPassword
-	// values are applied during the next maintenance window. All other changes
-	// are applied immediately, regardless of the value of the ApplyImmediately
-	// parameter.
+	// The ApplyImmediately parameter only affects NewDBClusterIdentifier values.
+	// If you set the ApplyImmediately parameter value to false, then changes to
+	// NewDBClusterIdentifier values are applied during the next maintenance window.
+	// All other changes are applied immediately, regardless of the value of the
+	// ApplyImmediately parameter.
 	//
 	// Default: false
 	ApplyImmediately *bool `type:"boolean"`
@@ -14826,6 +16112,10 @@ type ModifyDBClusterInput struct {
 	// The configuration setting for the log types to be enabled for export to CloudWatch
 	// Logs for a specific DB cluster.
 	CloudwatchLogsExportConfiguration *CloudwatchLogsExportConfiguration `type:"structure"`
+
+	// If set to true, tags are copied to any snapshot of the DB cluster that is
+	// created.
+	CopyTagsToSnapshot *bool `type:"boolean"`
 
 	// The DB cluster identifier for the cluster being modified. This parameter
 	// is not case-sensitive.
@@ -14845,7 +16135,7 @@ type ModifyDBClusterInput struct {
 	// deletion protection is disabled.
 	DeletionProtection *bool `type:"boolean"`
 
-	// True to enable mapping of AWS Identity and Access Management (IAM) accounts
+	// True to enable mapping of Amazon Identity and Access Management (IAM) accounts
 	// to database accounts, and otherwise false.
 	//
 	// Default: false
@@ -14860,10 +16150,7 @@ type ModifyDBClusterInput struct {
 	// or call DescribeDBEngineVersions (https://docs.aws.amazon.com/neptune/latest/userguide/api-other-apis.html#DescribeDBEngineVersions).
 	EngineVersion *string `type:"string"`
 
-	// The new password for the master database user. This password can contain
-	// any printable ASCII character except "/", """, or "@".
-	//
-	// Constraints: Must contain from 8 to 41 characters.
+	// Not supported by Neptune.
 	MasterUserPassword *string `type:"string"`
 
 	// The new DB cluster identifier for the DB cluster when renaming a DB cluster.
@@ -14880,7 +16167,7 @@ type ModifyDBClusterInput struct {
 	// Example: my-cluster2
 	NewDBClusterIdentifier *string `type:"string"`
 
-	// (Not supported by Neptune)
+	// Not supported by Neptune.
 	OptionGroupName *string `type:"string"`
 
 	// The port number on which the DB cluster accepts connections.
@@ -14894,7 +16181,7 @@ type ModifyDBClusterInput struct {
 	// backups are enabled, using the BackupRetentionPeriod parameter.
 	//
 	// The default is a 30-minute window selected at random from an 8-hour block
-	// of time for each AWS Region.
+	// of time for each Amazon Region.
 	//
 	// Constraints:
 	//
@@ -14913,7 +16200,7 @@ type ModifyDBClusterInput struct {
 	// Format: ddd:hh24:mi-ddd:hh24:mi
 	//
 	// The default is a 30-minute window selected at random from an 8-hour block
-	// of time for each AWS Region, occurring on a random day of the week.
+	// of time for each Amazon Region, occurring on a random day of the week.
 	//
 	// Valid Days: Mon, Tue, Wed, Thu, Fri, Sat, Sun.
 	//
@@ -14924,12 +16211,20 @@ type ModifyDBClusterInput struct {
 	VpcSecurityGroupIds []*string `locationNameList:"VpcSecurityGroupId" type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ModifyDBClusterInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ModifyDBClusterInput) GoString() string {
 	return s.String()
 }
@@ -14962,6 +16257,12 @@ func (s *ModifyDBClusterInput) SetBackupRetentionPeriod(v int64) *ModifyDBCluste
 // SetCloudwatchLogsExportConfiguration sets the CloudwatchLogsExportConfiguration field's value.
 func (s *ModifyDBClusterInput) SetCloudwatchLogsExportConfiguration(v *CloudwatchLogsExportConfiguration) *ModifyDBClusterInput {
 	s.CloudwatchLogsExportConfiguration = v
+	return s
+}
+
+// SetCopyTagsToSnapshot sets the CopyTagsToSnapshot field's value.
+func (s *ModifyDBClusterInput) SetCopyTagsToSnapshot(v bool) *ModifyDBClusterInput {
+	s.CopyTagsToSnapshot = &v
 	return s
 }
 
@@ -15046,12 +16347,20 @@ type ModifyDBClusterOutput struct {
 	DBCluster *DBCluster `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ModifyDBClusterOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ModifyDBClusterOutput) GoString() string {
 	return s.String()
 }
@@ -15076,12 +16385,20 @@ type ModifyDBClusterParameterGroupInput struct {
 	Parameters []*Parameter `locationNameList:"Parameter" type:"list" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ModifyDBClusterParameterGroupInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ModifyDBClusterParameterGroupInput) GoString() string {
 	return s.String()
 }
@@ -15119,7 +16436,7 @@ type ModifyDBClusterSnapshotAttributeInput struct {
 
 	// The name of the DB cluster snapshot attribute to modify.
 	//
-	// To manage authorization for other AWS accounts to copy or restore a manual
+	// To manage authorization for other Amazon accounts to copy or restore a manual
 	// DB cluster snapshot, set this value to restore.
 	//
 	// AttributeName is a required field
@@ -15133,31 +16450,39 @@ type ModifyDBClusterSnapshotAttributeInput struct {
 	// A list of DB cluster snapshot attributes to add to the attribute specified
 	// by AttributeName.
 	//
-	// To authorize other AWS accounts to copy or restore a manual DB cluster snapshot,
-	// set this list to include one or more AWS account IDs, or all to make the
-	// manual DB cluster snapshot restorable by any AWS account. Do not add the
-	// all value for any manual DB cluster snapshots that contain private information
-	// that you don't want available to all AWS accounts.
+	// To authorize other Amazon accounts to copy or restore a manual DB cluster
+	// snapshot, set this list to include one or more Amazon account IDs, or all
+	// to make the manual DB cluster snapshot restorable by any Amazon account.
+	// Do not add the all value for any manual DB cluster snapshots that contain
+	// private information that you don't want available to all AWS accounts.
 	ValuesToAdd []*string `locationNameList:"AttributeValue" type:"list"`
 
 	// A list of DB cluster snapshot attributes to remove from the attribute specified
 	// by AttributeName.
 	//
-	// To remove authorization for other AWS accounts to copy or restore a manual
-	// DB cluster snapshot, set this list to include one or more AWS account identifiers,
-	// or all to remove authorization for any AWS account to copy or restore the
-	// DB cluster snapshot. If you specify all, an AWS account whose account ID
-	// is explicitly added to the restore attribute can still copy or restore a
-	// manual DB cluster snapshot.
+	// To remove authorization for other Amazon accounts to copy or restore a manual
+	// DB cluster snapshot, set this list to include one or more Amazon account
+	// identifiers, or all to remove authorization for any Amazon account to copy
+	// or restore the DB cluster snapshot. If you specify all, an Amazon account
+	// whose account ID is explicitly added to the restore attribute can still copy
+	// or restore a manual DB cluster snapshot.
 	ValuesToRemove []*string `locationNameList:"AttributeValue" type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ModifyDBClusterSnapshotAttributeInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ModifyDBClusterSnapshotAttributeInput) GoString() string {
 	return s.String()
 }
@@ -15208,18 +16533,26 @@ type ModifyDBClusterSnapshotAttributeOutput struct {
 	// Contains the results of a successful call to the DescribeDBClusterSnapshotAttributes
 	// API action.
 	//
-	// Manual DB cluster snapshot attributes are used to authorize other AWS accounts
-	// to copy or restore a manual DB cluster snapshot. For more information, see
-	// the ModifyDBClusterSnapshotAttribute API action.
+	// Manual DB cluster snapshot attributes are used to authorize other Amazon
+	// accounts to copy or restore a manual DB cluster snapshot. For more information,
+	// see the ModifyDBClusterSnapshotAttribute API action.
 	DBClusterSnapshotAttributesResult *DBClusterSnapshotAttributesResult `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ModifyDBClusterSnapshotAttributeOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ModifyDBClusterSnapshotAttributeOutput) GoString() string {
 	return s.String()
 }
@@ -15233,9 +16566,7 @@ func (s *ModifyDBClusterSnapshotAttributeOutput) SetDBClusterSnapshotAttributesR
 type ModifyDBInstanceInput struct {
 	_ struct{} `type:"structure"`
 
-	// The new amount of storage (in gibibytes) to allocate for the DB instance.
-	//
-	// Not applicable. Storage is managed by the DB Cluster.
+	// Not supported by Neptune.
 	AllocatedStorage *int64 `type:"integer"`
 
 	// Indicates that major version upgrades are allowed. Changing this parameter
@@ -15355,12 +16686,12 @@ type ModifyDBInstanceInput struct {
 	// Not supported
 	DomainIAMRoleName *string `type:"string"`
 
-	// True to enable mapping of AWS Identity and Access Management (IAM) accounts
+	// True to enable mapping of Amazon Identity and Access Management (IAM) accounts
 	// to database accounts, and otherwise false.
 	//
 	// You can enable IAM database authentication for the following database engines
 	//
-	// Not applicable. Mapping AWS IAM accounts to database accounts is managed
+	// Not applicable. Mapping Amazon IAM accounts to database accounts is managed
 	// by the DB cluster. For more information, see ModifyDBCluster.
 	//
 	// Default: false
@@ -15383,10 +16714,10 @@ type ModifyDBInstanceInput struct {
 	// Default: Uses existing setting
 	Iops *int64 `type:"integer"`
 
-	// Not supported.
+	// Not supported by Neptune.
 	LicenseModel *string `type:"string"`
 
-	// Not applicable.
+	// Not supported by Neptune.
 	MasterUserPassword *string `type:"string"`
 
 	// The interval, in seconds, between points when Enhanced Monitoring metrics
@@ -15504,12 +16835,20 @@ type ModifyDBInstanceInput struct {
 	VpcSecurityGroupIds []*string `locationNameList:"VpcSecurityGroupId" type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ModifyDBInstanceInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ModifyDBInstanceInput) GoString() string {
 	return s.String()
 }
@@ -15758,12 +17097,20 @@ type ModifyDBInstanceOutput struct {
 	DBInstance *DBInstance `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ModifyDBInstanceOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ModifyDBInstanceOutput) GoString() string {
 	return s.String()
 }
@@ -15801,12 +17148,20 @@ type ModifyDBParameterGroupInput struct {
 	Parameters []*Parameter `locationNameList:"Parameter" type:"list" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ModifyDBParameterGroupInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ModifyDBParameterGroupInput) GoString() string {
 	return s.String()
 }
@@ -15862,12 +17217,20 @@ type ModifyDBSubnetGroupInput struct {
 	SubnetIds []*string `locationNameList:"SubnetIdentifier" type:"list" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ModifyDBSubnetGroupInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ModifyDBSubnetGroupInput) GoString() string {
 	return s.String()
 }
@@ -15916,12 +17279,20 @@ type ModifyDBSubnetGroupOutput struct {
 	DBSubnetGroup *DBSubnetGroup `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ModifyDBSubnetGroupOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ModifyDBSubnetGroupOutput) GoString() string {
 	return s.String()
 }
@@ -15961,12 +17332,20 @@ type ModifyEventSubscriptionInput struct {
 	SubscriptionName *string `type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ModifyEventSubscriptionInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ModifyEventSubscriptionInput) GoString() string {
 	return s.String()
 }
@@ -16022,12 +17401,20 @@ type ModifyEventSubscriptionOutput struct {
 	EventSubscription *EventSubscription `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ModifyEventSubscriptionOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ModifyEventSubscriptionOutput) GoString() string {
 	return s.String()
 }
@@ -16038,25 +17425,31 @@ func (s *ModifyEventSubscriptionOutput) SetEventSubscription(v *EventSubscriptio
 	return s
 }
 
-// Provides information on the option groups the DB instance is a member of.
+// Not supported by Neptune.
 type OptionGroupMembership struct {
 	_ struct{} `type:"structure"`
 
-	// The name of the option group that the instance belongs to.
+	// Not supported by Neptune.
 	OptionGroupName *string `type:"string"`
 
-	// The status of the DB instance's option group membership. Valid values are:
-	// in-sync, pending-apply, pending-removal, pending-maintenance-apply, pending-maintenance-removal,
-	// applying, removing, and failed.
+	// Not supported by Neptune.
 	Status *string `type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s OptionGroupMembership) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s OptionGroupMembership) GoString() string {
 	return s.String()
 }
@@ -16142,12 +17535,20 @@ type OrderableDBInstanceOption struct {
 	Vpc *bool `type:"boolean"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s OrderableDBInstanceOption) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s OrderableDBInstanceOption) GoString() string {
 	return s.String()
 }
@@ -16309,12 +17710,20 @@ type Parameter struct {
 	Source *string `type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s Parameter) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s Parameter) GoString() string {
 	return s.String()
 }
@@ -16393,12 +17802,20 @@ type PendingCloudwatchLogsExports struct {
 	LogTypesToEnable []*string `type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s PendingCloudwatchLogsExports) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s PendingCloudwatchLogsExports) GoString() string {
 	return s.String()
 }
@@ -16448,12 +17865,20 @@ type PendingMaintenanceAction struct {
 	OptInStatus *string `type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s PendingMaintenanceAction) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s PendingMaintenanceAction) GoString() string {
 	return s.String()
 }
@@ -16526,13 +17951,10 @@ type PendingModifiedValues struct {
 	// applied or is currently being applied.
 	Iops *int64 `type:"integer"`
 
-	// The license model for the DB instance.
-	//
-	// Valid values: license-included | bring-your-own-license | general-public-license
+	// Not supported by Neptune.
 	LicenseModel *string `type:"string"`
 
-	// Contains the pending or currently-in-progress change of the master credentials
-	// for the DB instance.
+	// Not supported by Neptune.
 	MasterUserPassword *string `type:"string"`
 
 	// Indicates that the Single-AZ DB instance is to change to a Multi-AZ deployment.
@@ -16549,12 +17971,20 @@ type PendingModifiedValues struct {
 	StorageType *string `type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s PendingModifiedValues) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s PendingModifiedValues) GoString() string {
 	return s.String()
 }
@@ -16652,12 +18082,20 @@ type PromoteReadReplicaDBClusterInput struct {
 	DBClusterIdentifier *string `type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s PromoteReadReplicaDBClusterInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s PromoteReadReplicaDBClusterInput) GoString() string {
 	return s.String()
 }
@@ -16690,12 +18128,20 @@ type PromoteReadReplicaDBClusterOutput struct {
 	DBCluster *DBCluster `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s PromoteReadReplicaDBClusterOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s PromoteReadReplicaDBClusterOutput) GoString() string {
 	return s.String()
 }
@@ -16723,12 +18169,20 @@ type Range struct {
 	To *int64 `type:"integer"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s Range) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s Range) GoString() string {
 	return s.String()
 }
@@ -16770,12 +18224,20 @@ type RebootDBInstanceInput struct {
 	ForceFailover *bool `type:"boolean"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s RebootDBInstanceInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s RebootDBInstanceInput) GoString() string {
 	return s.String()
 }
@@ -16814,12 +18276,20 @@ type RebootDBInstanceOutput struct {
 	DBInstance *DBInstance `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s RebootDBInstanceOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s RebootDBInstanceOutput) GoString() string {
 	return s.String()
 }
@@ -16849,12 +18319,20 @@ type RemoveRoleFromDBClusterInput struct {
 	RoleArn *string `type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s RemoveRoleFromDBClusterInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s RemoveRoleFromDBClusterInput) GoString() string {
 	return s.String()
 }
@@ -16897,12 +18375,20 @@ type RemoveRoleFromDBClusterOutput struct {
 	_ struct{} `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s RemoveRoleFromDBClusterOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s RemoveRoleFromDBClusterOutput) GoString() string {
 	return s.String()
 }
@@ -16923,12 +18409,20 @@ type RemoveSourceIdentifierFromSubscriptionInput struct {
 	SubscriptionName *string `type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s RemoveSourceIdentifierFromSubscriptionInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s RemoveSourceIdentifierFromSubscriptionInput) GoString() string {
 	return s.String()
 }
@@ -16969,12 +18463,20 @@ type RemoveSourceIdentifierFromSubscriptionOutput struct {
 	EventSubscription *EventSubscription `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s RemoveSourceIdentifierFromSubscriptionOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s RemoveSourceIdentifierFromSubscriptionOutput) GoString() string {
 	return s.String()
 }
@@ -17001,12 +18503,20 @@ type RemoveTagsFromResourceInput struct {
 	TagKeys []*string `type:"list" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s RemoveTagsFromResourceInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s RemoveTagsFromResourceInput) GoString() string {
 	return s.String()
 }
@@ -17043,12 +18553,20 @@ type RemoveTagsFromResourceOutput struct {
 	_ struct{} `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s RemoveTagsFromResourceOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s RemoveTagsFromResourceOutput) GoString() string {
 	return s.String()
 }
@@ -17072,12 +18590,20 @@ type ResetDBClusterParameterGroupInput struct {
 	ResetAllParameters *bool `type:"boolean"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ResetDBClusterParameterGroupInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ResetDBClusterParameterGroupInput) GoString() string {
 	return s.String()
 }
@@ -17130,12 +18656,20 @@ type ResetDBClusterParameterGroupOutput struct {
 	DBClusterParameterGroupName *string `type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ResetDBClusterParameterGroupOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ResetDBClusterParameterGroupOutput) GoString() string {
 	return s.String()
 }
@@ -17173,12 +18707,20 @@ type ResetDBParameterGroupInput struct {
 	ResetAllParameters *bool `type:"boolean"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ResetDBParameterGroupInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ResetDBParameterGroupInput) GoString() string {
 	return s.String()
 }
@@ -17221,12 +18763,20 @@ type ResetDBParameterGroupOutput struct {
 	DBParameterGroupName *string `type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ResetDBParameterGroupOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ResetDBParameterGroupOutput) GoString() string {
 	return s.String()
 }
@@ -17249,12 +18799,20 @@ type ResourcePendingMaintenanceActions struct {
 	ResourceIdentifier *string `type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ResourcePendingMaintenanceActions) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ResourcePendingMaintenanceActions) GoString() string {
 	return s.String()
 }
@@ -17277,6 +18835,10 @@ type RestoreDBClusterFromSnapshotInput struct {
 	// Provides the list of EC2 Availability Zones that instances in the restored
 	// DB cluster can be created in.
 	AvailabilityZones []*string `locationNameList:"AvailabilityZone" type:"list"`
+
+	// If set to true, tags are copied to any snapshot of the restored DB cluster
+	// that is created.
+	CopyTagsToSnapshot *bool `type:"boolean"`
 
 	// The name of the DB cluster to create from the DB snapshot or DB cluster snapshot.
 	// This parameter isn't case-sensitive.
@@ -17320,7 +18882,7 @@ type RestoreDBClusterFromSnapshotInput struct {
 	// Logs.
 	EnableCloudwatchLogsExports []*string `type:"list"`
 
-	// True to enable mapping of AWS Identity and Access Management (IAM) accounts
+	// True to enable mapping of Amazon Identity and Access Management (IAM) accounts
 	// to database accounts, and otherwise false.
 	//
 	// Default: false
@@ -17338,13 +18900,13 @@ type RestoreDBClusterFromSnapshotInput struct {
 	// The version of the database engine to use for the new DB cluster.
 	EngineVersion *string `type:"string"`
 
-	// The AWS KMS key identifier to use when restoring an encrypted DB cluster
+	// The Amazon KMS key identifier to use when restoring an encrypted DB cluster
 	// from a DB snapshot or DB cluster snapshot.
 	//
 	// The KMS key identifier is the Amazon Resource Name (ARN) for the KMS encryption
-	// key. If you are restoring a DB cluster with the same AWS account that owns
-	// the KMS encryption key used to encrypt the new DB cluster, then you can use
-	// the KMS key alias instead of the ARN for the KMS encryption key.
+	// key. If you are restoring a DB cluster with the same Amazon account that
+	// owns the KMS encryption key used to encrypt the new DB cluster, then you
+	// can use the KMS key alias instead of the ARN for the KMS encryption key.
 	//
 	// If you do not specify a value for the KmsKeyId parameter, then the following
 	// will occur:
@@ -17387,12 +18949,20 @@ type RestoreDBClusterFromSnapshotInput struct {
 	VpcSecurityGroupIds []*string `locationNameList:"VpcSecurityGroupId" type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s RestoreDBClusterFromSnapshotInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s RestoreDBClusterFromSnapshotInput) GoString() string {
 	return s.String()
 }
@@ -17419,6 +18989,12 @@ func (s *RestoreDBClusterFromSnapshotInput) Validate() error {
 // SetAvailabilityZones sets the AvailabilityZones field's value.
 func (s *RestoreDBClusterFromSnapshotInput) SetAvailabilityZones(v []*string) *RestoreDBClusterFromSnapshotInput {
 	s.AvailabilityZones = v
+	return s
+}
+
+// SetCopyTagsToSnapshot sets the CopyTagsToSnapshot field's value.
+func (s *RestoreDBClusterFromSnapshotInput) SetCopyTagsToSnapshot(v bool) *RestoreDBClusterFromSnapshotInput {
+	s.CopyTagsToSnapshot = &v
 	return s
 }
 
@@ -17521,12 +19097,20 @@ type RestoreDBClusterFromSnapshotOutput struct {
 	DBCluster *DBCluster `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s RestoreDBClusterFromSnapshotOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s RestoreDBClusterFromSnapshotOutput) GoString() string {
 	return s.String()
 }
@@ -17576,19 +19160,19 @@ type RestoreDBClusterToPointInTimeInput struct {
 	// Logs.
 	EnableCloudwatchLogsExports []*string `type:"list"`
 
-	// True to enable mapping of AWS Identity and Access Management (IAM) accounts
+	// True to enable mapping of Amazon Identity and Access Management (IAM) accounts
 	// to database accounts, and otherwise false.
 	//
 	// Default: false
 	EnableIAMDatabaseAuthentication *bool `type:"boolean"`
 
-	// The AWS KMS key identifier to use when restoring an encrypted DB cluster
+	// The Amazon KMS key identifier to use when restoring an encrypted DB cluster
 	// from an encrypted DB cluster.
 	//
 	// The KMS key identifier is the Amazon Resource Name (ARN) for the KMS encryption
-	// key. If you are restoring a DB cluster with the same AWS account that owns
-	// the KMS encryption key used to encrypt the new DB cluster, then you can use
-	// the KMS key alias instead of the ARN for the KMS encryption key.
+	// key. If you are restoring a DB cluster with the same Amazon account that
+	// owns the KMS encryption key used to encrypt the new DB cluster, then you
+	// can use the KMS key alias instead of the ARN for the KMS encryption key.
 	//
 	// You can restore to a new DB cluster and encrypt the new DB cluster with a
 	// KMS key that is different than the KMS key used to encrypt the source DB
@@ -17672,12 +19256,20 @@ type RestoreDBClusterToPointInTimeInput struct {
 	VpcSecurityGroupIds []*string `locationNameList:"VpcSecurityGroupId" type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s RestoreDBClusterToPointInTimeInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s RestoreDBClusterToPointInTimeInput) GoString() string {
 	return s.String()
 }
@@ -17797,12 +19389,20 @@ type RestoreDBClusterToPointInTimeOutput struct {
 	DBCluster *DBCluster `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s RestoreDBClusterToPointInTimeOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s RestoreDBClusterToPointInTimeOutput) GoString() string {
 	return s.String()
 }
@@ -17823,12 +19423,20 @@ type StartDBClusterInput struct {
 	DBClusterIdentifier *string `type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s StartDBClusterInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s StartDBClusterInput) GoString() string {
 	return s.String()
 }
@@ -17861,12 +19469,20 @@ type StartDBClusterOutput struct {
 	DBCluster *DBCluster `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s StartDBClusterOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s StartDBClusterOutput) GoString() string {
 	return s.String()
 }
@@ -17887,12 +19503,20 @@ type StopDBClusterInput struct {
 	DBClusterIdentifier *string `type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s StopDBClusterInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s StopDBClusterInput) GoString() string {
 	return s.String()
 }
@@ -17925,12 +19549,20 @@ type StopDBClusterOutput struct {
 	DBCluster *DBCluster `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s StopDBClusterOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s StopDBClusterOutput) GoString() string {
 	return s.String()
 }
@@ -17958,12 +19590,20 @@ type Subnet struct {
 	SubnetStatus *string `type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s Subnet) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s Subnet) GoString() string {
 	return s.String()
 }
@@ -18004,12 +19644,20 @@ type Tag struct {
 	Value *string `type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s Tag) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s Tag) GoString() string {
 	return s.String()
 }
@@ -18034,12 +19682,20 @@ type Timezone struct {
 	TimezoneName *string `type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s Timezone) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s Timezone) GoString() string {
 	return s.String()
 }
@@ -18071,12 +19727,20 @@ type UpgradeTarget struct {
 	IsMajorVersionUpgrade *bool `type:"boolean"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpgradeTarget) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpgradeTarget) GoString() string {
 	return s.String()
 }
@@ -18121,12 +19785,20 @@ type ValidDBInstanceModificationsMessage struct {
 	Storage []*ValidStorageOptions `locationNameList:"ValidStorageOptions" type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ValidDBInstanceModificationsMessage) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ValidDBInstanceModificationsMessage) GoString() string {
 	return s.String()
 }
@@ -18159,12 +19831,20 @@ type ValidStorageOptions struct {
 	StorageType *string `type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ValidStorageOptions) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ValidStorageOptions) GoString() string {
 	return s.String()
 }
@@ -18205,12 +19885,20 @@ type VpcSecurityGroupMembership struct {
 	VpcSecurityGroupId *string `type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s VpcSecurityGroupMembership) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s VpcSecurityGroupMembership) GoString() string {
 	return s.String()
 }

@@ -57,7 +57,8 @@ func (c *RAM) AcceptResourceShareInvitationRequest(input *AcceptResourceShareInv
 
 // AcceptResourceShareInvitation API operation for AWS Resource Access Manager.
 //
-// Accepts an invitation to a resource share from another AWS account.
+// Accepts an invitation to a resource share from another Amazon Web Services
+// account.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -377,7 +378,15 @@ func (c *RAM) CreateResourceShareRequest(input *CreateResourceShareInput) (req *
 
 // CreateResourceShare API operation for AWS Resource Access Manager.
 //
-// Creates a resource share.
+// Creates a resource share. You must provide a list of the Amazon Resource
+// Names (ARNs) for the resources you want to share. You must also specify who
+// you want to share the resources with, and the permissions that you grant
+// them.
+//
+// Sharing a resource makes it available for use by principals outside of the
+// Amazon Web Services account that created the resource. Sharing doesn't change
+// any permissions or quotas that apply to the resource in the account that
+// created it.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -702,7 +711,7 @@ func (c *RAM) DisassociateResourceSharePermissionRequest(input *DisassociateReso
 
 // DisassociateResourceSharePermission API operation for AWS Resource Access Manager.
 //
-// Disassociates an AWS RAM permission from a resource share.
+// Disassociates an RAM permission from a resource share.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -732,6 +741,9 @@ func (c *RAM) DisassociateResourceSharePermissionRequest(input *DisassociateReso
 //
 //   * OperationNotPermittedException
 //   The requested operation is not permitted.
+//
+//   * InvalidStateTransitionException
+//   The requested state transition is not valid.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/ram-2018-01-04/DisassociateResourceSharePermission
 func (c *RAM) DisassociateResourceSharePermission(input *DisassociateResourceSharePermissionInput) (*DisassociateResourceSharePermissionOutput, error) {
@@ -799,9 +811,9 @@ func (c *RAM) EnableSharingWithAwsOrganizationRequest(input *EnableSharingWithAw
 
 // EnableSharingWithAwsOrganization API operation for AWS Resource Access Manager.
 //
-// Enables resource sharing within your AWS Organization.
+// Enables resource sharing within your organization in Organizations.
 //
-// The caller must be the master account for the AWS Organization.
+// The caller must be the master account for the organization.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -886,7 +898,7 @@ func (c *RAM) GetPermissionRequest(input *GetPermissionInput) (req *request.Requ
 
 // GetPermission API operation for AWS Resource Access Manager.
 //
-// Gets the contents of an AWS RAM permission in JSON format.
+// Gets the contents of an RAM permission in JSON format.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -1293,7 +1305,7 @@ func (c *RAM) GetResourceShareInvitationsRequest(input *GetResourceShareInvitati
 
 // GetResourceShareInvitations API operation for AWS Resource Access Manager.
 //
-// Gets the invitations for resource sharing that you've received.
+// Gets the invitations that you have received for resource shares.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -1747,6 +1759,12 @@ func (c *RAM) ListPermissionsRequest(input *ListPermissionsInput) (req *request.
 		Name:       opListPermissions,
 		HTTPMethod: "POST",
 		HTTPPath:   "/listpermissions",
+		Paginator: &request.Paginator{
+			InputTokens:     []string{"nextToken"},
+			OutputTokens:    []string{"nextToken"},
+			LimitToken:      "maxResults",
+			TruncationToken: "",
+		},
 	}
 
 	if input == nil {
@@ -1760,7 +1778,7 @@ func (c *RAM) ListPermissionsRequest(input *ListPermissionsInput) (req *request.
 
 // ListPermissions API operation for AWS Resource Access Manager.
 //
-// Lists the AWS RAM permissions.
+// Lists the RAM permissions.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -1805,6 +1823,58 @@ func (c *RAM) ListPermissionsWithContext(ctx aws.Context, input *ListPermissions
 	req.SetContext(ctx)
 	req.ApplyOptions(opts...)
 	return out, req.Send()
+}
+
+// ListPermissionsPages iterates over the pages of a ListPermissions operation,
+// calling the "fn" function with the response data for each page. To stop
+// iterating, return false from the fn function.
+//
+// See ListPermissions method for more information on how to use this operation.
+//
+// Note: This operation can generate multiple requests to a service.
+//
+//    // Example iterating over at most 3 pages of a ListPermissions operation.
+//    pageNum := 0
+//    err := client.ListPermissionsPages(params,
+//        func(page *ram.ListPermissionsOutput, lastPage bool) bool {
+//            pageNum++
+//            fmt.Println(page)
+//            return pageNum <= 3
+//        })
+//
+func (c *RAM) ListPermissionsPages(input *ListPermissionsInput, fn func(*ListPermissionsOutput, bool) bool) error {
+	return c.ListPermissionsPagesWithContext(aws.BackgroundContext(), input, fn)
+}
+
+// ListPermissionsPagesWithContext same as ListPermissionsPages except
+// it takes a Context and allows setting request options on the pages.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *RAM) ListPermissionsPagesWithContext(ctx aws.Context, input *ListPermissionsInput, fn func(*ListPermissionsOutput, bool) bool, opts ...request.Option) error {
+	p := request.Pagination{
+		NewRequest: func() (*request.Request, error) {
+			var inCpy *ListPermissionsInput
+			if input != nil {
+				tmp := *input
+				inCpy = &tmp
+			}
+			req, _ := c.ListPermissionsRequest(inCpy)
+			req.SetContext(ctx)
+			req.ApplyOptions(opts...)
+			return req, nil
+		},
+	}
+
+	for p.Next() {
+		if !fn(p.Page().(*ListPermissionsOutput), !p.HasNextPage()) {
+			break
+		}
+	}
+
+	return p.Err()
 }
 
 const opListPrincipals = "ListPrincipals"
@@ -1991,6 +2061,12 @@ func (c *RAM) ListResourceSharePermissionsRequest(input *ListResourceSharePermis
 		Name:       opListResourceSharePermissions,
 		HTTPMethod: "POST",
 		HTTPPath:   "/listresourcesharepermissions",
+		Paginator: &request.Paginator{
+			InputTokens:     []string{"nextToken"},
+			OutputTokens:    []string{"nextToken"},
+			LimitToken:      "maxResults",
+			TruncationToken: "",
+		},
 	}
 
 	if input == nil {
@@ -2004,7 +2080,7 @@ func (c *RAM) ListResourceSharePermissionsRequest(input *ListResourceSharePermis
 
 // ListResourceSharePermissions API operation for AWS Resource Access Manager.
 //
-// Lists the AWS RAM permissions that are associated with a resource share.
+// Lists the RAM permissions that are associated with a resource share.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -2057,6 +2133,58 @@ func (c *RAM) ListResourceSharePermissionsWithContext(ctx aws.Context, input *Li
 	return out, req.Send()
 }
 
+// ListResourceSharePermissionsPages iterates over the pages of a ListResourceSharePermissions operation,
+// calling the "fn" function with the response data for each page. To stop
+// iterating, return false from the fn function.
+//
+// See ListResourceSharePermissions method for more information on how to use this operation.
+//
+// Note: This operation can generate multiple requests to a service.
+//
+//    // Example iterating over at most 3 pages of a ListResourceSharePermissions operation.
+//    pageNum := 0
+//    err := client.ListResourceSharePermissionsPages(params,
+//        func(page *ram.ListResourceSharePermissionsOutput, lastPage bool) bool {
+//            pageNum++
+//            fmt.Println(page)
+//            return pageNum <= 3
+//        })
+//
+func (c *RAM) ListResourceSharePermissionsPages(input *ListResourceSharePermissionsInput, fn func(*ListResourceSharePermissionsOutput, bool) bool) error {
+	return c.ListResourceSharePermissionsPagesWithContext(aws.BackgroundContext(), input, fn)
+}
+
+// ListResourceSharePermissionsPagesWithContext same as ListResourceSharePermissionsPages except
+// it takes a Context and allows setting request options on the pages.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *RAM) ListResourceSharePermissionsPagesWithContext(ctx aws.Context, input *ListResourceSharePermissionsInput, fn func(*ListResourceSharePermissionsOutput, bool) bool, opts ...request.Option) error {
+	p := request.Pagination{
+		NewRequest: func() (*request.Request, error) {
+			var inCpy *ListResourceSharePermissionsInput
+			if input != nil {
+				tmp := *input
+				inCpy = &tmp
+			}
+			req, _ := c.ListResourceSharePermissionsRequest(inCpy)
+			req.SetContext(ctx)
+			req.ApplyOptions(opts...)
+			return req, nil
+		},
+	}
+
+	for p.Next() {
+		if !fn(p.Page().(*ListResourceSharePermissionsOutput), !p.HasNextPage()) {
+			break
+		}
+	}
+
+	return p.Err()
+}
+
 const opListResourceTypes = "ListResourceTypes"
 
 // ListResourceTypesRequest generates a "aws/request.Request" representing the
@@ -2088,6 +2216,12 @@ func (c *RAM) ListResourceTypesRequest(input *ListResourceTypesInput) (req *requ
 		Name:       opListResourceTypes,
 		HTTPMethod: "POST",
 		HTTPPath:   "/listresourcetypes",
+		Paginator: &request.Paginator{
+			InputTokens:     []string{"nextToken"},
+			OutputTokens:    []string{"nextToken"},
+			LimitToken:      "maxResults",
+			TruncationToken: "",
+		},
 	}
 
 	if input == nil {
@@ -2101,7 +2235,7 @@ func (c *RAM) ListResourceTypesRequest(input *ListResourceTypesInput) (req *requ
 
 // ListResourceTypes API operation for AWS Resource Access Manager.
 //
-// Lists the shareable resource types supported by AWS RAM.
+// Lists the shareable resource types supported by RAM.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -2143,6 +2277,58 @@ func (c *RAM) ListResourceTypesWithContext(ctx aws.Context, input *ListResourceT
 	req.SetContext(ctx)
 	req.ApplyOptions(opts...)
 	return out, req.Send()
+}
+
+// ListResourceTypesPages iterates over the pages of a ListResourceTypes operation,
+// calling the "fn" function with the response data for each page. To stop
+// iterating, return false from the fn function.
+//
+// See ListResourceTypes method for more information on how to use this operation.
+//
+// Note: This operation can generate multiple requests to a service.
+//
+//    // Example iterating over at most 3 pages of a ListResourceTypes operation.
+//    pageNum := 0
+//    err := client.ListResourceTypesPages(params,
+//        func(page *ram.ListResourceTypesOutput, lastPage bool) bool {
+//            pageNum++
+//            fmt.Println(page)
+//            return pageNum <= 3
+//        })
+//
+func (c *RAM) ListResourceTypesPages(input *ListResourceTypesInput, fn func(*ListResourceTypesOutput, bool) bool) error {
+	return c.ListResourceTypesPagesWithContext(aws.BackgroundContext(), input, fn)
+}
+
+// ListResourceTypesPagesWithContext same as ListResourceTypesPages except
+// it takes a Context and allows setting request options on the pages.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *RAM) ListResourceTypesPagesWithContext(ctx aws.Context, input *ListResourceTypesInput, fn func(*ListResourceTypesOutput, bool) bool, opts ...request.Option) error {
+	p := request.Pagination{
+		NewRequest: func() (*request.Request, error) {
+			var inCpy *ListResourceTypesInput
+			if input != nil {
+				tmp := *input
+				inCpy = &tmp
+			}
+			req, _ := c.ListResourceTypesRequest(inCpy)
+			req.SetContext(ctx)
+			req.ApplyOptions(opts...)
+			return req, nil
+		},
+	}
+
+	for p.Next() {
+		if !fn(p.Page().(*ListResourceTypesOutput), !p.HasNextPage()) {
+			break
+		}
+	}
+
+	return p.Err()
 }
 
 const opListResources = "ListResources"
@@ -2347,14 +2533,14 @@ func (c *RAM) PromoteResourceShareCreatedFromPolicyRequest(input *PromoteResourc
 //
 // Resource shares that were created by attaching a policy to a resource are
 // visible only to the resource share owner, and the resource share cannot be
-// modified in AWS RAM.
+// modified in RAM.
 //
 // Use this API action to promote the resource share. When you promote the resource
 // share, it becomes:
 //
 //    * Visible to all principals that it is shared with.
 //
-//    * Modifiable in AWS RAM.
+//    * Modifiable in RAM.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -2366,6 +2552,9 @@ func (c *RAM) PromoteResourceShareCreatedFromPolicyRequest(input *PromoteResourc
 // Returned Error Types:
 //   * MalformedArnException
 //   The format of an Amazon Resource Name (ARN) is not valid.
+//
+//   * ResourceShareLimitExceededException
+//   The requested resource share exceeds the limit for your account.
 //
 //   * OperationNotPermittedException
 //   The requested operation is not permitted.
@@ -2451,7 +2640,8 @@ func (c *RAM) RejectResourceShareInvitationRequest(input *RejectResourceShareInv
 
 // RejectResourceShareInvitation API operation for AWS Resource Access Manager.
 //
-// Rejects an invitation to a resource share from another AWS account.
+// Rejects an invitation to a resource share from another Amazon Web Services
+// account.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -2575,6 +2765,9 @@ func (c *RAM) TagResourceRequest(input *TagResourceInput) (req *request.Request,
 //
 //   * MalformedArnException
 //   The format of an Amazon Resource Name (ARN) is not valid.
+//
+//   * UnknownResourceException
+//   A specified resource was not found.
 //
 //   * TagLimitExceededException
 //   The requested tags exceed the limit for your account.
@@ -2817,12 +3010,20 @@ type AcceptResourceShareInvitationInput struct {
 	ResourceShareInvitationArn *string `locationName:"resourceShareInvitationArn" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AcceptResourceShareInvitationInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AcceptResourceShareInvitationInput) GoString() string {
 	return s.String()
 }
@@ -2863,12 +3064,20 @@ type AcceptResourceShareInvitationOutput struct {
 	ResourceShareInvitation *ResourceShareInvitation `locationName:"resourceShareInvitation" type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AcceptResourceShareInvitationOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AcceptResourceShareInvitationOutput) GoString() string {
 	return s.String()
 }
@@ -2892,10 +3101,25 @@ type AssociateResourceShareInput struct {
 	// of the request.
 	ClientToken *string `locationName:"clientToken" type:"string"`
 
-	// The principals.
+	// The principals to associate with the resource share. The possible values
+	// are:
+	//
+	//    * An Amazon Web Services account ID
+	//
+	//    * An Amazon Resource Name (ARN) of an organization in Organizations
+	//
+	//    * An ARN of an organizational unit (OU) in Organizations
+	//
+	//    * An ARN of an IAM role
+	//
+	//    * An ARN of an IAM user
+	//
+	// Not all resource types can be shared with IAM roles and IAM users. For more
+	// information, see Sharing with IAM roles and IAM users (https://docs.aws.amazon.com/ram/latest/userguide/permissions.html#permissions-rbp-supported-resource-types)
+	// in the Resource Access Manager User Guide.
 	Principals []*string `locationName:"principals" type:"list"`
 
-	// The Amazon Resource Names (ARN) of the resources.
+	// The Amazon Resource Names (ARNs) of the resources.
 	ResourceArns []*string `locationName:"resourceArns" type:"list"`
 
 	// The Amazon Resource Name (ARN) of the resource share.
@@ -2904,12 +3128,20 @@ type AssociateResourceShareInput struct {
 	ResourceShareArn *string `locationName:"resourceShareArn" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AssociateResourceShareInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AssociateResourceShareInput) GoString() string {
 	return s.String()
 }
@@ -2962,12 +3194,20 @@ type AssociateResourceShareOutput struct {
 	ResourceShareAssociations []*ResourceShareAssociation `locationName:"resourceShareAssociations" type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AssociateResourceShareOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AssociateResourceShareOutput) GoString() string {
 	return s.String()
 }
@@ -2991,10 +3231,14 @@ type AssociateResourceSharePermissionInput struct {
 	// of the request.
 	ClientToken *string `locationName:"clientToken" type:"string"`
 
-	// The ARN of the AWS RAM permission to associate with the resource share.
+	// The Amazon Resource Name (ARN) of the RAM permission to associate with the
+	// resource share.
 	//
 	// PermissionArn is a required field
 	PermissionArn *string `locationName:"permissionArn" type:"string" required:"true"`
+
+	// The version of the RAM permissions to associate with the resource share.
+	PermissionVersion *int64 `locationName:"permissionVersion" type:"integer"`
 
 	// Indicates whether the permission should replace the permissions that are
 	// currently associated with the resource share. Use true to replace the current
@@ -3007,12 +3251,20 @@ type AssociateResourceSharePermissionInput struct {
 	ResourceShareArn *string `locationName:"resourceShareArn" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AssociateResourceSharePermissionInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AssociateResourceSharePermissionInput) GoString() string {
 	return s.String()
 }
@@ -3045,6 +3297,12 @@ func (s *AssociateResourceSharePermissionInput) SetPermissionArn(v string) *Asso
 	return s
 }
 
+// SetPermissionVersion sets the PermissionVersion field's value.
+func (s *AssociateResourceSharePermissionInput) SetPermissionVersion(v int64) *AssociateResourceSharePermissionInput {
+	s.PermissionVersion = &v
+	return s
+}
+
 // SetReplace sets the Replace field's value.
 func (s *AssociateResourceSharePermissionInput) SetReplace(v bool) *AssociateResourceSharePermissionInput {
 	s.Replace = &v
@@ -3068,12 +3326,20 @@ type AssociateResourceSharePermissionOutput struct {
 	ReturnValue *bool `locationName:"returnValue" type:"boolean"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AssociateResourceSharePermissionOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AssociateResourceSharePermissionOutput) GoString() string {
 	return s.String()
 }
@@ -3093,8 +3359,8 @@ func (s *AssociateResourceSharePermissionOutput) SetReturnValue(v bool) *Associa
 type CreateResourceShareInput struct {
 	_ struct{} `type:"structure"`
 
-	// Indicates whether principals outside your AWS organization can be associated
-	// with a resource share.
+	// Indicates whether principals outside your organization in Organizations can
+	// be associated with a resource share.
 	AllowExternalPrincipals *bool `locationName:"allowExternalPrincipals" type:"boolean"`
 
 	// A unique, case-sensitive identifier that you provide to ensure the idempotency
@@ -3106,29 +3372,51 @@ type CreateResourceShareInput struct {
 	// Name is a required field
 	Name *string `locationName:"name" type:"string" required:"true"`
 
-	// The ARNs of the permissions to associate with the resource share. If you
-	// do not specify an ARN for the permission, AWS RAM automatically attaches
-	// the default version of the permission for each resource type.
+	// The Amazon Resource Names (ARNs) of the permissions to associate with the
+	// resource share. If you do not specify an ARN for the permission, RAM automatically
+	// attaches the default version of the permission for each resource type. Only
+	// one permission can be associated with each resource type in a resource share.
 	PermissionArns []*string `locationName:"permissionArns" type:"list"`
 
 	// The principals to associate with the resource share. The possible values
-	// are IDs of AWS accounts, the ARN of an OU or organization from AWS Organizations.
+	// are:
+	//
+	//    * An Amazon Web Services account ID
+	//
+	//    * An Amazon Resource Name (ARN) of an organization in Organizations
+	//
+	//    * An ARN of an organizational unit (OU) in Organizations
+	//
+	//    * An ARN of an IAM role
+	//
+	//    * An ARN of an IAM user
+	//
+	// Not all resource types can be shared with IAM roles and IAM users. For more
+	// information, see Sharing with IAM roles and IAM users (https://docs.aws.amazon.com/ram/latest/userguide/permissions.html#permissions-rbp-supported-resource-types)
+	// in the Resource Access Manager User Guide.
 	Principals []*string `locationName:"principals" type:"list"`
 
-	// The Amazon Resource Names (ARN) of the resources to associate with the resource
-	// share.
+	// The ARNs of the resources to associate with the resource share.
 	ResourceArns []*string `locationName:"resourceArns" type:"list"`
 
 	// One or more tags.
 	Tags []*Tag `locationName:"tags" type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateResourceShareInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateResourceShareInput) GoString() string {
 	return s.String()
 }
@@ -3199,12 +3487,20 @@ type CreateResourceShareOutput struct {
 	ResourceShare *ResourceShare `locationName:"resourceShare" type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateResourceShareOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateResourceShareOutput) GoString() string {
 	return s.String()
 }
@@ -3222,7 +3518,7 @@ func (s *CreateResourceShareOutput) SetResourceShare(v *ResourceShare) *CreateRe
 }
 
 type DeleteResourceShareInput struct {
-	_ struct{} `type:"structure"`
+	_ struct{} `type:"structure" nopayload:"true"`
 
 	// A unique, case-sensitive identifier that you provide to ensure the idempotency
 	// of the request.
@@ -3234,12 +3530,20 @@ type DeleteResourceShareInput struct {
 	ResourceShareArn *string `location:"querystring" locationName:"resourceShareArn" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteResourceShareInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteResourceShareInput) GoString() string {
 	return s.String()
 }
@@ -3280,12 +3584,20 @@ type DeleteResourceShareOutput struct {
 	ReturnValue *bool `locationName:"returnValue" type:"boolean"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteResourceShareOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteResourceShareOutput) GoString() string {
 	return s.String()
 }
@@ -3321,12 +3633,20 @@ type DisassociateResourceShareInput struct {
 	ResourceShareArn *string `locationName:"resourceShareArn" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DisassociateResourceShareInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DisassociateResourceShareInput) GoString() string {
 	return s.String()
 }
@@ -3379,12 +3699,20 @@ type DisassociateResourceShareOutput struct {
 	ResourceShareAssociations []*ResourceShareAssociation `locationName:"resourceShareAssociations" type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DisassociateResourceShareOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DisassociateResourceShareOutput) GoString() string {
 	return s.String()
 }
@@ -3408,7 +3736,8 @@ type DisassociateResourceSharePermissionInput struct {
 	// of the request.
 	ClientToken *string `locationName:"clientToken" type:"string"`
 
-	// The ARN of the permission to disassociate from the resource share.
+	// The Amazon Resource Name (ARN) of the permission to disassociate from the
+	// resource share.
 	//
 	// PermissionArn is a required field
 	PermissionArn *string `locationName:"permissionArn" type:"string" required:"true"`
@@ -3419,12 +3748,20 @@ type DisassociateResourceSharePermissionInput struct {
 	ResourceShareArn *string `locationName:"resourceShareArn" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DisassociateResourceSharePermissionInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DisassociateResourceSharePermissionInput) GoString() string {
 	return s.String()
 }
@@ -3474,12 +3811,20 @@ type DisassociateResourceSharePermissionOutput struct {
 	ReturnValue *bool `locationName:"returnValue" type:"boolean"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DisassociateResourceSharePermissionOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DisassociateResourceSharePermissionOutput) GoString() string {
 	return s.String()
 }
@@ -3497,15 +3842,23 @@ func (s *DisassociateResourceSharePermissionOutput) SetReturnValue(v bool) *Disa
 }
 
 type EnableSharingWithAwsOrganizationInput struct {
-	_ struct{} `type:"structure"`
+	_ struct{} `type:"structure" nopayload:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s EnableSharingWithAwsOrganizationInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s EnableSharingWithAwsOrganizationInput) GoString() string {
 	return s.String()
 }
@@ -3517,12 +3870,20 @@ type EnableSharingWithAwsOrganizationOutput struct {
 	ReturnValue *bool `locationName:"returnValue" type:"boolean"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s EnableSharingWithAwsOrganizationOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s EnableSharingWithAwsOrganizationOutput) GoString() string {
 	return s.String()
 }
@@ -3536,7 +3897,7 @@ func (s *EnableSharingWithAwsOrganizationOutput) SetReturnValue(v bool) *EnableS
 type GetPermissionInput struct {
 	_ struct{} `type:"structure"`
 
-	// The ARN of the permission.
+	// The Amazon Resource Name (ARN) of the permission.
 	//
 	// PermissionArn is a required field
 	PermissionArn *string `locationName:"permissionArn" type:"string" required:"true"`
@@ -3545,12 +3906,20 @@ type GetPermissionInput struct {
 	PermissionVersion *int64 `locationName:"permissionVersion" type:"integer"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetPermissionInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetPermissionInput) GoString() string {
 	return s.String()
 }
@@ -3587,12 +3956,20 @@ type GetPermissionOutput struct {
 	Permission *ResourceSharePermissionDetail `locationName:"permission" type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetPermissionOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetPermissionOutput) GoString() string {
 	return s.String()
 }
@@ -3616,18 +3993,26 @@ type GetResourcePoliciesInput struct {
 	// The principal.
 	Principal *string `locationName:"principal" type:"string"`
 
-	// The Amazon Resource Names (ARN) of the resources.
+	// The Amazon Resource Names (ARNs) of the resources.
 	//
 	// ResourceArns is a required field
 	ResourceArns []*string `locationName:"resourceArns" type:"list" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetResourcePoliciesInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetResourcePoliciesInput) GoString() string {
 	return s.String()
 }
@@ -3683,12 +4068,20 @@ type GetResourcePoliciesOutput struct {
 	Policies []*string `locationName:"policies" type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetResourcePoliciesOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetResourcePoliciesOutput) GoString() string {
 	return s.String()
 }
@@ -3737,12 +4130,20 @@ type GetResourceShareAssociationsInput struct {
 	ResourceShareArns []*string `locationName:"resourceShareArns" type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetResourceShareAssociationsInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetResourceShareAssociationsInput) GoString() string {
 	return s.String()
 }
@@ -3816,12 +4217,20 @@ type GetResourceShareAssociationsOutput struct {
 	ResourceShareAssociations []*ResourceShareAssociation `locationName:"resourceShareAssociations" type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetResourceShareAssociationsOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetResourceShareAssociationsOutput) GoString() string {
 	return s.String()
 }
@@ -3855,12 +4264,20 @@ type GetResourceShareInvitationsInput struct {
 	ResourceShareInvitationArns []*string `locationName:"resourceShareInvitationArns" type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetResourceShareInvitationsInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetResourceShareInvitationsInput) GoString() string {
 	return s.String()
 }
@@ -3913,12 +4330,20 @@ type GetResourceShareInvitationsOutput struct {
 	ResourceShareInvitations []*ResourceShareInvitation `locationName:"resourceShareInvitations" type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetResourceShareInvitationsOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetResourceShareInvitationsOutput) GoString() string {
 	return s.String()
 }
@@ -3948,12 +4373,16 @@ type GetResourceSharesInput struct {
 	// The token for the next page of results.
 	NextToken *string `locationName:"nextToken" type:"string"`
 
+	// The Amazon Resource Name (ARN) of the RAM permission that is associated with
+	// the resource share.
+	PermissionArn *string `locationName:"permissionArn" type:"string"`
+
 	// The type of owner.
 	//
 	// ResourceOwner is a required field
 	ResourceOwner *string `locationName:"resourceOwner" type:"string" required:"true" enum:"ResourceOwner"`
 
-	// The Amazon Resource Names (ARN) of the resource shares.
+	// The Amazon Resource Names (ARNs) of the resource shares.
 	ResourceShareArns []*string `locationName:"resourceShareArns" type:"list"`
 
 	// The status of the resource share.
@@ -3963,12 +4392,20 @@ type GetResourceSharesInput struct {
 	TagFilters []*TagFilter `locationName:"tagFilters" type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetResourceSharesInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetResourceSharesInput) GoString() string {
 	return s.String()
 }
@@ -4007,6 +4444,12 @@ func (s *GetResourceSharesInput) SetNextToken(v string) *GetResourceSharesInput 
 	return s
 }
 
+// SetPermissionArn sets the PermissionArn field's value.
+func (s *GetResourceSharesInput) SetPermissionArn(v string) *GetResourceSharesInput {
+	s.PermissionArn = &v
+	return s
+}
+
 // SetResourceOwner sets the ResourceOwner field's value.
 func (s *GetResourceSharesInput) SetResourceOwner(v string) *GetResourceSharesInput {
 	s.ResourceOwner = &v
@@ -4042,12 +4485,20 @@ type GetResourceSharesOutput struct {
 	ResourceShares []*ResourceShare `locationName:"resourceShares" type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetResourceSharesOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetResourceSharesOutput) GoString() string {
 	return s.String()
 }
@@ -4074,12 +4525,20 @@ type IdempotentParameterMismatchException struct {
 	Message_ *string `locationName:"message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s IdempotentParameterMismatchException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s IdempotentParameterMismatchException) GoString() string {
 	return s.String()
 }
@@ -4130,12 +4589,20 @@ type InvalidClientTokenException struct {
 	Message_ *string `locationName:"message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s InvalidClientTokenException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s InvalidClientTokenException) GoString() string {
 	return s.String()
 }
@@ -4186,12 +4653,20 @@ type InvalidMaxResultsException struct {
 	Message_ *string `locationName:"message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s InvalidMaxResultsException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s InvalidMaxResultsException) GoString() string {
 	return s.String()
 }
@@ -4242,12 +4717,20 @@ type InvalidNextTokenException struct {
 	Message_ *string `locationName:"message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s InvalidNextTokenException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s InvalidNextTokenException) GoString() string {
 	return s.String()
 }
@@ -4298,12 +4781,20 @@ type InvalidParameterException struct {
 	Message_ *string `locationName:"message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s InvalidParameterException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s InvalidParameterException) GoString() string {
 	return s.String()
 }
@@ -4354,12 +4845,20 @@ type InvalidResourceTypeException struct {
 	Message_ *string `locationName:"message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s InvalidResourceTypeException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s InvalidResourceTypeException) GoString() string {
 	return s.String()
 }
@@ -4410,12 +4909,20 @@ type InvalidStateTransitionException struct {
 	Message_ *string `locationName:"message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s InvalidStateTransitionException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s InvalidStateTransitionException) GoString() string {
 	return s.String()
 }
@@ -4474,12 +4981,20 @@ type ListPendingInvitationResourcesInput struct {
 	ResourceShareInvitationArn *string `locationName:"resourceShareInvitationArn" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListPendingInvitationResourcesInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListPendingInvitationResourcesInput) GoString() string {
 	return s.String()
 }
@@ -4529,12 +5044,20 @@ type ListPendingInvitationResourcesOutput struct {
 	Resources []*Resource `locationName:"resources" type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListPendingInvitationResourcesOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListPendingInvitationResourcesOutput) GoString() string {
 	return s.String()
 }
@@ -4566,12 +5089,20 @@ type ListPermissionsInput struct {
 	ResourceType *string `locationName:"resourceType" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListPermissionsInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListPermissionsInput) GoString() string {
 	return s.String()
 }
@@ -4618,12 +5149,20 @@ type ListPermissionsOutput struct {
 	Permissions []*ResourceSharePermissionSummary `locationName:"permissions" type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListPermissionsOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListPermissionsOutput) GoString() string {
 	return s.String()
 }
@@ -4666,20 +5205,33 @@ type ListPrincipalsInput struct {
 
 	// The resource type.
 	//
-	// Valid values: codebuild:Project | codebuild:ReportGroup | ec2:CapacityReservation
-	// | ec2:DedicatedHost | ec2:Subnet | ec2:TrafficMirrorTarget | ec2:TransitGateway
+	// Valid values: acm-pca:CertificateAuthority | appmesh:Mesh | codebuild:Project
+	// | codebuild:ReportGroup | ec2:CapacityReservation | ec2:DedicatedHost | ec2:LocalGatewayRouteTable
+	// | ec2:PrefixList | ec2:Subnet | ec2:TrafficMirrorTarget | ec2:TransitGateway
 	// | imagebuilder:Component | imagebuilder:Image | imagebuilder:ImageRecipe
-	// | license-manager:LicenseConfiguration I resource-groups:Group | rds:Cluster
-	// | route53resolver:ResolverRule
+	// | imagebuilder:ContainerRecipe | glue:Catalog | glue:Database | glue:Table
+	// | license-manager:LicenseConfiguration I network-firewall:FirewallPolicy
+	// | network-firewall:StatefulRuleGroup | network-firewall:StatelessRuleGroup
+	// | outposts:Outpost | resource-groups:Group | rds:Cluster | route53resolver:FirewallRuleGroup
+	// |route53resolver:ResolverQueryLogConfig | route53resolver:ResolverRule |
+	// s3-outposts:Outpost | ssm-contacts:Contact | ssm-incidents:ResponsePlan
 	ResourceType *string `locationName:"resourceType" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListPrincipalsInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListPrincipalsInput) GoString() string {
 	return s.String()
 }
@@ -4753,12 +5305,20 @@ type ListPrincipalsOutput struct {
 	Principals []*Principal `locationName:"principals" type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListPrincipalsOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListPrincipalsOutput) GoString() string {
 	return s.String()
 }
@@ -4791,12 +5351,20 @@ type ListResourceSharePermissionsInput struct {
 	ResourceShareArn *string `locationName:"resourceShareArn" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListResourceSharePermissionsInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListResourceSharePermissionsInput) GoString() string {
 	return s.String()
 }
@@ -4846,12 +5414,20 @@ type ListResourceSharePermissionsOutput struct {
 	Permissions []*ResourceSharePermissionSummary `locationName:"permissions" type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListResourceSharePermissionsOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListResourceSharePermissionsOutput) GoString() string {
 	return s.String()
 }
@@ -4879,12 +5455,20 @@ type ListResourceTypesInput struct {
 	NextToken *string `locationName:"nextToken" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListResourceTypesInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListResourceTypesInput) GoString() string {
 	return s.String()
 }
@@ -4921,16 +5505,24 @@ type ListResourceTypesOutput struct {
 	// when there are no more results to return.
 	NextToken *string `locationName:"nextToken" type:"string"`
 
-	// The shareable resource types supported by AWS RAM.
+	// The shareable resource types supported by RAM.
 	ResourceTypes []*ServiceNameAndResourceType `locationName:"resourceTypes" type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListResourceTypesOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListResourceTypesOutput) GoString() string {
 	return s.String()
 }
@@ -4960,7 +5552,7 @@ type ListResourcesInput struct {
 	// The principal.
 	Principal *string `locationName:"principal" type:"string"`
 
-	// The Amazon Resource Names (ARN) of the resources.
+	// The Amazon Resource Names (ARNs) of the resources.
 	ResourceArns []*string `locationName:"resourceArns" type:"list"`
 
 	// The type of owner.
@@ -4973,20 +5565,33 @@ type ListResourcesInput struct {
 
 	// The resource type.
 	//
-	// Valid values: codebuild:Project | codebuild:ReportGroup | ec2:CapacityReservation
-	// | ec2:DedicatedHost | ec2:Subnet | ec2:TrafficMirrorTarget | ec2:TransitGateway
+	// Valid values: acm-pca:CertificateAuthority | appmesh:Mesh | codebuild:Project
+	// | codebuild:ReportGroup | ec2:CapacityReservation | ec2:DedicatedHost | ec2:LocalGatewayRouteTable
+	// | ec2:PrefixList | ec2:Subnet | ec2:TrafficMirrorTarget | ec2:TransitGateway
 	// | imagebuilder:Component | imagebuilder:Image | imagebuilder:ImageRecipe
-	// | license-manager:LicenseConfiguration I resource-groups:Group | rds:Cluster
-	// | route53resolver:ResolverRule
+	// | imagebuilder:ContainerRecipe | glue:Catalog | glue:Database | glue:Table
+	// | license-manager:LicenseConfiguration I network-firewall:FirewallPolicy
+	// | network-firewall:StatefulRuleGroup | network-firewall:StatelessRuleGroup
+	// | outposts:Outpost | resource-groups:Group | rds:Cluster | route53resolver:FirewallRuleGroup
+	// |route53resolver:ResolverQueryLogConfig | route53resolver:ResolverRule |
+	// s3-outposts:Outpost | ssm-contacts:Contact | ssm-incidents:ResponsePlan
 	ResourceType *string `locationName:"resourceType" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListResourcesInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListResourcesInput) GoString() string {
 	return s.String()
 }
@@ -5060,12 +5665,20 @@ type ListResourcesOutput struct {
 	Resources []*Resource `locationName:"resources" type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListResourcesOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListResourcesOutput) GoString() string {
 	return s.String()
 }
@@ -5090,12 +5703,20 @@ type MalformedArnException struct {
 	Message_ *string `locationName:"message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s MalformedArnException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s MalformedArnException) GoString() string {
 	return s.String()
 }
@@ -5146,12 +5767,20 @@ type MissingRequiredParameterException struct {
 	Message_ *string `locationName:"message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s MissingRequiredParameterException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s MissingRequiredParameterException) GoString() string {
 	return s.String()
 }
@@ -5202,12 +5831,20 @@ type OperationNotPermittedException struct {
 	Message_ *string `locationName:"message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s OperationNotPermittedException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s OperationNotPermittedException) GoString() string {
 	return s.String()
 }
@@ -5250,15 +5887,15 @@ func (s *OperationNotPermittedException) RequestID() string {
 	return s.RespMetadata.RequestID
 }
 
-// Describes a principal for use with AWS Resource Access Manager.
+// Describes a principal for use with Resource Access Manager.
 type Principal struct {
 	_ struct{} `type:"structure"`
 
 	// The time when the principal was associated with the resource share.
 	CreationTime *time.Time `locationName:"creationTime" type:"timestamp"`
 
-	// Indicates whether the principal belongs to the same AWS organization as the
-	// AWS account that owns the resource share.
+	// Indicates whether the principal belongs to the same organization in Organizations
+	// as the Amazon Web Services account that owns the resource share.
 	External *bool `locationName:"external" type:"boolean"`
 
 	// The ID of the principal.
@@ -5271,12 +5908,20 @@ type Principal struct {
 	ResourceShareArn *string `locationName:"resourceShareArn" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s Principal) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s Principal) GoString() string {
 	return s.String()
 }
@@ -5312,20 +5957,28 @@ func (s *Principal) SetResourceShareArn(v string) *Principal {
 }
 
 type PromoteResourceShareCreatedFromPolicyInput struct {
-	_ struct{} `type:"structure"`
+	_ struct{} `type:"structure" nopayload:"true"`
 
-	// The ARN of the resource share to promote.
+	// The Amazon Resource Name (ARN) of the resource share to promote.
 	//
 	// ResourceShareArn is a required field
 	ResourceShareArn *string `location:"querystring" locationName:"resourceShareArn" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s PromoteResourceShareCreatedFromPolicyInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s PromoteResourceShareCreatedFromPolicyInput) GoString() string {
 	return s.String()
 }
@@ -5356,12 +6009,20 @@ type PromoteResourceShareCreatedFromPolicyOutput struct {
 	ReturnValue *bool `locationName:"returnValue" type:"boolean"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s PromoteResourceShareCreatedFromPolicyOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s PromoteResourceShareCreatedFromPolicyOutput) GoString() string {
 	return s.String()
 }
@@ -5385,12 +6046,20 @@ type RejectResourceShareInvitationInput struct {
 	ResourceShareInvitationArn *string `locationName:"resourceShareInvitationArn" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s RejectResourceShareInvitationInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s RejectResourceShareInvitationInput) GoString() string {
 	return s.String()
 }
@@ -5431,12 +6100,20 @@ type RejectResourceShareInvitationOutput struct {
 	ResourceShareInvitation *ResourceShareInvitation `locationName:"resourceShareInvitation" type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s RejectResourceShareInvitationOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s RejectResourceShareInvitationOutput) GoString() string {
 	return s.String()
 }
@@ -5466,8 +6143,8 @@ type Resource struct {
 	// The time when the association was last updated.
 	LastUpdatedTime *time.Time `locationName:"lastUpdatedTime" type:"timestamp"`
 
-	// The ARN of the resource group. This value is returned only if the resource
-	// is a resource group.
+	// The Amazon Resource Name (ARN) of the resource group. This value is returned
+	// only if the resource is a resource group.
 	ResourceGroupArn *string `locationName:"resourceGroupArn" type:"string"`
 
 	// The Amazon Resource Name (ARN) of the resource share.
@@ -5483,12 +6160,20 @@ type Resource struct {
 	Type *string `locationName:"type" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s Resource) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s Resource) GoString() string {
 	return s.String()
 }
@@ -5549,12 +6234,20 @@ type ResourceArnNotFoundException struct {
 	Message_ *string `locationName:"message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ResourceArnNotFoundException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ResourceArnNotFoundException) GoString() string {
 	return s.String()
 }
@@ -5601,8 +6294,8 @@ func (s *ResourceArnNotFoundException) RequestID() string {
 type ResourceShare struct {
 	_ struct{} `type:"structure"`
 
-	// Indicates whether principals outside your AWS organization can be associated
-	// with a resource share.
+	// Indicates whether principals outside your organization in Organizations can
+	// be associated with a resource share.
 	AllowExternalPrincipals *bool `locationName:"allowExternalPrincipals" type:"boolean"`
 
 	// The time when the resource share was created.
@@ -5611,16 +6304,17 @@ type ResourceShare struct {
 	// Indicates how the resource share was created. Possible values include:
 	//
 	//    * CREATED_FROM_POLICY - Indicates that the resource share was created
-	//    from an AWS Identity and Access Management (AWS IAM) policy attached to
-	//    a resource. These resource shares are visible only to the AWS account
-	//    that created it. They cannot be modified in AWS RAM.
+	//    from an Amazon Web Services Identity and Access Management (Amazon Web
+	//    Services IAM) policy attached to a resource. These resource shares are
+	//    visible only to the Amazon Web Services account that created it. They
+	//    cannot be modified in RAM.
 	//
 	//    * PROMOTING_TO_STANDARD - The resource share is in the process of being
 	//    promoted. For more information, see PromoteResourceShareCreatedFromPolicy.
 	//
-	//    * STANDARD - Indicates that the resource share was created in AWS RAM
-	//    using the console or APIs. These resource shares are visible to all principals.
-	//    They can be modified in AWS RAM.
+	//    * STANDARD - Indicates that the resource share was created in RAM using
+	//    the console or APIs. These resource shares are visible to all principals.
+	//    They can be modified in RAM.
 	FeatureSet *string `locationName:"featureSet" type:"string" enum:"ResourceShareFeatureSet"`
 
 	// The time when the resource share was last updated.
@@ -5629,7 +6323,7 @@ type ResourceShare struct {
 	// The name of the resource share.
 	Name *string `locationName:"name" type:"string"`
 
-	// The ID of the AWS account that owns the resource share.
+	// The ID of the Amazon Web Services account that owns the resource share.
 	OwningAccountId *string `locationName:"owningAccountId" type:"string"`
 
 	// The Amazon Resource Name (ARN) of the resource share.
@@ -5645,12 +6339,20 @@ type ResourceShare struct {
 	Tags []*Tag `locationName:"tags" type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ResourceShare) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ResourceShare) GoString() string {
 	return s.String()
 }
@@ -5719,9 +6421,19 @@ func (s *ResourceShare) SetTags(v []*Tag) *ResourceShare {
 type ResourceShareAssociation struct {
 	_ struct{} `type:"structure"`
 
-	// The associated entity. For resource associations, this is the ARN of the
-	// resource. For principal associations, this is the ID of an AWS account or
-	// the ARN of an OU or organization from AWS Organizations.
+	// The associated entity. For resource associations, this is the Amazon Resource
+	// Name (ARN) of the resource. For principal associations, this is one of the
+	// following:
+	//
+	//    * An Amazon Web Services account ID
+	//
+	//    * An ARN of an organization in Organizations
+	//
+	//    * An ARN of an organizational unit (OU) in Organizations
+	//
+	//    * An ARN of an IAM role
+	//
+	//    * An ARN of an IAM user
 	AssociatedEntity *string `locationName:"associatedEntity" type:"string"`
 
 	// The association type.
@@ -5730,8 +6442,8 @@ type ResourceShareAssociation struct {
 	// The time when the association was created.
 	CreationTime *time.Time `locationName:"creationTime" type:"timestamp"`
 
-	// Indicates whether the principal belongs to the same AWS organization as the
-	// AWS account that owns the resource share.
+	// Indicates whether the principal belongs to the same organization in Organizations
+	// as the Amazon Web Services account that owns the resource share.
 	External *bool `locationName:"external" type:"boolean"`
 
 	// The time when the association was last updated.
@@ -5750,12 +6462,20 @@ type ResourceShareAssociation struct {
 	StatusMessage *string `locationName:"statusMessage" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ResourceShareAssociation) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ResourceShareAssociation) GoString() string {
 	return s.String()
 }
@@ -5821,8 +6541,12 @@ type ResourceShareInvitation struct {
 	// The date and time when the invitation was sent.
 	InvitationTimestamp *time.Time `locationName:"invitationTimestamp" type:"timestamp"`
 
-	// The ID of the AWS account that received the invitation.
+	// The ID of the Amazon Web Services account that received the invitation.
 	ReceiverAccountId *string `locationName:"receiverAccountId" type:"string"`
+
+	// The Amazon Resource Name (ARN) of the IAM user or IAM role that received
+	// the invitation.
+	ReceiverArn *string `locationName:"receiverArn" type:"string"`
 
 	// The Amazon Resource Name (ARN) of the resource share.
 	ResourceShareArn *string `locationName:"resourceShareArn" type:"string"`
@@ -5839,19 +6563,27 @@ type ResourceShareInvitation struct {
 	// The name of the resource share.
 	ResourceShareName *string `locationName:"resourceShareName" type:"string"`
 
-	// The ID of the AWS account that sent the invitation.
+	// The ID of the Amazon Web Services account that sent the invitation.
 	SenderAccountId *string `locationName:"senderAccountId" type:"string"`
 
 	// The status of the invitation.
 	Status *string `locationName:"status" type:"string" enum:"ResourceShareInvitationStatus"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ResourceShareInvitation) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ResourceShareInvitation) GoString() string {
 	return s.String()
 }
@@ -5865,6 +6597,12 @@ func (s *ResourceShareInvitation) SetInvitationTimestamp(v time.Time) *ResourceS
 // SetReceiverAccountId sets the ReceiverAccountId field's value.
 func (s *ResourceShareInvitation) SetReceiverAccountId(v string) *ResourceShareInvitation {
 	s.ReceiverAccountId = &v
+	return s
+}
+
+// SetReceiverArn sets the ReceiverArn field's value.
+func (s *ResourceShareInvitation) SetReceiverArn(v string) *ResourceShareInvitation {
+	s.ReceiverArn = &v
 	return s
 }
 
@@ -5912,12 +6650,20 @@ type ResourceShareInvitationAlreadyAcceptedException struct {
 	Message_ *string `locationName:"message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ResourceShareInvitationAlreadyAcceptedException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ResourceShareInvitationAlreadyAcceptedException) GoString() string {
 	return s.String()
 }
@@ -5968,12 +6714,20 @@ type ResourceShareInvitationAlreadyRejectedException struct {
 	Message_ *string `locationName:"message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ResourceShareInvitationAlreadyRejectedException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ResourceShareInvitationAlreadyRejectedException) GoString() string {
 	return s.String()
 }
@@ -6024,12 +6778,20 @@ type ResourceShareInvitationArnNotFoundException struct {
 	Message_ *string `locationName:"message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ResourceShareInvitationArnNotFoundException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ResourceShareInvitationArnNotFoundException) GoString() string {
 	return s.String()
 }
@@ -6080,12 +6842,20 @@ type ResourceShareInvitationExpiredException struct {
 	Message_ *string `locationName:"message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ResourceShareInvitationExpiredException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ResourceShareInvitationExpiredException) GoString() string {
 	return s.String()
 }
@@ -6136,12 +6906,20 @@ type ResourceShareLimitExceededException struct {
 	Message_ *string `locationName:"message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ResourceShareLimitExceededException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ResourceShareLimitExceededException) GoString() string {
 	return s.String()
 }
@@ -6184,19 +6962,23 @@ func (s *ResourceShareLimitExceededException) RequestID() string {
 	return s.RespMetadata.RequestID
 }
 
-// Information about an AWS RAM permission.
+// Information about an RAM permission.
 type ResourceSharePermissionDetail struct {
 	_ struct{} `type:"structure"`
 
-	// The ARN of the permission.
+	// The Amazon Resource Name (ARN) of the permission.
 	Arn *string `locationName:"arn" type:"string"`
 
 	// The date and time when the permission was created.
 	CreationTime *time.Time `locationName:"creationTime" type:"timestamp"`
 
-	// The identifier for the version of the permission that is set as the default
-	// version.
+	// Specifies whether the version of the permission is set to the default version
+	// for this permission.
 	DefaultVersion *bool `locationName:"defaultVersion" type:"boolean"`
+
+	// Specifies whether the version of the permission is set to the default version
+	// for this resource type.
+	IsResourceTypeDefault *bool `locationName:"isResourceTypeDefault" type:"boolean"`
 
 	// The date and time when the permission was last updated.
 	LastUpdatedTime *time.Time `locationName:"lastUpdatedTime" type:"timestamp"`
@@ -6216,12 +6998,20 @@ type ResourceSharePermissionDetail struct {
 	Version *string `locationName:"version" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ResourceSharePermissionDetail) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ResourceSharePermissionDetail) GoString() string {
 	return s.String()
 }
@@ -6241,6 +7031,12 @@ func (s *ResourceSharePermissionDetail) SetCreationTime(v time.Time) *ResourceSh
 // SetDefaultVersion sets the DefaultVersion field's value.
 func (s *ResourceSharePermissionDetail) SetDefaultVersion(v bool) *ResourceSharePermissionDetail {
 	s.DefaultVersion = &v
+	return s
+}
+
+// SetIsResourceTypeDefault sets the IsResourceTypeDefault field's value.
+func (s *ResourceSharePermissionDetail) SetIsResourceTypeDefault(v bool) *ResourceSharePermissionDetail {
+	s.IsResourceTypeDefault = &v
 	return s
 }
 
@@ -6278,15 +7074,19 @@ func (s *ResourceSharePermissionDetail) SetVersion(v string) *ResourceSharePermi
 type ResourceSharePermissionSummary struct {
 	_ struct{} `type:"structure"`
 
-	// The ARN of the permission.
+	// The Amazon Resource Name (ARN) of the permission.
 	Arn *string `locationName:"arn" type:"string"`
 
 	// The date and time when the permission was created.
 	CreationTime *time.Time `locationName:"creationTime" type:"timestamp"`
 
-	// The identifier for the version of the permission that is set as the default
-	// version.
+	// Specifies whether the version of the permission is set to the default version
+	// for this permission.
 	DefaultVersion *bool `locationName:"defaultVersion" type:"boolean"`
+
+	// Specifies whether the version of the permission is set to the default version
+	// for this resource type.
+	IsResourceTypeDefault *bool `locationName:"isResourceTypeDefault" type:"boolean"`
 
 	// The date and time when the permission was last updated.
 	LastUpdatedTime *time.Time `locationName:"lastUpdatedTime" type:"timestamp"`
@@ -6304,12 +7104,20 @@ type ResourceSharePermissionSummary struct {
 	Version *string `locationName:"version" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ResourceSharePermissionSummary) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ResourceSharePermissionSummary) GoString() string {
 	return s.String()
 }
@@ -6329,6 +7137,12 @@ func (s *ResourceSharePermissionSummary) SetCreationTime(v time.Time) *ResourceS
 // SetDefaultVersion sets the DefaultVersion field's value.
 func (s *ResourceSharePermissionSummary) SetDefaultVersion(v bool) *ResourceSharePermissionSummary {
 	s.DefaultVersion = &v
+	return s
+}
+
+// SetIsResourceTypeDefault sets the IsResourceTypeDefault field's value.
+func (s *ResourceSharePermissionSummary) SetIsResourceTypeDefault(v bool) *ResourceSharePermissionSummary {
+	s.IsResourceTypeDefault = &v
 	return s
 }
 
@@ -6370,12 +7184,20 @@ type ServerInternalException struct {
 	Message_ *string `locationName:"message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ServerInternalException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ServerInternalException) GoString() string {
 	return s.String()
 }
@@ -6418,24 +7240,32 @@ func (s *ServerInternalException) RequestID() string {
 	return s.RespMetadata.RequestID
 }
 
-// Information about the shareable resource types and the AWS services to which
-// they belong.
+// Information about the shareable resource types and the Amazon Web Services
+// services to which they belong.
 type ServiceNameAndResourceType struct {
 	_ struct{} `type:"structure"`
 
 	// The shareable resource types.
 	ResourceType *string `locationName:"resourceType" type:"string"`
 
-	// The name of the AWS services to which the resources belong.
+	// The name of the Amazon Web Services services to which the resources belong.
 	ServiceName *string `locationName:"serviceName" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ServiceNameAndResourceType) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ServiceNameAndResourceType) GoString() string {
 	return s.String()
 }
@@ -6460,12 +7290,20 @@ type ServiceUnavailableException struct {
 	Message_ *string `locationName:"message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ServiceUnavailableException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ServiceUnavailableException) GoString() string {
 	return s.String()
 }
@@ -6519,12 +7357,20 @@ type Tag struct {
 	Value *string `locationName:"value" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s Tag) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s Tag) GoString() string {
 	return s.String()
 }
@@ -6552,12 +7398,20 @@ type TagFilter struct {
 	TagValues []*string `locationName:"tagValues" type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s TagFilter) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s TagFilter) GoString() string {
 	return s.String()
 }
@@ -6582,12 +7436,20 @@ type TagLimitExceededException struct {
 	Message_ *string `locationName:"message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s TagLimitExceededException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s TagLimitExceededException) GoString() string {
 	return s.String()
 }
@@ -6638,12 +7500,20 @@ type TagPolicyViolationException struct {
 	Message_ *string `locationName:"message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s TagPolicyViolationException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s TagPolicyViolationException) GoString() string {
 	return s.String()
 }
@@ -6700,12 +7570,20 @@ type TagResourceInput struct {
 	Tags []*Tag `locationName:"tags" type:"list" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s TagResourceInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s TagResourceInput) GoString() string {
 	return s.String()
 }
@@ -6739,15 +7617,23 @@ func (s *TagResourceInput) SetTags(v []*Tag) *TagResourceInput {
 }
 
 type TagResourceOutput struct {
-	_ struct{} `type:"structure"`
+	_ struct{} `type:"structure" nopayload:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s TagResourceOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s TagResourceOutput) GoString() string {
 	return s.String()
 }
@@ -6760,12 +7646,20 @@ type UnknownResourceException struct {
 	Message_ *string `locationName:"message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UnknownResourceException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UnknownResourceException) GoString() string {
 	return s.String()
 }
@@ -6822,12 +7716,20 @@ type UntagResourceInput struct {
 	TagKeys []*string `locationName:"tagKeys" type:"list" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UntagResourceInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UntagResourceInput) GoString() string {
 	return s.String()
 }
@@ -6861,15 +7763,23 @@ func (s *UntagResourceInput) SetTagKeys(v []*string) *UntagResourceInput {
 }
 
 type UntagResourceOutput struct {
-	_ struct{} `type:"structure"`
+	_ struct{} `type:"structure" nopayload:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UntagResourceOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UntagResourceOutput) GoString() string {
 	return s.String()
 }
@@ -6877,8 +7787,8 @@ func (s UntagResourceOutput) GoString() string {
 type UpdateResourceShareInput struct {
 	_ struct{} `type:"structure"`
 
-	// Indicates whether principals outside your AWS organization can be associated
-	// with a resource share.
+	// Indicates whether principals outside your organization in Organizations can
+	// be associated with a resource share.
 	AllowExternalPrincipals *bool `locationName:"allowExternalPrincipals" type:"boolean"`
 
 	// A unique, case-sensitive identifier that you provide to ensure the idempotency
@@ -6894,12 +7804,20 @@ type UpdateResourceShareInput struct {
 	ResourceShareArn *string `locationName:"resourceShareArn" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpdateResourceShareInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpdateResourceShareInput) GoString() string {
 	return s.String()
 }
@@ -6952,12 +7870,20 @@ type UpdateResourceShareOutput struct {
 	ResourceShare *ResourceShare `locationName:"resourceShare" type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpdateResourceShareOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpdateResourceShareOutput) GoString() string {
 	return s.String()
 }

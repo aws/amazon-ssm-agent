@@ -166,11 +166,9 @@ func (c *Comprehend) BatchDetectEntitiesRequest(input *BatchDetectEntitiesInput)
 //   The size of the input text exceeds the limit. Use a smaller document.
 //
 //   * UnsupportedLanguageException
-//   Amazon Comprehend can't process the language of the input text. For all custom
-//   entity recognition APIs (such as CreateEntityRecognizer), only English, Spanish,
-//   French, Italian, German, or Portuguese are accepted. For most other APIs,
-//   such as those for Custom Classification, Amazon Comprehend accepts text in
-//   all supported languages. For a list of supported languages, see supported-languages.
+//   Amazon Comprehend can't process the language of the input text. For custom
+//   entity recognition APIs, only English, Spanish, French, Italian, German,
+//   or Portuguese are accepted. For a list of supported languages, see supported-languages.
 //
 //   * BatchSizeLimitExceededException
 //   The number of documents in the request exceeds the limit of 25. Try your
@@ -262,11 +260,9 @@ func (c *Comprehend) BatchDetectKeyPhrasesRequest(input *BatchDetectKeyPhrasesIn
 //   The size of the input text exceeds the limit. Use a smaller document.
 //
 //   * UnsupportedLanguageException
-//   Amazon Comprehend can't process the language of the input text. For all custom
-//   entity recognition APIs (such as CreateEntityRecognizer), only English, Spanish,
-//   French, Italian, German, or Portuguese are accepted. For most other APIs,
-//   such as those for Custom Classification, Amazon Comprehend accepts text in
-//   all supported languages. For a list of supported languages, see supported-languages.
+//   Amazon Comprehend can't process the language of the input text. For custom
+//   entity recognition APIs, only English, Spanish, French, Italian, German,
+//   or Portuguese are accepted. For a list of supported languages, see supported-languages.
 //
 //   * BatchSizeLimitExceededException
 //   The number of documents in the request exceeds the limit of 25. Try your
@@ -359,11 +355,9 @@ func (c *Comprehend) BatchDetectSentimentRequest(input *BatchDetectSentimentInpu
 //   The size of the input text exceeds the limit. Use a smaller document.
 //
 //   * UnsupportedLanguageException
-//   Amazon Comprehend can't process the language of the input text. For all custom
-//   entity recognition APIs (such as CreateEntityRecognizer), only English, Spanish,
-//   French, Italian, German, or Portuguese are accepted. For most other APIs,
-//   such as those for Custom Classification, Amazon Comprehend accepts text in
-//   all supported languages. For a list of supported languages, see supported-languages.
+//   Amazon Comprehend can't process the language of the input text. For custom
+//   entity recognition APIs, only English, Spanish, French, Italian, German,
+//   or Portuguese are accepted. For a list of supported languages, see supported-languages.
 //
 //   * BatchSizeLimitExceededException
 //   The number of documents in the request exceeds the limit of 25. Try your
@@ -457,11 +451,9 @@ func (c *Comprehend) BatchDetectSyntaxRequest(input *BatchDetectSyntaxInput) (re
 //   The size of the input text exceeds the limit. Use a smaller document.
 //
 //   * UnsupportedLanguageException
-//   Amazon Comprehend can't process the language of the input text. For all custom
-//   entity recognition APIs (such as CreateEntityRecognizer), only English, Spanish,
-//   French, Italian, German, or Portuguese are accepted. For most other APIs,
-//   such as those for Custom Classification, Amazon Comprehend accepts text in
-//   all supported languages. For a list of supported languages, see supported-languages.
+//   Amazon Comprehend can't process the language of the input text. For custom
+//   entity recognition APIs, only English, Spanish, French, Italian, German,
+//   or Portuguese are accepted. For a list of supported languages, see supported-languages.
 //
 //   * BatchSizeLimitExceededException
 //   The number of documents in the request exceeds the limit of 25. Try your
@@ -583,6 +575,98 @@ func (c *Comprehend) ClassifyDocumentWithContext(ctx aws.Context, input *Classif
 	return out, req.Send()
 }
 
+const opContainsPiiEntities = "ContainsPiiEntities"
+
+// ContainsPiiEntitiesRequest generates a "aws/request.Request" representing the
+// client's request for the ContainsPiiEntities operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See ContainsPiiEntities for more information on using the ContainsPiiEntities
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the ContainsPiiEntitiesRequest method.
+//    req, resp := client.ContainsPiiEntitiesRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/comprehend-2017-11-27/ContainsPiiEntities
+func (c *Comprehend) ContainsPiiEntitiesRequest(input *ContainsPiiEntitiesInput) (req *request.Request, output *ContainsPiiEntitiesOutput) {
+	op := &request.Operation{
+		Name:       opContainsPiiEntities,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &ContainsPiiEntitiesInput{}
+	}
+
+	output = &ContainsPiiEntitiesOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// ContainsPiiEntities API operation for Amazon Comprehend.
+//
+// Analyzes input text for the presence of personally identifiable information
+// (PII) and returns the labels of identified PII entity types such as name,
+// address, bank account number, or phone number.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Comprehend's
+// API operation ContainsPiiEntities for usage and error information.
+//
+// Returned Error Types:
+//   * InvalidRequestException
+//   The request is invalid.
+//
+//   * TextSizeLimitExceededException
+//   The size of the input text exceeds the limit. Use a smaller document.
+//
+//   * UnsupportedLanguageException
+//   Amazon Comprehend can't process the language of the input text. For custom
+//   entity recognition APIs, only English, Spanish, French, Italian, German,
+//   or Portuguese are accepted. For a list of supported languages, see supported-languages.
+//
+//   * InternalServerException
+//   An internal server error occurred. Retry your request.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/comprehend-2017-11-27/ContainsPiiEntities
+func (c *Comprehend) ContainsPiiEntities(input *ContainsPiiEntitiesInput) (*ContainsPiiEntitiesOutput, error) {
+	req, out := c.ContainsPiiEntitiesRequest(input)
+	return out, req.Send()
+}
+
+// ContainsPiiEntitiesWithContext is the same as ContainsPiiEntities with the addition of
+// the ability to pass a context and additional request options.
+//
+// See ContainsPiiEntities for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Comprehend) ContainsPiiEntitiesWithContext(ctx aws.Context, input *ContainsPiiEntitiesInput, opts ...request.Option) (*ContainsPiiEntitiesOutput, error) {
+	req, out := c.ContainsPiiEntitiesRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opCreateDocumentClassifier = "CreateDocumentClassifier"
 
 // CreateDocumentClassifierRequest generates a "aws/request.Request" representing the
@@ -661,11 +745,9 @@ func (c *Comprehend) CreateDocumentClassifierRequest(input *CreateDocumentClassi
 //   resources, and then try your request again.
 //
 //   * UnsupportedLanguageException
-//   Amazon Comprehend can't process the language of the input text. For all custom
-//   entity recognition APIs (such as CreateEntityRecognizer), only English, Spanish,
-//   French, Italian, German, or Portuguese are accepted. For most other APIs,
-//   such as those for Custom Classification, Amazon Comprehend accepts text in
-//   all supported languages. For a list of supported languages, see supported-languages.
+//   Amazon Comprehend can't process the language of the input text. For custom
+//   entity recognition APIs, only English, Spanish, French, Italian, German,
+//   or Portuguese are accepted. For a list of supported languages, see supported-languages.
 //
 //   * KmsKeyValidationException
 //   The KMS customer managed key (CMK) entered cannot be validated. Verify the
@@ -878,11 +960,9 @@ func (c *Comprehend) CreateEntityRecognizerRequest(input *CreateEntityRecognizer
 //   resources, and then try your request again.
 //
 //   * UnsupportedLanguageException
-//   Amazon Comprehend can't process the language of the input text. For all custom
-//   entity recognition APIs (such as CreateEntityRecognizer), only English, Spanish,
-//   French, Italian, German, or Portuguese are accepted. For most other APIs,
-//   such as those for Custom Classification, Amazon Comprehend accepts text in
-//   all supported languages. For a list of supported languages, see supported-languages.
+//   Amazon Comprehend can't process the language of the input text. For custom
+//   entity recognition APIs, only English, Spanish, French, Italian, German,
+//   or Portuguese are accepted. For a list of supported languages, see supported-languages.
 //
 //   * KmsKeyValidationException
 //   The KMS customer managed key (CMK) entered cannot be validated. Verify the
@@ -1756,6 +1836,94 @@ func (c *Comprehend) DescribeEntityRecognizerWithContext(ctx aws.Context, input 
 	return out, req.Send()
 }
 
+const opDescribeEventsDetectionJob = "DescribeEventsDetectionJob"
+
+// DescribeEventsDetectionJobRequest generates a "aws/request.Request" representing the
+// client's request for the DescribeEventsDetectionJob operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See DescribeEventsDetectionJob for more information on using the DescribeEventsDetectionJob
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the DescribeEventsDetectionJobRequest method.
+//    req, resp := client.DescribeEventsDetectionJobRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/comprehend-2017-11-27/DescribeEventsDetectionJob
+func (c *Comprehend) DescribeEventsDetectionJobRequest(input *DescribeEventsDetectionJobInput) (req *request.Request, output *DescribeEventsDetectionJobOutput) {
+	op := &request.Operation{
+		Name:       opDescribeEventsDetectionJob,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &DescribeEventsDetectionJobInput{}
+	}
+
+	output = &DescribeEventsDetectionJobOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// DescribeEventsDetectionJob API operation for Amazon Comprehend.
+//
+// Gets the status and details of an events detection job.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Comprehend's
+// API operation DescribeEventsDetectionJob for usage and error information.
+//
+// Returned Error Types:
+//   * InvalidRequestException
+//   The request is invalid.
+//
+//   * JobNotFoundException
+//   The specified job was not found. Check the job ID and try again.
+//
+//   * TooManyRequestsException
+//   The number of requests exceeds the limit. Resubmit your request later.
+//
+//   * InternalServerException
+//   An internal server error occurred. Retry your request.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/comprehend-2017-11-27/DescribeEventsDetectionJob
+func (c *Comprehend) DescribeEventsDetectionJob(input *DescribeEventsDetectionJobInput) (*DescribeEventsDetectionJobOutput, error) {
+	req, out := c.DescribeEventsDetectionJobRequest(input)
+	return out, req.Send()
+}
+
+// DescribeEventsDetectionJobWithContext is the same as DescribeEventsDetectionJob with the addition of
+// the ability to pass a context and additional request options.
+//
+// See DescribeEventsDetectionJob for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Comprehend) DescribeEventsDetectionJobWithContext(ctx aws.Context, input *DescribeEventsDetectionJobInput, opts ...request.Option) (*DescribeEventsDetectionJobOutput, error) {
+	req, out := c.DescribeEventsDetectionJobRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opDescribeKeyPhrasesDetectionJob = "DescribeKeyPhrasesDetectionJob"
 
 // DescribeKeyPhrasesDetectionJobRequest generates a "aws/request.Request" representing the
@@ -2265,11 +2433,9 @@ func (c *Comprehend) DetectEntitiesRequest(input *DetectEntitiesInput) (req *req
 //   The size of the input text exceeds the limit. Use a smaller document.
 //
 //   * UnsupportedLanguageException
-//   Amazon Comprehend can't process the language of the input text. For all custom
-//   entity recognition APIs (such as CreateEntityRecognizer), only English, Spanish,
-//   French, Italian, German, or Portuguese are accepted. For most other APIs,
-//   such as those for Custom Classification, Amazon Comprehend accepts text in
-//   all supported languages. For a list of supported languages, see supported-languages.
+//   Amazon Comprehend can't process the language of the input text. For custom
+//   entity recognition APIs, only English, Spanish, French, Italian, German,
+//   or Portuguese are accepted. For a list of supported languages, see supported-languages.
 //
 //   * InternalServerException
 //   An internal server error occurred. Retry your request.
@@ -2357,11 +2523,9 @@ func (c *Comprehend) DetectKeyPhrasesRequest(input *DetectKeyPhrasesInput) (req 
 //   The size of the input text exceeds the limit. Use a smaller document.
 //
 //   * UnsupportedLanguageException
-//   Amazon Comprehend can't process the language of the input text. For all custom
-//   entity recognition APIs (such as CreateEntityRecognizer), only English, Spanish,
-//   French, Italian, German, or Portuguese are accepted. For most other APIs,
-//   such as those for Custom Classification, Amazon Comprehend accepts text in
-//   all supported languages. For a list of supported languages, see supported-languages.
+//   Amazon Comprehend can't process the language of the input text. For custom
+//   entity recognition APIs, only English, Spanish, French, Italian, German,
+//   or Portuguese are accepted. For a list of supported languages, see supported-languages.
 //
 //   * InternalServerException
 //   An internal server error occurred. Retry your request.
@@ -2450,11 +2614,9 @@ func (c *Comprehend) DetectPiiEntitiesRequest(input *DetectPiiEntitiesInput) (re
 //   The size of the input text exceeds the limit. Use a smaller document.
 //
 //   * UnsupportedLanguageException
-//   Amazon Comprehend can't process the language of the input text. For all custom
-//   entity recognition APIs (such as CreateEntityRecognizer), only English, Spanish,
-//   French, Italian, German, or Portuguese are accepted. For most other APIs,
-//   such as those for Custom Classification, Amazon Comprehend accepts text in
-//   all supported languages. For a list of supported languages, see supported-languages.
+//   Amazon Comprehend can't process the language of the input text. For custom
+//   entity recognition APIs, only English, Spanish, French, Italian, German,
+//   or Portuguese are accepted. For a list of supported languages, see supported-languages.
 //
 //   * InternalServerException
 //   An internal server error occurred. Retry your request.
@@ -2543,11 +2705,9 @@ func (c *Comprehend) DetectSentimentRequest(input *DetectSentimentInput) (req *r
 //   The size of the input text exceeds the limit. Use a smaller document.
 //
 //   * UnsupportedLanguageException
-//   Amazon Comprehend can't process the language of the input text. For all custom
-//   entity recognition APIs (such as CreateEntityRecognizer), only English, Spanish,
-//   French, Italian, German, or Portuguese are accepted. For most other APIs,
-//   such as those for Custom Classification, Amazon Comprehend accepts text in
-//   all supported languages. For a list of supported languages, see supported-languages.
+//   Amazon Comprehend can't process the language of the input text. For custom
+//   entity recognition APIs, only English, Spanish, French, Italian, German,
+//   or Portuguese are accepted. For a list of supported languages, see supported-languages.
 //
 //   * InternalServerException
 //   An internal server error occurred. Retry your request.
@@ -2636,11 +2796,9 @@ func (c *Comprehend) DetectSyntaxRequest(input *DetectSyntaxInput) (req *request
 //   The size of the input text exceeds the limit. Use a smaller document.
 //
 //   * UnsupportedLanguageException
-//   Amazon Comprehend can't process the language of the input text. For all custom
-//   entity recognition APIs (such as CreateEntityRecognizer), only English, Spanish,
-//   French, Italian, German, or Portuguese are accepted. For most other APIs,
-//   such as those for Custom Classification, Amazon Comprehend accepts text in
-//   all supported languages. For a list of supported languages, see supported-languages.
+//   Amazon Comprehend can't process the language of the input text. For custom
+//   entity recognition APIs, only English, Spanish, French, Italian, German,
+//   or Portuguese are accepted. For a list of supported languages, see supported-languages.
 //
 //   * InternalServerException
 //   An internal server error occurred. Retry your request.
@@ -2806,6 +2964,149 @@ func (c *Comprehend) ListDocumentClassificationJobsPagesWithContext(ctx aws.Cont
 
 	for p.Next() {
 		if !fn(p.Page().(*ListDocumentClassificationJobsOutput), !p.HasNextPage()) {
+			break
+		}
+	}
+
+	return p.Err()
+}
+
+const opListDocumentClassifierSummaries = "ListDocumentClassifierSummaries"
+
+// ListDocumentClassifierSummariesRequest generates a "aws/request.Request" representing the
+// client's request for the ListDocumentClassifierSummaries operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See ListDocumentClassifierSummaries for more information on using the ListDocumentClassifierSummaries
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the ListDocumentClassifierSummariesRequest method.
+//    req, resp := client.ListDocumentClassifierSummariesRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/comprehend-2017-11-27/ListDocumentClassifierSummaries
+func (c *Comprehend) ListDocumentClassifierSummariesRequest(input *ListDocumentClassifierSummariesInput) (req *request.Request, output *ListDocumentClassifierSummariesOutput) {
+	op := &request.Operation{
+		Name:       opListDocumentClassifierSummaries,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+		Paginator: &request.Paginator{
+			InputTokens:     []string{"NextToken"},
+			OutputTokens:    []string{"NextToken"},
+			LimitToken:      "MaxResults",
+			TruncationToken: "",
+		},
+	}
+
+	if input == nil {
+		input = &ListDocumentClassifierSummariesInput{}
+	}
+
+	output = &ListDocumentClassifierSummariesOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// ListDocumentClassifierSummaries API operation for Amazon Comprehend.
+//
+// Gets a list of summaries of the document classifiers that you have created
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Comprehend's
+// API operation ListDocumentClassifierSummaries for usage and error information.
+//
+// Returned Error Types:
+//   * InvalidRequestException
+//   The request is invalid.
+//
+//   * TooManyRequestsException
+//   The number of requests exceeds the limit. Resubmit your request later.
+//
+//   * InternalServerException
+//   An internal server error occurred. Retry your request.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/comprehend-2017-11-27/ListDocumentClassifierSummaries
+func (c *Comprehend) ListDocumentClassifierSummaries(input *ListDocumentClassifierSummariesInput) (*ListDocumentClassifierSummariesOutput, error) {
+	req, out := c.ListDocumentClassifierSummariesRequest(input)
+	return out, req.Send()
+}
+
+// ListDocumentClassifierSummariesWithContext is the same as ListDocumentClassifierSummaries with the addition of
+// the ability to pass a context and additional request options.
+//
+// See ListDocumentClassifierSummaries for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Comprehend) ListDocumentClassifierSummariesWithContext(ctx aws.Context, input *ListDocumentClassifierSummariesInput, opts ...request.Option) (*ListDocumentClassifierSummariesOutput, error) {
+	req, out := c.ListDocumentClassifierSummariesRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+// ListDocumentClassifierSummariesPages iterates over the pages of a ListDocumentClassifierSummaries operation,
+// calling the "fn" function with the response data for each page. To stop
+// iterating, return false from the fn function.
+//
+// See ListDocumentClassifierSummaries method for more information on how to use this operation.
+//
+// Note: This operation can generate multiple requests to a service.
+//
+//    // Example iterating over at most 3 pages of a ListDocumentClassifierSummaries operation.
+//    pageNum := 0
+//    err := client.ListDocumentClassifierSummariesPages(params,
+//        func(page *comprehend.ListDocumentClassifierSummariesOutput, lastPage bool) bool {
+//            pageNum++
+//            fmt.Println(page)
+//            return pageNum <= 3
+//        })
+//
+func (c *Comprehend) ListDocumentClassifierSummariesPages(input *ListDocumentClassifierSummariesInput, fn func(*ListDocumentClassifierSummariesOutput, bool) bool) error {
+	return c.ListDocumentClassifierSummariesPagesWithContext(aws.BackgroundContext(), input, fn)
+}
+
+// ListDocumentClassifierSummariesPagesWithContext same as ListDocumentClassifierSummariesPages except
+// it takes a Context and allows setting request options on the pages.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Comprehend) ListDocumentClassifierSummariesPagesWithContext(ctx aws.Context, input *ListDocumentClassifierSummariesInput, fn func(*ListDocumentClassifierSummariesOutput, bool) bool, opts ...request.Option) error {
+	p := request.Pagination{
+		NewRequest: func() (*request.Request, error) {
+			var inCpy *ListDocumentClassifierSummariesInput
+			if input != nil {
+				tmp := *input
+				inCpy = &tmp
+			}
+			req, _ := c.ListDocumentClassifierSummariesRequest(inCpy)
+			req.SetContext(ctx)
+			req.ApplyOptions(opts...)
+			return req, nil
+		},
+	}
+
+	for p.Next() {
+		if !fn(p.Page().(*ListDocumentClassifierSummariesOutput), !p.HasNextPage()) {
 			break
 		}
 	}
@@ -3336,6 +3637,149 @@ func (c *Comprehend) ListEntitiesDetectionJobsPagesWithContext(ctx aws.Context, 
 	return p.Err()
 }
 
+const opListEntityRecognizerSummaries = "ListEntityRecognizerSummaries"
+
+// ListEntityRecognizerSummariesRequest generates a "aws/request.Request" representing the
+// client's request for the ListEntityRecognizerSummaries operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See ListEntityRecognizerSummaries for more information on using the ListEntityRecognizerSummaries
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the ListEntityRecognizerSummariesRequest method.
+//    req, resp := client.ListEntityRecognizerSummariesRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/comprehend-2017-11-27/ListEntityRecognizerSummaries
+func (c *Comprehend) ListEntityRecognizerSummariesRequest(input *ListEntityRecognizerSummariesInput) (req *request.Request, output *ListEntityRecognizerSummariesOutput) {
+	op := &request.Operation{
+		Name:       opListEntityRecognizerSummaries,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+		Paginator: &request.Paginator{
+			InputTokens:     []string{"NextToken"},
+			OutputTokens:    []string{"NextToken"},
+			LimitToken:      "MaxResults",
+			TruncationToken: "",
+		},
+	}
+
+	if input == nil {
+		input = &ListEntityRecognizerSummariesInput{}
+	}
+
+	output = &ListEntityRecognizerSummariesOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// ListEntityRecognizerSummaries API operation for Amazon Comprehend.
+//
+// Gets a list of summaries for the entity recognizers that you have created.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Comprehend's
+// API operation ListEntityRecognizerSummaries for usage and error information.
+//
+// Returned Error Types:
+//   * InvalidRequestException
+//   The request is invalid.
+//
+//   * TooManyRequestsException
+//   The number of requests exceeds the limit. Resubmit your request later.
+//
+//   * InternalServerException
+//   An internal server error occurred. Retry your request.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/comprehend-2017-11-27/ListEntityRecognizerSummaries
+func (c *Comprehend) ListEntityRecognizerSummaries(input *ListEntityRecognizerSummariesInput) (*ListEntityRecognizerSummariesOutput, error) {
+	req, out := c.ListEntityRecognizerSummariesRequest(input)
+	return out, req.Send()
+}
+
+// ListEntityRecognizerSummariesWithContext is the same as ListEntityRecognizerSummaries with the addition of
+// the ability to pass a context and additional request options.
+//
+// See ListEntityRecognizerSummaries for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Comprehend) ListEntityRecognizerSummariesWithContext(ctx aws.Context, input *ListEntityRecognizerSummariesInput, opts ...request.Option) (*ListEntityRecognizerSummariesOutput, error) {
+	req, out := c.ListEntityRecognizerSummariesRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+// ListEntityRecognizerSummariesPages iterates over the pages of a ListEntityRecognizerSummaries operation,
+// calling the "fn" function with the response data for each page. To stop
+// iterating, return false from the fn function.
+//
+// See ListEntityRecognizerSummaries method for more information on how to use this operation.
+//
+// Note: This operation can generate multiple requests to a service.
+//
+//    // Example iterating over at most 3 pages of a ListEntityRecognizerSummaries operation.
+//    pageNum := 0
+//    err := client.ListEntityRecognizerSummariesPages(params,
+//        func(page *comprehend.ListEntityRecognizerSummariesOutput, lastPage bool) bool {
+//            pageNum++
+//            fmt.Println(page)
+//            return pageNum <= 3
+//        })
+//
+func (c *Comprehend) ListEntityRecognizerSummariesPages(input *ListEntityRecognizerSummariesInput, fn func(*ListEntityRecognizerSummariesOutput, bool) bool) error {
+	return c.ListEntityRecognizerSummariesPagesWithContext(aws.BackgroundContext(), input, fn)
+}
+
+// ListEntityRecognizerSummariesPagesWithContext same as ListEntityRecognizerSummariesPages except
+// it takes a Context and allows setting request options on the pages.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Comprehend) ListEntityRecognizerSummariesPagesWithContext(ctx aws.Context, input *ListEntityRecognizerSummariesInput, fn func(*ListEntityRecognizerSummariesOutput, bool) bool, opts ...request.Option) error {
+	p := request.Pagination{
+		NewRequest: func() (*request.Request, error) {
+			var inCpy *ListEntityRecognizerSummariesInput
+			if input != nil {
+				tmp := *input
+				inCpy = &tmp
+			}
+			req, _ := c.ListEntityRecognizerSummariesRequest(inCpy)
+			req.SetContext(ctx)
+			req.ApplyOptions(opts...)
+			return req, nil
+		},
+	}
+
+	for p.Next() {
+		if !fn(p.Page().(*ListEntityRecognizerSummariesOutput), !p.HasNextPage()) {
+			break
+		}
+	}
+
+	return p.Err()
+}
+
 const opListEntityRecognizers = "ListEntityRecognizers"
 
 // ListEntityRecognizersRequest generates a "aws/request.Request" representing the
@@ -3482,6 +3926,152 @@ func (c *Comprehend) ListEntityRecognizersPagesWithContext(ctx aws.Context, inpu
 
 	for p.Next() {
 		if !fn(p.Page().(*ListEntityRecognizersOutput), !p.HasNextPage()) {
+			break
+		}
+	}
+
+	return p.Err()
+}
+
+const opListEventsDetectionJobs = "ListEventsDetectionJobs"
+
+// ListEventsDetectionJobsRequest generates a "aws/request.Request" representing the
+// client's request for the ListEventsDetectionJobs operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See ListEventsDetectionJobs for more information on using the ListEventsDetectionJobs
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the ListEventsDetectionJobsRequest method.
+//    req, resp := client.ListEventsDetectionJobsRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/comprehend-2017-11-27/ListEventsDetectionJobs
+func (c *Comprehend) ListEventsDetectionJobsRequest(input *ListEventsDetectionJobsInput) (req *request.Request, output *ListEventsDetectionJobsOutput) {
+	op := &request.Operation{
+		Name:       opListEventsDetectionJobs,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+		Paginator: &request.Paginator{
+			InputTokens:     []string{"NextToken"},
+			OutputTokens:    []string{"NextToken"},
+			LimitToken:      "MaxResults",
+			TruncationToken: "",
+		},
+	}
+
+	if input == nil {
+		input = &ListEventsDetectionJobsInput{}
+	}
+
+	output = &ListEventsDetectionJobsOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// ListEventsDetectionJobs API operation for Amazon Comprehend.
+//
+// Gets a list of the events detection jobs that you have submitted.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Comprehend's
+// API operation ListEventsDetectionJobs for usage and error information.
+//
+// Returned Error Types:
+//   * InvalidRequestException
+//   The request is invalid.
+//
+//   * TooManyRequestsException
+//   The number of requests exceeds the limit. Resubmit your request later.
+//
+//   * InvalidFilterException
+//   The filter specified for the operation is invalid. Specify a different filter.
+//
+//   * InternalServerException
+//   An internal server error occurred. Retry your request.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/comprehend-2017-11-27/ListEventsDetectionJobs
+func (c *Comprehend) ListEventsDetectionJobs(input *ListEventsDetectionJobsInput) (*ListEventsDetectionJobsOutput, error) {
+	req, out := c.ListEventsDetectionJobsRequest(input)
+	return out, req.Send()
+}
+
+// ListEventsDetectionJobsWithContext is the same as ListEventsDetectionJobs with the addition of
+// the ability to pass a context and additional request options.
+//
+// See ListEventsDetectionJobs for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Comprehend) ListEventsDetectionJobsWithContext(ctx aws.Context, input *ListEventsDetectionJobsInput, opts ...request.Option) (*ListEventsDetectionJobsOutput, error) {
+	req, out := c.ListEventsDetectionJobsRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+// ListEventsDetectionJobsPages iterates over the pages of a ListEventsDetectionJobs operation,
+// calling the "fn" function with the response data for each page. To stop
+// iterating, return false from the fn function.
+//
+// See ListEventsDetectionJobs method for more information on how to use this operation.
+//
+// Note: This operation can generate multiple requests to a service.
+//
+//    // Example iterating over at most 3 pages of a ListEventsDetectionJobs operation.
+//    pageNum := 0
+//    err := client.ListEventsDetectionJobsPages(params,
+//        func(page *comprehend.ListEventsDetectionJobsOutput, lastPage bool) bool {
+//            pageNum++
+//            fmt.Println(page)
+//            return pageNum <= 3
+//        })
+//
+func (c *Comprehend) ListEventsDetectionJobsPages(input *ListEventsDetectionJobsInput, fn func(*ListEventsDetectionJobsOutput, bool) bool) error {
+	return c.ListEventsDetectionJobsPagesWithContext(aws.BackgroundContext(), input, fn)
+}
+
+// ListEventsDetectionJobsPagesWithContext same as ListEventsDetectionJobsPages except
+// it takes a Context and allows setting request options on the pages.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Comprehend) ListEventsDetectionJobsPagesWithContext(ctx aws.Context, input *ListEventsDetectionJobsInput, fn func(*ListEventsDetectionJobsOutput, bool) bool, opts ...request.Option) error {
+	p := request.Pagination{
+		NewRequest: func() (*request.Request, error) {
+			var inCpy *ListEventsDetectionJobsInput
+			if input != nil {
+				tmp := *input
+				inCpy = &tmp
+			}
+			req, _ := c.ListEventsDetectionJobsRequest(inCpy)
+			req.SetContext(ctx)
+			req.ApplyOptions(opts...)
+			return req, nil
+		},
+	}
+
+	for p.Next() {
+		if !fn(p.Page().(*ListEventsDetectionJobsOutput), !p.HasNextPage()) {
 			break
 		}
 	}
@@ -4174,6 +4764,11 @@ func (c *Comprehend) StartDocumentClassificationJobRequest(input *StartDocumentC
 //   The KMS customer managed key (CMK) entered cannot be validated. Verify the
 //   key and re-enter it.
 //
+//   * TooManyTagsException
+//   The request contains more tags than can be associated with a resource (50
+//   tags per resource). The maximum number of tags includes both existing tags
+//   and those included in your current request.
+//
 //   * InternalServerException
 //   An internal server error occurred. Retry your request.
 //
@@ -4263,6 +4858,11 @@ func (c *Comprehend) StartDominantLanguageDetectionJobRequest(input *StartDomina
 //   * KmsKeyValidationException
 //   The KMS customer managed key (CMK) entered cannot be validated. Verify the
 //   key and re-enter it.
+//
+//   * TooManyTagsException
+//   The request contains more tags than can be associated with a resource (50
+//   tags per resource). The maximum number of tags includes both existing tags
+//   and those included in your current request.
 //
 //   * InternalServerException
 //   An internal server error occurred. Retry your request.
@@ -4367,6 +4967,11 @@ func (c *Comprehend) StartEntitiesDetectionJobRequest(input *StartEntitiesDetect
 //   The KMS customer managed key (CMK) entered cannot be validated. Verify the
 //   key and re-enter it.
 //
+//   * TooManyTagsException
+//   The request contains more tags than can be associated with a resource (50
+//   tags per resource). The maximum number of tags includes both existing tags
+//   and those included in your current request.
+//
 //   * InternalServerException
 //   An internal server error occurred. Retry your request.
 //
@@ -4387,6 +4992,100 @@ func (c *Comprehend) StartEntitiesDetectionJob(input *StartEntitiesDetectionJobI
 // for more information on using Contexts.
 func (c *Comprehend) StartEntitiesDetectionJobWithContext(ctx aws.Context, input *StartEntitiesDetectionJobInput, opts ...request.Option) (*StartEntitiesDetectionJobOutput, error) {
 	req, out := c.StartEntitiesDetectionJobRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opStartEventsDetectionJob = "StartEventsDetectionJob"
+
+// StartEventsDetectionJobRequest generates a "aws/request.Request" representing the
+// client's request for the StartEventsDetectionJob operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See StartEventsDetectionJob for more information on using the StartEventsDetectionJob
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the StartEventsDetectionJobRequest method.
+//    req, resp := client.StartEventsDetectionJobRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/comprehend-2017-11-27/StartEventsDetectionJob
+func (c *Comprehend) StartEventsDetectionJobRequest(input *StartEventsDetectionJobInput) (req *request.Request, output *StartEventsDetectionJobOutput) {
+	op := &request.Operation{
+		Name:       opStartEventsDetectionJob,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &StartEventsDetectionJobInput{}
+	}
+
+	output = &StartEventsDetectionJobOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// StartEventsDetectionJob API operation for Amazon Comprehend.
+//
+// Starts an asynchronous event detection job for a collection of documents.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Comprehend's
+// API operation StartEventsDetectionJob for usage and error information.
+//
+// Returned Error Types:
+//   * InvalidRequestException
+//   The request is invalid.
+//
+//   * TooManyRequestsException
+//   The number of requests exceeds the limit. Resubmit your request later.
+//
+//   * KmsKeyValidationException
+//   The KMS customer managed key (CMK) entered cannot be validated. Verify the
+//   key and re-enter it.
+//
+//   * TooManyTagsException
+//   The request contains more tags than can be associated with a resource (50
+//   tags per resource). The maximum number of tags includes both existing tags
+//   and those included in your current request.
+//
+//   * InternalServerException
+//   An internal server error occurred. Retry your request.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/comprehend-2017-11-27/StartEventsDetectionJob
+func (c *Comprehend) StartEventsDetectionJob(input *StartEventsDetectionJobInput) (*StartEventsDetectionJobOutput, error) {
+	req, out := c.StartEventsDetectionJobRequest(input)
+	return out, req.Send()
+}
+
+// StartEventsDetectionJobWithContext is the same as StartEventsDetectionJob with the addition of
+// the ability to pass a context and additional request options.
+//
+// See StartEventsDetectionJob for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Comprehend) StartEventsDetectionJobWithContext(ctx aws.Context, input *StartEventsDetectionJobInput, opts ...request.Option) (*StartEventsDetectionJobOutput, error) {
+	req, out := c.StartEventsDetectionJobRequest(input)
 	req.SetContext(ctx)
 	req.ApplyOptions(opts...)
 	return out, req.Send()
@@ -4456,6 +5155,11 @@ func (c *Comprehend) StartKeyPhrasesDetectionJobRequest(input *StartKeyPhrasesDe
 //   * KmsKeyValidationException
 //   The KMS customer managed key (CMK) entered cannot be validated. Verify the
 //   key and re-enter it.
+//
+//   * TooManyTagsException
+//   The request contains more tags than can be associated with a resource (50
+//   tags per resource). The maximum number of tags includes both existing tags
+//   and those included in your current request.
 //
 //   * InternalServerException
 //   An internal server error occurred. Retry your request.
@@ -4545,6 +5249,11 @@ func (c *Comprehend) StartPiiEntitiesDetectionJobRequest(input *StartPiiEntities
 //   * KmsKeyValidationException
 //   The KMS customer managed key (CMK) entered cannot be validated. Verify the
 //   key and re-enter it.
+//
+//   * TooManyTagsException
+//   The request contains more tags than can be associated with a resource (50
+//   tags per resource). The maximum number of tags includes both existing tags
+//   and those included in your current request.
 //
 //   * InternalServerException
 //   An internal server error occurred. Retry your request.
@@ -4636,6 +5345,11 @@ func (c *Comprehend) StartSentimentDetectionJobRequest(input *StartSentimentDete
 //   The KMS customer managed key (CMK) entered cannot be validated. Verify the
 //   key and re-enter it.
 //
+//   * TooManyTagsException
+//   The request contains more tags than can be associated with a resource (50
+//   tags per resource). The maximum number of tags includes both existing tags
+//   and those included in your current request.
+//
 //   * InternalServerException
 //   An internal server error occurred. Retry your request.
 //
@@ -4725,6 +5439,11 @@ func (c *Comprehend) StartTopicsDetectionJobRequest(input *StartTopicsDetectionJ
 //   * KmsKeyValidationException
 //   The KMS customer managed key (CMK) entered cannot be validated. Verify the
 //   key and re-enter it.
+//
+//   * TooManyTagsException
+//   The request contains more tags than can be associated with a resource (50
+//   tags per resource). The maximum number of tags includes both existing tags
+//   and those included in your current request.
 //
 //   * InternalServerException
 //   An internal server error occurred. Retry your request.
@@ -4938,6 +5657,91 @@ func (c *Comprehend) StopEntitiesDetectionJob(input *StopEntitiesDetectionJobInp
 // for more information on using Contexts.
 func (c *Comprehend) StopEntitiesDetectionJobWithContext(ctx aws.Context, input *StopEntitiesDetectionJobInput, opts ...request.Option) (*StopEntitiesDetectionJobOutput, error) {
 	req, out := c.StopEntitiesDetectionJobRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opStopEventsDetectionJob = "StopEventsDetectionJob"
+
+// StopEventsDetectionJobRequest generates a "aws/request.Request" representing the
+// client's request for the StopEventsDetectionJob operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See StopEventsDetectionJob for more information on using the StopEventsDetectionJob
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the StopEventsDetectionJobRequest method.
+//    req, resp := client.StopEventsDetectionJobRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/comprehend-2017-11-27/StopEventsDetectionJob
+func (c *Comprehend) StopEventsDetectionJobRequest(input *StopEventsDetectionJobInput) (req *request.Request, output *StopEventsDetectionJobOutput) {
+	op := &request.Operation{
+		Name:       opStopEventsDetectionJob,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &StopEventsDetectionJobInput{}
+	}
+
+	output = &StopEventsDetectionJobOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// StopEventsDetectionJob API operation for Amazon Comprehend.
+//
+// Stops an events detection job in progress.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Comprehend's
+// API operation StopEventsDetectionJob for usage and error information.
+//
+// Returned Error Types:
+//   * InvalidRequestException
+//   The request is invalid.
+//
+//   * JobNotFoundException
+//   The specified job was not found. Check the job ID and try again.
+//
+//   * InternalServerException
+//   An internal server error occurred. Retry your request.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/comprehend-2017-11-27/StopEventsDetectionJob
+func (c *Comprehend) StopEventsDetectionJob(input *StopEventsDetectionJobInput) (*StopEventsDetectionJobOutput, error) {
+	req, out := c.StopEventsDetectionJobRequest(input)
+	return out, req.Send()
+}
+
+// StopEventsDetectionJobWithContext is the same as StopEventsDetectionJob with the addition of
+// the ability to pass a context and additional request options.
+//
+// See StopEventsDetectionJob for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Comprehend) StopEventsDetectionJobWithContext(ctx aws.Context, input *StopEventsDetectionJobInput, opts ...request.Option) (*StopEventsDetectionJobOutput, error) {
+	req, out := c.StopEventsDetectionJobRequest(input)
 	req.SetContext(ctx)
 	req.ApplyOptions(opts...)
 	return out, req.Send()
@@ -5714,6 +6518,10 @@ func (c *Comprehend) UpdateEndpointWithContext(ctx aws.Context, input *UpdateEnd
 type AugmentedManifestsListItem struct {
 	_ struct{} `type:"structure"`
 
+	// The S3 prefix to the annotation files that are referred in the augmented
+	// manifest file.
+	AnnotationDataS3Uri *string `type:"string"`
+
 	// The JSON attribute that contains the annotations for your training documents.
 	// The number of attribute names that you specify depends on whether your augmented
 	// manifest file is the output of a single labeling job or a chained labeling
@@ -5729,18 +6537,51 @@ type AugmentedManifestsListItem struct {
 	// AttributeNames is a required field
 	AttributeNames []*string `type:"list" required:"true"`
 
+	// The type of augmented manifest. PlainTextDocument or SemiStructuredDocument.
+	// If you don't specify, the default is PlainTextDocument.
+	//
+	//    * PLAIN_TEXT_DOCUMENT A document type that represents any unicode text
+	//    that is encoded in UTF-8.
+	//
+	//    * SEMI_STRUCTURED_DOCUMENT A document type with positional and structural
+	//    context, like a PDF. For training with Amazon Comprehend, only PDFs are
+	//    supported. For inference, Amazon Comprehend support PDFs, DOCX and TXT.
+	DocumentType *string `type:"string" enum:"AugmentedManifestsDocumentTypeFormat"`
+
 	// The Amazon S3 location of the augmented manifest file.
 	//
 	// S3Uri is a required field
 	S3Uri *string `type:"string" required:"true"`
+
+	// The S3 prefix to the source files (PDFs) that are referred to in the augmented
+	// manifest file.
+	SourceDocumentsS3Uri *string `type:"string"`
+
+	// The purpose of the data you've provided in the augmented manifest. You can
+	// either train or test this data. If you don't specify, the default is train.
+	//
+	// TRAIN - all of the documents in the manifest will be used for training. If
+	// no test documents are provided, Amazon Comprehend will automatically reserve
+	// a portion of the training documents for testing.
+	//
+	// TEST - all of the documents in the manifest will be used for testing.
+	Split *string `type:"string" enum:"Split"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AugmentedManifestsListItem) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AugmentedManifestsListItem) GoString() string {
 	return s.String()
 }
@@ -5761,15 +6602,39 @@ func (s *AugmentedManifestsListItem) Validate() error {
 	return nil
 }
 
+// SetAnnotationDataS3Uri sets the AnnotationDataS3Uri field's value.
+func (s *AugmentedManifestsListItem) SetAnnotationDataS3Uri(v string) *AugmentedManifestsListItem {
+	s.AnnotationDataS3Uri = &v
+	return s
+}
+
 // SetAttributeNames sets the AttributeNames field's value.
 func (s *AugmentedManifestsListItem) SetAttributeNames(v []*string) *AugmentedManifestsListItem {
 	s.AttributeNames = v
 	return s
 }
 
+// SetDocumentType sets the DocumentType field's value.
+func (s *AugmentedManifestsListItem) SetDocumentType(v string) *AugmentedManifestsListItem {
+	s.DocumentType = &v
+	return s
+}
+
 // SetS3Uri sets the S3Uri field's value.
 func (s *AugmentedManifestsListItem) SetS3Uri(v string) *AugmentedManifestsListItem {
 	s.S3Uri = &v
+	return s
+}
+
+// SetSourceDocumentsS3Uri sets the SourceDocumentsS3Uri field's value.
+func (s *AugmentedManifestsListItem) SetSourceDocumentsS3Uri(v string) *AugmentedManifestsListItem {
+	s.SourceDocumentsS3Uri = &v
+	return s
+}
+
+// SetSplit sets the Split field's value.
+func (s *AugmentedManifestsListItem) SetSplit(v string) *AugmentedManifestsListItem {
+	s.Split = &v
 	return s
 }
 
@@ -5780,16 +6645,28 @@ type BatchDetectDominantLanguageInput struct {
 	// maximum of 25 documents. Each document should contain at least 20 characters
 	// and must contain fewer than 5,000 bytes of UTF-8 encoded characters.
 	//
+	// TextList is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by BatchDetectDominantLanguageInput's
+	// String and GoString methods.
+	//
 	// TextList is a required field
 	TextList []*string `type:"list" required:"true" sensitive:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s BatchDetectDominantLanguageInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s BatchDetectDominantLanguageInput) GoString() string {
 	return s.String()
 }
@@ -5826,12 +6703,20 @@ type BatchDetectDominantLanguageItemResult struct {
 	Languages []*DominantLanguage `type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s BatchDetectDominantLanguageItemResult) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s BatchDetectDominantLanguageItemResult) GoString() string {
 	return s.String()
 }
@@ -5868,12 +6753,20 @@ type BatchDetectDominantLanguageOutput struct {
 	ResultList []*BatchDetectDominantLanguageItemResult `type:"list" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s BatchDetectDominantLanguageOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s BatchDetectDominantLanguageOutput) GoString() string {
 	return s.String()
 }
@@ -5903,16 +6796,28 @@ type BatchDetectEntitiesInput struct {
 	// maximum of 25 documents. Each document must contain fewer than 5,000 bytes
 	// of UTF-8 encoded characters.
 	//
+	// TextList is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by BatchDetectEntitiesInput's
+	// String and GoString methods.
+	//
 	// TextList is a required field
 	TextList []*string `type:"list" required:"true" sensitive:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s BatchDetectEntitiesInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s BatchDetectEntitiesInput) GoString() string {
 	return s.String()
 }
@@ -5957,12 +6862,20 @@ type BatchDetectEntitiesItemResult struct {
 	Index *int64 `type:"integer"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s BatchDetectEntitiesItemResult) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s BatchDetectEntitiesItemResult) GoString() string {
 	return s.String()
 }
@@ -5999,12 +6912,20 @@ type BatchDetectEntitiesOutput struct {
 	ResultList []*BatchDetectEntitiesItemResult `type:"list" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s BatchDetectEntitiesOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s BatchDetectEntitiesOutput) GoString() string {
 	return s.String()
 }
@@ -6034,16 +6955,28 @@ type BatchDetectKeyPhrasesInput struct {
 	// maximum of 25 documents. Each document must contain fewer that 5,000 bytes
 	// of UTF-8 encoded characters.
 	//
+	// TextList is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by BatchDetectKeyPhrasesInput's
+	// String and GoString methods.
+	//
 	// TextList is a required field
 	TextList []*string `type:"list" required:"true" sensitive:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s BatchDetectKeyPhrasesInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s BatchDetectKeyPhrasesInput) GoString() string {
 	return s.String()
 }
@@ -6088,12 +7021,20 @@ type BatchDetectKeyPhrasesItemResult struct {
 	KeyPhrases []*KeyPhrase `type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s BatchDetectKeyPhrasesItemResult) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s BatchDetectKeyPhrasesItemResult) GoString() string {
 	return s.String()
 }
@@ -6130,12 +7071,20 @@ type BatchDetectKeyPhrasesOutput struct {
 	ResultList []*BatchDetectKeyPhrasesItemResult `type:"list" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s BatchDetectKeyPhrasesOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s BatchDetectKeyPhrasesOutput) GoString() string {
 	return s.String()
 }
@@ -6165,16 +7114,28 @@ type BatchDetectSentimentInput struct {
 	// maximum of 25 documents. Each document must contain fewer that 5,000 bytes
 	// of UTF-8 encoded characters.
 	//
+	// TextList is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by BatchDetectSentimentInput's
+	// String and GoString methods.
+	//
 	// TextList is a required field
 	TextList []*string `type:"list" required:"true" sensitive:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s BatchDetectSentimentInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s BatchDetectSentimentInput) GoString() string {
 	return s.String()
 }
@@ -6223,12 +7184,20 @@ type BatchDetectSentimentItemResult struct {
 	SentimentScore *SentimentScore `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s BatchDetectSentimentItemResult) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s BatchDetectSentimentItemResult) GoString() string {
 	return s.String()
 }
@@ -6271,12 +7240,20 @@ type BatchDetectSentimentOutput struct {
 	ResultList []*BatchDetectSentimentItemResult `type:"list" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s BatchDetectSentimentOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s BatchDetectSentimentOutput) GoString() string {
 	return s.String()
 }
@@ -6308,16 +7285,28 @@ type BatchDetectSyntaxInput struct {
 	// maximum of 25 documents. Each document must contain fewer that 5,000 bytes
 	// of UTF-8 encoded characters.
 	//
+	// TextList is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by BatchDetectSyntaxInput's
+	// String and GoString methods.
+	//
 	// TextList is a required field
 	TextList []*string `type:"list" required:"true" sensitive:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s BatchDetectSyntaxInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s BatchDetectSyntaxInput) GoString() string {
 	return s.String()
 }
@@ -6362,12 +7351,20 @@ type BatchDetectSyntaxItemResult struct {
 	SyntaxTokens []*SyntaxToken `type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s BatchDetectSyntaxItemResult) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s BatchDetectSyntaxItemResult) GoString() string {
 	return s.String()
 }
@@ -6404,12 +7401,20 @@ type BatchDetectSyntaxOutput struct {
 	ResultList []*BatchDetectSyntaxItemResult `type:"list" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s BatchDetectSyntaxOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s BatchDetectSyntaxOutput) GoString() string {
 	return s.String()
 }
@@ -6442,12 +7447,20 @@ type BatchItemError struct {
 	Index *int64 `type:"integer"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s BatchItemError) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s BatchItemError) GoString() string {
 	return s.String()
 }
@@ -6479,12 +7492,20 @@ type BatchSizeLimitExceededException struct {
 	Message_ *string `locationName:"Message" min:"1" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s BatchSizeLimitExceededException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s BatchSizeLimitExceededException) GoString() string {
 	return s.String()
 }
@@ -6579,12 +7600,20 @@ type ClassifierEvaluationMetrics struct {
 	Recall *float64 `type:"double"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ClassifierEvaluationMetrics) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ClassifierEvaluationMetrics) GoString() string {
 	return s.String()
 }
@@ -6657,12 +7686,20 @@ type ClassifierMetadata struct {
 	NumberOfTrainedDocuments *int64 `type:"integer"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ClassifierMetadata) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ClassifierMetadata) GoString() string {
 	return s.String()
 }
@@ -6701,16 +7738,28 @@ type ClassifyDocumentInput struct {
 
 	// The document text to be analyzed.
 	//
+	// Text is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by ClassifyDocumentInput's
+	// String and GoString methods.
+	//
 	// Text is a required field
 	Text *string `min:"1" type:"string" required:"true" sensitive:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ClassifyDocumentInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ClassifyDocumentInput) GoString() string {
 	return s.String()
 }
@@ -6757,18 +7806,26 @@ type ClassifyDocumentOutput struct {
 
 	// The labels used the document being analyzed. These are used for multi-label
 	// trained models. Individual labels represent different categories that are
-	// related in some manner and are not multually exclusive. For example, a movie
+	// related in some manner and are not mutually exclusive. For example, a movie
 	// can be just an action movie, or it can be an action movie, a science fiction
 	// movie, and a comedy, all at the same time.
 	Labels []*DocumentLabel `type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ClassifyDocumentOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ClassifyDocumentOutput) GoString() string {
 	return s.String()
 }
@@ -6794,12 +7851,20 @@ type ConcurrentModificationException struct {
 	Message_ *string `locationName:"Message" min:"1" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ConcurrentModificationException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ConcurrentModificationException) GoString() string {
 	return s.String()
 }
@@ -6842,6 +7907,103 @@ func (s *ConcurrentModificationException) RequestID() string {
 	return s.RespMetadata.RequestID
 }
 
+type ContainsPiiEntitiesInput struct {
+	_ struct{} `type:"structure"`
+
+	// The language of the input documents.
+	//
+	// LanguageCode is a required field
+	LanguageCode *string `type:"string" required:"true" enum:"LanguageCode"`
+
+	// Creates a new document classification request to analyze a single document
+	// in real-time, returning personally identifiable information (PII) entity
+	// labels.
+	//
+	// Text is a required field
+	Text *string `min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ContainsPiiEntitiesInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ContainsPiiEntitiesInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ContainsPiiEntitiesInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ContainsPiiEntitiesInput"}
+	if s.LanguageCode == nil {
+		invalidParams.Add(request.NewErrParamRequired("LanguageCode"))
+	}
+	if s.Text == nil {
+		invalidParams.Add(request.NewErrParamRequired("Text"))
+	}
+	if s.Text != nil && len(*s.Text) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Text", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetLanguageCode sets the LanguageCode field's value.
+func (s *ContainsPiiEntitiesInput) SetLanguageCode(v string) *ContainsPiiEntitiesInput {
+	s.LanguageCode = &v
+	return s
+}
+
+// SetText sets the Text field's value.
+func (s *ContainsPiiEntitiesInput) SetText(v string) *ContainsPiiEntitiesInput {
+	s.Text = &v
+	return s
+}
+
+type ContainsPiiEntitiesOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The labels used in the document being analyzed. Individual labels represent
+	// personally identifiable information (PII) entity types.
+	Labels []*EntityLabel `type:"list"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ContainsPiiEntitiesOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ContainsPiiEntitiesOutput) GoString() string {
+	return s.String()
+}
+
+// SetLabels sets the Labels field's value.
+func (s *ContainsPiiEntitiesOutput) SetLabels(v []*EntityLabel) *ContainsPiiEntitiesOutput {
+	s.Labels = v
+	return s
+}
+
 type CreateDocumentClassifierInput struct {
 	_ struct{} `type:"structure"`
 
@@ -6881,6 +8043,15 @@ type CreateDocumentClassifierInput struct {
 	// is a pipe (|).
 	Mode *string `type:"string" enum:"DocumentClassifierMode"`
 
+	// ID for the AWS Key Management Service (KMS) key that Amazon Comprehend uses
+	// to encrypt trained custom models. The ModelKmsKeyId can be either of the
+	// following formats:
+	//
+	//    * KMS Key ID: "1234abcd-12ab-34cd-56ef-1234567890ab"
+	//
+	//    * Amazon Resource Name (ARN) of a KMS Key: "arn:aws:kms:us-west-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab"
+	ModelKmsKeyId *string `type:"string"`
+
 	// Enables the addition of output results configuration parameters for custom
 	// classifier jobs.
 	OutputDataConfig *DocumentClassifierOutputDataConfig `type:"structure"`
@@ -6890,6 +8061,12 @@ type CreateDocumentClassifierInput struct {
 	// For example, a tag with "Sales" as the key might be added to a resource to
 	// indicate its use by the sales department.
 	Tags []*Tag `type:"list"`
+
+	// The version name given to the newly created classifier. Version names can
+	// have a maximum of 256 characters. Alphanumeric characters, hyphens (-) and
+	// underscores (_) are allowed. The version name must be unique among all models
+	// with the same classifier name in the account/AWS Region.
+	VersionName *string `type:"string"`
 
 	// ID for the AWS Key Management Service (KMS) key that Amazon Comprehend uses
 	// to encrypt data on the storage volume attached to the ML compute instance(s)
@@ -6907,12 +8084,20 @@ type CreateDocumentClassifierInput struct {
 	VpcConfig *VpcConfig `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateDocumentClassifierInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateDocumentClassifierInput) GoString() string {
 	return s.String()
 }
@@ -7001,6 +8186,12 @@ func (s *CreateDocumentClassifierInput) SetMode(v string) *CreateDocumentClassif
 	return s
 }
 
+// SetModelKmsKeyId sets the ModelKmsKeyId field's value.
+func (s *CreateDocumentClassifierInput) SetModelKmsKeyId(v string) *CreateDocumentClassifierInput {
+	s.ModelKmsKeyId = &v
+	return s
+}
+
 // SetOutputDataConfig sets the OutputDataConfig field's value.
 func (s *CreateDocumentClassifierInput) SetOutputDataConfig(v *DocumentClassifierOutputDataConfig) *CreateDocumentClassifierInput {
 	s.OutputDataConfig = v
@@ -7010,6 +8201,12 @@ func (s *CreateDocumentClassifierInput) SetOutputDataConfig(v *DocumentClassifie
 // SetTags sets the Tags field's value.
 func (s *CreateDocumentClassifierInput) SetTags(v []*Tag) *CreateDocumentClassifierInput {
 	s.Tags = v
+	return s
+}
+
+// SetVersionName sets the VersionName field's value.
+func (s *CreateDocumentClassifierInput) SetVersionName(v string) *CreateDocumentClassifierInput {
+	s.VersionName = &v
 	return s
 }
 
@@ -7032,12 +8229,20 @@ type CreateDocumentClassifierOutput struct {
 	DocumentClassifierArn *string `type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateDocumentClassifierOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateDocumentClassifierOutput) GoString() string {
 	return s.String()
 }
@@ -7054,6 +8259,11 @@ type CreateEndpointInput struct {
 	// An idempotency token provided by the customer. If this token matches a previous
 	// endpoint creation request, Amazon Comprehend will not return a ResourceInUseException.
 	ClientRequestToken *string `min:"1" type:"string" idempotencyToken:"true"`
+
+	// The Amazon Resource Name (ARN) of the AWS identity and Access Management
+	// (IAM) role that grants Amazon Comprehend read access to trained custom models
+	// encrypted with a customer managed key (ModelKmsKeyId).
+	DataAccessRoleArn *string `min:"20" type:"string"`
 
 	// The desired number of inference units to be used by the model using this
 	// endpoint. Each inference unit represents of a throughput of 100 characters
@@ -7080,12 +8290,20 @@ type CreateEndpointInput struct {
 	Tags []*Tag `type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateEndpointInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateEndpointInput) GoString() string {
 	return s.String()
 }
@@ -7095,6 +8313,9 @@ func (s *CreateEndpointInput) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "CreateEndpointInput"}
 	if s.ClientRequestToken != nil && len(*s.ClientRequestToken) < 1 {
 		invalidParams.Add(request.NewErrParamMinLen("ClientRequestToken", 1))
+	}
+	if s.DataAccessRoleArn != nil && len(*s.DataAccessRoleArn) < 20 {
+		invalidParams.Add(request.NewErrParamMinLen("DataAccessRoleArn", 20))
 	}
 	if s.DesiredInferenceUnits == nil {
 		invalidParams.Add(request.NewErrParamRequired("DesiredInferenceUnits"))
@@ -7131,6 +8352,12 @@ func (s *CreateEndpointInput) SetClientRequestToken(v string) *CreateEndpointInp
 	return s
 }
 
+// SetDataAccessRoleArn sets the DataAccessRoleArn field's value.
+func (s *CreateEndpointInput) SetDataAccessRoleArn(v string) *CreateEndpointInput {
+	s.DataAccessRoleArn = &v
+	return s
+}
+
 // SetDesiredInferenceUnits sets the DesiredInferenceUnits field's value.
 func (s *CreateEndpointInput) SetDesiredInferenceUnits(v int64) *CreateEndpointInput {
 	s.DesiredInferenceUnits = &v
@@ -7162,12 +8389,20 @@ type CreateEndpointOutput struct {
 	EndpointArn *string `type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateEndpointOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateEndpointOutput) GoString() string {
 	return s.String()
 }
@@ -7205,6 +8440,15 @@ type CreateEntityRecognizerInput struct {
 	// LanguageCode is a required field
 	LanguageCode *string `type:"string" required:"true" enum:"LanguageCode"`
 
+	// ID for the AWS Key Management Service (KMS) key that Amazon Comprehend uses
+	// to encrypt trained custom models. The ModelKmsKeyId can be either of the
+	// following formats
+	//
+	//    * KMS Key ID: "1234abcd-12ab-34cd-56ef-1234567890ab"
+	//
+	//    * Amazon Resource Name (ARN) of a KMS Key: "arn:aws:kms:us-west-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab"
+	ModelKmsKeyId *string `type:"string"`
+
 	// The name given to the newly created recognizer. Recognizer names can be a
 	// maximum of 256 characters. Alphanumeric characters, hyphens (-) and underscores
 	// (_) are allowed. The name must be unique in the account/region.
@@ -7217,6 +8461,12 @@ type CreateEntityRecognizerInput struct {
 	// For example, a tag with "Sales" as the key might be added to a resource to
 	// indicate its use by the sales department.
 	Tags []*Tag `type:"list"`
+
+	// The version name given to the newly created recognizer. Version names can
+	// be a maximum of 256 characters. Alphanumeric characters, hyphens (-) and
+	// underscores (_) are allowed. The version name must be unique among all models
+	// with the same recognizer name in the account/ AWS Region.
+	VersionName *string `type:"string"`
 
 	// ID for the AWS Key Management Service (KMS) key that Amazon Comprehend uses
 	// to encrypt data on the storage volume attached to the ML compute instance(s)
@@ -7234,12 +8484,20 @@ type CreateEntityRecognizerInput struct {
 	VpcConfig *VpcConfig `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateEntityRecognizerInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateEntityRecognizerInput) GoString() string {
 	return s.String()
 }
@@ -7316,6 +8574,12 @@ func (s *CreateEntityRecognizerInput) SetLanguageCode(v string) *CreateEntityRec
 	return s
 }
 
+// SetModelKmsKeyId sets the ModelKmsKeyId field's value.
+func (s *CreateEntityRecognizerInput) SetModelKmsKeyId(v string) *CreateEntityRecognizerInput {
+	s.ModelKmsKeyId = &v
+	return s
+}
+
 // SetRecognizerName sets the RecognizerName field's value.
 func (s *CreateEntityRecognizerInput) SetRecognizerName(v string) *CreateEntityRecognizerInput {
 	s.RecognizerName = &v
@@ -7325,6 +8589,12 @@ func (s *CreateEntityRecognizerInput) SetRecognizerName(v string) *CreateEntityR
 // SetTags sets the Tags field's value.
 func (s *CreateEntityRecognizerInput) SetTags(v []*Tag) *CreateEntityRecognizerInput {
 	s.Tags = v
+	return s
+}
+
+// SetVersionName sets the VersionName field's value.
+func (s *CreateEntityRecognizerInput) SetVersionName(v string) *CreateEntityRecognizerInput {
+	s.VersionName = &v
 	return s
 }
 
@@ -7347,12 +8617,20 @@ type CreateEntityRecognizerOutput struct {
 	EntityRecognizerArn *string `type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateEntityRecognizerOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateEntityRecognizerOutput) GoString() string {
 	return s.String()
 }
@@ -7372,12 +8650,20 @@ type DeleteDocumentClassifierInput struct {
 	DocumentClassifierArn *string `type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteDocumentClassifierInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteDocumentClassifierInput) GoString() string {
 	return s.String()
 }
@@ -7405,12 +8691,20 @@ type DeleteDocumentClassifierOutput struct {
 	_ struct{} `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteDocumentClassifierOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteDocumentClassifierOutput) GoString() string {
 	return s.String()
 }
@@ -7424,12 +8718,20 @@ type DeleteEndpointInput struct {
 	EndpointArn *string `type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteEndpointInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteEndpointInput) GoString() string {
 	return s.String()
 }
@@ -7457,12 +8759,20 @@ type DeleteEndpointOutput struct {
 	_ struct{} `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteEndpointOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteEndpointOutput) GoString() string {
 	return s.String()
 }
@@ -7476,12 +8786,20 @@ type DeleteEntityRecognizerInput struct {
 	EntityRecognizerArn *string `type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteEntityRecognizerInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteEntityRecognizerInput) GoString() string {
 	return s.String()
 }
@@ -7509,12 +8827,20 @@ type DeleteEntityRecognizerOutput struct {
 	_ struct{} `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteEntityRecognizerOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteEntityRecognizerOutput) GoString() string {
 	return s.String()
 }
@@ -7529,12 +8855,20 @@ type DescribeDocumentClassificationJobInput struct {
 	JobId *string `min:"1" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeDocumentClassificationJobInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeDocumentClassificationJobInput) GoString() string {
 	return s.String()
 }
@@ -7569,12 +8903,20 @@ type DescribeDocumentClassificationJobOutput struct {
 	DocumentClassificationJobProperties *DocumentClassificationJobProperties `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeDocumentClassificationJobOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeDocumentClassificationJobOutput) GoString() string {
 	return s.String()
 }
@@ -7595,12 +8937,20 @@ type DescribeDocumentClassifierInput struct {
 	DocumentClassifierArn *string `type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeDocumentClassifierInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeDocumentClassifierInput) GoString() string {
 	return s.String()
 }
@@ -7631,12 +8981,20 @@ type DescribeDocumentClassifierOutput struct {
 	DocumentClassifierProperties *DocumentClassifierProperties `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeDocumentClassifierOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeDocumentClassifierOutput) GoString() string {
 	return s.String()
 }
@@ -7657,12 +9015,20 @@ type DescribeDominantLanguageDetectionJobInput struct {
 	JobId *string `min:"1" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeDominantLanguageDetectionJobInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeDominantLanguageDetectionJobInput) GoString() string {
 	return s.String()
 }
@@ -7697,12 +9063,20 @@ type DescribeDominantLanguageDetectionJobOutput struct {
 	DominantLanguageDetectionJobProperties *DominantLanguageDetectionJobProperties `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeDominantLanguageDetectionJobOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeDominantLanguageDetectionJobOutput) GoString() string {
 	return s.String()
 }
@@ -7722,12 +9096,20 @@ type DescribeEndpointInput struct {
 	EndpointArn *string `type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeEndpointInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeEndpointInput) GoString() string {
 	return s.String()
 }
@@ -7758,12 +9140,20 @@ type DescribeEndpointOutput struct {
 	EndpointProperties *EndpointProperties `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeEndpointOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeEndpointOutput) GoString() string {
 	return s.String()
 }
@@ -7784,12 +9174,20 @@ type DescribeEntitiesDetectionJobInput struct {
 	JobId *string `min:"1" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeEntitiesDetectionJobInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeEntitiesDetectionJobInput) GoString() string {
 	return s.String()
 }
@@ -7824,12 +9222,20 @@ type DescribeEntitiesDetectionJobOutput struct {
 	EntitiesDetectionJobProperties *EntitiesDetectionJobProperties `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeEntitiesDetectionJobOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeEntitiesDetectionJobOutput) GoString() string {
 	return s.String()
 }
@@ -7849,12 +9255,20 @@ type DescribeEntityRecognizerInput struct {
 	EntityRecognizerArn *string `type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeEntityRecognizerInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeEntityRecognizerInput) GoString() string {
 	return s.String()
 }
@@ -7885,12 +9299,20 @@ type DescribeEntityRecognizerOutput struct {
 	EntityRecognizerProperties *EntityRecognizerProperties `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeEntityRecognizerOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeEntityRecognizerOutput) GoString() string {
 	return s.String()
 }
@@ -7898,6 +9320,87 @@ func (s DescribeEntityRecognizerOutput) GoString() string {
 // SetEntityRecognizerProperties sets the EntityRecognizerProperties field's value.
 func (s *DescribeEntityRecognizerOutput) SetEntityRecognizerProperties(v *EntityRecognizerProperties) *DescribeEntityRecognizerOutput {
 	s.EntityRecognizerProperties = v
+	return s
+}
+
+type DescribeEventsDetectionJobInput struct {
+	_ struct{} `type:"structure"`
+
+	// The identifier of the events detection job.
+	//
+	// JobId is a required field
+	JobId *string `min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DescribeEventsDetectionJobInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DescribeEventsDetectionJobInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DescribeEventsDetectionJobInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DescribeEventsDetectionJobInput"}
+	if s.JobId == nil {
+		invalidParams.Add(request.NewErrParamRequired("JobId"))
+	}
+	if s.JobId != nil && len(*s.JobId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("JobId", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetJobId sets the JobId field's value.
+func (s *DescribeEventsDetectionJobInput) SetJobId(v string) *DescribeEventsDetectionJobInput {
+	s.JobId = &v
+	return s
+}
+
+type DescribeEventsDetectionJobOutput struct {
+	_ struct{} `type:"structure"`
+
+	// An object that contains the properties associated with an event detection
+	// job.
+	EventsDetectionJobProperties *EventsDetectionJobProperties `type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DescribeEventsDetectionJobOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DescribeEventsDetectionJobOutput) GoString() string {
+	return s.String()
+}
+
+// SetEventsDetectionJobProperties sets the EventsDetectionJobProperties field's value.
+func (s *DescribeEventsDetectionJobOutput) SetEventsDetectionJobProperties(v *EventsDetectionJobProperties) *DescribeEventsDetectionJobOutput {
+	s.EventsDetectionJobProperties = v
 	return s
 }
 
@@ -7911,12 +9414,20 @@ type DescribeKeyPhrasesDetectionJobInput struct {
 	JobId *string `min:"1" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeKeyPhrasesDetectionJobInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeKeyPhrasesDetectionJobInput) GoString() string {
 	return s.String()
 }
@@ -7951,12 +9462,20 @@ type DescribeKeyPhrasesDetectionJobOutput struct {
 	KeyPhrasesDetectionJobProperties *KeyPhrasesDetectionJobProperties `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeKeyPhrasesDetectionJobOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeKeyPhrasesDetectionJobOutput) GoString() string {
 	return s.String()
 }
@@ -7977,12 +9496,20 @@ type DescribePiiEntitiesDetectionJobInput struct {
 	JobId *string `min:"1" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribePiiEntitiesDetectionJobInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribePiiEntitiesDetectionJobInput) GoString() string {
 	return s.String()
 }
@@ -8016,12 +9543,20 @@ type DescribePiiEntitiesDetectionJobOutput struct {
 	PiiEntitiesDetectionJobProperties *PiiEntitiesDetectionJobProperties `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribePiiEntitiesDetectionJobOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribePiiEntitiesDetectionJobOutput) GoString() string {
 	return s.String()
 }
@@ -8042,12 +9577,20 @@ type DescribeSentimentDetectionJobInput struct {
 	JobId *string `min:"1" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeSentimentDetectionJobInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeSentimentDetectionJobInput) GoString() string {
 	return s.String()
 }
@@ -8082,12 +9625,20 @@ type DescribeSentimentDetectionJobOutput struct {
 	SentimentDetectionJobProperties *SentimentDetectionJobProperties `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeSentimentDetectionJobOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeSentimentDetectionJobOutput) GoString() string {
 	return s.String()
 }
@@ -8107,12 +9658,20 @@ type DescribeTopicsDetectionJobInput struct {
 	JobId *string `min:"1" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeTopicsDetectionJobInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeTopicsDetectionJobInput) GoString() string {
 	return s.String()
 }
@@ -8146,12 +9705,20 @@ type DescribeTopicsDetectionJobOutput struct {
 	TopicsDetectionJobProperties *TopicsDetectionJobProperties `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeTopicsDetectionJobOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeTopicsDetectionJobOutput) GoString() string {
 	return s.String()
 }
@@ -8168,16 +9735,28 @@ type DetectDominantLanguageInput struct {
 	// A UTF-8 text string. Each string should contain at least 20 characters and
 	// must contain fewer that 5,000 bytes of UTF-8 encoded characters.
 	//
+	// Text is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by DetectDominantLanguageInput's
+	// String and GoString methods.
+	//
 	// Text is a required field
 	Text *string `min:"1" type:"string" required:"true" sensitive:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DetectDominantLanguageInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DetectDominantLanguageInput) GoString() string {
 	return s.String()
 }
@@ -8215,12 +9794,20 @@ type DetectDominantLanguageOutput struct {
 	Languages []*DominantLanguage `type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DetectDominantLanguageOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DetectDominantLanguageOutput) GoString() string {
 	return s.String()
 }
@@ -8254,16 +9841,28 @@ type DetectEntitiesInput struct {
 	// A UTF-8 text string. Each string must contain fewer that 5,000 bytes of UTF-8
 	// encoded characters.
 	//
+	// Text is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by DetectEntitiesInput's
+	// String and GoString methods.
+	//
 	// Text is a required field
 	Text *string `min:"1" type:"string" required:"true" sensitive:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DetectEntitiesInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DetectEntitiesInput) GoString() string {
 	return s.String()
 }
@@ -8316,12 +9915,20 @@ type DetectEntitiesOutput struct {
 	Entities []*Entity `type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DetectEntitiesOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DetectEntitiesOutput) GoString() string {
 	return s.String()
 }
@@ -8344,16 +9951,28 @@ type DetectKeyPhrasesInput struct {
 	// A UTF-8 text string. Each string must contain fewer that 5,000 bytes of UTF-8
 	// encoded characters.
 	//
+	// Text is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by DetectKeyPhrasesInput's
+	// String and GoString methods.
+	//
 	// Text is a required field
 	Text *string `min:"1" type:"string" required:"true" sensitive:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DetectKeyPhrasesInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DetectKeyPhrasesInput) GoString() string {
 	return s.String()
 }
@@ -8399,12 +10018,20 @@ type DetectKeyPhrasesOutput struct {
 	KeyPhrases []*KeyPhrase `type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DetectKeyPhrasesOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DetectKeyPhrasesOutput) GoString() string {
 	return s.String()
 }
@@ -8430,12 +10057,20 @@ type DetectPiiEntitiesInput struct {
 	Text *string `min:"1" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DetectPiiEntitiesInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DetectPiiEntitiesInput) GoString() string {
 	return s.String()
 }
@@ -8480,12 +10115,20 @@ type DetectPiiEntitiesOutput struct {
 	Entities []*PiiEntity `type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DetectPiiEntitiesOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DetectPiiEntitiesOutput) GoString() string {
 	return s.String()
 }
@@ -8508,16 +10151,28 @@ type DetectSentimentInput struct {
 	// A UTF-8 text string. Each string must contain fewer that 5,000 bytes of UTF-8
 	// encoded characters.
 	//
+	// Text is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by DetectSentimentInput's
+	// String and GoString methods.
+	//
 	// Text is a required field
 	Text *string `min:"1" type:"string" required:"true" sensitive:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DetectSentimentInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DetectSentimentInput) GoString() string {
 	return s.String()
 }
@@ -8564,12 +10219,20 @@ type DetectSentimentOutput struct {
 	SentimentScore *SentimentScore `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DetectSentimentOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DetectSentimentOutput) GoString() string {
 	return s.String()
 }
@@ -8599,16 +10262,28 @@ type DetectSyntaxInput struct {
 	// A UTF-8 string. Each string must contain fewer that 5,000 bytes of UTF encoded
 	// characters.
 	//
+	// Text is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by DetectSyntaxInput's
+	// String and GoString methods.
+	//
 	// Text is a required field
 	Text *string `min:"1" type:"string" required:"true" sensitive:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DetectSyntaxInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DetectSyntaxInput) GoString() string {
 	return s.String()
 }
@@ -8654,12 +10329,20 @@ type DetectSyntaxOutput struct {
 	SyntaxTokens []*SyntaxToken `type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DetectSyntaxOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DetectSyntaxOutput) GoString() string {
 	return s.String()
 }
@@ -8681,12 +10364,20 @@ type DocumentClass struct {
 	Score *float64 `type:"float"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DocumentClass) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DocumentClass) GoString() string {
 	return s.String()
 }
@@ -8727,12 +10418,20 @@ type DocumentClassificationJobFilter struct {
 	SubmitTimeBefore *time.Time `type:"timestamp"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DocumentClassificationJobFilter) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DocumentClassificationJobFilter) GoString() string {
 	return s.String()
 }
@@ -8792,6 +10491,17 @@ type DocumentClassificationJobProperties struct {
 	// classification job.
 	InputDataConfig *InputDataConfig `type:"structure"`
 
+	// The Amazon Resource Name (ARN) of the document classification job. It is
+	// a unique, fully qualified identifier for the job. It includes the AWS account,
+	// Region, and the job ID. The format of the ARN is as follows:
+	//
+	// arn:<partition>:comprehend:<region>:<account-id>:document-classification-job/<job-id>
+	//
+	// The following is an example job ARN:
+	//
+	// arn:aws:comprehend:us-west-2:111122223333:document-classification-job/1234abcd12ab34cd56ef1234567890ab
+	JobArn *string `type:"string"`
+
 	// The identifier assigned to the document classification job.
 	JobId *string `min:"1" type:"string"`
 
@@ -8828,12 +10538,20 @@ type DocumentClassificationJobProperties struct {
 	VpcConfig *VpcConfig `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DocumentClassificationJobProperties) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DocumentClassificationJobProperties) GoString() string {
 	return s.String()
 }
@@ -8859,6 +10577,12 @@ func (s *DocumentClassificationJobProperties) SetEndTime(v time.Time) *DocumentC
 // SetInputDataConfig sets the InputDataConfig field's value.
 func (s *DocumentClassificationJobProperties) SetInputDataConfig(v *InputDataConfig) *DocumentClassificationJobProperties {
 	s.InputDataConfig = v
+	return s
+}
+
+// SetJobArn sets the JobArn field's value.
+func (s *DocumentClassificationJobProperties) SetJobArn(v string) *DocumentClassificationJobProperties {
+	s.JobArn = &v
 	return s
 }
 
@@ -8916,6 +10640,9 @@ func (s *DocumentClassificationJobProperties) SetVpcConfig(v *VpcConfig) *Docume
 type DocumentClassifierFilter struct {
 	_ struct{} `type:"structure"`
 
+	// The name that you assigned to the document classifier
+	DocumentClassifierName *string `type:"string"`
+
 	// Filters the list of classifiers based on status.
 	Status *string `type:"string" enum:"ModelStatus"`
 
@@ -8930,14 +10657,28 @@ type DocumentClassifierFilter struct {
 	SubmitTimeBefore *time.Time `type:"timestamp"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DocumentClassifierFilter) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DocumentClassifierFilter) GoString() string {
 	return s.String()
+}
+
+// SetDocumentClassifierName sets the DocumentClassifierName field's value.
+func (s *DocumentClassifierFilter) SetDocumentClassifierName(v string) *DocumentClassifierFilter {
+	s.DocumentClassifierName = &v
+	return s
 }
 
 // SetStatus sets the Status field's value.
@@ -9005,14 +10746,28 @@ type DocumentClassifierInputDataConfig struct {
 	//
 	// This parameter is required if you set DataFormat to COMPREHEND_CSV.
 	S3Uri *string `type:"string"`
+
+	// The Amazon S3 URI for the input data. The Amazon S3 bucket must be in the
+	// same AWS Region as the API endpoint that you are calling. The URI can point
+	// to a single input file or it can provide the prefix for a collection of input
+	// files.
+	TestS3Uri *string `type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DocumentClassifierInputDataConfig) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DocumentClassifierInputDataConfig) GoString() string {
 	return s.String()
 }
@@ -9064,6 +10819,12 @@ func (s *DocumentClassifierInputDataConfig) SetS3Uri(v string) *DocumentClassifi
 	return s
 }
 
+// SetTestS3Uri sets the TestS3Uri field's value.
+func (s *DocumentClassifierInputDataConfig) SetTestS3Uri(v string) *DocumentClassifierInputDataConfig {
+	s.TestS3Uri = &v
+	return s
+}
+
 // Provides output results configuration parameters for custom classifier jobs.
 type DocumentClassifierOutputDataConfig struct {
 	_ struct{} `type:"structure"`
@@ -9094,12 +10855,20 @@ type DocumentClassifierOutputDataConfig struct {
 	S3Uri *string `type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DocumentClassifierOutputDataConfig) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DocumentClassifierOutputDataConfig) GoString() string {
 	return s.String()
 }
@@ -9123,6 +10892,10 @@ type DocumentClassifierProperties struct {
 	// Information about the document classifier, including the number of documents
 	// used for training the classifier, the number of documents used for test the
 	// classifier, and an accuracy rating.
+	//
+	// ClassifierMetadata is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by DocumentClassifierProperties's
+	// String and GoString methods.
 	ClassifierMetadata *ClassifierMetadata `type:"structure" sensitive:"true"`
 
 	// The Amazon Resource Name (ARN) of the AWS Identity and Management (IAM) role
@@ -9152,6 +10925,15 @@ type DocumentClassifierProperties struct {
 	// once the classifier is trained.
 	Mode *string `type:"string" enum:"DocumentClassifierMode"`
 
+	// ID for the AWS Key Management Service (KMS) key that Amazon Comprehend uses
+	// to encrypt trained custom models. The ModelKmsKeyId can be either of the
+	// following formats:
+	//
+	//    * KMS Key ID: "1234abcd-12ab-34cd-56ef-1234567890ab"
+	//
+	//    * Amazon Resource Name (ARN) of a KMS Key: "arn:aws:kms:us-west-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab"
+	ModelKmsKeyId *string `type:"string"`
+
 	// Provides output results configuration parameters for custom classifier jobs.
 	OutputDataConfig *DocumentClassifierOutputDataConfig `type:"structure"`
 
@@ -9172,6 +10954,9 @@ type DocumentClassifierProperties struct {
 	// You are billed for the time interval between this time and the value of TrainingEndTime.
 	TrainingStartTime *time.Time `type:"timestamp"`
 
+	// The version name that you assigned to the document classifier.
+	VersionName *string `type:"string"`
+
 	// ID for the AWS Key Management Service (KMS) key that Amazon Comprehend uses
 	// to encrypt data on the storage volume attached to the ML compute instance(s)
 	// that process the analysis job. The VolumeKmsKeyId can be either of the following
@@ -9188,12 +10973,20 @@ type DocumentClassifierProperties struct {
 	VpcConfig *VpcConfig `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DocumentClassifierProperties) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DocumentClassifierProperties) GoString() string {
 	return s.String()
 }
@@ -9246,6 +11039,12 @@ func (s *DocumentClassifierProperties) SetMode(v string) *DocumentClassifierProp
 	return s
 }
 
+// SetModelKmsKeyId sets the ModelKmsKeyId field's value.
+func (s *DocumentClassifierProperties) SetModelKmsKeyId(v string) *DocumentClassifierProperties {
+	s.ModelKmsKeyId = &v
+	return s
+}
+
 // SetOutputDataConfig sets the OutputDataConfig field's value.
 func (s *DocumentClassifierProperties) SetOutputDataConfig(v *DocumentClassifierOutputDataConfig) *DocumentClassifierProperties {
 	s.OutputDataConfig = v
@@ -9276,6 +11075,12 @@ func (s *DocumentClassifierProperties) SetTrainingStartTime(v time.Time) *Docume
 	return s
 }
 
+// SetVersionName sets the VersionName field's value.
+func (s *DocumentClassifierProperties) SetVersionName(v string) *DocumentClassifierProperties {
+	s.VersionName = &v
+	return s
+}
+
 // SetVolumeKmsKeyId sets the VolumeKmsKeyId field's value.
 func (s *DocumentClassifierProperties) SetVolumeKmsKeyId(v string) *DocumentClassifierProperties {
 	s.VolumeKmsKeyId = &v
@@ -9285,6 +11090,74 @@ func (s *DocumentClassifierProperties) SetVolumeKmsKeyId(v string) *DocumentClas
 // SetVpcConfig sets the VpcConfig field's value.
 func (s *DocumentClassifierProperties) SetVpcConfig(v *VpcConfig) *DocumentClassifierProperties {
 	s.VpcConfig = v
+	return s
+}
+
+// Describes information about a document classifier and its versions.
+type DocumentClassifierSummary struct {
+	_ struct{} `type:"structure"`
+
+	// The name that you assigned the document classifier.
+	DocumentClassifierName *string `type:"string"`
+
+	// The time that the latest document classifier version was submitted for processing.
+	LatestVersionCreatedAt *time.Time `type:"timestamp"`
+
+	// The version name you assigned to the latest document classifier version.
+	LatestVersionName *string `type:"string"`
+
+	// Provides the status of the latest document classifier version.
+	LatestVersionStatus *string `type:"string" enum:"ModelStatus"`
+
+	// The number of versions you created.
+	NumberOfVersions *int64 `type:"integer"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DocumentClassifierSummary) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DocumentClassifierSummary) GoString() string {
+	return s.String()
+}
+
+// SetDocumentClassifierName sets the DocumentClassifierName field's value.
+func (s *DocumentClassifierSummary) SetDocumentClassifierName(v string) *DocumentClassifierSummary {
+	s.DocumentClassifierName = &v
+	return s
+}
+
+// SetLatestVersionCreatedAt sets the LatestVersionCreatedAt field's value.
+func (s *DocumentClassifierSummary) SetLatestVersionCreatedAt(v time.Time) *DocumentClassifierSummary {
+	s.LatestVersionCreatedAt = &v
+	return s
+}
+
+// SetLatestVersionName sets the LatestVersionName field's value.
+func (s *DocumentClassifierSummary) SetLatestVersionName(v string) *DocumentClassifierSummary {
+	s.LatestVersionName = &v
+	return s
+}
+
+// SetLatestVersionStatus sets the LatestVersionStatus field's value.
+func (s *DocumentClassifierSummary) SetLatestVersionStatus(v string) *DocumentClassifierSummary {
+	s.LatestVersionStatus = &v
+	return s
+}
+
+// SetNumberOfVersions sets the NumberOfVersions field's value.
+func (s *DocumentClassifierSummary) SetNumberOfVersions(v int64) *DocumentClassifierSummary {
+	s.NumberOfVersions = &v
 	return s
 }
 
@@ -9299,12 +11172,20 @@ type DocumentLabel struct {
 	Score *float64 `type:"float"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DocumentLabel) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DocumentLabel) GoString() string {
 	return s.String()
 }
@@ -9318,6 +11199,86 @@ func (s *DocumentLabel) SetName(v string) *DocumentLabel {
 // SetScore sets the Score field's value.
 func (s *DocumentLabel) SetScore(v float64) *DocumentLabel {
 	s.Score = &v
+	return s
+}
+
+// The input properties for a topic detection job.
+type DocumentReaderConfig struct {
+	_ struct{} `type:"structure"`
+
+	// This enum field will start with two values which will apply to PDFs:
+	//
+	//    * TEXTRACT_DETECT_DOCUMENT_TEXT - The service calls DetectDocumentText
+	//    for PDF documents per page.
+	//
+	//    * TEXTRACT_ANALYZE_DOCUMENT - The service calls AnalyzeDocument for PDF
+	//    documents per page.
+	//
+	// DocumentReadAction is a required field
+	DocumentReadAction *string `type:"string" required:"true" enum:"DocumentReadAction"`
+
+	// This enum field provides two values:
+	//
+	//    * SERVICE_DEFAULT - use service defaults for Document reading. For Digital
+	//    PDF it would mean using an internal parser instead of Textract APIs
+	//
+	//    * FORCE_DOCUMENT_READ_ACTION - Always use specified action for DocumentReadAction,
+	//    including Digital PDF.
+	DocumentReadMode *string `type:"string" enum:"DocumentReadMode"`
+
+	// Specifies how the text in an input file should be processed:
+	FeatureTypes []*string `min:"1" type:"list"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DocumentReaderConfig) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DocumentReaderConfig) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DocumentReaderConfig) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DocumentReaderConfig"}
+	if s.DocumentReadAction == nil {
+		invalidParams.Add(request.NewErrParamRequired("DocumentReadAction"))
+	}
+	if s.FeatureTypes != nil && len(s.FeatureTypes) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("FeatureTypes", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetDocumentReadAction sets the DocumentReadAction field's value.
+func (s *DocumentReaderConfig) SetDocumentReadAction(v string) *DocumentReaderConfig {
+	s.DocumentReadAction = &v
+	return s
+}
+
+// SetDocumentReadMode sets the DocumentReadMode field's value.
+func (s *DocumentReaderConfig) SetDocumentReadMode(v string) *DocumentReaderConfig {
+	s.DocumentReadMode = &v
+	return s
+}
+
+// SetFeatureTypes sets the FeatureTypes field's value.
+func (s *DocumentReaderConfig) SetFeatureTypes(v []*string) *DocumentReaderConfig {
+	s.FeatureTypes = v
 	return s
 }
 
@@ -9336,12 +11297,20 @@ type DominantLanguage struct {
 	Score *float64 `type:"float"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DominantLanguage) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DominantLanguage) GoString() string {
 	return s.String()
 }
@@ -9381,12 +11350,20 @@ type DominantLanguageDetectionJobFilter struct {
 	SubmitTimeBefore *time.Time `type:"timestamp"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DominantLanguageDetectionJobFilter) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DominantLanguageDetectionJobFilter) GoString() string {
 	return s.String()
 }
@@ -9443,6 +11420,17 @@ type DominantLanguageDetectionJobProperties struct {
 	// language detection job.
 	InputDataConfig *InputDataConfig `type:"structure"`
 
+	// The Amazon Resource Name (ARN) of the dominant language detection job. It
+	// is a unique, fully qualified identifier for the job. It includes the AWS
+	// account, Region, and the job ID. The format of the ARN is as follows:
+	//
+	// arn:<partition>:comprehend:<region>:<account-id>:dominant-language-detection-job/<job-id>
+	//
+	// The following is an example job ARN:
+	//
+	// arn:aws:comprehend:us-west-2:111122223333:dominant-language-detection-job/1234abcd12ab34cd56ef1234567890ab
+	JobArn *string `type:"string"`
+
 	// The identifier assigned to the dominant language detection job.
 	JobId *string `min:"1" type:"string"`
 
@@ -9479,12 +11467,20 @@ type DominantLanguageDetectionJobProperties struct {
 	VpcConfig *VpcConfig `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DominantLanguageDetectionJobProperties) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DominantLanguageDetectionJobProperties) GoString() string {
 	return s.String()
 }
@@ -9504,6 +11500,12 @@ func (s *DominantLanguageDetectionJobProperties) SetEndTime(v time.Time) *Domina
 // SetInputDataConfig sets the InputDataConfig field's value.
 func (s *DominantLanguageDetectionJobProperties) SetInputDataConfig(v *InputDataConfig) *DominantLanguageDetectionJobProperties {
 	s.InputDataConfig = v
+	return s
+}
+
+// SetJobArn sets the JobArn field's value.
+func (s *DominantLanguageDetectionJobProperties) SetJobArn(v string) *DominantLanguageDetectionJobProperties {
+	s.JobArn = &v
 	return s
 }
 
@@ -9555,7 +11557,7 @@ func (s *DominantLanguageDetectionJobProperties) SetVpcConfig(v *VpcConfig) *Dom
 	return s
 }
 
-// The filter used to determine which endpoints are are returned. You can filter
+// The filter used to determine which endpoints are returned. You can filter
 // jobs on their name, model, status, or the date and time that they were created.
 // You can only set one filter at a time.
 type EndpointFilter struct {
@@ -9575,12 +11577,20 @@ type EndpointFilter struct {
 	Status *string `type:"string" enum:"EndpointStatus"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s EndpointFilter) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s EndpointFilter) GoString() string {
 	return s.String()
 }
@@ -9619,10 +11629,23 @@ type EndpointProperties struct {
 	// The number of inference units currently used by the model using this endpoint.
 	CurrentInferenceUnits *int64 `min:"1" type:"integer"`
 
+	// The Amazon Resource Name (ARN) of the AWS identity and Access Management
+	// (IAM) role that grants Amazon Comprehend read access to trained custom models
+	// encrypted with a customer managed key (ModelKmsKeyId).
+	DataAccessRoleArn *string `min:"20" type:"string"`
+
+	// Data access role ARN to use in case the new model is encrypted with a customer
+	// KMS key.
+	DesiredDataAccessRoleArn *string `min:"20" type:"string"`
+
 	// The desired number of inference units to be used by the model using this
 	// endpoint. Each inference unit represents of a throughput of 100 characters
 	// per second.
 	DesiredInferenceUnits *int64 `min:"1" type:"integer"`
+
+	// ARN of the new model to use for updating an existing endpoint. This ARN is
+	// going to be different from the model ARN when the update is in progress
+	DesiredModelArn *string `type:"string"`
 
 	// The Amazon Resource Number (ARN) of the endpoint.
 	EndpointArn *string `type:"string"`
@@ -9642,12 +11665,20 @@ type EndpointProperties struct {
 	Status *string `type:"string" enum:"EndpointStatus"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s EndpointProperties) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s EndpointProperties) GoString() string {
 	return s.String()
 }
@@ -9664,9 +11695,27 @@ func (s *EndpointProperties) SetCurrentInferenceUnits(v int64) *EndpointProperti
 	return s
 }
 
+// SetDataAccessRoleArn sets the DataAccessRoleArn field's value.
+func (s *EndpointProperties) SetDataAccessRoleArn(v string) *EndpointProperties {
+	s.DataAccessRoleArn = &v
+	return s
+}
+
+// SetDesiredDataAccessRoleArn sets the DesiredDataAccessRoleArn field's value.
+func (s *EndpointProperties) SetDesiredDataAccessRoleArn(v string) *EndpointProperties {
+	s.DesiredDataAccessRoleArn = &v
+	return s
+}
+
 // SetDesiredInferenceUnits sets the DesiredInferenceUnits field's value.
 func (s *EndpointProperties) SetDesiredInferenceUnits(v int64) *EndpointProperties {
 	s.DesiredInferenceUnits = &v
+	return s
+}
+
+// SetDesiredModelArn sets the DesiredModelArn field's value.
+func (s *EndpointProperties) SetDesiredModelArn(v string) *EndpointProperties {
+	s.DesiredModelArn = &v
 	return s
 }
 
@@ -9723,12 +11772,20 @@ type EntitiesDetectionJobFilter struct {
 	SubmitTimeBefore *time.Time `type:"timestamp"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s EntitiesDetectionJobFilter) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s EntitiesDetectionJobFilter) GoString() string {
 	return s.String()
 }
@@ -9788,6 +11845,17 @@ type EntitiesDetectionJobProperties struct {
 	// detection job.
 	InputDataConfig *InputDataConfig `type:"structure"`
 
+	// The Amazon Resource Name (ARN) of the entities detection job. It is a unique,
+	// fully qualified identifier for the job. It includes the AWS account, Region,
+	// and the job ID. The format of the ARN is as follows:
+	//
+	// arn:<partition>:comprehend:<region>:<account-id>:entities-detection-job/<job-id>
+	//
+	// The following is an example job ARN:
+	//
+	// arn:aws:comprehend:us-west-2:111122223333:entities-detection-job/1234abcd12ab34cd56ef1234567890ab
+	JobArn *string `type:"string"`
+
 	// The identifier assigned to the entities detection job.
 	JobId *string `min:"1" type:"string"`
 
@@ -9827,12 +11895,20 @@ type EntitiesDetectionJobProperties struct {
 	VpcConfig *VpcConfig `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s EntitiesDetectionJobProperties) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s EntitiesDetectionJobProperties) GoString() string {
 	return s.String()
 }
@@ -9858,6 +11934,12 @@ func (s *EntitiesDetectionJobProperties) SetEntityRecognizerArn(v string) *Entit
 // SetInputDataConfig sets the InputDataConfig field's value.
 func (s *EntitiesDetectionJobProperties) SetInputDataConfig(v *InputDataConfig) *EntitiesDetectionJobProperties {
 	s.InputDataConfig = v
+	return s
+}
+
+// SetJobArn sets the JobArn field's value.
+func (s *EntitiesDetectionJobProperties) SetJobArn(v string) *EntitiesDetectionJobProperties {
+	s.JobArn = &v
 	return s
 }
 
@@ -9943,12 +12025,20 @@ type Entity struct {
 	Type *string `type:"string" enum:"EntityType"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s Entity) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s Entity) GoString() string {
 	return s.String()
 }
@@ -9983,6 +12073,49 @@ func (s *Entity) SetType(v string) *Entity {
 	return s
 }
 
+// Specifies one of the label or labels that categorize the personally identifiable
+// information (PII) entity being analyzed.
+type EntityLabel struct {
+	_ struct{} `type:"structure"`
+
+	// The name of the label.
+	Name *string `type:"string" enum:"PiiEntityType"`
+
+	// The level of confidence that Amazon Comprehend has in the accuracy of the
+	// detection.
+	Score *float64 `type:"float"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s EntityLabel) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s EntityLabel) GoString() string {
+	return s.String()
+}
+
+// SetName sets the Name field's value.
+func (s *EntityLabel) SetName(v string) *EntityLabel {
+	s.Name = &v
+	return s
+}
+
+// SetScore sets the Score field's value.
+func (s *EntityLabel) SetScore(v float64) *EntityLabel {
+	s.Score = &v
+	return s
+}
+
 // Describes the annotations associated with a entity recognizer.
 type EntityRecognizerAnnotations struct {
 	_ struct{} `type:"structure"`
@@ -9993,14 +12126,27 @@ type EntityRecognizerAnnotations struct {
 	//
 	// S3Uri is a required field
 	S3Uri *string `type:"string" required:"true"`
+
+	// This specifies the Amazon S3 location where the test annotations for an entity
+	// recognizer are located. The URI must be in the same AWS Region as the API
+	// endpoint that you are calling.
+	TestS3Uri *string `type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s EntityRecognizerAnnotations) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s EntityRecognizerAnnotations) GoString() string {
 	return s.String()
 }
@@ -10024,9 +12170,23 @@ func (s *EntityRecognizerAnnotations) SetS3Uri(v string) *EntityRecognizerAnnota
 	return s
 }
 
+// SetTestS3Uri sets the TestS3Uri field's value.
+func (s *EntityRecognizerAnnotations) SetTestS3Uri(v string) *EntityRecognizerAnnotations {
+	s.TestS3Uri = &v
+	return s
+}
+
 // Describes the training documents submitted with an entity recognizer.
 type EntityRecognizerDocuments struct {
 	_ struct{} `type:"structure"`
+
+	// Specifies how the text in an input file should be processed. This is optional,
+	// and the default is ONE_DOC_PER_LINE. ONE_DOC_PER_FILE - Each file is considered
+	// a separate document. Use this option when you are processing large documents,
+	// such as newspaper articles or scientific papers. ONE_DOC_PER_LINE - Each
+	// line in a file is considered a separate document. Use this option when you
+	// are processing many short documents, such as text messages.
+	InputFormat *string `type:"string" enum:"InputFormat"`
 
 	// Specifies the Amazon S3 location where the training documents for an entity
 	// recognizer are located. The URI must be in the same region as the API endpoint
@@ -10034,14 +12194,27 @@ type EntityRecognizerDocuments struct {
 	//
 	// S3Uri is a required field
 	S3Uri *string `type:"string" required:"true"`
+
+	// Specifies the Amazon S3 location where the test documents for an entity recognizer
+	// are located. The URI must be in the same AWS Region as the API endpoint that
+	// you are calling.
+	TestS3Uri *string `type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s EntityRecognizerDocuments) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s EntityRecognizerDocuments) GoString() string {
 	return s.String()
 }
@@ -10059,9 +12232,21 @@ func (s *EntityRecognizerDocuments) Validate() error {
 	return nil
 }
 
+// SetInputFormat sets the InputFormat field's value.
+func (s *EntityRecognizerDocuments) SetInputFormat(v string) *EntityRecognizerDocuments {
+	s.InputFormat = &v
+	return s
+}
+
 // SetS3Uri sets the S3Uri field's value.
 func (s *EntityRecognizerDocuments) SetS3Uri(v string) *EntityRecognizerDocuments {
 	s.S3Uri = &v
+	return s
+}
+
+// SetTestS3Uri sets the TestS3Uri field's value.
+func (s *EntityRecognizerDocuments) SetTestS3Uri(v string) *EntityRecognizerDocuments {
+	s.TestS3Uri = &v
 	return s
 }
 
@@ -10076,12 +12261,20 @@ type EntityRecognizerEntityList struct {
 	S3Uri *string `type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s EntityRecognizerEntityList) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s EntityRecognizerEntityList) GoString() string {
 	return s.String()
 }
@@ -10125,12 +12318,20 @@ type EntityRecognizerEvaluationMetrics struct {
 	Recall *float64 `type:"double"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s EntityRecognizerEvaluationMetrics) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s EntityRecognizerEvaluationMetrics) GoString() string {
 	return s.String()
 }
@@ -10159,6 +12360,9 @@ func (s *EntityRecognizerEvaluationMetrics) SetRecall(v float64) *EntityRecogniz
 type EntityRecognizerFilter struct {
 	_ struct{} `type:"structure"`
 
+	// The name that you assigned the entity recognizer.
+	RecognizerName *string `type:"string"`
+
 	// The status of an entity recognizer.
 	Status *string `type:"string" enum:"ModelStatus"`
 
@@ -10173,14 +12377,28 @@ type EntityRecognizerFilter struct {
 	SubmitTimeBefore *time.Time `type:"timestamp"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s EntityRecognizerFilter) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s EntityRecognizerFilter) GoString() string {
 	return s.String()
+}
+
+// SetRecognizerName sets the RecognizerName field's value.
+func (s *EntityRecognizerFilter) SetRecognizerName(v string) *EntityRecognizerFilter {
+	s.RecognizerName = &v
+	return s
 }
 
 // SetStatus sets the Status field's value.
@@ -10258,12 +12476,20 @@ type EntityRecognizerInputDataConfig struct {
 	EntityTypes []*EntityTypesListItem `type:"list" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s EntityRecognizerInputDataConfig) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s EntityRecognizerInputDataConfig) GoString() string {
 	return s.String()
 }
@@ -10371,12 +12597,20 @@ type EntityRecognizerMetadata struct {
 	NumberOfTrainedDocuments *int64 `type:"integer"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s EntityRecognizerMetadata) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s EntityRecognizerMetadata) GoString() string {
 	return s.String()
 }
@@ -10423,12 +12657,20 @@ type EntityRecognizerMetadataEntityTypesListItem struct {
 	Type *string `type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s EntityRecognizerMetadataEntityTypesListItem) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s EntityRecognizerMetadataEntityTypesListItem) GoString() string {
 	return s.String()
 }
@@ -10475,7 +12717,20 @@ type EntityRecognizerProperties struct {
 	// A description of the status of the recognizer.
 	Message *string `type:"string"`
 
+	// ID for the AWS Key Management Service (KMS) key that Amazon Comprehend uses
+	// to encrypt trained custom models. The ModelKmsKeyId can be either of the
+	// following formats:
+	//
+	//    * KMS Key ID: "1234abcd-12ab-34cd-56ef-1234567890ab"
+	//
+	//    * Amazon Resource Name (ARN) of a KMS Key: "arn:aws:kms:us-west-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab"
+	ModelKmsKeyId *string `type:"string"`
+
 	// Provides information about an entity recognizer.
+	//
+	// RecognizerMetadata is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by EntityRecognizerProperties's
+	// String and GoString methods.
 	RecognizerMetadata *EntityRecognizerMetadata `type:"structure" sensitive:"true"`
 
 	// Provides the status of the entity recognizer.
@@ -10489,6 +12744,9 @@ type EntityRecognizerProperties struct {
 
 	// The time that training of the entity recognizer started.
 	TrainingStartTime *time.Time `type:"timestamp"`
+
+	// The version name you assigned to the entity recognizer.
+	VersionName *string `type:"string"`
 
 	// ID for the AWS Key Management Service (KMS) key that Amazon Comprehend uses
 	// to encrypt data on the storage volume attached to the ML compute instance(s)
@@ -10506,12 +12764,20 @@ type EntityRecognizerProperties struct {
 	VpcConfig *VpcConfig `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s EntityRecognizerProperties) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s EntityRecognizerProperties) GoString() string {
 	return s.String()
 }
@@ -10552,6 +12818,12 @@ func (s *EntityRecognizerProperties) SetMessage(v string) *EntityRecognizerPrope
 	return s
 }
 
+// SetModelKmsKeyId sets the ModelKmsKeyId field's value.
+func (s *EntityRecognizerProperties) SetModelKmsKeyId(v string) *EntityRecognizerProperties {
+	s.ModelKmsKeyId = &v
+	return s
+}
+
 // SetRecognizerMetadata sets the RecognizerMetadata field's value.
 func (s *EntityRecognizerProperties) SetRecognizerMetadata(v *EntityRecognizerMetadata) *EntityRecognizerProperties {
 	s.RecognizerMetadata = v
@@ -10582,6 +12854,12 @@ func (s *EntityRecognizerProperties) SetTrainingStartTime(v time.Time) *EntityRe
 	return s
 }
 
+// SetVersionName sets the VersionName field's value.
+func (s *EntityRecognizerProperties) SetVersionName(v string) *EntityRecognizerProperties {
+	s.VersionName = &v
+	return s
+}
+
 // SetVolumeKmsKeyId sets the VolumeKmsKeyId field's value.
 func (s *EntityRecognizerProperties) SetVolumeKmsKeyId(v string) *EntityRecognizerProperties {
 	s.VolumeKmsKeyId = &v
@@ -10594,12 +12872,80 @@ func (s *EntityRecognizerProperties) SetVpcConfig(v *VpcConfig) *EntityRecognize
 	return s
 }
 
+// Describes the information about an entity recognizer and its versions.
+type EntityRecognizerSummary struct {
+	_ struct{} `type:"structure"`
+
+	// The time that the latest entity recognizer version was submitted for processing.
+	LatestVersionCreatedAt *time.Time `type:"timestamp"`
+
+	// The version name you assigned to the latest entity recognizer version.
+	LatestVersionName *string `type:"string"`
+
+	// Provides the status of the latest entity recognizer version.
+	LatestVersionStatus *string `type:"string" enum:"ModelStatus"`
+
+	// The number of versions you created.
+	NumberOfVersions *int64 `type:"integer"`
+
+	// The name that you assigned the entity recognizer.
+	RecognizerName *string `type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s EntityRecognizerSummary) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s EntityRecognizerSummary) GoString() string {
+	return s.String()
+}
+
+// SetLatestVersionCreatedAt sets the LatestVersionCreatedAt field's value.
+func (s *EntityRecognizerSummary) SetLatestVersionCreatedAt(v time.Time) *EntityRecognizerSummary {
+	s.LatestVersionCreatedAt = &v
+	return s
+}
+
+// SetLatestVersionName sets the LatestVersionName field's value.
+func (s *EntityRecognizerSummary) SetLatestVersionName(v string) *EntityRecognizerSummary {
+	s.LatestVersionName = &v
+	return s
+}
+
+// SetLatestVersionStatus sets the LatestVersionStatus field's value.
+func (s *EntityRecognizerSummary) SetLatestVersionStatus(v string) *EntityRecognizerSummary {
+	s.LatestVersionStatus = &v
+	return s
+}
+
+// SetNumberOfVersions sets the NumberOfVersions field's value.
+func (s *EntityRecognizerSummary) SetNumberOfVersions(v int64) *EntityRecognizerSummary {
+	s.NumberOfVersions = &v
+	return s
+}
+
+// SetRecognizerName sets the RecognizerName field's value.
+func (s *EntityRecognizerSummary) SetRecognizerName(v string) *EntityRecognizerSummary {
+	s.RecognizerName = &v
+	return s
+}
+
 // Detailed information about the accuracy of an entity recognizer for a specific
 // entity type.
 type EntityTypesEvaluationMetrics struct {
 	_ struct{} `type:"structure"`
 
-	// A measure of how accurate the recognizer results are for for a specific entity
+	// A measure of how accurate the recognizer results are for a specific entity
 	// type in the test data. It is derived from the Precision and Recall values.
 	// The F1Score is the harmonic average of the two scores. The highest score
 	// is 1, and the worst score is 0.
@@ -10616,12 +12962,20 @@ type EntityTypesEvaluationMetrics struct {
 	Recall *float64 `type:"double"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s EntityTypesEvaluationMetrics) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s EntityTypesEvaluationMetrics) GoString() string {
 	return s.String()
 }
@@ -10660,12 +13014,20 @@ type EntityTypesListItem struct {
 	Type *string `type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s EntityTypesListItem) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s EntityTypesListItem) GoString() string {
 	return s.String()
 }
@@ -10689,9 +13051,235 @@ func (s *EntityTypesListItem) SetType(v string) *EntityTypesListItem {
 	return s
 }
 
-// The input properties for a topic detection job.
+// Provides information for filtering a list of event detection jobs.
+type EventsDetectionJobFilter struct {
+	_ struct{} `type:"structure"`
+
+	// Filters on the name of the events detection job.
+	JobName *string `min:"1" type:"string"`
+
+	// Filters the list of jobs based on job status. Returns only jobs with the
+	// specified status.
+	JobStatus *string `type:"string" enum:"JobStatus"`
+
+	// Filters the list of jobs based on the time that the job was submitted for
+	// processing. Returns only jobs submitted after the specified time. Jobs are
+	// returned in descending order, newest to oldest.
+	SubmitTimeAfter *time.Time `type:"timestamp"`
+
+	// Filters the list of jobs based on the time that the job was submitted for
+	// processing. Returns only jobs submitted before the specified time. Jobs are
+	// returned in ascending order, oldest to newest.
+	SubmitTimeBefore *time.Time `type:"timestamp"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s EventsDetectionJobFilter) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s EventsDetectionJobFilter) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *EventsDetectionJobFilter) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "EventsDetectionJobFilter"}
+	if s.JobName != nil && len(*s.JobName) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("JobName", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetJobName sets the JobName field's value.
+func (s *EventsDetectionJobFilter) SetJobName(v string) *EventsDetectionJobFilter {
+	s.JobName = &v
+	return s
+}
+
+// SetJobStatus sets the JobStatus field's value.
+func (s *EventsDetectionJobFilter) SetJobStatus(v string) *EventsDetectionJobFilter {
+	s.JobStatus = &v
+	return s
+}
+
+// SetSubmitTimeAfter sets the SubmitTimeAfter field's value.
+func (s *EventsDetectionJobFilter) SetSubmitTimeAfter(v time.Time) *EventsDetectionJobFilter {
+	s.SubmitTimeAfter = &v
+	return s
+}
+
+// SetSubmitTimeBefore sets the SubmitTimeBefore field's value.
+func (s *EventsDetectionJobFilter) SetSubmitTimeBefore(v time.Time) *EventsDetectionJobFilter {
+	s.SubmitTimeBefore = &v
+	return s
+}
+
+// Provides information about an events detection job.
+type EventsDetectionJobProperties struct {
+	_ struct{} `type:"structure"`
+
+	// The Amazon Resource Name (ARN) of the AWS Identify and Access Management
+	// (IAM) role that grants Amazon Comprehend read access to your input data.
+	DataAccessRoleArn *string `min:"20" type:"string"`
+
+	// The time that the events detection job completed.
+	EndTime *time.Time `type:"timestamp"`
+
+	// The input data configuration that you supplied when you created the events
+	// detection job.
+	InputDataConfig *InputDataConfig `type:"structure"`
+
+	// The Amazon Resource Name (ARN) of the events detection job. It is a unique,
+	// fully qualified identifier for the job. It includes the AWS account, Region,
+	// and the job ID. The format of the ARN is as follows:
+	//
+	// arn:<partition>:comprehend:<region>:<account-id>:events-detection-job/<job-id>
+	//
+	// The following is an example job ARN:
+	//
+	// arn:aws:comprehend:us-west-2:111122223333:events-detection-job/1234abcd12ab34cd56ef1234567890ab
+	JobArn *string `type:"string"`
+
+	// The identifier assigned to the events detection job.
+	JobId *string `min:"1" type:"string"`
+
+	// The name you assigned the events detection job.
+	JobName *string `min:"1" type:"string"`
+
+	// The current status of the events detection job.
+	JobStatus *string `type:"string" enum:"JobStatus"`
+
+	// The language code of the input documents.
+	LanguageCode *string `type:"string" enum:"LanguageCode"`
+
+	// A description of the status of the events detection job.
+	Message *string `type:"string"`
+
+	// The output data configuration that you supplied when you created the events
+	// detection job.
+	OutputDataConfig *OutputDataConfig `type:"structure"`
+
+	// The time that the events detection job was submitted for processing.
+	SubmitTime *time.Time `type:"timestamp"`
+
+	// The types of events that are detected by the job.
+	TargetEventTypes []*string `min:"1" type:"list"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s EventsDetectionJobProperties) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s EventsDetectionJobProperties) GoString() string {
+	return s.String()
+}
+
+// SetDataAccessRoleArn sets the DataAccessRoleArn field's value.
+func (s *EventsDetectionJobProperties) SetDataAccessRoleArn(v string) *EventsDetectionJobProperties {
+	s.DataAccessRoleArn = &v
+	return s
+}
+
+// SetEndTime sets the EndTime field's value.
+func (s *EventsDetectionJobProperties) SetEndTime(v time.Time) *EventsDetectionJobProperties {
+	s.EndTime = &v
+	return s
+}
+
+// SetInputDataConfig sets the InputDataConfig field's value.
+func (s *EventsDetectionJobProperties) SetInputDataConfig(v *InputDataConfig) *EventsDetectionJobProperties {
+	s.InputDataConfig = v
+	return s
+}
+
+// SetJobArn sets the JobArn field's value.
+func (s *EventsDetectionJobProperties) SetJobArn(v string) *EventsDetectionJobProperties {
+	s.JobArn = &v
+	return s
+}
+
+// SetJobId sets the JobId field's value.
+func (s *EventsDetectionJobProperties) SetJobId(v string) *EventsDetectionJobProperties {
+	s.JobId = &v
+	return s
+}
+
+// SetJobName sets the JobName field's value.
+func (s *EventsDetectionJobProperties) SetJobName(v string) *EventsDetectionJobProperties {
+	s.JobName = &v
+	return s
+}
+
+// SetJobStatus sets the JobStatus field's value.
+func (s *EventsDetectionJobProperties) SetJobStatus(v string) *EventsDetectionJobProperties {
+	s.JobStatus = &v
+	return s
+}
+
+// SetLanguageCode sets the LanguageCode field's value.
+func (s *EventsDetectionJobProperties) SetLanguageCode(v string) *EventsDetectionJobProperties {
+	s.LanguageCode = &v
+	return s
+}
+
+// SetMessage sets the Message field's value.
+func (s *EventsDetectionJobProperties) SetMessage(v string) *EventsDetectionJobProperties {
+	s.Message = &v
+	return s
+}
+
+// SetOutputDataConfig sets the OutputDataConfig field's value.
+func (s *EventsDetectionJobProperties) SetOutputDataConfig(v *OutputDataConfig) *EventsDetectionJobProperties {
+	s.OutputDataConfig = v
+	return s
+}
+
+// SetSubmitTime sets the SubmitTime field's value.
+func (s *EventsDetectionJobProperties) SetSubmitTime(v time.Time) *EventsDetectionJobProperties {
+	s.SubmitTime = &v
+	return s
+}
+
+// SetTargetEventTypes sets the TargetEventTypes field's value.
+func (s *EventsDetectionJobProperties) SetTargetEventTypes(v []*string) *EventsDetectionJobProperties {
+	s.TargetEventTypes = v
+	return s
+}
+
+// The input properties for an inference job.
 type InputDataConfig struct {
 	_ struct{} `type:"structure"`
+
+	// The document reader config field applies only for InputDataConfig of StartEntitiesDetectionJob.
+	//
+	// Use DocumentReaderConfig to provide specifications about how you want your
+	// inference documents read. Currently it applies for PDF documents in StartEntitiesDetectionJob
+	// custom inference.
+	DocumentReaderConfig *DocumentReaderConfig `type:"structure"`
 
 	// Specifies how the text in an input file should be processed:
 	//
@@ -10716,12 +13304,20 @@ type InputDataConfig struct {
 	S3Uri *string `type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s InputDataConfig) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s InputDataConfig) GoString() string {
 	return s.String()
 }
@@ -10732,11 +13328,22 @@ func (s *InputDataConfig) Validate() error {
 	if s.S3Uri == nil {
 		invalidParams.Add(request.NewErrParamRequired("S3Uri"))
 	}
+	if s.DocumentReaderConfig != nil {
+		if err := s.DocumentReaderConfig.Validate(); err != nil {
+			invalidParams.AddNested("DocumentReaderConfig", err.(request.ErrInvalidParams))
+		}
+	}
 
 	if invalidParams.Len() > 0 {
 		return invalidParams
 	}
 	return nil
+}
+
+// SetDocumentReaderConfig sets the DocumentReaderConfig field's value.
+func (s *InputDataConfig) SetDocumentReaderConfig(v *DocumentReaderConfig) *InputDataConfig {
+	s.DocumentReaderConfig = v
+	return s
 }
 
 // SetInputFormat sets the InputFormat field's value.
@@ -10759,12 +13366,20 @@ type InternalServerException struct {
 	Message_ *string `locationName:"Message" min:"1" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s InternalServerException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s InternalServerException) GoString() string {
 	return s.String()
 }
@@ -10815,12 +13430,20 @@ type InvalidFilterException struct {
 	Message_ *string `locationName:"Message" min:"1" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s InvalidFilterException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s InvalidFilterException) GoString() string {
 	return s.String()
 }
@@ -10871,12 +13494,20 @@ type InvalidRequestException struct {
 	Message_ *string `locationName:"Message" min:"1" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s InvalidRequestException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s InvalidRequestException) GoString() string {
 	return s.String()
 }
@@ -10927,12 +13558,20 @@ type JobNotFoundException struct {
 	Message_ *string `locationName:"Message" min:"1" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s JobNotFoundException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s JobNotFoundException) GoString() string {
 	return s.String()
 }
@@ -11000,12 +13639,20 @@ type KeyPhrase struct {
 	Text *string `min:"1" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s KeyPhrase) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s KeyPhrase) GoString() string {
 	return s.String()
 }
@@ -11057,12 +13704,20 @@ type KeyPhrasesDetectionJobFilter struct {
 	SubmitTimeBefore *time.Time `type:"timestamp"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s KeyPhrasesDetectionJobFilter) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s KeyPhrasesDetectionJobFilter) GoString() string {
 	return s.String()
 }
@@ -11119,6 +13774,17 @@ type KeyPhrasesDetectionJobProperties struct {
 	// detection job.
 	InputDataConfig *InputDataConfig `type:"structure"`
 
+	// The Amazon Resource Name (ARN) of the key phrases detection job. It is a
+	// unique, fully qualified identifier for the job. It includes the AWS account,
+	// Region, and the job ID. The format of the ARN is as follows:
+	//
+	// arn:<partition>:comprehend:<region>:<account-id>:key-phrases-detection-job/<job-id>
+	//
+	// The following is an example job ARN:
+	//
+	// arn:aws:comprehend:us-west-2:111122223333:key-phrases-detection-job/1234abcd12ab34cd56ef1234567890ab
+	JobArn *string `type:"string"`
+
 	// The identifier assigned to the key phrases detection job.
 	JobId *string `min:"1" type:"string"`
 
@@ -11158,12 +13824,20 @@ type KeyPhrasesDetectionJobProperties struct {
 	VpcConfig *VpcConfig `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s KeyPhrasesDetectionJobProperties) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s KeyPhrasesDetectionJobProperties) GoString() string {
 	return s.String()
 }
@@ -11183,6 +13857,12 @@ func (s *KeyPhrasesDetectionJobProperties) SetEndTime(v time.Time) *KeyPhrasesDe
 // SetInputDataConfig sets the InputDataConfig field's value.
 func (s *KeyPhrasesDetectionJobProperties) SetInputDataConfig(v *InputDataConfig) *KeyPhrasesDetectionJobProperties {
 	s.InputDataConfig = v
+	return s
+}
+
+// SetJobArn sets the JobArn field's value.
+func (s *KeyPhrasesDetectionJobProperties) SetJobArn(v string) *KeyPhrasesDetectionJobProperties {
+	s.JobArn = &v
 	return s
 }
 
@@ -11249,12 +13929,20 @@ type KmsKeyValidationException struct {
 	Message_ *string `locationName:"Message" min:"1" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s KmsKeyValidationException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s KmsKeyValidationException) GoString() string {
 	return s.String()
 }
@@ -11312,12 +14000,20 @@ type ListDocumentClassificationJobsInput struct {
 	NextToken *string `min:"1" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListDocumentClassificationJobsInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListDocumentClassificationJobsInput) GoString() string {
 	return s.String()
 }
@@ -11371,12 +14067,20 @@ type ListDocumentClassificationJobsOutput struct {
 	NextToken *string `min:"1" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListDocumentClassificationJobsOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListDocumentClassificationJobsOutput) GoString() string {
 	return s.String()
 }
@@ -11389,6 +14093,102 @@ func (s *ListDocumentClassificationJobsOutput) SetDocumentClassificationJobPrope
 
 // SetNextToken sets the NextToken field's value.
 func (s *ListDocumentClassificationJobsOutput) SetNextToken(v string) *ListDocumentClassificationJobsOutput {
+	s.NextToken = &v
+	return s
+}
+
+type ListDocumentClassifierSummariesInput struct {
+	_ struct{} `type:"structure"`
+
+	// The maximum number of results to return on each page. The default is 100.
+	MaxResults *int64 `min:"1" type:"integer"`
+
+	// Identifies the next page of results to return.
+	NextToken *string `min:"1" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListDocumentClassifierSummariesInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListDocumentClassifierSummariesInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ListDocumentClassifierSummariesInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ListDocumentClassifierSummariesInput"}
+	if s.MaxResults != nil && *s.MaxResults < 1 {
+		invalidParams.Add(request.NewErrParamMinValue("MaxResults", 1))
+	}
+	if s.NextToken != nil && len(*s.NextToken) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("NextToken", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetMaxResults sets the MaxResults field's value.
+func (s *ListDocumentClassifierSummariesInput) SetMaxResults(v int64) *ListDocumentClassifierSummariesInput {
+	s.MaxResults = &v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListDocumentClassifierSummariesInput) SetNextToken(v string) *ListDocumentClassifierSummariesInput {
+	s.NextToken = &v
+	return s
+}
+
+type ListDocumentClassifierSummariesOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The list of summaries of document classifiers.
+	DocumentClassifierSummariesList []*DocumentClassifierSummary `type:"list"`
+
+	// Identifies the next page of results to return.
+	NextToken *string `min:"1" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListDocumentClassifierSummariesOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListDocumentClassifierSummariesOutput) GoString() string {
+	return s.String()
+}
+
+// SetDocumentClassifierSummariesList sets the DocumentClassifierSummariesList field's value.
+func (s *ListDocumentClassifierSummariesOutput) SetDocumentClassifierSummariesList(v []*DocumentClassifierSummary) *ListDocumentClassifierSummariesOutput {
+	s.DocumentClassifierSummariesList = v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListDocumentClassifierSummariesOutput) SetNextToken(v string) *ListDocumentClassifierSummariesOutput {
 	s.NextToken = &v
 	return s
 }
@@ -11408,12 +14208,20 @@ type ListDocumentClassifiersInput struct {
 	NextToken *string `min:"1" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListDocumentClassifiersInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListDocumentClassifiersInput) GoString() string {
 	return s.String()
 }
@@ -11462,12 +14270,20 @@ type ListDocumentClassifiersOutput struct {
 	NextToken *string `min:"1" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListDocumentClassifiersOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListDocumentClassifiersOutput) GoString() string {
 	return s.String()
 }
@@ -11499,12 +14315,20 @@ type ListDominantLanguageDetectionJobsInput struct {
 	NextToken *string `min:"1" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListDominantLanguageDetectionJobsInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListDominantLanguageDetectionJobsInput) GoString() string {
 	return s.String()
 }
@@ -11558,12 +14382,20 @@ type ListDominantLanguageDetectionJobsOutput struct {
 	NextToken *string `min:"1" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListDominantLanguageDetectionJobsOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListDominantLanguageDetectionJobsOutput) GoString() string {
 	return s.String()
 }
@@ -11595,12 +14427,20 @@ type ListEndpointsInput struct {
 	NextToken *string `min:"1" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListEndpointsInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListEndpointsInput) GoString() string {
 	return s.String()
 }
@@ -11650,12 +14490,20 @@ type ListEndpointsOutput struct {
 	NextToken *string `min:"1" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListEndpointsOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListEndpointsOutput) GoString() string {
 	return s.String()
 }
@@ -11687,12 +14535,20 @@ type ListEntitiesDetectionJobsInput struct {
 	NextToken *string `min:"1" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListEntitiesDetectionJobsInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListEntitiesDetectionJobsInput) GoString() string {
 	return s.String()
 }
@@ -11746,12 +14602,20 @@ type ListEntitiesDetectionJobsOutput struct {
 	NextToken *string `min:"1" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListEntitiesDetectionJobsOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListEntitiesDetectionJobsOutput) GoString() string {
 	return s.String()
 }
@@ -11764,6 +14628,102 @@ func (s *ListEntitiesDetectionJobsOutput) SetEntitiesDetectionJobPropertiesList(
 
 // SetNextToken sets the NextToken field's value.
 func (s *ListEntitiesDetectionJobsOutput) SetNextToken(v string) *ListEntitiesDetectionJobsOutput {
+	s.NextToken = &v
+	return s
+}
+
+type ListEntityRecognizerSummariesInput struct {
+	_ struct{} `type:"structure"`
+
+	// The maximum number of results to return on each page. The default is 100.
+	MaxResults *int64 `min:"1" type:"integer"`
+
+	// Identifies the next page of results to return.
+	NextToken *string `min:"1" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListEntityRecognizerSummariesInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListEntityRecognizerSummariesInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ListEntityRecognizerSummariesInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ListEntityRecognizerSummariesInput"}
+	if s.MaxResults != nil && *s.MaxResults < 1 {
+		invalidParams.Add(request.NewErrParamMinValue("MaxResults", 1))
+	}
+	if s.NextToken != nil && len(*s.NextToken) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("NextToken", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetMaxResults sets the MaxResults field's value.
+func (s *ListEntityRecognizerSummariesInput) SetMaxResults(v int64) *ListEntityRecognizerSummariesInput {
+	s.MaxResults = &v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListEntityRecognizerSummariesInput) SetNextToken(v string) *ListEntityRecognizerSummariesInput {
+	s.NextToken = &v
+	return s
+}
+
+type ListEntityRecognizerSummariesOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The list entity recognizer summaries.
+	EntityRecognizerSummariesList []*EntityRecognizerSummary `type:"list"`
+
+	// The list entity recognizer summaries.
+	NextToken *string `min:"1" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListEntityRecognizerSummariesOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListEntityRecognizerSummariesOutput) GoString() string {
+	return s.String()
+}
+
+// SetEntityRecognizerSummariesList sets the EntityRecognizerSummariesList field's value.
+func (s *ListEntityRecognizerSummariesOutput) SetEntityRecognizerSummariesList(v []*EntityRecognizerSummary) *ListEntityRecognizerSummariesOutput {
+	s.EntityRecognizerSummariesList = v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListEntityRecognizerSummariesOutput) SetNextToken(v string) *ListEntityRecognizerSummariesOutput {
 	s.NextToken = &v
 	return s
 }
@@ -11782,12 +14742,20 @@ type ListEntityRecognizersInput struct {
 	NextToken *string `min:"1" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListEntityRecognizersInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListEntityRecognizersInput) GoString() string {
 	return s.String()
 }
@@ -11836,12 +14804,20 @@ type ListEntityRecognizersOutput struct {
 	NextToken *string `min:"1" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListEntityRecognizersOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListEntityRecognizersOutput) GoString() string {
 	return s.String()
 }
@@ -11854,6 +14830,118 @@ func (s *ListEntityRecognizersOutput) SetEntityRecognizerPropertiesList(v []*Ent
 
 // SetNextToken sets the NextToken field's value.
 func (s *ListEntityRecognizersOutput) SetNextToken(v string) *ListEntityRecognizersOutput {
+	s.NextToken = &v
+	return s
+}
+
+type ListEventsDetectionJobsInput struct {
+	_ struct{} `type:"structure"`
+
+	// Filters the jobs that are returned. You can filter jobs on their name, status,
+	// or the date and time that they were submitted. You can only set one filter
+	// at a time.
+	Filter *EventsDetectionJobFilter `type:"structure"`
+
+	// The maximum number of results to return in each page.
+	MaxResults *int64 `min:"1" type:"integer"`
+
+	// Identifies the next page of results to return.
+	NextToken *string `min:"1" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListEventsDetectionJobsInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListEventsDetectionJobsInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ListEventsDetectionJobsInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ListEventsDetectionJobsInput"}
+	if s.MaxResults != nil && *s.MaxResults < 1 {
+		invalidParams.Add(request.NewErrParamMinValue("MaxResults", 1))
+	}
+	if s.NextToken != nil && len(*s.NextToken) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("NextToken", 1))
+	}
+	if s.Filter != nil {
+		if err := s.Filter.Validate(); err != nil {
+			invalidParams.AddNested("Filter", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetFilter sets the Filter field's value.
+func (s *ListEventsDetectionJobsInput) SetFilter(v *EventsDetectionJobFilter) *ListEventsDetectionJobsInput {
+	s.Filter = v
+	return s
+}
+
+// SetMaxResults sets the MaxResults field's value.
+func (s *ListEventsDetectionJobsInput) SetMaxResults(v int64) *ListEventsDetectionJobsInput {
+	s.MaxResults = &v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListEventsDetectionJobsInput) SetNextToken(v string) *ListEventsDetectionJobsInput {
+	s.NextToken = &v
+	return s
+}
+
+type ListEventsDetectionJobsOutput struct {
+	_ struct{} `type:"structure"`
+
+	// A list containing the properties of each job that is returned.
+	EventsDetectionJobPropertiesList []*EventsDetectionJobProperties `type:"list"`
+
+	// Identifies the next page of results to return.
+	NextToken *string `min:"1" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListEventsDetectionJobsOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListEventsDetectionJobsOutput) GoString() string {
+	return s.String()
+}
+
+// SetEventsDetectionJobPropertiesList sets the EventsDetectionJobPropertiesList field's value.
+func (s *ListEventsDetectionJobsOutput) SetEventsDetectionJobPropertiesList(v []*EventsDetectionJobProperties) *ListEventsDetectionJobsOutput {
+	s.EventsDetectionJobPropertiesList = v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListEventsDetectionJobsOutput) SetNextToken(v string) *ListEventsDetectionJobsOutput {
 	s.NextToken = &v
 	return s
 }
@@ -11873,12 +14961,20 @@ type ListKeyPhrasesDetectionJobsInput struct {
 	NextToken *string `min:"1" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListKeyPhrasesDetectionJobsInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListKeyPhrasesDetectionJobsInput) GoString() string {
 	return s.String()
 }
@@ -11932,12 +15028,20 @@ type ListKeyPhrasesDetectionJobsOutput struct {
 	NextToken *string `min:"1" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListKeyPhrasesDetectionJobsOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListKeyPhrasesDetectionJobsOutput) GoString() string {
 	return s.String()
 }
@@ -11969,12 +15073,20 @@ type ListPiiEntitiesDetectionJobsInput struct {
 	NextToken *string `min:"1" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListPiiEntitiesDetectionJobsInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListPiiEntitiesDetectionJobsInput) GoString() string {
 	return s.String()
 }
@@ -12028,12 +15140,20 @@ type ListPiiEntitiesDetectionJobsOutput struct {
 	PiiEntitiesDetectionJobPropertiesList []*PiiEntitiesDetectionJobProperties `type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListPiiEntitiesDetectionJobsOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListPiiEntitiesDetectionJobsOutput) GoString() string {
 	return s.String()
 }
@@ -12065,12 +15185,20 @@ type ListSentimentDetectionJobsInput struct {
 	NextToken *string `min:"1" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListSentimentDetectionJobsInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListSentimentDetectionJobsInput) GoString() string {
 	return s.String()
 }
@@ -12124,12 +15252,20 @@ type ListSentimentDetectionJobsOutput struct {
 	SentimentDetectionJobPropertiesList []*SentimentDetectionJobProperties `type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListSentimentDetectionJobsOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListSentimentDetectionJobsOutput) GoString() string {
 	return s.String()
 }
@@ -12156,12 +15292,20 @@ type ListTagsForResourceInput struct {
 	ResourceArn *string `type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListTagsForResourceInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListTagsForResourceInput) GoString() string {
 	return s.String()
 }
@@ -12199,12 +15343,20 @@ type ListTagsForResourceOutput struct {
 	Tags []*Tag `type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListTagsForResourceOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListTagsForResourceOutput) GoString() string {
 	return s.String()
 }
@@ -12236,12 +15388,20 @@ type ListTopicsDetectionJobsInput struct {
 	NextToken *string `min:"1" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListTopicsDetectionJobsInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListTopicsDetectionJobsInput) GoString() string {
 	return s.String()
 }
@@ -12295,12 +15455,20 @@ type ListTopicsDetectionJobsOutput struct {
 	TopicsDetectionJobPropertiesList []*TopicsDetectionJobProperties `type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListTopicsDetectionJobsOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListTopicsDetectionJobsOutput) GoString() string {
 	return s.String()
 }
@@ -12349,12 +15517,20 @@ type OutputDataConfig struct {
 	S3Uri *string `type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s OutputDataConfig) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s OutputDataConfig) GoString() string {
 	return s.String()
 }
@@ -12399,12 +15575,20 @@ type PartOfSpeechTag struct {
 	Tag *string `type:"string" enum:"PartOfSpeechTagType"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s PartOfSpeechTag) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s PartOfSpeechTag) GoString() string {
 	return s.String()
 }
@@ -12443,12 +15627,20 @@ type PiiEntitiesDetectionJobFilter struct {
 	SubmitTimeBefore *time.Time `type:"timestamp"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s PiiEntitiesDetectionJobFilter) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s PiiEntitiesDetectionJobFilter) GoString() string {
 	return s.String()
 }
@@ -12504,6 +15696,17 @@ type PiiEntitiesDetectionJobProperties struct {
 	// The input properties for a PII entities detection job.
 	InputDataConfig *InputDataConfig `type:"structure"`
 
+	// The Amazon Resource Name (ARN) of the PII entities detection job. It is a
+	// unique, fully qualified identifier for the job. It includes the AWS account,
+	// Region, and the job ID. The format of the ARN is as follows:
+	//
+	// arn:<partition>:comprehend:<region>:<account-id>:pii-entities-detection-job/<job-id>
+	//
+	// The following is an example job ARN:
+	//
+	// arn:aws:comprehend:us-west-2:111122223333:pii-entities-detection-job/1234abcd12ab34cd56ef1234567890ab
+	JobArn *string `type:"string"`
+
 	// The identifier assigned to the PII entities detection job.
 	JobId *string `min:"1" type:"string"`
 
@@ -12539,12 +15742,20 @@ type PiiEntitiesDetectionJobProperties struct {
 	SubmitTime *time.Time `type:"timestamp"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s PiiEntitiesDetectionJobProperties) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s PiiEntitiesDetectionJobProperties) GoString() string {
 	return s.String()
 }
@@ -12564,6 +15775,12 @@ func (s *PiiEntitiesDetectionJobProperties) SetEndTime(v time.Time) *PiiEntities
 // SetInputDataConfig sets the InputDataConfig field's value.
 func (s *PiiEntitiesDetectionJobProperties) SetInputDataConfig(v *InputDataConfig) *PiiEntitiesDetectionJobProperties {
 	s.InputDataConfig = v
+	return s
+}
+
+// SetJobArn sets the JobArn field's value.
+func (s *PiiEntitiesDetectionJobProperties) SetJobArn(v string) *PiiEntitiesDetectionJobProperties {
+	s.JobArn = &v
 	return s
 }
 
@@ -12646,12 +15863,20 @@ type PiiEntity struct {
 	Type *string `type:"string" enum:"PiiEntityType"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s PiiEntity) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s PiiEntity) GoString() string {
 	return s.String()
 }
@@ -12696,12 +15921,20 @@ type PiiOutputDataConfig struct {
 	S3Uri *string `type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s PiiOutputDataConfig) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s PiiOutputDataConfig) GoString() string {
 	return s.String()
 }
@@ -12734,12 +15967,20 @@ type RedactionConfig struct {
 	PiiEntityTypes []*string `type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s RedactionConfig) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s RedactionConfig) GoString() string {
 	return s.String()
 }
@@ -12784,12 +16025,20 @@ type ResourceInUseException struct {
 	Message_ *string `locationName:"Message" min:"1" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ResourceInUseException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ResourceInUseException) GoString() string {
 	return s.String()
 }
@@ -12841,12 +16090,20 @@ type ResourceLimitExceededException struct {
 	Message_ *string `locationName:"Message" min:"1" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ResourceLimitExceededException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ResourceLimitExceededException) GoString() string {
 	return s.String()
 }
@@ -12898,12 +16155,20 @@ type ResourceNotFoundException struct {
 	Message_ *string `locationName:"Message" min:"1" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ResourceNotFoundException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ResourceNotFoundException) GoString() string {
 	return s.String()
 }
@@ -12955,12 +16220,20 @@ type ResourceUnavailableException struct {
 	Message_ *string `locationName:"Message" min:"1" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ResourceUnavailableException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ResourceUnavailableException) GoString() string {
 	return s.String()
 }
@@ -13026,12 +16299,20 @@ type SentimentDetectionJobFilter struct {
 	SubmitTimeBefore *time.Time `type:"timestamp"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s SentimentDetectionJobFilter) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s SentimentDetectionJobFilter) GoString() string {
 	return s.String()
 }
@@ -13088,6 +16369,17 @@ type SentimentDetectionJobProperties struct {
 	// detection job.
 	InputDataConfig *InputDataConfig `type:"structure"`
 
+	// The Amazon Resource Name (ARN) of the sentiment detection job. It is a unique,
+	// fully qualified identifier for the job. It includes the AWS account, Region,
+	// and the job ID. The format of the ARN is as follows:
+	//
+	// arn:<partition>:comprehend:<region>:<account-id>:sentiment-detection-job/<job-id>
+	//
+	// The following is an example job ARN:
+	//
+	// arn:aws:comprehend:us-west-2:111122223333:sentiment-detection-job/1234abcd12ab34cd56ef1234567890ab
+	JobArn *string `type:"string"`
+
 	// The identifier assigned to the sentiment detection job.
 	JobId *string `min:"1" type:"string"`
 
@@ -13127,12 +16419,20 @@ type SentimentDetectionJobProperties struct {
 	VpcConfig *VpcConfig `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s SentimentDetectionJobProperties) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s SentimentDetectionJobProperties) GoString() string {
 	return s.String()
 }
@@ -13152,6 +16452,12 @@ func (s *SentimentDetectionJobProperties) SetEndTime(v time.Time) *SentimentDete
 // SetInputDataConfig sets the InputDataConfig field's value.
 func (s *SentimentDetectionJobProperties) SetInputDataConfig(v *InputDataConfig) *SentimentDetectionJobProperties {
 	s.InputDataConfig = v
+	return s
+}
+
+// SetJobArn sets the JobArn field's value.
+func (s *SentimentDetectionJobProperties) SetJobArn(v string) *SentimentDetectionJobProperties {
+	s.JobArn = &v
 	return s
 }
 
@@ -13231,12 +16537,20 @@ type SentimentScore struct {
 	Positive *float64 `type:"float"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s SentimentScore) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s SentimentScore) GoString() string {
 	return s.String()
 }
@@ -13297,6 +16611,12 @@ type StartDocumentClassificationJobInput struct {
 	// OutputDataConfig is a required field
 	OutputDataConfig *OutputDataConfig `type:"structure" required:"true"`
 
+	// Tags to be associated with the document classification job. A tag is a key-value
+	// pair that adds metadata to a resource used by Amazon Comprehend. For example,
+	// a tag with "Sales" as the key might be added to a resource to indicate its
+	// use by the sales department.
+	Tags []*Tag `type:"list"`
+
 	// ID for the AWS Key Management Service (KMS) key that Amazon Comprehend uses
 	// to encrypt data on the storage volume attached to the ML compute instance(s)
 	// that process the analysis job. The VolumeKmsKeyId can be either of the following
@@ -13313,12 +16633,20 @@ type StartDocumentClassificationJobInput struct {
 	VpcConfig *VpcConfig `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s StartDocumentClassificationJobInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s StartDocumentClassificationJobInput) GoString() string {
 	return s.String()
 }
@@ -13355,6 +16683,16 @@ func (s *StartDocumentClassificationJobInput) Validate() error {
 	if s.OutputDataConfig != nil {
 		if err := s.OutputDataConfig.Validate(); err != nil {
 			invalidParams.AddNested("OutputDataConfig", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.Tags != nil {
+		for i, v := range s.Tags {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "Tags", i), err.(request.ErrInvalidParams))
+			}
 		}
 	}
 	if s.VpcConfig != nil {
@@ -13405,6 +16743,12 @@ func (s *StartDocumentClassificationJobInput) SetOutputDataConfig(v *OutputDataC
 	return s
 }
 
+// SetTags sets the Tags field's value.
+func (s *StartDocumentClassificationJobInput) SetTags(v []*Tag) *StartDocumentClassificationJobInput {
+	s.Tags = v
+	return s
+}
+
 // SetVolumeKmsKeyId sets the VolumeKmsKeyId field's value.
 func (s *StartDocumentClassificationJobInput) SetVolumeKmsKeyId(v string) *StartDocumentClassificationJobInput {
 	s.VolumeKmsKeyId = &v
@@ -13419,6 +16763,17 @@ func (s *StartDocumentClassificationJobInput) SetVpcConfig(v *VpcConfig) *StartD
 
 type StartDocumentClassificationJobOutput struct {
 	_ struct{} `type:"structure"`
+
+	// The Amazon Resource Name (ARN) of the document classification job. It is
+	// a unique, fully qualified identifier for the job. It includes the AWS account,
+	// Region, and the job ID. The format of the ARN is as follows:
+	//
+	// arn:<partition>:comprehend:<region>:<account-id>:document-classification-job/<job-id>
+	//
+	// The following is an example job ARN:
+	//
+	// arn:aws:comprehend:us-west-2:111122223333:document-classification-job/1234abcd12ab34cd56ef1234567890ab
+	JobArn *string `type:"string"`
 
 	// The identifier generated for the job. To get the status of the job, use this
 	// identifier with the operation.
@@ -13441,14 +16796,28 @@ type StartDocumentClassificationJobOutput struct {
 	JobStatus *string `type:"string" enum:"JobStatus"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s StartDocumentClassificationJobOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s StartDocumentClassificationJobOutput) GoString() string {
 	return s.String()
+}
+
+// SetJobArn sets the JobArn field's value.
+func (s *StartDocumentClassificationJobOutput) SetJobArn(v string) *StartDocumentClassificationJobOutput {
+	s.JobArn = &v
+	return s
 }
 
 // SetJobId sets the JobId field's value.
@@ -13491,6 +16860,12 @@ type StartDominantLanguageDetectionJobInput struct {
 	// OutputDataConfig is a required field
 	OutputDataConfig *OutputDataConfig `type:"structure" required:"true"`
 
+	// Tags to be associated with the dominant language detection job. A tag is
+	// a key-value pair that adds metadata to a resource used by Amazon Comprehend.
+	// For example, a tag with "Sales" as the key might be added to a resource to
+	// indicate its use by the sales department.
+	Tags []*Tag `type:"list"`
+
 	// ID for the AWS Key Management Service (KMS) key that Amazon Comprehend uses
 	// to encrypt data on the storage volume attached to the ML compute instance(s)
 	// that process the analysis job. The VolumeKmsKeyId can be either of the following
@@ -13507,12 +16882,20 @@ type StartDominantLanguageDetectionJobInput struct {
 	VpcConfig *VpcConfig `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s StartDominantLanguageDetectionJobInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s StartDominantLanguageDetectionJobInput) GoString() string {
 	return s.String()
 }
@@ -13546,6 +16929,16 @@ func (s *StartDominantLanguageDetectionJobInput) Validate() error {
 	if s.OutputDataConfig != nil {
 		if err := s.OutputDataConfig.Validate(); err != nil {
 			invalidParams.AddNested("OutputDataConfig", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.Tags != nil {
+		for i, v := range s.Tags {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "Tags", i), err.(request.ErrInvalidParams))
+			}
 		}
 	}
 	if s.VpcConfig != nil {
@@ -13590,6 +16983,12 @@ func (s *StartDominantLanguageDetectionJobInput) SetOutputDataConfig(v *OutputDa
 	return s
 }
 
+// SetTags sets the Tags field's value.
+func (s *StartDominantLanguageDetectionJobInput) SetTags(v []*Tag) *StartDominantLanguageDetectionJobInput {
+	s.Tags = v
+	return s
+}
+
 // SetVolumeKmsKeyId sets the VolumeKmsKeyId field's value.
 func (s *StartDominantLanguageDetectionJobInput) SetVolumeKmsKeyId(v string) *StartDominantLanguageDetectionJobInput {
 	s.VolumeKmsKeyId = &v
@@ -13604,6 +17003,17 @@ func (s *StartDominantLanguageDetectionJobInput) SetVpcConfig(v *VpcConfig) *Sta
 
 type StartDominantLanguageDetectionJobOutput struct {
 	_ struct{} `type:"structure"`
+
+	// The Amazon Resource Name (ARN) of the dominant language detection job. It
+	// is a unique, fully qualified identifier for the job. It includes the AWS
+	// account, Region, and the job ID. The format of the ARN is as follows:
+	//
+	// arn:<partition>:comprehend:<region>:<account-id>:dominant-language-detection-job/<job-id>
+	//
+	// The following is an example job ARN:
+	//
+	// arn:aws:comprehend:us-west-2:111122223333:dominant-language-detection-job/1234abcd12ab34cd56ef1234567890ab
+	JobArn *string `type:"string"`
 
 	// The identifier generated for the job. To get the status of a job, use this
 	// identifier with the operation.
@@ -13621,14 +17031,28 @@ type StartDominantLanguageDetectionJobOutput struct {
 	JobStatus *string `type:"string" enum:"JobStatus"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s StartDominantLanguageDetectionJobOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s StartDominantLanguageDetectionJobOutput) GoString() string {
 	return s.String()
+}
+
+// SetJobArn sets the JobArn field's value.
+func (s *StartDominantLanguageDetectionJobOutput) SetJobArn(v string) *StartDominantLanguageDetectionJobOutput {
+	s.JobArn = &v
+	return s
 }
 
 // SetJobId sets the JobId field's value.
@@ -13684,6 +17108,12 @@ type StartEntitiesDetectionJobInput struct {
 	// OutputDataConfig is a required field
 	OutputDataConfig *OutputDataConfig `type:"structure" required:"true"`
 
+	// Tags to be associated with the entities detection job. A tag is a key-value
+	// pair that adds metadata to a resource used by Amazon Comprehend. For example,
+	// a tag with "Sales" as the key might be added to a resource to indicate its
+	// use by the sales department.
+	Tags []*Tag `type:"list"`
+
 	// ID for the AWS Key Management Service (KMS) key that Amazon Comprehend uses
 	// to encrypt data on the storage volume attached to the ML compute instance(s)
 	// that process the analysis job. The VolumeKmsKeyId can be either of the following
@@ -13700,12 +17130,20 @@ type StartEntitiesDetectionJobInput struct {
 	VpcConfig *VpcConfig `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s StartEntitiesDetectionJobInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s StartEntitiesDetectionJobInput) GoString() string {
 	return s.String()
 }
@@ -13742,6 +17180,16 @@ func (s *StartEntitiesDetectionJobInput) Validate() error {
 	if s.OutputDataConfig != nil {
 		if err := s.OutputDataConfig.Validate(); err != nil {
 			invalidParams.AddNested("OutputDataConfig", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.Tags != nil {
+		for i, v := range s.Tags {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "Tags", i), err.(request.ErrInvalidParams))
+			}
 		}
 	}
 	if s.VpcConfig != nil {
@@ -13798,6 +17246,12 @@ func (s *StartEntitiesDetectionJobInput) SetOutputDataConfig(v *OutputDataConfig
 	return s
 }
 
+// SetTags sets the Tags field's value.
+func (s *StartEntitiesDetectionJobInput) SetTags(v []*Tag) *StartEntitiesDetectionJobInput {
+	s.Tags = v
+	return s
+}
+
 // SetVolumeKmsKeyId sets the VolumeKmsKeyId field's value.
 func (s *StartEntitiesDetectionJobInput) SetVolumeKmsKeyId(v string) *StartEntitiesDetectionJobInput {
 	s.VolumeKmsKeyId = &v
@@ -13812,6 +17266,17 @@ func (s *StartEntitiesDetectionJobInput) SetVpcConfig(v *VpcConfig) *StartEntiti
 
 type StartEntitiesDetectionJobOutput struct {
 	_ struct{} `type:"structure"`
+
+	// The Amazon Resource Name (ARN) of the entities detection job. It is a unique,
+	// fully qualified identifier for the job. It includes the AWS account, Region,
+	// and the job ID. The format of the ARN is as follows:
+	//
+	// arn:<partition>:comprehend:<region>:<account-id>:entities-detection-job/<job-id>
+	//
+	// The following is an example job ARN:
+	//
+	// arn:aws:comprehend:us-west-2:111122223333:entities-detection-job/1234abcd12ab34cd56ef1234567890ab
+	JobArn *string `type:"string"`
 
 	// The identifier generated for the job. To get the status of job, use this
 	// identifier with the operation.
@@ -13834,14 +17299,28 @@ type StartEntitiesDetectionJobOutput struct {
 	JobStatus *string `type:"string" enum:"JobStatus"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s StartEntitiesDetectionJobOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s StartEntitiesDetectionJobOutput) GoString() string {
 	return s.String()
+}
+
+// SetJobArn sets the JobArn field's value.
+func (s *StartEntitiesDetectionJobOutput) SetJobArn(v string) *StartEntitiesDetectionJobOutput {
+	s.JobArn = &v
+	return s
 }
 
 // SetJobId sets the JobId field's value.
@@ -13852,6 +17331,230 @@ func (s *StartEntitiesDetectionJobOutput) SetJobId(v string) *StartEntitiesDetec
 
 // SetJobStatus sets the JobStatus field's value.
 func (s *StartEntitiesDetectionJobOutput) SetJobStatus(v string) *StartEntitiesDetectionJobOutput {
+	s.JobStatus = &v
+	return s
+}
+
+type StartEventsDetectionJobInput struct {
+	_ struct{} `type:"structure"`
+
+	// An unique identifier for the request. If you don't set the client request
+	// token, Amazon Comprehend generates one.
+	ClientRequestToken *string `min:"1" type:"string" idempotencyToken:"true"`
+
+	// The Amazon Resource Name (ARN) of the AWS Identity and Access Management
+	// (IAM) role that grants Amazon Comprehend read access to your input data.
+	//
+	// DataAccessRoleArn is a required field
+	DataAccessRoleArn *string `min:"20" type:"string" required:"true"`
+
+	// Specifies the format and location of the input data for the job.
+	//
+	// InputDataConfig is a required field
+	InputDataConfig *InputDataConfig `type:"structure" required:"true"`
+
+	// The identifier of the events detection job.
+	JobName *string `min:"1" type:"string"`
+
+	// The language code of the input documents.
+	//
+	// LanguageCode is a required field
+	LanguageCode *string `type:"string" required:"true" enum:"LanguageCode"`
+
+	// Specifies where to send the output files.
+	//
+	// OutputDataConfig is a required field
+	OutputDataConfig *OutputDataConfig `type:"structure" required:"true"`
+
+	// Tags to be associated with the events detection job. A tag is a key-value
+	// pair that adds metadata to a resource used by Amazon Comprehend. For example,
+	// a tag with "Sales" as the key might be added to a resource to indicate its
+	// use by the sales department.
+	Tags []*Tag `type:"list"`
+
+	// The types of events to detect in the input documents.
+	//
+	// TargetEventTypes is a required field
+	TargetEventTypes []*string `min:"1" type:"list" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s StartEventsDetectionJobInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s StartEventsDetectionJobInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *StartEventsDetectionJobInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "StartEventsDetectionJobInput"}
+	if s.ClientRequestToken != nil && len(*s.ClientRequestToken) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ClientRequestToken", 1))
+	}
+	if s.DataAccessRoleArn == nil {
+		invalidParams.Add(request.NewErrParamRequired("DataAccessRoleArn"))
+	}
+	if s.DataAccessRoleArn != nil && len(*s.DataAccessRoleArn) < 20 {
+		invalidParams.Add(request.NewErrParamMinLen("DataAccessRoleArn", 20))
+	}
+	if s.InputDataConfig == nil {
+		invalidParams.Add(request.NewErrParamRequired("InputDataConfig"))
+	}
+	if s.JobName != nil && len(*s.JobName) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("JobName", 1))
+	}
+	if s.LanguageCode == nil {
+		invalidParams.Add(request.NewErrParamRequired("LanguageCode"))
+	}
+	if s.OutputDataConfig == nil {
+		invalidParams.Add(request.NewErrParamRequired("OutputDataConfig"))
+	}
+	if s.TargetEventTypes == nil {
+		invalidParams.Add(request.NewErrParamRequired("TargetEventTypes"))
+	}
+	if s.TargetEventTypes != nil && len(s.TargetEventTypes) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("TargetEventTypes", 1))
+	}
+	if s.InputDataConfig != nil {
+		if err := s.InputDataConfig.Validate(); err != nil {
+			invalidParams.AddNested("InputDataConfig", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.OutputDataConfig != nil {
+		if err := s.OutputDataConfig.Validate(); err != nil {
+			invalidParams.AddNested("OutputDataConfig", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.Tags != nil {
+		for i, v := range s.Tags {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "Tags", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetClientRequestToken sets the ClientRequestToken field's value.
+func (s *StartEventsDetectionJobInput) SetClientRequestToken(v string) *StartEventsDetectionJobInput {
+	s.ClientRequestToken = &v
+	return s
+}
+
+// SetDataAccessRoleArn sets the DataAccessRoleArn field's value.
+func (s *StartEventsDetectionJobInput) SetDataAccessRoleArn(v string) *StartEventsDetectionJobInput {
+	s.DataAccessRoleArn = &v
+	return s
+}
+
+// SetInputDataConfig sets the InputDataConfig field's value.
+func (s *StartEventsDetectionJobInput) SetInputDataConfig(v *InputDataConfig) *StartEventsDetectionJobInput {
+	s.InputDataConfig = v
+	return s
+}
+
+// SetJobName sets the JobName field's value.
+func (s *StartEventsDetectionJobInput) SetJobName(v string) *StartEventsDetectionJobInput {
+	s.JobName = &v
+	return s
+}
+
+// SetLanguageCode sets the LanguageCode field's value.
+func (s *StartEventsDetectionJobInput) SetLanguageCode(v string) *StartEventsDetectionJobInput {
+	s.LanguageCode = &v
+	return s
+}
+
+// SetOutputDataConfig sets the OutputDataConfig field's value.
+func (s *StartEventsDetectionJobInput) SetOutputDataConfig(v *OutputDataConfig) *StartEventsDetectionJobInput {
+	s.OutputDataConfig = v
+	return s
+}
+
+// SetTags sets the Tags field's value.
+func (s *StartEventsDetectionJobInput) SetTags(v []*Tag) *StartEventsDetectionJobInput {
+	s.Tags = v
+	return s
+}
+
+// SetTargetEventTypes sets the TargetEventTypes field's value.
+func (s *StartEventsDetectionJobInput) SetTargetEventTypes(v []*string) *StartEventsDetectionJobInput {
+	s.TargetEventTypes = v
+	return s
+}
+
+type StartEventsDetectionJobOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The Amazon Resource Name (ARN) of the events detection job. It is a unique,
+	// fully qualified identifier for the job. It includes the AWS account, Region,
+	// and the job ID. The format of the ARN is as follows:
+	//
+	// arn:<partition>:comprehend:<region>:<account-id>:events-detection-job/<job-id>
+	//
+	// The following is an example job ARN:
+	//
+	// arn:aws:comprehend:us-west-2:111122223333:events-detection-job/1234abcd12ab34cd56ef1234567890ab
+	JobArn *string `type:"string"`
+
+	// An unique identifier for the request. If you don't set the client request
+	// token, Amazon Comprehend generates one.
+	JobId *string `min:"1" type:"string"`
+
+	// The status of the events detection job.
+	JobStatus *string `type:"string" enum:"JobStatus"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s StartEventsDetectionJobOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s StartEventsDetectionJobOutput) GoString() string {
+	return s.String()
+}
+
+// SetJobArn sets the JobArn field's value.
+func (s *StartEventsDetectionJobOutput) SetJobArn(v string) *StartEventsDetectionJobOutput {
+	s.JobArn = &v
+	return s
+}
+
+// SetJobId sets the JobId field's value.
+func (s *StartEventsDetectionJobOutput) SetJobId(v string) *StartEventsDetectionJobOutput {
+	s.JobId = &v
+	return s
+}
+
+// SetJobStatus sets the JobStatus field's value.
+func (s *StartEventsDetectionJobOutput) SetJobStatus(v string) *StartEventsDetectionJobOutput {
 	s.JobStatus = &v
 	return s
 }
@@ -13890,6 +17593,12 @@ type StartKeyPhrasesDetectionJobInput struct {
 	// OutputDataConfig is a required field
 	OutputDataConfig *OutputDataConfig `type:"structure" required:"true"`
 
+	// Tags to be associated with the key phrases detection job. A tag is a key-value
+	// pair that adds metadata to a resource used by Amazon Comprehend. For example,
+	// a tag with "Sales" as the key might be added to a resource to indicate its
+	// use by the sales department.
+	Tags []*Tag `type:"list"`
+
 	// ID for the AWS Key Management Service (KMS) key that Amazon Comprehend uses
 	// to encrypt data on the storage volume attached to the ML compute instance(s)
 	// that process the analysis job. The VolumeKmsKeyId can be either of the following
@@ -13906,12 +17615,20 @@ type StartKeyPhrasesDetectionJobInput struct {
 	VpcConfig *VpcConfig `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s StartKeyPhrasesDetectionJobInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s StartKeyPhrasesDetectionJobInput) GoString() string {
 	return s.String()
 }
@@ -13948,6 +17665,16 @@ func (s *StartKeyPhrasesDetectionJobInput) Validate() error {
 	if s.OutputDataConfig != nil {
 		if err := s.OutputDataConfig.Validate(); err != nil {
 			invalidParams.AddNested("OutputDataConfig", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.Tags != nil {
+		for i, v := range s.Tags {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "Tags", i), err.(request.ErrInvalidParams))
+			}
 		}
 	}
 	if s.VpcConfig != nil {
@@ -13998,6 +17725,12 @@ func (s *StartKeyPhrasesDetectionJobInput) SetOutputDataConfig(v *OutputDataConf
 	return s
 }
 
+// SetTags sets the Tags field's value.
+func (s *StartKeyPhrasesDetectionJobInput) SetTags(v []*Tag) *StartKeyPhrasesDetectionJobInput {
+	s.Tags = v
+	return s
+}
+
 // SetVolumeKmsKeyId sets the VolumeKmsKeyId field's value.
 func (s *StartKeyPhrasesDetectionJobInput) SetVolumeKmsKeyId(v string) *StartKeyPhrasesDetectionJobInput {
 	s.VolumeKmsKeyId = &v
@@ -14012,6 +17745,17 @@ func (s *StartKeyPhrasesDetectionJobInput) SetVpcConfig(v *VpcConfig) *StartKeyP
 
 type StartKeyPhrasesDetectionJobOutput struct {
 	_ struct{} `type:"structure"`
+
+	// The Amazon Resource Name (ARN) of the key phrase detection job. It is a unique,
+	// fully qualified identifier for the job. It includes the AWS account, Region,
+	// and the job ID. The format of the ARN is as follows:
+	//
+	// arn:<partition>:comprehend:<region>:<account-id>:key-phrases-detection-job/<job-id>
+	//
+	// The following is an example job ARN:
+	//
+	// arn:aws:comprehend:us-west-2:111122223333:key-phrases-detection-job/1234abcd12ab34cd56ef1234567890ab
+	JobArn *string `type:"string"`
 
 	// The identifier generated for the job. To get the status of a job, use this
 	// identifier with the operation.
@@ -14029,14 +17773,28 @@ type StartKeyPhrasesDetectionJobOutput struct {
 	JobStatus *string `type:"string" enum:"JobStatus"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s StartKeyPhrasesDetectionJobOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s StartKeyPhrasesDetectionJobOutput) GoString() string {
 	return s.String()
+}
+
+// SetJobArn sets the JobArn field's value.
+func (s *StartKeyPhrasesDetectionJobOutput) SetJobArn(v string) *StartKeyPhrasesDetectionJobOutput {
+	s.JobArn = &v
+	return s
 }
 
 // SetJobId sets the JobId field's value.
@@ -14095,14 +17853,28 @@ type StartPiiEntitiesDetectionJobInput struct {
 	// In that case, you must provide a RedactionConfig definition that includes
 	// the PiiEntityTypes parameter.
 	RedactionConfig *RedactionConfig `type:"structure"`
+
+	// Tags to be associated with the PII entities detection job. A tag is a key-value
+	// pair that adds metadata to a resource used by Amazon Comprehend. For example,
+	// a tag with "Sales" as the key might be added to a resource to indicate its
+	// use by the sales department.
+	Tags []*Tag `type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s StartPiiEntitiesDetectionJobInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s StartPiiEntitiesDetectionJobInput) GoString() string {
 	return s.String()
 }
@@ -14147,6 +17919,16 @@ func (s *StartPiiEntitiesDetectionJobInput) Validate() error {
 	if s.RedactionConfig != nil {
 		if err := s.RedactionConfig.Validate(); err != nil {
 			invalidParams.AddNested("RedactionConfig", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.Tags != nil {
+		for i, v := range s.Tags {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "Tags", i), err.(request.ErrInvalidParams))
+			}
 		}
 	}
 
@@ -14204,8 +17986,25 @@ func (s *StartPiiEntitiesDetectionJobInput) SetRedactionConfig(v *RedactionConfi
 	return s
 }
 
+// SetTags sets the Tags field's value.
+func (s *StartPiiEntitiesDetectionJobInput) SetTags(v []*Tag) *StartPiiEntitiesDetectionJobInput {
+	s.Tags = v
+	return s
+}
+
 type StartPiiEntitiesDetectionJobOutput struct {
 	_ struct{} `type:"structure"`
+
+	// The Amazon Resource Name (ARN) of the PII entity detection job. It is a unique,
+	// fully qualified identifier for the job. It includes the AWS account, Region,
+	// and the job ID. The format of the ARN is as follows:
+	//
+	// arn:<partition>:comprehend:<region>:<account-id>:pii-entities-detection-job/<job-id>
+	//
+	// The following is an example job ARN:
+	//
+	// arn:aws:comprehend:us-west-2:111122223333:pii-entities-detection-job/1234abcd12ab34cd56ef1234567890ab
+	JobArn *string `type:"string"`
 
 	// The identifier generated for the job.
 	JobId *string `min:"1" type:"string"`
@@ -14214,14 +18013,28 @@ type StartPiiEntitiesDetectionJobOutput struct {
 	JobStatus *string `type:"string" enum:"JobStatus"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s StartPiiEntitiesDetectionJobOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s StartPiiEntitiesDetectionJobOutput) GoString() string {
 	return s.String()
+}
+
+// SetJobArn sets the JobArn field's value.
+func (s *StartPiiEntitiesDetectionJobOutput) SetJobArn(v string) *StartPiiEntitiesDetectionJobOutput {
+	s.JobArn = &v
+	return s
 }
 
 // SetJobId sets the JobId field's value.
@@ -14270,6 +18083,12 @@ type StartSentimentDetectionJobInput struct {
 	// OutputDataConfig is a required field
 	OutputDataConfig *OutputDataConfig `type:"structure" required:"true"`
 
+	// Tags to be associated with the sentiment detection job. A tag is a key-value
+	// pair that adds metadata to a resource used by Amazon Comprehend. For example,
+	// a tag with "Sales" as the key might be added to a resource to indicate its
+	// use by the sales department.
+	Tags []*Tag `type:"list"`
+
 	// ID for the AWS Key Management Service (KMS) key that Amazon Comprehend uses
 	// to encrypt data on the storage volume attached to the ML compute instance(s)
 	// that process the analysis job. The VolumeKmsKeyId can be either of the following
@@ -14286,12 +18105,20 @@ type StartSentimentDetectionJobInput struct {
 	VpcConfig *VpcConfig `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s StartSentimentDetectionJobInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s StartSentimentDetectionJobInput) GoString() string {
 	return s.String()
 }
@@ -14328,6 +18155,16 @@ func (s *StartSentimentDetectionJobInput) Validate() error {
 	if s.OutputDataConfig != nil {
 		if err := s.OutputDataConfig.Validate(); err != nil {
 			invalidParams.AddNested("OutputDataConfig", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.Tags != nil {
+		for i, v := range s.Tags {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "Tags", i), err.(request.ErrInvalidParams))
+			}
 		}
 	}
 	if s.VpcConfig != nil {
@@ -14378,6 +18215,12 @@ func (s *StartSentimentDetectionJobInput) SetOutputDataConfig(v *OutputDataConfi
 	return s
 }
 
+// SetTags sets the Tags field's value.
+func (s *StartSentimentDetectionJobInput) SetTags(v []*Tag) *StartSentimentDetectionJobInput {
+	s.Tags = v
+	return s
+}
+
 // SetVolumeKmsKeyId sets the VolumeKmsKeyId field's value.
 func (s *StartSentimentDetectionJobInput) SetVolumeKmsKeyId(v string) *StartSentimentDetectionJobInput {
 	s.VolumeKmsKeyId = &v
@@ -14392,6 +18235,17 @@ func (s *StartSentimentDetectionJobInput) SetVpcConfig(v *VpcConfig) *StartSenti
 
 type StartSentimentDetectionJobOutput struct {
 	_ struct{} `type:"structure"`
+
+	// The Amazon Resource Name (ARN) of the sentiment detection job. It is a unique,
+	// fully qualified identifier for the job. It includes the AWS account, Region,
+	// and the job ID. The format of the ARN is as follows:
+	//
+	// arn:<partition>:comprehend:<region>:<account-id>:sentiment-detection-job/<job-id>
+	//
+	// The following is an example job ARN:
+	//
+	// arn:aws:comprehend:us-west-2:111122223333:sentiment-detection-job/1234abcd12ab34cd56ef1234567890ab
+	JobArn *string `type:"string"`
 
 	// The identifier generated for the job. To get the status of a job, use this
 	// identifier with the operation.
@@ -14409,14 +18263,28 @@ type StartSentimentDetectionJobOutput struct {
 	JobStatus *string `type:"string" enum:"JobStatus"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s StartSentimentDetectionJobOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s StartSentimentDetectionJobOutput) GoString() string {
 	return s.String()
+}
+
+// SetJobArn sets the JobArn field's value.
+func (s *StartSentimentDetectionJobOutput) SetJobArn(v string) *StartSentimentDetectionJobOutput {
+	s.JobArn = &v
+	return s
 }
 
 // SetJobId sets the JobId field's value.
@@ -14464,6 +18332,12 @@ type StartTopicsDetectionJobInput struct {
 	// OutputDataConfig is a required field
 	OutputDataConfig *OutputDataConfig `type:"structure" required:"true"`
 
+	// Tags to be associated with the topics detection job. A tag is a key-value
+	// pair that adds metadata to a resource used by Amazon Comprehend. For example,
+	// a tag with "Sales" as the key might be added to a resource to indicate its
+	// use by the sales department.
+	Tags []*Tag `type:"list"`
+
 	// ID for the AWS Key Management Service (KMS) key that Amazon Comprehend uses
 	// to encrypt data on the storage volume attached to the ML compute instance(s)
 	// that process the analysis job. The VolumeKmsKeyId can be either of the following
@@ -14480,12 +18354,20 @@ type StartTopicsDetectionJobInput struct {
 	VpcConfig *VpcConfig `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s StartTopicsDetectionJobInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s StartTopicsDetectionJobInput) GoString() string {
 	return s.String()
 }
@@ -14522,6 +18404,16 @@ func (s *StartTopicsDetectionJobInput) Validate() error {
 	if s.OutputDataConfig != nil {
 		if err := s.OutputDataConfig.Validate(); err != nil {
 			invalidParams.AddNested("OutputDataConfig", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.Tags != nil {
+		for i, v := range s.Tags {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "Tags", i), err.(request.ErrInvalidParams))
+			}
 		}
 	}
 	if s.VpcConfig != nil {
@@ -14572,6 +18464,12 @@ func (s *StartTopicsDetectionJobInput) SetOutputDataConfig(v *OutputDataConfig) 
 	return s
 }
 
+// SetTags sets the Tags field's value.
+func (s *StartTopicsDetectionJobInput) SetTags(v []*Tag) *StartTopicsDetectionJobInput {
+	s.Tags = v
+	return s
+}
+
 // SetVolumeKmsKeyId sets the VolumeKmsKeyId field's value.
 func (s *StartTopicsDetectionJobInput) SetVolumeKmsKeyId(v string) *StartTopicsDetectionJobInput {
 	s.VolumeKmsKeyId = &v
@@ -14586,6 +18484,17 @@ func (s *StartTopicsDetectionJobInput) SetVpcConfig(v *VpcConfig) *StartTopicsDe
 
 type StartTopicsDetectionJobOutput struct {
 	_ struct{} `type:"structure"`
+
+	// The Amazon Resource Name (ARN) of the topics detection job. It is a unique,
+	// fully qualified identifier for the job. It includes the AWS account, Region,
+	// and the job ID. The format of the ARN is as follows:
+	//
+	// arn:<partition>:comprehend:<region>:<account-id>:topics-detection-job/<job-id>
+	//
+	// The following is an example job ARN:
+	//
+	// arn:aws:comprehend:us-west-2:111122223333:document-classification-job/1234abcd12ab34cd56ef1234567890ab
+	JobArn *string `type:"string"`
 
 	// The identifier generated for the job. To get the status of the job, use this
 	// identifier with the DescribeTopicDetectionJob operation.
@@ -14604,14 +18513,28 @@ type StartTopicsDetectionJobOutput struct {
 	JobStatus *string `type:"string" enum:"JobStatus"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s StartTopicsDetectionJobOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s StartTopicsDetectionJobOutput) GoString() string {
 	return s.String()
+}
+
+// SetJobArn sets the JobArn field's value.
+func (s *StartTopicsDetectionJobOutput) SetJobArn(v string) *StartTopicsDetectionJobOutput {
+	s.JobArn = &v
+	return s
 }
 
 // SetJobId sets the JobId field's value.
@@ -14635,12 +18558,20 @@ type StopDominantLanguageDetectionJobInput struct {
 	JobId *string `min:"1" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s StopDominantLanguageDetectionJobInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s StopDominantLanguageDetectionJobInput) GoString() string {
 	return s.String()
 }
@@ -14678,12 +18609,20 @@ type StopDominantLanguageDetectionJobOutput struct {
 	JobStatus *string `type:"string" enum:"JobStatus"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s StopDominantLanguageDetectionJobOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s StopDominantLanguageDetectionJobOutput) GoString() string {
 	return s.String()
 }
@@ -14709,12 +18648,20 @@ type StopEntitiesDetectionJobInput struct {
 	JobId *string `min:"1" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s StopEntitiesDetectionJobInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s StopEntitiesDetectionJobInput) GoString() string {
 	return s.String()
 }
@@ -14752,12 +18699,20 @@ type StopEntitiesDetectionJobOutput struct {
 	JobStatus *string `type:"string" enum:"JobStatus"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s StopEntitiesDetectionJobOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s StopEntitiesDetectionJobOutput) GoString() string {
 	return s.String()
 }
@@ -14774,6 +18729,95 @@ func (s *StopEntitiesDetectionJobOutput) SetJobStatus(v string) *StopEntitiesDet
 	return s
 }
 
+type StopEventsDetectionJobInput struct {
+	_ struct{} `type:"structure"`
+
+	// The identifier of the events detection job to stop.
+	//
+	// JobId is a required field
+	JobId *string `min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s StopEventsDetectionJobInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s StopEventsDetectionJobInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *StopEventsDetectionJobInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "StopEventsDetectionJobInput"}
+	if s.JobId == nil {
+		invalidParams.Add(request.NewErrParamRequired("JobId"))
+	}
+	if s.JobId != nil && len(*s.JobId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("JobId", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetJobId sets the JobId field's value.
+func (s *StopEventsDetectionJobInput) SetJobId(v string) *StopEventsDetectionJobInput {
+	s.JobId = &v
+	return s
+}
+
+type StopEventsDetectionJobOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The identifier of the events detection job to stop.
+	JobId *string `min:"1" type:"string"`
+
+	// The status of the events detection job.
+	JobStatus *string `type:"string" enum:"JobStatus"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s StopEventsDetectionJobOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s StopEventsDetectionJobOutput) GoString() string {
+	return s.String()
+}
+
+// SetJobId sets the JobId field's value.
+func (s *StopEventsDetectionJobOutput) SetJobId(v string) *StopEventsDetectionJobOutput {
+	s.JobId = &v
+	return s
+}
+
+// SetJobStatus sets the JobStatus field's value.
+func (s *StopEventsDetectionJobOutput) SetJobStatus(v string) *StopEventsDetectionJobOutput {
+	s.JobStatus = &v
+	return s
+}
+
 type StopKeyPhrasesDetectionJobInput struct {
 	_ struct{} `type:"structure"`
 
@@ -14783,12 +18827,20 @@ type StopKeyPhrasesDetectionJobInput struct {
 	JobId *string `min:"1" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s StopKeyPhrasesDetectionJobInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s StopKeyPhrasesDetectionJobInput) GoString() string {
 	return s.String()
 }
@@ -14826,12 +18878,20 @@ type StopKeyPhrasesDetectionJobOutput struct {
 	JobStatus *string `type:"string" enum:"JobStatus"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s StopKeyPhrasesDetectionJobOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s StopKeyPhrasesDetectionJobOutput) GoString() string {
 	return s.String()
 }
@@ -14857,12 +18917,20 @@ type StopPiiEntitiesDetectionJobInput struct {
 	JobId *string `min:"1" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s StopPiiEntitiesDetectionJobInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s StopPiiEntitiesDetectionJobInput) GoString() string {
 	return s.String()
 }
@@ -14899,12 +18967,20 @@ type StopPiiEntitiesDetectionJobOutput struct {
 	JobStatus *string `type:"string" enum:"JobStatus"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s StopPiiEntitiesDetectionJobOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s StopPiiEntitiesDetectionJobOutput) GoString() string {
 	return s.String()
 }
@@ -14930,12 +19006,20 @@ type StopSentimentDetectionJobInput struct {
 	JobId *string `min:"1" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s StopSentimentDetectionJobInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s StopSentimentDetectionJobInput) GoString() string {
 	return s.String()
 }
@@ -14973,12 +19057,20 @@ type StopSentimentDetectionJobOutput struct {
 	JobStatus *string `type:"string" enum:"JobStatus"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s StopSentimentDetectionJobOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s StopSentimentDetectionJobOutput) GoString() string {
 	return s.String()
 }
@@ -15005,12 +19097,20 @@ type StopTrainingDocumentClassifierInput struct {
 	DocumentClassifierArn *string `type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s StopTrainingDocumentClassifierInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s StopTrainingDocumentClassifierInput) GoString() string {
 	return s.String()
 }
@@ -15038,12 +19138,20 @@ type StopTrainingDocumentClassifierOutput struct {
 	_ struct{} `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s StopTrainingDocumentClassifierOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s StopTrainingDocumentClassifierOutput) GoString() string {
 	return s.String()
 }
@@ -15058,12 +19166,20 @@ type StopTrainingEntityRecognizerInput struct {
 	EntityRecognizerArn *string `type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s StopTrainingEntityRecognizerInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s StopTrainingEntityRecognizerInput) GoString() string {
 	return s.String()
 }
@@ -15091,12 +19207,20 @@ type StopTrainingEntityRecognizerOutput struct {
 	_ struct{} `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s StopTrainingEntityRecognizerOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s StopTrainingEntityRecognizerOutput) GoString() string {
 	return s.String()
 }
@@ -15126,12 +19250,20 @@ type SyntaxToken struct {
 	TokenId *int64 `type:"integer"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s SyntaxToken) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s SyntaxToken) GoString() string {
 	return s.String()
 }
@@ -15187,12 +19319,20 @@ type Tag struct {
 	Value *string `type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s Tag) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s Tag) GoString() string {
 	return s.String()
 }
@@ -15242,12 +19382,20 @@ type TagResourceInput struct {
 	Tags []*Tag `type:"list" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s TagResourceInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s TagResourceInput) GoString() string {
 	return s.String()
 }
@@ -15294,12 +19442,20 @@ type TagResourceOutput struct {
 	_ struct{} `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s TagResourceOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s TagResourceOutput) GoString() string {
 	return s.String()
 }
@@ -15312,12 +19468,20 @@ type TextSizeLimitExceededException struct {
 	Message_ *string `locationName:"Message" min:"1" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s TextSizeLimitExceededException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s TextSizeLimitExceededException) GoString() string {
 	return s.String()
 }
@@ -15368,12 +19532,20 @@ type TooManyRequestsException struct {
 	Message_ *string `locationName:"Message" min:"1" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s TooManyRequestsException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s TooManyRequestsException) GoString() string {
 	return s.String()
 }
@@ -15425,12 +19597,20 @@ type TooManyTagKeysException struct {
 	Message_ *string `locationName:"Message" min:"1" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s TooManyTagKeysException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s TooManyTagKeysException) GoString() string {
 	return s.String()
 }
@@ -15483,12 +19663,20 @@ type TooManyTagsException struct {
 	Message_ *string `locationName:"Message" min:"1" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s TooManyTagsException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s TooManyTagsException) GoString() string {
 	return s.String()
 }
@@ -15553,12 +19741,20 @@ type TopicsDetectionJobFilter struct {
 	SubmitTimeBefore *time.Time `type:"timestamp"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s TopicsDetectionJobFilter) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s TopicsDetectionJobFilter) GoString() string {
 	return s.String()
 }
@@ -15615,6 +19811,17 @@ type TopicsDetectionJobProperties struct {
 	// job.
 	InputDataConfig *InputDataConfig `type:"structure"`
 
+	// The Amazon Resource Name (ARN) of the topics detection job. It is a unique,
+	// fully qualified identifier for the job. It includes the AWS account, Region,
+	// and the job ID. The format of the ARN is as follows:
+	//
+	// arn:<partition>:comprehend:<region>:<account-id>:topics-detection-job/<job-id>
+	//
+	// The following is an example job ARN:
+	//
+	// arn:aws:comprehend:us-west-2:111122223333:topics-detection-job/1234abcd12ab34cd56ef1234567890ab
+	JobArn *string `type:"string"`
+
 	// The identifier assigned to the topic detection job.
 	JobId *string `min:"1" type:"string"`
 
@@ -15655,12 +19862,20 @@ type TopicsDetectionJobProperties struct {
 	VpcConfig *VpcConfig `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s TopicsDetectionJobProperties) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s TopicsDetectionJobProperties) GoString() string {
 	return s.String()
 }
@@ -15680,6 +19895,12 @@ func (s *TopicsDetectionJobProperties) SetEndTime(v time.Time) *TopicsDetectionJ
 // SetInputDataConfig sets the InputDataConfig field's value.
 func (s *TopicsDetectionJobProperties) SetInputDataConfig(v *InputDataConfig) *TopicsDetectionJobProperties {
 	s.InputDataConfig = v
+	return s
+}
+
+// SetJobArn sets the JobArn field's value.
+func (s *TopicsDetectionJobProperties) SetJobArn(v string) *TopicsDetectionJobProperties {
+	s.JobArn = &v
 	return s
 }
 
@@ -15737,11 +19958,9 @@ func (s *TopicsDetectionJobProperties) SetVpcConfig(v *VpcConfig) *TopicsDetecti
 	return s
 }
 
-// Amazon Comprehend can't process the language of the input text. For all custom
-// entity recognition APIs (such as CreateEntityRecognizer), only English, Spanish,
-// French, Italian, German, or Portuguese are accepted. For most other APIs,
-// such as those for Custom Classification, Amazon Comprehend accepts text in
-// all supported languages. For a list of supported languages, see supported-languages.
+// Amazon Comprehend can't process the language of the input text. For custom
+// entity recognition APIs, only English, Spanish, French, Italian, German,
+// or Portuguese are accepted. For a list of supported languages, see supported-languages.
 type UnsupportedLanguageException struct {
 	_            struct{}                  `type:"structure"`
 	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
@@ -15749,12 +19968,20 @@ type UnsupportedLanguageException struct {
 	Message_ *string `locationName:"Message" min:"1" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UnsupportedLanguageException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UnsupportedLanguageException) GoString() string {
 	return s.String()
 }
@@ -15815,12 +20042,20 @@ type UntagResourceInput struct {
 	TagKeys []*string `type:"list" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UntagResourceInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UntagResourceInput) GoString() string {
 	return s.String()
 }
@@ -15857,12 +20092,20 @@ type UntagResourceOutput struct {
 	_ struct{} `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UntagResourceOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UntagResourceOutput) GoString() string {
 	return s.String()
 }
@@ -15870,12 +20113,17 @@ func (s UntagResourceOutput) GoString() string {
 type UpdateEndpointInput struct {
 	_ struct{} `type:"structure"`
 
+	// Data access role ARN to use in case the new model is encrypted with a customer
+	// CMK.
+	DesiredDataAccessRoleArn *string `min:"20" type:"string"`
+
 	// The desired number of inference units to be used by the model using this
 	// endpoint. Each inference unit represents of a throughput of 100 characters
 	// per second.
-	//
-	// DesiredInferenceUnits is a required field
-	DesiredInferenceUnits *int64 `min:"1" type:"integer" required:"true"`
+	DesiredInferenceUnits *int64 `min:"1" type:"integer"`
+
+	// The ARN of the new model to use when updating an existing endpoint.
+	DesiredModelArn *string `type:"string"`
 
 	// The Amazon Resource Number (ARN) of the endpoint being updated.
 	//
@@ -15883,12 +20131,20 @@ type UpdateEndpointInput struct {
 	EndpointArn *string `type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpdateEndpointInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpdateEndpointInput) GoString() string {
 	return s.String()
 }
@@ -15896,8 +20152,8 @@ func (s UpdateEndpointInput) GoString() string {
 // Validate inspects the fields of the type to determine if they are valid.
 func (s *UpdateEndpointInput) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "UpdateEndpointInput"}
-	if s.DesiredInferenceUnits == nil {
-		invalidParams.Add(request.NewErrParamRequired("DesiredInferenceUnits"))
+	if s.DesiredDataAccessRoleArn != nil && len(*s.DesiredDataAccessRoleArn) < 20 {
+		invalidParams.Add(request.NewErrParamMinLen("DesiredDataAccessRoleArn", 20))
 	}
 	if s.DesiredInferenceUnits != nil && *s.DesiredInferenceUnits < 1 {
 		invalidParams.Add(request.NewErrParamMinValue("DesiredInferenceUnits", 1))
@@ -15912,9 +20168,21 @@ func (s *UpdateEndpointInput) Validate() error {
 	return nil
 }
 
+// SetDesiredDataAccessRoleArn sets the DesiredDataAccessRoleArn field's value.
+func (s *UpdateEndpointInput) SetDesiredDataAccessRoleArn(v string) *UpdateEndpointInput {
+	s.DesiredDataAccessRoleArn = &v
+	return s
+}
+
 // SetDesiredInferenceUnits sets the DesiredInferenceUnits field's value.
 func (s *UpdateEndpointInput) SetDesiredInferenceUnits(v int64) *UpdateEndpointInput {
 	s.DesiredInferenceUnits = &v
+	return s
+}
+
+// SetDesiredModelArn sets the DesiredModelArn field's value.
+func (s *UpdateEndpointInput) SetDesiredModelArn(v string) *UpdateEndpointInput {
+	s.DesiredModelArn = &v
 	return s
 }
 
@@ -15928,18 +20196,26 @@ type UpdateEndpointOutput struct {
 	_ struct{} `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpdateEndpointOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpdateEndpointOutput) GoString() string {
 	return s.String()
 }
 
 // Configuration parameters for an optional private Virtual Private Cloud (VPC)
-// containing the resources you are using for the job. For For more information,
+// containing the resources you are using for the job. For more information,
 // see Amazon VPC (https://docs.aws.amazon.com/vpc/latest/userguide/what-is-amazon-vpc.html).
 type VpcConfig struct {
 	_ struct{} `type:"structure"`
@@ -15964,12 +20240,20 @@ type VpcConfig struct {
 	Subnets []*string `min:"1" type:"list" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s VpcConfig) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s VpcConfig) GoString() string {
 	return s.String()
 }
@@ -16009,6 +20293,22 @@ func (s *VpcConfig) SetSubnets(v []*string) *VpcConfig {
 }
 
 const (
+	// AugmentedManifestsDocumentTypeFormatPlainTextDocument is a AugmentedManifestsDocumentTypeFormat enum value
+	AugmentedManifestsDocumentTypeFormatPlainTextDocument = "PLAIN_TEXT_DOCUMENT"
+
+	// AugmentedManifestsDocumentTypeFormatSemiStructuredDocument is a AugmentedManifestsDocumentTypeFormat enum value
+	AugmentedManifestsDocumentTypeFormatSemiStructuredDocument = "SEMI_STRUCTURED_DOCUMENT"
+)
+
+// AugmentedManifestsDocumentTypeFormat_Values returns all elements of the AugmentedManifestsDocumentTypeFormat enum
+func AugmentedManifestsDocumentTypeFormat_Values() []string {
+	return []string{
+		AugmentedManifestsDocumentTypeFormatPlainTextDocument,
+		AugmentedManifestsDocumentTypeFormatSemiStructuredDocument,
+	}
+}
+
+const (
 	// DocumentClassifierDataFormatComprehendCsv is a DocumentClassifierDataFormat enum value
 	DocumentClassifierDataFormatComprehendCsv = "COMPREHEND_CSV"
 
@@ -16037,6 +20337,62 @@ func DocumentClassifierMode_Values() []string {
 	return []string{
 		DocumentClassifierModeMultiClass,
 		DocumentClassifierModeMultiLabel,
+	}
+}
+
+const (
+	// DocumentReadActionTextractDetectDocumentText is a DocumentReadAction enum value
+	DocumentReadActionTextractDetectDocumentText = "TEXTRACT_DETECT_DOCUMENT_TEXT"
+
+	// DocumentReadActionTextractAnalyzeDocument is a DocumentReadAction enum value
+	DocumentReadActionTextractAnalyzeDocument = "TEXTRACT_ANALYZE_DOCUMENT"
+)
+
+// DocumentReadAction_Values returns all elements of the DocumentReadAction enum
+func DocumentReadAction_Values() []string {
+	return []string{
+		DocumentReadActionTextractDetectDocumentText,
+		DocumentReadActionTextractAnalyzeDocument,
+	}
+}
+
+// A list of the types of analyses to perform. This field specifies what feature
+// types need to be extracted from the document where entity recognition is
+// expected.
+//
+//    * TABLES - Add TABLES to the list to return information about the tables
+//    that are detected in the input document.
+//
+//    * FORMS - Add FORMS to return detected form data.
+const (
+	// DocumentReadFeatureTypesTables is a DocumentReadFeatureTypes enum value
+	DocumentReadFeatureTypesTables = "TABLES"
+
+	// DocumentReadFeatureTypesForms is a DocumentReadFeatureTypes enum value
+	DocumentReadFeatureTypesForms = "FORMS"
+)
+
+// DocumentReadFeatureTypes_Values returns all elements of the DocumentReadFeatureTypes enum
+func DocumentReadFeatureTypes_Values() []string {
+	return []string{
+		DocumentReadFeatureTypesTables,
+		DocumentReadFeatureTypesForms,
+	}
+}
+
+const (
+	// DocumentReadModeServiceDefault is a DocumentReadMode enum value
+	DocumentReadModeServiceDefault = "SERVICE_DEFAULT"
+
+	// DocumentReadModeForceDocumentReadAction is a DocumentReadMode enum value
+	DocumentReadModeForceDocumentReadAction = "FORCE_DOCUMENT_READ_ACTION"
+)
+
+// DocumentReadMode_Values returns all elements of the DocumentReadMode enum
+func DocumentReadMode_Values() []string {
+	return []string{
+		DocumentReadModeServiceDefault,
+		DocumentReadModeForceDocumentReadAction,
 	}
 }
 
@@ -16501,6 +20857,22 @@ func SentimentType_Values() []string {
 		SentimentTypeNegative,
 		SentimentTypeNeutral,
 		SentimentTypeMixed,
+	}
+}
+
+const (
+	// SplitTrain is a Split enum value
+	SplitTrain = "TRAIN"
+
+	// SplitTest is a Split enum value
+	SplitTest = "TEST"
+)
+
+// Split_Values returns all elements of the Split enum
+func Split_Values() []string {
+	return []string{
+		SplitTrain,
+		SplitTest,
 	}
 }
 

@@ -25,9 +25,9 @@ func parseTime(layout, value string) *time.Time {
 	return &t
 }
 
-// To cancel deletion of a customer master key (CMK)
+// To cancel deletion of a KMS key
 //
-// The following example cancels deletion of the specified CMK.
+// The following example cancels deletion of the specified KMS key.
 func ExampleKMS_CancelKeyDeletion_shared00() {
 	svc := kms.New(session.New())
 	input := &kms.CancelKeyDeletionInput{
@@ -62,9 +62,48 @@ func ExampleKMS_CancelKeyDeletion_shared00() {
 	fmt.Println(result)
 }
 
+// To connect a custom key store to its CloudHSM cluster
+//
+// This example connects an AWS KMS custom key store to its AWS CloudHSM cluster. This
+// operation does not return any data. To verify that the custom key store is connected,
+// use the <code>DescribeCustomKeyStores</code> operation.
+func ExampleKMS_ConnectCustomKeyStore_shared00() {
+	svc := kms.New(session.New())
+	input := &kms.ConnectCustomKeyStoreInput{
+		CustomKeyStoreId: aws.String("cks-1234567890abcdef0"),
+	}
+
+	result, err := svc.ConnectCustomKeyStore(input)
+	if err != nil {
+		if aerr, ok := err.(awserr.Error); ok {
+			switch aerr.Code() {
+			case kms.ErrCodeCloudHsmClusterNotActiveException:
+				fmt.Println(kms.ErrCodeCloudHsmClusterNotActiveException, aerr.Error())
+			case kms.ErrCodeCustomKeyStoreInvalidStateException:
+				fmt.Println(kms.ErrCodeCustomKeyStoreInvalidStateException, aerr.Error())
+			case kms.ErrCodeCustomKeyStoreNotFoundException:
+				fmt.Println(kms.ErrCodeCustomKeyStoreNotFoundException, aerr.Error())
+			case kms.ErrCodeInternalException:
+				fmt.Println(kms.ErrCodeInternalException, aerr.Error())
+			case kms.ErrCodeCloudHsmClusterInvalidConfigurationException:
+				fmt.Println(kms.ErrCodeCloudHsmClusterInvalidConfigurationException, aerr.Error())
+			default:
+				fmt.Println(aerr.Error())
+			}
+		} else {
+			// Print the error, cast err to awserr.Error to get the Code and
+			// Message from an error.
+			fmt.Println(err.Error())
+		}
+		return
+	}
+
+	fmt.Println(result)
+}
+
 // To create an alias
 //
-// The following example creates an alias for the specified customer master key (CMK).
+// The following example creates an alias for the specified KMS key.
 func ExampleKMS_CreateAlias_shared00() {
 	svc := kms.New(session.New())
 	input := &kms.CreateAliasInput{
@@ -104,10 +143,54 @@ func ExampleKMS_CreateAlias_shared00() {
 	fmt.Println(result)
 }
 
+// To create an AWS CloudHSM custom key store
+//
+// This example creates a custom key store that is associated with an AWS CloudHSM cluster.
+func ExampleKMS_CreateCustomKeyStore_shared00() {
+	svc := kms.New(session.New())
+	input := &kms.CreateCustomKeyStoreInput{
+		CloudHsmClusterId:      aws.String("cluster-1a23b4cdefg"),
+		CustomKeyStoreName:     aws.String("ExampleKeyStore"),
+		KeyStorePassword:       aws.String("kmsPswd"),
+		TrustAnchorCertificate: aws.String("<certificate-goes-here>"),
+	}
+
+	result, err := svc.CreateCustomKeyStore(input)
+	if err != nil {
+		if aerr, ok := err.(awserr.Error); ok {
+			switch aerr.Code() {
+			case kms.ErrCodeCloudHsmClusterInUseException:
+				fmt.Println(kms.ErrCodeCloudHsmClusterInUseException, aerr.Error())
+			case kms.ErrCodeCustomKeyStoreNameInUseException:
+				fmt.Println(kms.ErrCodeCustomKeyStoreNameInUseException, aerr.Error())
+			case kms.ErrCodeCloudHsmClusterNotFoundException:
+				fmt.Println(kms.ErrCodeCloudHsmClusterNotFoundException, aerr.Error())
+			case kms.ErrCodeInternalException:
+				fmt.Println(kms.ErrCodeInternalException, aerr.Error())
+			case kms.ErrCodeCloudHsmClusterNotActiveException:
+				fmt.Println(kms.ErrCodeCloudHsmClusterNotActiveException, aerr.Error())
+			case kms.ErrCodeIncorrectTrustAnchorException:
+				fmt.Println(kms.ErrCodeIncorrectTrustAnchorException, aerr.Error())
+			case kms.ErrCodeCloudHsmClusterInvalidConfigurationException:
+				fmt.Println(kms.ErrCodeCloudHsmClusterInvalidConfigurationException, aerr.Error())
+			default:
+				fmt.Println(aerr.Error())
+			}
+		} else {
+			// Print the error, cast err to awserr.Error to get the Code and
+			// Message from an error.
+			fmt.Println(err.Error())
+		}
+		return
+	}
+
+	fmt.Println(result)
+}
+
 // To create a grant
 //
 // The following example creates a grant that allows the specified IAM role to encrypt
-// data with the specified customer master key (CMK).
+// data with the specified KMS key.
 func ExampleKMS_CreateGrant_shared00() {
 	svc := kms.New(session.New())
 	input := &kms.CreateGrantInput{
@@ -153,18 +236,261 @@ func ExampleKMS_CreateGrant_shared00() {
 	fmt.Println(result)
 }
 
-// To create a customer master key (CMK)
+// To create a KMS key
 //
-// The following example creates a CMK.
+// The following example creates a symmetric KMS key for encryption and decryption.
+// No parameters are required for this operation.
 func ExampleKMS_CreateKey_shared00() {
 	svc := kms.New(session.New())
+	input := &kms.CreateKeyInput{}
+
+	result, err := svc.CreateKey(input)
+	if err != nil {
+		if aerr, ok := err.(awserr.Error); ok {
+			switch aerr.Code() {
+			case kms.ErrCodeMalformedPolicyDocumentException:
+				fmt.Println(kms.ErrCodeMalformedPolicyDocumentException, aerr.Error())
+			case kms.ErrCodeDependencyTimeoutException:
+				fmt.Println(kms.ErrCodeDependencyTimeoutException, aerr.Error())
+			case kms.ErrCodeInvalidArnException:
+				fmt.Println(kms.ErrCodeInvalidArnException, aerr.Error())
+			case kms.ErrCodeUnsupportedOperationException:
+				fmt.Println(kms.ErrCodeUnsupportedOperationException, aerr.Error())
+			case kms.ErrCodeInternalException:
+				fmt.Println(kms.ErrCodeInternalException, aerr.Error())
+			case kms.ErrCodeLimitExceededException:
+				fmt.Println(kms.ErrCodeLimitExceededException, aerr.Error())
+			case kms.ErrCodeTagException:
+				fmt.Println(kms.ErrCodeTagException, aerr.Error())
+			case kms.ErrCodeCustomKeyStoreNotFoundException:
+				fmt.Println(kms.ErrCodeCustomKeyStoreNotFoundException, aerr.Error())
+			case kms.ErrCodeCustomKeyStoreInvalidStateException:
+				fmt.Println(kms.ErrCodeCustomKeyStoreInvalidStateException, aerr.Error())
+			case kms.ErrCodeCloudHsmClusterInvalidConfigurationException:
+				fmt.Println(kms.ErrCodeCloudHsmClusterInvalidConfigurationException, aerr.Error())
+			default:
+				fmt.Println(aerr.Error())
+			}
+		} else {
+			// Print the error, cast err to awserr.Error to get the Code and
+			// Message from an error.
+			fmt.Println(err.Error())
+		}
+		return
+	}
+
+	fmt.Println(result)
+}
+
+// To create an asymmetric RSA KMS key for encryption and decryption
+//
+// This example creates a KMS key that contains an asymmetric RSA key pair for encryption
+// and decryption. The key spec and key usage can't be changed after the key is created.
+func ExampleKMS_CreateKey_shared01() {
+	svc := kms.New(session.New())
 	input := &kms.CreateKeyInput{
-		Tags: []*kms.Tag{
-			{
-				TagKey:   aws.String("CreatedBy"),
-				TagValue: aws.String("ExampleUser"),
-			},
-		},
+		KeySpec:  aws.String("RSA_4096"),
+		KeyUsage: aws.String("ENCRYPT_DECRYPT"),
+	}
+
+	result, err := svc.CreateKey(input)
+	if err != nil {
+		if aerr, ok := err.(awserr.Error); ok {
+			switch aerr.Code() {
+			case kms.ErrCodeMalformedPolicyDocumentException:
+				fmt.Println(kms.ErrCodeMalformedPolicyDocumentException, aerr.Error())
+			case kms.ErrCodeDependencyTimeoutException:
+				fmt.Println(kms.ErrCodeDependencyTimeoutException, aerr.Error())
+			case kms.ErrCodeInvalidArnException:
+				fmt.Println(kms.ErrCodeInvalidArnException, aerr.Error())
+			case kms.ErrCodeUnsupportedOperationException:
+				fmt.Println(kms.ErrCodeUnsupportedOperationException, aerr.Error())
+			case kms.ErrCodeInternalException:
+				fmt.Println(kms.ErrCodeInternalException, aerr.Error())
+			case kms.ErrCodeLimitExceededException:
+				fmt.Println(kms.ErrCodeLimitExceededException, aerr.Error())
+			case kms.ErrCodeTagException:
+				fmt.Println(kms.ErrCodeTagException, aerr.Error())
+			case kms.ErrCodeCustomKeyStoreNotFoundException:
+				fmt.Println(kms.ErrCodeCustomKeyStoreNotFoundException, aerr.Error())
+			case kms.ErrCodeCustomKeyStoreInvalidStateException:
+				fmt.Println(kms.ErrCodeCustomKeyStoreInvalidStateException, aerr.Error())
+			case kms.ErrCodeCloudHsmClusterInvalidConfigurationException:
+				fmt.Println(kms.ErrCodeCloudHsmClusterInvalidConfigurationException, aerr.Error())
+			default:
+				fmt.Println(aerr.Error())
+			}
+		} else {
+			// Print the error, cast err to awserr.Error to get the Code and
+			// Message from an error.
+			fmt.Println(err.Error())
+		}
+		return
+	}
+
+	fmt.Println(result)
+}
+
+// To create an asymmetric elliptic curve KMS key for signing and verification
+//
+// This example creates a KMS key that contains an asymmetric elliptic curve (ECC) key
+// pair for signing and verification. The key usage is required even though "SIGN_VERIFY"
+// is the only valid value for ECC KMS keys. The key spec and key usage can't be changed
+// after the key is created.
+func ExampleKMS_CreateKey_shared02() {
+	svc := kms.New(session.New())
+	input := &kms.CreateKeyInput{
+		KeySpec:  aws.String("ECC_NIST_P521"),
+		KeyUsage: aws.String("SIGN_VERIFY"),
+	}
+
+	result, err := svc.CreateKey(input)
+	if err != nil {
+		if aerr, ok := err.(awserr.Error); ok {
+			switch aerr.Code() {
+			case kms.ErrCodeMalformedPolicyDocumentException:
+				fmt.Println(kms.ErrCodeMalformedPolicyDocumentException, aerr.Error())
+			case kms.ErrCodeDependencyTimeoutException:
+				fmt.Println(kms.ErrCodeDependencyTimeoutException, aerr.Error())
+			case kms.ErrCodeInvalidArnException:
+				fmt.Println(kms.ErrCodeInvalidArnException, aerr.Error())
+			case kms.ErrCodeUnsupportedOperationException:
+				fmt.Println(kms.ErrCodeUnsupportedOperationException, aerr.Error())
+			case kms.ErrCodeInternalException:
+				fmt.Println(kms.ErrCodeInternalException, aerr.Error())
+			case kms.ErrCodeLimitExceededException:
+				fmt.Println(kms.ErrCodeLimitExceededException, aerr.Error())
+			case kms.ErrCodeTagException:
+				fmt.Println(kms.ErrCodeTagException, aerr.Error())
+			case kms.ErrCodeCustomKeyStoreNotFoundException:
+				fmt.Println(kms.ErrCodeCustomKeyStoreNotFoundException, aerr.Error())
+			case kms.ErrCodeCustomKeyStoreInvalidStateException:
+				fmt.Println(kms.ErrCodeCustomKeyStoreInvalidStateException, aerr.Error())
+			case kms.ErrCodeCloudHsmClusterInvalidConfigurationException:
+				fmt.Println(kms.ErrCodeCloudHsmClusterInvalidConfigurationException, aerr.Error())
+			default:
+				fmt.Println(aerr.Error())
+			}
+		} else {
+			// Print the error, cast err to awserr.Error to get the Code and
+			// Message from an error.
+			fmt.Println(err.Error())
+		}
+		return
+	}
+
+	fmt.Println(result)
+}
+
+// To create a multi-Region primary KMS key
+//
+// This example creates a multi-Region primary symmetric encryption key. Because the
+// default values for all parameters create a symmetric encryption key, only the MultiRegion
+// parameter is required for this KMS key.
+func ExampleKMS_CreateKey_shared03() {
+	svc := kms.New(session.New())
+	input := &kms.CreateKeyInput{
+		MultiRegion: aws.Bool(true),
+	}
+
+	result, err := svc.CreateKey(input)
+	if err != nil {
+		if aerr, ok := err.(awserr.Error); ok {
+			switch aerr.Code() {
+			case kms.ErrCodeMalformedPolicyDocumentException:
+				fmt.Println(kms.ErrCodeMalformedPolicyDocumentException, aerr.Error())
+			case kms.ErrCodeDependencyTimeoutException:
+				fmt.Println(kms.ErrCodeDependencyTimeoutException, aerr.Error())
+			case kms.ErrCodeInvalidArnException:
+				fmt.Println(kms.ErrCodeInvalidArnException, aerr.Error())
+			case kms.ErrCodeUnsupportedOperationException:
+				fmt.Println(kms.ErrCodeUnsupportedOperationException, aerr.Error())
+			case kms.ErrCodeInternalException:
+				fmt.Println(kms.ErrCodeInternalException, aerr.Error())
+			case kms.ErrCodeLimitExceededException:
+				fmt.Println(kms.ErrCodeLimitExceededException, aerr.Error())
+			case kms.ErrCodeTagException:
+				fmt.Println(kms.ErrCodeTagException, aerr.Error())
+			case kms.ErrCodeCustomKeyStoreNotFoundException:
+				fmt.Println(kms.ErrCodeCustomKeyStoreNotFoundException, aerr.Error())
+			case kms.ErrCodeCustomKeyStoreInvalidStateException:
+				fmt.Println(kms.ErrCodeCustomKeyStoreInvalidStateException, aerr.Error())
+			case kms.ErrCodeCloudHsmClusterInvalidConfigurationException:
+				fmt.Println(kms.ErrCodeCloudHsmClusterInvalidConfigurationException, aerr.Error())
+			default:
+				fmt.Println(aerr.Error())
+			}
+		} else {
+			// Print the error, cast err to awserr.Error to get the Code and
+			// Message from an error.
+			fmt.Println(err.Error())
+		}
+		return
+	}
+
+	fmt.Println(result)
+}
+
+// To create a KMS key for imported key material
+//
+// This example creates a KMS key with no key material. When the operation is complete,
+// you can import your own key material into the KMS key. To create this KMS key, set
+// the Origin parameter to EXTERNAL.
+func ExampleKMS_CreateKey_shared04() {
+	svc := kms.New(session.New())
+	input := &kms.CreateKeyInput{
+		Origin: aws.String("EXTERNAL"),
+	}
+
+	result, err := svc.CreateKey(input)
+	if err != nil {
+		if aerr, ok := err.(awserr.Error); ok {
+			switch aerr.Code() {
+			case kms.ErrCodeMalformedPolicyDocumentException:
+				fmt.Println(kms.ErrCodeMalformedPolicyDocumentException, aerr.Error())
+			case kms.ErrCodeDependencyTimeoutException:
+				fmt.Println(kms.ErrCodeDependencyTimeoutException, aerr.Error())
+			case kms.ErrCodeInvalidArnException:
+				fmt.Println(kms.ErrCodeInvalidArnException, aerr.Error())
+			case kms.ErrCodeUnsupportedOperationException:
+				fmt.Println(kms.ErrCodeUnsupportedOperationException, aerr.Error())
+			case kms.ErrCodeInternalException:
+				fmt.Println(kms.ErrCodeInternalException, aerr.Error())
+			case kms.ErrCodeLimitExceededException:
+				fmt.Println(kms.ErrCodeLimitExceededException, aerr.Error())
+			case kms.ErrCodeTagException:
+				fmt.Println(kms.ErrCodeTagException, aerr.Error())
+			case kms.ErrCodeCustomKeyStoreNotFoundException:
+				fmt.Println(kms.ErrCodeCustomKeyStoreNotFoundException, aerr.Error())
+			case kms.ErrCodeCustomKeyStoreInvalidStateException:
+				fmt.Println(kms.ErrCodeCustomKeyStoreInvalidStateException, aerr.Error())
+			case kms.ErrCodeCloudHsmClusterInvalidConfigurationException:
+				fmt.Println(kms.ErrCodeCloudHsmClusterInvalidConfigurationException, aerr.Error())
+			default:
+				fmt.Println(aerr.Error())
+			}
+		} else {
+			// Print the error, cast err to awserr.Error to get the Code and
+			// Message from an error.
+			fmt.Println(err.Error())
+		}
+		return
+	}
+
+	fmt.Println(result)
+}
+
+// To create a KMS key in a custom key store
+//
+// This example creates a KMS key in the specified custom key store. The operation creates
+// the KMS key and its metadata in AWS KMS and the key material in the AWS CloudHSM
+// cluster associated with the custom key store. This example requires the Origin and
+// CustomKeyStoreId parameters.
+func ExampleKMS_CreateKey_shared05() {
+	svc := kms.New(session.New())
+	input := &kms.CreateKeyInput{
+		CustomKeyStoreId: aws.String("cks-1234567890abcdef0"),
+		Origin:           aws.String("AWS_CLOUDHSM"),
 	}
 
 	result, err := svc.CreateKey(input)
@@ -207,12 +533,12 @@ func ExampleKMS_CreateKey_shared00() {
 
 // To decrypt data
 //
-// The following example decrypts data that was encrypted with a customer master key
-// (CMK) in AWS KMS.
+// The following example decrypts data that was encrypted with a KMS key.
 func ExampleKMS_Decrypt_shared00() {
 	svc := kms.New(session.New())
 	input := &kms.DecryptInput{
 		CiphertextBlob: []byte("<binary data>"),
+		KeyId:          aws.String("arn:aws:kms:us-west-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab"),
 	}
 
 	result, err := svc.Decrypt(input)
@@ -288,10 +614,47 @@ func ExampleKMS_DeleteAlias_shared00() {
 	fmt.Println(result)
 }
 
+// To delete a custom key store from AWS KMS
+//
+// This example deletes a custom key store from AWS KMS. This operation does not delete
+// the AWS CloudHSM cluster that was associated with the CloudHSM cluster. This operation
+// doesn't return any data. To verify that the operation was successful, use the DescribeCustomKeyStores
+// operation.
+func ExampleKMS_DeleteCustomKeyStore_shared00() {
+	svc := kms.New(session.New())
+	input := &kms.DeleteCustomKeyStoreInput{
+		CustomKeyStoreId: aws.String("cks-1234567890abcdef0"),
+	}
+
+	result, err := svc.DeleteCustomKeyStore(input)
+	if err != nil {
+		if aerr, ok := err.(awserr.Error); ok {
+			switch aerr.Code() {
+			case kms.ErrCodeCustomKeyStoreHasCMKsException:
+				fmt.Println(kms.ErrCodeCustomKeyStoreHasCMKsException, aerr.Error())
+			case kms.ErrCodeCustomKeyStoreInvalidStateException:
+				fmt.Println(kms.ErrCodeCustomKeyStoreInvalidStateException, aerr.Error())
+			case kms.ErrCodeCustomKeyStoreNotFoundException:
+				fmt.Println(kms.ErrCodeCustomKeyStoreNotFoundException, aerr.Error())
+			case kms.ErrCodeInternalException:
+				fmt.Println(kms.ErrCodeInternalException, aerr.Error())
+			default:
+				fmt.Println(aerr.Error())
+			}
+		} else {
+			// Print the error, cast err to awserr.Error to get the Code and
+			// Message from an error.
+			fmt.Println(err.Error())
+		}
+		return
+	}
+
+	fmt.Println(result)
+}
+
 // To delete imported key material
 //
-// The following example deletes the imported key material from the specified customer
-// master key (CMK).
+// The following example deletes the imported key material from the specified KMS key.
 func ExampleKMS_DeleteImportedKeyMaterial_shared00() {
 	svc := kms.New(session.New())
 	input := &kms.DeleteImportedKeyMaterialInput{
@@ -328,9 +691,77 @@ func ExampleKMS_DeleteImportedKeyMaterial_shared00() {
 	fmt.Println(result)
 }
 
-// To obtain information about a customer master key (CMK)
+// To get detailed information about custom key stores in the account and Region
 //
-// The following example returns information (metadata) about the specified CMK.
+// This example gets detailed information about all AWS KMS custom key stores in an
+// AWS account and Region. To get all key stores, do not enter a custom key store name
+// or ID.
+func ExampleKMS_DescribeCustomKeyStores_shared00() {
+	svc := kms.New(session.New())
+	input := &kms.DescribeCustomKeyStoresInput{}
+
+	result, err := svc.DescribeCustomKeyStores(input)
+	if err != nil {
+		if aerr, ok := err.(awserr.Error); ok {
+			switch aerr.Code() {
+			case kms.ErrCodeCustomKeyStoreNotFoundException:
+				fmt.Println(kms.ErrCodeCustomKeyStoreNotFoundException, aerr.Error())
+			case kms.ErrCodeInvalidMarkerException:
+				fmt.Println(kms.ErrCodeInvalidMarkerException, aerr.Error())
+			case kms.ErrCodeInternalException:
+				fmt.Println(kms.ErrCodeInternalException, aerr.Error())
+			default:
+				fmt.Println(aerr.Error())
+			}
+		} else {
+			// Print the error, cast err to awserr.Error to get the Code and
+			// Message from an error.
+			fmt.Println(err.Error())
+		}
+		return
+	}
+
+	fmt.Println(result)
+}
+
+// To get detailed information about a custom key store associated with a CloudHSM cluster.
+//
+// This example gets detailed information about a particular AWS KMS custom key store
+// that is associate with an AWS CloudHSM cluster. To limit the output to a particular
+// custom key store, provide the custom key store name or ID.
+func ExampleKMS_DescribeCustomKeyStores_shared01() {
+	svc := kms.New(session.New())
+	input := &kms.DescribeCustomKeyStoresInput{
+		CustomKeyStoreName: aws.String("ExampleKeyStore"),
+	}
+
+	result, err := svc.DescribeCustomKeyStores(input)
+	if err != nil {
+		if aerr, ok := err.(awserr.Error); ok {
+			switch aerr.Code() {
+			case kms.ErrCodeCustomKeyStoreNotFoundException:
+				fmt.Println(kms.ErrCodeCustomKeyStoreNotFoundException, aerr.Error())
+			case kms.ErrCodeInvalidMarkerException:
+				fmt.Println(kms.ErrCodeInvalidMarkerException, aerr.Error())
+			case kms.ErrCodeInternalException:
+				fmt.Println(kms.ErrCodeInternalException, aerr.Error())
+			default:
+				fmt.Println(aerr.Error())
+			}
+		} else {
+			// Print the error, cast err to awserr.Error to get the Code and
+			// Message from an error.
+			fmt.Println(err.Error())
+		}
+		return
+	}
+
+	fmt.Println(result)
+}
+
+// To get details about a KMS key
+//
+// The following example gets metadata about a symmetric KMS key.
 func ExampleKMS_DescribeKey_shared00() {
 	svc := kms.New(session.New())
 	input := &kms.DescribeKeyInput{
@@ -363,9 +794,9 @@ func ExampleKMS_DescribeKey_shared00() {
 	fmt.Println(result)
 }
 
-// To disable a customer master key (CMK)
+// To disable a KMS key
 //
-// The following example disables the specified CMK.
+// The following example disables the specified KMS key.
 func ExampleKMS_DisableKey_shared00() {
 	svc := kms.New(session.New())
 	input := &kms.DisableKeyInput{
@@ -403,7 +834,7 @@ func ExampleKMS_DisableKey_shared00() {
 // To disable automatic rotation of key material
 //
 // The following example disables automatic annual rotation of the key material for
-// the specified CMK.
+// the specified KMS key.
 func ExampleKMS_DisableKeyRotation_shared00() {
 	svc := kms.New(session.New())
 	input := &kms.DisableKeyRotationInput{
@@ -442,9 +873,44 @@ func ExampleKMS_DisableKeyRotation_shared00() {
 	fmt.Println(result)
 }
 
-// To enable a customer master key (CMK)
+// To disconnect a custom key store from its CloudHSM cluster
 //
-// The following example enables the specified CMK.
+// This example disconnects an AWS KMS custom key store from its AWS CloudHSM cluster.
+// This operation doesn't return any data. To verify that the custom key store is disconnected,
+// use the <code>DescribeCustomKeyStores</code> operation.
+func ExampleKMS_DisconnectCustomKeyStore_shared00() {
+	svc := kms.New(session.New())
+	input := &kms.DisconnectCustomKeyStoreInput{
+		CustomKeyStoreId: aws.String("cks-1234567890abcdef0"),
+	}
+
+	result, err := svc.DisconnectCustomKeyStore(input)
+	if err != nil {
+		if aerr, ok := err.(awserr.Error); ok {
+			switch aerr.Code() {
+			case kms.ErrCodeCustomKeyStoreInvalidStateException:
+				fmt.Println(kms.ErrCodeCustomKeyStoreInvalidStateException, aerr.Error())
+			case kms.ErrCodeCustomKeyStoreNotFoundException:
+				fmt.Println(kms.ErrCodeCustomKeyStoreNotFoundException, aerr.Error())
+			case kms.ErrCodeInternalException:
+				fmt.Println(kms.ErrCodeInternalException, aerr.Error())
+			default:
+				fmt.Println(aerr.Error())
+			}
+		} else {
+			// Print the error, cast err to awserr.Error to get the Code and
+			// Message from an error.
+			fmt.Println(err.Error())
+		}
+		return
+	}
+
+	fmt.Println(result)
+}
+
+// To enable a KMS key
+//
+// The following example enables the specified KMS key.
 func ExampleKMS_EnableKey_shared00() {
 	svc := kms.New(session.New())
 	input := &kms.EnableKeyInput{
@@ -484,7 +950,7 @@ func ExampleKMS_EnableKey_shared00() {
 // To enable automatic rotation of key material
 //
 // The following example enables automatic annual rotation of the key material for the
-// specified CMK.
+// specified KMS key.
 func ExampleKMS_EnableKeyRotation_shared00() {
 	svc := kms.New(session.New())
 	input := &kms.EnableKeyRotationInput{
@@ -525,7 +991,7 @@ func ExampleKMS_EnableKeyRotation_shared00() {
 
 // To encrypt data
 //
-// The following example encrypts data with the specified customer master key (CMK).
+// The following example encrypts data with the specified KMS key.
 func ExampleKMS_Encrypt_shared00() {
 	svc := kms.New(session.New())
 	input := &kms.EncryptInput{
@@ -571,7 +1037,7 @@ func ExampleKMS_Encrypt_shared00() {
 //
 // The following example generates a 256-bit symmetric data encryption key (data key)
 // in two formats. One is the unencrypted (plainext) data key, and the other is the
-// data key encrypted with the specified customer master key (CMK).
+// data key encrypted with the specified KMS key.
 func ExampleKMS_GenerateDataKey_shared00() {
 	svc := kms.New(session.New())
 	input := &kms.GenerateDataKeyInput{
@@ -613,11 +1079,106 @@ func ExampleKMS_GenerateDataKey_shared00() {
 	fmt.Println(result)
 }
 
+// To generate an RSA key pair for encryption and decryption
+//
+// This example generates an RSA data key pair for encryption and decryption. The operation
+// returns a plaintext public key and private key, and a copy of the private key that
+// is encrypted under a symmetric KMS key that you specify.
+func ExampleKMS_GenerateDataKeyPair_shared00() {
+	svc := kms.New(session.New())
+	input := &kms.GenerateDataKeyPairInput{
+		KeyId:       aws.String("arn:aws:kms:us-west-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab"),
+		KeyPairSpec: aws.String("RSA_3072"),
+	}
+
+	result, err := svc.GenerateDataKeyPair(input)
+	if err != nil {
+		if aerr, ok := err.(awserr.Error); ok {
+			switch aerr.Code() {
+			case kms.ErrCodeNotFoundException:
+				fmt.Println(kms.ErrCodeNotFoundException, aerr.Error())
+			case kms.ErrCodeDisabledException:
+				fmt.Println(kms.ErrCodeDisabledException, aerr.Error())
+			case kms.ErrCodeKeyUnavailableException:
+				fmt.Println(kms.ErrCodeKeyUnavailableException, aerr.Error())
+			case kms.ErrCodeDependencyTimeoutException:
+				fmt.Println(kms.ErrCodeDependencyTimeoutException, aerr.Error())
+			case kms.ErrCodeInvalidKeyUsageException:
+				fmt.Println(kms.ErrCodeInvalidKeyUsageException, aerr.Error())
+			case kms.ErrCodeInvalidGrantTokenException:
+				fmt.Println(kms.ErrCodeInvalidGrantTokenException, aerr.Error())
+			case kms.ErrCodeInternalException:
+				fmt.Println(kms.ErrCodeInternalException, aerr.Error())
+			case kms.ErrCodeInvalidStateException:
+				fmt.Println(kms.ErrCodeInvalidStateException, aerr.Error())
+			case kms.ErrCodeUnsupportedOperationException:
+				fmt.Println(kms.ErrCodeUnsupportedOperationException, aerr.Error())
+			default:
+				fmt.Println(aerr.Error())
+			}
+		} else {
+			// Print the error, cast err to awserr.Error to get the Code and
+			// Message from an error.
+			fmt.Println(err.Error())
+		}
+		return
+	}
+
+	fmt.Println(result)
+}
+
+// To generate an asymmetric data key pair without a plaintext key
+//
+// This example returns an asymmetric elliptic curve (ECC) data key pair. The private
+// key is encrypted under the symmetric KMS key that you specify. This operation doesn't
+// return a plaintext (unencrypted) private key.
+func ExampleKMS_GenerateDataKeyPairWithoutPlaintext_shared00() {
+	svc := kms.New(session.New())
+	input := &kms.GenerateDataKeyPairWithoutPlaintextInput{
+		KeyId:       aws.String("arn:aws:kms:us-west-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab"),
+		KeyPairSpec: aws.String("ECC_NIST_P521"),
+	}
+
+	result, err := svc.GenerateDataKeyPairWithoutPlaintext(input)
+	if err != nil {
+		if aerr, ok := err.(awserr.Error); ok {
+			switch aerr.Code() {
+			case kms.ErrCodeNotFoundException:
+				fmt.Println(kms.ErrCodeNotFoundException, aerr.Error())
+			case kms.ErrCodeDisabledException:
+				fmt.Println(kms.ErrCodeDisabledException, aerr.Error())
+			case kms.ErrCodeKeyUnavailableException:
+				fmt.Println(kms.ErrCodeKeyUnavailableException, aerr.Error())
+			case kms.ErrCodeDependencyTimeoutException:
+				fmt.Println(kms.ErrCodeDependencyTimeoutException, aerr.Error())
+			case kms.ErrCodeInvalidKeyUsageException:
+				fmt.Println(kms.ErrCodeInvalidKeyUsageException, aerr.Error())
+			case kms.ErrCodeInvalidGrantTokenException:
+				fmt.Println(kms.ErrCodeInvalidGrantTokenException, aerr.Error())
+			case kms.ErrCodeInternalException:
+				fmt.Println(kms.ErrCodeInternalException, aerr.Error())
+			case kms.ErrCodeInvalidStateException:
+				fmt.Println(kms.ErrCodeInvalidStateException, aerr.Error())
+			case kms.ErrCodeUnsupportedOperationException:
+				fmt.Println(kms.ErrCodeUnsupportedOperationException, aerr.Error())
+			default:
+				fmt.Println(aerr.Error())
+			}
+		} else {
+			// Print the error, cast err to awserr.Error to get the Code and
+			// Message from an error.
+			fmt.Println(err.Error())
+		}
+		return
+	}
+
+	fmt.Println(result)
+}
+
 // To generate an encrypted data key
 //
 // The following example generates an encrypted copy of a 256-bit symmetric data encryption
-// key (data key). The data key is encrypted with the specified customer master key
-// (CMK).
+// key (data key). The data key is encrypted with the specified KMS key.
 func ExampleKMS_GenerateDataKeyWithoutPlaintext_shared00() {
 	svc := kms.New(session.New())
 	input := &kms.GenerateDataKeyWithoutPlaintextInput{
@@ -661,7 +1222,7 @@ func ExampleKMS_GenerateDataKeyWithoutPlaintext_shared00() {
 
 // To generate random data
 //
-// The following example uses AWS KMS to generate 32 bytes of random data.
+// The following example generates 32 bytes of random data.
 func ExampleKMS_GenerateRandom_shared00() {
 	svc := kms.New(session.New())
 	input := &kms.GenerateRandomInput{
@@ -696,8 +1257,7 @@ func ExampleKMS_GenerateRandom_shared00() {
 
 // To retrieve a key policy
 //
-// The following example retrieves the key policy for the specified customer master
-// key (CMK).
+// The following example retrieves the key policy for the specified KMS key.
 func ExampleKMS_GetKeyPolicy_shared00() {
 	svc := kms.New(session.New())
 	input := &kms.GetKeyPolicyInput{
@@ -733,10 +1293,10 @@ func ExampleKMS_GetKeyPolicy_shared00() {
 	fmt.Println(result)
 }
 
-// To retrieve the rotation status for a customer master key (CMK)
+// To retrieve the rotation status for a KMS key
 //
 // The following example retrieves the status of automatic annual rotation of the key
-// material for the specified CMK.
+// material for the specified KMS key.
 func ExampleKMS_GetKeyRotationStatus_shared00() {
 	svc := kms.New(session.New())
 	input := &kms.GetKeyRotationStatusInput{
@@ -773,10 +1333,10 @@ func ExampleKMS_GetKeyRotationStatus_shared00() {
 	fmt.Println(result)
 }
 
-// To retrieve the public key and import token for a customer master key (CMK)
+// To retrieve the public key and import token for a KMS key
 //
 // The following example retrieves the public key and import token for the specified
-// CMK.
+// KMS key.
 func ExampleKMS_GetParametersForImport_shared00() {
 	svc := kms.New(session.New())
 	input := &kms.GetParametersForImportInput{
@@ -815,9 +1375,58 @@ func ExampleKMS_GetParametersForImport_shared00() {
 	fmt.Println(result)
 }
 
-// To import key material into a customer master key (CMK)
+// To download the public key of an asymmetric KMS key
 //
-// The following example imports key material into the specified CMK.
+// This example gets the public key of an asymmetric RSA KMS key used for encryption
+// and decryption. The operation returns the key spec, key usage, and encryption or
+// signing algorithms to help you use the public key correctly outside of AWS KMS.
+func ExampleKMS_GetPublicKey_shared00() {
+	svc := kms.New(session.New())
+	input := &kms.GetPublicKeyInput{
+		KeyId: aws.String("arn:aws:kms:us-west-2:111122223333:key/0987dcba-09fe-87dc-65ba-ab0987654321"),
+	}
+
+	result, err := svc.GetPublicKey(input)
+	if err != nil {
+		if aerr, ok := err.(awserr.Error); ok {
+			switch aerr.Code() {
+			case kms.ErrCodeNotFoundException:
+				fmt.Println(kms.ErrCodeNotFoundException, aerr.Error())
+			case kms.ErrCodeDisabledException:
+				fmt.Println(kms.ErrCodeDisabledException, aerr.Error())
+			case kms.ErrCodeKeyUnavailableException:
+				fmt.Println(kms.ErrCodeKeyUnavailableException, aerr.Error())
+			case kms.ErrCodeDependencyTimeoutException:
+				fmt.Println(kms.ErrCodeDependencyTimeoutException, aerr.Error())
+			case kms.ErrCodeUnsupportedOperationException:
+				fmt.Println(kms.ErrCodeUnsupportedOperationException, aerr.Error())
+			case kms.ErrCodeInvalidArnException:
+				fmt.Println(kms.ErrCodeInvalidArnException, aerr.Error())
+			case kms.ErrCodeInvalidGrantTokenException:
+				fmt.Println(kms.ErrCodeInvalidGrantTokenException, aerr.Error())
+			case kms.ErrCodeInvalidKeyUsageException:
+				fmt.Println(kms.ErrCodeInvalidKeyUsageException, aerr.Error())
+			case kms.ErrCodeInternalException:
+				fmt.Println(kms.ErrCodeInternalException, aerr.Error())
+			case kms.ErrCodeInvalidStateException:
+				fmt.Println(kms.ErrCodeInvalidStateException, aerr.Error())
+			default:
+				fmt.Println(aerr.Error())
+			}
+		} else {
+			// Print the error, cast err to awserr.Error to get the Code and
+			// Message from an error.
+			fmt.Println(err.Error())
+		}
+		return
+	}
+
+	fmt.Println(result)
+}
+
+// To import key material into a KMS key
+//
+// The following example imports key material into the specified KMS key.
 func ExampleKMS_ImportKeyMaterial_shared00() {
 	svc := kms.New(session.New())
 	input := &kms.ImportKeyMaterialInput{
@@ -900,9 +1509,9 @@ func ExampleKMS_ListAliases_shared00() {
 	fmt.Println(result)
 }
 
-// To list grants for a customer master key (CMK)
+// To list grants for a KMS key
 //
-// The following example lists grants for the specified CMK.
+// The following example lists grants for the specified KMS key.
 func ExampleKMS_ListGrants_shared00() {
 	svc := kms.New(session.New())
 	input := &kms.ListGrantsInput{
@@ -919,6 +1528,8 @@ func ExampleKMS_ListGrants_shared00() {
 				fmt.Println(kms.ErrCodeDependencyTimeoutException, aerr.Error())
 			case kms.ErrCodeInvalidMarkerException:
 				fmt.Println(kms.ErrCodeInvalidMarkerException, aerr.Error())
+			case kms.ErrCodeInvalidGrantIdException:
+				fmt.Println(kms.ErrCodeInvalidGrantIdException, aerr.Error())
 			case kms.ErrCodeInvalidArnException:
 				fmt.Println(kms.ErrCodeInvalidArnException, aerr.Error())
 			case kms.ErrCodeInternalException:
@@ -939,9 +1550,9 @@ func ExampleKMS_ListGrants_shared00() {
 	fmt.Println(result)
 }
 
-// To list key policies for a customer master key (CMK)
+// To list key policies for a KMS key
 //
-// The following example lists key policies for the specified CMK.
+// The following example lists key policies for the specified KMS key.
 func ExampleKMS_ListKeyPolicies_shared00() {
 	svc := kms.New(session.New())
 	input := &kms.ListKeyPoliciesInput{
@@ -976,9 +1587,9 @@ func ExampleKMS_ListKeyPolicies_shared00() {
 	fmt.Println(result)
 }
 
-// To list customer master keys (CMKs)
+// To list KMS keys
 //
-// The following example lists CMKs.
+// The following example lists KMS keys.
 func ExampleKMS_ListKeys_shared00() {
 	svc := kms.New(session.New())
 	input := &kms.ListKeysInput{}
@@ -1007,9 +1618,9 @@ func ExampleKMS_ListKeys_shared00() {
 	fmt.Println(result)
 }
 
-// To list tags for a customer master key (CMK)
+// To list tags for a KMS key
 //
-// The following example lists tags for a CMK.
+// The following example lists tags for a KMS key.
 func ExampleKMS_ListResourceTags_shared00() {
 	svc := kms.New(session.New())
 	input := &kms.ListResourceTagsInput{
@@ -1080,9 +1691,9 @@ func ExampleKMS_ListRetirableGrants_shared00() {
 	fmt.Println(result)
 }
 
-// To attach a key policy to a customer master key (CMK)
+// To attach a key policy to a KMS key
 //
-// The following example attaches a key policy to the specified CMK.
+// The following example attaches a key policy to the specified KMS key.
 func ExampleKMS_PutKeyPolicy_shared00() {
 	svc := kms.New(session.New())
 	input := &kms.PutKeyPolicyInput{
@@ -1127,7 +1738,7 @@ func ExampleKMS_PutKeyPolicy_shared00() {
 
 // To reencrypt data
 //
-// The following example reencrypts data with the specified CMK.
+// The following example reencrypts data with the specified KMS key.
 func ExampleKMS_ReEncrypt_shared00() {
 	svc := kms.New(session.New())
 	input := &kms.ReEncryptInput{
@@ -1159,6 +1770,55 @@ func ExampleKMS_ReEncrypt_shared00() {
 				fmt.Println(kms.ErrCodeInternalException, aerr.Error())
 			case kms.ErrCodeInvalidStateException:
 				fmt.Println(kms.ErrCodeInvalidStateException, aerr.Error())
+			default:
+				fmt.Println(aerr.Error())
+			}
+		} else {
+			// Print the error, cast err to awserr.Error to get the Code and
+			// Message from an error.
+			fmt.Println(err.Error())
+		}
+		return
+	}
+
+	fmt.Println(result)
+}
+
+// To replicate a multi-Region key in a different AWS Region
+//
+// This example creates a multi-Region replica key in us-west-2 of a multi-Region primary
+// key in us-east-1.
+func ExampleKMS_ReplicateKey_shared00() {
+	svc := kms.New(session.New())
+	input := &kms.ReplicateKeyInput{
+		KeyId:         aws.String("arn:aws:kms:us-east-1:111122223333:key/mrk-1234abcd12ab34cd56ef1234567890ab"),
+		ReplicaRegion: aws.String("us-west-2"),
+	}
+
+	result, err := svc.ReplicateKey(input)
+	if err != nil {
+		if aerr, ok := err.(awserr.Error); ok {
+			switch aerr.Code() {
+			case kms.ErrCodeAlreadyExistsException:
+				fmt.Println(kms.ErrCodeAlreadyExistsException, aerr.Error())
+			case kms.ErrCodeDisabledException:
+				fmt.Println(kms.ErrCodeDisabledException, aerr.Error())
+			case kms.ErrCodeInvalidArnException:
+				fmt.Println(kms.ErrCodeInvalidArnException, aerr.Error())
+			case kms.ErrCodeInvalidStateException:
+				fmt.Println(kms.ErrCodeInvalidStateException, aerr.Error())
+			case kms.ErrCodeInternalException:
+				fmt.Println(kms.ErrCodeInternalException, aerr.Error())
+			case kms.ErrCodeLimitExceededException:
+				fmt.Println(kms.ErrCodeLimitExceededException, aerr.Error())
+			case kms.ErrCodeMalformedPolicyDocumentException:
+				fmt.Println(kms.ErrCodeMalformedPolicyDocumentException, aerr.Error())
+			case kms.ErrCodeNotFoundException:
+				fmt.Println(kms.ErrCodeNotFoundException, aerr.Error())
+			case kms.ErrCodeTagException:
+				fmt.Println(kms.ErrCodeTagException, aerr.Error())
+			case kms.ErrCodeUnsupportedOperationException:
+				fmt.Println(kms.ErrCodeUnsupportedOperationException, aerr.Error())
 			default:
 				fmt.Println(aerr.Error())
 			}
@@ -1255,9 +1915,9 @@ func ExampleKMS_RevokeGrant_shared00() {
 	fmt.Println(result)
 }
 
-// To schedule a customer master key (CMK) for deletion
+// To schedule a KMS key for deletion
 //
-// The following example schedules the specified CMK for deletion.
+// The following example schedules the specified KMS key for deletion.
 func ExampleKMS_ScheduleKeyDeletion_shared00() {
 	svc := kms.New(session.New())
 	input := &kms.ScheduleKeyDeletionInput{
@@ -1293,9 +1953,56 @@ func ExampleKMS_ScheduleKeyDeletion_shared00() {
 	fmt.Println(result)
 }
 
-// To tag a customer master key (CMK)
+// To digitally sign a message with an asymmetric KMS key.
 //
-// The following example tags a CMK.
+// This operation uses the private key in an asymmetric elliptic curve (ECC) KMS key
+// to generate a digital signature for a given message.
+func ExampleKMS_Sign_shared00() {
+	svc := kms.New(session.New())
+	input := &kms.SignInput{
+		KeyId:            aws.String("alias/ECC_signing_key"),
+		Message:          []byte("<message to be signed>"),
+		MessageType:      aws.String("RAW"),
+		SigningAlgorithm: aws.String("ECDSA_SHA_384"),
+	}
+
+	result, err := svc.Sign(input)
+	if err != nil {
+		if aerr, ok := err.(awserr.Error); ok {
+			switch aerr.Code() {
+			case kms.ErrCodeNotFoundException:
+				fmt.Println(kms.ErrCodeNotFoundException, aerr.Error())
+			case kms.ErrCodeDisabledException:
+				fmt.Println(kms.ErrCodeDisabledException, aerr.Error())
+			case kms.ErrCodeKeyUnavailableException:
+				fmt.Println(kms.ErrCodeKeyUnavailableException, aerr.Error())
+			case kms.ErrCodeDependencyTimeoutException:
+				fmt.Println(kms.ErrCodeDependencyTimeoutException, aerr.Error())
+			case kms.ErrCodeInvalidKeyUsageException:
+				fmt.Println(kms.ErrCodeInvalidKeyUsageException, aerr.Error())
+			case kms.ErrCodeInvalidGrantTokenException:
+				fmt.Println(kms.ErrCodeInvalidGrantTokenException, aerr.Error())
+			case kms.ErrCodeInternalException:
+				fmt.Println(kms.ErrCodeInternalException, aerr.Error())
+			case kms.ErrCodeInvalidStateException:
+				fmt.Println(kms.ErrCodeInvalidStateException, aerr.Error())
+			default:
+				fmt.Println(aerr.Error())
+			}
+		} else {
+			// Print the error, cast err to awserr.Error to get the Code and
+			// Message from an error.
+			fmt.Println(err.Error())
+		}
+		return
+	}
+
+	fmt.Println(result)
+}
+
+// To tag a KMS key
+//
+// The following example tags a KMS key.
 func ExampleKMS_TagResource_shared00() {
 	svc := kms.New(session.New())
 	input := &kms.TagResourceInput{
@@ -1338,9 +2045,9 @@ func ExampleKMS_TagResource_shared00() {
 	fmt.Println(result)
 }
 
-// To remove tags from a customer master key (CMK)
+// To remove tags from a KMS key
 //
-// The following example removes tags from a CMK.
+// The following example removes tags from a KMS key.
 func ExampleKMS_UntagResource_shared00() {
 	svc := kms.New(session.New())
 	input := &kms.UntagResourceInput{
@@ -1381,8 +2088,7 @@ func ExampleKMS_UntagResource_shared00() {
 
 // To update an alias
 //
-// The following example updates the specified alias to refer to the specified customer
-// master key (CMK).
+// The following example updates the specified alias to refer to the specified KMS key.
 func ExampleKMS_UpdateAlias_shared00() {
 	svc := kms.New(session.New())
 	input := &kms.UpdateAliasInput{
@@ -1418,13 +2124,152 @@ func ExampleKMS_UpdateAlias_shared00() {
 	fmt.Println(result)
 }
 
-// To update the description of a customer master key (CMK)
+// To edit the password of a custom key store
 //
-// The following example updates the description of the specified CMK.
+// This example tells KMS the password for the kmsuser crypto user in the AWS CloudHSM
+// cluster that is associated with the AWS KMS custom key store. (It does not change
+// the password in the CloudHSM cluster.) This operation does not return any data.
+func ExampleKMS_UpdateCustomKeyStore_shared00() {
+	svc := kms.New(session.New())
+	input := &kms.UpdateCustomKeyStoreInput{
+		CustomKeyStoreId: aws.String("cks-1234567890abcdef0"),
+		KeyStorePassword: aws.String("ExamplePassword"),
+	}
+
+	result, err := svc.UpdateCustomKeyStore(input)
+	if err != nil {
+		if aerr, ok := err.(awserr.Error); ok {
+			switch aerr.Code() {
+			case kms.ErrCodeCustomKeyStoreNotFoundException:
+				fmt.Println(kms.ErrCodeCustomKeyStoreNotFoundException, aerr.Error())
+			case kms.ErrCodeCustomKeyStoreNameInUseException:
+				fmt.Println(kms.ErrCodeCustomKeyStoreNameInUseException, aerr.Error())
+			case kms.ErrCodeCloudHsmClusterNotFoundException:
+				fmt.Println(kms.ErrCodeCloudHsmClusterNotFoundException, aerr.Error())
+			case kms.ErrCodeCloudHsmClusterNotRelatedException:
+				fmt.Println(kms.ErrCodeCloudHsmClusterNotRelatedException, aerr.Error())
+			case kms.ErrCodeCustomKeyStoreInvalidStateException:
+				fmt.Println(kms.ErrCodeCustomKeyStoreInvalidStateException, aerr.Error())
+			case kms.ErrCodeInternalException:
+				fmt.Println(kms.ErrCodeInternalException, aerr.Error())
+			case kms.ErrCodeCloudHsmClusterNotActiveException:
+				fmt.Println(kms.ErrCodeCloudHsmClusterNotActiveException, aerr.Error())
+			case kms.ErrCodeCloudHsmClusterInvalidConfigurationException:
+				fmt.Println(kms.ErrCodeCloudHsmClusterInvalidConfigurationException, aerr.Error())
+			default:
+				fmt.Println(aerr.Error())
+			}
+		} else {
+			// Print the error, cast err to awserr.Error to get the Code and
+			// Message from an error.
+			fmt.Println(err.Error())
+		}
+		return
+	}
+
+	fmt.Println(result)
+}
+
+// To edit the friendly name of a custom key store
+//
+// This example changes the friendly name of the AWS KMS custom key store to the name
+// that you specify. This operation does not return any data. To verify that the operation
+// worked, use the DescribeCustomKeyStores operation.
+func ExampleKMS_UpdateCustomKeyStore_shared01() {
+	svc := kms.New(session.New())
+	input := &kms.UpdateCustomKeyStoreInput{
+		CustomKeyStoreId:      aws.String("cks-1234567890abcdef0"),
+		NewCustomKeyStoreName: aws.String("DevelopmentKeys"),
+	}
+
+	result, err := svc.UpdateCustomKeyStore(input)
+	if err != nil {
+		if aerr, ok := err.(awserr.Error); ok {
+			switch aerr.Code() {
+			case kms.ErrCodeCustomKeyStoreNotFoundException:
+				fmt.Println(kms.ErrCodeCustomKeyStoreNotFoundException, aerr.Error())
+			case kms.ErrCodeCustomKeyStoreNameInUseException:
+				fmt.Println(kms.ErrCodeCustomKeyStoreNameInUseException, aerr.Error())
+			case kms.ErrCodeCloudHsmClusterNotFoundException:
+				fmt.Println(kms.ErrCodeCloudHsmClusterNotFoundException, aerr.Error())
+			case kms.ErrCodeCloudHsmClusterNotRelatedException:
+				fmt.Println(kms.ErrCodeCloudHsmClusterNotRelatedException, aerr.Error())
+			case kms.ErrCodeCustomKeyStoreInvalidStateException:
+				fmt.Println(kms.ErrCodeCustomKeyStoreInvalidStateException, aerr.Error())
+			case kms.ErrCodeInternalException:
+				fmt.Println(kms.ErrCodeInternalException, aerr.Error())
+			case kms.ErrCodeCloudHsmClusterNotActiveException:
+				fmt.Println(kms.ErrCodeCloudHsmClusterNotActiveException, aerr.Error())
+			case kms.ErrCodeCloudHsmClusterInvalidConfigurationException:
+				fmt.Println(kms.ErrCodeCloudHsmClusterInvalidConfigurationException, aerr.Error())
+			default:
+				fmt.Println(aerr.Error())
+			}
+		} else {
+			// Print the error, cast err to awserr.Error to get the Code and
+			// Message from an error.
+			fmt.Println(err.Error())
+		}
+		return
+	}
+
+	fmt.Println(result)
+}
+
+// To associate the custom key store with a different, but related, AWS CloudHSM cluster.
+//
+// This example changes the cluster that is associated with a custom key store to a
+// related cluster, such as a different backup of the same cluster. This operation does
+// not return any data. To verify that the operation worked, use the DescribeCustomKeyStores
+// operation.
+func ExampleKMS_UpdateCustomKeyStore_shared02() {
+	svc := kms.New(session.New())
+	input := &kms.UpdateCustomKeyStoreInput{
+		CloudHsmClusterId: aws.String("cluster-1a23b4cdefg"),
+		CustomKeyStoreId:  aws.String("cks-1234567890abcdef0"),
+	}
+
+	result, err := svc.UpdateCustomKeyStore(input)
+	if err != nil {
+		if aerr, ok := err.(awserr.Error); ok {
+			switch aerr.Code() {
+			case kms.ErrCodeCustomKeyStoreNotFoundException:
+				fmt.Println(kms.ErrCodeCustomKeyStoreNotFoundException, aerr.Error())
+			case kms.ErrCodeCustomKeyStoreNameInUseException:
+				fmt.Println(kms.ErrCodeCustomKeyStoreNameInUseException, aerr.Error())
+			case kms.ErrCodeCloudHsmClusterNotFoundException:
+				fmt.Println(kms.ErrCodeCloudHsmClusterNotFoundException, aerr.Error())
+			case kms.ErrCodeCloudHsmClusterNotRelatedException:
+				fmt.Println(kms.ErrCodeCloudHsmClusterNotRelatedException, aerr.Error())
+			case kms.ErrCodeCustomKeyStoreInvalidStateException:
+				fmt.Println(kms.ErrCodeCustomKeyStoreInvalidStateException, aerr.Error())
+			case kms.ErrCodeInternalException:
+				fmt.Println(kms.ErrCodeInternalException, aerr.Error())
+			case kms.ErrCodeCloudHsmClusterNotActiveException:
+				fmt.Println(kms.ErrCodeCloudHsmClusterNotActiveException, aerr.Error())
+			case kms.ErrCodeCloudHsmClusterInvalidConfigurationException:
+				fmt.Println(kms.ErrCodeCloudHsmClusterInvalidConfigurationException, aerr.Error())
+			default:
+				fmt.Println(aerr.Error())
+			}
+		} else {
+			// Print the error, cast err to awserr.Error to get the Code and
+			// Message from an error.
+			fmt.Println(err.Error())
+		}
+		return
+	}
+
+	fmt.Println(result)
+}
+
+// To update the description of a KMS key
+//
+// The following example updates the description of the specified KMS key.
 func ExampleKMS_UpdateKeyDescription_shared00() {
 	svc := kms.New(session.New())
 	input := &kms.UpdateKeyDescriptionInput{
-		Description: aws.String("Example description that indicates the intended use of this CMK."),
+		Description: aws.String("Example description that indicates the intended use of this KMS key."),
 		KeyId:       aws.String("1234abcd-12ab-34cd-56ef-1234567890ab"),
 	}
 
@@ -1442,6 +2287,56 @@ func ExampleKMS_UpdateKeyDescription_shared00() {
 				fmt.Println(kms.ErrCodeInternalException, aerr.Error())
 			case kms.ErrCodeInvalidStateException:
 				fmt.Println(kms.ErrCodeInvalidStateException, aerr.Error())
+			default:
+				fmt.Println(aerr.Error())
+			}
+		} else {
+			// Print the error, cast err to awserr.Error to get the Code and
+			// Message from an error.
+			fmt.Println(err.Error())
+		}
+		return
+	}
+
+	fmt.Println(result)
+}
+
+// To use an asymmetric KMS key to verify a digital signature
+//
+// This operation uses the public key in an elliptic curve (ECC) asymmetric key to verify
+// a digital signature within AWS KMS.
+func ExampleKMS_Verify_shared00() {
+	svc := kms.New(session.New())
+	input := &kms.VerifyInput{
+		KeyId:            aws.String("alias/ECC_signing_key"),
+		Message:          []byte("<message to be verified>"),
+		MessageType:      aws.String("RAW"),
+		Signature:        []byte("<binary data>"),
+		SigningAlgorithm: aws.String("ECDSA_SHA_384"),
+	}
+
+	result, err := svc.Verify(input)
+	if err != nil {
+		if aerr, ok := err.(awserr.Error); ok {
+			switch aerr.Code() {
+			case kms.ErrCodeNotFoundException:
+				fmt.Println(kms.ErrCodeNotFoundException, aerr.Error())
+			case kms.ErrCodeDisabledException:
+				fmt.Println(kms.ErrCodeDisabledException, aerr.Error())
+			case kms.ErrCodeKeyUnavailableException:
+				fmt.Println(kms.ErrCodeKeyUnavailableException, aerr.Error())
+			case kms.ErrCodeDependencyTimeoutException:
+				fmt.Println(kms.ErrCodeDependencyTimeoutException, aerr.Error())
+			case kms.ErrCodeInvalidKeyUsageException:
+				fmt.Println(kms.ErrCodeInvalidKeyUsageException, aerr.Error())
+			case kms.ErrCodeInvalidGrantTokenException:
+				fmt.Println(kms.ErrCodeInvalidGrantTokenException, aerr.Error())
+			case kms.ErrCodeInternalException:
+				fmt.Println(kms.ErrCodeInternalException, aerr.Error())
+			case kms.ErrCodeInvalidStateException:
+				fmt.Println(kms.ErrCodeInvalidStateException, aerr.Error())
+			case kms.ErrCodeKMSInvalidSignatureException:
+				fmt.Println(kms.ErrCodeKMSInvalidSignatureException, aerr.Error())
 			default:
 				fmt.Println(aerr.Error())
 			}

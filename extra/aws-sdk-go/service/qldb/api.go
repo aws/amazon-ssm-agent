@@ -147,7 +147,7 @@ func (c *QLDB) CreateLedgerRequest(input *CreateLedgerInput) (req *request.Reque
 
 // CreateLedger API operation for Amazon QLDB.
 //
-// Creates a new ledger in your AWS account.
+// Creates a new ledger in your account in the current Region.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -239,10 +239,8 @@ func (c *QLDB) DeleteLedgerRequest(input *DeleteLedgerInput) (req *request.Reque
 // Deletes a ledger and all of its contents. This action is irreversible.
 //
 // If deletion protection is enabled, you must first disable it before you can
-// delete the ledger using the QLDB API or the AWS Command Line Interface (AWS
-// CLI). You can disable it by calling the UpdateLedger operation to set the
-// flag to false. The QLDB console disables deletion protection for you when
-// you use it to delete a ledger.
+// delete the ledger. You can disable it by calling the UpdateLedger operation
+// to set the flag to false.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -332,7 +330,11 @@ func (c *QLDB) DescribeJournalKinesisStreamRequest(input *DescribeJournalKinesis
 //
 // Returns detailed information about a given Amazon QLDB journal stream. The
 // output includes the Amazon Resource Name (ARN), stream name, current status,
-// creation time, and the parameters of your original stream creation request.
+// creation time, and the parameters of the original stream creation request.
+//
+// This action does not return any expired journal streams. For more information,
+// see Expiration for terminal streams (https://docs.aws.amazon.com/qldb/latest/developerguide/streams.create.html#streams.create.states.expiration)
+// in the Amazon QLDB Developer Guide.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -418,11 +420,11 @@ func (c *QLDB) DescribeJournalS3ExportRequest(input *DescribeJournalS3ExportInpu
 // DescribeJournalS3Export API operation for Amazon QLDB.
 //
 // Returns information about a journal export job, including the ledger name,
-// export ID, when it was created, current status, and its start and end time
-// export parameters.
+// export ID, creation time, current status, and the parameters of the original
+// export creation request.
 //
 // This action does not return any expired export jobs. For more information,
-// see Export Job Expiration (https://docs.aws.amazon.com/qldb/latest/developerguide/export-journal.request.html#export-journal.request.expiration)
+// see Export job expiration (https://docs.aws.amazon.com/qldb/latest/developerguide/export-journal.request.html#export-journal.request.expiration)
 // in the Amazon QLDB Developer Guide.
 //
 // If the export job with the given ExportId doesn't exist, then throws ResourceNotFoundException.
@@ -506,7 +508,8 @@ func (c *QLDB) DescribeLedgerRequest(input *DescribeLedgerInput) (req *request.R
 
 // DescribeLedger API operation for Amazon QLDB.
 //
-// Returns information about a ledger, including its state and when it was created.
+// Returns information about a ledger, including its state, permissions mode,
+// encryption at rest settings, and when it was created.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -959,6 +962,10 @@ func (c *QLDB) ListJournalKinesisStreamsForLedgerRequest(input *ListJournalKines
 // ledger. The output of each stream descriptor includes the same details that
 // are returned by DescribeJournalKinesisStream.
 //
+// This action does not return any expired journal streams. For more information,
+// see Expiration for terminal streams (https://docs.aws.amazon.com/qldb/latest/developerguide/streams.create.html#streams.create.states.expiration)
+// in the Amazon QLDB Developer Guide.
+//
 // This action returns a maximum of MaxResults items. It is paginated so that
 // you can retrieve all the items by calling ListJournalKinesisStreamsForLedger
 // multiple times.
@@ -1105,13 +1112,13 @@ func (c *QLDB) ListJournalS3ExportsRequest(input *ListJournalS3ExportsInput) (re
 // ListJournalS3Exports API operation for Amazon QLDB.
 //
 // Returns an array of journal export job descriptions for all ledgers that
-// are associated with the current AWS account and Region.
+// are associated with the current account and Region.
 //
 // This action returns a maximum of MaxResults items, and is paginated so that
 // you can retrieve all the items by calling ListJournalS3Exports multiple times.
 //
 // This action does not return any expired export jobs. For more information,
-// see Export Job Expiration (https://docs.aws.amazon.com/qldb/latest/developerguide/export-journal.request.html#export-journal.request.expiration)
+// see Export job expiration (https://docs.aws.amazon.com/qldb/latest/developerguide/export-journal.request.html#export-journal.request.expiration)
 // in the Amazon QLDB Developer Guide.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
@@ -1251,7 +1258,7 @@ func (c *QLDB) ListJournalS3ExportsForLedgerRequest(input *ListJournalS3ExportsF
 // times.
 //
 // This action does not return any expired export jobs. For more information,
-// see Export Job Expiration (https://docs.aws.amazon.com/qldb/latest/developerguide/export-journal.request.html#export-journal.request.expiration)
+// see Export job expiration (https://docs.aws.amazon.com/qldb/latest/developerguide/export-journal.request.html#export-journal.request.expiration)
 // in the Amazon QLDB Developer Guide.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
@@ -1385,7 +1392,7 @@ func (c *QLDB) ListLedgersRequest(input *ListLedgersInput) (req *request.Request
 // ListLedgers API operation for Amazon QLDB.
 //
 // Returns an array of ledger summaries that are associated with the current
-// AWS account and Region.
+// account and Region.
 //
 // This action returns a maximum of 100 items and is paginated so that you can
 // retrieve all the items by calling ListLedgers multiple times.
@@ -1891,26 +1898,122 @@ func (c *QLDB) UpdateLedgerWithContext(ctx aws.Context, input *UpdateLedgerInput
 	return out, req.Send()
 }
 
+const opUpdateLedgerPermissionsMode = "UpdateLedgerPermissionsMode"
+
+// UpdateLedgerPermissionsModeRequest generates a "aws/request.Request" representing the
+// client's request for the UpdateLedgerPermissionsMode operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See UpdateLedgerPermissionsMode for more information on using the UpdateLedgerPermissionsMode
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the UpdateLedgerPermissionsModeRequest method.
+//    req, resp := client.UpdateLedgerPermissionsModeRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/qldb-2019-01-02/UpdateLedgerPermissionsMode
+func (c *QLDB) UpdateLedgerPermissionsModeRequest(input *UpdateLedgerPermissionsModeInput) (req *request.Request, output *UpdateLedgerPermissionsModeOutput) {
+	op := &request.Operation{
+		Name:       opUpdateLedgerPermissionsMode,
+		HTTPMethod: "PATCH",
+		HTTPPath:   "/ledgers/{name}/permissions-mode",
+	}
+
+	if input == nil {
+		input = &UpdateLedgerPermissionsModeInput{}
+	}
+
+	output = &UpdateLedgerPermissionsModeOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// UpdateLedgerPermissionsMode API operation for Amazon QLDB.
+//
+// Updates the permissions mode of a ledger.
+//
+// Before you switch to the STANDARD permissions mode, you must first create
+// all required IAM policies and table tags to avoid disruption to your users.
+// To learn more, see Migrating to the standard permissions mode (https://docs.aws.amazon.com/qldb/latest/developerguide/ledger-management.basics.html#ledger-mgmt.basics.update-permissions.migrating)
+// in the Amazon QLDB Developer Guide.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon QLDB's
+// API operation UpdateLedgerPermissionsMode for usage and error information.
+//
+// Returned Error Types:
+//   * InvalidParameterException
+//   One or more parameters in the request aren't valid.
+//
+//   * ResourceNotFoundException
+//   The specified resource doesn't exist.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/qldb-2019-01-02/UpdateLedgerPermissionsMode
+func (c *QLDB) UpdateLedgerPermissionsMode(input *UpdateLedgerPermissionsModeInput) (*UpdateLedgerPermissionsModeOutput, error) {
+	req, out := c.UpdateLedgerPermissionsModeRequest(input)
+	return out, req.Send()
+}
+
+// UpdateLedgerPermissionsModeWithContext is the same as UpdateLedgerPermissionsMode with the addition of
+// the ability to pass a context and additional request options.
+//
+// See UpdateLedgerPermissionsMode for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *QLDB) UpdateLedgerPermissionsModeWithContext(ctx aws.Context, input *UpdateLedgerPermissionsModeInput, opts ...request.Option) (*UpdateLedgerPermissionsModeOutput, error) {
+	req, out := c.UpdateLedgerPermissionsModeRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 type CancelJournalKinesisStreamInput struct {
-	_ struct{} `type:"structure"`
+	_ struct{} `type:"structure" nopayload:"true"`
 
 	// The name of the ledger.
 	//
 	// LedgerName is a required field
 	LedgerName *string `location:"uri" locationName:"name" min:"1" type:"string" required:"true"`
 
-	// The unique ID that QLDB assigns to each QLDB journal stream.
+	// The UUID (represented in Base62-encoded text) of the QLDB journal stream
+	// to be canceled.
 	//
 	// StreamId is a required field
 	StreamId *string `location:"uri" locationName:"streamId" min:"22" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CancelJournalKinesisStreamInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CancelJournalKinesisStreamInput) GoString() string {
 	return s.String()
 }
@@ -1952,16 +2055,24 @@ func (s *CancelJournalKinesisStreamInput) SetStreamId(v string) *CancelJournalKi
 type CancelJournalKinesisStreamOutput struct {
 	_ struct{} `type:"structure"`
 
-	// The unique ID that QLDB assigns to each QLDB journal stream.
+	// The UUID (Base62-encoded text) of the canceled QLDB journal stream.
 	StreamId *string `min:"22" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CancelJournalKinesisStreamOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CancelJournalKinesisStreamOutput) GoString() string {
 	return s.String()
 }
@@ -1979,14 +2090,48 @@ type CreateLedgerInput struct {
 	// on ledger creation, this feature is enabled (true) by default.
 	//
 	// If deletion protection is enabled, you must first disable it before you can
-	// delete the ledger using the QLDB API or the AWS Command Line Interface (AWS
-	// CLI). You can disable it by calling the UpdateLedger operation to set the
-	// flag to false. The QLDB console disables deletion protection for you when
-	// you use it to delete a ledger.
+	// delete the ledger. You can disable it by calling the UpdateLedger operation
+	// to set the flag to false.
 	DeletionProtection *bool `type:"boolean"`
 
+	// The key in Key Management Service (KMS) to use for encryption of data at
+	// rest in the ledger. For more information, see Encryption at rest (https://docs.aws.amazon.com/qldb/latest/developerguide/encryption-at-rest.html)
+	// in the Amazon QLDB Developer Guide.
+	//
+	// Use one of the following options to specify this parameter:
+	//
+	//    * AWS_OWNED_KMS_KEY: Use an KMS key that is owned and managed by Amazon
+	//    Web Services on your behalf.
+	//
+	//    * Undefined: By default, use an Amazon Web Services owned KMS key.
+	//
+	//    * A valid symmetric customer managed KMS key: Use the specified KMS key
+	//    in your account that you create, own, and manage. Amazon QLDB does not
+	//    support asymmetric keys. For more information, see Using symmetric and
+	//    asymmetric keys (https://docs.aws.amazon.com/kms/latest/developerguide/symmetric-asymmetric.html)
+	//    in the Key Management Service Developer Guide.
+	//
+	// To specify a customer managed KMS key, you can use its key ID, Amazon Resource
+	// Name (ARN), alias name, or alias ARN. When using an alias name, prefix it
+	// with "alias/". To specify a key in a different account, you must use the
+	// key ARN or alias ARN.
+	//
+	// For example:
+	//
+	//    * Key ID: 1234abcd-12ab-34cd-56ef-1234567890ab
+	//
+	//    * Key ARN: arn:aws:kms:us-east-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab
+	//
+	//    * Alias name: alias/ExampleAlias
+	//
+	//    * Alias ARN: arn:aws:kms:us-east-2:111122223333:alias/ExampleAlias
+	//
+	// For more information, see Key identifiers (KeyId) (https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#key-id)
+	// in the Key Management Service Developer Guide.
+	KmsKey *string `type:"string"`
+
 	// The name of the ledger that you want to create. The name must be unique among
-	// all of your ledgers in the current AWS Region.
+	// all of the ledgers in your account in the current Region.
 	//
 	// Naming constraints for ledger names are defined in Quotas in Amazon QLDB
 	// (https://docs.aws.amazon.com/qldb/latest/developerguide/limits.html#limits.naming)
@@ -1995,7 +2140,27 @@ type CreateLedgerInput struct {
 	// Name is a required field
 	Name *string `min:"1" type:"string" required:"true"`
 
-	// The permissions mode to assign to the ledger that you want to create.
+	// The permissions mode to assign to the ledger that you want to create. This
+	// parameter can have one of the following values:
+	//
+	//    * ALLOW_ALL: A legacy permissions mode that enables access control with
+	//    API-level granularity for ledgers. This mode allows users who have the
+	//    SendCommand API permission for this ledger to run all PartiQL commands
+	//    (hence, ALLOW_ALL) on any tables in the specified ledger. This mode disregards
+	//    any table-level or command-level IAM permissions policies that you create
+	//    for the ledger.
+	//
+	//    * STANDARD: (Recommended) A permissions mode that enables access control
+	//    with finer granularity for ledgers, tables, and PartiQL commands. By default,
+	//    this mode denies all user requests to run any PartiQL commands on any
+	//    tables in this ledger. To allow PartiQL commands to run, you must create
+	//    IAM permissions policies for specific table resources and PartiQL actions,
+	//    in addition to the SendCommand API permission for the ledger. For information,
+	//    see Getting started with the standard permissions mode (https://docs.aws.amazon.com/qldb/latest/developerguide/getting-started-standard-mode.html)
+	//    in the Amazon QLDB Developer Guide.
+	//
+	// We strongly recommend using the STANDARD permissions mode to maximize the
+	// security of your ledger data.
 	//
 	// PermissionsMode is a required field
 	PermissionsMode *string `type:"string" required:"true" enum:"PermissionsMode"`
@@ -2005,12 +2170,20 @@ type CreateLedgerInput struct {
 	Tags map[string]*string `type:"map"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateLedgerInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateLedgerInput) GoString() string {
 	return s.String()
 }
@@ -2037,6 +2210,12 @@ func (s *CreateLedgerInput) Validate() error {
 // SetDeletionProtection sets the DeletionProtection field's value.
 func (s *CreateLedgerInput) SetDeletionProtection(v bool) *CreateLedgerInput {
 	s.DeletionProtection = &v
+	return s
+}
+
+// SetKmsKey sets the KmsKey field's value.
+func (s *CreateLedgerInput) SetKmsKey(v string) *CreateLedgerInput {
+	s.KmsKey = &v
 	return s
 }
 
@@ -2073,25 +2252,39 @@ type CreateLedgerOutput struct {
 	// on ledger creation, this feature is enabled (true) by default.
 	//
 	// If deletion protection is enabled, you must first disable it before you can
-	// delete the ledger using the QLDB API or the AWS Command Line Interface (AWS
-	// CLI). You can disable it by calling the UpdateLedger operation to set the
-	// flag to false. The QLDB console disables deletion protection for you when
-	// you use it to delete a ledger.
+	// delete the ledger. You can disable it by calling the UpdateLedger operation
+	// to set the flag to false.
 	DeletionProtection *bool `type:"boolean"`
+
+	// The ARN of the customer managed KMS key that the ledger uses for encryption
+	// at rest. If this parameter is undefined, the ledger uses an Amazon Web Services
+	// owned KMS key for encryption.
+	KmsKeyArn *string `min:"20" type:"string"`
 
 	// The name of the ledger.
 	Name *string `min:"1" type:"string"`
+
+	// The permissions mode of the ledger that you created.
+	PermissionsMode *string `type:"string" enum:"PermissionsMode"`
 
 	// The current status of the ledger.
 	State *string `type:"string" enum:"LedgerState"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateLedgerOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateLedgerOutput) GoString() string {
 	return s.String()
 }
@@ -2114,9 +2307,21 @@ func (s *CreateLedgerOutput) SetDeletionProtection(v bool) *CreateLedgerOutput {
 	return s
 }
 
+// SetKmsKeyArn sets the KmsKeyArn field's value.
+func (s *CreateLedgerOutput) SetKmsKeyArn(v string) *CreateLedgerOutput {
+	s.KmsKeyArn = &v
+	return s
+}
+
 // SetName sets the Name field's value.
 func (s *CreateLedgerOutput) SetName(v string) *CreateLedgerOutput {
 	s.Name = &v
+	return s
+}
+
+// SetPermissionsMode sets the PermissionsMode field's value.
+func (s *CreateLedgerOutput) SetPermissionsMode(v string) *CreateLedgerOutput {
+	s.PermissionsMode = &v
 	return s
 }
 
@@ -2127,7 +2332,7 @@ func (s *CreateLedgerOutput) SetState(v string) *CreateLedgerOutput {
 }
 
 type DeleteLedgerInput struct {
-	_ struct{} `type:"structure"`
+	_ struct{} `type:"structure" nopayload:"true"`
 
 	// The name of the ledger that you want to delete.
 	//
@@ -2135,12 +2340,20 @@ type DeleteLedgerInput struct {
 	Name *string `location:"uri" locationName:"name" min:"1" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteLedgerInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteLedgerInput) GoString() string {
 	return s.String()
 }
@@ -2168,39 +2381,56 @@ func (s *DeleteLedgerInput) SetName(v string) *DeleteLedgerInput {
 }
 
 type DeleteLedgerOutput struct {
-	_ struct{} `type:"structure"`
+	_ struct{} `type:"structure" nopayload:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteLedgerOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteLedgerOutput) GoString() string {
 	return s.String()
 }
 
 type DescribeJournalKinesisStreamInput struct {
-	_ struct{} `type:"structure"`
+	_ struct{} `type:"structure" nopayload:"true"`
 
 	// The name of the ledger.
 	//
 	// LedgerName is a required field
 	LedgerName *string `location:"uri" locationName:"name" min:"1" type:"string" required:"true"`
 
-	// The unique ID that QLDB assigns to each QLDB journal stream.
+	// The UUID (represented in Base62-encoded text) of the QLDB journal stream
+	// to describe.
 	//
 	// StreamId is a required field
 	StreamId *string `location:"uri" locationName:"streamId" min:"22" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeJournalKinesisStreamInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeJournalKinesisStreamInput) GoString() string {
 	return s.String()
 }
@@ -2247,12 +2477,20 @@ type DescribeJournalKinesisStreamOutput struct {
 	Stream *JournalKinesisStreamDescription `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeJournalKinesisStreamOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeJournalKinesisStreamOutput) GoString() string {
 	return s.String()
 }
@@ -2264,9 +2502,10 @@ func (s *DescribeJournalKinesisStreamOutput) SetStream(v *JournalKinesisStreamDe
 }
 
 type DescribeJournalS3ExportInput struct {
-	_ struct{} `type:"structure"`
+	_ struct{} `type:"structure" nopayload:"true"`
 
-	// The unique ID of the journal export job that you want to describe.
+	// The UUID (represented in Base62-encoded text) of the journal export job to
+	// describe.
 	//
 	// ExportId is a required field
 	ExportId *string `location:"uri" locationName:"exportId" min:"22" type:"string" required:"true"`
@@ -2277,12 +2516,20 @@ type DescribeJournalS3ExportInput struct {
 	Name *string `location:"uri" locationName:"name" min:"1" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeJournalS3ExportInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeJournalS3ExportInput) GoString() string {
 	return s.String()
 }
@@ -2331,12 +2578,20 @@ type DescribeJournalS3ExportOutput struct {
 	ExportDescription *JournalS3ExportDescription `type:"structure" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeJournalS3ExportOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeJournalS3ExportOutput) GoString() string {
 	return s.String()
 }
@@ -2348,7 +2603,7 @@ func (s *DescribeJournalS3ExportOutput) SetExportDescription(v *JournalS3ExportD
 }
 
 type DescribeLedgerInput struct {
-	_ struct{} `type:"structure"`
+	_ struct{} `type:"structure" nopayload:"true"`
 
 	// The name of the ledger that you want to describe.
 	//
@@ -2356,12 +2611,20 @@ type DescribeLedgerInput struct {
 	Name *string `location:"uri" locationName:"name" min:"1" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeLedgerInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeLedgerInput) GoString() string {
 	return s.String()
 }
@@ -2403,25 +2666,39 @@ type DescribeLedgerOutput struct {
 	// on ledger creation, this feature is enabled (true) by default.
 	//
 	// If deletion protection is enabled, you must first disable it before you can
-	// delete the ledger using the QLDB API or the AWS Command Line Interface (AWS
-	// CLI). You can disable it by calling the UpdateLedger operation to set the
-	// flag to false. The QLDB console disables deletion protection for you when
-	// you use it to delete a ledger.
+	// delete the ledger. You can disable it by calling the UpdateLedger operation
+	// to set the flag to false.
 	DeletionProtection *bool `type:"boolean"`
+
+	// Information about the encryption of data at rest in the ledger. This includes
+	// the current status, the KMS key, and when the key became inaccessible (in
+	// the case of an error).
+	EncryptionDescription *LedgerEncryptionDescription `type:"structure"`
 
 	// The name of the ledger.
 	Name *string `min:"1" type:"string"`
+
+	// The permissions mode of the ledger.
+	PermissionsMode *string `type:"string" enum:"PermissionsMode"`
 
 	// The current status of the ledger.
 	State *string `type:"string" enum:"LedgerState"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeLedgerOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeLedgerOutput) GoString() string {
 	return s.String()
 }
@@ -2444,9 +2721,21 @@ func (s *DescribeLedgerOutput) SetDeletionProtection(v bool) *DescribeLedgerOutp
 	return s
 }
 
+// SetEncryptionDescription sets the EncryptionDescription field's value.
+func (s *DescribeLedgerOutput) SetEncryptionDescription(v *LedgerEncryptionDescription) *DescribeLedgerOutput {
+	s.EncryptionDescription = v
+	return s
+}
+
 // SetName sets the Name field's value.
 func (s *DescribeLedgerOutput) SetName(v string) *DescribeLedgerOutput {
 	s.Name = &v
+	return s
+}
+
+// SetPermissionsMode sets the PermissionsMode field's value.
+func (s *DescribeLedgerOutput) SetPermissionsMode(v string) *DescribeLedgerOutput {
+	s.PermissionsMode = &v
 	return s
 }
 
@@ -2459,11 +2748,10 @@ func (s *DescribeLedgerOutput) SetState(v string) *DescribeLedgerOutput {
 type ExportJournalToS3Input struct {
 	_ struct{} `type:"structure"`
 
-	// The exclusive end date and time for the range of journal contents that you
-	// want to export.
+	// The exclusive end date and time for the range of journal contents to export.
 	//
 	// The ExclusiveEndTime must be in ISO 8601 date and time format and in Universal
-	// Coordinated Time (UTC). For example: 2019-06-13T21:36:34Z
+	// Coordinated Time (UTC). For example: 2019-06-13T21:36:34Z.
 	//
 	// The ExclusiveEndTime must be less than or equal to the current UTC date and
 	// time.
@@ -2471,11 +2759,10 @@ type ExportJournalToS3Input struct {
 	// ExclusiveEndTime is a required field
 	ExclusiveEndTime *time.Time `type:"timestamp" required:"true"`
 
-	// The inclusive start date and time for the range of journal contents that
-	// you want to export.
+	// The inclusive start date and time for the range of journal contents to export.
 	//
 	// The InclusiveStartTime must be in ISO 8601 date and time format and in Universal
-	// Coordinated Time (UTC). For example: 2019-06-13T21:36:34Z
+	// Coordinated Time (UTC). For example: 2019-06-13T21:36:34Z.
 	//
 	// The InclusiveStartTime must be before ExclusiveEndTime.
 	//
@@ -2495,8 +2782,8 @@ type ExportJournalToS3Input struct {
 	//
 	//    * Write objects into your Amazon Simple Storage Service (Amazon S3) bucket.
 	//
-	//    * (Optional) Use your customer master key (CMK) in AWS Key Management
-	//    Service (AWS KMS) for server-side encryption of your exported data.
+	//    * (Optional) Use your customer master key (CMK) in Key Management Service
+	//    (KMS) for server-side encryption of your exported data.
 	//
 	// RoleArn is a required field
 	RoleArn *string `min:"20" type:"string" required:"true"`
@@ -2508,12 +2795,20 @@ type ExportJournalToS3Input struct {
 	S3ExportConfiguration *S3ExportConfiguration `type:"structure" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ExportJournalToS3Input) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ExportJournalToS3Input) GoString() string {
 	return s.String()
 }
@@ -2587,7 +2882,8 @@ func (s *ExportJournalToS3Input) SetS3ExportConfiguration(v *S3ExportConfigurati
 type ExportJournalToS3Output struct {
 	_ struct{} `type:"structure"`
 
-	// The unique ID that QLDB assigns to each journal export job.
+	// The UUID (represented in Base62-encoded text) that QLDB assigns to each journal
+	// export job.
 	//
 	// To describe your export request and check the status of the job, you can
 	// use ExportId to call DescribeJournalS3Export.
@@ -2596,12 +2892,20 @@ type ExportJournalToS3Output struct {
 	ExportId *string `min:"22" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ExportJournalToS3Output) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ExportJournalToS3Output) GoString() string {
 	return s.String()
 }
@@ -2618,7 +2922,11 @@ type GetBlockInput struct {
 	// The location of the block that you want to request. An address is an Amazon
 	// Ion structure that has two fields: strandId and sequenceNo.
 	//
-	// For example: {strandId:"BlFTjlSXze9BIh1KOszcE3",sequenceNo:14}
+	// For example: {strandId:"BlFTjlSXze9BIh1KOszcE3",sequenceNo:14}.
+	//
+	// BlockAddress is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by GetBlockInput's
+	// String and GoString methods.
 	//
 	// BlockAddress is a required field
 	BlockAddress *ValueHolder `type:"structure" required:"true" sensitive:"true"`
@@ -2626,7 +2934,11 @@ type GetBlockInput struct {
 	// The latest block location covered by the digest for which to request a proof.
 	// An address is an Amazon Ion structure that has two fields: strandId and sequenceNo.
 	//
-	// For example: {strandId:"BlFTjlSXze9BIh1KOszcE3",sequenceNo:49}
+	// For example: {strandId:"BlFTjlSXze9BIh1KOszcE3",sequenceNo:49}.
+	//
+	// DigestTipAddress is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by GetBlockInput's
+	// String and GoString methods.
 	DigestTipAddress *ValueHolder `type:"structure" sensitive:"true"`
 
 	// The name of the ledger.
@@ -2635,12 +2947,20 @@ type GetBlockInput struct {
 	Name *string `location:"uri" locationName:"name" min:"1" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetBlockInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetBlockInput) GoString() string {
 	return s.String()
 }
@@ -2697,21 +3017,37 @@ type GetBlockOutput struct {
 
 	// The block data object in Amazon Ion format.
 	//
+	// Block is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by GetBlockOutput's
+	// String and GoString methods.
+	//
 	// Block is a required field
 	Block *ValueHolder `type:"structure" required:"true" sensitive:"true"`
 
 	// The proof object in Amazon Ion format returned by a GetBlock request. A proof
 	// contains the list of hash values required to recalculate the specified digest
 	// using a Merkle tree, starting with the specified block.
+	//
+	// Proof is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by GetBlockOutput's
+	// String and GoString methods.
 	Proof *ValueHolder `type:"structure" sensitive:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetBlockOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetBlockOutput) GoString() string {
 	return s.String()
 }
@@ -2729,7 +3065,7 @@ func (s *GetBlockOutput) SetProof(v *ValueHolder) *GetBlockOutput {
 }
 
 type GetDigestInput struct {
-	_ struct{} `type:"structure"`
+	_ struct{} `type:"structure" nopayload:"true"`
 
 	// The name of the ledger.
 	//
@@ -2737,12 +3073,20 @@ type GetDigestInput struct {
 	Name *string `location:"uri" locationName:"name" min:"1" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetDigestInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetDigestInput) GoString() string {
 	return s.String()
 }
@@ -2773,7 +3117,6 @@ type GetDigestOutput struct {
 	_ struct{} `type:"structure"`
 
 	// The 256-bit hash value representing the digest returned by a GetDigest request.
-	//
 	// Digest is automatically base64 encoded/decoded by the SDK.
 	//
 	// Digest is a required field
@@ -2782,16 +3125,28 @@ type GetDigestOutput struct {
 	// The latest block location covered by the digest that you requested. An address
 	// is an Amazon Ion structure that has two fields: strandId and sequenceNo.
 	//
+	// DigestTipAddress is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by GetDigestOutput's
+	// String and GoString methods.
+	//
 	// DigestTipAddress is a required field
 	DigestTipAddress *ValueHolder `type:"structure" required:"true" sensitive:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetDigestOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetDigestOutput) GoString() string {
 	return s.String()
 }
@@ -2814,7 +3169,11 @@ type GetRevisionInput struct {
 	// The block location of the document revision to be verified. An address is
 	// an Amazon Ion structure that has two fields: strandId and sequenceNo.
 	//
-	// For example: {strandId:"BlFTjlSXze9BIh1KOszcE3",sequenceNo:14}
+	// For example: {strandId:"BlFTjlSXze9BIh1KOszcE3",sequenceNo:14}.
+	//
+	// BlockAddress is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by GetRevisionInput's
+	// String and GoString methods.
 	//
 	// BlockAddress is a required field
 	BlockAddress *ValueHolder `type:"structure" required:"true" sensitive:"true"`
@@ -2822,10 +3181,14 @@ type GetRevisionInput struct {
 	// The latest block location covered by the digest for which to request a proof.
 	// An address is an Amazon Ion structure that has two fields: strandId and sequenceNo.
 	//
-	// For example: {strandId:"BlFTjlSXze9BIh1KOszcE3",sequenceNo:49}
+	// For example: {strandId:"BlFTjlSXze9BIh1KOszcE3",sequenceNo:49}.
+	//
+	// DigestTipAddress is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by GetRevisionInput's
+	// String and GoString methods.
 	DigestTipAddress *ValueHolder `type:"structure" sensitive:"true"`
 
-	// The unique ID of the document to be verified.
+	// The UUID (represented in Base62-encoded text) of the document to be verified.
 	//
 	// DocumentId is a required field
 	DocumentId *string `min:"22" type:"string" required:"true"`
@@ -2836,12 +3199,20 @@ type GetRevisionInput struct {
 	Name *string `location:"uri" locationName:"name" min:"1" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetRevisionInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetRevisionInput) GoString() string {
 	return s.String()
 }
@@ -2912,20 +3283,36 @@ type GetRevisionOutput struct {
 	// A proof contains the list of hash values that are required to recalculate
 	// the specified digest using a Merkle tree, starting with the specified document
 	// revision.
+	//
+	// Proof is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by GetRevisionOutput's
+	// String and GoString methods.
 	Proof *ValueHolder `type:"structure" sensitive:"true"`
 
 	// The document revision data object in Amazon Ion format.
+	//
+	// Revision is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by GetRevisionOutput's
+	// String and GoString methods.
 	//
 	// Revision is a required field
 	Revision *ValueHolder `type:"structure" required:"true" sensitive:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetRevisionOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetRevisionOutput) GoString() string {
 	return s.String()
 }
@@ -2953,12 +3340,20 @@ type InvalidParameterException struct {
 	ParameterName *string `type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s InvalidParameterException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s InvalidParameterException) GoString() string {
 	return s.String()
 }
@@ -3001,9 +3396,9 @@ func (s *InvalidParameterException) RequestID() string {
 	return s.RespMetadata.RequestID
 }
 
-// The information about an Amazon QLDB journal stream, including the Amazon
-// Resource Name (ARN), stream name, creation time, current status, and the
-// parameters of your original stream creation request.
+// Information about an Amazon QLDB journal stream, including the Amazon Resource
+// Name (ARN), stream name, creation time, current status, and the parameters
+// of the original stream creation request.
 type JournalKinesisStreamDescription struct {
 	_ struct{} `type:"structure"`
 
@@ -3021,14 +3416,14 @@ type JournalKinesisStreamDescription struct {
 	ErrorCause *string `type:"string" enum:"ErrorCause"`
 
 	// The exclusive date and time that specifies when the stream ends. If this
-	// parameter is blank, the stream runs indefinitely until you cancel it.
+	// parameter is undefined, the stream runs indefinitely until you cancel it.
 	ExclusiveEndTime *time.Time `type:"timestamp"`
 
 	// The inclusive start date and time from which to start streaming journal data.
 	InclusiveStartTime *time.Time `type:"timestamp"`
 
 	// The configuration settings of the Amazon Kinesis Data Streams destination
-	// for your QLDB journal stream.
+	// for a QLDB journal stream.
 	//
 	// KinesisConfiguration is a required field
 	KinesisConfiguration *KinesisConfiguration `type:"structure" required:"true"`
@@ -3049,7 +3444,7 @@ type JournalKinesisStreamDescription struct {
 	// Status is a required field
 	Status *string `type:"string" required:"true" enum:"StreamStatus"`
 
-	// The unique ID that QLDB assigns to each QLDB journal stream.
+	// The UUID (represented in Base62-encoded text) of the QLDB journal stream.
 	//
 	// StreamId is a required field
 	StreamId *string `min:"22" type:"string" required:"true"`
@@ -3060,12 +3455,20 @@ type JournalKinesisStreamDescription struct {
 	StreamName *string `min:"1" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s JournalKinesisStreamDescription) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s JournalKinesisStreamDescription) GoString() string {
 	return s.String()
 }
@@ -3136,9 +3539,9 @@ func (s *JournalKinesisStreamDescription) SetStreamName(v string) *JournalKinesi
 	return s
 }
 
-// The information about a journal export job, including the ledger name, export
-// ID, when it was created, current status, and its start and end time export
-// parameters.
+// Information about a journal export job, including the ledger name, export
+// ID, creation time, current status, and the parameters of the original export
+// creation request.
 type JournalS3ExportDescription struct {
 	_ struct{} `type:"structure"`
 
@@ -3155,7 +3558,7 @@ type JournalS3ExportDescription struct {
 	// ExportCreationTime is a required field
 	ExportCreationTime *time.Time `type:"timestamp" required:"true"`
 
-	// The unique ID of the journal export job.
+	// The UUID (represented in Base62-encoded text) of the journal export job.
 	//
 	// ExportId is a required field
 	ExportId *string `min:"22" type:"string" required:"true"`
@@ -3176,8 +3579,8 @@ type JournalS3ExportDescription struct {
 	//
 	//    * Write objects into your Amazon Simple Storage Service (Amazon S3) bucket.
 	//
-	//    * (Optional) Use your customer master key (CMK) in AWS Key Management
-	//    Service (AWS KMS) for server-side encryption of your exported data.
+	//    * (Optional) Use your customer master key (CMK) in Key Management Service
+	//    (KMS) for server-side encryption of your exported data.
 	//
 	// RoleArn is a required field
 	RoleArn *string `min:"20" type:"string" required:"true"`
@@ -3194,12 +3597,20 @@ type JournalS3ExportDescription struct {
 	Status *string `type:"string" required:"true" enum:"ExportStatus"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s JournalS3ExportDescription) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s JournalS3ExportDescription) GoString() string {
 	return s.String()
 }
@@ -3253,27 +3664,40 @@ func (s *JournalS3ExportDescription) SetStatus(v string) *JournalS3ExportDescrip
 }
 
 // The configuration settings of the Amazon Kinesis Data Streams destination
-// for your Amazon QLDB journal stream.
+// for an Amazon QLDB journal stream.
 type KinesisConfiguration struct {
 	_ struct{} `type:"structure"`
 
 	// Enables QLDB to publish multiple data records in a single Kinesis Data Streams
-	// record. To learn more, see KPL Key Concepts (https://docs.aws.amazon.com/streams/latest/dev/kinesis-kpl-concepts.html)
+	// record, increasing the number of records sent per API call.
+	//
+	// This option is enabled by default. Record aggregation has important implications
+	// for processing records and requires de-aggregation in your stream consumer.
+	// To learn more, see KPL Key Concepts (https://docs.aws.amazon.com/streams/latest/dev/kinesis-kpl-concepts.html)
+	// and Consumer De-aggregation (https://docs.aws.amazon.com/streams/latest/dev/kinesis-kpl-consumer-deaggregation.html)
 	// in the Amazon Kinesis Data Streams Developer Guide.
 	AggregationEnabled *bool `type:"boolean"`
 
-	// The Amazon Resource Name (ARN) of the Kinesis data stream resource.
+	// The Amazon Resource Name (ARN) of the Kinesis Data Streams resource.
 	//
 	// StreamArn is a required field
 	StreamArn *string `min:"20" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s KinesisConfiguration) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s KinesisConfiguration) GoString() string {
 	return s.String()
 }
@@ -3306,6 +3730,89 @@ func (s *KinesisConfiguration) SetStreamArn(v string) *KinesisConfiguration {
 	return s
 }
 
+// Information about the encryption of data at rest in an Amazon QLDB ledger.
+// This includes the current status, the key in Key Management Service (KMS),
+// and when the key became inaccessible (in the case of an error).
+//
+// For more information, see Encryption at rest (https://docs.aws.amazon.com/qldb/latest/developerguide/encryption-at-rest.html)
+// in the Amazon QLDB Developer Guide.
+type LedgerEncryptionDescription struct {
+	_ struct{} `type:"structure"`
+
+	// The current state of encryption at rest for the ledger. This can be one of
+	// the following values:
+	//
+	//    * ENABLED: Encryption is fully enabled using the specified key.
+	//
+	//    * UPDATING: The ledger is actively processing the specified key change.
+	//    Key changes in QLDB are asynchronous. The ledger is fully accessible without
+	//    any performance impact while the key change is being processed. The amount
+	//    of time it takes to update a key varies depending on the ledger size.
+	//
+	//    * KMS_KEY_INACCESSIBLE: The specified customer managed KMS key is not
+	//    accessible, and the ledger is impaired. Either the key was disabled or
+	//    deleted, or the grants on the key were revoked. When a ledger is impaired,
+	//    it is not accessible and does not accept any read or write requests. An
+	//    impaired ledger automatically returns to an active state after you restore
+	//    the grants on the key, or re-enable the key that was disabled. However,
+	//    deleting a customer managed KMS key is irreversible. After a key is deleted,
+	//    you can no longer access the ledgers that are protected with that key,
+	//    and the data becomes unrecoverable permanently.
+	//
+	// EncryptionStatus is a required field
+	EncryptionStatus *string `type:"string" required:"true" enum:"EncryptionStatus"`
+
+	// The date and time, in epoch time format, when the KMS key first became inaccessible,
+	// in the case of an error. (Epoch time format is the number of seconds that
+	// have elapsed since 12:00:00 AM January 1, 1970 UTC.)
+	//
+	// This parameter is undefined if the KMS key is accessible.
+	InaccessibleKmsKeyDateTime *time.Time `type:"timestamp"`
+
+	// The Amazon Resource Name (ARN) of the customer managed KMS key that the ledger
+	// uses for encryption at rest. If this parameter is undefined, the ledger uses
+	// an Amazon Web Services owned KMS key for encryption.
+	//
+	// KmsKeyArn is a required field
+	KmsKeyArn *string `min:"20" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s LedgerEncryptionDescription) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s LedgerEncryptionDescription) GoString() string {
+	return s.String()
+}
+
+// SetEncryptionStatus sets the EncryptionStatus field's value.
+func (s *LedgerEncryptionDescription) SetEncryptionStatus(v string) *LedgerEncryptionDescription {
+	s.EncryptionStatus = &v
+	return s
+}
+
+// SetInaccessibleKmsKeyDateTime sets the InaccessibleKmsKeyDateTime field's value.
+func (s *LedgerEncryptionDescription) SetInaccessibleKmsKeyDateTime(v time.Time) *LedgerEncryptionDescription {
+	s.InaccessibleKmsKeyDateTime = &v
+	return s
+}
+
+// SetKmsKeyArn sets the KmsKeyArn field's value.
+func (s *LedgerEncryptionDescription) SetKmsKeyArn(v string) *LedgerEncryptionDescription {
+	s.KmsKeyArn = &v
+	return s
+}
+
 // Information about a ledger, including its name, state, and when it was created.
 type LedgerSummary struct {
 	_ struct{} `type:"structure"`
@@ -3322,12 +3829,20 @@ type LedgerSummary struct {
 	State *string `type:"string" enum:"LedgerState"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s LedgerSummary) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s LedgerSummary) GoString() string {
 	return s.String()
 }
@@ -3361,12 +3876,20 @@ type LimitExceededException struct {
 	ResourceType *string `type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s LimitExceededException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s LimitExceededException) GoString() string {
 	return s.String()
 }
@@ -3410,7 +3933,7 @@ func (s *LimitExceededException) RequestID() string {
 }
 
 type ListJournalKinesisStreamsForLedgerInput struct {
-	_ struct{} `type:"structure"`
+	_ struct{} `type:"structure" nopayload:"true"`
 
 	// The name of the ledger.
 	//
@@ -3428,12 +3951,20 @@ type ListJournalKinesisStreamsForLedgerInput struct {
 	NextToken *string `location:"querystring" locationName:"next_token" min:"4" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListJournalKinesisStreamsForLedgerInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListJournalKinesisStreamsForLedgerInput) GoString() string {
 	return s.String()
 }
@@ -3494,12 +4025,20 @@ type ListJournalKinesisStreamsForLedgerOutput struct {
 	Streams []*JournalKinesisStreamDescription `type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListJournalKinesisStreamsForLedgerOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListJournalKinesisStreamsForLedgerOutput) GoString() string {
 	return s.String()
 }
@@ -3517,7 +4056,7 @@ func (s *ListJournalKinesisStreamsForLedgerOutput) SetStreams(v []*JournalKinesi
 }
 
 type ListJournalS3ExportsForLedgerInput struct {
-	_ struct{} `type:"structure"`
+	_ struct{} `type:"structure" nopayload:"true"`
 
 	// The maximum number of results to return in a single ListJournalS3ExportsForLedger
 	// request. (The actual number of results returned might be fewer.)
@@ -3535,12 +4074,20 @@ type ListJournalS3ExportsForLedgerInput struct {
 	NextToken *string `location:"querystring" locationName:"next_token" min:"4" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListJournalS3ExportsForLedgerInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListJournalS3ExportsForLedgerInput) GoString() string {
 	return s.String()
 }
@@ -3601,12 +4148,20 @@ type ListJournalS3ExportsForLedgerOutput struct {
 	NextToken *string `min:"4" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListJournalS3ExportsForLedgerOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListJournalS3ExportsForLedgerOutput) GoString() string {
 	return s.String()
 }
@@ -3624,7 +4179,7 @@ func (s *ListJournalS3ExportsForLedgerOutput) SetNextToken(v string) *ListJourna
 }
 
 type ListJournalS3ExportsInput struct {
-	_ struct{} `type:"structure"`
+	_ struct{} `type:"structure" nopayload:"true"`
 
 	// The maximum number of results to return in a single ListJournalS3Exports
 	// request. (The actual number of results returned might be fewer.)
@@ -3636,12 +4191,20 @@ type ListJournalS3ExportsInput struct {
 	NextToken *string `location:"querystring" locationName:"next_token" min:"4" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListJournalS3ExportsInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListJournalS3ExportsInput) GoString() string {
 	return s.String()
 }
@@ -3678,7 +4241,7 @@ type ListJournalS3ExportsOutput struct {
 	_ struct{} `type:"structure"`
 
 	// The array of journal export job descriptions for all ledgers that are associated
-	// with the current AWS account and Region.
+	// with the current account and Region.
 	JournalS3Exports []*JournalS3ExportDescription `type:"list"`
 
 	//    * If NextToken is empty, then the last page of results has been processed
@@ -3690,12 +4253,20 @@ type ListJournalS3ExportsOutput struct {
 	NextToken *string `min:"4" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListJournalS3ExportsOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListJournalS3ExportsOutput) GoString() string {
 	return s.String()
 }
@@ -3713,7 +4284,7 @@ func (s *ListJournalS3ExportsOutput) SetNextToken(v string) *ListJournalS3Export
 }
 
 type ListLedgersInput struct {
-	_ struct{} `type:"structure"`
+	_ struct{} `type:"structure" nopayload:"true"`
 
 	// The maximum number of results to return in a single ListLedgers request.
 	// (The actual number of results returned might be fewer.)
@@ -3725,12 +4296,20 @@ type ListLedgersInput struct {
 	NextToken *string `location:"querystring" locationName:"next_token" min:"4" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListLedgersInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListLedgersInput) GoString() string {
 	return s.String()
 }
@@ -3766,7 +4345,7 @@ func (s *ListLedgersInput) SetNextToken(v string) *ListLedgersInput {
 type ListLedgersOutput struct {
 	_ struct{} `type:"structure"`
 
-	// The array of ledger summaries that are associated with the current AWS account
+	// The array of ledger summaries that are associated with the current account
 	// and Region.
 	Ledgers []*LedgerSummary `type:"list"`
 
@@ -3781,12 +4360,20 @@ type ListLedgersOutput struct {
 	NextToken *string `min:"4" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListLedgersOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListLedgersOutput) GoString() string {
 	return s.String()
 }
@@ -3804,9 +4391,9 @@ func (s *ListLedgersOutput) SetNextToken(v string) *ListLedgersOutput {
 }
 
 type ListTagsForResourceInput struct {
-	_ struct{} `type:"structure"`
+	_ struct{} `type:"structure" nopayload:"true"`
 
-	// The Amazon Resource Name (ARN) for which you want to list the tags. For example:
+	// The Amazon Resource Name (ARN) for which to list the tags. For example:
 	//
 	// arn:aws:qldb:us-east-1:123456789012:ledger/exampleLedger
 	//
@@ -3814,12 +4401,20 @@ type ListTagsForResourceInput struct {
 	ResourceArn *string `location:"uri" locationName:"resourceArn" min:"20" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListTagsForResourceInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListTagsForResourceInput) GoString() string {
 	return s.String()
 }
@@ -3853,12 +4448,20 @@ type ListTagsForResourceOutput struct {
 	Tags map[string]*string `type:"map"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListTagsForResourceOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListTagsForResourceOutput) GoString() string {
 	return s.String()
 }
@@ -3883,12 +4486,20 @@ type ResourceAlreadyExistsException struct {
 	ResourceType *string `type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ResourceAlreadyExistsException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ResourceAlreadyExistsException) GoString() string {
 	return s.String()
 }
@@ -3945,12 +4556,20 @@ type ResourceInUseException struct {
 	ResourceType *string `type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ResourceInUseException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ResourceInUseException) GoString() string {
 	return s.String()
 }
@@ -4007,12 +4626,20 @@ type ResourceNotFoundException struct {
 	ResourceType *string `type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ResourceNotFoundException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ResourceNotFoundException) GoString() string {
 	return s.String()
 }
@@ -4069,12 +4696,20 @@ type ResourcePreconditionNotMetException struct {
 	ResourceType *string `type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ResourcePreconditionNotMetException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ResourcePreconditionNotMetException) GoString() string {
 	return s.String()
 }
@@ -4122,9 +4757,8 @@ func (s *ResourcePreconditionNotMetException) RequestID() string {
 type S3EncryptionConfiguration struct {
 	_ struct{} `type:"structure"`
 
-	// The Amazon Resource Name (ARN) for a symmetric customer master key (CMK)
-	// in AWS Key Management Service (AWS KMS). Amazon QLDB does not support asymmetric
-	// CMKs.
+	// The Amazon Resource Name (ARN) of a symmetric customer master key (CMK) in
+	// Key Management Service (KMS). Amazon S3 does not support asymmetric CMKs.
 	//
 	// You must provide a KmsKeyArn if you specify SSE_KMS as the ObjectEncryptionType.
 	//
@@ -4141,12 +4775,20 @@ type S3EncryptionConfiguration struct {
 	ObjectEncryptionType *string `type:"string" required:"true" enum:"S3ObjectEncryptionType"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s S3EncryptionConfiguration) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s S3EncryptionConfiguration) GoString() string {
 	return s.String()
 }
@@ -4219,12 +4861,20 @@ type S3ExportConfiguration struct {
 	Prefix *string `type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s S3ExportConfiguration) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s S3ExportConfiguration) GoString() string {
 	return s.String()
 }
@@ -4281,12 +4931,12 @@ type StreamJournalToKinesisInput struct {
 	// define this parameter, the stream runs indefinitely until you cancel it.
 	//
 	// The ExclusiveEndTime must be in ISO 8601 date and time format and in Universal
-	// Coordinated Time (UTC). For example: 2019-06-13T21:36:34Z
+	// Coordinated Time (UTC). For example: 2019-06-13T21:36:34Z.
 	ExclusiveEndTime *time.Time `type:"timestamp"`
 
 	// The inclusive start date and time from which to start streaming journal data.
 	// This parameter must be in ISO 8601 date and time format and in Universal
-	// Coordinated Time (UTC). For example: 2019-06-13T21:36:34Z
+	// Coordinated Time (UTC). For example: 2019-06-13T21:36:34Z.
 	//
 	// The InclusiveStartTime cannot be in the future and must be before ExclusiveEndTime.
 	//
@@ -4329,12 +4979,20 @@ type StreamJournalToKinesisInput struct {
 	Tags map[string]*string `type:"map"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s StreamJournalToKinesisInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s StreamJournalToKinesisInput) GoString() string {
 	return s.String()
 }
@@ -4423,16 +5081,25 @@ func (s *StreamJournalToKinesisInput) SetTags(v map[string]*string) *StreamJourn
 type StreamJournalToKinesisOutput struct {
 	_ struct{} `type:"structure"`
 
-	// The unique ID that QLDB assigns to each QLDB journal stream.
+	// The UUID (represented in Base62-encoded text) that QLDB assigns to each QLDB
+	// journal stream.
 	StreamId *string `min:"22" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s StreamJournalToKinesisOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s StreamJournalToKinesisOutput) GoString() string {
 	return s.String()
 }
@@ -4462,12 +5129,20 @@ type TagResourceInput struct {
 	Tags map[string]*string `type:"map" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s TagResourceInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s TagResourceInput) GoString() string {
 	return s.String()
 }
@@ -4504,42 +5179,57 @@ func (s *TagResourceInput) SetTags(v map[string]*string) *TagResourceInput {
 }
 
 type TagResourceOutput struct {
-	_ struct{} `type:"structure"`
+	_ struct{} `type:"structure" nopayload:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s TagResourceOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s TagResourceOutput) GoString() string {
 	return s.String()
 }
 
 type UntagResourceInput struct {
-	_ struct{} `type:"structure"`
+	_ struct{} `type:"structure" nopayload:"true"`
 
-	// The Amazon Resource Name (ARN) from which you want to remove the tags. For
-	// example:
+	// The Amazon Resource Name (ARN) from which to remove the tags. For example:
 	//
 	// arn:aws:qldb:us-east-1:123456789012:ledger/exampleLedger
 	//
 	// ResourceArn is a required field
 	ResourceArn *string `location:"uri" locationName:"resourceArn" min:"20" type:"string" required:"true"`
 
-	// The list of tag keys that you want to remove.
+	// The list of tag keys to remove.
 	//
 	// TagKeys is a required field
 	TagKeys []*string `location:"querystring" locationName:"tagKeys" type:"list" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UntagResourceInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UntagResourceInput) GoString() string {
 	return s.String()
 }
@@ -4576,15 +5266,23 @@ func (s *UntagResourceInput) SetTagKeys(v []*string) *UntagResourceInput {
 }
 
 type UntagResourceOutput struct {
-	_ struct{} `type:"structure"`
+	_ struct{} `type:"structure" nopayload:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UntagResourceOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UntagResourceOutput) GoString() string {
 	return s.String()
 }
@@ -4596,11 +5294,45 @@ type UpdateLedgerInput struct {
 	// on ledger creation, this feature is enabled (true) by default.
 	//
 	// If deletion protection is enabled, you must first disable it before you can
-	// delete the ledger using the QLDB API or the AWS Command Line Interface (AWS
-	// CLI). You can disable it by calling the UpdateLedger operation to set the
-	// flag to false. The QLDB console disables deletion protection for you when
-	// you use it to delete a ledger.
+	// delete the ledger. You can disable it by calling the UpdateLedger operation
+	// to set the flag to false.
 	DeletionProtection *bool `type:"boolean"`
+
+	// The key in Key Management Service (KMS) to use for encryption of data at
+	// rest in the ledger. For more information, see Encryption at rest (https://docs.aws.amazon.com/qldb/latest/developerguide/encryption-at-rest.html)
+	// in the Amazon QLDB Developer Guide.
+	//
+	// Use one of the following options to specify this parameter:
+	//
+	//    * AWS_OWNED_KMS_KEY: Use an KMS key that is owned and managed by Amazon
+	//    Web Services on your behalf.
+	//
+	//    * Undefined: Make no changes to the KMS key of the ledger.
+	//
+	//    * A valid symmetric customer managed KMS key: Use the specified KMS key
+	//    in your account that you create, own, and manage. Amazon QLDB does not
+	//    support asymmetric keys. For more information, see Using symmetric and
+	//    asymmetric keys (https://docs.aws.amazon.com/kms/latest/developerguide/symmetric-asymmetric.html)
+	//    in the Key Management Service Developer Guide.
+	//
+	// To specify a customer managed KMS key, you can use its key ID, Amazon Resource
+	// Name (ARN), alias name, or alias ARN. When using an alias name, prefix it
+	// with "alias/". To specify a key in a different account, you must use the
+	// key ARN or alias ARN.
+	//
+	// For example:
+	//
+	//    * Key ID: 1234abcd-12ab-34cd-56ef-1234567890ab
+	//
+	//    * Key ARN: arn:aws:kms:us-east-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab
+	//
+	//    * Alias name: alias/ExampleAlias
+	//
+	//    * Alias ARN: arn:aws:kms:us-east-2:111122223333:alias/ExampleAlias
+	//
+	// For more information, see Key identifiers (KeyId) (https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#key-id)
+	// in the Key Management Service Developer Guide.
+	KmsKey *string `type:"string"`
 
 	// The name of the ledger.
 	//
@@ -4608,12 +5340,20 @@ type UpdateLedgerInput struct {
 	Name *string `location:"uri" locationName:"name" min:"1" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpdateLedgerInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpdateLedgerInput) GoString() string {
 	return s.String()
 }
@@ -4640,6 +5380,12 @@ func (s *UpdateLedgerInput) SetDeletionProtection(v bool) *UpdateLedgerInput {
 	return s
 }
 
+// SetKmsKey sets the KmsKey field's value.
+func (s *UpdateLedgerInput) SetKmsKey(v string) *UpdateLedgerInput {
+	s.KmsKey = &v
+	return s
+}
+
 // SetName sets the Name field's value.
 func (s *UpdateLedgerInput) SetName(v string) *UpdateLedgerInput {
 	s.Name = &v
@@ -4661,11 +5407,14 @@ type UpdateLedgerOutput struct {
 	// on ledger creation, this feature is enabled (true) by default.
 	//
 	// If deletion protection is enabled, you must first disable it before you can
-	// delete the ledger using the QLDB API or the AWS Command Line Interface (AWS
-	// CLI). You can disable it by calling the UpdateLedger operation to set the
-	// flag to false. The QLDB console disables deletion protection for you when
-	// you use it to delete a ledger.
+	// delete the ledger. You can disable it by calling the UpdateLedger operation
+	// to set the flag to false.
 	DeletionProtection *bool `type:"boolean"`
+
+	// Information about the encryption of data at rest in the ledger. This includes
+	// the current status, the KMS key, and when the key became inaccessible (in
+	// the case of an error).
+	EncryptionDescription *LedgerEncryptionDescription `type:"structure"`
 
 	// The name of the ledger.
 	Name *string `min:"1" type:"string"`
@@ -4674,12 +5423,20 @@ type UpdateLedgerOutput struct {
 	State *string `type:"string" enum:"LedgerState"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpdateLedgerOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpdateLedgerOutput) GoString() string {
 	return s.String()
 }
@@ -4702,6 +5459,12 @@ func (s *UpdateLedgerOutput) SetDeletionProtection(v bool) *UpdateLedgerOutput {
 	return s
 }
 
+// SetEncryptionDescription sets the EncryptionDescription field's value.
+func (s *UpdateLedgerOutput) SetEncryptionDescription(v *LedgerEncryptionDescription) *UpdateLedgerOutput {
+	s.EncryptionDescription = v
+	return s
+}
+
 // SetName sets the Name field's value.
 func (s *UpdateLedgerOutput) SetName(v string) *UpdateLedgerOutput {
 	s.Name = &v
@@ -4714,20 +5477,164 @@ func (s *UpdateLedgerOutput) SetState(v string) *UpdateLedgerOutput {
 	return s
 }
 
+type UpdateLedgerPermissionsModeInput struct {
+	_ struct{} `type:"structure"`
+
+	// The name of the ledger.
+	//
+	// Name is a required field
+	Name *string `location:"uri" locationName:"name" min:"1" type:"string" required:"true"`
+
+	// The permissions mode to assign to the ledger. This parameter can have one
+	// of the following values:
+	//
+	//    * ALLOW_ALL: A legacy permissions mode that enables access control with
+	//    API-level granularity for ledgers. This mode allows users who have the
+	//    SendCommand API permission for this ledger to run all PartiQL commands
+	//    (hence, ALLOW_ALL) on any tables in the specified ledger. This mode disregards
+	//    any table-level or command-level IAM permissions policies that you create
+	//    for the ledger.
+	//
+	//    * STANDARD: (Recommended) A permissions mode that enables access control
+	//    with finer granularity for ledgers, tables, and PartiQL commands. By default,
+	//    this mode denies all user requests to run any PartiQL commands on any
+	//    tables in this ledger. To allow PartiQL commands to run, you must create
+	//    IAM permissions policies for specific table resources and PartiQL actions,
+	//    in addition to the SendCommand API permission for the ledger. For information,
+	//    see Getting started with the standard permissions mode (https://docs.aws.amazon.com/qldb/latest/developerguide/getting-started-standard-mode.html)
+	//    in the Amazon QLDB Developer Guide.
+	//
+	// We strongly recommend using the STANDARD permissions mode to maximize the
+	// security of your ledger data.
+	//
+	// PermissionsMode is a required field
+	PermissionsMode *string `type:"string" required:"true" enum:"PermissionsMode"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdateLedgerPermissionsModeInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdateLedgerPermissionsModeInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *UpdateLedgerPermissionsModeInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "UpdateLedgerPermissionsModeInput"}
+	if s.Name == nil {
+		invalidParams.Add(request.NewErrParamRequired("Name"))
+	}
+	if s.Name != nil && len(*s.Name) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Name", 1))
+	}
+	if s.PermissionsMode == nil {
+		invalidParams.Add(request.NewErrParamRequired("PermissionsMode"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetName sets the Name field's value.
+func (s *UpdateLedgerPermissionsModeInput) SetName(v string) *UpdateLedgerPermissionsModeInput {
+	s.Name = &v
+	return s
+}
+
+// SetPermissionsMode sets the PermissionsMode field's value.
+func (s *UpdateLedgerPermissionsModeInput) SetPermissionsMode(v string) *UpdateLedgerPermissionsModeInput {
+	s.PermissionsMode = &v
+	return s
+}
+
+type UpdateLedgerPermissionsModeOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The Amazon Resource Name (ARN) for the ledger.
+	Arn *string `min:"20" type:"string"`
+
+	// The name of the ledger.
+	Name *string `min:"1" type:"string"`
+
+	// The current permissions mode of the ledger.
+	PermissionsMode *string `type:"string" enum:"PermissionsMode"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdateLedgerPermissionsModeOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdateLedgerPermissionsModeOutput) GoString() string {
+	return s.String()
+}
+
+// SetArn sets the Arn field's value.
+func (s *UpdateLedgerPermissionsModeOutput) SetArn(v string) *UpdateLedgerPermissionsModeOutput {
+	s.Arn = &v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *UpdateLedgerPermissionsModeOutput) SetName(v string) *UpdateLedgerPermissionsModeOutput {
+	s.Name = &v
+	return s
+}
+
+// SetPermissionsMode sets the PermissionsMode field's value.
+func (s *UpdateLedgerPermissionsModeOutput) SetPermissionsMode(v string) *UpdateLedgerPermissionsModeOutput {
+	s.PermissionsMode = &v
+	return s
+}
+
 // A structure that can contain a value in multiple encoding formats.
 type ValueHolder struct {
 	_ struct{} `type:"structure" sensitive:"true"`
 
 	// An Amazon Ion plaintext value contained in a ValueHolder structure.
+	//
+	// IonText is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by ValueHolder's
+	// String and GoString methods.
 	IonText *string `min:"1" type:"string" sensitive:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ValueHolder) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ValueHolder) GoString() string {
 	return s.String()
 }
@@ -4749,6 +5656,26 @@ func (s *ValueHolder) Validate() error {
 func (s *ValueHolder) SetIonText(v string) *ValueHolder {
 	s.IonText = &v
 	return s
+}
+
+const (
+	// EncryptionStatusEnabled is a EncryptionStatus enum value
+	EncryptionStatusEnabled = "ENABLED"
+
+	// EncryptionStatusUpdating is a EncryptionStatus enum value
+	EncryptionStatusUpdating = "UPDATING"
+
+	// EncryptionStatusKmsKeyInaccessible is a EncryptionStatus enum value
+	EncryptionStatusKmsKeyInaccessible = "KMS_KEY_INACCESSIBLE"
+)
+
+// EncryptionStatus_Values returns all elements of the EncryptionStatus enum
+func EncryptionStatus_Values() []string {
+	return []string{
+		EncryptionStatusEnabled,
+		EncryptionStatusUpdating,
+		EncryptionStatusKmsKeyInaccessible,
+	}
 }
 
 const (
@@ -4814,12 +5741,16 @@ func LedgerState_Values() []string {
 const (
 	// PermissionsModeAllowAll is a PermissionsMode enum value
 	PermissionsModeAllowAll = "ALLOW_ALL"
+
+	// PermissionsModeStandard is a PermissionsMode enum value
+	PermissionsModeStandard = "STANDARD"
 )
 
 // PermissionsMode_Values returns all elements of the PermissionsMode enum
 func PermissionsMode_Values() []string {
 	return []string{
 		PermissionsModeAllowAll,
+		PermissionsModeStandard,
 	}
 }
 

@@ -53,7 +53,7 @@ func (c *IoTSiteWise) AssociateAssetsRequest(input *AssociateAssetsInput) (req *
 	output = &AssociateAssetsOutput{}
 	req = c.newRequest(op, input, output)
 	req.Handlers.Unmarshal.Swap(restjson.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
-	req.Handlers.Build.PushBackNamed(protocol.NewHostPrefixHandler("model.", nil))
+	req.Handlers.Build.PushBackNamed(protocol.NewHostPrefixHandler("api.", nil))
 	req.Handlers.Build.PushBackNamed(protocol.ValidateEndpointHostHandler)
 	return
 }
@@ -63,7 +63,7 @@ func (c *IoTSiteWise) AssociateAssetsRequest(input *AssociateAssetsInput) (req *
 // Associates a child asset with the given parent asset through a hierarchy
 // defined in the parent asset's model. For more information, see Associating
 // assets (https://docs.aws.amazon.com/iot-sitewise/latest/userguide/add-associated-assets.html)
-// in the AWS IoT SiteWise User Guide.
+// in the IoT SiteWise User Guide.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -81,7 +81,7 @@ func (c *IoTSiteWise) AssociateAssetsRequest(input *AssociateAssetsInput) (req *
 //   The requested resource can't be found.
 //
 //   * InternalFailureException
-//   AWS IoT SiteWise can't process your request right now. Try again later.
+//   IoT SiteWise can't process your request right now. Try again later.
 //
 //   * LimitExceededException
 //   You've reached the limit for a resource. For example, this can occur if you're
@@ -89,15 +89,15 @@ func (c *IoTSiteWise) AssociateAssetsRequest(input *AssociateAssetsInput) (req *
 //   to create more than the allowed number of properties for an asset model.
 //
 //   For more information, see Quotas (https://docs.aws.amazon.com/iot-sitewise/latest/userguide/quotas.html)
-//   in the AWS IoT SiteWise User Guide.
+//   in the IoT SiteWise User Guide.
 //
 //   * ThrottlingException
 //   Your request exceeded a rate limit. For example, you might have exceeded
-//   the number of AWS IoT SiteWise assets that can be created per second, the
-//   allowed number of messages per second, and so on.
+//   the number of IoT SiteWise assets that can be created per second, the allowed
+//   number of messages per second, and so on.
 //
 //   For more information, see Quotas (https://docs.aws.amazon.com/iot-sitewise/latest/userguide/quotas.html)
-//   in the AWS IoT SiteWise User Guide.
+//   in the IoT SiteWise User Guide.
 //
 //   * ConflictingOperationException
 //   Your request has conflicting operations. This can occur if you're trying
@@ -171,7 +171,7 @@ func (c *IoTSiteWise) BatchAssociateProjectAssetsRequest(input *BatchAssociatePr
 
 // BatchAssociateProjectAssets API operation for AWS IoT SiteWise.
 //
-// Associates a group (batch) of assets with an AWS IoT SiteWise Monitor project.
+// Associates a group (batch) of assets with an IoT SiteWise Monitor project.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -189,15 +189,15 @@ func (c *IoTSiteWise) BatchAssociateProjectAssetsRequest(input *BatchAssociatePr
 //   The requested resource can't be found.
 //
 //   * InternalFailureException
-//   AWS IoT SiteWise can't process your request right now. Try again later.
+//   IoT SiteWise can't process your request right now. Try again later.
 //
 //   * ThrottlingException
 //   Your request exceeded a rate limit. For example, you might have exceeded
-//   the number of AWS IoT SiteWise assets that can be created per second, the
-//   allowed number of messages per second, and so on.
+//   the number of IoT SiteWise assets that can be created per second, the allowed
+//   number of messages per second, and so on.
 //
 //   For more information, see Quotas (https://docs.aws.amazon.com/iot-sitewise/latest/userguide/quotas.html)
-//   in the AWS IoT SiteWise User Guide.
+//   in the IoT SiteWise User Guide.
 //
 //   * LimitExceededException
 //   You've reached the limit for a resource. For example, this can occur if you're
@@ -205,7 +205,7 @@ func (c *IoTSiteWise) BatchAssociateProjectAssetsRequest(input *BatchAssociatePr
 //   to create more than the allowed number of properties for an asset model.
 //
 //   For more information, see Quotas (https://docs.aws.amazon.com/iot-sitewise/latest/userguide/quotas.html)
-//   in the AWS IoT SiteWise User Guide.
+//   in the IoT SiteWise User Guide.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iotsitewise-2019-12-02/BatchAssociateProjectAssets
 func (c *IoTSiteWise) BatchAssociateProjectAssets(input *BatchAssociateProjectAssetsInput) (*BatchAssociateProjectAssetsOutput, error) {
@@ -275,8 +275,7 @@ func (c *IoTSiteWise) BatchDisassociateProjectAssetsRequest(input *BatchDisassoc
 
 // BatchDisassociateProjectAssets API operation for AWS IoT SiteWise.
 //
-// Disassociates a group (batch) of assets from an AWS IoT SiteWise Monitor
-// project.
+// Disassociates a group (batch) of assets from an IoT SiteWise Monitor project.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -294,15 +293,15 @@ func (c *IoTSiteWise) BatchDisassociateProjectAssetsRequest(input *BatchDisassoc
 //   The requested resource can't be found.
 //
 //   * InternalFailureException
-//   AWS IoT SiteWise can't process your request right now. Try again later.
+//   IoT SiteWise can't process your request right now. Try again later.
 //
 //   * ThrottlingException
 //   Your request exceeded a rate limit. For example, you might have exceeded
-//   the number of AWS IoT SiteWise assets that can be created per second, the
-//   allowed number of messages per second, and so on.
+//   the number of IoT SiteWise assets that can be created per second, the allowed
+//   number of messages per second, and so on.
 //
 //   For more information, see Quotas (https://docs.aws.amazon.com/iot-sitewise/latest/userguide/quotas.html)
-//   in the AWS IoT SiteWise User Guide.
+//   in the IoT SiteWise User Guide.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iotsitewise-2019-12-02/BatchDisassociateProjectAssets
 func (c *IoTSiteWise) BatchDisassociateProjectAssets(input *BatchDisassociateProjectAssetsInput) (*BatchDisassociateProjectAssetsOutput, error) {
@@ -372,10 +371,10 @@ func (c *IoTSiteWise) BatchPutAssetPropertyValueRequest(input *BatchPutAssetProp
 
 // BatchPutAssetPropertyValue API operation for AWS IoT SiteWise.
 //
-// Sends a list of asset property values to AWS IoT SiteWise. Each value is
-// a timestamp-quality-value (TQV) data point. For more information, see Ingesting
-// data using the API (https://docs.aws.amazon.com/iot-sitewise/latest/userguide/ingest-api.html)
-// in the AWS IoT SiteWise User Guide.
+// Sends a list of asset property values to IoT SiteWise. Each value is a timestamp-quality-value
+// (TQV) data point. For more information, see Ingesting data using the API
+// (https://docs.aws.amazon.com/iot-sitewise/latest/userguide/ingest-api.html)
+// in the IoT SiteWise User Guide.
 //
 // To identify an asset property, you must specify one of the following:
 //
@@ -384,21 +383,18 @@ func (c *IoTSiteWise) BatchPutAssetPropertyValueRequest(input *BatchPutAssetProp
 //    * A propertyAlias, which is a data stream alias (for example, /company/windfarm/3/turbine/7/temperature).
 //    To define an asset property's alias, see UpdateAssetProperty (https://docs.aws.amazon.com/iot-sitewise/latest/APIReference/API_UpdateAssetProperty.html).
 //
-// With respect to Unix epoch time, AWS IoT SiteWise accepts only TQVs that
-// have a timestamp of no more than 15 minutes in the past and no more than
-// 5 minutes in the future. AWS IoT SiteWise rejects timestamps outside of the
-// inclusive range of [-15, +5] minutes and returns a TimestampOutOfRangeException
-// error.
+// With respect to Unix epoch time, IoT SiteWise accepts only TQVs that have
+// a timestamp of no more than 7 days in the past and no more than 10 minutes
+// in the future. IoT SiteWise rejects timestamps outside of the inclusive range
+// of [-7 days, +10 minutes] and returns a TimestampOutOfRangeException error.
 //
-// For each asset property, AWS IoT SiteWise overwrites TQVs with duplicate
-// timestamps unless the newer TQV has a different quality. For example, if
-// you store a TQV {T1, GOOD, V1}, then storing {T1, GOOD, V2} replaces the
-// existing TQV.
+// For each asset property, IoT SiteWise overwrites TQVs with duplicate timestamps
+// unless the newer TQV has a different quality. For example, if you store a
+// TQV {T1, GOOD, V1}, then storing {T1, GOOD, V2} replaces the existing TQV.
 //
-// AWS IoT SiteWise authorizes access to each BatchPutAssetPropertyValue entry
-// individually. For more information, see BatchPutAssetPropertyValue authorization
-// (https://docs.aws.amazon.com/iot-sitewise/latest/userguide/security_iam_service-with-iam.html#security_iam_service-with-iam-id-based-policies-batchputassetpropertyvalue-action)
-// in the AWS IoT SiteWise User Guide.
+// IoT SiteWise authorizes access to each BatchPutAssetPropertyValue entry individually.
+// For more information, see BatchPutAssetPropertyValue authorization (https://docs.aws.amazon.com/iot-sitewise/latest/userguide/security_iam_service-with-iam.html#security_iam_service-with-iam-id-based-policies-batchputassetpropertyvalue-action)
+// in the IoT SiteWise User Guide.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -416,15 +412,15 @@ func (c *IoTSiteWise) BatchPutAssetPropertyValueRequest(input *BatchPutAssetProp
 //   The requested resource can't be found.
 //
 //   * InternalFailureException
-//   AWS IoT SiteWise can't process your request right now. Try again later.
+//   IoT SiteWise can't process your request right now. Try again later.
 //
 //   * ThrottlingException
 //   Your request exceeded a rate limit. For example, you might have exceeded
-//   the number of AWS IoT SiteWise assets that can be created per second, the
-//   allowed number of messages per second, and so on.
+//   the number of IoT SiteWise assets that can be created per second, the allowed
+//   number of messages per second, and so on.
 //
 //   For more information, see Quotas (https://docs.aws.amazon.com/iot-sitewise/latest/userguide/quotas.html)
-//   in the AWS IoT SiteWise User Guide.
+//   in the IoT SiteWise User Guide.
 //
 //   * LimitExceededException
 //   You've reached the limit for a resource. For example, this can occur if you're
@@ -432,7 +428,7 @@ func (c *IoTSiteWise) BatchPutAssetPropertyValueRequest(input *BatchPutAssetProp
 //   to create more than the allowed number of properties for an asset model.
 //
 //   For more information, see Quotas (https://docs.aws.amazon.com/iot-sitewise/latest/userguide/quotas.html)
-//   in the AWS IoT SiteWise User Guide.
+//   in the IoT SiteWise User Guide.
 //
 //   * ServiceUnavailableException
 //   The requested service is unavailable.
@@ -509,9 +505,9 @@ func (c *IoTSiteWise) CreateAccessPolicyRequest(input *CreateAccessPolicyInput) 
 
 // CreateAccessPolicy API operation for AWS IoT SiteWise.
 //
-// Creates an access policy that grants the specified identity (AWS SSO user,
-// AWS SSO group, or IAM user) access to the specified AWS IoT SiteWise Monitor
-// portal or project resource.
+// Creates an access policy that grants the specified identity (Amazon Web Services
+// SSO user, Amazon Web Services SSO group, or IAM user) access to the specified
+// IoT SiteWise Monitor portal or project resource.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -529,15 +525,15 @@ func (c *IoTSiteWise) CreateAccessPolicyRequest(input *CreateAccessPolicyInput) 
 //   The requested resource can't be found.
 //
 //   * InternalFailureException
-//   AWS IoT SiteWise can't process your request right now. Try again later.
+//   IoT SiteWise can't process your request right now. Try again later.
 //
 //   * ThrottlingException
 //   Your request exceeded a rate limit. For example, you might have exceeded
-//   the number of AWS IoT SiteWise assets that can be created per second, the
-//   allowed number of messages per second, and so on.
+//   the number of IoT SiteWise assets that can be created per second, the allowed
+//   number of messages per second, and so on.
 //
 //   For more information, see Quotas (https://docs.aws.amazon.com/iot-sitewise/latest/userguide/quotas.html)
-//   in the AWS IoT SiteWise User Guide.
+//   in the IoT SiteWise User Guide.
 //
 //   * LimitExceededException
 //   You've reached the limit for a resource. For example, this can occur if you're
@@ -545,7 +541,7 @@ func (c *IoTSiteWise) CreateAccessPolicyRequest(input *CreateAccessPolicyInput) 
 //   to create more than the allowed number of properties for an asset model.
 //
 //   For more information, see Quotas (https://docs.aws.amazon.com/iot-sitewise/latest/userguide/quotas.html)
-//   in the AWS IoT SiteWise User Guide.
+//   in the IoT SiteWise User Guide.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iotsitewise-2019-12-02/CreateAccessPolicy
 func (c *IoTSiteWise) CreateAccessPolicy(input *CreateAccessPolicyInput) (*CreateAccessPolicyOutput, error) {
@@ -608,7 +604,7 @@ func (c *IoTSiteWise) CreateAssetRequest(input *CreateAssetInput) (req *request.
 
 	output = &CreateAssetOutput{}
 	req = c.newRequest(op, input, output)
-	req.Handlers.Build.PushBackNamed(protocol.NewHostPrefixHandler("model.", nil))
+	req.Handlers.Build.PushBackNamed(protocol.NewHostPrefixHandler("api.", nil))
 	req.Handlers.Build.PushBackNamed(protocol.ValidateEndpointHostHandler)
 	return
 }
@@ -617,7 +613,7 @@ func (c *IoTSiteWise) CreateAssetRequest(input *CreateAssetInput) (req *request.
 //
 // Creates an asset from an existing asset model. For more information, see
 // Creating assets (https://docs.aws.amazon.com/iot-sitewise/latest/userguide/create-assets.html)
-// in the AWS IoT SiteWise User Guide.
+// in the IoT SiteWise User Guide.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -638,15 +634,15 @@ func (c *IoTSiteWise) CreateAssetRequest(input *CreateAssetInput) (req *request.
 //   The requested resource can't be found.
 //
 //   * InternalFailureException
-//   AWS IoT SiteWise can't process your request right now. Try again later.
+//   IoT SiteWise can't process your request right now. Try again later.
 //
 //   * ThrottlingException
 //   Your request exceeded a rate limit. For example, you might have exceeded
-//   the number of AWS IoT SiteWise assets that can be created per second, the
-//   allowed number of messages per second, and so on.
+//   the number of IoT SiteWise assets that can be created per second, the allowed
+//   number of messages per second, and so on.
 //
 //   For more information, see Quotas (https://docs.aws.amazon.com/iot-sitewise/latest/userguide/quotas.html)
-//   in the AWS IoT SiteWise User Guide.
+//   in the IoT SiteWise User Guide.
 //
 //   * LimitExceededException
 //   You've reached the limit for a resource. For example, this can occur if you're
@@ -654,7 +650,7 @@ func (c *IoTSiteWise) CreateAssetRequest(input *CreateAssetInput) (req *request.
 //   to create more than the allowed number of properties for an asset model.
 //
 //   For more information, see Quotas (https://docs.aws.amazon.com/iot-sitewise/latest/userguide/quotas.html)
-//   in the AWS IoT SiteWise User Guide.
+//   in the IoT SiteWise User Guide.
 //
 //   * ConflictingOperationException
 //   Your request has conflicting operations. This can occur if you're trying
@@ -721,7 +717,7 @@ func (c *IoTSiteWise) CreateAssetModelRequest(input *CreateAssetModelInput) (req
 
 	output = &CreateAssetModelOutput{}
 	req = c.newRequest(op, input, output)
-	req.Handlers.Build.PushBackNamed(protocol.NewHostPrefixHandler("model.", nil))
+	req.Handlers.Build.PushBackNamed(protocol.NewHostPrefixHandler("api.", nil))
 	req.Handlers.Build.PushBackNamed(protocol.ValidateEndpointHostHandler)
 	return
 }
@@ -733,7 +729,7 @@ func (c *IoTSiteWise) CreateAssetModelRequest(input *CreateAssetModelInput) (req
 // assets of the same type that have standardized definitions. Each asset created
 // from a model inherits the asset model's property and hierarchy definitions.
 // For more information, see Defining asset models (https://docs.aws.amazon.com/iot-sitewise/latest/userguide/define-models.html)
-// in the AWS IoT SiteWise User Guide.
+// in the IoT SiteWise User Guide.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -754,15 +750,15 @@ func (c *IoTSiteWise) CreateAssetModelRequest(input *CreateAssetModelInput) (req
 //   The requested resource can't be found.
 //
 //   * InternalFailureException
-//   AWS IoT SiteWise can't process your request right now. Try again later.
+//   IoT SiteWise can't process your request right now. Try again later.
 //
 //   * ThrottlingException
 //   Your request exceeded a rate limit. For example, you might have exceeded
-//   the number of AWS IoT SiteWise assets that can be created per second, the
-//   allowed number of messages per second, and so on.
+//   the number of IoT SiteWise assets that can be created per second, the allowed
+//   number of messages per second, and so on.
 //
 //   For more information, see Quotas (https://docs.aws.amazon.com/iot-sitewise/latest/userguide/quotas.html)
-//   in the AWS IoT SiteWise User Guide.
+//   in the IoT SiteWise User Guide.
 //
 //   * LimitExceededException
 //   You've reached the limit for a resource. For example, this can occur if you're
@@ -770,7 +766,7 @@ func (c *IoTSiteWise) CreateAssetModelRequest(input *CreateAssetModelInput) (req
 //   to create more than the allowed number of properties for an asset model.
 //
 //   For more information, see Quotas (https://docs.aws.amazon.com/iot-sitewise/latest/userguide/quotas.html)
-//   in the AWS IoT SiteWise User Guide.
+//   in the IoT SiteWise User Guide.
 //
 //   * ConflictingOperationException
 //   Your request has conflicting operations. This can occur if you're trying
@@ -844,7 +840,7 @@ func (c *IoTSiteWise) CreateDashboardRequest(input *CreateDashboardInput) (req *
 
 // CreateDashboard API operation for AWS IoT SiteWise.
 //
-// Creates a dashboard in an AWS IoT SiteWise Monitor project.
+// Creates a dashboard in an IoT SiteWise Monitor project.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -862,15 +858,15 @@ func (c *IoTSiteWise) CreateDashboardRequest(input *CreateDashboardInput) (req *
 //   The requested resource can't be found.
 //
 //   * InternalFailureException
-//   AWS IoT SiteWise can't process your request right now. Try again later.
+//   IoT SiteWise can't process your request right now. Try again later.
 //
 //   * ThrottlingException
 //   Your request exceeded a rate limit. For example, you might have exceeded
-//   the number of AWS IoT SiteWise assets that can be created per second, the
-//   allowed number of messages per second, and so on.
+//   the number of IoT SiteWise assets that can be created per second, the allowed
+//   number of messages per second, and so on.
 //
 //   For more information, see Quotas (https://docs.aws.amazon.com/iot-sitewise/latest/userguide/quotas.html)
-//   in the AWS IoT SiteWise User Guide.
+//   in the IoT SiteWise User Guide.
 //
 //   * LimitExceededException
 //   You've reached the limit for a resource. For example, this can occur if you're
@@ -878,7 +874,7 @@ func (c *IoTSiteWise) CreateDashboardRequest(input *CreateDashboardInput) (req *
 //   to create more than the allowed number of properties for an asset model.
 //
 //   For more information, see Quotas (https://docs.aws.amazon.com/iot-sitewise/latest/userguide/quotas.html)
-//   in the AWS IoT SiteWise User Guide.
+//   in the IoT SiteWise User Guide.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iotsitewise-2019-12-02/CreateDashboard
 func (c *IoTSiteWise) CreateDashboard(input *CreateDashboardInput) (*CreateDashboardOutput, error) {
@@ -941,7 +937,7 @@ func (c *IoTSiteWise) CreateGatewayRequest(input *CreateGatewayInput) (req *requ
 
 	output = &CreateGatewayOutput{}
 	req = c.newRequest(op, input, output)
-	req.Handlers.Build.PushBackNamed(protocol.NewHostPrefixHandler("edge.", nil))
+	req.Handlers.Build.PushBackNamed(protocol.NewHostPrefixHandler("api.", nil))
 	req.Handlers.Build.PushBackNamed(protocol.ValidateEndpointHostHandler)
 	return
 }
@@ -949,9 +945,9 @@ func (c *IoTSiteWise) CreateGatewayRequest(input *CreateGatewayInput) (req *requ
 // CreateGateway API operation for AWS IoT SiteWise.
 //
 // Creates a gateway, which is a virtual or edge device that delivers industrial
-// data streams from local servers to AWS IoT SiteWise. For more information,
-// see Ingesting data using a gateway (https://docs.aws.amazon.com/iot-sitewise/latest/userguide/gateway-connector.html)
-// in the AWS IoT SiteWise User Guide.
+// data streams from local servers to IoT SiteWise. For more information, see
+// Ingesting data using a gateway (https://docs.aws.amazon.com/iot-sitewise/latest/userguide/gateway-connector.html)
+// in the IoT SiteWise User Guide.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -969,15 +965,15 @@ func (c *IoTSiteWise) CreateGatewayRequest(input *CreateGatewayInput) (req *requ
 //   The resource already exists.
 //
 //   * InternalFailureException
-//   AWS IoT SiteWise can't process your request right now. Try again later.
+//   IoT SiteWise can't process your request right now. Try again later.
 //
 //   * ThrottlingException
 //   Your request exceeded a rate limit. For example, you might have exceeded
-//   the number of AWS IoT SiteWise assets that can be created per second, the
-//   allowed number of messages per second, and so on.
+//   the number of IoT SiteWise assets that can be created per second, the allowed
+//   number of messages per second, and so on.
 //
 //   For more information, see Quotas (https://docs.aws.amazon.com/iot-sitewise/latest/userguide/quotas.html)
-//   in the AWS IoT SiteWise User Guide.
+//   in the IoT SiteWise User Guide.
 //
 //   * LimitExceededException
 //   You've reached the limit for a resource. For example, this can occur if you're
@@ -985,7 +981,7 @@ func (c *IoTSiteWise) CreateGatewayRequest(input *CreateGatewayInput) (req *requ
 //   to create more than the allowed number of properties for an asset model.
 //
 //   For more information, see Quotas (https://docs.aws.amazon.com/iot-sitewise/latest/userguide/quotas.html)
-//   in the AWS IoT SiteWise User Guide.
+//   in the IoT SiteWise User Guide.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iotsitewise-2019-12-02/CreateGateway
 func (c *IoTSiteWise) CreateGateway(input *CreateGatewayInput) (*CreateGatewayOutput, error) {
@@ -1055,14 +1051,14 @@ func (c *IoTSiteWise) CreatePortalRequest(input *CreatePortalInput) (req *reques
 
 // CreatePortal API operation for AWS IoT SiteWise.
 //
-// Creates a portal, which can contain projects and dashboards. AWS IoT SiteWise
-// Monitor uses AWS SSO or IAM to authenticate portal users and manage user
-// permissions.
+// Creates a portal, which can contain projects and dashboards. IoT SiteWise
+// Monitor uses Amazon Web Services SSO or IAM to authenticate portal users
+// and manage user permissions.
 //
 // Before you can sign in to a new portal, you must add at least one identity
 // to that portal. For more information, see Adding or removing portal administrators
 // (https://docs.aws.amazon.com/iot-sitewise/latest/userguide/administer-portals.html#portal-change-admins)
-// in the AWS IoT SiteWise User Guide.
+// in the IoT SiteWise User Guide.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -1080,15 +1076,15 @@ func (c *IoTSiteWise) CreatePortalRequest(input *CreatePortalInput) (req *reques
 //   The requested resource can't be found.
 //
 //   * InternalFailureException
-//   AWS IoT SiteWise can't process your request right now. Try again later.
+//   IoT SiteWise can't process your request right now. Try again later.
 //
 //   * ThrottlingException
 //   Your request exceeded a rate limit. For example, you might have exceeded
-//   the number of AWS IoT SiteWise assets that can be created per second, the
-//   allowed number of messages per second, and so on.
+//   the number of IoT SiteWise assets that can be created per second, the allowed
+//   number of messages per second, and so on.
 //
 //   For more information, see Quotas (https://docs.aws.amazon.com/iot-sitewise/latest/userguide/quotas.html)
-//   in the AWS IoT SiteWise User Guide.
+//   in the IoT SiteWise User Guide.
 //
 //   * LimitExceededException
 //   You've reached the limit for a resource. For example, this can occur if you're
@@ -1096,7 +1092,7 @@ func (c *IoTSiteWise) CreatePortalRequest(input *CreatePortalInput) (req *reques
 //   to create more than the allowed number of properties for an asset model.
 //
 //   For more information, see Quotas (https://docs.aws.amazon.com/iot-sitewise/latest/userguide/quotas.html)
-//   in the AWS IoT SiteWise User Guide.
+//   in the IoT SiteWise User Guide.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iotsitewise-2019-12-02/CreatePortal
 func (c *IoTSiteWise) CreatePortal(input *CreatePortalInput) (*CreatePortalOutput, error) {
@@ -1184,15 +1180,15 @@ func (c *IoTSiteWise) CreateProjectRequest(input *CreateProjectInput) (req *requ
 //   The requested resource can't be found.
 //
 //   * InternalFailureException
-//   AWS IoT SiteWise can't process your request right now. Try again later.
+//   IoT SiteWise can't process your request right now. Try again later.
 //
 //   * ThrottlingException
 //   Your request exceeded a rate limit. For example, you might have exceeded
-//   the number of AWS IoT SiteWise assets that can be created per second, the
-//   allowed number of messages per second, and so on.
+//   the number of IoT SiteWise assets that can be created per second, the allowed
+//   number of messages per second, and so on.
 //
 //   For more information, see Quotas (https://docs.aws.amazon.com/iot-sitewise/latest/userguide/quotas.html)
-//   in the AWS IoT SiteWise User Guide.
+//   in the IoT SiteWise User Guide.
 //
 //   * LimitExceededException
 //   You've reached the limit for a resource. For example, this can occur if you're
@@ -1200,7 +1196,7 @@ func (c *IoTSiteWise) CreateProjectRequest(input *CreateProjectInput) (req *requ
 //   to create more than the allowed number of properties for an asset model.
 //
 //   For more information, see Quotas (https://docs.aws.amazon.com/iot-sitewise/latest/userguide/quotas.html)
-//   in the AWS IoT SiteWise User Guide.
+//   in the IoT SiteWise User Guide.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iotsitewise-2019-12-02/CreateProject
 func (c *IoTSiteWise) CreateProject(input *CreateProjectInput) (*CreateProjectOutput, error) {
@@ -1272,8 +1268,8 @@ func (c *IoTSiteWise) DeleteAccessPolicyRequest(input *DeleteAccessPolicyInput) 
 // DeleteAccessPolicy API operation for AWS IoT SiteWise.
 //
 // Deletes an access policy that grants the specified identity access to the
-// specified AWS IoT SiteWise Monitor resource. You can use this operation to
-// revoke access to an AWS IoT SiteWise Monitor resource.
+// specified IoT SiteWise Monitor resource. You can use this operation to revoke
+// access to an IoT SiteWise Monitor resource.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -1291,15 +1287,15 @@ func (c *IoTSiteWise) DeleteAccessPolicyRequest(input *DeleteAccessPolicyInput) 
 //   The requested resource can't be found.
 //
 //   * InternalFailureException
-//   AWS IoT SiteWise can't process your request right now. Try again later.
+//   IoT SiteWise can't process your request right now. Try again later.
 //
 //   * ThrottlingException
 //   Your request exceeded a rate limit. For example, you might have exceeded
-//   the number of AWS IoT SiteWise assets that can be created per second, the
-//   allowed number of messages per second, and so on.
+//   the number of IoT SiteWise assets that can be created per second, the allowed
+//   number of messages per second, and so on.
 //
 //   For more information, see Quotas (https://docs.aws.amazon.com/iot-sitewise/latest/userguide/quotas.html)
-//   in the AWS IoT SiteWise User Guide.
+//   in the IoT SiteWise User Guide.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iotsitewise-2019-12-02/DeleteAccessPolicy
 func (c *IoTSiteWise) DeleteAccessPolicy(input *DeleteAccessPolicyInput) (*DeleteAccessPolicyOutput, error) {
@@ -1362,7 +1358,7 @@ func (c *IoTSiteWise) DeleteAssetRequest(input *DeleteAssetInput) (req *request.
 
 	output = &DeleteAssetOutput{}
 	req = c.newRequest(op, input, output)
-	req.Handlers.Build.PushBackNamed(protocol.NewHostPrefixHandler("model.", nil))
+	req.Handlers.Build.PushBackNamed(protocol.NewHostPrefixHandler("api.", nil))
 	req.Handlers.Build.PushBackNamed(protocol.ValidateEndpointHostHandler)
 	return
 }
@@ -1371,7 +1367,7 @@ func (c *IoTSiteWise) DeleteAssetRequest(input *DeleteAssetInput) (req *request.
 //
 // Deletes an asset. This action can't be undone. For more information, see
 // Deleting assets and models (https://docs.aws.amazon.com/iot-sitewise/latest/userguide/delete-assets-and-models.html)
-// in the AWS IoT SiteWise User Guide.
+// in the IoT SiteWise User Guide.
 //
 // You can't delete an asset that's associated to another asset. For more information,
 // see DisassociateAssets (https://docs.aws.amazon.com/iot-sitewise/latest/APIReference/API_DisassociateAssets.html).
@@ -1392,15 +1388,15 @@ func (c *IoTSiteWise) DeleteAssetRequest(input *DeleteAssetInput) (req *request.
 //   The requested resource can't be found.
 //
 //   * InternalFailureException
-//   AWS IoT SiteWise can't process your request right now. Try again later.
+//   IoT SiteWise can't process your request right now. Try again later.
 //
 //   * ThrottlingException
 //   Your request exceeded a rate limit. For example, you might have exceeded
-//   the number of AWS IoT SiteWise assets that can be created per second, the
-//   allowed number of messages per second, and so on.
+//   the number of IoT SiteWise assets that can be created per second, the allowed
+//   number of messages per second, and so on.
 //
 //   For more information, see Quotas (https://docs.aws.amazon.com/iot-sitewise/latest/userguide/quotas.html)
-//   in the AWS IoT SiteWise User Guide.
+//   in the IoT SiteWise User Guide.
 //
 //   * ConflictingOperationException
 //   Your request has conflicting operations. This can occur if you're trying
@@ -1467,7 +1463,7 @@ func (c *IoTSiteWise) DeleteAssetModelRequest(input *DeleteAssetModelInput) (req
 
 	output = &DeleteAssetModelOutput{}
 	req = c.newRequest(op, input, output)
-	req.Handlers.Build.PushBackNamed(protocol.NewHostPrefixHandler("model.", nil))
+	req.Handlers.Build.PushBackNamed(protocol.NewHostPrefixHandler("api.", nil))
 	req.Handlers.Build.PushBackNamed(protocol.ValidateEndpointHostHandler)
 	return
 }
@@ -1479,7 +1475,7 @@ func (c *IoTSiteWise) DeleteAssetModelRequest(input *DeleteAssetModelInput) (req
 // you can't delete an asset model if a parent asset model exists that contains
 // a property formula expression that depends on the asset model that you want
 // to delete. For more information, see Deleting assets and models (https://docs.aws.amazon.com/iot-sitewise/latest/userguide/delete-assets-and-models.html)
-// in the AWS IoT SiteWise User Guide.
+// in the IoT SiteWise User Guide.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -1497,15 +1493,15 @@ func (c *IoTSiteWise) DeleteAssetModelRequest(input *DeleteAssetModelInput) (req
 //   The requested resource can't be found.
 //
 //   * InternalFailureException
-//   AWS IoT SiteWise can't process your request right now. Try again later.
+//   IoT SiteWise can't process your request right now. Try again later.
 //
 //   * ThrottlingException
 //   Your request exceeded a rate limit. For example, you might have exceeded
-//   the number of AWS IoT SiteWise assets that can be created per second, the
-//   allowed number of messages per second, and so on.
+//   the number of IoT SiteWise assets that can be created per second, the allowed
+//   number of messages per second, and so on.
 //
 //   For more information, see Quotas (https://docs.aws.amazon.com/iot-sitewise/latest/userguide/quotas.html)
-//   in the AWS IoT SiteWise User Guide.
+//   in the IoT SiteWise User Guide.
 //
 //   * ConflictingOperationException
 //   Your request has conflicting operations. This can occur if you're trying
@@ -1580,7 +1576,7 @@ func (c *IoTSiteWise) DeleteDashboardRequest(input *DeleteDashboardInput) (req *
 
 // DeleteDashboard API operation for AWS IoT SiteWise.
 //
-// Deletes a dashboard from AWS IoT SiteWise Monitor.
+// Deletes a dashboard from IoT SiteWise Monitor.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -1598,15 +1594,15 @@ func (c *IoTSiteWise) DeleteDashboardRequest(input *DeleteDashboardInput) (req *
 //   The requested resource can't be found.
 //
 //   * InternalFailureException
-//   AWS IoT SiteWise can't process your request right now. Try again later.
+//   IoT SiteWise can't process your request right now. Try again later.
 //
 //   * ThrottlingException
 //   Your request exceeded a rate limit. For example, you might have exceeded
-//   the number of AWS IoT SiteWise assets that can be created per second, the
-//   allowed number of messages per second, and so on.
+//   the number of IoT SiteWise assets that can be created per second, the allowed
+//   number of messages per second, and so on.
 //
 //   For more information, see Quotas (https://docs.aws.amazon.com/iot-sitewise/latest/userguide/quotas.html)
-//   in the AWS IoT SiteWise User Guide.
+//   in the IoT SiteWise User Guide.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iotsitewise-2019-12-02/DeleteDashboard
 func (c *IoTSiteWise) DeleteDashboard(input *DeleteDashboardInput) (*DeleteDashboardOutput, error) {
@@ -1670,15 +1666,15 @@ func (c *IoTSiteWise) DeleteGatewayRequest(input *DeleteGatewayInput) (req *requ
 	output = &DeleteGatewayOutput{}
 	req = c.newRequest(op, input, output)
 	req.Handlers.Unmarshal.Swap(restjson.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
-	req.Handlers.Build.PushBackNamed(protocol.NewHostPrefixHandler("edge.", nil))
+	req.Handlers.Build.PushBackNamed(protocol.NewHostPrefixHandler("api.", nil))
 	req.Handlers.Build.PushBackNamed(protocol.ValidateEndpointHostHandler)
 	return
 }
 
 // DeleteGateway API operation for AWS IoT SiteWise.
 //
-// Deletes a gateway from AWS IoT SiteWise. When you delete a gateway, some
-// of the gateway's files remain in your gateway's file system.
+// Deletes a gateway from IoT SiteWise. When you delete a gateway, some of the
+// gateway's files remain in your gateway's file system.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -1696,15 +1692,15 @@ func (c *IoTSiteWise) DeleteGatewayRequest(input *DeleteGatewayInput) (req *requ
 //   The requested resource can't be found.
 //
 //   * InternalFailureException
-//   AWS IoT SiteWise can't process your request right now. Try again later.
+//   IoT SiteWise can't process your request right now. Try again later.
 //
 //   * ThrottlingException
 //   Your request exceeded a rate limit. For example, you might have exceeded
-//   the number of AWS IoT SiteWise assets that can be created per second, the
-//   allowed number of messages per second, and so on.
+//   the number of IoT SiteWise assets that can be created per second, the allowed
+//   number of messages per second, and so on.
 //
 //   For more information, see Quotas (https://docs.aws.amazon.com/iot-sitewise/latest/userguide/quotas.html)
-//   in the AWS IoT SiteWise User Guide.
+//   in the IoT SiteWise User Guide.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iotsitewise-2019-12-02/DeleteGateway
 func (c *IoTSiteWise) DeleteGateway(input *DeleteGatewayInput) (*DeleteGatewayOutput, error) {
@@ -1774,7 +1770,7 @@ func (c *IoTSiteWise) DeletePortalRequest(input *DeletePortalInput) (req *reques
 
 // DeletePortal API operation for AWS IoT SiteWise.
 //
-// Deletes a portal from AWS IoT SiteWise Monitor.
+// Deletes a portal from IoT SiteWise Monitor.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -1792,15 +1788,15 @@ func (c *IoTSiteWise) DeletePortalRequest(input *DeletePortalInput) (req *reques
 //   The requested resource can't be found.
 //
 //   * InternalFailureException
-//   AWS IoT SiteWise can't process your request right now. Try again later.
+//   IoT SiteWise can't process your request right now. Try again later.
 //
 //   * ThrottlingException
 //   Your request exceeded a rate limit. For example, you might have exceeded
-//   the number of AWS IoT SiteWise assets that can be created per second, the
-//   allowed number of messages per second, and so on.
+//   the number of IoT SiteWise assets that can be created per second, the allowed
+//   number of messages per second, and so on.
 //
 //   For more information, see Quotas (https://docs.aws.amazon.com/iot-sitewise/latest/userguide/quotas.html)
-//   in the AWS IoT SiteWise User Guide.
+//   in the IoT SiteWise User Guide.
 //
 //   * ConflictingOperationException
 //   Your request has conflicting operations. This can occur if you're trying
@@ -1875,7 +1871,7 @@ func (c *IoTSiteWise) DeleteProjectRequest(input *DeleteProjectInput) (req *requ
 
 // DeleteProject API operation for AWS IoT SiteWise.
 //
-// Deletes a project from AWS IoT SiteWise Monitor.
+// Deletes a project from IoT SiteWise Monitor.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -1893,15 +1889,15 @@ func (c *IoTSiteWise) DeleteProjectRequest(input *DeleteProjectInput) (req *requ
 //   The requested resource can't be found.
 //
 //   * InternalFailureException
-//   AWS IoT SiteWise can't process your request right now. Try again later.
+//   IoT SiteWise can't process your request right now. Try again later.
 //
 //   * ThrottlingException
 //   Your request exceeded a rate limit. For example, you might have exceeded
-//   the number of AWS IoT SiteWise assets that can be created per second, the
-//   allowed number of messages per second, and so on.
+//   the number of IoT SiteWise assets that can be created per second, the allowed
+//   number of messages per second, and so on.
 //
 //   For more information, see Quotas (https://docs.aws.amazon.com/iot-sitewise/latest/userguide/quotas.html)
-//   in the AWS IoT SiteWise User Guide.
+//   in the IoT SiteWise User Guide.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iotsitewise-2019-12-02/DeleteProject
 func (c *IoTSiteWise) DeleteProject(input *DeleteProjectInput) (*DeleteProjectOutput, error) {
@@ -1971,8 +1967,8 @@ func (c *IoTSiteWise) DescribeAccessPolicyRequest(input *DescribeAccessPolicyInp
 
 // DescribeAccessPolicy API operation for AWS IoT SiteWise.
 //
-// Describes an access policy, which specifies an identity's access to an AWS
-// IoT SiteWise Monitor portal or project.
+// Describes an access policy, which specifies an identity's access to an IoT
+// SiteWise Monitor portal or project.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -1990,15 +1986,15 @@ func (c *IoTSiteWise) DescribeAccessPolicyRequest(input *DescribeAccessPolicyInp
 //   The requested resource can't be found.
 //
 //   * InternalFailureException
-//   AWS IoT SiteWise can't process your request right now. Try again later.
+//   IoT SiteWise can't process your request right now. Try again later.
 //
 //   * ThrottlingException
 //   Your request exceeded a rate limit. For example, you might have exceeded
-//   the number of AWS IoT SiteWise assets that can be created per second, the
-//   allowed number of messages per second, and so on.
+//   the number of IoT SiteWise assets that can be created per second, the allowed
+//   number of messages per second, and so on.
 //
 //   For more information, see Quotas (https://docs.aws.amazon.com/iot-sitewise/latest/userguide/quotas.html)
-//   in the AWS IoT SiteWise User Guide.
+//   in the IoT SiteWise User Guide.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iotsitewise-2019-12-02/DescribeAccessPolicy
 func (c *IoTSiteWise) DescribeAccessPolicy(input *DescribeAccessPolicyInput) (*DescribeAccessPolicyOutput, error) {
@@ -2061,7 +2057,7 @@ func (c *IoTSiteWise) DescribeAssetRequest(input *DescribeAssetInput) (req *requ
 
 	output = &DescribeAssetOutput{}
 	req = c.newRequest(op, input, output)
-	req.Handlers.Build.PushBackNamed(protocol.NewHostPrefixHandler("model.", nil))
+	req.Handlers.Build.PushBackNamed(protocol.NewHostPrefixHandler("api.", nil))
 	req.Handlers.Build.PushBackNamed(protocol.ValidateEndpointHostHandler)
 	return
 }
@@ -2086,15 +2082,15 @@ func (c *IoTSiteWise) DescribeAssetRequest(input *DescribeAssetInput) (req *requ
 //   The requested resource can't be found.
 //
 //   * InternalFailureException
-//   AWS IoT SiteWise can't process your request right now. Try again later.
+//   IoT SiteWise can't process your request right now. Try again later.
 //
 //   * ThrottlingException
 //   Your request exceeded a rate limit. For example, you might have exceeded
-//   the number of AWS IoT SiteWise assets that can be created per second, the
-//   allowed number of messages per second, and so on.
+//   the number of IoT SiteWise assets that can be created per second, the allowed
+//   number of messages per second, and so on.
 //
 //   For more information, see Quotas (https://docs.aws.amazon.com/iot-sitewise/latest/userguide/quotas.html)
-//   in the AWS IoT SiteWise User Guide.
+//   in the IoT SiteWise User Guide.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iotsitewise-2019-12-02/DescribeAsset
 func (c *IoTSiteWise) DescribeAsset(input *DescribeAssetInput) (*DescribeAssetOutput, error) {
@@ -2157,7 +2153,7 @@ func (c *IoTSiteWise) DescribeAssetModelRequest(input *DescribeAssetModelInput) 
 
 	output = &DescribeAssetModelOutput{}
 	req = c.newRequest(op, input, output)
-	req.Handlers.Build.PushBackNamed(protocol.NewHostPrefixHandler("model.", nil))
+	req.Handlers.Build.PushBackNamed(protocol.NewHostPrefixHandler("api.", nil))
 	req.Handlers.Build.PushBackNamed(protocol.ValidateEndpointHostHandler)
 	return
 }
@@ -2182,15 +2178,15 @@ func (c *IoTSiteWise) DescribeAssetModelRequest(input *DescribeAssetModelInput) 
 //   The requested resource can't be found.
 //
 //   * InternalFailureException
-//   AWS IoT SiteWise can't process your request right now. Try again later.
+//   IoT SiteWise can't process your request right now. Try again later.
 //
 //   * ThrottlingException
 //   Your request exceeded a rate limit. For example, you might have exceeded
-//   the number of AWS IoT SiteWise assets that can be created per second, the
-//   allowed number of messages per second, and so on.
+//   the number of IoT SiteWise assets that can be created per second, the allowed
+//   number of messages per second, and so on.
 //
 //   For more information, see Quotas (https://docs.aws.amazon.com/iot-sitewise/latest/userguide/quotas.html)
-//   in the AWS IoT SiteWise User Guide.
+//   in the IoT SiteWise User Guide.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iotsitewise-2019-12-02/DescribeAssetModel
 func (c *IoTSiteWise) DescribeAssetModel(input *DescribeAssetModelInput) (*DescribeAssetModelOutput, error) {
@@ -2253,7 +2249,7 @@ func (c *IoTSiteWise) DescribeAssetPropertyRequest(input *DescribeAssetPropertyI
 
 	output = &DescribeAssetPropertyOutput{}
 	req = c.newRequest(op, input, output)
-	req.Handlers.Build.PushBackNamed(protocol.NewHostPrefixHandler("model.", nil))
+	req.Handlers.Build.PushBackNamed(protocol.NewHostPrefixHandler("api.", nil))
 	req.Handlers.Build.PushBackNamed(protocol.ValidateEndpointHostHandler)
 	return
 }
@@ -2286,15 +2282,15 @@ func (c *IoTSiteWise) DescribeAssetPropertyRequest(input *DescribeAssetPropertyI
 //   The requested resource can't be found.
 //
 //   * InternalFailureException
-//   AWS IoT SiteWise can't process your request right now. Try again later.
+//   IoT SiteWise can't process your request right now. Try again later.
 //
 //   * ThrottlingException
 //   Your request exceeded a rate limit. For example, you might have exceeded
-//   the number of AWS IoT SiteWise assets that can be created per second, the
-//   allowed number of messages per second, and so on.
+//   the number of IoT SiteWise assets that can be created per second, the allowed
+//   number of messages per second, and so on.
 //
 //   For more information, see Quotas (https://docs.aws.amazon.com/iot-sitewise/latest/userguide/quotas.html)
-//   in the AWS IoT SiteWise User Guide.
+//   in the IoT SiteWise User Guide.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iotsitewise-2019-12-02/DescribeAssetProperty
 func (c *IoTSiteWise) DescribeAssetProperty(input *DescribeAssetPropertyInput) (*DescribeAssetPropertyOutput, error) {
@@ -2382,15 +2378,15 @@ func (c *IoTSiteWise) DescribeDashboardRequest(input *DescribeDashboardInput) (r
 //   The requested resource can't be found.
 //
 //   * InternalFailureException
-//   AWS IoT SiteWise can't process your request right now. Try again later.
+//   IoT SiteWise can't process your request right now. Try again later.
 //
 //   * ThrottlingException
 //   Your request exceeded a rate limit. For example, you might have exceeded
-//   the number of AWS IoT SiteWise assets that can be created per second, the
-//   allowed number of messages per second, and so on.
+//   the number of IoT SiteWise assets that can be created per second, the allowed
+//   number of messages per second, and so on.
 //
 //   For more information, see Quotas (https://docs.aws.amazon.com/iot-sitewise/latest/userguide/quotas.html)
-//   in the AWS IoT SiteWise User Guide.
+//   in the IoT SiteWise User Guide.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iotsitewise-2019-12-02/DescribeDashboard
 func (c *IoTSiteWise) DescribeDashboard(input *DescribeDashboardInput) (*DescribeDashboardOutput, error) {
@@ -2409,6 +2405,102 @@ func (c *IoTSiteWise) DescribeDashboard(input *DescribeDashboardInput) (*Describ
 // for more information on using Contexts.
 func (c *IoTSiteWise) DescribeDashboardWithContext(ctx aws.Context, input *DescribeDashboardInput, opts ...request.Option) (*DescribeDashboardOutput, error) {
 	req, out := c.DescribeDashboardRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opDescribeDefaultEncryptionConfiguration = "DescribeDefaultEncryptionConfiguration"
+
+// DescribeDefaultEncryptionConfigurationRequest generates a "aws/request.Request" representing the
+// client's request for the DescribeDefaultEncryptionConfiguration operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See DescribeDefaultEncryptionConfiguration for more information on using the DescribeDefaultEncryptionConfiguration
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the DescribeDefaultEncryptionConfigurationRequest method.
+//    req, resp := client.DescribeDefaultEncryptionConfigurationRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/iotsitewise-2019-12-02/DescribeDefaultEncryptionConfiguration
+func (c *IoTSiteWise) DescribeDefaultEncryptionConfigurationRequest(input *DescribeDefaultEncryptionConfigurationInput) (req *request.Request, output *DescribeDefaultEncryptionConfigurationOutput) {
+	op := &request.Operation{
+		Name:       opDescribeDefaultEncryptionConfiguration,
+		HTTPMethod: "GET",
+		HTTPPath:   "/configuration/account/encryption",
+	}
+
+	if input == nil {
+		input = &DescribeDefaultEncryptionConfigurationInput{}
+	}
+
+	output = &DescribeDefaultEncryptionConfigurationOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Build.PushBackNamed(protocol.NewHostPrefixHandler("api.", nil))
+	req.Handlers.Build.PushBackNamed(protocol.ValidateEndpointHostHandler)
+	return
+}
+
+// DescribeDefaultEncryptionConfiguration API operation for AWS IoT SiteWise.
+//
+// Retrieves information about the default encryption configuration for the
+// Amazon Web Services account in the default or specified Region. For more
+// information, see Key management (https://docs.aws.amazon.com/iot-sitewise/latest/userguide/key-management.html)
+// in the IoT SiteWise User Guide.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS IoT SiteWise's
+// API operation DescribeDefaultEncryptionConfiguration for usage and error information.
+//
+// Returned Error Types:
+//   * InvalidRequestException
+//   The request isn't valid. This can occur if your request contains malformed
+//   JSON or unsupported characters. Check your request and try again.
+//
+//   * InternalFailureException
+//   IoT SiteWise can't process your request right now. Try again later.
+//
+//   * ThrottlingException
+//   Your request exceeded a rate limit. For example, you might have exceeded
+//   the number of IoT SiteWise assets that can be created per second, the allowed
+//   number of messages per second, and so on.
+//
+//   For more information, see Quotas (https://docs.aws.amazon.com/iot-sitewise/latest/userguide/quotas.html)
+//   in the IoT SiteWise User Guide.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/iotsitewise-2019-12-02/DescribeDefaultEncryptionConfiguration
+func (c *IoTSiteWise) DescribeDefaultEncryptionConfiguration(input *DescribeDefaultEncryptionConfigurationInput) (*DescribeDefaultEncryptionConfigurationOutput, error) {
+	req, out := c.DescribeDefaultEncryptionConfigurationRequest(input)
+	return out, req.Send()
+}
+
+// DescribeDefaultEncryptionConfigurationWithContext is the same as DescribeDefaultEncryptionConfiguration with the addition of
+// the ability to pass a context and additional request options.
+//
+// See DescribeDefaultEncryptionConfiguration for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *IoTSiteWise) DescribeDefaultEncryptionConfigurationWithContext(ctx aws.Context, input *DescribeDefaultEncryptionConfigurationInput, opts ...request.Option) (*DescribeDefaultEncryptionConfigurationOutput, error) {
+	req, out := c.DescribeDefaultEncryptionConfigurationRequest(input)
 	req.SetContext(ctx)
 	req.ApplyOptions(opts...)
 	return out, req.Send()
@@ -2453,7 +2545,7 @@ func (c *IoTSiteWise) DescribeGatewayRequest(input *DescribeGatewayInput) (req *
 
 	output = &DescribeGatewayOutput{}
 	req = c.newRequest(op, input, output)
-	req.Handlers.Build.PushBackNamed(protocol.NewHostPrefixHandler("edge.", nil))
+	req.Handlers.Build.PushBackNamed(protocol.NewHostPrefixHandler("api.", nil))
 	req.Handlers.Build.PushBackNamed(protocol.ValidateEndpointHostHandler)
 	return
 }
@@ -2478,15 +2570,15 @@ func (c *IoTSiteWise) DescribeGatewayRequest(input *DescribeGatewayInput) (req *
 //   The requested resource can't be found.
 //
 //   * InternalFailureException
-//   AWS IoT SiteWise can't process your request right now. Try again later.
+//   IoT SiteWise can't process your request right now. Try again later.
 //
 //   * ThrottlingException
 //   Your request exceeded a rate limit. For example, you might have exceeded
-//   the number of AWS IoT SiteWise assets that can be created per second, the
-//   allowed number of messages per second, and so on.
+//   the number of IoT SiteWise assets that can be created per second, the allowed
+//   number of messages per second, and so on.
 //
 //   For more information, see Quotas (https://docs.aws.amazon.com/iot-sitewise/latest/userguide/quotas.html)
-//   in the AWS IoT SiteWise User Guide.
+//   in the IoT SiteWise User Guide.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iotsitewise-2019-12-02/DescribeGateway
 func (c *IoTSiteWise) DescribeGateway(input *DescribeGatewayInput) (*DescribeGatewayOutput, error) {
@@ -2549,7 +2641,7 @@ func (c *IoTSiteWise) DescribeGatewayCapabilityConfigurationRequest(input *Descr
 
 	output = &DescribeGatewayCapabilityConfigurationOutput{}
 	req = c.newRequest(op, input, output)
-	req.Handlers.Build.PushBackNamed(protocol.NewHostPrefixHandler("edge.", nil))
+	req.Handlers.Build.PushBackNamed(protocol.NewHostPrefixHandler("api.", nil))
 	req.Handlers.Build.PushBackNamed(protocol.ValidateEndpointHostHandler)
 	return
 }
@@ -2559,8 +2651,8 @@ func (c *IoTSiteWise) DescribeGatewayCapabilityConfigurationRequest(input *Descr
 // Retrieves information about a gateway capability configuration. Each gateway
 // capability defines data sources for a gateway. A capability configuration
 // can contain multiple data source configurations. If you define OPC-UA sources
-// for a gateway in the AWS IoT SiteWise console, all of your OPC-UA sources
-// are stored in one capability configuration. To list all capability configurations
+// for a gateway in the IoT SiteWise console, all of your OPC-UA sources are
+// stored in one capability configuration. To list all capability configurations
 // for a gateway, use DescribeGateway (https://docs.aws.amazon.com/iot-sitewise/latest/APIReference/API_DescribeGateway.html).
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
@@ -2579,15 +2671,15 @@ func (c *IoTSiteWise) DescribeGatewayCapabilityConfigurationRequest(input *Descr
 //   The requested resource can't be found.
 //
 //   * InternalFailureException
-//   AWS IoT SiteWise can't process your request right now. Try again later.
+//   IoT SiteWise can't process your request right now. Try again later.
 //
 //   * ThrottlingException
 //   Your request exceeded a rate limit. For example, you might have exceeded
-//   the number of AWS IoT SiteWise assets that can be created per second, the
-//   allowed number of messages per second, and so on.
+//   the number of IoT SiteWise assets that can be created per second, the allowed
+//   number of messages per second, and so on.
 //
 //   For more information, see Quotas (https://docs.aws.amazon.com/iot-sitewise/latest/userguide/quotas.html)
-//   in the AWS IoT SiteWise User Guide.
+//   in the IoT SiteWise User Guide.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iotsitewise-2019-12-02/DescribeGatewayCapabilityConfiguration
 func (c *IoTSiteWise) DescribeGatewayCapabilityConfiguration(input *DescribeGatewayCapabilityConfigurationInput) (*DescribeGatewayCapabilityConfigurationOutput, error) {
@@ -2650,14 +2742,14 @@ func (c *IoTSiteWise) DescribeLoggingOptionsRequest(input *DescribeLoggingOption
 
 	output = &DescribeLoggingOptionsOutput{}
 	req = c.newRequest(op, input, output)
-	req.Handlers.Build.PushBackNamed(protocol.NewHostPrefixHandler("model.", nil))
+	req.Handlers.Build.PushBackNamed(protocol.NewHostPrefixHandler("api.", nil))
 	req.Handlers.Build.PushBackNamed(protocol.ValidateEndpointHostHandler)
 	return
 }
 
 // DescribeLoggingOptions API operation for AWS IoT SiteWise.
 //
-// Retrieves the current AWS IoT SiteWise logging options.
+// Retrieves the current IoT SiteWise logging options.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -2673,14 +2765,14 @@ func (c *IoTSiteWise) DescribeLoggingOptionsRequest(input *DescribeLoggingOption
 //
 //   * ThrottlingException
 //   Your request exceeded a rate limit. For example, you might have exceeded
-//   the number of AWS IoT SiteWise assets that can be created per second, the
-//   allowed number of messages per second, and so on.
+//   the number of IoT SiteWise assets that can be created per second, the allowed
+//   number of messages per second, and so on.
 //
 //   For more information, see Quotas (https://docs.aws.amazon.com/iot-sitewise/latest/userguide/quotas.html)
-//   in the AWS IoT SiteWise User Guide.
+//   in the IoT SiteWise User Guide.
 //
 //   * InternalFailureException
-//   AWS IoT SiteWise can't process your request right now. Try again later.
+//   IoT SiteWise can't process your request right now. Try again later.
 //
 //   * ResourceNotFoundException
 //   The requested resource can't be found.
@@ -2771,15 +2863,15 @@ func (c *IoTSiteWise) DescribePortalRequest(input *DescribePortalInput) (req *re
 //   The requested resource can't be found.
 //
 //   * InternalFailureException
-//   AWS IoT SiteWise can't process your request right now. Try again later.
+//   IoT SiteWise can't process your request right now. Try again later.
 //
 //   * ThrottlingException
 //   Your request exceeded a rate limit. For example, you might have exceeded
-//   the number of AWS IoT SiteWise assets that can be created per second, the
-//   allowed number of messages per second, and so on.
+//   the number of IoT SiteWise assets that can be created per second, the allowed
+//   number of messages per second, and so on.
 //
 //   For more information, see Quotas (https://docs.aws.amazon.com/iot-sitewise/latest/userguide/quotas.html)
-//   in the AWS IoT SiteWise User Guide.
+//   in the IoT SiteWise User Guide.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iotsitewise-2019-12-02/DescribePortal
 func (c *IoTSiteWise) DescribePortal(input *DescribePortalInput) (*DescribePortalOutput, error) {
@@ -2867,15 +2959,15 @@ func (c *IoTSiteWise) DescribeProjectRequest(input *DescribeProjectInput) (req *
 //   The requested resource can't be found.
 //
 //   * InternalFailureException
-//   AWS IoT SiteWise can't process your request right now. Try again later.
+//   IoT SiteWise can't process your request right now. Try again later.
 //
 //   * ThrottlingException
 //   Your request exceeded a rate limit. For example, you might have exceeded
-//   the number of AWS IoT SiteWise assets that can be created per second, the
-//   allowed number of messages per second, and so on.
+//   the number of IoT SiteWise assets that can be created per second, the allowed
+//   number of messages per second, and so on.
 //
 //   For more information, see Quotas (https://docs.aws.amazon.com/iot-sitewise/latest/userguide/quotas.html)
-//   in the AWS IoT SiteWise User Guide.
+//   in the IoT SiteWise User Guide.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iotsitewise-2019-12-02/DescribeProject
 func (c *IoTSiteWise) DescribeProject(input *DescribeProjectInput) (*DescribeProjectOutput, error) {
@@ -2894,6 +2986,114 @@ func (c *IoTSiteWise) DescribeProject(input *DescribeProjectInput) (*DescribePro
 // for more information on using Contexts.
 func (c *IoTSiteWise) DescribeProjectWithContext(ctx aws.Context, input *DescribeProjectInput, opts ...request.Option) (*DescribeProjectOutput, error) {
 	req, out := c.DescribeProjectRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opDescribeStorageConfiguration = "DescribeStorageConfiguration"
+
+// DescribeStorageConfigurationRequest generates a "aws/request.Request" representing the
+// client's request for the DescribeStorageConfiguration operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See DescribeStorageConfiguration for more information on using the DescribeStorageConfiguration
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the DescribeStorageConfigurationRequest method.
+//    req, resp := client.DescribeStorageConfigurationRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/iotsitewise-2019-12-02/DescribeStorageConfiguration
+func (c *IoTSiteWise) DescribeStorageConfigurationRequest(input *DescribeStorageConfigurationInput) (req *request.Request, output *DescribeStorageConfigurationOutput) {
+	op := &request.Operation{
+		Name:       opDescribeStorageConfiguration,
+		HTTPMethod: "GET",
+		HTTPPath:   "/configuration/account/storage",
+	}
+
+	if input == nil {
+		input = &DescribeStorageConfigurationInput{}
+	}
+
+	output = &DescribeStorageConfigurationOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Build.PushBackNamed(protocol.NewHostPrefixHandler("api.", nil))
+	req.Handlers.Build.PushBackNamed(protocol.ValidateEndpointHostHandler)
+	return
+}
+
+// DescribeStorageConfiguration API operation for AWS IoT SiteWise.
+//
+// Retrieves information about the storage configuration for IoT SiteWise.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS IoT SiteWise's
+// API operation DescribeStorageConfiguration for usage and error information.
+//
+// Returned Error Types:
+//   * InvalidRequestException
+//   The request isn't valid. This can occur if your request contains malformed
+//   JSON or unsupported characters. Check your request and try again.
+//
+//   * ResourceNotFoundException
+//   The requested resource can't be found.
+//
+//   * InternalFailureException
+//   IoT SiteWise can't process your request right now. Try again later.
+//
+//   * ThrottlingException
+//   Your request exceeded a rate limit. For example, you might have exceeded
+//   the number of IoT SiteWise assets that can be created per second, the allowed
+//   number of messages per second, and so on.
+//
+//   For more information, see Quotas (https://docs.aws.amazon.com/iot-sitewise/latest/userguide/quotas.html)
+//   in the IoT SiteWise User Guide.
+//
+//   * LimitExceededException
+//   You've reached the limit for a resource. For example, this can occur if you're
+//   trying to associate more than the allowed number of child assets or attempting
+//   to create more than the allowed number of properties for an asset model.
+//
+//   For more information, see Quotas (https://docs.aws.amazon.com/iot-sitewise/latest/userguide/quotas.html)
+//   in the IoT SiteWise User Guide.
+//
+//   * ConflictingOperationException
+//   Your request has conflicting operations. This can occur if you're trying
+//   to perform more than one operation on the same resource at the same time.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/iotsitewise-2019-12-02/DescribeStorageConfiguration
+func (c *IoTSiteWise) DescribeStorageConfiguration(input *DescribeStorageConfigurationInput) (*DescribeStorageConfigurationOutput, error) {
+	req, out := c.DescribeStorageConfigurationRequest(input)
+	return out, req.Send()
+}
+
+// DescribeStorageConfigurationWithContext is the same as DescribeStorageConfiguration with the addition of
+// the ability to pass a context and additional request options.
+//
+// See DescribeStorageConfiguration for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *IoTSiteWise) DescribeStorageConfigurationWithContext(ctx aws.Context, input *DescribeStorageConfigurationInput, opts ...request.Option) (*DescribeStorageConfigurationOutput, error) {
+	req, out := c.DescribeStorageConfigurationRequest(input)
 	req.SetContext(ctx)
 	req.ApplyOptions(opts...)
 	return out, req.Send()
@@ -2939,7 +3139,7 @@ func (c *IoTSiteWise) DisassociateAssetsRequest(input *DisassociateAssetsInput) 
 	output = &DisassociateAssetsOutput{}
 	req = c.newRequest(op, input, output)
 	req.Handlers.Unmarshal.Swap(restjson.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
-	req.Handlers.Build.PushBackNamed(protocol.NewHostPrefixHandler("model.", nil))
+	req.Handlers.Build.PushBackNamed(protocol.NewHostPrefixHandler("api.", nil))
 	req.Handlers.Build.PushBackNamed(protocol.ValidateEndpointHostHandler)
 	return
 }
@@ -2965,15 +3165,15 @@ func (c *IoTSiteWise) DisassociateAssetsRequest(input *DisassociateAssetsInput) 
 //   The requested resource can't be found.
 //
 //   * InternalFailureException
-//   AWS IoT SiteWise can't process your request right now. Try again later.
+//   IoT SiteWise can't process your request right now. Try again later.
 //
 //   * ThrottlingException
 //   Your request exceeded a rate limit. For example, you might have exceeded
-//   the number of AWS IoT SiteWise assets that can be created per second, the
-//   allowed number of messages per second, and so on.
+//   the number of IoT SiteWise assets that can be created per second, the allowed
+//   number of messages per second, and so on.
 //
 //   For more information, see Quotas (https://docs.aws.amazon.com/iot-sitewise/latest/userguide/quotas.html)
-//   in the AWS IoT SiteWise User Guide.
+//   in the IoT SiteWise User Guide.
 //
 //   * ConflictingOperationException
 //   Your request has conflicting operations. This can occur if you're trying
@@ -3055,7 +3255,7 @@ func (c *IoTSiteWise) GetAssetPropertyAggregatesRequest(input *GetAssetPropertyA
 //
 // Gets aggregated values for an asset property. For more information, see Querying
 // aggregates (https://docs.aws.amazon.com/iot-sitewise/latest/userguide/query-industrial-data.html#aggregates)
-// in the AWS IoT SiteWise User Guide.
+// in the IoT SiteWise User Guide.
 //
 // To identify an asset property, you must specify one of the following:
 //
@@ -3080,15 +3280,15 @@ func (c *IoTSiteWise) GetAssetPropertyAggregatesRequest(input *GetAssetPropertyA
 //   The requested resource can't be found.
 //
 //   * InternalFailureException
-//   AWS IoT SiteWise can't process your request right now. Try again later.
+//   IoT SiteWise can't process your request right now. Try again later.
 //
 //   * ThrottlingException
 //   Your request exceeded a rate limit. For example, you might have exceeded
-//   the number of AWS IoT SiteWise assets that can be created per second, the
-//   allowed number of messages per second, and so on.
+//   the number of IoT SiteWise assets that can be created per second, the allowed
+//   number of messages per second, and so on.
 //
 //   For more information, see Quotas (https://docs.aws.amazon.com/iot-sitewise/latest/userguide/quotas.html)
-//   in the AWS IoT SiteWise User Guide.
+//   in the IoT SiteWise User Guide.
 //
 //   * ServiceUnavailableException
 //   The requested service is unavailable.
@@ -3215,7 +3415,7 @@ func (c *IoTSiteWise) GetAssetPropertyValueRequest(input *GetAssetPropertyValueI
 //
 // Gets an asset property's current value. For more information, see Querying
 // current values (https://docs.aws.amazon.com/iot-sitewise/latest/userguide/query-industrial-data.html#current-values)
-// in the AWS IoT SiteWise User Guide.
+// in the IoT SiteWise User Guide.
 //
 // To identify an asset property, you must specify one of the following:
 //
@@ -3240,15 +3440,15 @@ func (c *IoTSiteWise) GetAssetPropertyValueRequest(input *GetAssetPropertyValueI
 //   The requested resource can't be found.
 //
 //   * InternalFailureException
-//   AWS IoT SiteWise can't process your request right now. Try again later.
+//   IoT SiteWise can't process your request right now. Try again later.
 //
 //   * ThrottlingException
 //   Your request exceeded a rate limit. For example, you might have exceeded
-//   the number of AWS IoT SiteWise assets that can be created per second, the
-//   allowed number of messages per second, and so on.
+//   the number of IoT SiteWise assets that can be created per second, the allowed
+//   number of messages per second, and so on.
 //
 //   For more information, see Quotas (https://docs.aws.amazon.com/iot-sitewise/latest/userguide/quotas.html)
-//   in the AWS IoT SiteWise User Guide.
+//   in the IoT SiteWise User Guide.
 //
 //   * ServiceUnavailableException
 //   The requested service is unavailable.
@@ -3329,7 +3529,7 @@ func (c *IoTSiteWise) GetAssetPropertyValueHistoryRequest(input *GetAssetPropert
 //
 // Gets the history of an asset property's values. For more information, see
 // Querying historical values (https://docs.aws.amazon.com/iot-sitewise/latest/userguide/query-industrial-data.html#historical-values)
-// in the AWS IoT SiteWise User Guide.
+// in the IoT SiteWise User Guide.
 //
 // To identify an asset property, you must specify one of the following:
 //
@@ -3354,15 +3554,15 @@ func (c *IoTSiteWise) GetAssetPropertyValueHistoryRequest(input *GetAssetPropert
 //   The requested resource can't be found.
 //
 //   * InternalFailureException
-//   AWS IoT SiteWise can't process your request right now. Try again later.
+//   IoT SiteWise can't process your request right now. Try again later.
 //
 //   * ThrottlingException
 //   Your request exceeded a rate limit. For example, you might have exceeded
-//   the number of AWS IoT SiteWise assets that can be created per second, the
-//   allowed number of messages per second, and so on.
+//   the number of IoT SiteWise assets that can be created per second, the allowed
+//   number of messages per second, and so on.
 //
 //   For more information, see Quotas (https://docs.aws.amazon.com/iot-sitewise/latest/userguide/quotas.html)
-//   in the AWS IoT SiteWise User Guide.
+//   in the IoT SiteWise User Guide.
 //
 //   * ServiceUnavailableException
 //   The requested service is unavailable.
@@ -3441,6 +3641,176 @@ func (c *IoTSiteWise) GetAssetPropertyValueHistoryPagesWithContext(ctx aws.Conte
 	return p.Err()
 }
 
+const opGetInterpolatedAssetPropertyValues = "GetInterpolatedAssetPropertyValues"
+
+// GetInterpolatedAssetPropertyValuesRequest generates a "aws/request.Request" representing the
+// client's request for the GetInterpolatedAssetPropertyValues operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See GetInterpolatedAssetPropertyValues for more information on using the GetInterpolatedAssetPropertyValues
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the GetInterpolatedAssetPropertyValuesRequest method.
+//    req, resp := client.GetInterpolatedAssetPropertyValuesRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/iotsitewise-2019-12-02/GetInterpolatedAssetPropertyValues
+func (c *IoTSiteWise) GetInterpolatedAssetPropertyValuesRequest(input *GetInterpolatedAssetPropertyValuesInput) (req *request.Request, output *GetInterpolatedAssetPropertyValuesOutput) {
+	op := &request.Operation{
+		Name:       opGetInterpolatedAssetPropertyValues,
+		HTTPMethod: "GET",
+		HTTPPath:   "/properties/interpolated",
+		Paginator: &request.Paginator{
+			InputTokens:     []string{"nextToken"},
+			OutputTokens:    []string{"nextToken"},
+			LimitToken:      "maxResults",
+			TruncationToken: "",
+		},
+	}
+
+	if input == nil {
+		input = &GetInterpolatedAssetPropertyValuesInput{}
+	}
+
+	output = &GetInterpolatedAssetPropertyValuesOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Build.PushBackNamed(protocol.NewHostPrefixHandler("data.", nil))
+	req.Handlers.Build.PushBackNamed(protocol.ValidateEndpointHostHandler)
+	return
+}
+
+// GetInterpolatedAssetPropertyValues API operation for AWS IoT SiteWise.
+//
+// Get interpolated values for an asset property for a specified time interval,
+// during a period of time. If your time series is missing data points during
+// the specified time interval, you can use interpolation to estimate the missing
+// data.
+//
+// For example, you can use this operation to return the interpolated temperature
+// values for a wind turbine every 24 hours over a duration of 7 days.
+//
+// To identify an asset property, you must specify one of the following:
+//
+//    * The assetId and propertyId of an asset property.
+//
+//    * A propertyAlias, which is a data stream alias (for example, /company/windfarm/3/turbine/7/temperature).
+//    To define an asset property's alias, see UpdateAssetProperty (https://docs.aws.amazon.com/iot-sitewise/latest/APIReference/API_UpdateAssetProperty.html).
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS IoT SiteWise's
+// API operation GetInterpolatedAssetPropertyValues for usage and error information.
+//
+// Returned Error Types:
+//   * InvalidRequestException
+//   The request isn't valid. This can occur if your request contains malformed
+//   JSON or unsupported characters. Check your request and try again.
+//
+//   * ResourceNotFoundException
+//   The requested resource can't be found.
+//
+//   * InternalFailureException
+//   IoT SiteWise can't process your request right now. Try again later.
+//
+//   * ThrottlingException
+//   Your request exceeded a rate limit. For example, you might have exceeded
+//   the number of IoT SiteWise assets that can be created per second, the allowed
+//   number of messages per second, and so on.
+//
+//   For more information, see Quotas (https://docs.aws.amazon.com/iot-sitewise/latest/userguide/quotas.html)
+//   in the IoT SiteWise User Guide.
+//
+//   * ServiceUnavailableException
+//   The requested service is unavailable.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/iotsitewise-2019-12-02/GetInterpolatedAssetPropertyValues
+func (c *IoTSiteWise) GetInterpolatedAssetPropertyValues(input *GetInterpolatedAssetPropertyValuesInput) (*GetInterpolatedAssetPropertyValuesOutput, error) {
+	req, out := c.GetInterpolatedAssetPropertyValuesRequest(input)
+	return out, req.Send()
+}
+
+// GetInterpolatedAssetPropertyValuesWithContext is the same as GetInterpolatedAssetPropertyValues with the addition of
+// the ability to pass a context and additional request options.
+//
+// See GetInterpolatedAssetPropertyValues for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *IoTSiteWise) GetInterpolatedAssetPropertyValuesWithContext(ctx aws.Context, input *GetInterpolatedAssetPropertyValuesInput, opts ...request.Option) (*GetInterpolatedAssetPropertyValuesOutput, error) {
+	req, out := c.GetInterpolatedAssetPropertyValuesRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+// GetInterpolatedAssetPropertyValuesPages iterates over the pages of a GetInterpolatedAssetPropertyValues operation,
+// calling the "fn" function with the response data for each page. To stop
+// iterating, return false from the fn function.
+//
+// See GetInterpolatedAssetPropertyValues method for more information on how to use this operation.
+//
+// Note: This operation can generate multiple requests to a service.
+//
+//    // Example iterating over at most 3 pages of a GetInterpolatedAssetPropertyValues operation.
+//    pageNum := 0
+//    err := client.GetInterpolatedAssetPropertyValuesPages(params,
+//        func(page *iotsitewise.GetInterpolatedAssetPropertyValuesOutput, lastPage bool) bool {
+//            pageNum++
+//            fmt.Println(page)
+//            return pageNum <= 3
+//        })
+//
+func (c *IoTSiteWise) GetInterpolatedAssetPropertyValuesPages(input *GetInterpolatedAssetPropertyValuesInput, fn func(*GetInterpolatedAssetPropertyValuesOutput, bool) bool) error {
+	return c.GetInterpolatedAssetPropertyValuesPagesWithContext(aws.BackgroundContext(), input, fn)
+}
+
+// GetInterpolatedAssetPropertyValuesPagesWithContext same as GetInterpolatedAssetPropertyValuesPages except
+// it takes a Context and allows setting request options on the pages.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *IoTSiteWise) GetInterpolatedAssetPropertyValuesPagesWithContext(ctx aws.Context, input *GetInterpolatedAssetPropertyValuesInput, fn func(*GetInterpolatedAssetPropertyValuesOutput, bool) bool, opts ...request.Option) error {
+	p := request.Pagination{
+		NewRequest: func() (*request.Request, error) {
+			var inCpy *GetInterpolatedAssetPropertyValuesInput
+			if input != nil {
+				tmp := *input
+				inCpy = &tmp
+			}
+			req, _ := c.GetInterpolatedAssetPropertyValuesRequest(inCpy)
+			req.SetContext(ctx)
+			req.ApplyOptions(opts...)
+			return req, nil
+		},
+	}
+
+	for p.Next() {
+		if !fn(p.Page().(*GetInterpolatedAssetPropertyValuesOutput), !p.HasNextPage()) {
+			break
+		}
+	}
+
+	return p.Err()
+}
+
 const opListAccessPolicies = "ListAccessPolicies"
 
 // ListAccessPoliciesRequest generates a "aws/request.Request" representing the
@@ -3493,9 +3863,9 @@ func (c *IoTSiteWise) ListAccessPoliciesRequest(input *ListAccessPoliciesInput) 
 
 // ListAccessPolicies API operation for AWS IoT SiteWise.
 //
-// Retrieves a paginated list of access policies for an identity (an AWS SSO
-// user, an AWS SSO group, or an IAM user) or an AWS IoT SiteWise Monitor resource
-// (a portal or project).
+// Retrieves a paginated list of access policies for an identity (an Amazon
+// Web Services SSO user, an Amazon Web Services SSO group, or an IAM user)
+// or an IoT SiteWise Monitor resource (a portal or project).
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -3510,15 +3880,15 @@ func (c *IoTSiteWise) ListAccessPoliciesRequest(input *ListAccessPoliciesInput) 
 //   JSON or unsupported characters. Check your request and try again.
 //
 //   * InternalFailureException
-//   AWS IoT SiteWise can't process your request right now. Try again later.
+//   IoT SiteWise can't process your request right now. Try again later.
 //
 //   * ThrottlingException
 //   Your request exceeded a rate limit. For example, you might have exceeded
-//   the number of AWS IoT SiteWise assets that can be created per second, the
-//   allowed number of messages per second, and so on.
+//   the number of IoT SiteWise assets that can be created per second, the allowed
+//   number of messages per second, and so on.
 //
 //   For more information, see Quotas (https://docs.aws.amazon.com/iot-sitewise/latest/userguide/quotas.html)
-//   in the AWS IoT SiteWise User Guide.
+//   in the IoT SiteWise User Guide.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iotsitewise-2019-12-02/ListAccessPolicies
 func (c *IoTSiteWise) ListAccessPolicies(input *ListAccessPoliciesInput) (*ListAccessPoliciesOutput, error) {
@@ -3639,7 +4009,7 @@ func (c *IoTSiteWise) ListAssetModelsRequest(input *ListAssetModelsInput) (req *
 
 	output = &ListAssetModelsOutput{}
 	req = c.newRequest(op, input, output)
-	req.Handlers.Build.PushBackNamed(protocol.NewHostPrefixHandler("model.", nil))
+	req.Handlers.Build.PushBackNamed(protocol.NewHostPrefixHandler("api.", nil))
 	req.Handlers.Build.PushBackNamed(protocol.ValidateEndpointHostHandler)
 	return
 }
@@ -3661,15 +4031,15 @@ func (c *IoTSiteWise) ListAssetModelsRequest(input *ListAssetModelsInput) (req *
 //   JSON or unsupported characters. Check your request and try again.
 //
 //   * InternalFailureException
-//   AWS IoT SiteWise can't process your request right now. Try again later.
+//   IoT SiteWise can't process your request right now. Try again later.
 //
 //   * ThrottlingException
 //   Your request exceeded a rate limit. For example, you might have exceeded
-//   the number of AWS IoT SiteWise assets that can be created per second, the
-//   allowed number of messages per second, and so on.
+//   the number of IoT SiteWise assets that can be created per second, the allowed
+//   number of messages per second, and so on.
 //
 //   For more information, see Quotas (https://docs.aws.amazon.com/iot-sitewise/latest/userguide/quotas.html)
-//   in the AWS IoT SiteWise User Guide.
+//   in the IoT SiteWise User Guide.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iotsitewise-2019-12-02/ListAssetModels
 func (c *IoTSiteWise) ListAssetModels(input *ListAssetModelsInput) (*ListAssetModelsOutput, error) {
@@ -3745,6 +4115,162 @@ func (c *IoTSiteWise) ListAssetModelsPagesWithContext(ctx aws.Context, input *Li
 	return p.Err()
 }
 
+const opListAssetRelationships = "ListAssetRelationships"
+
+// ListAssetRelationshipsRequest generates a "aws/request.Request" representing the
+// client's request for the ListAssetRelationships operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See ListAssetRelationships for more information on using the ListAssetRelationships
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the ListAssetRelationshipsRequest method.
+//    req, resp := client.ListAssetRelationshipsRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/iotsitewise-2019-12-02/ListAssetRelationships
+func (c *IoTSiteWise) ListAssetRelationshipsRequest(input *ListAssetRelationshipsInput) (req *request.Request, output *ListAssetRelationshipsOutput) {
+	op := &request.Operation{
+		Name:       opListAssetRelationships,
+		HTTPMethod: "GET",
+		HTTPPath:   "/assets/{assetId}/assetRelationships",
+		Paginator: &request.Paginator{
+			InputTokens:     []string{"nextToken"},
+			OutputTokens:    []string{"nextToken"},
+			LimitToken:      "maxResults",
+			TruncationToken: "",
+		},
+	}
+
+	if input == nil {
+		input = &ListAssetRelationshipsInput{}
+	}
+
+	output = &ListAssetRelationshipsOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Build.PushBackNamed(protocol.NewHostPrefixHandler("api.", nil))
+	req.Handlers.Build.PushBackNamed(protocol.ValidateEndpointHostHandler)
+	return
+}
+
+// ListAssetRelationships API operation for AWS IoT SiteWise.
+//
+// Retrieves a paginated list of asset relationships for an asset. You can use
+// this operation to identify an asset's root asset and all associated assets
+// between that asset and its root.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS IoT SiteWise's
+// API operation ListAssetRelationships for usage and error information.
+//
+// Returned Error Types:
+//   * InvalidRequestException
+//   The request isn't valid. This can occur if your request contains malformed
+//   JSON or unsupported characters. Check your request and try again.
+//
+//   * InternalFailureException
+//   IoT SiteWise can't process your request right now. Try again later.
+//
+//   * ResourceNotFoundException
+//   The requested resource can't be found.
+//
+//   * ThrottlingException
+//   Your request exceeded a rate limit. For example, you might have exceeded
+//   the number of IoT SiteWise assets that can be created per second, the allowed
+//   number of messages per second, and so on.
+//
+//   For more information, see Quotas (https://docs.aws.amazon.com/iot-sitewise/latest/userguide/quotas.html)
+//   in the IoT SiteWise User Guide.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/iotsitewise-2019-12-02/ListAssetRelationships
+func (c *IoTSiteWise) ListAssetRelationships(input *ListAssetRelationshipsInput) (*ListAssetRelationshipsOutput, error) {
+	req, out := c.ListAssetRelationshipsRequest(input)
+	return out, req.Send()
+}
+
+// ListAssetRelationshipsWithContext is the same as ListAssetRelationships with the addition of
+// the ability to pass a context and additional request options.
+//
+// See ListAssetRelationships for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *IoTSiteWise) ListAssetRelationshipsWithContext(ctx aws.Context, input *ListAssetRelationshipsInput, opts ...request.Option) (*ListAssetRelationshipsOutput, error) {
+	req, out := c.ListAssetRelationshipsRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+// ListAssetRelationshipsPages iterates over the pages of a ListAssetRelationships operation,
+// calling the "fn" function with the response data for each page. To stop
+// iterating, return false from the fn function.
+//
+// See ListAssetRelationships method for more information on how to use this operation.
+//
+// Note: This operation can generate multiple requests to a service.
+//
+//    // Example iterating over at most 3 pages of a ListAssetRelationships operation.
+//    pageNum := 0
+//    err := client.ListAssetRelationshipsPages(params,
+//        func(page *iotsitewise.ListAssetRelationshipsOutput, lastPage bool) bool {
+//            pageNum++
+//            fmt.Println(page)
+//            return pageNum <= 3
+//        })
+//
+func (c *IoTSiteWise) ListAssetRelationshipsPages(input *ListAssetRelationshipsInput, fn func(*ListAssetRelationshipsOutput, bool) bool) error {
+	return c.ListAssetRelationshipsPagesWithContext(aws.BackgroundContext(), input, fn)
+}
+
+// ListAssetRelationshipsPagesWithContext same as ListAssetRelationshipsPages except
+// it takes a Context and allows setting request options on the pages.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *IoTSiteWise) ListAssetRelationshipsPagesWithContext(ctx aws.Context, input *ListAssetRelationshipsInput, fn func(*ListAssetRelationshipsOutput, bool) bool, opts ...request.Option) error {
+	p := request.Pagination{
+		NewRequest: func() (*request.Request, error) {
+			var inCpy *ListAssetRelationshipsInput
+			if input != nil {
+				tmp := *input
+				inCpy = &tmp
+			}
+			req, _ := c.ListAssetRelationshipsRequest(inCpy)
+			req.SetContext(ctx)
+			req.ApplyOptions(opts...)
+			return req, nil
+		},
+	}
+
+	for p.Next() {
+		if !fn(p.Page().(*ListAssetRelationshipsOutput), !p.HasNextPage()) {
+			break
+		}
+	}
+
+	return p.Err()
+}
+
 const opListAssets = "ListAssets"
 
 // ListAssetsRequest generates a "aws/request.Request" representing the
@@ -3790,7 +4316,7 @@ func (c *IoTSiteWise) ListAssetsRequest(input *ListAssetsInput) (req *request.Re
 
 	output = &ListAssetsOutput{}
 	req = c.newRequest(op, input, output)
-	req.Handlers.Build.PushBackNamed(protocol.NewHostPrefixHandler("model.", nil))
+	req.Handlers.Build.PushBackNamed(protocol.NewHostPrefixHandler("api.", nil))
 	req.Handlers.Build.PushBackNamed(protocol.ValidateEndpointHostHandler)
 	return
 }
@@ -3823,18 +4349,18 @@ func (c *IoTSiteWise) ListAssetsRequest(input *ListAssetsInput) (req *request.Re
 //   JSON or unsupported characters. Check your request and try again.
 //
 //   * InternalFailureException
-//   AWS IoT SiteWise can't process your request right now. Try again later.
+//   IoT SiteWise can't process your request right now. Try again later.
 //
 //   * ResourceNotFoundException
 //   The requested resource can't be found.
 //
 //   * ThrottlingException
 //   Your request exceeded a rate limit. For example, you might have exceeded
-//   the number of AWS IoT SiteWise assets that can be created per second, the
-//   allowed number of messages per second, and so on.
+//   the number of IoT SiteWise assets that can be created per second, the allowed
+//   number of messages per second, and so on.
 //
 //   For more information, see Quotas (https://docs.aws.amazon.com/iot-sitewise/latest/userguide/quotas.html)
-//   in the AWS IoT SiteWise User Guide.
+//   in the IoT SiteWise User Guide.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iotsitewise-2019-12-02/ListAssets
 func (c *IoTSiteWise) ListAssets(input *ListAssetsInput) (*ListAssetsOutput, error) {
@@ -3955,7 +4481,7 @@ func (c *IoTSiteWise) ListAssociatedAssetsRequest(input *ListAssociatedAssetsInp
 
 	output = &ListAssociatedAssetsOutput{}
 	req = c.newRequest(op, input, output)
-	req.Handlers.Build.PushBackNamed(protocol.NewHostPrefixHandler("model.", nil))
+	req.Handlers.Build.PushBackNamed(protocol.NewHostPrefixHandler("api.", nil))
 	req.Handlers.Build.PushBackNamed(protocol.ValidateEndpointHostHandler)
 	return
 }
@@ -3984,18 +4510,18 @@ func (c *IoTSiteWise) ListAssociatedAssetsRequest(input *ListAssociatedAssetsInp
 //   JSON or unsupported characters. Check your request and try again.
 //
 //   * InternalFailureException
-//   AWS IoT SiteWise can't process your request right now. Try again later.
+//   IoT SiteWise can't process your request right now. Try again later.
 //
 //   * ResourceNotFoundException
 //   The requested resource can't be found.
 //
 //   * ThrottlingException
 //   Your request exceeded a rate limit. For example, you might have exceeded
-//   the number of AWS IoT SiteWise assets that can be created per second, the
-//   allowed number of messages per second, and so on.
+//   the number of IoT SiteWise assets that can be created per second, the allowed
+//   number of messages per second, and so on.
 //
 //   For more information, see Quotas (https://docs.aws.amazon.com/iot-sitewise/latest/userguide/quotas.html)
-//   in the AWS IoT SiteWise User Guide.
+//   in the IoT SiteWise User Guide.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iotsitewise-2019-12-02/ListAssociatedAssets
 func (c *IoTSiteWise) ListAssociatedAssets(input *ListAssociatedAssetsInput) (*ListAssociatedAssetsOutput, error) {
@@ -4123,8 +4649,7 @@ func (c *IoTSiteWise) ListDashboardsRequest(input *ListDashboardsInput) (req *re
 
 // ListDashboards API operation for AWS IoT SiteWise.
 //
-// Retrieves a paginated list of dashboards for an AWS IoT SiteWise Monitor
-// project.
+// Retrieves a paginated list of dashboards for an IoT SiteWise Monitor project.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -4139,15 +4664,15 @@ func (c *IoTSiteWise) ListDashboardsRequest(input *ListDashboardsInput) (req *re
 //   JSON or unsupported characters. Check your request and try again.
 //
 //   * InternalFailureException
-//   AWS IoT SiteWise can't process your request right now. Try again later.
+//   IoT SiteWise can't process your request right now. Try again later.
 //
 //   * ThrottlingException
 //   Your request exceeded a rate limit. For example, you might have exceeded
-//   the number of AWS IoT SiteWise assets that can be created per second, the
-//   allowed number of messages per second, and so on.
+//   the number of IoT SiteWise assets that can be created per second, the allowed
+//   number of messages per second, and so on.
 //
 //   For more information, see Quotas (https://docs.aws.amazon.com/iot-sitewise/latest/userguide/quotas.html)
-//   in the AWS IoT SiteWise User Guide.
+//   in the IoT SiteWise User Guide.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iotsitewise-2019-12-02/ListDashboards
 func (c *IoTSiteWise) ListDashboards(input *ListDashboardsInput) (*ListDashboardsOutput, error) {
@@ -4268,7 +4793,7 @@ func (c *IoTSiteWise) ListGatewaysRequest(input *ListGatewaysInput) (req *reques
 
 	output = &ListGatewaysOutput{}
 	req = c.newRequest(op, input, output)
-	req.Handlers.Build.PushBackNamed(protocol.NewHostPrefixHandler("edge.", nil))
+	req.Handlers.Build.PushBackNamed(protocol.NewHostPrefixHandler("api.", nil))
 	req.Handlers.Build.PushBackNamed(protocol.ValidateEndpointHostHandler)
 	return
 }
@@ -4290,15 +4815,15 @@ func (c *IoTSiteWise) ListGatewaysRequest(input *ListGatewaysInput) (req *reques
 //   JSON or unsupported characters. Check your request and try again.
 //
 //   * InternalFailureException
-//   AWS IoT SiteWise can't process your request right now. Try again later.
+//   IoT SiteWise can't process your request right now. Try again later.
 //
 //   * ThrottlingException
 //   Your request exceeded a rate limit. For example, you might have exceeded
-//   the number of AWS IoT SiteWise assets that can be created per second, the
-//   allowed number of messages per second, and so on.
+//   the number of IoT SiteWise assets that can be created per second, the allowed
+//   number of messages per second, and so on.
 //
 //   For more information, see Quotas (https://docs.aws.amazon.com/iot-sitewise/latest/userguide/quotas.html)
-//   in the AWS IoT SiteWise User Guide.
+//   in the IoT SiteWise User Guide.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iotsitewise-2019-12-02/ListGateways
 func (c *IoTSiteWise) ListGateways(input *ListGatewaysInput) (*ListGatewaysOutput, error) {
@@ -4426,7 +4951,7 @@ func (c *IoTSiteWise) ListPortalsRequest(input *ListPortalsInput) (req *request.
 
 // ListPortals API operation for AWS IoT SiteWise.
 //
-// Retrieves a paginated list of AWS IoT SiteWise Monitor portals.
+// Retrieves a paginated list of IoT SiteWise Monitor portals.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -4441,15 +4966,15 @@ func (c *IoTSiteWise) ListPortalsRequest(input *ListPortalsInput) (req *request.
 //   JSON or unsupported characters. Check your request and try again.
 //
 //   * InternalFailureException
-//   AWS IoT SiteWise can't process your request right now. Try again later.
+//   IoT SiteWise can't process your request right now. Try again later.
 //
 //   * ThrottlingException
 //   Your request exceeded a rate limit. For example, you might have exceeded
-//   the number of AWS IoT SiteWise assets that can be created per second, the
-//   allowed number of messages per second, and so on.
+//   the number of IoT SiteWise assets that can be created per second, the allowed
+//   number of messages per second, and so on.
 //
 //   For more information, see Quotas (https://docs.aws.amazon.com/iot-sitewise/latest/userguide/quotas.html)
-//   in the AWS IoT SiteWise User Guide.
+//   in the IoT SiteWise User Guide.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iotsitewise-2019-12-02/ListPortals
 func (c *IoTSiteWise) ListPortals(input *ListPortalsInput) (*ListPortalsOutput, error) {
@@ -4577,8 +5102,8 @@ func (c *IoTSiteWise) ListProjectAssetsRequest(input *ListProjectAssetsInput) (r
 
 // ListProjectAssets API operation for AWS IoT SiteWise.
 //
-// Retrieves a paginated list of assets associated with an AWS IoT SiteWise
-// Monitor project.
+// Retrieves a paginated list of assets associated with an IoT SiteWise Monitor
+// project.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -4593,15 +5118,15 @@ func (c *IoTSiteWise) ListProjectAssetsRequest(input *ListProjectAssetsInput) (r
 //   JSON or unsupported characters. Check your request and try again.
 //
 //   * InternalFailureException
-//   AWS IoT SiteWise can't process your request right now. Try again later.
+//   IoT SiteWise can't process your request right now. Try again later.
 //
 //   * ThrottlingException
 //   Your request exceeded a rate limit. For example, you might have exceeded
-//   the number of AWS IoT SiteWise assets that can be created per second, the
-//   allowed number of messages per second, and so on.
+//   the number of IoT SiteWise assets that can be created per second, the allowed
+//   number of messages per second, and so on.
 //
 //   For more information, see Quotas (https://docs.aws.amazon.com/iot-sitewise/latest/userguide/quotas.html)
-//   in the AWS IoT SiteWise User Guide.
+//   in the IoT SiteWise User Guide.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iotsitewise-2019-12-02/ListProjectAssets
 func (c *IoTSiteWise) ListProjectAssets(input *ListProjectAssetsInput) (*ListProjectAssetsOutput, error) {
@@ -4729,7 +5254,7 @@ func (c *IoTSiteWise) ListProjectsRequest(input *ListProjectsInput) (req *reques
 
 // ListProjects API operation for AWS IoT SiteWise.
 //
-// Retrieves a paginated list of projects for an AWS IoT SiteWise Monitor portal.
+// Retrieves a paginated list of projects for an IoT SiteWise Monitor portal.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -4744,15 +5269,15 @@ func (c *IoTSiteWise) ListProjectsRequest(input *ListProjectsInput) (req *reques
 //   JSON or unsupported characters. Check your request and try again.
 //
 //   * InternalFailureException
-//   AWS IoT SiteWise can't process your request right now. Try again later.
+//   IoT SiteWise can't process your request right now. Try again later.
 //
 //   * ThrottlingException
 //   Your request exceeded a rate limit. For example, you might have exceeded
-//   the number of AWS IoT SiteWise assets that can be created per second, the
-//   allowed number of messages per second, and so on.
+//   the number of IoT SiteWise assets that can be created per second, the allowed
+//   number of messages per second, and so on.
 //
 //   For more information, see Quotas (https://docs.aws.amazon.com/iot-sitewise/latest/userguide/quotas.html)
-//   in the AWS IoT SiteWise User Guide.
+//   in the IoT SiteWise User Guide.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iotsitewise-2019-12-02/ListProjects
 func (c *IoTSiteWise) ListProjects(input *ListProjectsInput) (*ListProjectsOutput, error) {
@@ -4867,12 +5392,14 @@ func (c *IoTSiteWise) ListTagsForResourceRequest(input *ListTagsForResourceInput
 
 	output = &ListTagsForResourceOutput{}
 	req = c.newRequest(op, input, output)
+	req.Handlers.Build.PushBackNamed(protocol.NewHostPrefixHandler("api.", nil))
+	req.Handlers.Build.PushBackNamed(protocol.ValidateEndpointHostHandler)
 	return
 }
 
 // ListTagsForResource API operation for AWS IoT SiteWise.
 //
-// Retrieves the list of tags for an AWS IoT SiteWise resource.
+// Retrieves the list of tags for an IoT SiteWise resource.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -4887,18 +5414,33 @@ func (c *IoTSiteWise) ListTagsForResourceRequest(input *ListTagsForResourceInput
 //   JSON or unsupported characters. Check your request and try again.
 //
 //   * InternalFailureException
-//   AWS IoT SiteWise can't process your request right now. Try again later.
+//   IoT SiteWise can't process your request right now. Try again later.
 //
 //   * ThrottlingException
 //   Your request exceeded a rate limit. For example, you might have exceeded
-//   the number of AWS IoT SiteWise assets that can be created per second, the
-//   allowed number of messages per second, and so on.
+//   the number of IoT SiteWise assets that can be created per second, the allowed
+//   number of messages per second, and so on.
 //
 //   For more information, see Quotas (https://docs.aws.amazon.com/iot-sitewise/latest/userguide/quotas.html)
-//   in the AWS IoT SiteWise User Guide.
+//   in the IoT SiteWise User Guide.
 //
 //   * ResourceNotFoundException
 //   The requested resource can't be found.
+//
+//   * ConflictingOperationException
+//   Your request has conflicting operations. This can occur if you're trying
+//   to perform more than one operation on the same resource at the same time.
+//
+//   * LimitExceededException
+//   You've reached the limit for a resource. For example, this can occur if you're
+//   trying to associate more than the allowed number of child assets or attempting
+//   to create more than the allowed number of properties for an asset model.
+//
+//   For more information, see Quotas (https://docs.aws.amazon.com/iot-sitewise/latest/userguide/quotas.html)
+//   in the IoT SiteWise User Guide.
+//
+//   * UnauthorizedException
+//   You are not authorized.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iotsitewise-2019-12-02/ListTagsForResource
 func (c *IoTSiteWise) ListTagsForResource(input *ListTagsForResourceInput) (*ListTagsForResourceOutput, error) {
@@ -4917,6 +5459,113 @@ func (c *IoTSiteWise) ListTagsForResource(input *ListTagsForResourceInput) (*Lis
 // for more information on using Contexts.
 func (c *IoTSiteWise) ListTagsForResourceWithContext(ctx aws.Context, input *ListTagsForResourceInput, opts ...request.Option) (*ListTagsForResourceOutput, error) {
 	req, out := c.ListTagsForResourceRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opPutDefaultEncryptionConfiguration = "PutDefaultEncryptionConfiguration"
+
+// PutDefaultEncryptionConfigurationRequest generates a "aws/request.Request" representing the
+// client's request for the PutDefaultEncryptionConfiguration operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See PutDefaultEncryptionConfiguration for more information on using the PutDefaultEncryptionConfiguration
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the PutDefaultEncryptionConfigurationRequest method.
+//    req, resp := client.PutDefaultEncryptionConfigurationRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/iotsitewise-2019-12-02/PutDefaultEncryptionConfiguration
+func (c *IoTSiteWise) PutDefaultEncryptionConfigurationRequest(input *PutDefaultEncryptionConfigurationInput) (req *request.Request, output *PutDefaultEncryptionConfigurationOutput) {
+	op := &request.Operation{
+		Name:       opPutDefaultEncryptionConfiguration,
+		HTTPMethod: "POST",
+		HTTPPath:   "/configuration/account/encryption",
+	}
+
+	if input == nil {
+		input = &PutDefaultEncryptionConfigurationInput{}
+	}
+
+	output = &PutDefaultEncryptionConfigurationOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Build.PushBackNamed(protocol.NewHostPrefixHandler("api.", nil))
+	req.Handlers.Build.PushBackNamed(protocol.ValidateEndpointHostHandler)
+	return
+}
+
+// PutDefaultEncryptionConfiguration API operation for AWS IoT SiteWise.
+//
+// Sets the default encryption configuration for the Amazon Web Services account.
+// For more information, see Key management (https://docs.aws.amazon.com/iot-sitewise/latest/userguide/key-management.html)
+// in the IoT SiteWise User Guide.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS IoT SiteWise's
+// API operation PutDefaultEncryptionConfiguration for usage and error information.
+//
+// Returned Error Types:
+//   * InvalidRequestException
+//   The request isn't valid. This can occur if your request contains malformed
+//   JSON or unsupported characters. Check your request and try again.
+//
+//   * InternalFailureException
+//   IoT SiteWise can't process your request right now. Try again later.
+//
+//   * ThrottlingException
+//   Your request exceeded a rate limit. For example, you might have exceeded
+//   the number of IoT SiteWise assets that can be created per second, the allowed
+//   number of messages per second, and so on.
+//
+//   For more information, see Quotas (https://docs.aws.amazon.com/iot-sitewise/latest/userguide/quotas.html)
+//   in the IoT SiteWise User Guide.
+//
+//   * LimitExceededException
+//   You've reached the limit for a resource. For example, this can occur if you're
+//   trying to associate more than the allowed number of child assets or attempting
+//   to create more than the allowed number of properties for an asset model.
+//
+//   For more information, see Quotas (https://docs.aws.amazon.com/iot-sitewise/latest/userguide/quotas.html)
+//   in the IoT SiteWise User Guide.
+//
+//   * ConflictingOperationException
+//   Your request has conflicting operations. This can occur if you're trying
+//   to perform more than one operation on the same resource at the same time.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/iotsitewise-2019-12-02/PutDefaultEncryptionConfiguration
+func (c *IoTSiteWise) PutDefaultEncryptionConfiguration(input *PutDefaultEncryptionConfigurationInput) (*PutDefaultEncryptionConfigurationOutput, error) {
+	req, out := c.PutDefaultEncryptionConfigurationRequest(input)
+	return out, req.Send()
+}
+
+// PutDefaultEncryptionConfigurationWithContext is the same as PutDefaultEncryptionConfiguration with the addition of
+// the ability to pass a context and additional request options.
+//
+// See PutDefaultEncryptionConfiguration for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *IoTSiteWise) PutDefaultEncryptionConfigurationWithContext(ctx aws.Context, input *PutDefaultEncryptionConfigurationInput, opts ...request.Option) (*PutDefaultEncryptionConfigurationOutput, error) {
+	req, out := c.PutDefaultEncryptionConfigurationRequest(input)
 	req.SetContext(ctx)
 	req.ApplyOptions(opts...)
 	return out, req.Send()
@@ -4962,14 +5611,14 @@ func (c *IoTSiteWise) PutLoggingOptionsRequest(input *PutLoggingOptionsInput) (r
 	output = &PutLoggingOptionsOutput{}
 	req = c.newRequest(op, input, output)
 	req.Handlers.Unmarshal.Swap(restjson.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
-	req.Handlers.Build.PushBackNamed(protocol.NewHostPrefixHandler("model.", nil))
+	req.Handlers.Build.PushBackNamed(protocol.NewHostPrefixHandler("api.", nil))
 	req.Handlers.Build.PushBackNamed(protocol.ValidateEndpointHostHandler)
 	return
 }
 
 // PutLoggingOptions API operation for AWS IoT SiteWise.
 //
-// Sets logging options for AWS IoT SiteWise.
+// Sets logging options for IoT SiteWise.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -4985,14 +5634,14 @@ func (c *IoTSiteWise) PutLoggingOptionsRequest(input *PutLoggingOptionsInput) (r
 //
 //   * ThrottlingException
 //   Your request exceeded a rate limit. For example, you might have exceeded
-//   the number of AWS IoT SiteWise assets that can be created per second, the
-//   allowed number of messages per second, and so on.
+//   the number of IoT SiteWise assets that can be created per second, the allowed
+//   number of messages per second, and so on.
 //
 //   For more information, see Quotas (https://docs.aws.amazon.com/iot-sitewise/latest/userguide/quotas.html)
-//   in the AWS IoT SiteWise User Guide.
+//   in the IoT SiteWise User Guide.
 //
 //   * InternalFailureException
-//   AWS IoT SiteWise can't process your request right now. Try again later.
+//   IoT SiteWise can't process your request right now. Try again later.
 //
 //   * ConflictingOperationException
 //   Your request has conflicting operations. This can occur if you're trying
@@ -5018,6 +5667,117 @@ func (c *IoTSiteWise) PutLoggingOptions(input *PutLoggingOptionsInput) (*PutLogg
 // for more information on using Contexts.
 func (c *IoTSiteWise) PutLoggingOptionsWithContext(ctx aws.Context, input *PutLoggingOptionsInput, opts ...request.Option) (*PutLoggingOptionsOutput, error) {
 	req, out := c.PutLoggingOptionsRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opPutStorageConfiguration = "PutStorageConfiguration"
+
+// PutStorageConfigurationRequest generates a "aws/request.Request" representing the
+// client's request for the PutStorageConfiguration operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See PutStorageConfiguration for more information on using the PutStorageConfiguration
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the PutStorageConfigurationRequest method.
+//    req, resp := client.PutStorageConfigurationRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/iotsitewise-2019-12-02/PutStorageConfiguration
+func (c *IoTSiteWise) PutStorageConfigurationRequest(input *PutStorageConfigurationInput) (req *request.Request, output *PutStorageConfigurationOutput) {
+	op := &request.Operation{
+		Name:       opPutStorageConfiguration,
+		HTTPMethod: "POST",
+		HTTPPath:   "/configuration/account/storage",
+	}
+
+	if input == nil {
+		input = &PutStorageConfigurationInput{}
+	}
+
+	output = &PutStorageConfigurationOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Build.PushBackNamed(protocol.NewHostPrefixHandler("api.", nil))
+	req.Handlers.Build.PushBackNamed(protocol.ValidateEndpointHostHandler)
+	return
+}
+
+// PutStorageConfiguration API operation for AWS IoT SiteWise.
+//
+// Configures storage settings for IoT SiteWise.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS IoT SiteWise's
+// API operation PutStorageConfiguration for usage and error information.
+//
+// Returned Error Types:
+//   * InvalidRequestException
+//   The request isn't valid. This can occur if your request contains malformed
+//   JSON or unsupported characters. Check your request and try again.
+//
+//   * ResourceAlreadyExistsException
+//   The resource already exists.
+//
+//   * ResourceNotFoundException
+//   The requested resource can't be found.
+//
+//   * InternalFailureException
+//   IoT SiteWise can't process your request right now. Try again later.
+//
+//   * ThrottlingException
+//   Your request exceeded a rate limit. For example, you might have exceeded
+//   the number of IoT SiteWise assets that can be created per second, the allowed
+//   number of messages per second, and so on.
+//
+//   For more information, see Quotas (https://docs.aws.amazon.com/iot-sitewise/latest/userguide/quotas.html)
+//   in the IoT SiteWise User Guide.
+//
+//   * LimitExceededException
+//   You've reached the limit for a resource. For example, this can occur if you're
+//   trying to associate more than the allowed number of child assets or attempting
+//   to create more than the allowed number of properties for an asset model.
+//
+//   For more information, see Quotas (https://docs.aws.amazon.com/iot-sitewise/latest/userguide/quotas.html)
+//   in the IoT SiteWise User Guide.
+//
+//   * ConflictingOperationException
+//   Your request has conflicting operations. This can occur if you're trying
+//   to perform more than one operation on the same resource at the same time.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/iotsitewise-2019-12-02/PutStorageConfiguration
+func (c *IoTSiteWise) PutStorageConfiguration(input *PutStorageConfigurationInput) (*PutStorageConfigurationOutput, error) {
+	req, out := c.PutStorageConfigurationRequest(input)
+	return out, req.Send()
+}
+
+// PutStorageConfigurationWithContext is the same as PutStorageConfiguration with the addition of
+// the ability to pass a context and additional request options.
+//
+// See PutStorageConfiguration for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *IoTSiteWise) PutStorageConfigurationWithContext(ctx aws.Context, input *PutStorageConfigurationInput, opts ...request.Option) (*PutStorageConfigurationOutput, error) {
+	req, out := c.PutStorageConfigurationRequest(input)
 	req.SetContext(ctx)
 	req.ApplyOptions(opts...)
 	return out, req.Send()
@@ -5063,13 +5823,15 @@ func (c *IoTSiteWise) TagResourceRequest(input *TagResourceInput) (req *request.
 	output = &TagResourceOutput{}
 	req = c.newRequest(op, input, output)
 	req.Handlers.Unmarshal.Swap(restjson.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
+	req.Handlers.Build.PushBackNamed(protocol.NewHostPrefixHandler("api.", nil))
+	req.Handlers.Build.PushBackNamed(protocol.ValidateEndpointHostHandler)
 	return
 }
 
 // TagResource API operation for AWS IoT SiteWise.
 //
-// Adds tags to an AWS IoT SiteWise resource. If a tag already exists for the
-// resource, this operation updates the tag's value.
+// Adds tags to an IoT SiteWise resource. If a tag already exists for the resource,
+// this operation updates the tag's value.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -5084,23 +5846,38 @@ func (c *IoTSiteWise) TagResourceRequest(input *TagResourceInput) (req *request.
 //   JSON or unsupported characters. Check your request and try again.
 //
 //   * InternalFailureException
-//   AWS IoT SiteWise can't process your request right now. Try again later.
+//   IoT SiteWise can't process your request right now. Try again later.
 //
 //   * ThrottlingException
 //   Your request exceeded a rate limit. For example, you might have exceeded
-//   the number of AWS IoT SiteWise assets that can be created per second, the
-//   allowed number of messages per second, and so on.
+//   the number of IoT SiteWise assets that can be created per second, the allowed
+//   number of messages per second, and so on.
 //
 //   For more information, see Quotas (https://docs.aws.amazon.com/iot-sitewise/latest/userguide/quotas.html)
-//   in the AWS IoT SiteWise User Guide.
+//   in the IoT SiteWise User Guide.
 //
 //   * ResourceNotFoundException
 //   The requested resource can't be found.
 //
+//   * ConflictingOperationException
+//   Your request has conflicting operations. This can occur if you're trying
+//   to perform more than one operation on the same resource at the same time.
+//
+//   * LimitExceededException
+//   You've reached the limit for a resource. For example, this can occur if you're
+//   trying to associate more than the allowed number of child assets or attempting
+//   to create more than the allowed number of properties for an asset model.
+//
+//   For more information, see Quotas (https://docs.aws.amazon.com/iot-sitewise/latest/userguide/quotas.html)
+//   in the IoT SiteWise User Guide.
+//
+//   * UnauthorizedException
+//   You are not authorized.
+//
 //   * TooManyTagsException
 //   You've reached the limit for the number of tags allowed for a resource. For
 //   more information, see Tag naming limits and requirements (https://docs.aws.amazon.com/general/latest/gr/aws_tagging.html#tag-conventions)
-//   in the AWS General Reference.
+//   in the Amazon Web Services General Reference.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iotsitewise-2019-12-02/TagResource
 func (c *IoTSiteWise) TagResource(input *TagResourceInput) (*TagResourceOutput, error) {
@@ -5164,12 +5941,14 @@ func (c *IoTSiteWise) UntagResourceRequest(input *UntagResourceInput) (req *requ
 	output = &UntagResourceOutput{}
 	req = c.newRequest(op, input, output)
 	req.Handlers.Unmarshal.Swap(restjson.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
+	req.Handlers.Build.PushBackNamed(protocol.NewHostPrefixHandler("api.", nil))
+	req.Handlers.Build.PushBackNamed(protocol.ValidateEndpointHostHandler)
 	return
 }
 
 // UntagResource API operation for AWS IoT SiteWise.
 //
-// Removes a tag from an AWS IoT SiteWise resource.
+// Removes a tag from an IoT SiteWise resource.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -5184,18 +5963,33 @@ func (c *IoTSiteWise) UntagResourceRequest(input *UntagResourceInput) (req *requ
 //   JSON or unsupported characters. Check your request and try again.
 //
 //   * InternalFailureException
-//   AWS IoT SiteWise can't process your request right now. Try again later.
+//   IoT SiteWise can't process your request right now. Try again later.
 //
 //   * ThrottlingException
 //   Your request exceeded a rate limit. For example, you might have exceeded
-//   the number of AWS IoT SiteWise assets that can be created per second, the
-//   allowed number of messages per second, and so on.
+//   the number of IoT SiteWise assets that can be created per second, the allowed
+//   number of messages per second, and so on.
 //
 //   For more information, see Quotas (https://docs.aws.amazon.com/iot-sitewise/latest/userguide/quotas.html)
-//   in the AWS IoT SiteWise User Guide.
+//   in the IoT SiteWise User Guide.
 //
 //   * ResourceNotFoundException
 //   The requested resource can't be found.
+//
+//   * ConflictingOperationException
+//   Your request has conflicting operations. This can occur if you're trying
+//   to perform more than one operation on the same resource at the same time.
+//
+//   * LimitExceededException
+//   You've reached the limit for a resource. For example, this can occur if you're
+//   trying to associate more than the allowed number of child assets or attempting
+//   to create more than the allowed number of properties for an asset model.
+//
+//   For more information, see Quotas (https://docs.aws.amazon.com/iot-sitewise/latest/userguide/quotas.html)
+//   in the IoT SiteWise User Guide.
+//
+//   * UnauthorizedException
+//   You are not authorized.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iotsitewise-2019-12-02/UntagResource
 func (c *IoTSiteWise) UntagResource(input *UntagResourceInput) (*UntagResourceOutput, error) {
@@ -5267,7 +6061,7 @@ func (c *IoTSiteWise) UpdateAccessPolicyRequest(input *UpdateAccessPolicyInput) 
 // UpdateAccessPolicy API operation for AWS IoT SiteWise.
 //
 // Updates an existing access policy that specifies an identity's access to
-// an AWS IoT SiteWise Monitor portal or project resource.
+// an IoT SiteWise Monitor portal or project resource.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -5285,15 +6079,15 @@ func (c *IoTSiteWise) UpdateAccessPolicyRequest(input *UpdateAccessPolicyInput) 
 //   The requested resource can't be found.
 //
 //   * InternalFailureException
-//   AWS IoT SiteWise can't process your request right now. Try again later.
+//   IoT SiteWise can't process your request right now. Try again later.
 //
 //   * ThrottlingException
 //   Your request exceeded a rate limit. For example, you might have exceeded
-//   the number of AWS IoT SiteWise assets that can be created per second, the
-//   allowed number of messages per second, and so on.
+//   the number of IoT SiteWise assets that can be created per second, the allowed
+//   number of messages per second, and so on.
 //
 //   For more information, see Quotas (https://docs.aws.amazon.com/iot-sitewise/latest/userguide/quotas.html)
-//   in the AWS IoT SiteWise User Guide.
+//   in the IoT SiteWise User Guide.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iotsitewise-2019-12-02/UpdateAccessPolicy
 func (c *IoTSiteWise) UpdateAccessPolicy(input *UpdateAccessPolicyInput) (*UpdateAccessPolicyOutput, error) {
@@ -5356,7 +6150,7 @@ func (c *IoTSiteWise) UpdateAssetRequest(input *UpdateAssetInput) (req *request.
 
 	output = &UpdateAssetOutput{}
 	req = c.newRequest(op, input, output)
-	req.Handlers.Build.PushBackNamed(protocol.NewHostPrefixHandler("model.", nil))
+	req.Handlers.Build.PushBackNamed(protocol.NewHostPrefixHandler("api.", nil))
 	req.Handlers.Build.PushBackNamed(protocol.ValidateEndpointHostHandler)
 	return
 }
@@ -5365,7 +6159,7 @@ func (c *IoTSiteWise) UpdateAssetRequest(input *UpdateAssetInput) (req *request.
 //
 // Updates an asset's name. For more information, see Updating assets and models
 // (https://docs.aws.amazon.com/iot-sitewise/latest/userguide/update-assets-and-models.html)
-// in the AWS IoT SiteWise User Guide.
+// in the IoT SiteWise User Guide.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -5386,15 +6180,15 @@ func (c *IoTSiteWise) UpdateAssetRequest(input *UpdateAssetInput) (req *request.
 //   The requested resource can't be found.
 //
 //   * InternalFailureException
-//   AWS IoT SiteWise can't process your request right now. Try again later.
+//   IoT SiteWise can't process your request right now. Try again later.
 //
 //   * ThrottlingException
 //   Your request exceeded a rate limit. For example, you might have exceeded
-//   the number of AWS IoT SiteWise assets that can be created per second, the
-//   allowed number of messages per second, and so on.
+//   the number of IoT SiteWise assets that can be created per second, the allowed
+//   number of messages per second, and so on.
 //
 //   For more information, see Quotas (https://docs.aws.amazon.com/iot-sitewise/latest/userguide/quotas.html)
-//   in the AWS IoT SiteWise User Guide.
+//   in the IoT SiteWise User Guide.
 //
 //   * ConflictingOperationException
 //   Your request has conflicting operations. This can occur if you're trying
@@ -5461,7 +6255,7 @@ func (c *IoTSiteWise) UpdateAssetModelRequest(input *UpdateAssetModelInput) (req
 
 	output = &UpdateAssetModelOutput{}
 	req = c.newRequest(op, input, output)
-	req.Handlers.Build.PushBackNamed(protocol.NewHostPrefixHandler("model.", nil))
+	req.Handlers.Build.PushBackNamed(protocol.NewHostPrefixHandler("api.", nil))
 	req.Handlers.Build.PushBackNamed(protocol.ValidateEndpointHostHandler)
 	return
 }
@@ -5472,17 +6266,17 @@ func (c *IoTSiteWise) UpdateAssetModelRequest(input *UpdateAssetModelInput) (req
 // Each asset created from the model inherits the updated asset model's property
 // and hierarchy definitions. For more information, see Updating assets and
 // models (https://docs.aws.amazon.com/iot-sitewise/latest/userguide/update-assets-and-models.html)
-// in the AWS IoT SiteWise User Guide.
+// in the IoT SiteWise User Guide.
 //
 // This operation overwrites the existing model with the provided model. To
 // avoid deleting your asset model's properties or hierarchies, you must include
 // their IDs and definitions in the updated asset model payload. For more information,
 // see DescribeAssetModel (https://docs.aws.amazon.com/iot-sitewise/latest/APIReference/API_DescribeAssetModel.html).
 //
-// If you remove a property from an asset model, AWS IoT SiteWise deletes all
-// previous data for that property. If you remove a hierarchy definition from
-// an asset model, AWS IoT SiteWise disassociates every asset associated with
-// that hierarchy. You can't change the type or data type of an existing property.
+// If you remove a property from an asset model, IoT SiteWise deletes all previous
+// data for that property. If you remove a hierarchy definition from an asset
+// model, IoT SiteWise disassociates every asset associated with that hierarchy.
+// You can't change the type or data type of an existing property.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -5503,7 +6297,7 @@ func (c *IoTSiteWise) UpdateAssetModelRequest(input *UpdateAssetModelInput) (req
 //   The requested resource can't be found.
 //
 //   * InternalFailureException
-//   AWS IoT SiteWise can't process your request right now. Try again later.
+//   IoT SiteWise can't process your request right now. Try again later.
 //
 //   * LimitExceededException
 //   You've reached the limit for a resource. For example, this can occur if you're
@@ -5511,15 +6305,15 @@ func (c *IoTSiteWise) UpdateAssetModelRequest(input *UpdateAssetModelInput) (req
 //   to create more than the allowed number of properties for an asset model.
 //
 //   For more information, see Quotas (https://docs.aws.amazon.com/iot-sitewise/latest/userguide/quotas.html)
-//   in the AWS IoT SiteWise User Guide.
+//   in the IoT SiteWise User Guide.
 //
 //   * ThrottlingException
 //   Your request exceeded a rate limit. For example, you might have exceeded
-//   the number of AWS IoT SiteWise assets that can be created per second, the
-//   allowed number of messages per second, and so on.
+//   the number of IoT SiteWise assets that can be created per second, the allowed
+//   number of messages per second, and so on.
 //
 //   For more information, see Quotas (https://docs.aws.amazon.com/iot-sitewise/latest/userguide/quotas.html)
-//   in the AWS IoT SiteWise User Guide.
+//   in the IoT SiteWise User Guide.
 //
 //   * ConflictingOperationException
 //   Your request has conflicting operations. This can occur if you're trying
@@ -5587,7 +6381,7 @@ func (c *IoTSiteWise) UpdateAssetPropertyRequest(input *UpdateAssetPropertyInput
 	output = &UpdateAssetPropertyOutput{}
 	req = c.newRequest(op, input, output)
 	req.Handlers.Unmarshal.Swap(restjson.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
-	req.Handlers.Build.PushBackNamed(protocol.NewHostPrefixHandler("model.", nil))
+	req.Handlers.Build.PushBackNamed(protocol.NewHostPrefixHandler("api.", nil))
 	req.Handlers.Build.PushBackNamed(protocol.ValidateEndpointHostHandler)
 	return
 }
@@ -5617,15 +6411,15 @@ func (c *IoTSiteWise) UpdateAssetPropertyRequest(input *UpdateAssetPropertyInput
 //   The requested resource can't be found.
 //
 //   * InternalFailureException
-//   AWS IoT SiteWise can't process your request right now. Try again later.
+//   IoT SiteWise can't process your request right now. Try again later.
 //
 //   * ThrottlingException
 //   Your request exceeded a rate limit. For example, you might have exceeded
-//   the number of AWS IoT SiteWise assets that can be created per second, the
-//   allowed number of messages per second, and so on.
+//   the number of IoT SiteWise assets that can be created per second, the allowed
+//   number of messages per second, and so on.
 //
 //   For more information, see Quotas (https://docs.aws.amazon.com/iot-sitewise/latest/userguide/quotas.html)
-//   in the AWS IoT SiteWise User Guide.
+//   in the IoT SiteWise User Guide.
 //
 //   * ConflictingOperationException
 //   Your request has conflicting operations. This can occur if you're trying
@@ -5700,7 +6494,7 @@ func (c *IoTSiteWise) UpdateDashboardRequest(input *UpdateDashboardInput) (req *
 
 // UpdateDashboard API operation for AWS IoT SiteWise.
 //
-// Updates an AWS IoT SiteWise Monitor dashboard.
+// Updates an IoT SiteWise Monitor dashboard.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -5718,15 +6512,15 @@ func (c *IoTSiteWise) UpdateDashboardRequest(input *UpdateDashboardInput) (req *
 //   The requested resource can't be found.
 //
 //   * InternalFailureException
-//   AWS IoT SiteWise can't process your request right now. Try again later.
+//   IoT SiteWise can't process your request right now. Try again later.
 //
 //   * ThrottlingException
 //   Your request exceeded a rate limit. For example, you might have exceeded
-//   the number of AWS IoT SiteWise assets that can be created per second, the
-//   allowed number of messages per second, and so on.
+//   the number of IoT SiteWise assets that can be created per second, the allowed
+//   number of messages per second, and so on.
 //
 //   For more information, see Quotas (https://docs.aws.amazon.com/iot-sitewise/latest/userguide/quotas.html)
-//   in the AWS IoT SiteWise User Guide.
+//   in the IoT SiteWise User Guide.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iotsitewise-2019-12-02/UpdateDashboard
 func (c *IoTSiteWise) UpdateDashboard(input *UpdateDashboardInput) (*UpdateDashboardOutput, error) {
@@ -5790,7 +6584,7 @@ func (c *IoTSiteWise) UpdateGatewayRequest(input *UpdateGatewayInput) (req *requ
 	output = &UpdateGatewayOutput{}
 	req = c.newRequest(op, input, output)
 	req.Handlers.Unmarshal.Swap(restjson.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
-	req.Handlers.Build.PushBackNamed(protocol.NewHostPrefixHandler("edge.", nil))
+	req.Handlers.Build.PushBackNamed(protocol.NewHostPrefixHandler("api.", nil))
 	req.Handlers.Build.PushBackNamed(protocol.ValidateEndpointHostHandler)
 	return
 }
@@ -5819,15 +6613,15 @@ func (c *IoTSiteWise) UpdateGatewayRequest(input *UpdateGatewayInput) (req *requ
 //   to perform more than one operation on the same resource at the same time.
 //
 //   * InternalFailureException
-//   AWS IoT SiteWise can't process your request right now. Try again later.
+//   IoT SiteWise can't process your request right now. Try again later.
 //
 //   * ThrottlingException
 //   Your request exceeded a rate limit. For example, you might have exceeded
-//   the number of AWS IoT SiteWise assets that can be created per second, the
-//   allowed number of messages per second, and so on.
+//   the number of IoT SiteWise assets that can be created per second, the allowed
+//   number of messages per second, and so on.
 //
 //   For more information, see Quotas (https://docs.aws.amazon.com/iot-sitewise/latest/userguide/quotas.html)
-//   in the AWS IoT SiteWise User Guide.
+//   in the IoT SiteWise User Guide.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iotsitewise-2019-12-02/UpdateGateway
 func (c *IoTSiteWise) UpdateGateway(input *UpdateGatewayInput) (*UpdateGatewayOutput, error) {
@@ -5890,7 +6684,7 @@ func (c *IoTSiteWise) UpdateGatewayCapabilityConfigurationRequest(input *UpdateG
 
 	output = &UpdateGatewayCapabilityConfigurationOutput{}
 	req = c.newRequest(op, input, output)
-	req.Handlers.Build.PushBackNamed(protocol.NewHostPrefixHandler("edge.", nil))
+	req.Handlers.Build.PushBackNamed(protocol.NewHostPrefixHandler("api.", nil))
 	req.Handlers.Build.PushBackNamed(protocol.ValidateEndpointHostHandler)
 	return
 }
@@ -5900,8 +6694,8 @@ func (c *IoTSiteWise) UpdateGatewayCapabilityConfigurationRequest(input *UpdateG
 // Updates a gateway capability configuration or defines a new capability configuration.
 // Each gateway capability defines data sources for a gateway. A capability
 // configuration can contain multiple data source configurations. If you define
-// OPC-UA sources for a gateway in the AWS IoT SiteWise console, all of your
-// OPC-UA sources are stored in one capability configuration. To list all capability
+// OPC-UA sources for a gateway in the IoT SiteWise console, all of your OPC-UA
+// sources are stored in one capability configuration. To list all capability
 // configurations for a gateway, use DescribeGateway (https://docs.aws.amazon.com/iot-sitewise/latest/APIReference/API_DescribeGateway.html).
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
@@ -5924,15 +6718,15 @@ func (c *IoTSiteWise) UpdateGatewayCapabilityConfigurationRequest(input *UpdateG
 //   to perform more than one operation on the same resource at the same time.
 //
 //   * InternalFailureException
-//   AWS IoT SiteWise can't process your request right now. Try again later.
+//   IoT SiteWise can't process your request right now. Try again later.
 //
 //   * ThrottlingException
 //   Your request exceeded a rate limit. For example, you might have exceeded
-//   the number of AWS IoT SiteWise assets that can be created per second, the
-//   allowed number of messages per second, and so on.
+//   the number of IoT SiteWise assets that can be created per second, the allowed
+//   number of messages per second, and so on.
 //
 //   For more information, see Quotas (https://docs.aws.amazon.com/iot-sitewise/latest/userguide/quotas.html)
-//   in the AWS IoT SiteWise User Guide.
+//   in the IoT SiteWise User Guide.
 //
 //   * LimitExceededException
 //   You've reached the limit for a resource. For example, this can occur if you're
@@ -5940,7 +6734,7 @@ func (c *IoTSiteWise) UpdateGatewayCapabilityConfigurationRequest(input *UpdateG
 //   to create more than the allowed number of properties for an asset model.
 //
 //   For more information, see Quotas (https://docs.aws.amazon.com/iot-sitewise/latest/userguide/quotas.html)
-//   in the AWS IoT SiteWise User Guide.
+//   in the IoT SiteWise User Guide.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iotsitewise-2019-12-02/UpdateGatewayCapabilityConfiguration
 func (c *IoTSiteWise) UpdateGatewayCapabilityConfiguration(input *UpdateGatewayCapabilityConfigurationInput) (*UpdateGatewayCapabilityConfigurationOutput, error) {
@@ -6010,7 +6804,7 @@ func (c *IoTSiteWise) UpdatePortalRequest(input *UpdatePortalInput) (req *reques
 
 // UpdatePortal API operation for AWS IoT SiteWise.
 //
-// Updates an AWS IoT SiteWise Monitor portal.
+// Updates an IoT SiteWise Monitor portal.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -6028,15 +6822,15 @@ func (c *IoTSiteWise) UpdatePortalRequest(input *UpdatePortalInput) (req *reques
 //   The requested resource can't be found.
 //
 //   * InternalFailureException
-//   AWS IoT SiteWise can't process your request right now. Try again later.
+//   IoT SiteWise can't process your request right now. Try again later.
 //
 //   * ThrottlingException
 //   Your request exceeded a rate limit. For example, you might have exceeded
-//   the number of AWS IoT SiteWise assets that can be created per second, the
-//   allowed number of messages per second, and so on.
+//   the number of IoT SiteWise assets that can be created per second, the allowed
+//   number of messages per second, and so on.
 //
 //   For more information, see Quotas (https://docs.aws.amazon.com/iot-sitewise/latest/userguide/quotas.html)
-//   in the AWS IoT SiteWise User Guide.
+//   in the IoT SiteWise User Guide.
 //
 //   * ConflictingOperationException
 //   Your request has conflicting operations. This can occur if you're trying
@@ -6111,7 +6905,7 @@ func (c *IoTSiteWise) UpdateProjectRequest(input *UpdateProjectInput) (req *requ
 
 // UpdateProject API operation for AWS IoT SiteWise.
 //
-// Updates an AWS IoT SiteWise Monitor project.
+// Updates an IoT SiteWise Monitor project.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -6129,15 +6923,15 @@ func (c *IoTSiteWise) UpdateProjectRequest(input *UpdateProjectInput) (req *requ
 //   The requested resource can't be found.
 //
 //   * InternalFailureException
-//   AWS IoT SiteWise can't process your request right now. Try again later.
+//   IoT SiteWise can't process your request right now. Try again later.
 //
 //   * ThrottlingException
 //   Your request exceeded a rate limit. For example, you might have exceeded
-//   the number of AWS IoT SiteWise assets that can be created per second, the
-//   allowed number of messages per second, and so on.
+//   the number of IoT SiteWise assets that can be created per second, the allowed
+//   number of messages per second, and so on.
 //
 //   For more information, see Quotas (https://docs.aws.amazon.com/iot-sitewise/latest/userguide/quotas.html)
-//   in the AWS IoT SiteWise User Guide.
+//   in the IoT SiteWise User Guide.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iotsitewise-2019-12-02/UpdateProject
 func (c *IoTSiteWise) UpdateProject(input *UpdateProjectInput) (*UpdateProjectOutput, error) {
@@ -6161,8 +6955,8 @@ func (c *IoTSiteWise) UpdateProjectWithContext(ctx aws.Context, input *UpdatePro
 	return out, req.Send()
 }
 
-// Contains an access policy that defines an identity's access to an AWS IoT
-// SiteWise Monitor resource.
+// Contains an access policy that defines an identity's access to an IoT SiteWise
+// Monitor resource.
 type AccessPolicySummary struct {
 	_ struct{} `type:"structure"`
 
@@ -6174,7 +6968,8 @@ type AccessPolicySummary struct {
 	// Id is a required field
 	Id *string `locationName:"id" min:"36" type:"string" required:"true"`
 
-	// The identity (an AWS SSO user, an AWS SSO group, or an IAM user).
+	// The identity (an Amazon Web Services SSO user, an Amazon Web Services SSO
+	// group, or an IAM user).
 	//
 	// Identity is a required field
 	Identity *Identity `locationName:"identity" type:"structure" required:"true"`
@@ -6188,18 +6983,26 @@ type AccessPolicySummary struct {
 	// Permission is a required field
 	Permission *string `locationName:"permission" type:"string" required:"true" enum:"Permission"`
 
-	// The AWS IoT SiteWise Monitor resource (a portal or project).
+	// The IoT SiteWise Monitor resource (a portal or project).
 	//
 	// Resource is a required field
 	Resource *Resource `locationName:"resource" type:"structure" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AccessPolicySummary) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AccessPolicySummary) GoString() string {
 	return s.String()
 }
@@ -6259,12 +7062,20 @@ type AggregatedValue struct {
 	Value *Aggregates `locationName:"value" type:"structure" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AggregatedValue) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AggregatedValue) GoString() string {
 	return s.String()
 }
@@ -6310,12 +7121,20 @@ type Aggregates struct {
 	Sum *float64 `locationName:"sum" type:"double"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s Aggregates) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s Aggregates) GoString() string {
 	return s.String()
 }
@@ -6356,6 +7175,144 @@ func (s *Aggregates) SetSum(v float64) *Aggregates {
 	return s
 }
 
+// Contains the configuration information of an alarm created in an IoT SiteWise
+// Monitor portal. You can use the alarm to monitor an asset property and get
+// notified when the asset property value is outside a specified range. For
+// more information, see Monitoring with alarms (https://docs.aws.amazon.com/iot-sitewise/latest/appguide/monitor-alarms.html)
+// in the IoT SiteWise Application Guide.
+type Alarms struct {
+	_ struct{} `type:"structure"`
+
+	// The ARN (https://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html)
+	// of the IAM role that allows the alarm to perform actions and access Amazon
+	// Web Services resources and services, such as IoT Events.
+	//
+	// AlarmRoleArn is a required field
+	AlarmRoleArn *string `locationName:"alarmRoleArn" min:"1" type:"string" required:"true"`
+
+	// The ARN (https://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html)
+	// of the Lambda function that manages alarm notifications. For more information,
+	// see Managing alarm notifications (https://docs.aws.amazon.com/iotevents/latest/developerguide/lambda-support.html)
+	// in the IoT Events Developer Guide.
+	NotificationLambdaArn *string `locationName:"notificationLambdaArn" min:"1" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s Alarms) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s Alarms) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *Alarms) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "Alarms"}
+	if s.AlarmRoleArn == nil {
+		invalidParams.Add(request.NewErrParamRequired("AlarmRoleArn"))
+	}
+	if s.AlarmRoleArn != nil && len(*s.AlarmRoleArn) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("AlarmRoleArn", 1))
+	}
+	if s.NotificationLambdaArn != nil && len(*s.NotificationLambdaArn) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("NotificationLambdaArn", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetAlarmRoleArn sets the AlarmRoleArn field's value.
+func (s *Alarms) SetAlarmRoleArn(v string) *Alarms {
+	s.AlarmRoleArn = &v
+	return s
+}
+
+// SetNotificationLambdaArn sets the NotificationLambdaArn field's value.
+func (s *Alarms) SetNotificationLambdaArn(v string) *Alarms {
+	s.NotificationLambdaArn = &v
+	return s
+}
+
+// Contains information about a composite model in an asset. This object contains
+// the asset's properties that you define in the composite model.
+type AssetCompositeModel struct {
+	_ struct{} `type:"structure"`
+
+	// The description of the composite model.
+	Description *string `locationName:"description" min:"1" type:"string"`
+
+	// The name of the composite model.
+	//
+	// Name is a required field
+	Name *string `locationName:"name" min:"1" type:"string" required:"true"`
+
+	// The asset properties that this composite model defines.
+	//
+	// Properties is a required field
+	Properties []*AssetProperty `locationName:"properties" type:"list" required:"true"`
+
+	// The type of the composite model. For alarm composite models, this type is
+	// AWS/ALARM.
+	//
+	// Type is a required field
+	Type *string `locationName:"type" min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s AssetCompositeModel) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s AssetCompositeModel) GoString() string {
+	return s.String()
+}
+
+// SetDescription sets the Description field's value.
+func (s *AssetCompositeModel) SetDescription(v string) *AssetCompositeModel {
+	s.Description = &v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *AssetCompositeModel) SetName(v string) *AssetCompositeModel {
+	s.Name = &v
+	return s
+}
+
+// SetProperties sets the Properties field's value.
+func (s *AssetCompositeModel) SetProperties(v []*AssetProperty) *AssetCompositeModel {
+	s.Properties = v
+	return s
+}
+
+// SetType sets the Type field's value.
+func (s *AssetCompositeModel) SetType(v string) *AssetCompositeModel {
+	s.Type = &v
+	return s
+}
+
 // Contains error details for the requested associate project asset action.
 type AssetErrorDetails struct {
 	_ struct{} `type:"structure"`
@@ -6376,12 +7333,20 @@ type AssetErrorDetails struct {
 	Message *string `locationName:"message" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AssetErrorDetails) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AssetErrorDetails) GoString() string {
 	return s.String()
 }
@@ -6419,12 +7384,20 @@ type AssetHierarchy struct {
 	Name *string `locationName:"name" min:"1" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AssetHierarchy) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AssetHierarchy) GoString() string {
 	return s.String()
 }
@@ -6438,6 +7411,249 @@ func (s *AssetHierarchy) SetId(v string) *AssetHierarchy {
 // SetName sets the Name field's value.
 func (s *AssetHierarchy) SetName(v string) *AssetHierarchy {
 	s.Name = &v
+	return s
+}
+
+// Contains information about a parent asset and a child asset that are related
+// through an asset hierarchy.
+type AssetHierarchyInfo struct {
+	_ struct{} `type:"structure"`
+
+	// The ID of the child asset in this asset relationship.
+	ChildAssetId *string `locationName:"childAssetId" min:"36" type:"string"`
+
+	// The ID of the parent asset in this asset relationship.
+	ParentAssetId *string `locationName:"parentAssetId" min:"36" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s AssetHierarchyInfo) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s AssetHierarchyInfo) GoString() string {
+	return s.String()
+}
+
+// SetChildAssetId sets the ChildAssetId field's value.
+func (s *AssetHierarchyInfo) SetChildAssetId(v string) *AssetHierarchyInfo {
+	s.ChildAssetId = &v
+	return s
+}
+
+// SetParentAssetId sets the ParentAssetId field's value.
+func (s *AssetHierarchyInfo) SetParentAssetId(v string) *AssetHierarchyInfo {
+	s.ParentAssetId = &v
+	return s
+}
+
+// Contains information about a composite model in an asset model. This object
+// contains the asset property definitions that you define in the composite
+// model.
+type AssetModelCompositeModel struct {
+	_ struct{} `type:"structure"`
+
+	// The description of the composite model.
+	Description *string `locationName:"description" min:"1" type:"string"`
+
+	// The name of the composite model.
+	//
+	// Name is a required field
+	Name *string `locationName:"name" min:"1" type:"string" required:"true"`
+
+	// The asset property definitions for this composite model.
+	Properties []*AssetModelProperty `locationName:"properties" type:"list"`
+
+	// The type of the composite model. For alarm composite models, this type is
+	// AWS/ALARM.
+	//
+	// Type is a required field
+	Type *string `locationName:"type" min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s AssetModelCompositeModel) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s AssetModelCompositeModel) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *AssetModelCompositeModel) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "AssetModelCompositeModel"}
+	if s.Description != nil && len(*s.Description) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Description", 1))
+	}
+	if s.Name == nil {
+		invalidParams.Add(request.NewErrParamRequired("Name"))
+	}
+	if s.Name != nil && len(*s.Name) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Name", 1))
+	}
+	if s.Type == nil {
+		invalidParams.Add(request.NewErrParamRequired("Type"))
+	}
+	if s.Type != nil && len(*s.Type) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Type", 1))
+	}
+	if s.Properties != nil {
+		for i, v := range s.Properties {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "Properties", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetDescription sets the Description field's value.
+func (s *AssetModelCompositeModel) SetDescription(v string) *AssetModelCompositeModel {
+	s.Description = &v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *AssetModelCompositeModel) SetName(v string) *AssetModelCompositeModel {
+	s.Name = &v
+	return s
+}
+
+// SetProperties sets the Properties field's value.
+func (s *AssetModelCompositeModel) SetProperties(v []*AssetModelProperty) *AssetModelCompositeModel {
+	s.Properties = v
+	return s
+}
+
+// SetType sets the Type field's value.
+func (s *AssetModelCompositeModel) SetType(v string) *AssetModelCompositeModel {
+	s.Type = &v
+	return s
+}
+
+// Contains a composite model definition in an asset model. This composite model
+// definition is applied to all assets created from the asset model.
+type AssetModelCompositeModelDefinition struct {
+	_ struct{} `type:"structure"`
+
+	// The description of the composite model.
+	Description *string `locationName:"description" min:"1" type:"string"`
+
+	// The name of the composite model.
+	//
+	// Name is a required field
+	Name *string `locationName:"name" min:"1" type:"string" required:"true"`
+
+	// The asset property definitions for this composite model.
+	Properties []*AssetModelPropertyDefinition `locationName:"properties" type:"list"`
+
+	// The type of the composite model. For alarm composite models, this type is
+	// AWS/ALARM.
+	//
+	// Type is a required field
+	Type *string `locationName:"type" min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s AssetModelCompositeModelDefinition) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s AssetModelCompositeModelDefinition) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *AssetModelCompositeModelDefinition) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "AssetModelCompositeModelDefinition"}
+	if s.Description != nil && len(*s.Description) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Description", 1))
+	}
+	if s.Name == nil {
+		invalidParams.Add(request.NewErrParamRequired("Name"))
+	}
+	if s.Name != nil && len(*s.Name) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Name", 1))
+	}
+	if s.Type == nil {
+		invalidParams.Add(request.NewErrParamRequired("Type"))
+	}
+	if s.Type != nil && len(*s.Type) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Type", 1))
+	}
+	if s.Properties != nil {
+		for i, v := range s.Properties {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "Properties", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetDescription sets the Description field's value.
+func (s *AssetModelCompositeModelDefinition) SetDescription(v string) *AssetModelCompositeModelDefinition {
+	s.Description = &v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *AssetModelCompositeModelDefinition) SetName(v string) *AssetModelCompositeModelDefinition {
+	s.Name = &v
+	return s
+}
+
+// SetProperties sets the Properties field's value.
+func (s *AssetModelCompositeModelDefinition) SetProperties(v []*AssetModelPropertyDefinition) *AssetModelCompositeModelDefinition {
+	s.Properties = v
+	return s
+}
+
+// SetType sets the Type field's value.
+func (s *AssetModelCompositeModelDefinition) SetType(v string) *AssetModelCompositeModelDefinition {
+	s.Type = &v
 	return s
 }
 
@@ -6464,12 +7680,20 @@ type AssetModelHierarchy struct {
 	Name *string `locationName:"name" min:"1" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AssetModelHierarchy) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AssetModelHierarchy) GoString() string {
 	return s.String()
 }
@@ -6537,12 +7761,20 @@ type AssetModelHierarchyDefinition struct {
 	Name *string `locationName:"name" min:"1" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AssetModelHierarchyDefinition) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AssetModelHierarchyDefinition) GoString() string {
 	return s.String()
 }
@@ -6590,6 +7822,10 @@ type AssetModelProperty struct {
 	// DataType is a required field
 	DataType *string `locationName:"dataType" type:"string" required:"true" enum:"PropertyDataType"`
 
+	// The data type of the structure for this property. This parameter exists on
+	// properties that have the STRUCT data type.
+	DataTypeSpec *string `locationName:"dataTypeSpec" min:"1" type:"string"`
+
 	// The ID of the asset model property.
 	Id *string `locationName:"id" min:"36" type:"string"`
 
@@ -6607,12 +7843,20 @@ type AssetModelProperty struct {
 	Unit *string `locationName:"unit" min:"1" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AssetModelProperty) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AssetModelProperty) GoString() string {
 	return s.String()
 }
@@ -6622,6 +7866,9 @@ func (s *AssetModelProperty) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "AssetModelProperty"}
 	if s.DataType == nil {
 		invalidParams.Add(request.NewErrParamRequired("DataType"))
+	}
+	if s.DataTypeSpec != nil && len(*s.DataTypeSpec) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("DataTypeSpec", 1))
 	}
 	if s.Id != nil && len(*s.Id) < 36 {
 		invalidParams.Add(request.NewErrParamMinLen("Id", 36))
@@ -6656,6 +7903,12 @@ func (s *AssetModelProperty) SetDataType(v string) *AssetModelProperty {
 	return s
 }
 
+// SetDataTypeSpec sets the DataTypeSpec field's value.
+func (s *AssetModelProperty) SetDataTypeSpec(v string) *AssetModelProperty {
+	s.DataTypeSpec = &v
+	return s
+}
+
 // SetId sets the Id field's value.
 func (s *AssetModelProperty) SetId(v string) *AssetModelProperty {
 	s.Id = &v
@@ -6687,8 +7940,19 @@ type AssetModelPropertyDefinition struct {
 
 	// The data type of the property definition.
 	//
+	// If you specify STRUCT, you must also specify dataTypeSpec to identify the
+	// type of the structure for this property.
+	//
 	// DataType is a required field
 	DataType *string `locationName:"dataType" type:"string" required:"true" enum:"PropertyDataType"`
+
+	// The data type of the structure for this property. This parameter is required
+	// on properties that have the STRUCT data type.
+	//
+	// The options for this parameter depend on the type of the composite model
+	// in which you define this property. Use AWS/ALARM_STATE for alarm state in
+	// alarm composite models.
+	DataTypeSpec *string `locationName:"dataTypeSpec" min:"1" type:"string"`
 
 	// The name of the property definition.
 	//
@@ -6705,12 +7969,20 @@ type AssetModelPropertyDefinition struct {
 	Unit *string `locationName:"unit" min:"1" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AssetModelPropertyDefinition) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AssetModelPropertyDefinition) GoString() string {
 	return s.String()
 }
@@ -6720,6 +7992,9 @@ func (s *AssetModelPropertyDefinition) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "AssetModelPropertyDefinition"}
 	if s.DataType == nil {
 		invalidParams.Add(request.NewErrParamRequired("DataType"))
+	}
+	if s.DataTypeSpec != nil && len(*s.DataTypeSpec) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("DataTypeSpec", 1))
 	}
 	if s.Name == nil {
 		invalidParams.Add(request.NewErrParamRequired("Name"))
@@ -6751,6 +8026,12 @@ func (s *AssetModelPropertyDefinition) SetDataType(v string) *AssetModelProperty
 	return s
 }
 
+// SetDataTypeSpec sets the DataTypeSpec field's value.
+func (s *AssetModelPropertyDefinition) SetDataTypeSpec(v string) *AssetModelPropertyDefinition {
+	s.DataTypeSpec = &v
+	return s
+}
+
 // SetName sets the Name field's value.
 func (s *AssetModelPropertyDefinition) SetName(v string) *AssetModelPropertyDefinition {
 	s.Name = &v
@@ -6771,7 +8052,7 @@ func (s *AssetModelPropertyDefinition) SetUnit(v string) *AssetModelPropertyDefi
 
 // Contains current status information for an asset model. For more information,
 // see Asset and model states (https://docs.aws.amazon.com/iot-sitewise/latest/userguide/asset-and-model-states.html)
-// in the AWS IoT SiteWise User Guide.
+// in the IoT SiteWise User Guide.
 type AssetModelStatus struct {
 	_ struct{} `type:"structure"`
 
@@ -6784,12 +8065,20 @@ type AssetModelStatus struct {
 	State *string `locationName:"state" type:"string" required:"true" enum:"AssetModelState"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AssetModelStatus) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AssetModelStatus) GoString() string {
 	return s.String()
 }
@@ -6828,7 +8117,7 @@ type AssetModelSummary struct {
 	// Description is a required field
 	Description *string `locationName:"description" min:"1" type:"string" required:"true"`
 
-	// The ID of the asset model (used with AWS IoT SiteWise APIs).
+	// The ID of the asset model (used with IoT SiteWise APIs).
 	//
 	// Id is a required field
 	Id *string `locationName:"id" min:"36" type:"string" required:"true"`
@@ -6849,12 +8138,20 @@ type AssetModelSummary struct {
 	Status *AssetModelStatus `locationName:"status" type:"structure" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AssetModelSummary) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AssetModelSummary) GoString() string {
 	return s.String()
 }
@@ -6905,17 +8202,20 @@ func (s *AssetModelSummary) SetStatus(v *AssetModelStatus) *AssetModelSummary {
 type AssetProperty struct {
 	_ struct{} `type:"structure"`
 
-	// The property alias that identifies the property, such as an OPC-UA server
-	// data stream path (for example, /company/windfarm/3/turbine/7/temperature).
-	// For more information, see Mapping industrial data streams to asset properties
-	// (https://docs.aws.amazon.com/iot-sitewise/latest/userguide/connect-data-streams.html)
-	// in the AWS IoT SiteWise User Guide.
+	// The alias that identifies the property, such as an OPC-UA server data stream
+	// path (for example, /company/windfarm/3/turbine/7/temperature). For more information,
+	// see Mapping industrial data streams to asset properties (https://docs.aws.amazon.com/iot-sitewise/latest/userguide/connect-data-streams.html)
+	// in the IoT SiteWise User Guide.
 	Alias *string `locationName:"alias" min:"1" type:"string"`
 
 	// The data type of the asset property.
 	//
 	// DataType is a required field
 	DataType *string `locationName:"dataType" type:"string" required:"true" enum:"PropertyDataType"`
+
+	// The data type of the structure for this property. This parameter exists on
+	// properties that have the STRUCT data type.
+	DataTypeSpec *string `locationName:"dataTypeSpec" min:"1" type:"string"`
 
 	// The ID of the asset property.
 	//
@@ -6935,12 +8235,20 @@ type AssetProperty struct {
 	Unit *string `locationName:"unit" min:"1" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AssetProperty) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AssetProperty) GoString() string {
 	return s.String()
 }
@@ -6954,6 +8262,12 @@ func (s *AssetProperty) SetAlias(v string) *AssetProperty {
 // SetDataType sets the DataType field's value.
 func (s *AssetProperty) SetDataType(v string) *AssetProperty {
 	s.DataType = &v
+	return s
+}
+
+// SetDataTypeSpec sets the DataTypeSpec field's value.
+func (s *AssetProperty) SetDataTypeSpec(v string) *AssetProperty {
+	s.DataTypeSpec = &v
 	return s
 }
 
@@ -6999,12 +8313,20 @@ type AssetPropertyValue struct {
 	Value *Variant `locationName:"value" type:"structure" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AssetPropertyValue) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AssetPropertyValue) GoString() string {
 	return s.String()
 }
@@ -7021,11 +8343,6 @@ func (s *AssetPropertyValue) Validate() error {
 	if s.Timestamp != nil {
 		if err := s.Timestamp.Validate(); err != nil {
 			invalidParams.AddNested("Timestamp", err.(request.ErrInvalidParams))
-		}
-	}
-	if s.Value != nil {
-		if err := s.Value.Validate(); err != nil {
-			invalidParams.AddNested("Value", err.(request.ErrInvalidParams))
 		}
 	}
 
@@ -7053,9 +8370,59 @@ func (s *AssetPropertyValue) SetValue(v *Variant) *AssetPropertyValue {
 	return s
 }
 
+// Contains information about assets that are related to one another.
+type AssetRelationshipSummary struct {
+	_ struct{} `type:"structure"`
+
+	// The assets that are related through an asset hierarchy.
+	//
+	// This object is present if the relationshipType is HIERARCHY.
+	HierarchyInfo *AssetHierarchyInfo `locationName:"hierarchyInfo" type:"structure"`
+
+	// The relationship type of the assets in this relationship. This value is one
+	// of the following:
+	//
+	//    * HIERARCHY – The assets are related through an asset hierarchy. If
+	//    you specify this relationship type, this asset relationship includes the
+	//    hierarchyInfo object.
+	//
+	// RelationshipType is a required field
+	RelationshipType *string `locationName:"relationshipType" type:"string" required:"true" enum:"AssetRelationshipType"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s AssetRelationshipSummary) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s AssetRelationshipSummary) GoString() string {
+	return s.String()
+}
+
+// SetHierarchyInfo sets the HierarchyInfo field's value.
+func (s *AssetRelationshipSummary) SetHierarchyInfo(v *AssetHierarchyInfo) *AssetRelationshipSummary {
+	s.HierarchyInfo = v
+	return s
+}
+
+// SetRelationshipType sets the RelationshipType field's value.
+func (s *AssetRelationshipSummary) SetRelationshipType(v string) *AssetRelationshipSummary {
+	s.RelationshipType = &v
+	return s
+}
+
 // Contains information about the current status of an asset. For more information,
 // see Asset and model states (https://docs.aws.amazon.com/iot-sitewise/latest/userguide/asset-and-model-states.html)
-// in the AWS IoT SiteWise User Guide.
+// in the IoT SiteWise User Guide.
 type AssetStatus struct {
 	_ struct{} `type:"structure"`
 
@@ -7068,12 +8435,20 @@ type AssetStatus struct {
 	State *string `locationName:"state" type:"string" required:"true" enum:"AssetState"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AssetStatus) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AssetStatus) GoString() string {
 	return s.String()
 }
@@ -7139,12 +8514,20 @@ type AssetSummary struct {
 	Status *AssetStatus `locationName:"status" type:"structure" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AssetSummary) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AssetSummary) GoString() string {
 	return s.String()
 }
@@ -7218,18 +8601,26 @@ type AssociateAssetsInput struct {
 	// The ID of a hierarchy in the parent asset's model. Hierarchies allow different
 	// groupings of assets to be formed that all come from the same asset model.
 	// For more information, see Asset hierarchies (https://docs.aws.amazon.com/iot-sitewise/latest/userguide/asset-hierarchies.html)
-	// in the AWS IoT SiteWise User Guide.
+	// in the IoT SiteWise User Guide.
 	//
 	// HierarchyId is a required field
 	HierarchyId *string `locationName:"hierarchyId" min:"36" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AssociateAssetsInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AssociateAssetsInput) GoString() string {
 	return s.String()
 }
@@ -7290,15 +8681,23 @@ func (s *AssociateAssetsInput) SetHierarchyId(v string) *AssociateAssetsInput {
 }
 
 type AssociateAssetsOutput struct {
-	_ struct{} `type:"structure"`
+	_ struct{} `type:"structure" nopayload:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AssociateAssetsOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AssociateAssetsOutput) GoString() string {
 	return s.String()
 }
@@ -7352,12 +8751,20 @@ type AssociatedAssetsSummary struct {
 	Status *AssetStatus `locationName:"status" type:"structure" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AssociatedAssetsSummary) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s AssociatedAssetsSummary) GoString() string {
 	return s.String()
 }
@@ -7412,7 +8819,7 @@ func (s *AssociatedAssetsSummary) SetStatus(v *AssetStatus) *AssociatedAssetsSum
 
 // Contains an asset attribute property. For more information, see Attributes
 // (https://docs.aws.amazon.com/iot-sitewise/latest/userguide/asset-properties.html#attributes)
-// in the AWS IoT SiteWise User Guide.
+// in the IoT SiteWise User Guide.
 type Attribute struct {
 	_ struct{} `type:"structure"`
 
@@ -7420,16 +8827,24 @@ type Attribute struct {
 	// you create from the asset model contain this attribute value. You can update
 	// an attribute's value after you create an asset. For more information, see
 	// Updating attribute values (https://docs.aws.amazon.com/iot-sitewise/latest/userguide/update-attribute-values.html)
-	// in the AWS IoT SiteWise User Guide.
+	// in the IoT SiteWise User Guide.
 	DefaultValue *string `locationName:"defaultValue" min:"1" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s Attribute) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s Attribute) GoString() string {
 	return s.String()
 }
@@ -7472,12 +8887,20 @@ type BatchAssociateProjectAssetsInput struct {
 	ProjectId *string `location:"uri" locationName:"projectId" min:"36" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s BatchAssociateProjectAssetsInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s BatchAssociateProjectAssetsInput) GoString() string {
 	return s.String()
 }
@@ -7532,12 +8955,20 @@ type BatchAssociateProjectAssetsOutput struct {
 	Errors []*AssetErrorDetails `locationName:"errors" type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s BatchAssociateProjectAssetsOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s BatchAssociateProjectAssetsOutput) GoString() string {
 	return s.String()
 }
@@ -7567,12 +8998,20 @@ type BatchDisassociateProjectAssetsInput struct {
 	ProjectId *string `location:"uri" locationName:"projectId" min:"36" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s BatchDisassociateProjectAssetsInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s BatchDisassociateProjectAssetsInput) GoString() string {
 	return s.String()
 }
@@ -7627,12 +9066,20 @@ type BatchDisassociateProjectAssetsOutput struct {
 	Errors []*AssetErrorDetails `locationName:"errors" type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s BatchDisassociateProjectAssetsOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s BatchDisassociateProjectAssetsOutput) GoString() string {
 	return s.String()
 }
@@ -7663,12 +9110,20 @@ type BatchPutAssetPropertyError struct {
 	Timestamps []*TimeInNanos `locationName:"timestamps" type:"list" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s BatchPutAssetPropertyError) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s BatchPutAssetPropertyError) GoString() string {
 	return s.String()
 }
@@ -7708,12 +9163,20 @@ type BatchPutAssetPropertyErrorEntry struct {
 	Errors []*BatchPutAssetPropertyError `locationName:"errors" type:"list" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s BatchPutAssetPropertyErrorEntry) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s BatchPutAssetPropertyErrorEntry) GoString() string {
 	return s.String()
 }
@@ -7740,12 +9203,20 @@ type BatchPutAssetPropertyValueInput struct {
 	Entries []*PutAssetPropertyValueEntry `locationName:"entries" type:"list" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s BatchPutAssetPropertyValueInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s BatchPutAssetPropertyValueInput) GoString() string {
 	return s.String()
 }
@@ -7789,12 +9260,20 @@ type BatchPutAssetPropertyValueOutput struct {
 	ErrorEntries []*BatchPutAssetPropertyErrorEntry `locationName:"errorEntries" type:"list" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s BatchPutAssetPropertyValueOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s BatchPutAssetPropertyValueOutput) GoString() string {
 	return s.String()
 }
@@ -7802,6 +9281,150 @@ func (s BatchPutAssetPropertyValueOutput) GoString() string {
 // SetErrorEntries sets the ErrorEntries field's value.
 func (s *BatchPutAssetPropertyValueOutput) SetErrorEntries(v []*BatchPutAssetPropertyErrorEntry) *BatchPutAssetPropertyValueOutput {
 	s.ErrorEntries = v
+	return s
+}
+
+// Contains information about a composite model property on an asset.
+type CompositeModelProperty struct {
+	_ struct{} `type:"structure"`
+
+	// Contains asset property information.
+	//
+	// AssetProperty is a required field
+	AssetProperty *Property `locationName:"assetProperty" type:"structure" required:"true"`
+
+	// The name of the property.
+	//
+	// Name is a required field
+	Name *string `locationName:"name" min:"1" type:"string" required:"true"`
+
+	// The type of the composite model that defines this property.
+	//
+	// Type is a required field
+	Type *string `locationName:"type" min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CompositeModelProperty) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CompositeModelProperty) GoString() string {
+	return s.String()
+}
+
+// SetAssetProperty sets the AssetProperty field's value.
+func (s *CompositeModelProperty) SetAssetProperty(v *Property) *CompositeModelProperty {
+	s.AssetProperty = v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *CompositeModelProperty) SetName(v string) *CompositeModelProperty {
+	s.Name = &v
+	return s
+}
+
+// SetType sets the Type field's value.
+func (s *CompositeModelProperty) SetType(v string) *CompositeModelProperty {
+	s.Type = &v
+	return s
+}
+
+// Contains the details of an IoT SiteWise configuration error.
+type ConfigurationErrorDetails struct {
+	_ struct{} `type:"structure"`
+
+	// The error code.
+	//
+	// Code is a required field
+	Code *string `locationName:"code" type:"string" required:"true" enum:"ErrorCode"`
+
+	// The error message.
+	//
+	// Message is a required field
+	Message *string `locationName:"message" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ConfigurationErrorDetails) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ConfigurationErrorDetails) GoString() string {
+	return s.String()
+}
+
+// SetCode sets the Code field's value.
+func (s *ConfigurationErrorDetails) SetCode(v string) *ConfigurationErrorDetails {
+	s.Code = &v
+	return s
+}
+
+// SetMessage sets the Message field's value.
+func (s *ConfigurationErrorDetails) SetMessage(v string) *ConfigurationErrorDetails {
+	s.Message = &v
+	return s
+}
+
+// Contains current status information for the configuration.
+type ConfigurationStatus struct {
+	_ struct{} `type:"structure"`
+
+	// Contains associated error information, if any.
+	Error *ConfigurationErrorDetails `locationName:"error" type:"structure"`
+
+	// The current state of the configuration.
+	//
+	// State is a required field
+	State *string `locationName:"state" type:"string" required:"true" enum:"ConfigurationState"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ConfigurationStatus) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ConfigurationStatus) GoString() string {
+	return s.String()
+}
+
+// SetError sets the Error field's value.
+func (s *ConfigurationStatus) SetError(v *ConfigurationErrorDetails) *ConfigurationStatus {
+	s.Error = v
+	return s
+}
+
+// SetState sets the State field's value.
+func (s *ConfigurationStatus) SetState(v string) *ConfigurationStatus {
+	s.State = &v
 	return s
 }
 
@@ -7824,12 +9447,20 @@ type ConflictingOperationException struct {
 	ResourceId *string `locationName:"resourceId" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ConflictingOperationException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ConflictingOperationException) GoString() string {
 	return s.String()
 }
@@ -7875,8 +9506,8 @@ func (s *ConflictingOperationException) RequestID() string {
 type CreateAccessPolicyInput struct {
 	_ struct{} `type:"structure"`
 
-	// The identity for this access policy. Choose an AWS SSO user, an AWS SSO group,
-	// or an IAM user.
+	// The identity for this access policy. Choose an Amazon Web Services SSO user,
+	// an Amazon Web Services SSO group, or an IAM user.
 	//
 	// AccessPolicyIdentity is a required field
 	AccessPolicyIdentity *Identity `locationName:"accessPolicyIdentity" type:"structure" required:"true"`
@@ -7887,8 +9518,8 @@ type CreateAccessPolicyInput struct {
 	// AccessPolicyPermission is a required field
 	AccessPolicyPermission *string `locationName:"accessPolicyPermission" type:"string" required:"true" enum:"Permission"`
 
-	// The AWS IoT SiteWise Monitor resource for this access policy. Choose either
-	// a portal or a project.
+	// The IoT SiteWise Monitor resource for this access policy. Choose either a
+	// portal or a project.
 	//
 	// AccessPolicyResource is a required field
 	AccessPolicyResource *Resource `locationName:"accessPolicyResource" type:"structure" required:"true"`
@@ -7899,17 +9530,25 @@ type CreateAccessPolicyInput struct {
 	ClientToken *string `locationName:"clientToken" min:"36" type:"string" idempotencyToken:"true"`
 
 	// A list of key-value pairs that contain metadata for the access policy. For
-	// more information, see Tagging your AWS IoT SiteWise resources (https://docs.aws.amazon.com/iot-sitewise/latest/userguide/tag-resources.html)
-	// in the AWS IoT SiteWise User Guide.
+	// more information, see Tagging your IoT SiteWise resources (https://docs.aws.amazon.com/iot-sitewise/latest/userguide/tag-resources.html)
+	// in the IoT SiteWise User Guide.
 	Tags map[string]*string `locationName:"tags" min:"1" type:"map"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateAccessPolicyInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateAccessPolicyInput) GoString() string {
 	return s.String()
 }
@@ -7996,12 +9635,20 @@ type CreateAccessPolicyOutput struct {
 	AccessPolicyId *string `locationName:"accessPolicyId" min:"36" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateAccessPolicyOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateAccessPolicyOutput) GoString() string {
 	return s.String()
 }
@@ -8037,17 +9684,25 @@ type CreateAssetInput struct {
 	ClientToken *string `locationName:"clientToken" min:"36" type:"string" idempotencyToken:"true"`
 
 	// A list of key-value pairs that contain metadata for the asset. For more information,
-	// see Tagging your AWS IoT SiteWise resources (https://docs.aws.amazon.com/iot-sitewise/latest/userguide/tag-resources.html)
-	// in the AWS IoT SiteWise User Guide.
+	// see Tagging your IoT SiteWise resources (https://docs.aws.amazon.com/iot-sitewise/latest/userguide/tag-resources.html)
+	// in the IoT SiteWise User Guide.
 	Tags map[string]*string `locationName:"tags" min:"1" type:"map"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateAssetInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateAssetInput) GoString() string {
 	return s.String()
 }
@@ -8107,17 +9762,23 @@ func (s *CreateAssetInput) SetTags(v map[string]*string) *CreateAssetInput {
 type CreateAssetModelInput struct {
 	_ struct{} `type:"structure"`
 
+	// The composite asset models that are part of this asset model. Composite asset
+	// models are asset models that contain specific properties. Each composite
+	// model has a type that defines the properties that the composite model supports.
+	// Use composite asset models to define alarms on this asset model.
+	AssetModelCompositeModels []*AssetModelCompositeModelDefinition `locationName:"assetModelCompositeModels" type:"list"`
+
 	// A description for the asset model.
 	AssetModelDescription *string `locationName:"assetModelDescription" min:"1" type:"string"`
 
 	// The hierarchy definitions of the asset model. Each hierarchy specifies an
 	// asset model whose assets can be children of any other assets created from
 	// this asset model. For more information, see Asset hierarchies (https://docs.aws.amazon.com/iot-sitewise/latest/userguide/asset-hierarchies.html)
-	// in the AWS IoT SiteWise User Guide.
+	// in the IoT SiteWise User Guide.
 	//
 	// You can specify up to 10 hierarchies per asset model. For more information,
 	// see Quotas (https://docs.aws.amazon.com/iot-sitewise/latest/userguide/quotas.html)
-	// in the AWS IoT SiteWise User Guide.
+	// in the IoT SiteWise User Guide.
 	AssetModelHierarchies []*AssetModelHierarchyDefinition `locationName:"assetModelHierarchies" type:"list"`
 
 	// A unique, friendly name for the asset model.
@@ -8127,11 +9788,11 @@ type CreateAssetModelInput struct {
 
 	// The property definitions of the asset model. For more information, see Asset
 	// properties (https://docs.aws.amazon.com/iot-sitewise/latest/userguide/asset-properties.html)
-	// in the AWS IoT SiteWise User Guide.
+	// in the IoT SiteWise User Guide.
 	//
 	// You can specify up to 200 properties per asset model. For more information,
 	// see Quotas (https://docs.aws.amazon.com/iot-sitewise/latest/userguide/quotas.html)
-	// in the AWS IoT SiteWise User Guide.
+	// in the IoT SiteWise User Guide.
 	AssetModelProperties []*AssetModelPropertyDefinition `locationName:"assetModelProperties" type:"list"`
 
 	// A unique case-sensitive identifier that you can provide to ensure the idempotency
@@ -8140,17 +9801,25 @@ type CreateAssetModelInput struct {
 	ClientToken *string `locationName:"clientToken" min:"36" type:"string" idempotencyToken:"true"`
 
 	// A list of key-value pairs that contain metadata for the asset model. For
-	// more information, see Tagging your AWS IoT SiteWise resources (https://docs.aws.amazon.com/iot-sitewise/latest/userguide/tag-resources.html)
-	// in the AWS IoT SiteWise User Guide.
+	// more information, see Tagging your IoT SiteWise resources (https://docs.aws.amazon.com/iot-sitewise/latest/userguide/tag-resources.html)
+	// in the IoT SiteWise User Guide.
 	Tags map[string]*string `locationName:"tags" min:"1" type:"map"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateAssetModelInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateAssetModelInput) GoString() string {
 	return s.String()
 }
@@ -8172,6 +9841,16 @@ func (s *CreateAssetModelInput) Validate() error {
 	}
 	if s.Tags != nil && len(s.Tags) < 1 {
 		invalidParams.Add(request.NewErrParamMinLen("Tags", 1))
+	}
+	if s.AssetModelCompositeModels != nil {
+		for i, v := range s.AssetModelCompositeModels {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "AssetModelCompositeModels", i), err.(request.ErrInvalidParams))
+			}
+		}
 	}
 	if s.AssetModelHierarchies != nil {
 		for i, v := range s.AssetModelHierarchies {
@@ -8198,6 +9877,12 @@ func (s *CreateAssetModelInput) Validate() error {
 		return invalidParams
 	}
 	return nil
+}
+
+// SetAssetModelCompositeModels sets the AssetModelCompositeModels field's value.
+func (s *CreateAssetModelInput) SetAssetModelCompositeModels(v []*AssetModelCompositeModelDefinition) *CreateAssetModelInput {
+	s.AssetModelCompositeModels = v
+	return s
 }
 
 // SetAssetModelDescription sets the AssetModelDescription field's value.
@@ -8247,8 +9932,8 @@ type CreateAssetModelOutput struct {
 	// AssetModelArn is a required field
 	AssetModelArn *string `locationName:"assetModelArn" min:"1" type:"string" required:"true"`
 
-	// The ID of the asset model. You can use this ID when you call other AWS IoT
-	// SiteWise APIs.
+	// The ID of the asset model. You can use this ID when you call other IoT SiteWise
+	// APIs.
 	//
 	// AssetModelId is a required field
 	AssetModelId *string `locationName:"assetModelId" min:"36" type:"string" required:"true"`
@@ -8260,12 +9945,20 @@ type CreateAssetModelOutput struct {
 	AssetModelStatus *AssetModelStatus `locationName:"assetModelStatus" type:"structure" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateAssetModelOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateAssetModelOutput) GoString() string {
 	return s.String()
 }
@@ -8299,8 +9992,8 @@ type CreateAssetOutput struct {
 	// AssetArn is a required field
 	AssetArn *string `locationName:"assetArn" min:"1" type:"string" required:"true"`
 
-	// The ID of the asset. This ID uniquely identifies the asset within AWS IoT
-	// SiteWise and can be used with other AWS IoT SiteWise APIs.
+	// The ID of the asset. This ID uniquely identifies the asset within IoT SiteWise
+	// and can be used with other IoT SiteWise APIs.
 	//
 	// AssetId is a required field
 	AssetId *string `locationName:"assetId" min:"36" type:"string" required:"true"`
@@ -8312,12 +10005,20 @@ type CreateAssetOutput struct {
 	AssetStatus *AssetStatus `locationName:"assetStatus" type:"structure" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateAssetOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateAssetOutput) GoString() string {
 	return s.String()
 }
@@ -8350,7 +10051,7 @@ type CreateDashboardInput struct {
 
 	// The dashboard definition specified in a JSON literal. For detailed information,
 	// see Creating dashboards (CLI) (https://docs.aws.amazon.com/iot-sitewise/latest/userguide/create-dashboards-using-aws-cli.html)
-	// in the AWS IoT SiteWise User Guide.
+	// in the IoT SiteWise User Guide.
 	//
 	// DashboardDefinition is a required field
 	DashboardDefinition *string `locationName:"dashboardDefinition" type:"string" required:"true"`
@@ -8369,17 +10070,25 @@ type CreateDashboardInput struct {
 	ProjectId *string `locationName:"projectId" min:"36" type:"string" required:"true"`
 
 	// A list of key-value pairs that contain metadata for the dashboard. For more
-	// information, see Tagging your AWS IoT SiteWise resources (https://docs.aws.amazon.com/iot-sitewise/latest/userguide/tag-resources.html)
-	// in the AWS IoT SiteWise User Guide.
+	// information, see Tagging your IoT SiteWise resources (https://docs.aws.amazon.com/iot-sitewise/latest/userguide/tag-resources.html)
+	// in the IoT SiteWise User Guide.
 	Tags map[string]*string `locationName:"tags" min:"1" type:"map"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateDashboardInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateDashboardInput) GoString() string {
 	return s.String()
 }
@@ -8471,12 +10180,20 @@ type CreateDashboardOutput struct {
 	DashboardId *string `locationName:"dashboardId" min:"36" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateDashboardOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateDashboardOutput) GoString() string {
 	return s.String()
 }
@@ -8507,17 +10224,25 @@ type CreateGatewayInput struct {
 	GatewayPlatform *GatewayPlatform `locationName:"gatewayPlatform" type:"structure" required:"true"`
 
 	// A list of key-value pairs that contain metadata for the gateway. For more
-	// information, see Tagging your AWS IoT SiteWise resources (https://docs.aws.amazon.com/iot-sitewise/latest/userguide/tag-resources.html)
-	// in the AWS IoT SiteWise User Guide.
+	// information, see Tagging your IoT SiteWise resources (https://docs.aws.amazon.com/iot-sitewise/latest/userguide/tag-resources.html)
+	// in the IoT SiteWise User Guide.
 	Tags map[string]*string `locationName:"tags" min:"1" type:"map"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateGatewayInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateGatewayInput) GoString() string {
 	return s.String()
 }
@@ -8578,19 +10303,27 @@ type CreateGatewayOutput struct {
 	// GatewayArn is a required field
 	GatewayArn *string `locationName:"gatewayArn" min:"1" type:"string" required:"true"`
 
-	// The ID of the gateway device. You can use this ID when you call other AWS
-	// IoT SiteWise APIs.
+	// The ID of the gateway device. You can use this ID when you call other IoT
+	// SiteWise APIs.
 	//
 	// GatewayId is a required field
 	GatewayId *string `locationName:"gatewayId" min:"36" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateGatewayOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateGatewayOutput) GoString() string {
 	return s.String()
 }
@@ -8610,32 +10343,45 @@ func (s *CreateGatewayOutput) SetGatewayId(v string) *CreateGatewayOutput {
 type CreatePortalInput struct {
 	_ struct{} `type:"structure"`
 
+	// Contains the configuration information of an alarm created in an IoT SiteWise
+	// Monitor portal. You can use the alarm to monitor an asset property and get
+	// notified when the asset property value is outside a specified range. For
+	// more information, see Monitoring with alarms (https://docs.aws.amazon.com/iot-sitewise/latest/appguide/monitor-alarms.html)
+	// in the IoT SiteWise Application Guide.
+	Alarms *Alarms `locationName:"alarms" type:"structure"`
+
 	// A unique case-sensitive identifier that you can provide to ensure the idempotency
 	// of the request. Don't reuse this client token if a new idempotent request
 	// is required.
 	ClientToken *string `locationName:"clientToken" min:"36" type:"string" idempotencyToken:"true"`
 
+	// The email address that sends alarm notifications.
+	//
+	// If you use the IoT Events managed Lambda function (https://docs.aws.amazon.com/iotevents/latest/developerguide/lambda-support.html)
+	// to manage your emails, you must verify the sender email address in Amazon
+	// SES (https://docs.aws.amazon.com/ses/latest/DeveloperGuide/verify-email-addresses.html).
+	NotificationSenderEmail *string `locationName:"notificationSenderEmail" min:"1" type:"string"`
+
 	// The service to use to authenticate users to the portal. Choose from the following
 	// options:
 	//
-	//    * SSO – The portal uses AWS Single Sign-On to authenticate users and
-	//    manage user permissions. Before you can create a portal that uses AWS
-	//    SSO, you must enable AWS SSO. For more information, see Enabling AWS SSO
-	//    (https://docs.aws.amazon.com/iot-sitewise/latest/userguide/monitor-get-started.html#mon-gs-sso)
-	//    in the AWS IoT SiteWise User Guide. This option is only available in AWS
-	//    Regions other than the China Regions.
+	//    * SSO – The portal uses Amazon Web Services Single Sign On to authenticate
+	//    users and manage user permissions. Before you can create a portal that
+	//    uses Amazon Web Services SSO, you must enable Amazon Web Services SSO.
+	//    For more information, see Enabling Amazon Web Services SSO (https://docs.aws.amazon.com/iot-sitewise/latest/userguide/monitor-get-started.html#mon-gs-sso)
+	//    in the IoT SiteWise User Guide. This option is only available in Amazon
+	//    Web Services Regions other than the China Regions.
 	//
-	//    * IAM – The portal uses AWS Identity and Access Management (IAM) to
-	//    authenticate users and manage user permissions. IAM users must have the
-	//    iotsitewise:CreatePresignedPortalUrl permission to sign in to the portal.
-	//    This option is only available in the China Regions.
+	//    * IAM – The portal uses Identity and Access Management to authenticate
+	//    users and manage user permissions. This option is only available in the
+	//    China Regions.
 	//
 	// You can't change this value after you create a portal.
 	//
 	// Default: SSO
 	PortalAuthMode *string `locationName:"portalAuthMode" type:"string" enum:"AuthMode"`
 
-	// The AWS administrator's contact email address.
+	// The Amazon Web Services administrator's contact email address.
 	//
 	// PortalContactEmail is a required field
 	PortalContactEmail *string `locationName:"portalContactEmail" min:"1" type:"string" required:"true"`
@@ -8653,26 +10399,34 @@ type CreatePortalInput struct {
 	PortalName *string `locationName:"portalName" min:"1" type:"string" required:"true"`
 
 	// The ARN (https://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html)
-	// of a service role that allows the portal's users to access your AWS IoT SiteWise
+	// of a service role that allows the portal's users to access your IoT SiteWise
 	// resources on your behalf. For more information, see Using service roles for
-	// AWS IoT SiteWise Monitor (https://docs.aws.amazon.com/iot-sitewise/latest/userguide/monitor-service-role.html)
-	// in the AWS IoT SiteWise User Guide.
+	// IoT SiteWise Monitor (https://docs.aws.amazon.com/iot-sitewise/latest/userguide/monitor-service-role.html)
+	// in the IoT SiteWise User Guide.
 	//
 	// RoleArn is a required field
 	RoleArn *string `locationName:"roleArn" min:"1" type:"string" required:"true"`
 
 	// A list of key-value pairs that contain metadata for the portal. For more
-	// information, see Tagging your AWS IoT SiteWise resources (https://docs.aws.amazon.com/iot-sitewise/latest/userguide/tag-resources.html)
-	// in the AWS IoT SiteWise User Guide.
+	// information, see Tagging your IoT SiteWise resources (https://docs.aws.amazon.com/iot-sitewise/latest/userguide/tag-resources.html)
+	// in the IoT SiteWise User Guide.
 	Tags map[string]*string `locationName:"tags" min:"1" type:"map"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreatePortalInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreatePortalInput) GoString() string {
 	return s.String()
 }
@@ -8682,6 +10436,9 @@ func (s *CreatePortalInput) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "CreatePortalInput"}
 	if s.ClientToken != nil && len(*s.ClientToken) < 36 {
 		invalidParams.Add(request.NewErrParamMinLen("ClientToken", 36))
+	}
+	if s.NotificationSenderEmail != nil && len(*s.NotificationSenderEmail) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("NotificationSenderEmail", 1))
 	}
 	if s.PortalContactEmail == nil {
 		invalidParams.Add(request.NewErrParamRequired("PortalContactEmail"))
@@ -8707,6 +10464,11 @@ func (s *CreatePortalInput) Validate() error {
 	if s.Tags != nil && len(s.Tags) < 1 {
 		invalidParams.Add(request.NewErrParamMinLen("Tags", 1))
 	}
+	if s.Alarms != nil {
+		if err := s.Alarms.Validate(); err != nil {
+			invalidParams.AddNested("Alarms", err.(request.ErrInvalidParams))
+		}
+	}
 	if s.PortalLogoImageFile != nil {
 		if err := s.PortalLogoImageFile.Validate(); err != nil {
 			invalidParams.AddNested("PortalLogoImageFile", err.(request.ErrInvalidParams))
@@ -8719,9 +10481,21 @@ func (s *CreatePortalInput) Validate() error {
 	return nil
 }
 
+// SetAlarms sets the Alarms field's value.
+func (s *CreatePortalInput) SetAlarms(v *Alarms) *CreatePortalInput {
+	s.Alarms = v
+	return s
+}
+
 // SetClientToken sets the ClientToken field's value.
 func (s *CreatePortalInput) SetClientToken(v string) *CreatePortalInput {
 	s.ClientToken = &v
+	return s
+}
+
+// SetNotificationSenderEmail sets the NotificationSenderEmail field's value.
+func (s *CreatePortalInput) SetNotificationSenderEmail(v string) *CreatePortalInput {
+	s.NotificationSenderEmail = &v
 	return s
 }
 
@@ -8783,11 +10557,10 @@ type CreatePortalOutput struct {
 	// PortalId is a required field
 	PortalId *string `locationName:"portalId" min:"36" type:"string" required:"true"`
 
-	// The URL for the AWS IoT SiteWise Monitor portal. You can use this URL to
-	// access portals that use AWS SSO for authentication. For portals that use
-	// IAM for authentication, you must use the CreatePresignedPortalUrl (https://docs.aws.amazon.com/AWS
-	// IoT SiteWise API ReferenceAPI_CreatePresignedPortalUrl.html) operation to
-	// create a URL that you can use to access the portal.
+	// The URL for the IoT SiteWise Monitor portal. You can use this URL to access
+	// portals that use Amazon Web Services SSO for authentication. For portals
+	// that use IAM for authentication, you must use the IoT SiteWise console to
+	// get a URL that you can use to access the portal.
 	//
 	// PortalStartUrl is a required field
 	PortalStartUrl *string `locationName:"portalStartUrl" min:"1" type:"string" required:"true"`
@@ -8798,18 +10571,27 @@ type CreatePortalOutput struct {
 	// PortalStatus is a required field
 	PortalStatus *PortalStatus `locationName:"portalStatus" type:"structure" required:"true"`
 
-	// The associated AWS SSO application ID, if the portal uses AWS SSO.
+	// The associated Amazon Web Services SSO application ID, if the portal uses
+	// Amazon Web Services SSO.
 	//
 	// SsoApplicationId is a required field
 	SsoApplicationId *string `locationName:"ssoApplicationId" min:"1" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreatePortalOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreatePortalOutput) GoString() string {
 	return s.String()
 }
@@ -8866,17 +10648,25 @@ type CreateProjectInput struct {
 	ProjectName *string `locationName:"projectName" min:"1" type:"string" required:"true"`
 
 	// A list of key-value pairs that contain metadata for the project. For more
-	// information, see Tagging your AWS IoT SiteWise resources (https://docs.aws.amazon.com/iot-sitewise/latest/userguide/tag-resources.html)
-	// in the AWS IoT SiteWise User Guide.
+	// information, see Tagging your IoT SiteWise resources (https://docs.aws.amazon.com/iot-sitewise/latest/userguide/tag-resources.html)
+	// in the IoT SiteWise User Guide.
 	Tags map[string]*string `locationName:"tags" min:"1" type:"map"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateProjectInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateProjectInput) GoString() string {
 	return s.String()
 }
@@ -8959,12 +10749,20 @@ type CreateProjectOutput struct {
 	ProjectId *string `locationName:"projectId" min:"36" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateProjectOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s CreateProjectOutput) GoString() string {
 	return s.String()
 }
@@ -8978,6 +10776,78 @@ func (s *CreateProjectOutput) SetProjectArn(v string) *CreateProjectOutput {
 // SetProjectId sets the ProjectId field's value.
 func (s *CreateProjectOutput) SetProjectId(v string) *CreateProjectOutput {
 	s.ProjectId = &v
+	return s
+}
+
+// Contains information about a customer managed Amazon S3 bucket.
+type CustomerManagedS3Storage struct {
+	_ struct{} `type:"structure"`
+
+	// The ARN (https://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html)
+	// of the Identity and Access Management role that allows IoT SiteWise to send
+	// data to Amazon S3.
+	//
+	// RoleArn is a required field
+	RoleArn *string `locationName:"roleArn" min:"1" type:"string" required:"true"`
+
+	// The ARN (https://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html)
+	// of the Amazon S3 object. For more information about how to find the ARN for
+	// an Amazon S3 object, see Amazon S3 resources (https://docs.aws.amazon.com/AmazonS3/latest/userguide/s3-arn-format.html)
+	// in the Amazon Simple Storage Service User Guide.
+	//
+	// S3ResourceArn is a required field
+	S3ResourceArn *string `locationName:"s3ResourceArn" min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CustomerManagedS3Storage) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CustomerManagedS3Storage) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *CustomerManagedS3Storage) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "CustomerManagedS3Storage"}
+	if s.RoleArn == nil {
+		invalidParams.Add(request.NewErrParamRequired("RoleArn"))
+	}
+	if s.RoleArn != nil && len(*s.RoleArn) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("RoleArn", 1))
+	}
+	if s.S3ResourceArn == nil {
+		invalidParams.Add(request.NewErrParamRequired("S3ResourceArn"))
+	}
+	if s.S3ResourceArn != nil && len(*s.S3ResourceArn) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("S3ResourceArn", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetRoleArn sets the RoleArn field's value.
+func (s *CustomerManagedS3Storage) SetRoleArn(v string) *CustomerManagedS3Storage {
+	s.RoleArn = &v
+	return s
+}
+
+// SetS3ResourceArn sets the S3ResourceArn field's value.
+func (s *CustomerManagedS3Storage) SetS3ResourceArn(v string) *CustomerManagedS3Storage {
+	s.S3ResourceArn = &v
 	return s
 }
 
@@ -9005,12 +10875,20 @@ type DashboardSummary struct {
 	Name *string `locationName:"name" min:"1" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DashboardSummary) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DashboardSummary) GoString() string {
 	return s.String()
 }
@@ -9046,7 +10924,7 @@ func (s *DashboardSummary) SetName(v string) *DashboardSummary {
 }
 
 type DeleteAccessPolicyInput struct {
-	_ struct{} `type:"structure"`
+	_ struct{} `type:"structure" nopayload:"true"`
 
 	// The ID of the access policy to be deleted.
 	//
@@ -9059,12 +10937,20 @@ type DeleteAccessPolicyInput struct {
 	ClientToken *string `location:"querystring" locationName:"clientToken" min:"36" type:"string" idempotencyToken:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteAccessPolicyInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteAccessPolicyInput) GoString() string {
 	return s.String()
 }
@@ -9101,21 +10987,29 @@ func (s *DeleteAccessPolicyInput) SetClientToken(v string) *DeleteAccessPolicyIn
 }
 
 type DeleteAccessPolicyOutput struct {
-	_ struct{} `type:"structure"`
+	_ struct{} `type:"structure" nopayload:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteAccessPolicyOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteAccessPolicyOutput) GoString() string {
 	return s.String()
 }
 
 type DeleteAssetInput struct {
-	_ struct{} `type:"structure"`
+	_ struct{} `type:"structure" nopayload:"true"`
 
 	// The ID of the asset to delete.
 	//
@@ -9128,12 +11022,20 @@ type DeleteAssetInput struct {
 	ClientToken *string `location:"querystring" locationName:"clientToken" min:"36" type:"string" idempotencyToken:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteAssetInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteAssetInput) GoString() string {
 	return s.String()
 }
@@ -9170,7 +11072,7 @@ func (s *DeleteAssetInput) SetClientToken(v string) *DeleteAssetInput {
 }
 
 type DeleteAssetModelInput struct {
-	_ struct{} `type:"structure"`
+	_ struct{} `type:"structure" nopayload:"true"`
 
 	// The ID of the asset model to delete.
 	//
@@ -9183,12 +11085,20 @@ type DeleteAssetModelInput struct {
 	ClientToken *string `location:"querystring" locationName:"clientToken" min:"36" type:"string" idempotencyToken:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteAssetModelInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteAssetModelInput) GoString() string {
 	return s.String()
 }
@@ -9234,12 +11144,20 @@ type DeleteAssetModelOutput struct {
 	AssetModelStatus *AssetModelStatus `locationName:"assetModelStatus" type:"structure" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteAssetModelOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteAssetModelOutput) GoString() string {
 	return s.String()
 }
@@ -9260,12 +11178,20 @@ type DeleteAssetOutput struct {
 	AssetStatus *AssetStatus `locationName:"assetStatus" type:"structure" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteAssetOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteAssetOutput) GoString() string {
 	return s.String()
 }
@@ -9277,7 +11203,7 @@ func (s *DeleteAssetOutput) SetAssetStatus(v *AssetStatus) *DeleteAssetOutput {
 }
 
 type DeleteDashboardInput struct {
-	_ struct{} `type:"structure"`
+	_ struct{} `type:"structure" nopayload:"true"`
 
 	// A unique case-sensitive identifier that you can provide to ensure the idempotency
 	// of the request. Don't reuse this client token if a new idempotent request
@@ -9290,12 +11216,20 @@ type DeleteDashboardInput struct {
 	DashboardId *string `location:"uri" locationName:"dashboardId" min:"36" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteDashboardInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteDashboardInput) GoString() string {
 	return s.String()
 }
@@ -9332,21 +11266,29 @@ func (s *DeleteDashboardInput) SetDashboardId(v string) *DeleteDashboardInput {
 }
 
 type DeleteDashboardOutput struct {
-	_ struct{} `type:"structure"`
+	_ struct{} `type:"structure" nopayload:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteDashboardOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteDashboardOutput) GoString() string {
 	return s.String()
 }
 
 type DeleteGatewayInput struct {
-	_ struct{} `type:"structure"`
+	_ struct{} `type:"structure" nopayload:"true"`
 
 	// The ID of the gateway to delete.
 	//
@@ -9354,12 +11296,20 @@ type DeleteGatewayInput struct {
 	GatewayId *string `location:"uri" locationName:"gatewayId" min:"36" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteGatewayInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteGatewayInput) GoString() string {
 	return s.String()
 }
@@ -9387,21 +11337,29 @@ func (s *DeleteGatewayInput) SetGatewayId(v string) *DeleteGatewayInput {
 }
 
 type DeleteGatewayOutput struct {
-	_ struct{} `type:"structure"`
+	_ struct{} `type:"structure" nopayload:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteGatewayOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteGatewayOutput) GoString() string {
 	return s.String()
 }
 
 type DeletePortalInput struct {
-	_ struct{} `type:"structure"`
+	_ struct{} `type:"structure" nopayload:"true"`
 
 	// A unique case-sensitive identifier that you can provide to ensure the idempotency
 	// of the request. Don't reuse this client token if a new idempotent request
@@ -9414,12 +11372,20 @@ type DeletePortalInput struct {
 	PortalId *string `location:"uri" locationName:"portalId" min:"36" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeletePortalInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeletePortalInput) GoString() string {
 	return s.String()
 }
@@ -9465,12 +11431,20 @@ type DeletePortalOutput struct {
 	PortalStatus *PortalStatus `locationName:"portalStatus" type:"structure" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeletePortalOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeletePortalOutput) GoString() string {
 	return s.String()
 }
@@ -9482,7 +11456,7 @@ func (s *DeletePortalOutput) SetPortalStatus(v *PortalStatus) *DeletePortalOutpu
 }
 
 type DeleteProjectInput struct {
-	_ struct{} `type:"structure"`
+	_ struct{} `type:"structure" nopayload:"true"`
 
 	// A unique case-sensitive identifier that you can provide to ensure the idempotency
 	// of the request. Don't reuse this client token if a new idempotent request
@@ -9495,12 +11469,20 @@ type DeleteProjectInput struct {
 	ProjectId *string `location:"uri" locationName:"projectId" min:"36" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteProjectInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteProjectInput) GoString() string {
 	return s.String()
 }
@@ -9537,21 +11519,29 @@ func (s *DeleteProjectInput) SetProjectId(v string) *DeleteProjectInput {
 }
 
 type DeleteProjectOutput struct {
-	_ struct{} `type:"structure"`
+	_ struct{} `type:"structure" nopayload:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteProjectOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DeleteProjectOutput) GoString() string {
 	return s.String()
 }
 
 type DescribeAccessPolicyInput struct {
-	_ struct{} `type:"structure"`
+	_ struct{} `type:"structure" nopayload:"true"`
 
 	// The ID of the access policy.
 	//
@@ -9559,12 +11549,20 @@ type DescribeAccessPolicyInput struct {
 	AccessPolicyId *string `location:"uri" locationName:"accessPolicyId" min:"36" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeAccessPolicyInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeAccessPolicyInput) GoString() string {
 	return s.String()
 }
@@ -9612,8 +11610,8 @@ type DescribeAccessPolicyOutput struct {
 	// AccessPolicyId is a required field
 	AccessPolicyId *string `locationName:"accessPolicyId" min:"36" type:"string" required:"true"`
 
-	// The identity (AWS SSO user, AWS SSO group, or IAM user) to which this access
-	// policy applies.
+	// The identity (Amazon Web Services SSO user, Amazon Web Services SSO group,
+	// or IAM user) to which this access policy applies.
 	//
 	// AccessPolicyIdentity is a required field
 	AccessPolicyIdentity *Identity `locationName:"accessPolicyIdentity" type:"structure" required:"true"`
@@ -9629,19 +11627,27 @@ type DescribeAccessPolicyOutput struct {
 	// AccessPolicyPermission is a required field
 	AccessPolicyPermission *string `locationName:"accessPolicyPermission" type:"string" required:"true" enum:"Permission"`
 
-	// The AWS IoT SiteWise Monitor resource (portal or project) to which this access
+	// The IoT SiteWise Monitor resource (portal or project) to which this access
 	// policy provides access.
 	//
 	// AccessPolicyResource is a required field
 	AccessPolicyResource *Resource `locationName:"accessPolicyResource" type:"structure" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeAccessPolicyOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeAccessPolicyOutput) GoString() string {
 	return s.String()
 }
@@ -9689,7 +11695,7 @@ func (s *DescribeAccessPolicyOutput) SetAccessPolicyResource(v *Resource) *Descr
 }
 
 type DescribeAssetInput struct {
-	_ struct{} `type:"structure"`
+	_ struct{} `type:"structure" nopayload:"true"`
 
 	// The ID of the asset.
 	//
@@ -9697,12 +11703,20 @@ type DescribeAssetInput struct {
 	AssetId *string `location:"uri" locationName:"assetId" min:"36" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeAssetInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeAssetInput) GoString() string {
 	return s.String()
 }
@@ -9730,7 +11744,7 @@ func (s *DescribeAssetInput) SetAssetId(v string) *DescribeAssetInput {
 }
 
 type DescribeAssetModelInput struct {
-	_ struct{} `type:"structure"`
+	_ struct{} `type:"structure" nopayload:"true"`
 
 	// The ID of the asset model.
 	//
@@ -9738,12 +11752,20 @@ type DescribeAssetModelInput struct {
 	AssetModelId *string `location:"uri" locationName:"assetModelId" min:"36" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeAssetModelInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeAssetModelInput) GoString() string {
 	return s.String()
 }
@@ -9781,6 +11803,9 @@ type DescribeAssetModelOutput struct {
 	// AssetModelArn is a required field
 	AssetModelArn *string `locationName:"assetModelArn" min:"1" type:"string" required:"true"`
 
+	// The list of composite asset models for the asset model.
+	AssetModelCompositeModels []*AssetModelCompositeModel `locationName:"assetModelCompositeModels" type:"list"`
+
 	// The date the asset model was created, in Unix epoch time.
 	//
 	// AssetModelCreationDate is a required field
@@ -9815,6 +11840,10 @@ type DescribeAssetModelOutput struct {
 
 	// The list of asset properties for the asset model.
 	//
+	// This object doesn't include properties that you define in composite models.
+	// You can find composite model properties in the assetModelCompositeModels
+	// object.
+	//
 	// AssetModelProperties is a required field
 	AssetModelProperties []*AssetModelProperty `locationName:"assetModelProperties" type:"list" required:"true"`
 
@@ -9825,12 +11854,20 @@ type DescribeAssetModelOutput struct {
 	AssetModelStatus *AssetModelStatus `locationName:"assetModelStatus" type:"structure" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeAssetModelOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeAssetModelOutput) GoString() string {
 	return s.String()
 }
@@ -9838,6 +11875,12 @@ func (s DescribeAssetModelOutput) GoString() string {
 // SetAssetModelArn sets the AssetModelArn field's value.
 func (s *DescribeAssetModelOutput) SetAssetModelArn(v string) *DescribeAssetModelOutput {
 	s.AssetModelArn = &v
+	return s
+}
+
+// SetAssetModelCompositeModels sets the AssetModelCompositeModels field's value.
+func (s *DescribeAssetModelOutput) SetAssetModelCompositeModels(v []*AssetModelCompositeModel) *DescribeAssetModelOutput {
+	s.AssetModelCompositeModels = v
 	return s
 }
 
@@ -9900,6 +11943,9 @@ type DescribeAssetOutput struct {
 	// AssetArn is a required field
 	AssetArn *string `locationName:"assetArn" min:"1" type:"string" required:"true"`
 
+	// The composite models for the asset.
+	AssetCompositeModels []*AssetCompositeModel `locationName:"assetCompositeModels" type:"list"`
+
 	// The date the asset was created, in Unix epoch time.
 	//
 	// AssetCreationDate is a required field
@@ -9933,6 +11979,9 @@ type DescribeAssetOutput struct {
 
 	// The list of asset properties for the asset.
 	//
+	// This object doesn't include properties that you define in composite models.
+	// You can find composite model properties in the assetCompositeModels object.
+	//
 	// AssetProperties is a required field
 	AssetProperties []*AssetProperty `locationName:"assetProperties" type:"list" required:"true"`
 
@@ -9942,12 +11991,20 @@ type DescribeAssetOutput struct {
 	AssetStatus *AssetStatus `locationName:"assetStatus" type:"structure" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeAssetOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeAssetOutput) GoString() string {
 	return s.String()
 }
@@ -9955,6 +12012,12 @@ func (s DescribeAssetOutput) GoString() string {
 // SetAssetArn sets the AssetArn field's value.
 func (s *DescribeAssetOutput) SetAssetArn(v string) *DescribeAssetOutput {
 	s.AssetArn = &v
+	return s
+}
+
+// SetAssetCompositeModels sets the AssetCompositeModels field's value.
+func (s *DescribeAssetOutput) SetAssetCompositeModels(v []*AssetCompositeModel) *DescribeAssetOutput {
+	s.AssetCompositeModels = v
 	return s
 }
 
@@ -10007,7 +12070,7 @@ func (s *DescribeAssetOutput) SetAssetStatus(v *AssetStatus) *DescribeAssetOutpu
 }
 
 type DescribeAssetPropertyInput struct {
-	_ struct{} `type:"structure"`
+	_ struct{} `type:"structure" nopayload:"true"`
 
 	// The ID of the asset.
 	//
@@ -10020,12 +12083,20 @@ type DescribeAssetPropertyInput struct {
 	PropertyId *string `location:"uri" locationName:"propertyId" min:"36" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeAssetPropertyInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeAssetPropertyInput) GoString() string {
 	return s.String()
 }
@@ -10084,16 +12155,30 @@ type DescribeAssetPropertyOutput struct {
 
 	// The asset property's definition, alias, and notification state.
 	//
-	// AssetProperty is a required field
-	AssetProperty *Property `locationName:"assetProperty" type:"structure" required:"true"`
+	// This response includes this object for normal asset properties. If you describe
+	// an asset property in a composite model, this response includes the asset
+	// property information in compositeModel.
+	AssetProperty *Property `locationName:"assetProperty" type:"structure"`
+
+	// The composite asset model that declares this asset property, if this asset
+	// property exists in a composite model.
+	CompositeModel *CompositeModelProperty `locationName:"compositeModel" type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeAssetPropertyOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeAssetPropertyOutput) GoString() string {
 	return s.String()
 }
@@ -10122,8 +12207,14 @@ func (s *DescribeAssetPropertyOutput) SetAssetProperty(v *Property) *DescribeAss
 	return s
 }
 
+// SetCompositeModel sets the CompositeModel field's value.
+func (s *DescribeAssetPropertyOutput) SetCompositeModel(v *CompositeModelProperty) *DescribeAssetPropertyOutput {
+	s.CompositeModel = v
+	return s
+}
+
 type DescribeDashboardInput struct {
-	_ struct{} `type:"structure"`
+	_ struct{} `type:"structure" nopayload:"true"`
 
 	// The ID of the dashboard.
 	//
@@ -10131,12 +12222,20 @@ type DescribeDashboardInput struct {
 	DashboardId *string `location:"uri" locationName:"dashboardId" min:"36" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeDashboardInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeDashboardInput) GoString() string {
 	return s.String()
 }
@@ -10181,7 +12280,7 @@ type DescribeDashboardOutput struct {
 
 	// The dashboard's definition JSON literal. For detailed information, see Creating
 	// dashboards (CLI) (https://docs.aws.amazon.com/iot-sitewise/latest/userguide/create-dashboards-using-aws-cli.html)
-	// in the AWS IoT SiteWise User Guide.
+	// in the IoT SiteWise User Guide.
 	//
 	// DashboardDefinition is a required field
 	DashboardDefinition *string `locationName:"dashboardDefinition" type:"string" required:"true"`
@@ -10210,12 +12309,20 @@ type DescribeDashboardOutput struct {
 	ProjectId *string `locationName:"projectId" min:"36" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeDashboardOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeDashboardOutput) GoString() string {
 	return s.String()
 }
@@ -10268,13 +12375,90 @@ func (s *DescribeDashboardOutput) SetProjectId(v string) *DescribeDashboardOutpu
 	return s
 }
 
-type DescribeGatewayCapabilityConfigurationInput struct {
+type DescribeDefaultEncryptionConfigurationInput struct {
+	_ struct{} `type:"structure" nopayload:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DescribeDefaultEncryptionConfigurationInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DescribeDefaultEncryptionConfigurationInput) GoString() string {
+	return s.String()
+}
+
+type DescribeDefaultEncryptionConfigurationOutput struct {
 	_ struct{} `type:"structure"`
 
+	// The status of the account configuration. This contains the ConfigurationState.
+	// If there's an error, it also contains the ErrorDetails.
+	//
+	// ConfigurationStatus is a required field
+	ConfigurationStatus *ConfigurationStatus `locationName:"configurationStatus" type:"structure" required:"true"`
+
+	// The type of encryption used for the encryption configuration.
+	//
+	// EncryptionType is a required field
+	EncryptionType *string `locationName:"encryptionType" type:"string" required:"true" enum:"EncryptionType"`
+
+	// The key ARN of the customer managed customer master key (CMK) used for KMS
+	// encryption if you use KMS_BASED_ENCRYPTION.
+	KmsKeyArn *string `locationName:"kmsKeyArn" min:"1" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DescribeDefaultEncryptionConfigurationOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DescribeDefaultEncryptionConfigurationOutput) GoString() string {
+	return s.String()
+}
+
+// SetConfigurationStatus sets the ConfigurationStatus field's value.
+func (s *DescribeDefaultEncryptionConfigurationOutput) SetConfigurationStatus(v *ConfigurationStatus) *DescribeDefaultEncryptionConfigurationOutput {
+	s.ConfigurationStatus = v
+	return s
+}
+
+// SetEncryptionType sets the EncryptionType field's value.
+func (s *DescribeDefaultEncryptionConfigurationOutput) SetEncryptionType(v string) *DescribeDefaultEncryptionConfigurationOutput {
+	s.EncryptionType = &v
+	return s
+}
+
+// SetKmsKeyArn sets the KmsKeyArn field's value.
+func (s *DescribeDefaultEncryptionConfigurationOutput) SetKmsKeyArn(v string) *DescribeDefaultEncryptionConfigurationOutput {
+	s.KmsKeyArn = &v
+	return s
+}
+
+type DescribeGatewayCapabilityConfigurationInput struct {
+	_ struct{} `type:"structure" nopayload:"true"`
+
 	// The namespace of the capability configuration. For example, if you configure
-	// OPC-UA sources from the AWS IoT SiteWise console, your OPC-UA capability
-	// configuration has the namespace iotsitewise:opcuacollector:version, where
-	// version is a number such as 1.
+	// OPC-UA sources from the IoT SiteWise console, your OPC-UA capability configuration
+	// has the namespace iotsitewise:opcuacollector:version, where version is a
+	// number such as 1.
 	//
 	// CapabilityNamespace is a required field
 	CapabilityNamespace *string `location:"uri" locationName:"capabilityNamespace" min:"1" type:"string" required:"true"`
@@ -10285,12 +12469,20 @@ type DescribeGatewayCapabilityConfigurationInput struct {
 	GatewayId *string `location:"uri" locationName:"gatewayId" min:"36" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeGatewayCapabilityConfigurationInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeGatewayCapabilityConfigurationInput) GoString() string {
 	return s.String()
 }
@@ -10334,7 +12526,7 @@ type DescribeGatewayCapabilityConfigurationOutput struct {
 
 	// The JSON document that defines the gateway capability's configuration. For
 	// more information, see Configuring data sources (CLI) (https://docs.aws.amazon.com/iot-sitewise/latest/userguide/configure-sources.html#configure-source-cli)
-	// in the AWS IoT SiteWise User Guide.
+	// in the IoT SiteWise User Guide.
 	//
 	// CapabilityConfiguration is a required field
 	CapabilityConfiguration *string `locationName:"capabilityConfiguration" min:"1" type:"string" required:"true"`
@@ -10362,12 +12554,20 @@ type DescribeGatewayCapabilityConfigurationOutput struct {
 	GatewayId *string `locationName:"gatewayId" min:"36" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeGatewayCapabilityConfigurationOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeGatewayCapabilityConfigurationOutput) GoString() string {
 	return s.String()
 }
@@ -10397,7 +12597,7 @@ func (s *DescribeGatewayCapabilityConfigurationOutput) SetGatewayId(v string) *D
 }
 
 type DescribeGatewayInput struct {
-	_ struct{} `type:"structure"`
+	_ struct{} `type:"structure" nopayload:"true"`
 
 	// The ID of the gateway device.
 	//
@@ -10405,12 +12605,20 @@ type DescribeGatewayInput struct {
 	GatewayId *string `location:"uri" locationName:"gatewayId" min:"36" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeGatewayInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeGatewayInput) GoString() string {
 	return s.String()
 }
@@ -10480,12 +12688,20 @@ type DescribeGatewayOutput struct {
 	LastUpdateDate *time.Time `locationName:"lastUpdateDate" type:"timestamp" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeGatewayOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeGatewayOutput) GoString() string {
 	return s.String()
 }
@@ -10533,15 +12749,23 @@ func (s *DescribeGatewayOutput) SetLastUpdateDate(v time.Time) *DescribeGatewayO
 }
 
 type DescribeLoggingOptionsInput struct {
-	_ struct{} `type:"structure"`
+	_ struct{} `type:"structure" nopayload:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeLoggingOptionsInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeLoggingOptionsInput) GoString() string {
 	return s.String()
 }
@@ -10555,12 +12779,20 @@ type DescribeLoggingOptionsOutput struct {
 	LoggingOptions *LoggingOptions `locationName:"loggingOptions" type:"structure" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeLoggingOptionsOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeLoggingOptionsOutput) GoString() string {
 	return s.String()
 }
@@ -10572,7 +12804,7 @@ func (s *DescribeLoggingOptionsOutput) SetLoggingOptions(v *LoggingOptions) *Des
 }
 
 type DescribePortalInput struct {
-	_ struct{} `type:"structure"`
+	_ struct{} `type:"structure" nopayload:"true"`
 
 	// The ID of the portal.
 	//
@@ -10580,12 +12812,20 @@ type DescribePortalInput struct {
 	PortalId *string `location:"uri" locationName:"portalId" min:"36" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribePortalInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribePortalInput) GoString() string {
 	return s.String()
 }
@@ -10615,6 +12855,13 @@ func (s *DescribePortalInput) SetPortalId(v string) *DescribePortalInput {
 type DescribePortalOutput struct {
 	_ struct{} `type:"structure"`
 
+	// Contains the configuration information of an alarm created in an IoT SiteWise
+	// Monitor portal.
+	Alarms *Alarms `locationName:"alarms" type:"structure"`
+
+	// The email address that sends alarm notifications.
+	NotificationSenderEmail *string `locationName:"notificationSenderEmail" min:"1" type:"string"`
+
 	// The ARN (https://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html)
 	// of the portal, which has the following format.
 	//
@@ -10626,14 +12873,14 @@ type DescribePortalOutput struct {
 	// The service to use to authenticate users to the portal.
 	PortalAuthMode *string `locationName:"portalAuthMode" type:"string" enum:"AuthMode"`
 
-	// The AWS SSO application generated client ID (used with AWS SSO APIs). AWS
-	// IoT SiteWise includes portalClientId for only portals that use AWS SSO to
-	// authenticate users.
+	// The Amazon Web Services SSO application generated client ID (used with Amazon
+	// Web Services SSO APIs). IoT SiteWise includes portalClientId for only portals
+	// that use Amazon Web Services SSO to authenticate users.
 	//
 	// PortalClientId is a required field
 	PortalClientId *string `locationName:"portalClientId" min:"1" type:"string" required:"true"`
 
-	// The AWS administrator's contact email address.
+	// The Amazon Web Services administrator's contact email address.
 	//
 	// PortalContactEmail is a required field
 	PortalContactEmail *string `locationName:"portalContactEmail" min:"1" type:"string" required:"true"`
@@ -10664,11 +12911,10 @@ type DescribePortalOutput struct {
 	// PortalName is a required field
 	PortalName *string `locationName:"portalName" min:"1" type:"string" required:"true"`
 
-	// The URL for the AWS IoT SiteWise Monitor portal. You can use this URL to
-	// access portals that use AWS SSO for authentication. For portals that use
-	// IAM for authentication, you must use the CreatePresignedPortalUrl (https://docs.aws.amazon.com/AWS
-	// IoT SiteWise API ReferenceAPI_CreatePresignedPortalUrl.html) operation to
-	// create a URL that you can use to access the portal.
+	// The URL for the IoT SiteWise Monitor portal. You can use this URL to access
+	// portals that use Amazon Web Services SSO for authentication. For portals
+	// that use IAM for authentication, you must use the IoT SiteWise console to
+	// get a URL that you can use to access the portal.
 	//
 	// PortalStartUrl is a required field
 	PortalStartUrl *string `locationName:"portalStartUrl" min:"1" type:"string" required:"true"`
@@ -10679,21 +12925,41 @@ type DescribePortalOutput struct {
 	PortalStatus *PortalStatus `locationName:"portalStatus" type:"structure" required:"true"`
 
 	// The ARN (https://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html)
-	// of the service role that allows the portal's users to access your AWS IoT
-	// SiteWise resources on your behalf. For more information, see Using service
-	// roles for AWS IoT SiteWise Monitor (https://docs.aws.amazon.com/iot-sitewise/latest/userguide/monitor-service-role.html)
-	// in the AWS IoT SiteWise User Guide.
+	// of the service role that allows the portal's users to access your IoT SiteWise
+	// resources on your behalf. For more information, see Using service roles for
+	// IoT SiteWise Monitor (https://docs.aws.amazon.com/iot-sitewise/latest/userguide/monitor-service-role.html)
+	// in the IoT SiteWise User Guide.
 	RoleArn *string `locationName:"roleArn" min:"1" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribePortalOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribePortalOutput) GoString() string {
 	return s.String()
+}
+
+// SetAlarms sets the Alarms field's value.
+func (s *DescribePortalOutput) SetAlarms(v *Alarms) *DescribePortalOutput {
+	s.Alarms = v
+	return s
+}
+
+// SetNotificationSenderEmail sets the NotificationSenderEmail field's value.
+func (s *DescribePortalOutput) SetNotificationSenderEmail(v string) *DescribePortalOutput {
+	s.NotificationSenderEmail = &v
+	return s
 }
 
 // SetPortalArn sets the PortalArn field's value.
@@ -10775,7 +13041,7 @@ func (s *DescribePortalOutput) SetRoleArn(v string) *DescribePortalOutput {
 }
 
 type DescribeProjectInput struct {
-	_ struct{} `type:"structure"`
+	_ struct{} `type:"structure" nopayload:"true"`
 
 	// The ID of the project.
 	//
@@ -10783,12 +13049,20 @@ type DescribeProjectInput struct {
 	ProjectId *string `location:"uri" locationName:"projectId" min:"36" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeProjectInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeProjectInput) GoString() string {
 	return s.String()
 }
@@ -10855,12 +13129,20 @@ type DescribeProjectOutput struct {
 	ProjectName *string `locationName:"projectName" min:"1" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeProjectOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeProjectOutput) GoString() string {
 	return s.String()
 }
@@ -10907,6 +13189,143 @@ func (s *DescribeProjectOutput) SetProjectName(v string) *DescribeProjectOutput 
 	return s
 }
 
+type DescribeStorageConfigurationInput struct {
+	_ struct{} `type:"structure" nopayload:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DescribeStorageConfigurationInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DescribeStorageConfigurationInput) GoString() string {
+	return s.String()
+}
+
+type DescribeStorageConfigurationOutput struct {
+	_ struct{} `type:"structure"`
+
+	// Contains current status information for the configuration.
+	//
+	// ConfigurationStatus is a required field
+	ConfigurationStatus *ConfigurationStatus `locationName:"configurationStatus" type:"structure" required:"true"`
+
+	// The date the storage configuration was last updated, in Unix epoch time.
+	LastUpdateDate *time.Time `locationName:"lastUpdateDate" type:"timestamp"`
+
+	// Contains information about the storage destination.
+	MultiLayerStorage *MultiLayerStorage `locationName:"multiLayerStorage" type:"structure"`
+
+	// The type of storage that you specified for your data. The storage type can
+	// be one of the following values:
+	//
+	//    * SITEWISE_DEFAULT_STORAGE – IoT SiteWise replicates your data into
+	//    a service managed database.
+	//
+	//    * MULTI_LAYER_STORAGE – IoT SiteWise replicates your data into a service
+	//    managed database and saves a copy of your raw data and metadata in an
+	//    Amazon S3 object that you specified.
+	//
+	// StorageType is a required field
+	StorageType *string `locationName:"storageType" type:"string" required:"true" enum:"StorageType"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DescribeStorageConfigurationOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DescribeStorageConfigurationOutput) GoString() string {
+	return s.String()
+}
+
+// SetConfigurationStatus sets the ConfigurationStatus field's value.
+func (s *DescribeStorageConfigurationOutput) SetConfigurationStatus(v *ConfigurationStatus) *DescribeStorageConfigurationOutput {
+	s.ConfigurationStatus = v
+	return s
+}
+
+// SetLastUpdateDate sets the LastUpdateDate field's value.
+func (s *DescribeStorageConfigurationOutput) SetLastUpdateDate(v time.Time) *DescribeStorageConfigurationOutput {
+	s.LastUpdateDate = &v
+	return s
+}
+
+// SetMultiLayerStorage sets the MultiLayerStorage field's value.
+func (s *DescribeStorageConfigurationOutput) SetMultiLayerStorage(v *MultiLayerStorage) *DescribeStorageConfigurationOutput {
+	s.MultiLayerStorage = v
+	return s
+}
+
+// SetStorageType sets the StorageType field's value.
+func (s *DescribeStorageConfigurationOutput) SetStorageType(v string) *DescribeStorageConfigurationOutput {
+	s.StorageType = &v
+	return s
+}
+
+// Contains detailed error information.
+type DetailedError struct {
+	_ struct{} `type:"structure"`
+
+	// The error code.
+	//
+	// Code is a required field
+	Code *string `locationName:"code" type:"string" required:"true" enum:"DetailedErrorCode"`
+
+	// The error message.
+	//
+	// Message is a required field
+	Message *string `locationName:"message" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DetailedError) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DetailedError) GoString() string {
+	return s.String()
+}
+
+// SetCode sets the Code field's value.
+func (s *DetailedError) SetCode(v string) *DetailedError {
+	s.Code = &v
+	return s
+}
+
+// SetMessage sets the Message field's value.
+func (s *DetailedError) SetMessage(v string) *DetailedError {
+	s.Message = &v
+	return s
+}
+
 type DisassociateAssetsInput struct {
 	_ struct{} `type:"structure"`
 
@@ -10929,18 +13348,26 @@ type DisassociateAssetsInput struct {
 	// groupings of assets to be formed that all come from the same asset model.
 	// You can use the hierarchy ID to identify the correct asset to disassociate.
 	// For more information, see Asset hierarchies (https://docs.aws.amazon.com/iot-sitewise/latest/userguide/asset-hierarchies.html)
-	// in the AWS IoT SiteWise User Guide.
+	// in the IoT SiteWise User Guide.
 	//
 	// HierarchyId is a required field
 	HierarchyId *string `locationName:"hierarchyId" min:"36" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DisassociateAssetsInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DisassociateAssetsInput) GoString() string {
 	return s.String()
 }
@@ -11001,20 +13428,28 @@ func (s *DisassociateAssetsInput) SetHierarchyId(v string) *DisassociateAssetsIn
 }
 
 type DisassociateAssetsOutput struct {
-	_ struct{} `type:"structure"`
+	_ struct{} `type:"structure" nopayload:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DisassociateAssetsOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DisassociateAssetsOutput) GoString() string {
 	return s.String()
 }
 
-// Contains the details of an AWS IoT SiteWise error.
+// Contains the details of an IoT SiteWise error.
 type ErrorDetails struct {
 	_ struct{} `type:"structure"`
 
@@ -11023,18 +13458,29 @@ type ErrorDetails struct {
 	// Code is a required field
 	Code *string `locationName:"code" type:"string" required:"true" enum:"ErrorCode"`
 
+	// A list of detailed errors.
+	Details []*DetailedError `locationName:"details" type:"list"`
+
 	// The error message.
 	//
 	// Message is a required field
 	Message *string `locationName:"message" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ErrorDetails) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ErrorDetails) GoString() string {
 	return s.String()
 }
@@ -11042,6 +13488,12 @@ func (s ErrorDetails) GoString() string {
 // SetCode sets the Code field's value.
 func (s *ErrorDetails) SetCode(v string) *ErrorDetails {
 	s.Code = &v
+	return s
+}
+
+// SetDetails sets the Details field's value.
+func (s *ErrorDetails) SetDetails(v []*DetailedError) *ErrorDetails {
+	s.Details = v
 	return s
 }
 
@@ -11066,12 +13518,20 @@ type ExpressionVariable struct {
 	Value *VariableValue `locationName:"value" type:"structure" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ExpressionVariable) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ExpressionVariable) GoString() string {
 	return s.String()
 }
@@ -11112,14 +13572,61 @@ func (s *ExpressionVariable) SetValue(v *VariableValue) *ExpressionVariable {
 	return s
 }
 
+// The forwarding configuration for a given property.
+type ForwardingConfig struct {
+	_ struct{} `type:"structure"`
+
+	// The forwarding state for the given property.
+	//
+	// State is a required field
+	State *string `locationName:"state" type:"string" required:"true" enum:"ForwardingConfigState"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ForwardingConfig) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ForwardingConfig) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ForwardingConfig) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ForwardingConfig"}
+	if s.State == nil {
+		invalidParams.Add(request.NewErrParamRequired("State"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetState sets the State field's value.
+func (s *ForwardingConfig) SetState(v string) *ForwardingConfig {
+	s.State = &v
+	return s
+}
+
 // Contains a summary of a gateway capability configuration.
 type GatewayCapabilitySummary struct {
 	_ struct{} `type:"structure"`
 
 	// The namespace of the capability configuration. For example, if you configure
-	// OPC-UA sources from the AWS IoT SiteWise console, your OPC-UA capability
-	// configuration has the namespace iotsitewise:opcuacollector:version, where
-	// version is a number such as 1.
+	// OPC-UA sources from the IoT SiteWise console, your OPC-UA capability configuration
+	// has the namespace iotsitewise:opcuacollector:version, where version is a
+	// number such as 1.
 	//
 	// CapabilityNamespace is a required field
 	CapabilityNamespace *string `locationName:"capabilityNamespace" min:"1" type:"string" required:"true"`
@@ -11137,12 +13644,20 @@ type GatewayCapabilitySummary struct {
 	CapabilitySyncStatus *string `locationName:"capabilitySyncStatus" type:"string" required:"true" enum:"CapabilitySyncStatus"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GatewayCapabilitySummary) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GatewayCapabilitySummary) GoString() string {
 	return s.String()
 }
@@ -11163,18 +13678,27 @@ func (s *GatewayCapabilitySummary) SetCapabilitySyncStatus(v string) *GatewayCap
 type GatewayPlatform struct {
 	_ struct{} `type:"structure"`
 
-	// A gateway that runs on AWS IoT Greengrass.
-	//
-	// Greengrass is a required field
-	Greengrass *Greengrass `locationName:"greengrass" type:"structure" required:"true"`
+	// A gateway that runs on IoT Greengrass.
+	Greengrass *Greengrass `locationName:"greengrass" type:"structure"`
+
+	// A gateway that runs on IoT Greengrass V2.
+	GreengrassV2 *GreengrassV2 `locationName:"greengrassV2" type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GatewayPlatform) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GatewayPlatform) GoString() string {
 	return s.String()
 }
@@ -11182,12 +13706,14 @@ func (s GatewayPlatform) GoString() string {
 // Validate inspects the fields of the type to determine if they are valid.
 func (s *GatewayPlatform) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "GatewayPlatform"}
-	if s.Greengrass == nil {
-		invalidParams.Add(request.NewErrParamRequired("Greengrass"))
-	}
 	if s.Greengrass != nil {
 		if err := s.Greengrass.Validate(); err != nil {
 			invalidParams.AddNested("Greengrass", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.GreengrassV2 != nil {
+		if err := s.GreengrassV2.Validate(); err != nil {
+			invalidParams.AddNested("GreengrassV2", err.(request.ErrInvalidParams))
 		}
 	}
 
@@ -11200,6 +13726,12 @@ func (s *GatewayPlatform) Validate() error {
 // SetGreengrass sets the Greengrass field's value.
 func (s *GatewayPlatform) SetGreengrass(v *Greengrass) *GatewayPlatform {
 	s.Greengrass = v
+	return s
+}
+
+// SetGreengrassV2 sets the GreengrassV2 field's value.
+func (s *GatewayPlatform) SetGreengrassV2(v *GreengrassV2) *GatewayPlatform {
+	s.GreengrassV2 = v
 	return s
 }
 
@@ -11228,18 +13760,29 @@ type GatewaySummary struct {
 	// GatewayName is a required field
 	GatewayName *string `locationName:"gatewayName" min:"1" type:"string" required:"true"`
 
+	// Contains a gateway's platform information.
+	GatewayPlatform *GatewayPlatform `locationName:"gatewayPlatform" type:"structure"`
+
 	// The date the gateway was last updated, in Unix epoch time.
 	//
 	// LastUpdateDate is a required field
 	LastUpdateDate *time.Time `locationName:"lastUpdateDate" type:"timestamp" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GatewaySummary) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GatewaySummary) GoString() string {
 	return s.String()
 }
@@ -11268,6 +13811,12 @@ func (s *GatewaySummary) SetGatewayName(v string) *GatewaySummary {
 	return s
 }
 
+// SetGatewayPlatform sets the GatewayPlatform field's value.
+func (s *GatewaySummary) SetGatewayPlatform(v *GatewayPlatform) *GatewaySummary {
+	s.GatewayPlatform = v
+	return s
+}
+
 // SetLastUpdateDate sets the LastUpdateDate field's value.
 func (s *GatewaySummary) SetLastUpdateDate(v time.Time) *GatewaySummary {
 	s.LastUpdateDate = &v
@@ -11275,7 +13824,7 @@ func (s *GatewaySummary) SetLastUpdateDate(v time.Time) *GatewaySummary {
 }
 
 type GetAssetPropertyAggregatesInput struct {
-	_ struct{} `type:"structure"`
+	_ struct{} `type:"structure" nopayload:"true"`
 
 	// The data aggregating function.
 	//
@@ -11291,7 +13840,7 @@ type GetAssetPropertyAggregatesInput struct {
 	// EndDate is a required field
 	EndDate *time.Time `location:"querystring" locationName:"endDate" type:"timestamp" required:"true"`
 
-	// The maximum number of results to be returned per paginated request.
+	// The maximum number of results to return for each paginated request.
 	//
 	// Default: 100
 	MaxResults *int64 `location:"querystring" locationName:"maxResults" min:"1" type:"integer"`
@@ -11299,11 +13848,10 @@ type GetAssetPropertyAggregatesInput struct {
 	// The token to be used for the next set of paginated results.
 	NextToken *string `location:"querystring" locationName:"nextToken" min:"1" type:"string"`
 
-	// The property alias that identifies the property, such as an OPC-UA server
-	// data stream path (for example, /company/windfarm/3/turbine/7/temperature).
-	// For more information, see Mapping industrial data streams to asset properties
-	// (https://docs.aws.amazon.com/iot-sitewise/latest/userguide/connect-data-streams.html)
-	// in the AWS IoT SiteWise User Guide.
+	// The alias that identifies the property, such as an OPC-UA server data stream
+	// path (for example, /company/windfarm/3/turbine/7/temperature). For more information,
+	// see Mapping industrial data streams to asset properties (https://docs.aws.amazon.com/iot-sitewise/latest/userguide/connect-data-streams.html)
+	// in the IoT SiteWise User Guide.
 	PropertyAlias *string `location:"querystring" locationName:"propertyAlias" min:"1" type:"string"`
 
 	// The ID of the asset property.
@@ -11329,12 +13877,20 @@ type GetAssetPropertyAggregatesInput struct {
 	TimeOrdering *string `location:"querystring" locationName:"timeOrdering" type:"string" enum:"TimeOrdering"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetAssetPropertyAggregatesInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetAssetPropertyAggregatesInput) GoString() string {
 	return s.String()
 }
@@ -11464,12 +14020,20 @@ type GetAssetPropertyAggregatesOutput struct {
 	NextToken *string `locationName:"nextToken" min:"1" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetAssetPropertyAggregatesOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetAssetPropertyAggregatesOutput) GoString() string {
 	return s.String()
 }
@@ -11487,7 +14051,7 @@ func (s *GetAssetPropertyAggregatesOutput) SetNextToken(v string) *GetAssetPrope
 }
 
 type GetAssetPropertyValueHistoryInput struct {
-	_ struct{} `type:"structure"`
+	_ struct{} `type:"structure" nopayload:"true"`
 
 	// The ID of the asset.
 	AssetId *string `location:"querystring" locationName:"assetId" min:"36" type:"string"`
@@ -11496,7 +14060,7 @@ type GetAssetPropertyValueHistoryInput struct {
 	// in seconds in Unix epoch time.
 	EndDate *time.Time `location:"querystring" locationName:"endDate" type:"timestamp"`
 
-	// The maximum number of results to be returned per paginated request.
+	// The maximum number of results to return for each paginated request.
 	//
 	// Default: 100
 	MaxResults *int64 `location:"querystring" locationName:"maxResults" min:"1" type:"integer"`
@@ -11504,11 +14068,10 @@ type GetAssetPropertyValueHistoryInput struct {
 	// The token to be used for the next set of paginated results.
 	NextToken *string `location:"querystring" locationName:"nextToken" min:"1" type:"string"`
 
-	// The property alias that identifies the property, such as an OPC-UA server
-	// data stream path (for example, /company/windfarm/3/turbine/7/temperature).
-	// For more information, see Mapping industrial data streams to asset properties
-	// (https://docs.aws.amazon.com/iot-sitewise/latest/userguide/connect-data-streams.html)
-	// in the AWS IoT SiteWise User Guide.
+	// The alias that identifies the property, such as an OPC-UA server data stream
+	// path (for example, /company/windfarm/3/turbine/7/temperature). For more information,
+	// see Mapping industrial data streams to asset properties (https://docs.aws.amazon.com/iot-sitewise/latest/userguide/connect-data-streams.html)
+	// in the IoT SiteWise User Guide.
 	PropertyAlias *string `location:"querystring" locationName:"propertyAlias" min:"1" type:"string"`
 
 	// The ID of the asset property.
@@ -11527,12 +14090,20 @@ type GetAssetPropertyValueHistoryInput struct {
 	TimeOrdering *string `location:"querystring" locationName:"timeOrdering" type:"string" enum:"TimeOrdering"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetAssetPropertyValueHistoryInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetAssetPropertyValueHistoryInput) GoString() string {
 	return s.String()
 }
@@ -11632,12 +14203,20 @@ type GetAssetPropertyValueHistoryOutput struct {
 	NextToken *string `locationName:"nextToken" min:"1" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetAssetPropertyValueHistoryOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetAssetPropertyValueHistoryOutput) GoString() string {
 	return s.String()
 }
@@ -11655,28 +14234,35 @@ func (s *GetAssetPropertyValueHistoryOutput) SetNextToken(v string) *GetAssetPro
 }
 
 type GetAssetPropertyValueInput struct {
-	_ struct{} `type:"structure"`
+	_ struct{} `type:"structure" nopayload:"true"`
 
 	// The ID of the asset.
 	AssetId *string `location:"querystring" locationName:"assetId" min:"36" type:"string"`
 
-	// The property alias that identifies the property, such as an OPC-UA server
-	// data stream path (for example, /company/windfarm/3/turbine/7/temperature).
-	// For more information, see Mapping industrial data streams to asset properties
-	// (https://docs.aws.amazon.com/iot-sitewise/latest/userguide/connect-data-streams.html)
-	// in the AWS IoT SiteWise User Guide.
+	// The alias that identifies the property, such as an OPC-UA server data stream
+	// path (for example, /company/windfarm/3/turbine/7/temperature). For more information,
+	// see Mapping industrial data streams to asset properties (https://docs.aws.amazon.com/iot-sitewise/latest/userguide/connect-data-streams.html)
+	// in the IoT SiteWise User Guide.
 	PropertyAlias *string `location:"querystring" locationName:"propertyAlias" min:"1" type:"string"`
 
 	// The ID of the asset property.
 	PropertyId *string `location:"querystring" locationName:"propertyId" min:"36" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetAssetPropertyValueInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetAssetPropertyValueInput) GoString() string {
 	return s.String()
 }
@@ -11725,12 +14311,20 @@ type GetAssetPropertyValueOutput struct {
 	PropertyValue *AssetPropertyValue `locationName:"propertyValue" type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetAssetPropertyValueOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetAssetPropertyValueOutput) GoString() string {
 	return s.String()
 }
@@ -11741,12 +14335,307 @@ func (s *GetAssetPropertyValueOutput) SetPropertyValue(v *AssetPropertyValue) *G
 	return s
 }
 
-// Contains details for a gateway that runs on AWS IoT Greengrass. To create
-// a gateway that runs on AWS IoT Greengrass, you must add the IoT SiteWise
-// connector to a Greengrass group and deploy it. Your Greengrass group must
-// also have permissions to upload data to AWS IoT SiteWise. For more information,
-// see Ingesting data using a gateway (https://docs.aws.amazon.com/iot-sitewise/latest/userguide/gateway-connector.html)
-// in the AWS IoT SiteWise User Guide.
+type GetInterpolatedAssetPropertyValuesInput struct {
+	_ struct{} `type:"structure" nopayload:"true"`
+
+	// The ID of the asset.
+	AssetId *string `location:"querystring" locationName:"assetId" min:"36" type:"string"`
+
+	// The inclusive end of the range from which to interpolate data, expressed
+	// in seconds in Unix epoch time.
+	//
+	// EndTimeInSeconds is a required field
+	EndTimeInSeconds *int64 `location:"querystring" locationName:"endTimeInSeconds" min:"1" type:"long" required:"true"`
+
+	// The nanosecond offset converted from endTimeInSeconds.
+	EndTimeOffsetInNanos *int64 `location:"querystring" locationName:"endTimeOffsetInNanos" type:"integer"`
+
+	// The time interval in seconds over which to interpolate data. Each interval
+	// starts when the previous one ends.
+	//
+	// IntervalInSeconds is a required field
+	IntervalInSeconds *int64 `location:"querystring" locationName:"intervalInSeconds" min:"1" type:"long" required:"true"`
+
+	// The query interval for the window in seconds. IoT SiteWise computes each
+	// interpolated value by using data points from the timestamp of each interval
+	// minus the window to the timestamp of each interval plus the window. If not
+	// specified, the window is between the start time minus the interval and the
+	// end time plus the interval.
+	//
+	//    * If you specify a value for the intervalWindowInSeconds parameter, the
+	//    type parameter must be LINEAR_INTERPOLATION.
+	//
+	//    * If no data point is found during the specified query window, IoT SiteWise
+	//    won't return an interpolated value for the interval. This indicates that
+	//    there's a gap in the ingested data points.
+	//
+	// For example, you can get the interpolated temperature values for a wind turbine
+	// every 24 hours over a duration of 7 days. If the interpolation starts on
+	// July 1, 2021, at 9 AM with a window of 2 hours, IoT SiteWise uses the data
+	// points from 7 AM (9 AM - 2 hours) to 11 AM (9 AM + 2 hours) on July 2, 2021
+	// to compute the first interpolated value, uses the data points from 7 AM (9
+	// AM - 2 hours) to 11 AM (9 AM + 2 hours) on July 3, 2021 to compute the second
+	// interpolated value, and so on.
+	IntervalWindowInSeconds *int64 `location:"querystring" locationName:"intervalWindowInSeconds" min:"1" type:"long"`
+
+	// The maximum number of results to return for each paginated request. If not
+	// specified, the default value is 10.
+	MaxResults *int64 `location:"querystring" locationName:"maxResults" min:"1" type:"integer"`
+
+	// The token to be used for the next set of paginated results.
+	NextToken *string `location:"querystring" locationName:"nextToken" min:"1" type:"string"`
+
+	// The alias that identifies the property, such as an OPC-UA server data stream
+	// path (for example, /company/windfarm/3/turbine/7/temperature). For more information,
+	// see Mapping industrial data streams to asset properties (https://docs.aws.amazon.com/iot-sitewise/latest/userguide/connect-data-streams.html)
+	// in the IoT SiteWise User Guide.
+	PropertyAlias *string `location:"querystring" locationName:"propertyAlias" min:"1" type:"string"`
+
+	// The ID of the asset property.
+	PropertyId *string `location:"querystring" locationName:"propertyId" min:"36" type:"string"`
+
+	// The quality of the asset property value. You can use this parameter as a
+	// filter to choose only the asset property values that have a specific quality.
+	//
+	// Quality is a required field
+	Quality *string `location:"querystring" locationName:"quality" type:"string" required:"true" enum:"Quality"`
+
+	// The exclusive start of the range from which to interpolate data, expressed
+	// in seconds in Unix epoch time.
+	//
+	// StartTimeInSeconds is a required field
+	StartTimeInSeconds *int64 `location:"querystring" locationName:"startTimeInSeconds" min:"1" type:"long" required:"true"`
+
+	// The nanosecond offset converted from startTimeInSeconds.
+	StartTimeOffsetInNanos *int64 `location:"querystring" locationName:"startTimeOffsetInNanos" type:"integer"`
+
+	// The interpolation type.
+	//
+	// Valid values: LINEAR_INTERPOLATION | LOCF_INTERPOLATION
+	//
+	//    * LINEAR_INTERPOLATION – Estimates missing data using linear interpolation
+	//    (https://en.wikipedia.org/wiki/Linear_interpolation). For example, you
+	//    can use this operation to return the interpolated temperature values for
+	//    a wind turbine every 24 hours over a duration of 7 days. If the interpolation
+	//    starts on July 1, 2021, at 9 AM, IoT SiteWise returns the first interpolated
+	//    value on July 2, 2021, at 9 AM, the second interpolated value on July
+	//    3, 2021, at 9 AM, and so on.
+	//
+	//    * LOCF_INTERPOLATION – Estimates missing data using last observation
+	//    carried forward interpolation If no data point is found for an interval,
+	//    IoT SiteWise returns the last observed data point for the previous interval
+	//    and carries forward this interpolated value until a new data point is
+	//    found. For example, you can get the state of an on-off valve every 24
+	//    hours over a duration of 7 days. If the interpolation starts on July 1,
+	//    2021, at 9 AM, IoT SiteWise returns the last observed data point between
+	//    July 1, 2021, at 9 AM and July 2, 2021, at 9 AM as the first interpolated
+	//    value. If no data point is found after 9 AM on July 2, 2021, IoT SiteWise
+	//    uses the same interpolated value for the rest of the days.
+	//
+	// Type is a required field
+	Type *string `location:"querystring" locationName:"type" min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetInterpolatedAssetPropertyValuesInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetInterpolatedAssetPropertyValuesInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *GetInterpolatedAssetPropertyValuesInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "GetInterpolatedAssetPropertyValuesInput"}
+	if s.AssetId != nil && len(*s.AssetId) < 36 {
+		invalidParams.Add(request.NewErrParamMinLen("AssetId", 36))
+	}
+	if s.EndTimeInSeconds == nil {
+		invalidParams.Add(request.NewErrParamRequired("EndTimeInSeconds"))
+	}
+	if s.EndTimeInSeconds != nil && *s.EndTimeInSeconds < 1 {
+		invalidParams.Add(request.NewErrParamMinValue("EndTimeInSeconds", 1))
+	}
+	if s.IntervalInSeconds == nil {
+		invalidParams.Add(request.NewErrParamRequired("IntervalInSeconds"))
+	}
+	if s.IntervalInSeconds != nil && *s.IntervalInSeconds < 1 {
+		invalidParams.Add(request.NewErrParamMinValue("IntervalInSeconds", 1))
+	}
+	if s.IntervalWindowInSeconds != nil && *s.IntervalWindowInSeconds < 1 {
+		invalidParams.Add(request.NewErrParamMinValue("IntervalWindowInSeconds", 1))
+	}
+	if s.MaxResults != nil && *s.MaxResults < 1 {
+		invalidParams.Add(request.NewErrParamMinValue("MaxResults", 1))
+	}
+	if s.NextToken != nil && len(*s.NextToken) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("NextToken", 1))
+	}
+	if s.PropertyAlias != nil && len(*s.PropertyAlias) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("PropertyAlias", 1))
+	}
+	if s.PropertyId != nil && len(*s.PropertyId) < 36 {
+		invalidParams.Add(request.NewErrParamMinLen("PropertyId", 36))
+	}
+	if s.Quality == nil {
+		invalidParams.Add(request.NewErrParamRequired("Quality"))
+	}
+	if s.StartTimeInSeconds == nil {
+		invalidParams.Add(request.NewErrParamRequired("StartTimeInSeconds"))
+	}
+	if s.StartTimeInSeconds != nil && *s.StartTimeInSeconds < 1 {
+		invalidParams.Add(request.NewErrParamMinValue("StartTimeInSeconds", 1))
+	}
+	if s.Type == nil {
+		invalidParams.Add(request.NewErrParamRequired("Type"))
+	}
+	if s.Type != nil && len(*s.Type) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Type", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetAssetId sets the AssetId field's value.
+func (s *GetInterpolatedAssetPropertyValuesInput) SetAssetId(v string) *GetInterpolatedAssetPropertyValuesInput {
+	s.AssetId = &v
+	return s
+}
+
+// SetEndTimeInSeconds sets the EndTimeInSeconds field's value.
+func (s *GetInterpolatedAssetPropertyValuesInput) SetEndTimeInSeconds(v int64) *GetInterpolatedAssetPropertyValuesInput {
+	s.EndTimeInSeconds = &v
+	return s
+}
+
+// SetEndTimeOffsetInNanos sets the EndTimeOffsetInNanos field's value.
+func (s *GetInterpolatedAssetPropertyValuesInput) SetEndTimeOffsetInNanos(v int64) *GetInterpolatedAssetPropertyValuesInput {
+	s.EndTimeOffsetInNanos = &v
+	return s
+}
+
+// SetIntervalInSeconds sets the IntervalInSeconds field's value.
+func (s *GetInterpolatedAssetPropertyValuesInput) SetIntervalInSeconds(v int64) *GetInterpolatedAssetPropertyValuesInput {
+	s.IntervalInSeconds = &v
+	return s
+}
+
+// SetIntervalWindowInSeconds sets the IntervalWindowInSeconds field's value.
+func (s *GetInterpolatedAssetPropertyValuesInput) SetIntervalWindowInSeconds(v int64) *GetInterpolatedAssetPropertyValuesInput {
+	s.IntervalWindowInSeconds = &v
+	return s
+}
+
+// SetMaxResults sets the MaxResults field's value.
+func (s *GetInterpolatedAssetPropertyValuesInput) SetMaxResults(v int64) *GetInterpolatedAssetPropertyValuesInput {
+	s.MaxResults = &v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *GetInterpolatedAssetPropertyValuesInput) SetNextToken(v string) *GetInterpolatedAssetPropertyValuesInput {
+	s.NextToken = &v
+	return s
+}
+
+// SetPropertyAlias sets the PropertyAlias field's value.
+func (s *GetInterpolatedAssetPropertyValuesInput) SetPropertyAlias(v string) *GetInterpolatedAssetPropertyValuesInput {
+	s.PropertyAlias = &v
+	return s
+}
+
+// SetPropertyId sets the PropertyId field's value.
+func (s *GetInterpolatedAssetPropertyValuesInput) SetPropertyId(v string) *GetInterpolatedAssetPropertyValuesInput {
+	s.PropertyId = &v
+	return s
+}
+
+// SetQuality sets the Quality field's value.
+func (s *GetInterpolatedAssetPropertyValuesInput) SetQuality(v string) *GetInterpolatedAssetPropertyValuesInput {
+	s.Quality = &v
+	return s
+}
+
+// SetStartTimeInSeconds sets the StartTimeInSeconds field's value.
+func (s *GetInterpolatedAssetPropertyValuesInput) SetStartTimeInSeconds(v int64) *GetInterpolatedAssetPropertyValuesInput {
+	s.StartTimeInSeconds = &v
+	return s
+}
+
+// SetStartTimeOffsetInNanos sets the StartTimeOffsetInNanos field's value.
+func (s *GetInterpolatedAssetPropertyValuesInput) SetStartTimeOffsetInNanos(v int64) *GetInterpolatedAssetPropertyValuesInput {
+	s.StartTimeOffsetInNanos = &v
+	return s
+}
+
+// SetType sets the Type field's value.
+func (s *GetInterpolatedAssetPropertyValuesInput) SetType(v string) *GetInterpolatedAssetPropertyValuesInput {
+	s.Type = &v
+	return s
+}
+
+type GetInterpolatedAssetPropertyValuesOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The requested interpolated values.
+	//
+	// InterpolatedAssetPropertyValues is a required field
+	InterpolatedAssetPropertyValues []*InterpolatedAssetPropertyValue `locationName:"interpolatedAssetPropertyValues" type:"list" required:"true"`
+
+	// The token for the next set of results, or null if there are no additional
+	// results.
+	NextToken *string `locationName:"nextToken" min:"1" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetInterpolatedAssetPropertyValuesOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetInterpolatedAssetPropertyValuesOutput) GoString() string {
+	return s.String()
+}
+
+// SetInterpolatedAssetPropertyValues sets the InterpolatedAssetPropertyValues field's value.
+func (s *GetInterpolatedAssetPropertyValuesOutput) SetInterpolatedAssetPropertyValues(v []*InterpolatedAssetPropertyValue) *GetInterpolatedAssetPropertyValuesOutput {
+	s.InterpolatedAssetPropertyValues = v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *GetInterpolatedAssetPropertyValuesOutput) SetNextToken(v string) *GetInterpolatedAssetPropertyValuesOutput {
+	s.NextToken = &v
+	return s
+}
+
+// Contains details for a gateway that runs on IoT Greengrass. To create a gateway
+// that runs on IoT Greengrass, you must add the IoT SiteWise connector to a
+// Greengrass group and deploy it. Your Greengrass group must also have permissions
+// to upload data to IoT SiteWise. For more information, see Ingesting data
+// using a gateway (https://docs.aws.amazon.com/iot-sitewise/latest/userguide/gateway-connector.html)
+// in the IoT SiteWise User Guide.
 type Greengrass struct {
 	_ struct{} `type:"structure"`
 
@@ -11754,18 +14643,26 @@ type Greengrass struct {
 	// of the Greengrass group. For more information about how to find a group's
 	// ARN, see ListGroups (https://docs.aws.amazon.com/greengrass/latest/apireference/listgroups-get.html)
 	// and GetGroup (https://docs.aws.amazon.com/greengrass/latest/apireference/getgroup-get.html)
-	// in the AWS IoT Greengrass API Reference.
+	// in the IoT Greengrass API Reference.
 	//
 	// GroupArn is a required field
 	GroupArn *string `locationName:"groupArn" min:"1" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s Greengrass) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s Greengrass) GoString() string {
 	return s.String()
 }
@@ -11792,22 +14689,85 @@ func (s *Greengrass) SetGroupArn(v string) *Greengrass {
 	return s
 }
 
+// Contains details for a gateway that runs on IoT Greengrass V2. To create
+// a gateway that runs on IoT Greengrass V2, you must deploy the IoT SiteWise
+// Edge component to your gateway device. Your Greengrass device role (https://docs.aws.amazon.com/greengrass/v2/developerguide/device-service-role.html)
+// must use the AWSIoTSiteWiseEdgeAccess policy. For more information, see Using
+// IoT SiteWise at the edge (https://docs.aws.amazon.com/iot-sitewise/latest/userguide/sw-gateways.html)
+// in the IoT SiteWise User Guide.
+type GreengrassV2 struct {
+	_ struct{} `type:"structure"`
+
+	// The name of the IoT thing for your IoT Greengrass V2 core device.
+	//
+	// CoreDeviceThingName is a required field
+	CoreDeviceThingName *string `locationName:"coreDeviceThingName" min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GreengrassV2) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GreengrassV2) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *GreengrassV2) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "GreengrassV2"}
+	if s.CoreDeviceThingName == nil {
+		invalidParams.Add(request.NewErrParamRequired("CoreDeviceThingName"))
+	}
+	if s.CoreDeviceThingName != nil && len(*s.CoreDeviceThingName) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("CoreDeviceThingName", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetCoreDeviceThingName sets the CoreDeviceThingName field's value.
+func (s *GreengrassV2) SetCoreDeviceThingName(v string) *GreengrassV2 {
+	s.CoreDeviceThingName = &v
+	return s
+}
+
 // Contains information for a group identity in an access policy.
 type GroupIdentity struct {
 	_ struct{} `type:"structure"`
 
-	// The AWS SSO ID of the group.
+	// The Amazon Web Services SSO ID of the group.
 	//
 	// Id is a required field
 	Id *string `locationName:"id" min:"1" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GroupIdentity) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GroupIdentity) GoString() string {
 	return s.String()
 }
@@ -11834,12 +14794,64 @@ func (s *GroupIdentity) SetId(v string) *GroupIdentity {
 	return s
 }
 
-// Contains information about an AWS Identity and Access Management (IAM) user.
+// Contains information about an Identity and Access Management role. For more
+// information, see IAM roles (https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles.html)
+// in the IAM User Guide.
+type IAMRoleIdentity struct {
+	_ struct{} `type:"structure"`
+
+	// The ARN of the IAM role. For more information, see IAM ARNs (https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_identifiers.html)
+	// in the IAM User Guide.
+	//
+	// Arn is a required field
+	Arn *string `locationName:"arn" min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s IAMRoleIdentity) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s IAMRoleIdentity) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *IAMRoleIdentity) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "IAMRoleIdentity"}
+	if s.Arn == nil {
+		invalidParams.Add(request.NewErrParamRequired("Arn"))
+	}
+	if s.Arn != nil && len(*s.Arn) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Arn", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetArn sets the Arn field's value.
+func (s *IAMRoleIdentity) SetArn(v string) *IAMRoleIdentity {
+	s.Arn = &v
+	return s
+}
+
+// Contains information about an Identity and Access Management user.
 type IAMUserIdentity struct {
 	_ struct{} `type:"structure"`
 
-	// The ARN of the IAM user. IAM users must have the iotsitewise:CreatePresignedPortalUrl
-	// permission to sign in to the portal. For more information, see IAM ARNs (https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_identifiers.html)
+	// The ARN of the IAM user. For more information, see IAM ARNs (https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_identifiers.html)
 	// in the IAM User Guide.
 	//
 	// If you delete the IAM user, access policies that contain this identity include
@@ -11850,12 +14862,20 @@ type IAMUserIdentity struct {
 	Arn *string `locationName:"arn" min:"1" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s IAMUserIdentity) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s IAMUserIdentity) GoString() string {
 	return s.String()
 }
@@ -11882,30 +14902,42 @@ func (s *IAMUserIdentity) SetArn(v string) *IAMUserIdentity {
 	return s
 }
 
-// Contains an identity that can access an AWS IoT SiteWise Monitor resource.
+// Contains an identity that can access an IoT SiteWise Monitor resource.
 //
-// Currently, you can't use AWS APIs to retrieve AWS SSO identity IDs. You can
-// find the AWS SSO identity IDs in the URL of user and group pages in the AWS
-// SSO console (https://console.aws.amazon.com/singlesignon).
+// Currently, you can't use Amazon Web Services APIs to retrieve Amazon Web
+// Services SSO identity IDs. You can find the Amazon Web Services SSO identity
+// IDs in the URL of user and group pages in the Amazon Web Services SSO console
+// (https://console.aws.amazon.com/singlesignon).
 type Identity struct {
 	_ struct{} `type:"structure"`
 
-	// An AWS SSO group identity.
+	// An Amazon Web Services SSO group identity.
 	Group *GroupIdentity `locationName:"group" type:"structure"`
+
+	// An IAM role identity.
+	IamRole *IAMRoleIdentity `locationName:"iamRole" type:"structure"`
 
 	// An IAM user identity.
 	IamUser *IAMUserIdentity `locationName:"iamUser" type:"structure"`
 
-	// An AWS SSO user identity.
+	// An Amazon Web Services SSO user identity.
 	User *UserIdentity `locationName:"user" type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s Identity) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s Identity) GoString() string {
 	return s.String()
 }
@@ -11916,6 +14948,11 @@ func (s *Identity) Validate() error {
 	if s.Group != nil {
 		if err := s.Group.Validate(); err != nil {
 			invalidParams.AddNested("Group", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.IamRole != nil {
+		if err := s.IamRole.Validate(); err != nil {
+			invalidParams.AddNested("IamRole", err.(request.ErrInvalidParams))
 		}
 	}
 	if s.IamUser != nil {
@@ -11938,6 +14975,12 @@ func (s *Identity) Validate() error {
 // SetGroup sets the Group field's value.
 func (s *Identity) SetGroup(v *GroupIdentity) *Identity {
 	s.Group = v
+	return s
+}
+
+// SetIamRole sets the IamRole field's value.
+func (s *Identity) SetIamRole(v *IAMRoleIdentity) *Identity {
+	s.IamRole = v
 	return s
 }
 
@@ -11969,12 +15012,20 @@ type Image struct {
 	Id *string `locationName:"id" min:"36" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s Image) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s Image) GoString() string {
 	return s.String()
 }
@@ -12015,7 +15066,6 @@ type ImageFile struct {
 
 	// The image file contents, represented as a base64-encoded string. The file
 	// size must be less than 1 MB.
-	//
 	// Data is automatically base64 encoded/decoded by the SDK.
 	//
 	// Data is a required field
@@ -12027,12 +15077,20 @@ type ImageFile struct {
 	Type *string `locationName:"type" type:"string" required:"true" enum:"ImageFileType"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ImageFile) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ImageFile) GoString() string {
 	return s.String()
 }
@@ -12068,8 +15126,7 @@ func (s *ImageFile) SetType(v string) *ImageFile {
 	return s
 }
 
-// Contains an image that is uploaded to AWS IoT SiteWise and available at a
-// URL.
+// Contains an image that is uploaded to IoT SiteWise and available at a URL.
 type ImageLocation struct {
 	_ struct{} `type:"structure"`
 
@@ -12085,12 +15142,20 @@ type ImageLocation struct {
 	Url *string `locationName:"url" min:"1" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ImageLocation) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ImageLocation) GoString() string {
 	return s.String()
 }
@@ -12107,7 +15172,7 @@ func (s *ImageLocation) SetUrl(v string) *ImageLocation {
 	return s
 }
 
-// AWS IoT SiteWise can't process your request right now. Try again later.
+// IoT SiteWise can't process your request right now. Try again later.
 type InternalFailureException struct {
 	_            struct{}                  `type:"structure"`
 	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
@@ -12115,12 +15180,20 @@ type InternalFailureException struct {
 	Message_ *string `locationName:"message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s InternalFailureException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s InternalFailureException) GoString() string {
 	return s.String()
 }
@@ -12163,6 +15236,51 @@ func (s *InternalFailureException) RequestID() string {
 	return s.RespMetadata.RequestID
 }
 
+// Contains information about an interpolated asset property value.
+type InterpolatedAssetPropertyValue struct {
+	_ struct{} `type:"structure"`
+
+	// Contains a timestamp with optional nanosecond granularity.
+	//
+	// Timestamp is a required field
+	Timestamp *TimeInNanos `locationName:"timestamp" type:"structure" required:"true"`
+
+	// Contains an asset property value (of a single type only).
+	//
+	// Value is a required field
+	Value *Variant `locationName:"value" type:"structure" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s InterpolatedAssetPropertyValue) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s InterpolatedAssetPropertyValue) GoString() string {
+	return s.String()
+}
+
+// SetTimestamp sets the Timestamp field's value.
+func (s *InterpolatedAssetPropertyValue) SetTimestamp(v *TimeInNanos) *InterpolatedAssetPropertyValue {
+	s.Timestamp = v
+	return s
+}
+
+// SetValue sets the Value field's value.
+func (s *InterpolatedAssetPropertyValue) SetValue(v *Variant) *InterpolatedAssetPropertyValue {
+	s.Value = v
+	return s
+}
+
 // The request isn't valid. This can occur if your request contains malformed
 // JSON or unsupported characters. Check your request and try again.
 type InvalidRequestException struct {
@@ -12172,12 +15290,20 @@ type InvalidRequestException struct {
 	Message_ *string `locationName:"message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s InvalidRequestException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s InvalidRequestException) GoString() string {
 	return s.String()
 }
@@ -12225,7 +15351,7 @@ func (s *InvalidRequestException) RequestID() string {
 // to create more than the allowed number of properties for an asset model.
 //
 // For more information, see Quotas (https://docs.aws.amazon.com/iot-sitewise/latest/userguide/quotas.html)
-// in the AWS IoT SiteWise User Guide.
+// in the IoT SiteWise User Guide.
 type LimitExceededException struct {
 	_            struct{}                  `type:"structure"`
 	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
@@ -12233,12 +15359,20 @@ type LimitExceededException struct {
 	Message_ *string `locationName:"message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s LimitExceededException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s LimitExceededException) GoString() string {
 	return s.String()
 }
@@ -12282,7 +15416,7 @@ func (s *LimitExceededException) RequestID() string {
 }
 
 type ListAccessPoliciesInput struct {
-	_ struct{} `type:"structure"`
+	_ struct{} `type:"structure" nopayload:"true"`
 
 	// The ARN of the IAM user. For more information, see IAM ARNs (https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_identifiers.html)
 	// in the IAM User Guide. This parameter is required if you specify IAM for
@@ -12293,11 +15427,11 @@ type ListAccessPoliciesInput struct {
 	// GROUP for identityType.
 	IdentityId *string `location:"querystring" locationName:"identityId" min:"1" type:"string"`
 
-	// The type of identity (AWS SSO user, AWS SSO group, or IAM user). This parameter
-	// is required if you specify identityId.
+	// The type of identity (Amazon Web Services SSO user, Amazon Web Services SSO
+	// group, or IAM user). This parameter is required if you specify identityId.
 	IdentityType *string `location:"querystring" locationName:"identityType" type:"string" enum:"IdentityType"`
 
-	// The maximum number of results to be returned per paginated request.
+	// The maximum number of results to return for each paginated request.
 	//
 	// Default: 50
 	MaxResults *int64 `location:"querystring" locationName:"maxResults" min:"1" type:"integer"`
@@ -12313,12 +15447,20 @@ type ListAccessPoliciesInput struct {
 	ResourceType *string `location:"querystring" locationName:"resourceType" type:"string" enum:"ResourceType"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListAccessPoliciesInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListAccessPoliciesInput) GoString() string {
 	return s.String()
 }
@@ -12403,12 +15545,20 @@ type ListAccessPoliciesOutput struct {
 	NextToken *string `locationName:"nextToken" min:"1" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListAccessPoliciesOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListAccessPoliciesOutput) GoString() string {
 	return s.String()
 }
@@ -12426,9 +15576,9 @@ func (s *ListAccessPoliciesOutput) SetNextToken(v string) *ListAccessPoliciesOut
 }
 
 type ListAssetModelsInput struct {
-	_ struct{} `type:"structure"`
+	_ struct{} `type:"structure" nopayload:"true"`
 
-	// The maximum number of results to be returned per paginated request.
+	// The maximum number of results to return for each paginated request.
 	//
 	// Default: 50
 	MaxResults *int64 `location:"querystring" locationName:"maxResults" min:"1" type:"integer"`
@@ -12437,12 +15587,20 @@ type ListAssetModelsInput struct {
 	NextToken *string `location:"querystring" locationName:"nextToken" min:"1" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListAssetModelsInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListAssetModelsInput) GoString() string {
 	return s.String()
 }
@@ -12488,12 +15646,20 @@ type ListAssetModelsOutput struct {
 	NextToken *string `locationName:"nextToken" min:"1" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListAssetModelsOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListAssetModelsOutput) GoString() string {
 	return s.String()
 }
@@ -12510,8 +15676,143 @@ func (s *ListAssetModelsOutput) SetNextToken(v string) *ListAssetModelsOutput {
 	return s
 }
 
-type ListAssetsInput struct {
+type ListAssetRelationshipsInput struct {
+	_ struct{} `type:"structure" nopayload:"true"`
+
+	// The ID of the asset.
+	//
+	// AssetId is a required field
+	AssetId *string `location:"uri" locationName:"assetId" min:"36" type:"string" required:"true"`
+
+	// The maximum number of results to return for each paginated request.
+	MaxResults *int64 `location:"querystring" locationName:"maxResults" min:"1" type:"integer"`
+
+	// The token to be used for the next set of paginated results.
+	NextToken *string `location:"querystring" locationName:"nextToken" min:"1" type:"string"`
+
+	// The type of traversal to use to identify asset relationships. Choose the
+	// following option:
+	//
+	//    * PATH_TO_ROOT – Identify the asset's parent assets up to the root asset.
+	//    The asset that you specify in assetId is the first result in the list
+	//    of assetRelationshipSummaries, and the root asset is the last result.
+	//
+	// TraversalType is a required field
+	TraversalType *string `location:"querystring" locationName:"traversalType" type:"string" required:"true" enum:"TraversalType"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListAssetRelationshipsInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListAssetRelationshipsInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ListAssetRelationshipsInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ListAssetRelationshipsInput"}
+	if s.AssetId == nil {
+		invalidParams.Add(request.NewErrParamRequired("AssetId"))
+	}
+	if s.AssetId != nil && len(*s.AssetId) < 36 {
+		invalidParams.Add(request.NewErrParamMinLen("AssetId", 36))
+	}
+	if s.MaxResults != nil && *s.MaxResults < 1 {
+		invalidParams.Add(request.NewErrParamMinValue("MaxResults", 1))
+	}
+	if s.NextToken != nil && len(*s.NextToken) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("NextToken", 1))
+	}
+	if s.TraversalType == nil {
+		invalidParams.Add(request.NewErrParamRequired("TraversalType"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetAssetId sets the AssetId field's value.
+func (s *ListAssetRelationshipsInput) SetAssetId(v string) *ListAssetRelationshipsInput {
+	s.AssetId = &v
+	return s
+}
+
+// SetMaxResults sets the MaxResults field's value.
+func (s *ListAssetRelationshipsInput) SetMaxResults(v int64) *ListAssetRelationshipsInput {
+	s.MaxResults = &v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListAssetRelationshipsInput) SetNextToken(v string) *ListAssetRelationshipsInput {
+	s.NextToken = &v
+	return s
+}
+
+// SetTraversalType sets the TraversalType field's value.
+func (s *ListAssetRelationshipsInput) SetTraversalType(v string) *ListAssetRelationshipsInput {
+	s.TraversalType = &v
+	return s
+}
+
+type ListAssetRelationshipsOutput struct {
 	_ struct{} `type:"structure"`
+
+	// A list that summarizes each asset relationship.
+	//
+	// AssetRelationshipSummaries is a required field
+	AssetRelationshipSummaries []*AssetRelationshipSummary `locationName:"assetRelationshipSummaries" type:"list" required:"true"`
+
+	// The token for the next set of results, or null if there are no additional
+	// results.
+	NextToken *string `locationName:"nextToken" min:"1" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListAssetRelationshipsOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListAssetRelationshipsOutput) GoString() string {
+	return s.String()
+}
+
+// SetAssetRelationshipSummaries sets the AssetRelationshipSummaries field's value.
+func (s *ListAssetRelationshipsOutput) SetAssetRelationshipSummaries(v []*AssetRelationshipSummary) *ListAssetRelationshipsOutput {
+	s.AssetRelationshipSummaries = v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListAssetRelationshipsOutput) SetNextToken(v string) *ListAssetRelationshipsOutput {
+	s.NextToken = &v
+	return s
+}
+
+type ListAssetsInput struct {
+	_ struct{} `type:"structure" nopayload:"true"`
 
 	// The ID of the asset model by which to filter the list of assets. This parameter
 	// is required if you choose ALL for filter.
@@ -12529,7 +15830,7 @@ type ListAssetsInput struct {
 	// Default: ALL
 	Filter *string `location:"querystring" locationName:"filter" type:"string" enum:"ListAssetsFilter"`
 
-	// The maximum number of results to be returned per paginated request.
+	// The maximum number of results to return for each paginated request.
 	//
 	// Default: 50
 	MaxResults *int64 `location:"querystring" locationName:"maxResults" min:"1" type:"integer"`
@@ -12538,12 +15839,20 @@ type ListAssetsInput struct {
 	NextToken *string `location:"querystring" locationName:"nextToken" min:"1" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListAssetsInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListAssetsInput) GoString() string {
 	return s.String()
 }
@@ -12604,12 +15913,20 @@ type ListAssetsOutput struct {
 	NextToken *string `locationName:"nextToken" min:"1" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListAssetsOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListAssetsOutput) GoString() string {
 	return s.String()
 }
@@ -12627,7 +15944,7 @@ func (s *ListAssetsOutput) SetNextToken(v string) *ListAssetsOutput {
 }
 
 type ListAssociatedAssetsInput struct {
-	_ struct{} `type:"structure"`
+	_ struct{} `type:"structure" nopayload:"true"`
 
 	// The ID of the asset to query.
 	//
@@ -12640,10 +15957,10 @@ type ListAssociatedAssetsInput struct {
 	// operations. This parameter is required if you choose CHILD for traversalDirection.
 	//
 	// For more information, see Asset hierarchies (https://docs.aws.amazon.com/iot-sitewise/latest/userguide/asset-hierarchies.html)
-	// in the AWS IoT SiteWise User Guide.
+	// in the IoT SiteWise User Guide.
 	HierarchyId *string `location:"querystring" locationName:"hierarchyId" min:"36" type:"string"`
 
-	// The maximum number of results to be returned per paginated request.
+	// The maximum number of results to return for each paginated request.
 	//
 	// Default: 50
 	MaxResults *int64 `location:"querystring" locationName:"maxResults" min:"1" type:"integer"`
@@ -12662,12 +15979,20 @@ type ListAssociatedAssetsInput struct {
 	TraversalDirection *string `location:"querystring" locationName:"traversalDirection" type:"string" enum:"TraversalDirection"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListAssociatedAssetsInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListAssociatedAssetsInput) GoString() string {
 	return s.String()
 }
@@ -12740,12 +16065,20 @@ type ListAssociatedAssetsOutput struct {
 	NextToken *string `locationName:"nextToken" min:"1" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListAssociatedAssetsOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListAssociatedAssetsOutput) GoString() string {
 	return s.String()
 }
@@ -12763,9 +16096,9 @@ func (s *ListAssociatedAssetsOutput) SetNextToken(v string) *ListAssociatedAsset
 }
 
 type ListDashboardsInput struct {
-	_ struct{} `type:"structure"`
+	_ struct{} `type:"structure" nopayload:"true"`
 
-	// The maximum number of results to be returned per paginated request.
+	// The maximum number of results to return for each paginated request.
 	//
 	// Default: 50
 	MaxResults *int64 `location:"querystring" locationName:"maxResults" min:"1" type:"integer"`
@@ -12779,12 +16112,20 @@ type ListDashboardsInput struct {
 	ProjectId *string `location:"querystring" locationName:"projectId" min:"36" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListDashboardsInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListDashboardsInput) GoString() string {
 	return s.String()
 }
@@ -12842,12 +16183,20 @@ type ListDashboardsOutput struct {
 	NextToken *string `locationName:"nextToken" min:"1" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListDashboardsOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListDashboardsOutput) GoString() string {
 	return s.String()
 }
@@ -12865,9 +16214,9 @@ func (s *ListDashboardsOutput) SetNextToken(v string) *ListDashboardsOutput {
 }
 
 type ListGatewaysInput struct {
-	_ struct{} `type:"structure"`
+	_ struct{} `type:"structure" nopayload:"true"`
 
-	// The maximum number of results to be returned per paginated request.
+	// The maximum number of results to return for each paginated request.
 	//
 	// Default: 50
 	MaxResults *int64 `location:"querystring" locationName:"maxResults" min:"1" type:"integer"`
@@ -12876,12 +16225,20 @@ type ListGatewaysInput struct {
 	NextToken *string `location:"querystring" locationName:"nextToken" min:"1" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListGatewaysInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListGatewaysInput) GoString() string {
 	return s.String()
 }
@@ -12927,12 +16284,20 @@ type ListGatewaysOutput struct {
 	NextToken *string `locationName:"nextToken" min:"1" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListGatewaysOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListGatewaysOutput) GoString() string {
 	return s.String()
 }
@@ -12950,9 +16315,9 @@ func (s *ListGatewaysOutput) SetNextToken(v string) *ListGatewaysOutput {
 }
 
 type ListPortalsInput struct {
-	_ struct{} `type:"structure"`
+	_ struct{} `type:"structure" nopayload:"true"`
 
-	// The maximum number of results to be returned per paginated request.
+	// The maximum number of results to return for each paginated request.
 	//
 	// Default: 50
 	MaxResults *int64 `location:"querystring" locationName:"maxResults" min:"1" type:"integer"`
@@ -12961,12 +16326,20 @@ type ListPortalsInput struct {
 	NextToken *string `location:"querystring" locationName:"nextToken" min:"1" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListPortalsInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListPortalsInput) GoString() string {
 	return s.String()
 }
@@ -13010,12 +16383,20 @@ type ListPortalsOutput struct {
 	PortalSummaries []*PortalSummary `locationName:"portalSummaries" type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListPortalsOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListPortalsOutput) GoString() string {
 	return s.String()
 }
@@ -13033,9 +16414,9 @@ func (s *ListPortalsOutput) SetPortalSummaries(v []*PortalSummary) *ListPortalsO
 }
 
 type ListProjectAssetsInput struct {
-	_ struct{} `type:"structure"`
+	_ struct{} `type:"structure" nopayload:"true"`
 
-	// The maximum number of results to be returned per paginated request.
+	// The maximum number of results to return for each paginated request.
 	//
 	// Default: 50
 	MaxResults *int64 `location:"querystring" locationName:"maxResults" min:"1" type:"integer"`
@@ -13049,12 +16430,20 @@ type ListProjectAssetsInput struct {
 	ProjectId *string `location:"uri" locationName:"projectId" min:"36" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListProjectAssetsInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListProjectAssetsInput) GoString() string {
 	return s.String()
 }
@@ -13112,12 +16501,20 @@ type ListProjectAssetsOutput struct {
 	NextToken *string `locationName:"nextToken" min:"1" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListProjectAssetsOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListProjectAssetsOutput) GoString() string {
 	return s.String()
 }
@@ -13135,9 +16532,9 @@ func (s *ListProjectAssetsOutput) SetNextToken(v string) *ListProjectAssetsOutpu
 }
 
 type ListProjectsInput struct {
-	_ struct{} `type:"structure"`
+	_ struct{} `type:"structure" nopayload:"true"`
 
-	// The maximum number of results to be returned per paginated request.
+	// The maximum number of results to return for each paginated request.
 	//
 	// Default: 50
 	MaxResults *int64 `location:"querystring" locationName:"maxResults" min:"1" type:"integer"`
@@ -13151,12 +16548,20 @@ type ListProjectsInput struct {
 	PortalId *string `location:"querystring" locationName:"portalId" min:"36" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListProjectsInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListProjectsInput) GoString() string {
 	return s.String()
 }
@@ -13214,12 +16619,20 @@ type ListProjectsOutput struct {
 	ProjectSummaries []*ProjectSummary `locationName:"projectSummaries" type:"list" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListProjectsOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListProjectsOutput) GoString() string {
 	return s.String()
 }
@@ -13237,7 +16650,7 @@ func (s *ListProjectsOutput) SetProjectSummaries(v []*ProjectSummary) *ListProje
 }
 
 type ListTagsForResourceInput struct {
-	_ struct{} `type:"structure"`
+	_ struct{} `type:"structure" nopayload:"true"`
 
 	// The ARN (https://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html)
 	// of the resource.
@@ -13246,12 +16659,20 @@ type ListTagsForResourceInput struct {
 	ResourceArn *string `location:"querystring" locationName:"resourceArn" min:"1" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListTagsForResourceInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListTagsForResourceInput) GoString() string {
 	return s.String()
 }
@@ -13282,17 +16703,25 @@ type ListTagsForResourceOutput struct {
 	_ struct{} `type:"structure"`
 
 	// The list of key-value pairs that contain metadata for the resource. For more
-	// information, see Tagging your AWS IoT SiteWise resources (https://docs.aws.amazon.com/iot-sitewise/latest/userguide/tag-resources.html)
-	// in the AWS IoT SiteWise User Guide.
+	// information, see Tagging your IoT SiteWise resources (https://docs.aws.amazon.com/iot-sitewise/latest/userguide/tag-resources.html)
+	// in the IoT SiteWise User Guide.
 	Tags map[string]*string `locationName:"tags" min:"1" type:"map"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListTagsForResourceOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ListTagsForResourceOutput) GoString() string {
 	return s.String()
 }
@@ -13307,18 +16736,26 @@ func (s *ListTagsForResourceOutput) SetTags(v map[string]*string) *ListTagsForRe
 type LoggingOptions struct {
 	_ struct{} `type:"structure"`
 
-	// The AWS IoT SiteWise logging verbosity level.
+	// The IoT SiteWise logging verbosity level.
 	//
 	// Level is a required field
 	Level *string `locationName:"level" type:"string" required:"true" enum:"LoggingLevel"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s LoggingOptions) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s LoggingOptions) GoString() string {
 	return s.String()
 }
@@ -13342,21 +16779,109 @@ func (s *LoggingOptions) SetLevel(v string) *LoggingOptions {
 	return s
 }
 
-// Contains an asset measurement property. This structure is empty. For more
-// information, see Measurements (https://docs.aws.amazon.com/iot-sitewise/latest/userguide/asset-properties.html#measurements)
-// in the AWS IoT SiteWise User Guide.
+// Contains an asset measurement property. For more information, see Measurements
+// (https://docs.aws.amazon.com/iot-sitewise/latest/userguide/asset-properties.html#measurements)
+// in the IoT SiteWise User Guide.
 type Measurement struct {
 	_ struct{} `type:"structure"`
+
+	// The processing configuration for the given measurement property. You can
+	// configure measurements to be kept at the edge or forwarded to the Amazon
+	// Web Services Cloud. By default, measurements are forwarded to the cloud.
+	ProcessingConfig *MeasurementProcessingConfig `locationName:"processingConfig" type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s Measurement) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s Measurement) GoString() string {
 	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *Measurement) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "Measurement"}
+	if s.ProcessingConfig != nil {
+		if err := s.ProcessingConfig.Validate(); err != nil {
+			invalidParams.AddNested("ProcessingConfig", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetProcessingConfig sets the ProcessingConfig field's value.
+func (s *Measurement) SetProcessingConfig(v *MeasurementProcessingConfig) *Measurement {
+	s.ProcessingConfig = v
+	return s
+}
+
+// The processing configuration for the given measurement property. You can
+// configure measurements to be kept at the edge or forwarded to the Amazon
+// Web Services Cloud. By default, measurements are forwarded to the cloud.
+type MeasurementProcessingConfig struct {
+	_ struct{} `type:"structure"`
+
+	// The forwarding configuration for the given measurement property.
+	//
+	// ForwardingConfig is a required field
+	ForwardingConfig *ForwardingConfig `locationName:"forwardingConfig" type:"structure" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s MeasurementProcessingConfig) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s MeasurementProcessingConfig) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *MeasurementProcessingConfig) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "MeasurementProcessingConfig"}
+	if s.ForwardingConfig == nil {
+		invalidParams.Add(request.NewErrParamRequired("ForwardingConfig"))
+	}
+	if s.ForwardingConfig != nil {
+		if err := s.ForwardingConfig.Validate(); err != nil {
+			invalidParams.AddNested("ForwardingConfig", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetForwardingConfig sets the ForwardingConfig field's value.
+func (s *MeasurementProcessingConfig) SetForwardingConfig(v *ForwardingConfig) *MeasurementProcessingConfig {
+	s.ForwardingConfig = v
+	return s
 }
 
 // Contains an asset metric property. With metrics, you can calculate aggregate
@@ -13371,7 +16896,7 @@ func (s Measurement) GoString() string {
 // DOUBLE.
 //
 // For more information, see Metrics (https://docs.aws.amazon.com/iot-sitewise/latest/userguide/asset-properties.html#metrics)
-// in the AWS IoT SiteWise User Guide.
+// in the IoT SiteWise User Guide.
 type Metric struct {
 	_ struct{} `type:"structure"`
 
@@ -13380,29 +16905,42 @@ type Metric struct {
 	// 10 functions per expression.
 	//
 	// For more information, see Quotas (https://docs.aws.amazon.com/iot-sitewise/latest/userguide/quotas.html)
-	// in the AWS IoT SiteWise User Guide.
+	// in the IoT SiteWise User Guide.
 	//
 	// Expression is a required field
 	Expression *string `locationName:"expression" min:"1" type:"string" required:"true"`
+
+	// The processing configuration for the given metric property. You can configure
+	// metrics to be computed at the edge or in the Amazon Web Services Cloud. By
+	// default, metrics are forwarded to the cloud.
+	ProcessingConfig *MetricProcessingConfig `locationName:"processingConfig" type:"structure"`
 
 	// The list of variables used in the expression.
 	//
 	// Variables is a required field
 	Variables []*ExpressionVariable `locationName:"variables" type:"list" required:"true"`
 
-	// The window (time interval) over which AWS IoT SiteWise computes the metric's
-	// aggregation expression. AWS IoT SiteWise computes one data point per window.
+	// The window (time interval) over which IoT SiteWise computes the metric's
+	// aggregation expression. IoT SiteWise computes one data point per window.
 	//
 	// Window is a required field
 	Window *MetricWindow `locationName:"window" type:"structure" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s Metric) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s Metric) GoString() string {
 	return s.String()
 }
@@ -13421,6 +16959,11 @@ func (s *Metric) Validate() error {
 	}
 	if s.Window == nil {
 		invalidParams.Add(request.NewErrParamRequired("Window"))
+	}
+	if s.ProcessingConfig != nil {
+		if err := s.ProcessingConfig.Validate(); err != nil {
+			invalidParams.AddNested("ProcessingConfig", err.(request.ErrInvalidParams))
+		}
 	}
 	if s.Variables != nil {
 		for i, v := range s.Variables {
@@ -13450,6 +16993,12 @@ func (s *Metric) SetExpression(v string) *Metric {
 	return s
 }
 
+// SetProcessingConfig sets the ProcessingConfig field's value.
+func (s *Metric) SetProcessingConfig(v *MetricProcessingConfig) *Metric {
+	s.ProcessingConfig = v
+	return s
+}
+
 // SetVariables sets the Variables field's value.
 func (s *Metric) SetVariables(v []*ExpressionVariable) *Metric {
 	s.Variables = v
@@ -13462,6 +17011,55 @@ func (s *Metric) SetWindow(v *MetricWindow) *Metric {
 	return s
 }
 
+// The processing configuration for the given metric property. You can configure
+// metrics to be computed at the edge or in the Amazon Web Services Cloud. By
+// default, metrics are forwarded to the cloud.
+type MetricProcessingConfig struct {
+	_ struct{} `type:"structure"`
+
+	// The compute location for the given metric property.
+	//
+	// ComputeLocation is a required field
+	ComputeLocation *string `locationName:"computeLocation" type:"string" required:"true" enum:"ComputeLocation"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s MetricProcessingConfig) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s MetricProcessingConfig) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *MetricProcessingConfig) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "MetricProcessingConfig"}
+	if s.ComputeLocation == nil {
+		invalidParams.Add(request.NewErrParamRequired("ComputeLocation"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetComputeLocation sets the ComputeLocation field's value.
+func (s *MetricProcessingConfig) SetComputeLocation(v string) *MetricProcessingConfig {
+	s.ComputeLocation = &v
+	return s
+}
+
 // Contains a time interval window used for data aggregate computations (for
 // example, average, sum, count, and so on).
 type MetricWindow struct {
@@ -13471,12 +17069,20 @@ type MetricWindow struct {
 	Tumbling *TumblingWindow `locationName:"tumbling" type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s MetricWindow) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s MetricWindow) GoString() string {
 	return s.String()
 }
@@ -13502,7 +17108,7 @@ func (s *MetricWindow) SetTumbling(v *TumblingWindow) *MetricWindow {
 	return s
 }
 
-// Contains AWS IoT SiteWise Monitor error details.
+// Contains IoT SiteWise Monitor error details.
 type MonitorErrorDetails struct {
 	_ struct{} `type:"structure"`
 
@@ -13513,12 +17119,20 @@ type MonitorErrorDetails struct {
 	Message *string `locationName:"message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s MonitorErrorDetails) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s MonitorErrorDetails) GoString() string {
 	return s.String()
 }
@@ -13535,7 +17149,59 @@ func (s *MonitorErrorDetails) SetMessage(v string) *MonitorErrorDetails {
 	return s
 }
 
-// Identifies an AWS IoT SiteWise Monitor portal.
+// Contains information about the storage destination.
+type MultiLayerStorage struct {
+	_ struct{} `type:"structure"`
+
+	// Contains information about a customer managed Amazon S3 bucket.
+	//
+	// CustomerManagedS3Storage is a required field
+	CustomerManagedS3Storage *CustomerManagedS3Storage `locationName:"customerManagedS3Storage" type:"structure" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s MultiLayerStorage) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s MultiLayerStorage) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *MultiLayerStorage) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "MultiLayerStorage"}
+	if s.CustomerManagedS3Storage == nil {
+		invalidParams.Add(request.NewErrParamRequired("CustomerManagedS3Storage"))
+	}
+	if s.CustomerManagedS3Storage != nil {
+		if err := s.CustomerManagedS3Storage.Validate(); err != nil {
+			invalidParams.AddNested("CustomerManagedS3Storage", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetCustomerManagedS3Storage sets the CustomerManagedS3Storage field's value.
+func (s *MultiLayerStorage) SetCustomerManagedS3Storage(v *CustomerManagedS3Storage) *MultiLayerStorage {
+	s.CustomerManagedS3Storage = v
+	return s
+}
+
+// Identifies an IoT SiteWise Monitor portal.
 type PortalResource struct {
 	_ struct{} `type:"structure"`
 
@@ -13545,12 +17211,20 @@ type PortalResource struct {
 	Id *string `locationName:"id" min:"36" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s PortalResource) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s PortalResource) GoString() string {
 	return s.String()
 }
@@ -13590,12 +17264,20 @@ type PortalStatus struct {
 	State *string `locationName:"state" type:"string" required:"true" enum:"PortalState"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s PortalStatus) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s PortalStatus) GoString() string {
 	return s.String()
 }
@@ -13636,17 +17318,16 @@ type PortalSummary struct {
 	Name *string `locationName:"name" min:"1" type:"string" required:"true"`
 
 	// The ARN (https://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html)
-	// of the service role that allows the portal's users to access your AWS IoT
-	// SiteWise resources on your behalf. For more information, see Using service
-	// roles for AWS IoT SiteWise Monitor (https://docs.aws.amazon.com/iot-sitewise/latest/userguide/monitor-service-role.html)
-	// in the AWS IoT SiteWise User Guide.
+	// of the service role that allows the portal's users to access your IoT SiteWise
+	// resources on your behalf. For more information, see Using service roles for
+	// IoT SiteWise Monitor (https://docs.aws.amazon.com/iot-sitewise/latest/userguide/monitor-service-role.html)
+	// in the IoT SiteWise User Guide.
 	RoleArn *string `locationName:"roleArn" min:"1" type:"string"`
 
-	// The URL for the AWS IoT SiteWise Monitor portal. You can use this URL to
-	// access portals that use AWS SSO for authentication. For portals that use
-	// IAM for authentication, you must use the CreatePresignedPortalUrl (https://docs.aws.amazon.com/AWS
-	// IoT SiteWise API ReferenceAPI_CreatePresignedPortalUrl.html) operation to
-	// create a URL that you can use to access the portal.
+	// The URL for the IoT SiteWise Monitor portal. You can use this URL to access
+	// portals that use Amazon Web Services SSO for authentication. For portals
+	// that use IAM for authentication, you must use the IoT SiteWise console to
+	// get a URL that you can use to access the portal.
 	//
 	// StartUrl is a required field
 	StartUrl *string `locationName:"startUrl" min:"1" type:"string" required:"true"`
@@ -13657,12 +17338,20 @@ type PortalSummary struct {
 	Status *PortalStatus `locationName:"status" type:"structure" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s PortalSummary) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s PortalSummary) GoString() string {
 	return s.String()
 }
@@ -13715,7 +17404,7 @@ func (s *PortalSummary) SetStatus(v *PortalStatus) *PortalSummary {
 	return s
 }
 
-// Identifies a specific AWS IoT SiteWise Monitor project.
+// Identifies a specific IoT SiteWise Monitor project.
 type ProjectResource struct {
 	_ struct{} `type:"structure"`
 
@@ -13725,12 +17414,20 @@ type ProjectResource struct {
 	Id *string `locationName:"id" min:"36" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ProjectResource) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ProjectResource) GoString() string {
 	return s.String()
 }
@@ -13781,12 +17478,20 @@ type ProjectSummary struct {
 	Name *string `locationName:"name" min:"1" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ProjectSummary) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ProjectSummary) GoString() string {
 	return s.String()
 }
@@ -13825,11 +17530,10 @@ func (s *ProjectSummary) SetName(v string) *ProjectSummary {
 type Property struct {
 	_ struct{} `type:"structure"`
 
-	// The property alias that identifies the property, such as an OPC-UA server
-	// data stream path (for example, /company/windfarm/3/turbine/7/temperature).
-	// For more information, see Mapping industrial data streams to asset properties
-	// (https://docs.aws.amazon.com/iot-sitewise/latest/userguide/connect-data-streams.html)
-	// in the AWS IoT SiteWise User Guide.
+	// The alias that identifies the property, such as an OPC-UA server data stream
+	// path (for example, /company/windfarm/3/turbine/7/temperature). For more information,
+	// see Mapping industrial data streams to asset properties (https://docs.aws.amazon.com/iot-sitewise/latest/userguide/connect-data-streams.html)
+	// in the IoT SiteWise User Guide.
 	Alias *string `locationName:"alias" min:"1" type:"string"`
 
 	// The property data type.
@@ -13858,12 +17562,20 @@ type Property struct {
 	Unit *string `locationName:"unit" min:"1" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s Property) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s Property) GoString() string {
 	return s.String()
 }
@@ -13911,10 +17623,9 @@ func (s *Property) SetUnit(v string) *Property {
 }
 
 // Contains asset property value notification information. When the notification
-// state is enabled, AWS IoT SiteWise publishes property value updates to a
-// unique MQTT topic. For more information, see Interacting with other services
-// (https://docs.aws.amazon.com/iot-sitewise/latest/userguide/interact-with-other-services.html)
-// in the AWS IoT SiteWise User Guide.
+// state is enabled, IoT SiteWise publishes property value updates to a unique
+// MQTT topic. For more information, see Interacting with other services (https://docs.aws.amazon.com/iot-sitewise/latest/userguide/interact-with-other-services.html)
+// in the IoT SiteWise User Guide.
 type PropertyNotification struct {
 	_ struct{} `type:"structure"`
 
@@ -13923,19 +17634,26 @@ type PropertyNotification struct {
 	// State is a required field
 	State *string `locationName:"state" type:"string" required:"true" enum:"PropertyNotificationState"`
 
-	// The MQTT topic to which AWS IoT SiteWise publishes property value update
-	// notifications.
+	// The MQTT topic to which IoT SiteWise publishes property value update notifications.
 	//
 	// Topic is a required field
 	Topic *string `locationName:"topic" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s PropertyNotification) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s PropertyNotification) GoString() string {
 	return s.String()
 }
@@ -13979,12 +17697,20 @@ type PropertyType struct {
 	Transform *Transform `locationName:"transform" type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s PropertyType) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s PropertyType) GoString() string {
 	return s.String()
 }
@@ -13995,6 +17721,11 @@ func (s *PropertyType) Validate() error {
 	if s.Attribute != nil {
 		if err := s.Attribute.Validate(); err != nil {
 			invalidParams.AddNested("Attribute", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.Measurement != nil {
+		if err := s.Measurement.Validate(); err != nil {
+			invalidParams.AddNested("Measurement", err.(request.ErrInvalidParams))
 		}
 	}
 	if s.Metric != nil {
@@ -14053,11 +17784,10 @@ type PutAssetPropertyValueEntry struct {
 	// EntryId is a required field
 	EntryId *string `locationName:"entryId" min:"1" type:"string" required:"true"`
 
-	// The property alias that identifies the property, such as an OPC-UA server
-	// data stream path (for example, /company/windfarm/3/turbine/7/temperature).
-	// For more information, see Mapping industrial data streams to asset properties
-	// (https://docs.aws.amazon.com/iot-sitewise/latest/userguide/connect-data-streams.html)
-	// in the AWS IoT SiteWise User Guide.
+	// The alias that identifies the property, such as an OPC-UA server data stream
+	// path (for example, /company/windfarm/3/turbine/7/temperature). For more information,
+	// see Mapping industrial data streams to asset properties (https://docs.aws.amazon.com/iot-sitewise/latest/userguide/connect-data-streams.html)
+	// in the IoT SiteWise User Guide.
 	PropertyAlias *string `locationName:"propertyAlias" min:"1" type:"string"`
 
 	// The ID of the asset property for this entry.
@@ -14070,12 +17800,20 @@ type PutAssetPropertyValueEntry struct {
 	PropertyValues []*AssetPropertyValue `locationName:"propertyValues" type:"list" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s PutAssetPropertyValueEntry) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s PutAssetPropertyValueEntry) GoString() string {
 	return s.String()
 }
@@ -14148,6 +17886,119 @@ func (s *PutAssetPropertyValueEntry) SetPropertyValues(v []*AssetPropertyValue) 
 	return s
 }
 
+type PutDefaultEncryptionConfigurationInput struct {
+	_ struct{} `type:"structure"`
+
+	// The type of encryption used for the encryption configuration.
+	//
+	// EncryptionType is a required field
+	EncryptionType *string `locationName:"encryptionType" type:"string" required:"true" enum:"EncryptionType"`
+
+	// The Key ID of the customer managed customer master key (CMK) used for KMS
+	// encryption. This is required if you use KMS_BASED_ENCRYPTION.
+	KmsKeyId *string `locationName:"kmsKeyId" min:"1" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s PutDefaultEncryptionConfigurationInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s PutDefaultEncryptionConfigurationInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *PutDefaultEncryptionConfigurationInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "PutDefaultEncryptionConfigurationInput"}
+	if s.EncryptionType == nil {
+		invalidParams.Add(request.NewErrParamRequired("EncryptionType"))
+	}
+	if s.KmsKeyId != nil && len(*s.KmsKeyId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("KmsKeyId", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetEncryptionType sets the EncryptionType field's value.
+func (s *PutDefaultEncryptionConfigurationInput) SetEncryptionType(v string) *PutDefaultEncryptionConfigurationInput {
+	s.EncryptionType = &v
+	return s
+}
+
+// SetKmsKeyId sets the KmsKeyId field's value.
+func (s *PutDefaultEncryptionConfigurationInput) SetKmsKeyId(v string) *PutDefaultEncryptionConfigurationInput {
+	s.KmsKeyId = &v
+	return s
+}
+
+type PutDefaultEncryptionConfigurationOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The status of the account configuration. This contains the ConfigurationState.
+	// If there is an error, it also contains the ErrorDetails.
+	//
+	// ConfigurationStatus is a required field
+	ConfigurationStatus *ConfigurationStatus `locationName:"configurationStatus" type:"structure" required:"true"`
+
+	// The type of encryption used for the encryption configuration.
+	//
+	// EncryptionType is a required field
+	EncryptionType *string `locationName:"encryptionType" type:"string" required:"true" enum:"EncryptionType"`
+
+	// The Key ARN of the KMS CMK used for KMS encryption if you use KMS_BASED_ENCRYPTION.
+	KmsKeyArn *string `locationName:"kmsKeyArn" min:"1" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s PutDefaultEncryptionConfigurationOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s PutDefaultEncryptionConfigurationOutput) GoString() string {
+	return s.String()
+}
+
+// SetConfigurationStatus sets the ConfigurationStatus field's value.
+func (s *PutDefaultEncryptionConfigurationOutput) SetConfigurationStatus(v *ConfigurationStatus) *PutDefaultEncryptionConfigurationOutput {
+	s.ConfigurationStatus = v
+	return s
+}
+
+// SetEncryptionType sets the EncryptionType field's value.
+func (s *PutDefaultEncryptionConfigurationOutput) SetEncryptionType(v string) *PutDefaultEncryptionConfigurationOutput {
+	s.EncryptionType = &v
+	return s
+}
+
+// SetKmsKeyArn sets the KmsKeyArn field's value.
+func (s *PutDefaultEncryptionConfigurationOutput) SetKmsKeyArn(v string) *PutDefaultEncryptionConfigurationOutput {
+	s.KmsKeyArn = &v
+	return s
+}
+
 type PutLoggingOptionsInput struct {
 	_ struct{} `type:"structure"`
 
@@ -14157,12 +18008,20 @@ type PutLoggingOptionsInput struct {
 	LoggingOptions *LoggingOptions `locationName:"loggingOptions" type:"structure" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s PutLoggingOptionsInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s PutLoggingOptionsInput) GoString() string {
 	return s.String()
 }
@@ -14192,20 +18051,158 @@ func (s *PutLoggingOptionsInput) SetLoggingOptions(v *LoggingOptions) *PutLoggin
 }
 
 type PutLoggingOptionsOutput struct {
-	_ struct{} `type:"structure"`
+	_ struct{} `type:"structure" nopayload:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s PutLoggingOptionsOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s PutLoggingOptionsOutput) GoString() string {
 	return s.String()
 }
 
-// Contains an AWS IoT SiteWise Monitor resource ID for a portal or project.
+type PutStorageConfigurationInput struct {
+	_ struct{} `type:"structure"`
+
+	// Identifies a storage destination. If you specified MULTI_LAYER_STORAGE for
+	// the storage type, you must specify a MultiLayerStorage object.
+	MultiLayerStorage *MultiLayerStorage `locationName:"multiLayerStorage" type:"structure"`
+
+	// The type of storage that you specified for your data. The storage type can
+	// be one of the following values:
+	//
+	//    * SITEWISE_DEFAULT_STORAGE – IoT SiteWise replicates your data into
+	//    a service managed database.
+	//
+	//    * MULTI_LAYER_STORAGE – IoT SiteWise replicates your data into a service
+	//    managed database and saves a copy of your raw data and metadata in an
+	//    Amazon S3 object that you specified.
+	//
+	// StorageType is a required field
+	StorageType *string `locationName:"storageType" type:"string" required:"true" enum:"StorageType"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s PutStorageConfigurationInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s PutStorageConfigurationInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *PutStorageConfigurationInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "PutStorageConfigurationInput"}
+	if s.StorageType == nil {
+		invalidParams.Add(request.NewErrParamRequired("StorageType"))
+	}
+	if s.MultiLayerStorage != nil {
+		if err := s.MultiLayerStorage.Validate(); err != nil {
+			invalidParams.AddNested("MultiLayerStorage", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetMultiLayerStorage sets the MultiLayerStorage field's value.
+func (s *PutStorageConfigurationInput) SetMultiLayerStorage(v *MultiLayerStorage) *PutStorageConfigurationInput {
+	s.MultiLayerStorage = v
+	return s
+}
+
+// SetStorageType sets the StorageType field's value.
+func (s *PutStorageConfigurationInput) SetStorageType(v string) *PutStorageConfigurationInput {
+	s.StorageType = &v
+	return s
+}
+
+type PutStorageConfigurationOutput struct {
+	_ struct{} `type:"structure"`
+
+	// Contains current status information for the configuration.
+	//
+	// ConfigurationStatus is a required field
+	ConfigurationStatus *ConfigurationStatus `locationName:"configurationStatus" type:"structure" required:"true"`
+
+	// Contains information about the storage destination.
+	MultiLayerStorage *MultiLayerStorage `locationName:"multiLayerStorage" type:"structure"`
+
+	// The type of storage that you specified for your data. The storage type can
+	// be one of the following values:
+	//
+	//    * SITEWISE_DEFAULT_STORAGE – IoT SiteWise replicates your data into
+	//    a service managed database.
+	//
+	//    * MULTI_LAYER_STORAGE – IoT SiteWise replicates your data into a service
+	//    managed database and saves a copy of your raw data and metadata in an
+	//    Amazon S3 object that you specified.
+	//
+	// StorageType is a required field
+	StorageType *string `locationName:"storageType" type:"string" required:"true" enum:"StorageType"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s PutStorageConfigurationOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s PutStorageConfigurationOutput) GoString() string {
+	return s.String()
+}
+
+// SetConfigurationStatus sets the ConfigurationStatus field's value.
+func (s *PutStorageConfigurationOutput) SetConfigurationStatus(v *ConfigurationStatus) *PutStorageConfigurationOutput {
+	s.ConfigurationStatus = v
+	return s
+}
+
+// SetMultiLayerStorage sets the MultiLayerStorage field's value.
+func (s *PutStorageConfigurationOutput) SetMultiLayerStorage(v *MultiLayerStorage) *PutStorageConfigurationOutput {
+	s.MultiLayerStorage = v
+	return s
+}
+
+// SetStorageType sets the StorageType field's value.
+func (s *PutStorageConfigurationOutput) SetStorageType(v string) *PutStorageConfigurationOutput {
+	s.StorageType = &v
+	return s
+}
+
+// Contains an IoT SiteWise Monitor resource ID for a portal or project.
 type Resource struct {
 	_ struct{} `type:"structure"`
 
@@ -14216,12 +18213,20 @@ type Resource struct {
 	Project *ProjectResource `locationName:"project" type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s Resource) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s Resource) GoString() string {
 	return s.String()
 }
@@ -14276,12 +18281,20 @@ type ResourceAlreadyExistsException struct {
 	ResourceId *string `locationName:"resourceId" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ResourceAlreadyExistsException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ResourceAlreadyExistsException) GoString() string {
 	return s.String()
 }
@@ -14332,12 +18345,20 @@ type ResourceNotFoundException struct {
 	Message_ *string `locationName:"message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ResourceNotFoundException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ResourceNotFoundException) GoString() string {
 	return s.String()
 }
@@ -14388,12 +18409,20 @@ type ServiceUnavailableException struct {
 	Message_ *string `locationName:"message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ServiceUnavailableException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ServiceUnavailableException) GoString() string {
 	return s.String()
 }
@@ -14446,19 +18475,27 @@ type TagResourceInput struct {
 	ResourceArn *string `location:"querystring" locationName:"resourceArn" min:"1" type:"string" required:"true"`
 
 	// A list of key-value pairs that contain metadata for the resource. For more
-	// information, see Tagging your AWS IoT SiteWise resources (https://docs.aws.amazon.com/iot-sitewise/latest/userguide/tag-resources.html)
-	// in the AWS IoT SiteWise User Guide.
+	// information, see Tagging your IoT SiteWise resources (https://docs.aws.amazon.com/iot-sitewise/latest/userguide/tag-resources.html)
+	// in the IoT SiteWise User Guide.
 	//
 	// Tags is a required field
 	Tags map[string]*string `locationName:"tags" min:"1" type:"map" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s TagResourceInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s TagResourceInput) GoString() string {
 	return s.String()
 }
@@ -14498,25 +18535,33 @@ func (s *TagResourceInput) SetTags(v map[string]*string) *TagResourceInput {
 }
 
 type TagResourceOutput struct {
-	_ struct{} `type:"structure"`
+	_ struct{} `type:"structure" nopayload:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s TagResourceOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s TagResourceOutput) GoString() string {
 	return s.String()
 }
 
 // Your request exceeded a rate limit. For example, you might have exceeded
-// the number of AWS IoT SiteWise assets that can be created per second, the
-// allowed number of messages per second, and so on.
+// the number of IoT SiteWise assets that can be created per second, the allowed
+// number of messages per second, and so on.
 //
 // For more information, see Quotas (https://docs.aws.amazon.com/iot-sitewise/latest/userguide/quotas.html)
-// in the AWS IoT SiteWise User Guide.
+// in the IoT SiteWise User Guide.
 type ThrottlingException struct {
 	_            struct{}                  `type:"structure"`
 	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
@@ -14524,12 +18569,20 @@ type ThrottlingException struct {
 	Message_ *string `locationName:"message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ThrottlingException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ThrottlingException) GoString() string {
 	return s.String()
 }
@@ -14586,12 +18639,20 @@ type TimeInNanos struct {
 	TimeInSeconds *int64 `locationName:"timeInSeconds" min:"1" type:"long" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s TimeInNanos) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s TimeInNanos) GoString() string {
 	return s.String()
 }
@@ -14626,7 +18687,7 @@ func (s *TimeInNanos) SetTimeInSeconds(v int64) *TimeInNanos {
 
 // You've reached the limit for the number of tags allowed for a resource. For
 // more information, see Tag naming limits and requirements (https://docs.aws.amazon.com/general/latest/gr/aws_tagging.html#tag-conventions)
-// in the AWS General Reference.
+// in the Amazon Web Services General Reference.
 type TooManyTagsException struct {
 	_            struct{}                  `type:"structure"`
 	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
@@ -14637,12 +18698,20 @@ type TooManyTagsException struct {
 	ResourceName *string `locationName:"resourceName" min:"1" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s TooManyTagsException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s TooManyTagsException) GoString() string {
 	return s.String()
 }
@@ -14693,7 +18762,7 @@ func (s *TooManyTagsException) RequestID() string {
 // data types of INTEGER or DOUBLE.
 //
 // For more information, see Transforms (https://docs.aws.amazon.com/iot-sitewise/latest/userguide/asset-properties.html#transforms)
-// in the AWS IoT SiteWise User Guide.
+// in the IoT SiteWise User Guide.
 type Transform struct {
 	_ struct{} `type:"structure"`
 
@@ -14702,10 +18771,16 @@ type Transform struct {
 	// per expression.
 	//
 	// For more information, see Quotas (https://docs.aws.amazon.com/iot-sitewise/latest/userguide/quotas.html)
-	// in the AWS IoT SiteWise User Guide.
+	// in the IoT SiteWise User Guide.
 	//
 	// Expression is a required field
 	Expression *string `locationName:"expression" min:"1" type:"string" required:"true"`
+
+	// The processing configuration for the given transform property. You can configure
+	// transforms to be kept at the edge or forwarded to the Amazon Web Services
+	// Cloud. You can also configure transforms to be computed at the edge or in
+	// the cloud.
+	ProcessingConfig *TransformProcessingConfig `locationName:"processingConfig" type:"structure"`
 
 	// The list of variables used in the expression.
 	//
@@ -14713,12 +18788,20 @@ type Transform struct {
 	Variables []*ExpressionVariable `locationName:"variables" type:"list" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s Transform) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s Transform) GoString() string {
 	return s.String()
 }
@@ -14734,6 +18817,11 @@ func (s *Transform) Validate() error {
 	}
 	if s.Variables == nil {
 		invalidParams.Add(request.NewErrParamRequired("Variables"))
+	}
+	if s.ProcessingConfig != nil {
+		if err := s.ProcessingConfig.Validate(); err != nil {
+			invalidParams.AddNested("ProcessingConfig", err.(request.ErrInvalidParams))
+		}
 	}
 	if s.Variables != nil {
 		for i, v := range s.Variables {
@@ -14758,38 +18846,154 @@ func (s *Transform) SetExpression(v string) *Transform {
 	return s
 }
 
+// SetProcessingConfig sets the ProcessingConfig field's value.
+func (s *Transform) SetProcessingConfig(v *TransformProcessingConfig) *Transform {
+	s.ProcessingConfig = v
+	return s
+}
+
 // SetVariables sets the Variables field's value.
 func (s *Transform) SetVariables(v []*ExpressionVariable) *Transform {
 	s.Variables = v
 	return s
 }
 
+// The processing configuration for the given transform property. You can configure
+// transforms to be kept at the edge or forwarded to the Amazon Web Services
+// Cloud. You can also configure transforms to be computed at the edge or in
+// the cloud.
+type TransformProcessingConfig struct {
+	_ struct{} `type:"structure"`
+
+	// The compute location for the given transform property.
+	//
+	// ComputeLocation is a required field
+	ComputeLocation *string `locationName:"computeLocation" type:"string" required:"true" enum:"ComputeLocation"`
+
+	// The forwarding configuration for a given property.
+	ForwardingConfig *ForwardingConfig `locationName:"forwardingConfig" type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s TransformProcessingConfig) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s TransformProcessingConfig) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *TransformProcessingConfig) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "TransformProcessingConfig"}
+	if s.ComputeLocation == nil {
+		invalidParams.Add(request.NewErrParamRequired("ComputeLocation"))
+	}
+	if s.ForwardingConfig != nil {
+		if err := s.ForwardingConfig.Validate(); err != nil {
+			invalidParams.AddNested("ForwardingConfig", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetComputeLocation sets the ComputeLocation field's value.
+func (s *TransformProcessingConfig) SetComputeLocation(v string) *TransformProcessingConfig {
+	s.ComputeLocation = &v
+	return s
+}
+
+// SetForwardingConfig sets the ForwardingConfig field's value.
+func (s *TransformProcessingConfig) SetForwardingConfig(v *ForwardingConfig) *TransformProcessingConfig {
+	s.ForwardingConfig = v
+	return s
+}
+
 // Contains a tumbling window, which is a repeating fixed-sized, non-overlapping,
-// and contiguous time interval. This window is used in metric and aggregation
-// computations.
+// and contiguous time window. You use this window in metrics to aggregate data
+// from properties and other assets.
+//
+// You can use m, h, d, and w when you specify an interval or offset. Note that
+// m represents minutes, and w represents weeks. You can also use s to represent
+// seconds in offset.
+//
+// The interval and offset parameters support the ISO 8601 format (https://en.wikipedia.org/wiki/ISO_8601).
+// For example, PT5S represents five seconds, PT5M represents five minutes,
+// and PT5H represents five hours.
 type TumblingWindow struct {
 	_ struct{} `type:"structure"`
 
-	// The time interval for the tumbling window. Note that w represents weeks,
-	// d represents days, h represents hours, and m represents minutes. AWS IoT
-	// SiteWise computes the 1w interval the end of Sunday at midnight each week
-	// (UTC), the 1d interval at the end of each day at midnight (UTC), the 1h interval
-	// at the end of each hour, and so on.
+	// The time interval for the tumbling window. The interval time must be between
+	// 1 minute and 1 week.
 	//
-	// When AWS IoT SiteWise aggregates data points for metric computations, the
-	// start of each interval is exclusive and the end of each interval is inclusive.
-	// AWS IoT SiteWise places the computed data point at the end of the interval.
+	// IoT SiteWise computes the 1w interval the end of Sunday at midnight each
+	// week (UTC), the 1d interval at the end of each day at midnight (UTC), the
+	// 1h interval at the end of each hour, and so on.
+	//
+	// When IoT SiteWise aggregates data points for metric computations, the start
+	// of each interval is exclusive and the end of each interval is inclusive.
+	// IoT SiteWise places the computed data point at the end of the interval.
 	//
 	// Interval is a required field
 	Interval *string `locationName:"interval" min:"2" type:"string" required:"true"`
+
+	// The offset for the tumbling window. The offset parameter accepts the following:
+	//
+	//    * The offset time. For example, if you specify 18h for offset and 1d for
+	//    interval, IoT SiteWise aggregates data in one of the following ways: If
+	//    you create the metric before or at 6:00 PM (UTC), you get the first aggregation
+	//    result at 6 PM (UTC) on the day when you create the metric. If you create
+	//    the metric after 6:00 PM (UTC), you get the first aggregation result at
+	//    6 PM (UTC) the next day.
+	//
+	//    * The ISO 8601 format. For example, if you specify PT18H for offset and
+	//    1d for interval, IoT SiteWise aggregates data in one of the following
+	//    ways: If you create the metric before or at 6:00 PM (UTC), you get the
+	//    first aggregation result at 6 PM (UTC) on the day when you create the
+	//    metric. If you create the metric after 6:00 PM (UTC), you get the first
+	//    aggregation result at 6 PM (UTC) the next day.
+	//
+	//    * The 24-hour clock. For example, if you specify 00:03:00 for offset and
+	//    5m for interval, and you create the metric at 2 PM (UTC), you get the
+	//    first aggregation result at 2:03 PM (UTC). You get the second aggregation
+	//    result at 2:08 PM (UTC).
+	//
+	//    * The offset time zone. For example, if you specify 2021-07-23T18:00-08
+	//    for offset and 1d for interval, IoT SiteWise aggregates data in one of
+	//    the following ways: If you create the metric before or at 6:00 PM (PST),
+	//    you get the first aggregation result at 6 PM (PST) on the day when you
+	//    create the metric. If you create the metric after 6:00 PM (PST), you get
+	//    the first aggregation result at 6 PM (PST) the next day.
+	Offset *string `locationName:"offset" min:"2" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s TumblingWindow) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s TumblingWindow) GoString() string {
 	return s.String()
 }
@@ -14802,6 +19006,9 @@ func (s *TumblingWindow) Validate() error {
 	}
 	if s.Interval != nil && len(*s.Interval) < 2 {
 		invalidParams.Add(request.NewErrParamMinLen("Interval", 2))
+	}
+	if s.Offset != nil && len(*s.Offset) < 2 {
+		invalidParams.Add(request.NewErrParamMinLen("Offset", 2))
 	}
 
 	if invalidParams.Len() > 0 {
@@ -14816,8 +19023,78 @@ func (s *TumblingWindow) SetInterval(v string) *TumblingWindow {
 	return s
 }
 
+// SetOffset sets the Offset field's value.
+func (s *TumblingWindow) SetOffset(v string) *TumblingWindow {
+	s.Offset = &v
+	return s
+}
+
+// You are not authorized.
+type UnauthorizedException struct {
+	_            struct{}                  `type:"structure"`
+	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
+
+	Message_ *string `locationName:"message" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UnauthorizedException) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UnauthorizedException) GoString() string {
+	return s.String()
+}
+
+func newErrorUnauthorizedException(v protocol.ResponseMetadata) error {
+	return &UnauthorizedException{
+		RespMetadata: v,
+	}
+}
+
+// Code returns the exception type name.
+func (s *UnauthorizedException) Code() string {
+	return "UnauthorizedException"
+}
+
+// Message returns the exception's message.
+func (s *UnauthorizedException) Message() string {
+	if s.Message_ != nil {
+		return *s.Message_
+	}
+	return ""
+}
+
+// OrigErr always returns nil, satisfies awserr.Error interface.
+func (s *UnauthorizedException) OrigErr() error {
+	return nil
+}
+
+func (s *UnauthorizedException) Error() string {
+	return fmt.Sprintf("%s: %s", s.Code(), s.Message())
+}
+
+// Status code returns the HTTP status code for the request's response error.
+func (s *UnauthorizedException) StatusCode() int {
+	return s.RespMetadata.StatusCode
+}
+
+// RequestID returns the service's response RequestID for request.
+func (s *UnauthorizedException) RequestID() string {
+	return s.RespMetadata.RequestID
+}
+
 type UntagResourceInput struct {
-	_ struct{} `type:"structure"`
+	_ struct{} `type:"structure" nopayload:"true"`
 
 	// The ARN (https://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html)
 	// of the resource to untag.
@@ -14831,12 +19108,20 @@ type UntagResourceInput struct {
 	TagKeys []*string `location:"querystring" locationName:"tagKeys" type:"list" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UntagResourceInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UntagResourceInput) GoString() string {
 	return s.String()
 }
@@ -14873,15 +19158,23 @@ func (s *UntagResourceInput) SetTagKeys(v []*string) *UntagResourceInput {
 }
 
 type UntagResourceOutput struct {
-	_ struct{} `type:"structure"`
+	_ struct{} `type:"structure" nopayload:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UntagResourceOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UntagResourceOutput) GoString() string {
 	return s.String()
 }
@@ -14894,8 +19187,8 @@ type UpdateAccessPolicyInput struct {
 	// AccessPolicyId is a required field
 	AccessPolicyId *string `location:"uri" locationName:"accessPolicyId" min:"36" type:"string" required:"true"`
 
-	// The identity for this access policy. Choose an AWS SSO user, an AWS SSO group,
-	// or an IAM user.
+	// The identity for this access policy. Choose an Amazon Web Services SSO user,
+	// an Amazon Web Services SSO group, or an IAM user.
 	//
 	// AccessPolicyIdentity is a required field
 	AccessPolicyIdentity *Identity `locationName:"accessPolicyIdentity" type:"structure" required:"true"`
@@ -14906,8 +19199,8 @@ type UpdateAccessPolicyInput struct {
 	// AccessPolicyPermission is a required field
 	AccessPolicyPermission *string `locationName:"accessPolicyPermission" type:"string" required:"true" enum:"Permission"`
 
-	// The AWS IoT SiteWise Monitor resource for this access policy. Choose either
-	// a portal or a project.
+	// The IoT SiteWise Monitor resource for this access policy. Choose either a
+	// portal or a project.
 	//
 	// AccessPolicyResource is a required field
 	AccessPolicyResource *Resource `locationName:"accessPolicyResource" type:"structure" required:"true"`
@@ -14918,12 +19211,20 @@ type UpdateAccessPolicyInput struct {
 	ClientToken *string `locationName:"clientToken" min:"36" type:"string" idempotencyToken:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpdateAccessPolicyInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpdateAccessPolicyInput) GoString() string {
 	return s.String()
 }
@@ -14997,15 +19298,23 @@ func (s *UpdateAccessPolicyInput) SetClientToken(v string) *UpdateAccessPolicyIn
 }
 
 type UpdateAccessPolicyOutput struct {
-	_ struct{} `type:"structure"`
+	_ struct{} `type:"structure" nopayload:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpdateAccessPolicyOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpdateAccessPolicyOutput) GoString() string {
 	return s.String()
 }
@@ -15029,12 +19338,20 @@ type UpdateAssetInput struct {
 	ClientToken *string `locationName:"clientToken" min:"36" type:"string" idempotencyToken:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpdateAssetInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpdateAssetInput) GoString() string {
 	return s.String()
 }
@@ -15085,17 +19402,23 @@ func (s *UpdateAssetInput) SetClientToken(v string) *UpdateAssetInput {
 type UpdateAssetModelInput struct {
 	_ struct{} `type:"structure"`
 
+	// The composite asset models that are part of this asset model. Composite asset
+	// models are asset models that contain specific properties. Each composite
+	// model has a type that defines the properties that the composite model supports.
+	// Use composite asset models to define alarms on this asset model.
+	AssetModelCompositeModels []*AssetModelCompositeModel `locationName:"assetModelCompositeModels" type:"list"`
+
 	// A description for the asset model.
 	AssetModelDescription *string `locationName:"assetModelDescription" min:"1" type:"string"`
 
 	// The updated hierarchy definitions of the asset model. Each hierarchy specifies
 	// an asset model whose assets can be children of any other assets created from
 	// this asset model. For more information, see Asset hierarchies (https://docs.aws.amazon.com/iot-sitewise/latest/userguide/asset-hierarchies.html)
-	// in the AWS IoT SiteWise User Guide.
+	// in the IoT SiteWise User Guide.
 	//
 	// You can specify up to 10 hierarchies per asset model. For more information,
 	// see Quotas (https://docs.aws.amazon.com/iot-sitewise/latest/userguide/quotas.html)
-	// in the AWS IoT SiteWise User Guide.
+	// in the IoT SiteWise User Guide.
 	AssetModelHierarchies []*AssetModelHierarchy `locationName:"assetModelHierarchies" type:"list"`
 
 	// The ID of the asset model to update.
@@ -15110,11 +19433,11 @@ type UpdateAssetModelInput struct {
 
 	// The updated property definitions of the asset model. For more information,
 	// see Asset properties (https://docs.aws.amazon.com/iot-sitewise/latest/userguide/asset-properties.html)
-	// in the AWS IoT SiteWise User Guide.
+	// in the IoT SiteWise User Guide.
 	//
 	// You can specify up to 200 properties per asset model. For more information,
 	// see Quotas (https://docs.aws.amazon.com/iot-sitewise/latest/userguide/quotas.html)
-	// in the AWS IoT SiteWise User Guide.
+	// in the IoT SiteWise User Guide.
 	AssetModelProperties []*AssetModelProperty `locationName:"assetModelProperties" type:"list"`
 
 	// A unique case-sensitive identifier that you can provide to ensure the idempotency
@@ -15123,12 +19446,20 @@ type UpdateAssetModelInput struct {
 	ClientToken *string `locationName:"clientToken" min:"36" type:"string" idempotencyToken:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpdateAssetModelInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpdateAssetModelInput) GoString() string {
 	return s.String()
 }
@@ -15153,6 +19484,16 @@ func (s *UpdateAssetModelInput) Validate() error {
 	}
 	if s.ClientToken != nil && len(*s.ClientToken) < 36 {
 		invalidParams.Add(request.NewErrParamMinLen("ClientToken", 36))
+	}
+	if s.AssetModelCompositeModels != nil {
+		for i, v := range s.AssetModelCompositeModels {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "AssetModelCompositeModels", i), err.(request.ErrInvalidParams))
+			}
+		}
 	}
 	if s.AssetModelHierarchies != nil {
 		for i, v := range s.AssetModelHierarchies {
@@ -15179,6 +19520,12 @@ func (s *UpdateAssetModelInput) Validate() error {
 		return invalidParams
 	}
 	return nil
+}
+
+// SetAssetModelCompositeModels sets the AssetModelCompositeModels field's value.
+func (s *UpdateAssetModelInput) SetAssetModelCompositeModels(v []*AssetModelCompositeModel) *UpdateAssetModelInput {
+	s.AssetModelCompositeModels = v
+	return s
 }
 
 // SetAssetModelDescription sets the AssetModelDescription field's value.
@@ -15227,12 +19574,20 @@ type UpdateAssetModelOutput struct {
 	AssetModelStatus *AssetModelStatus `locationName:"assetModelStatus" type:"structure" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpdateAssetModelOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpdateAssetModelOutput) GoString() string {
 	return s.String()
 }
@@ -15253,12 +19608,20 @@ type UpdateAssetOutput struct {
 	AssetStatus *AssetStatus `locationName:"assetStatus" type:"structure" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpdateAssetOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpdateAssetOutput) GoString() string {
 	return s.String()
 }
@@ -15282,11 +19645,10 @@ type UpdateAssetPropertyInput struct {
 	// is required.
 	ClientToken *string `locationName:"clientToken" min:"36" type:"string" idempotencyToken:"true"`
 
-	// The property alias that identifies the property, such as an OPC-UA server
-	// data stream path (for example, /company/windfarm/3/turbine/7/temperature).
-	// For more information, see Mapping industrial data streams to asset properties
-	// (https://docs.aws.amazon.com/iot-sitewise/latest/userguide/connect-data-streams.html)
-	// in the AWS IoT SiteWise User Guide.
+	// The alias that identifies the property, such as an OPC-UA server data stream
+	// path (for example, /company/windfarm/3/turbine/7/temperature). For more information,
+	// see Mapping industrial data streams to asset properties (https://docs.aws.amazon.com/iot-sitewise/latest/userguide/connect-data-streams.html)
+	// in the IoT SiteWise User Guide.
 	//
 	// If you omit this parameter, the alias is removed from the property.
 	PropertyAlias *string `locationName:"propertyAlias" min:"1" type:"string"`
@@ -15297,21 +19659,29 @@ type UpdateAssetPropertyInput struct {
 	PropertyId *string `location:"uri" locationName:"propertyId" min:"36" type:"string" required:"true"`
 
 	// The MQTT notification state (enabled or disabled) for this asset property.
-	// When the notification state is enabled, AWS IoT SiteWise publishes property
-	// value updates to a unique MQTT topic. For more information, see Interacting
-	// with other services (https://docs.aws.amazon.com/iot-sitewise/latest/userguide/interact-with-other-services.html)
-	// in the AWS IoT SiteWise User Guide.
+	// When the notification state is enabled, IoT SiteWise publishes property value
+	// updates to a unique MQTT topic. For more information, see Interacting with
+	// other services (https://docs.aws.amazon.com/iot-sitewise/latest/userguide/interact-with-other-services.html)
+	// in the IoT SiteWise User Guide.
 	//
 	// If you omit this parameter, the notification state is set to DISABLED.
 	PropertyNotificationState *string `locationName:"propertyNotificationState" type:"string" enum:"PropertyNotificationState"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpdateAssetPropertyInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpdateAssetPropertyInput) GoString() string {
 	return s.String()
 }
@@ -15375,15 +19745,23 @@ func (s *UpdateAssetPropertyInput) SetPropertyNotificationState(v string) *Updat
 }
 
 type UpdateAssetPropertyOutput struct {
-	_ struct{} `type:"structure"`
+	_ struct{} `type:"structure" nopayload:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpdateAssetPropertyOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpdateAssetPropertyOutput) GoString() string {
 	return s.String()
 }
@@ -15398,7 +19776,7 @@ type UpdateDashboardInput struct {
 
 	// The new dashboard definition, as specified in a JSON literal. For detailed
 	// information, see Creating dashboards (CLI) (https://docs.aws.amazon.com/iot-sitewise/latest/userguide/create-dashboards-using-aws-cli.html)
-	// in the AWS IoT SiteWise User Guide.
+	// in the IoT SiteWise User Guide.
 	//
 	// DashboardDefinition is a required field
 	DashboardDefinition *string `locationName:"dashboardDefinition" type:"string" required:"true"`
@@ -15417,12 +19795,20 @@ type UpdateDashboardInput struct {
 	DashboardName *string `locationName:"dashboardName" min:"1" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpdateDashboardInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpdateDashboardInput) GoString() string {
 	return s.String()
 }
@@ -15489,15 +19875,23 @@ func (s *UpdateDashboardInput) SetDashboardName(v string) *UpdateDashboardInput 
 }
 
 type UpdateDashboardOutput struct {
-	_ struct{} `type:"structure"`
+	_ struct{} `type:"structure" nopayload:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpdateDashboardOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpdateDashboardOutput) GoString() string {
 	return s.String()
 }
@@ -15507,14 +19901,14 @@ type UpdateGatewayCapabilityConfigurationInput struct {
 
 	// The JSON document that defines the configuration for the gateway capability.
 	// For more information, see Configuring data sources (CLI) (https://docs.aws.amazon.com/iot-sitewise/latest/userguide/configure-sources.html#configure-source-cli)
-	// in the AWS IoT SiteWise User Guide.
+	// in the IoT SiteWise User Guide.
 	//
 	// CapabilityConfiguration is a required field
 	CapabilityConfiguration *string `locationName:"capabilityConfiguration" min:"1" type:"string" required:"true"`
 
 	// The namespace of the gateway capability configuration to be updated. For
-	// example, if you configure OPC-UA sources from the AWS IoT SiteWise console,
-	// your OPC-UA capability configuration has the namespace iotsitewise:opcuacollector:version,
+	// example, if you configure OPC-UA sources from the IoT SiteWise console, your
+	// OPC-UA capability configuration has the namespace iotsitewise:opcuacollector:version,
 	// where version is a number such as 1.
 	//
 	// CapabilityNamespace is a required field
@@ -15526,12 +19920,20 @@ type UpdateGatewayCapabilityConfigurationInput struct {
 	GatewayId *string `location:"uri" locationName:"gatewayId" min:"36" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpdateGatewayCapabilityConfigurationInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpdateGatewayCapabilityConfigurationInput) GoString() string {
 	return s.String()
 }
@@ -15606,12 +20008,20 @@ type UpdateGatewayCapabilityConfigurationOutput struct {
 	CapabilitySyncStatus *string `locationName:"capabilitySyncStatus" type:"string" required:"true" enum:"CapabilitySyncStatus"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpdateGatewayCapabilityConfigurationOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpdateGatewayCapabilityConfigurationOutput) GoString() string {
 	return s.String()
 }
@@ -15642,12 +20052,20 @@ type UpdateGatewayInput struct {
 	GatewayName *string `locationName:"gatewayName" min:"1" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpdateGatewayInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpdateGatewayInput) GoString() string {
 	return s.String()
 }
@@ -15687,15 +20105,23 @@ func (s *UpdateGatewayInput) SetGatewayName(v string) *UpdateGatewayInput {
 }
 
 type UpdateGatewayOutput struct {
-	_ struct{} `type:"structure"`
+	_ struct{} `type:"structure" nopayload:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpdateGatewayOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpdateGatewayOutput) GoString() string {
 	return s.String()
 }
@@ -15703,12 +20129,22 @@ func (s UpdateGatewayOutput) GoString() string {
 type UpdatePortalInput struct {
 	_ struct{} `type:"structure"`
 
+	// Contains the configuration information of an alarm created in an IoT SiteWise
+	// Monitor portal. You can use the alarm to monitor an asset property and get
+	// notified when the asset property value is outside a specified range. For
+	// more information, see Monitoring with alarms (https://docs.aws.amazon.com/iot-sitewise/latest/appguide/monitor-alarms.html)
+	// in the IoT SiteWise Application Guide.
+	Alarms *Alarms `locationName:"alarms" type:"structure"`
+
 	// A unique case-sensitive identifier that you can provide to ensure the idempotency
 	// of the request. Don't reuse this client token if a new idempotent request
 	// is required.
 	ClientToken *string `locationName:"clientToken" min:"36" type:"string" idempotencyToken:"true"`
 
-	// The AWS administrator's contact email address.
+	// The email address that sends alarm notifications.
+	NotificationSenderEmail *string `locationName:"notificationSenderEmail" min:"1" type:"string"`
+
+	// The Amazon Web Services administrator's contact email address.
 	//
 	// PortalContactEmail is a required field
 	PortalContactEmail *string `locationName:"portalContactEmail" min:"1" type:"string" required:"true"`
@@ -15735,21 +20171,29 @@ type UpdatePortalInput struct {
 	PortalName *string `locationName:"portalName" min:"1" type:"string" required:"true"`
 
 	// The ARN (https://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html)
-	// of a service role that allows the portal's users to access your AWS IoT SiteWise
+	// of a service role that allows the portal's users to access your IoT SiteWise
 	// resources on your behalf. For more information, see Using service roles for
-	// AWS IoT SiteWise Monitor (https://docs.aws.amazon.com/iot-sitewise/latest/userguide/monitor-service-role.html)
-	// in the AWS IoT SiteWise User Guide.
+	// IoT SiteWise Monitor (https://docs.aws.amazon.com/iot-sitewise/latest/userguide/monitor-service-role.html)
+	// in the IoT SiteWise User Guide.
 	//
 	// RoleArn is a required field
 	RoleArn *string `locationName:"roleArn" min:"1" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpdatePortalInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpdatePortalInput) GoString() string {
 	return s.String()
 }
@@ -15759,6 +20203,9 @@ func (s *UpdatePortalInput) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "UpdatePortalInput"}
 	if s.ClientToken != nil && len(*s.ClientToken) < 36 {
 		invalidParams.Add(request.NewErrParamMinLen("ClientToken", 36))
+	}
+	if s.NotificationSenderEmail != nil && len(*s.NotificationSenderEmail) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("NotificationSenderEmail", 1))
 	}
 	if s.PortalContactEmail == nil {
 		invalidParams.Add(request.NewErrParamRequired("PortalContactEmail"))
@@ -15787,6 +20234,11 @@ func (s *UpdatePortalInput) Validate() error {
 	if s.RoleArn != nil && len(*s.RoleArn) < 1 {
 		invalidParams.Add(request.NewErrParamMinLen("RoleArn", 1))
 	}
+	if s.Alarms != nil {
+		if err := s.Alarms.Validate(); err != nil {
+			invalidParams.AddNested("Alarms", err.(request.ErrInvalidParams))
+		}
+	}
 	if s.PortalLogoImage != nil {
 		if err := s.PortalLogoImage.Validate(); err != nil {
 			invalidParams.AddNested("PortalLogoImage", err.(request.ErrInvalidParams))
@@ -15799,9 +20251,21 @@ func (s *UpdatePortalInput) Validate() error {
 	return nil
 }
 
+// SetAlarms sets the Alarms field's value.
+func (s *UpdatePortalInput) SetAlarms(v *Alarms) *UpdatePortalInput {
+	s.Alarms = v
+	return s
+}
+
 // SetClientToken sets the ClientToken field's value.
 func (s *UpdatePortalInput) SetClientToken(v string) *UpdatePortalInput {
 	s.ClientToken = &v
+	return s
+}
+
+// SetNotificationSenderEmail sets the NotificationSenderEmail field's value.
+func (s *UpdatePortalInput) SetNotificationSenderEmail(v string) *UpdatePortalInput {
+	s.NotificationSenderEmail = &v
 	return s
 }
 
@@ -15851,12 +20315,20 @@ type UpdatePortalOutput struct {
 	PortalStatus *PortalStatus `locationName:"portalStatus" type:"structure" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpdatePortalOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpdatePortalOutput) GoString() string {
 	return s.String()
 }
@@ -15889,12 +20361,20 @@ type UpdateProjectInput struct {
 	ProjectName *string `locationName:"projectName" min:"1" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpdateProjectInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpdateProjectInput) GoString() string {
 	return s.String()
 }
@@ -15952,15 +20432,23 @@ func (s *UpdateProjectInput) SetProjectName(v string) *UpdateProjectInput {
 }
 
 type UpdateProjectOutput struct {
-	_ struct{} `type:"structure"`
+	_ struct{} `type:"structure" nopayload:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpdateProjectOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UpdateProjectOutput) GoString() string {
 	return s.String()
 }
@@ -15969,18 +20457,26 @@ func (s UpdateProjectOutput) GoString() string {
 type UserIdentity struct {
 	_ struct{} `type:"structure"`
 
-	// The AWS SSO ID of the user.
+	// The Amazon Web Services SSO ID of the user.
 	//
 	// Id is a required field
 	Id *string `locationName:"id" min:"1" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UserIdentity) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s UserIdentity) GoString() string {
 	return s.String()
 }
@@ -16018,7 +20514,7 @@ type VariableValue struct {
 	// hierarchies using the same model and therefore the same propertyId. For example,
 	// you might have separately grouped assets that come from the same asset model.
 	// For more information, see Asset hierarchies (https://docs.aws.amazon.com/iot-sitewise/latest/userguide/asset-hierarchies.html)
-	// in the AWS IoT SiteWise User Guide.
+	// in the IoT SiteWise User Guide.
 	HierarchyId *string `locationName:"hierarchyId" min:"1" type:"string"`
 
 	// The ID of the property to use as the variable. You can use the property name
@@ -16028,12 +20524,20 @@ type VariableValue struct {
 	PropertyId *string `locationName:"propertyId" min:"1" type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s VariableValue) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s VariableValue) GoString() string {
 	return s.String()
 }
@@ -16083,30 +20587,25 @@ type Variant struct {
 	IntegerValue *int64 `locationName:"integerValue" type:"integer"`
 
 	// Asset property data of type string (sequence of characters).
-	StringValue *string `locationName:"stringValue" min:"1" type:"string"`
+	StringValue *string `locationName:"stringValue" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s Variant) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s Variant) GoString() string {
 	return s.String()
-}
-
-// Validate inspects the fields of the type to determine if they are valid.
-func (s *Variant) Validate() error {
-	invalidParams := request.ErrInvalidParams{Context: "Variant"}
-	if s.StringValue != nil && len(*s.StringValue) < 1 {
-		invalidParams.Add(request.NewErrParamMinLen("StringValue", 1))
-	}
-
-	if invalidParams.Len() > 0 {
-		return invalidParams
-	}
-	return nil
 }
 
 // SetBooleanValue sets the BooleanValue field's value.
@@ -16210,6 +20709,18 @@ func AssetModelState_Values() []string {
 }
 
 const (
+	// AssetRelationshipTypeHierarchy is a AssetRelationshipType enum value
+	AssetRelationshipTypeHierarchy = "HIERARCHY"
+)
+
+// AssetRelationshipType_Values returns all elements of the AssetRelationshipType enum
+func AssetRelationshipType_Values() []string {
+	return []string{
+		AssetRelationshipTypeHierarchy,
+	}
+}
+
+const (
 	// AssetStateCreating is a AssetState enum value
 	AssetStateCreating = "CREATING"
 
@@ -16306,6 +20817,9 @@ const (
 
 	// CapabilitySyncStatusSyncFailed is a CapabilitySyncStatus enum value
 	CapabilitySyncStatusSyncFailed = "SYNC_FAILED"
+
+	// CapabilitySyncStatusUnknown is a CapabilitySyncStatus enum value
+	CapabilitySyncStatusUnknown = "UNKNOWN"
 )
 
 // CapabilitySyncStatus_Values returns all elements of the CapabilitySyncStatus enum
@@ -16314,6 +20828,75 @@ func CapabilitySyncStatus_Values() []string {
 		CapabilitySyncStatusInSync,
 		CapabilitySyncStatusOutOfSync,
 		CapabilitySyncStatusSyncFailed,
+		CapabilitySyncStatusUnknown,
+	}
+}
+
+const (
+	// ComputeLocationEdge is a ComputeLocation enum value
+	ComputeLocationEdge = "EDGE"
+
+	// ComputeLocationCloud is a ComputeLocation enum value
+	ComputeLocationCloud = "CLOUD"
+)
+
+// ComputeLocation_Values returns all elements of the ComputeLocation enum
+func ComputeLocation_Values() []string {
+	return []string{
+		ComputeLocationEdge,
+		ComputeLocationCloud,
+	}
+}
+
+const (
+	// ConfigurationStateActive is a ConfigurationState enum value
+	ConfigurationStateActive = "ACTIVE"
+
+	// ConfigurationStateUpdateInProgress is a ConfigurationState enum value
+	ConfigurationStateUpdateInProgress = "UPDATE_IN_PROGRESS"
+
+	// ConfigurationStateUpdateFailed is a ConfigurationState enum value
+	ConfigurationStateUpdateFailed = "UPDATE_FAILED"
+)
+
+// ConfigurationState_Values returns all elements of the ConfigurationState enum
+func ConfigurationState_Values() []string {
+	return []string{
+		ConfigurationStateActive,
+		ConfigurationStateUpdateInProgress,
+		ConfigurationStateUpdateFailed,
+	}
+}
+
+const (
+	// DetailedErrorCodeIncompatibleComputeLocation is a DetailedErrorCode enum value
+	DetailedErrorCodeIncompatibleComputeLocation = "INCOMPATIBLE_COMPUTE_LOCATION"
+
+	// DetailedErrorCodeIncompatibleForwardingConfiguration is a DetailedErrorCode enum value
+	DetailedErrorCodeIncompatibleForwardingConfiguration = "INCOMPATIBLE_FORWARDING_CONFIGURATION"
+)
+
+// DetailedErrorCode_Values returns all elements of the DetailedErrorCode enum
+func DetailedErrorCode_Values() []string {
+	return []string{
+		DetailedErrorCodeIncompatibleComputeLocation,
+		DetailedErrorCodeIncompatibleForwardingConfiguration,
+	}
+}
+
+const (
+	// EncryptionTypeSitewiseDefaultEncryption is a EncryptionType enum value
+	EncryptionTypeSitewiseDefaultEncryption = "SITEWISE_DEFAULT_ENCRYPTION"
+
+	// EncryptionTypeKmsBasedEncryption is a EncryptionType enum value
+	EncryptionTypeKmsBasedEncryption = "KMS_BASED_ENCRYPTION"
+)
+
+// EncryptionType_Values returns all elements of the EncryptionType enum
+func EncryptionType_Values() []string {
+	return []string{
+		EncryptionTypeSitewiseDefaultEncryption,
+		EncryptionTypeKmsBasedEncryption,
 	}
 }
 
@@ -16330,6 +20913,22 @@ func ErrorCode_Values() []string {
 	return []string{
 		ErrorCodeValidationError,
 		ErrorCodeInternalFailure,
+	}
+}
+
+const (
+	// ForwardingConfigStateDisabled is a ForwardingConfigState enum value
+	ForwardingConfigStateDisabled = "DISABLED"
+
+	// ForwardingConfigStateEnabled is a ForwardingConfigState enum value
+	ForwardingConfigStateEnabled = "ENABLED"
+)
+
+// ForwardingConfigState_Values returns all elements of the ForwardingConfigState enum
+func ForwardingConfigState_Values() []string {
+	return []string{
+		ForwardingConfigStateDisabled,
+		ForwardingConfigStateEnabled,
 	}
 }
 
@@ -16477,6 +21076,9 @@ const (
 
 	// PropertyDataTypeBoolean is a PropertyDataType enum value
 	PropertyDataTypeBoolean = "BOOLEAN"
+
+	// PropertyDataTypeStruct is a PropertyDataType enum value
+	PropertyDataTypeStruct = "STRUCT"
 )
 
 // PropertyDataType_Values returns all elements of the PropertyDataType enum
@@ -16486,6 +21088,7 @@ func PropertyDataType_Values() []string {
 		PropertyDataTypeInteger,
 		PropertyDataTypeDouble,
 		PropertyDataTypeBoolean,
+		PropertyDataTypeStruct,
 	}
 }
 
@@ -16542,6 +21145,22 @@ func ResourceType_Values() []string {
 }
 
 const (
+	// StorageTypeSitewiseDefaultStorage is a StorageType enum value
+	StorageTypeSitewiseDefaultStorage = "SITEWISE_DEFAULT_STORAGE"
+
+	// StorageTypeMultiLayerStorage is a StorageType enum value
+	StorageTypeMultiLayerStorage = "MULTI_LAYER_STORAGE"
+)
+
+// StorageType_Values returns all elements of the StorageType enum
+func StorageType_Values() []string {
+	return []string{
+		StorageTypeSitewiseDefaultStorage,
+		StorageTypeMultiLayerStorage,
+	}
+}
+
+const (
 	// TimeOrderingAscending is a TimeOrdering enum value
 	TimeOrderingAscending = "ASCENDING"
 
@@ -16570,5 +21189,17 @@ func TraversalDirection_Values() []string {
 	return []string{
 		TraversalDirectionParent,
 		TraversalDirectionChild,
+	}
+}
+
+const (
+	// TraversalTypePathToRoot is a TraversalType enum value
+	TraversalTypePathToRoot = "PATH_TO_ROOT"
+)
+
+// TraversalType_Values returns all elements of the TraversalType enum
+func TraversalType_Values() []string {
+	return []string{
+		TraversalTypePathToRoot,
 	}
 }

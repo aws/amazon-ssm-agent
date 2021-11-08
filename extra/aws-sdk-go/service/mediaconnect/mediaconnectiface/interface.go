@@ -26,7 +26,7 @@ import (
 //    // myFunc uses an SDK service client to make a request to
 //    // AWS MediaConnect.
 //    func myFunc(svc mediaconnectiface.MediaConnectAPI) bool {
-//        // Make svc.AddFlowOutputs request
+//        // Make svc.AddFlowMediaStreams request
 //    }
 //
 //    func main() {
@@ -42,7 +42,7 @@ import (
 //    type mockMediaConnectClient struct {
 //        mediaconnectiface.MediaConnectAPI
 //    }
-//    func (m *mockMediaConnectClient) AddFlowOutputs(input *mediaconnect.AddFlowOutputsInput) (*mediaconnect.AddFlowOutputsOutput, error) {
+//    func (m *mockMediaConnectClient) AddFlowMediaStreams(input *mediaconnect.AddFlowMediaStreamsInput) (*mediaconnect.AddFlowMediaStreamsOutput, error) {
 //        // mock response/functionality
 //    }
 //
@@ -60,6 +60,10 @@ import (
 // and waiters. Its suggested to use the pattern above for testing, or using
 // tooling to generate mocks to satisfy the interfaces.
 type MediaConnectAPI interface {
+	AddFlowMediaStreams(*mediaconnect.AddFlowMediaStreamsInput) (*mediaconnect.AddFlowMediaStreamsOutput, error)
+	AddFlowMediaStreamsWithContext(aws.Context, *mediaconnect.AddFlowMediaStreamsInput, ...request.Option) (*mediaconnect.AddFlowMediaStreamsOutput, error)
+	AddFlowMediaStreamsRequest(*mediaconnect.AddFlowMediaStreamsInput) (*request.Request, *mediaconnect.AddFlowMediaStreamsOutput)
+
 	AddFlowOutputs(*mediaconnect.AddFlowOutputsInput) (*mediaconnect.AddFlowOutputsOutput, error)
 	AddFlowOutputsWithContext(aws.Context, *mediaconnect.AddFlowOutputsInput, ...request.Option) (*mediaconnect.AddFlowOutputsOutput, error)
 	AddFlowOutputsRequest(*mediaconnect.AddFlowOutputsInput) (*request.Request, *mediaconnect.AddFlowOutputsOutput)
@@ -132,6 +136,10 @@ type MediaConnectAPI interface {
 	PurchaseOfferingWithContext(aws.Context, *mediaconnect.PurchaseOfferingInput, ...request.Option) (*mediaconnect.PurchaseOfferingOutput, error)
 	PurchaseOfferingRequest(*mediaconnect.PurchaseOfferingInput) (*request.Request, *mediaconnect.PurchaseOfferingOutput)
 
+	RemoveFlowMediaStream(*mediaconnect.RemoveFlowMediaStreamInput) (*mediaconnect.RemoveFlowMediaStreamOutput, error)
+	RemoveFlowMediaStreamWithContext(aws.Context, *mediaconnect.RemoveFlowMediaStreamInput, ...request.Option) (*mediaconnect.RemoveFlowMediaStreamOutput, error)
+	RemoveFlowMediaStreamRequest(*mediaconnect.RemoveFlowMediaStreamInput) (*request.Request, *mediaconnect.RemoveFlowMediaStreamOutput)
+
 	RemoveFlowOutput(*mediaconnect.RemoveFlowOutputInput) (*mediaconnect.RemoveFlowOutputOutput, error)
 	RemoveFlowOutputWithContext(aws.Context, *mediaconnect.RemoveFlowOutputInput, ...request.Option) (*mediaconnect.RemoveFlowOutputOutput, error)
 	RemoveFlowOutputRequest(*mediaconnect.RemoveFlowOutputInput) (*request.Request, *mediaconnect.RemoveFlowOutputOutput)
@@ -172,6 +180,10 @@ type MediaConnectAPI interface {
 	UpdateFlowEntitlementWithContext(aws.Context, *mediaconnect.UpdateFlowEntitlementInput, ...request.Option) (*mediaconnect.UpdateFlowEntitlementOutput, error)
 	UpdateFlowEntitlementRequest(*mediaconnect.UpdateFlowEntitlementInput) (*request.Request, *mediaconnect.UpdateFlowEntitlementOutput)
 
+	UpdateFlowMediaStream(*mediaconnect.UpdateFlowMediaStreamInput) (*mediaconnect.UpdateFlowMediaStreamOutput, error)
+	UpdateFlowMediaStreamWithContext(aws.Context, *mediaconnect.UpdateFlowMediaStreamInput, ...request.Option) (*mediaconnect.UpdateFlowMediaStreamOutput, error)
+	UpdateFlowMediaStreamRequest(*mediaconnect.UpdateFlowMediaStreamInput) (*request.Request, *mediaconnect.UpdateFlowMediaStreamOutput)
+
 	UpdateFlowOutput(*mediaconnect.UpdateFlowOutputInput) (*mediaconnect.UpdateFlowOutputOutput, error)
 	UpdateFlowOutputWithContext(aws.Context, *mediaconnect.UpdateFlowOutputInput, ...request.Option) (*mediaconnect.UpdateFlowOutputOutput, error)
 	UpdateFlowOutputRequest(*mediaconnect.UpdateFlowOutputInput) (*request.Request, *mediaconnect.UpdateFlowOutputOutput)
@@ -179,6 +191,15 @@ type MediaConnectAPI interface {
 	UpdateFlowSource(*mediaconnect.UpdateFlowSourceInput) (*mediaconnect.UpdateFlowSourceOutput, error)
 	UpdateFlowSourceWithContext(aws.Context, *mediaconnect.UpdateFlowSourceInput, ...request.Option) (*mediaconnect.UpdateFlowSourceOutput, error)
 	UpdateFlowSourceRequest(*mediaconnect.UpdateFlowSourceInput) (*request.Request, *mediaconnect.UpdateFlowSourceOutput)
+
+	WaitUntilFlowActive(*mediaconnect.DescribeFlowInput) error
+	WaitUntilFlowActiveWithContext(aws.Context, *mediaconnect.DescribeFlowInput, ...request.WaiterOption) error
+
+	WaitUntilFlowDeleted(*mediaconnect.DescribeFlowInput) error
+	WaitUntilFlowDeletedWithContext(aws.Context, *mediaconnect.DescribeFlowInput, ...request.WaiterOption) error
+
+	WaitUntilFlowStandby(*mediaconnect.DescribeFlowInput) error
+	WaitUntilFlowStandbyWithContext(aws.Context, *mediaconnect.DescribeFlowInput, ...request.WaiterOption) error
 }
 
 var _ MediaConnectAPI = (*mediaconnect.MediaConnect)(nil)

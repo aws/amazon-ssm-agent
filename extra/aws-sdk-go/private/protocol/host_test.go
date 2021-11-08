@@ -1,3 +1,4 @@
+//go:build go1.7
 // +build go1.7
 
 package protocol
@@ -6,6 +7,28 @@ import (
 	"strconv"
 	"testing"
 )
+
+func TestValidPortNumber(t *testing.T) {
+	cases := []struct {
+		Input string
+		Valid bool
+	}{
+		{Input: "123", Valid: true},
+		{Input: "123.0", Valid: false},
+		{Input: "-123", Valid: false},
+		{Input: "65536", Valid: false},
+		{Input: "0", Valid: true},
+	}
+	for i, c := range cases {
+		t.Run(strconv.Itoa(i), func(t *testing.T) {
+			valid := ValidPortNumber(c.Input)
+			if e, a := c.Valid, valid; e != a {
+				t.Errorf("expect valid %v, got %v", e, a)
+			}
+		})
+	}
+
+}
 
 func TestValidHostLabel(t *testing.T) {
 	cases := []struct {
@@ -50,6 +73,10 @@ func TestValidateEndpointHostHandler(t *testing.T) {
 			Input: "123456789.123456789.123456789.123456789.123456789.123456789.123456789.123456789.123456789.123456789.123456789.123456789.123456789.123456789.123456789.123456789.123456789.123456789.123456789.123456789.123456789.123456789.123456789.123456789.123456789.123456",
 			Valid: false,
 		},
+		"valid host with port number":         {Input: "abd.123:1234", Valid: true},
+		"valid host with invalid port number": {Input: "abc.123:99999", Valid: false},
+		"empty host with port number":         {Input: ":1234", Valid: false},
+		"valid host with empty port number":   {Input: "abc.123:", Valid: false},
 	}
 
 	for name, c := range cases {

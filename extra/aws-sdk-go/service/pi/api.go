@@ -58,6 +58,9 @@ func (c *PI) DescribeDimensionKeysRequest(input *DescribeDimensionKeysInput) (re
 //
 // For a specific time period, retrieve the top N dimension keys for a metric.
 //
+// Each response element returns a maximum of 500 bytes. For larger elements,
+// such as SQL statements, only the first 500 bytes are returned.
+//
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
 // the error.
@@ -92,6 +95,95 @@ func (c *PI) DescribeDimensionKeys(input *DescribeDimensionKeysInput) (*Describe
 // for more information on using Contexts.
 func (c *PI) DescribeDimensionKeysWithContext(ctx aws.Context, input *DescribeDimensionKeysInput, opts ...request.Option) (*DescribeDimensionKeysOutput, error) {
 	req, out := c.DescribeDimensionKeysRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opGetDimensionKeyDetails = "GetDimensionKeyDetails"
+
+// GetDimensionKeyDetailsRequest generates a "aws/request.Request" representing the
+// client's request for the GetDimensionKeyDetails operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See GetDimensionKeyDetails for more information on using the GetDimensionKeyDetails
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the GetDimensionKeyDetailsRequest method.
+//    req, resp := client.GetDimensionKeyDetailsRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/pi-2018-02-27/GetDimensionKeyDetails
+func (c *PI) GetDimensionKeyDetailsRequest(input *GetDimensionKeyDetailsInput) (req *request.Request, output *GetDimensionKeyDetailsOutput) {
+	op := &request.Operation{
+		Name:       opGetDimensionKeyDetails,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &GetDimensionKeyDetailsInput{}
+	}
+
+	output = &GetDimensionKeyDetailsOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// GetDimensionKeyDetails API operation for AWS Performance Insights.
+//
+// Get the attributes of the specified dimension group for a DB instance or
+// data source. For example, if you specify a SQL ID, GetDimensionKeyDetails
+// retrieves the full text of the dimension db.sql.statement associated with
+// this ID. This operation is useful because GetResourceMetrics and DescribeDimensionKeys
+// don't support retrieval of large SQL statement text.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Performance Insights's
+// API operation GetDimensionKeyDetails for usage and error information.
+//
+// Returned Error Types:
+//   * InvalidArgumentException
+//   One of the arguments provided is invalid for this request.
+//
+//   * InternalServiceError
+//   The request failed due to an unknown error.
+//
+//   * NotAuthorizedException
+//   The user is not authorized to perform this request.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/pi-2018-02-27/GetDimensionKeyDetails
+func (c *PI) GetDimensionKeyDetails(input *GetDimensionKeyDetailsInput) (*GetDimensionKeyDetailsOutput, error) {
+	req, out := c.GetDimensionKeyDetailsRequest(input)
+	return out, req.Send()
+}
+
+// GetDimensionKeyDetailsWithContext is the same as GetDimensionKeyDetails with the addition of
+// the ability to pass a context and additional request options.
+//
+// See GetDimensionKeyDetails for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *PI) GetDimensionKeyDetailsWithContext(ctx aws.Context, input *GetDimensionKeyDetailsInput, opts ...request.Option) (*GetDimensionKeyDetailsOutput, error) {
+	req, out := c.GetDimensionKeyDetailsRequest(input)
 	req.SetContext(ctx)
 	req.ApplyOptions(opts...)
 	return out, req.Send()
@@ -144,6 +236,9 @@ func (c *PI) GetResourceMetricsRequest(input *GetResourceMetricsInput) (req *req
 // Retrieve Performance Insights metrics for a set of data sources, over a time
 // period. You can provide specific dimension groups and dimensions, and provide
 // aggregation and filtering criteria for each group.
+//
+// Each response element returns a maximum of 500 bytes. For larger elements,
+// such as SQL statements, only the first 500 bytes are returned.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -200,12 +295,20 @@ type DataPoint struct {
 	Value *float64 `type:"double" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DataPoint) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DataPoint) GoString() string {
 	return s.String()
 }
@@ -226,8 +329,8 @@ type DescribeDimensionKeysInput struct {
 	_ struct{} `type:"structure"`
 
 	// The date and time specifying the end of the requested time series data. The
-	// value specified is exclusive - data points less than (but not equal to) EndTime
-	// will be returned.
+	// value specified is exclusive, which means that data points less than (but
+	// not equal to) EndTime are returned.
 	//
 	// The value for EndTime must be later than the value for StartTime.
 	//
@@ -243,10 +346,10 @@ type DescribeDimensionKeysInput struct {
 	Filter map[string]*string `type:"map"`
 
 	// A specification for how to aggregate the data points from a query result.
-	// You must specify a valid dimension group. Performance Insights will return
-	// all of the dimensions within that group, unless you provide the names of
-	// specific dimensions within that group. You can also request that Performance
-	// Insights return a limited number of values for a dimension.
+	// You must specify a valid dimension group. Performance Insights returns all
+	// dimensions within this group, unless you provide the names of specific dimensions
+	// within this group. You can also request that Performance Insights return
+	// a limited number of values for a dimension.
 	//
 	// GroupBy is a required field
 	GroupBy *DimensionGroup `type:"structure" required:"true"`
@@ -255,7 +358,7 @@ type DescribeDimensionKeysInput struct {
 	// Insights gathers metrics from this data source.
 	//
 	// To use an Amazon RDS instance as a data source, you specify its DbiResourceId
-	// value - for example: db-FAIHNTYBKTGAUSUZQYPDS2GW4A
+	// value. For example, specify db-FAIHNTYBKTGAUSUZQYPDS2GW4A
 	//
 	// Identifier is a required field
 	Identifier *string `type:"string" required:"true"`
@@ -275,13 +378,20 @@ type DescribeDimensionKeysInput struct {
 	//    * db.sampledload.avg - the raw number of active sessions for the database
 	//    engine.
 	//
+	// If the number of active sessions is less than an internal Performance Insights
+	// threshold, db.load.avg and db.sampledload.avg are the same value. If the
+	// number of active sessions is greater than the internal threshold, Performance
+	// Insights samples the active sessions, with db.load.avg showing the scaled
+	// values, db.sampledload.avg showing the raw values, and db.sampledload.avg
+	// less than db.load.avg. For most use cases, you can query db.load.avg only.
+	//
 	// Metric is a required field
 	Metric *string `type:"string" required:"true"`
 
 	// An optional pagination token provided by a previous request. If this parameter
 	// is specified, the response includes only records beyond the token, up to
 	// the value specified by MaxRecords.
-	NextToken *string `type:"string"`
+	NextToken *string `min:"1" type:"string"`
 
 	// For each dimension specified in GroupBy, specify a secondary dimension to
 	// further subdivide the partition keys in the response.
@@ -301,20 +411,21 @@ type DescribeDimensionKeysInput struct {
 	//
 	//    * 86400 (twenty-four hours)
 	//
-	// If you don't specify PeriodInSeconds, then Performance Insights will choose
-	// a value for you, with a goal of returning roughly 100-200 data points in
-	// the response.
+	// If you don't specify PeriodInSeconds, then Performance Insights chooses a
+	// value for you, with a goal of returning roughly 100-200 data points in the
+	// response.
 	PeriodInSeconds *int64 `type:"integer"`
 
 	// The AWS service for which Performance Insights will return metrics. The only
-	// valid value for ServiceType is: RDS
+	// valid value for ServiceType is RDS.
 	//
 	// ServiceType is a required field
 	ServiceType *string `type:"string" required:"true" enum:"ServiceType"`
 
 	// The date and time specifying the beginning of the requested time series data.
-	// You can't specify a StartTime that's earlier than 7 days ago. The value specified
-	// is inclusive - data points equal to or greater than StartTime will be returned.
+	// You must specify a StartTime within the past 7 days. The value specified
+	// is inclusive, which means that data points equal to or greater than StartTime
+	// are returned.
 	//
 	// The value for StartTime must be earlier than the value for EndTime.
 	//
@@ -322,12 +433,20 @@ type DescribeDimensionKeysInput struct {
 	StartTime *time.Time `type:"timestamp" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeDimensionKeysInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeDimensionKeysInput) GoString() string {
 	return s.String()
 }
@@ -346,6 +465,9 @@ func (s *DescribeDimensionKeysInput) Validate() error {
 	}
 	if s.Metric == nil {
 		invalidParams.Add(request.NewErrParamRequired("Metric"))
+	}
+	if s.NextToken != nil && len(*s.NextToken) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("NextToken", 1))
 	}
 	if s.ServiceType == nil {
 		invalidParams.Add(request.NewErrParamRequired("ServiceType"))
@@ -455,19 +577,27 @@ type DescribeDimensionKeysOutput struct {
 	// An optional pagination token provided by a previous request. If this parameter
 	// is specified, the response includes only records beyond the token, up to
 	// the value specified by MaxRecords.
-	NextToken *string `type:"string"`
+	NextToken *string `min:"1" type:"string"`
 
 	// If PartitionBy was present in the request, PartitionKeys contains the breakdown
 	// of dimension keys by the specified partitions.
 	PartitionKeys []*ResponsePartitionKey `type:"list"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeDimensionKeysOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DescribeDimensionKeysOutput) GoString() string {
 	return s.String()
 }
@@ -505,6 +635,9 @@ func (s *DescribeDimensionKeysOutput) SetPartitionKeys(v []*ResponsePartitionKey
 // A logical grouping of Performance Insights metrics for a related subject
 // area. For example, the db.sql dimension group consists of the following dimensions:
 // db.sql.id, db.sql.db_id, db.sql.statement, and db.sql.tokenized_id.
+//
+// Each response element returns a maximum of 500 bytes. For larger elements,
+// such as SQL statements, only the first 500 bytes are returned.
 type DimensionGroup struct {
 	_ struct{} `type:"structure"`
 
@@ -514,48 +647,74 @@ type DimensionGroup struct {
 	//
 	// Valid values for elements in the Dimensions array are:
 	//
-	//    * db.user.id
+	//    * db.application.name - The name of the application that is connected
+	//    to the database (only Aurora PostgreSQL and RDS PostgreSQL)
 	//
-	//    * db.user.name
+	//    * db.host.id - The host ID of the connected client (all engines)
 	//
-	//    * db.host.id
+	//    * db.host.name - The host name of the connected client (all engines)
 	//
-	//    * db.host.name
+	//    * db.name - The name of the database to which the client is connected
+	//    (only Aurora PostgreSQL, RDS PostgreSQL, Aurora MySQL, RDS MySQL, and
+	//    MariaDB)
 	//
-	//    * db.sql.id
+	//    * db.session_type.name - The type of the current session (only Aurora
+	//    PostgreSQL and RDS PostgreSQL)
 	//
-	//    * db.sql.db_id
+	//    * db.sql.id - The SQL ID generated by Performance Insights (all engines)
 	//
-	//    * db.sql.statement
+	//    * db.sql.db_id - The SQL ID generated by the database (all engines)
+	//
+	//    * db.sql.statement - The SQL text that is being executed (all engines)
 	//
 	//    * db.sql.tokenized_id
 	//
-	//    * db.sql_tokenized.id
+	//    * db.sql_tokenized.id - The SQL digest ID generated by Performance Insights
+	//    (all engines)
 	//
-	//    * db.sql_tokenized.db_id
+	//    * db.sql_tokenized.db_id - SQL digest ID generated by the database (all
+	//    engines)
 	//
-	//    * db.sql_tokenized.statement
+	//    * db.sql_tokenized.statement - The SQL digest text (all engines)
 	//
-	//    * db.wait_event.name
+	//    * db.user.id - The ID of the user logged in to the database (all engines)
 	//
-	//    * db.wait_event.type
+	//    * db.user.name - The name of the user logged in to the database (all engines)
 	//
-	//    * db.wait_event_type.name
+	//    * db.wait_event.name - The event for which the backend is waiting (all
+	//    engines)
+	//
+	//    * db.wait_event.type - The type of event for which the backend is waiting
+	//    (all engines)
+	//
+	//    * db.wait_event_type.name - The name of the event type for which the backend
+	//    is waiting (all engines)
 	Dimensions []*string `min:"1" type:"list"`
 
 	// The name of the dimension group. Valid values are:
 	//
-	//    * db.user
+	//    * db - The name of the database to which the client is connected (only
+	//    Aurora PostgreSQL, RDS PostgreSQL, Aurora MySQL, RDS MySQL, and MariaDB)
 	//
-	//    * db.host
+	//    * db.application - The name of the application that is connected to the
+	//    database (only Aurora PostgreSQL and RDS PostgreSQL)
 	//
-	//    * db.sql
+	//    * db.host - The host name of the connected client (all engines)
 	//
-	//    * db.sql_tokenized
+	//    * db.session_type - The type of the current session (only Aurora PostgreSQL
+	//    and RDS PostgreSQL)
 	//
-	//    * db.wait_event
+	//    * db.sql - The SQL that is currently executing (all engines)
 	//
-	//    * db.wait_event_type
+	//    * db.sql_tokenized - The SQL digest (all engines)
+	//
+	//    * db.wait_event - The event for which the database backend is waiting
+	//    (all engines)
+	//
+	//    * db.wait_event_type - The type of event for which the database backend
+	//    is waiting (all engines)
+	//
+	//    * db.user - The user logged in to the database (all engines)
 	//
 	// Group is a required field
 	Group *string `type:"string" required:"true"`
@@ -564,12 +723,20 @@ type DimensionGroup struct {
 	Limit *int64 `min:"1" type:"integer"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DimensionGroup) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DimensionGroup) GoString() string {
 	return s.String()
 }
@@ -628,12 +795,20 @@ type DimensionKeyDescription struct {
 	Total *float64 `type:"double"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DimensionKeyDescription) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s DimensionKeyDescription) GoString() string {
 	return s.String()
 }
@@ -656,12 +831,214 @@ func (s *DimensionKeyDescription) SetTotal(v float64) *DimensionKeyDescription {
 	return s
 }
 
+// An object that describes the details for a specified dimension.
+type DimensionKeyDetail struct {
+	_ struct{} `type:"structure"`
+
+	// The full name of the dimension. The full name includes the group name and
+	// key name. The only valid value is db.sql.statement.
+	Dimension *string `type:"string"`
+
+	// The status of the dimension detail data. Possible values include the following:
+	//
+	//    * AVAILABLE - The dimension detail data is ready to be retrieved.
+	//
+	//    * PROCESSING - The dimension detail data isn't ready to be retrieved because
+	//    more processing time is required. If the requested detail data for db.sql.statement
+	//    has the status PROCESSING, Performance Insights returns the truncated
+	//    query.
+	//
+	//    * UNAVAILABLE - The dimension detail data could not be collected successfully.
+	Status *string `type:"string" enum:"DetailStatus"`
+
+	// The value of the dimension detail data. For the db.sql.statement dimension,
+	// this value is either the full or truncated SQL query, depending on the return
+	// status.
+	Value *string `type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DimensionKeyDetail) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DimensionKeyDetail) GoString() string {
+	return s.String()
+}
+
+// SetDimension sets the Dimension field's value.
+func (s *DimensionKeyDetail) SetDimension(v string) *DimensionKeyDetail {
+	s.Dimension = &v
+	return s
+}
+
+// SetStatus sets the Status field's value.
+func (s *DimensionKeyDetail) SetStatus(v string) *DimensionKeyDetail {
+	s.Status = &v
+	return s
+}
+
+// SetValue sets the Value field's value.
+func (s *DimensionKeyDetail) SetValue(v string) *DimensionKeyDetail {
+	s.Value = &v
+	return s
+}
+
+type GetDimensionKeyDetailsInput struct {
+	_ struct{} `type:"structure"`
+
+	// The name of the dimension group. The only valid value is db.sql. Performance
+	// Insights searches the specified group for the dimension group ID.
+	//
+	// Group is a required field
+	Group *string `type:"string" required:"true"`
+
+	// The ID of the dimension group from which to retrieve dimension details. For
+	// dimension group db.sql, the group ID is db.sql.id.
+	//
+	// GroupIdentifier is a required field
+	GroupIdentifier *string `type:"string" required:"true"`
+
+	// The ID for a data source from which to gather dimension data. This ID must
+	// be immutable and unique within an AWS Region. When a DB instance is the data
+	// source, specify its DbiResourceId value. For example, specify db-ABCDEFGHIJKLMNOPQRSTU1VW2X.
+	//
+	// Identifier is a required field
+	Identifier *string `type:"string" required:"true"`
+
+	// A list of dimensions to retrieve the detail data for within the given dimension
+	// group. For the dimension group db.sql, specify either the full dimension
+	// name db.sql.statement or the short dimension name statement. If you don't
+	// specify this parameter, Performance Insights returns all dimension data within
+	// the specified dimension group.
+	RequestedDimensions []*string `min:"1" type:"list"`
+
+	// The AWS service for which Performance Insights returns data. The only valid
+	// value is RDS.
+	//
+	// ServiceType is a required field
+	ServiceType *string `type:"string" required:"true" enum:"ServiceType"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetDimensionKeyDetailsInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetDimensionKeyDetailsInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *GetDimensionKeyDetailsInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "GetDimensionKeyDetailsInput"}
+	if s.Group == nil {
+		invalidParams.Add(request.NewErrParamRequired("Group"))
+	}
+	if s.GroupIdentifier == nil {
+		invalidParams.Add(request.NewErrParamRequired("GroupIdentifier"))
+	}
+	if s.Identifier == nil {
+		invalidParams.Add(request.NewErrParamRequired("Identifier"))
+	}
+	if s.RequestedDimensions != nil && len(s.RequestedDimensions) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("RequestedDimensions", 1))
+	}
+	if s.ServiceType == nil {
+		invalidParams.Add(request.NewErrParamRequired("ServiceType"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetGroup sets the Group field's value.
+func (s *GetDimensionKeyDetailsInput) SetGroup(v string) *GetDimensionKeyDetailsInput {
+	s.Group = &v
+	return s
+}
+
+// SetGroupIdentifier sets the GroupIdentifier field's value.
+func (s *GetDimensionKeyDetailsInput) SetGroupIdentifier(v string) *GetDimensionKeyDetailsInput {
+	s.GroupIdentifier = &v
+	return s
+}
+
+// SetIdentifier sets the Identifier field's value.
+func (s *GetDimensionKeyDetailsInput) SetIdentifier(v string) *GetDimensionKeyDetailsInput {
+	s.Identifier = &v
+	return s
+}
+
+// SetRequestedDimensions sets the RequestedDimensions field's value.
+func (s *GetDimensionKeyDetailsInput) SetRequestedDimensions(v []*string) *GetDimensionKeyDetailsInput {
+	s.RequestedDimensions = v
+	return s
+}
+
+// SetServiceType sets the ServiceType field's value.
+func (s *GetDimensionKeyDetailsInput) SetServiceType(v string) *GetDimensionKeyDetailsInput {
+	s.ServiceType = &v
+	return s
+}
+
+type GetDimensionKeyDetailsOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The details for the requested dimensions.
+	Dimensions []*DimensionKeyDetail `type:"list"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetDimensionKeyDetailsOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetDimensionKeyDetailsOutput) GoString() string {
+	return s.String()
+}
+
+// SetDimensions sets the Dimensions field's value.
+func (s *GetDimensionKeyDetailsOutput) SetDimensions(v []*DimensionKeyDetail) *GetDimensionKeyDetailsOutput {
+	s.Dimensions = v
+	return s
+}
+
 type GetResourceMetricsInput struct {
 	_ struct{} `type:"structure"`
 
-	// The date and time specifiying the end of the requested time series data.
-	// The value specified is exclusive - data points less than (but not equal to)
-	// EndTime will be returned.
+	// The date and time specifying the end of the requested time series data. The
+	// value specified is exclusive - data points less than (but not equal to) EndTime
+	// will be returned.
 	//
 	// The value for EndTime must be later than the value for StartTime.
 	//
@@ -671,8 +1048,8 @@ type GetResourceMetricsInput struct {
 	// An immutable, AWS Region-unique identifier for a data source. Performance
 	// Insights gathers metrics from this data source.
 	//
-	// To use an Amazon RDS instance as a data source, you specify its DbiResourceId
-	// value - for example: db-FAIHNTYBKTGAUSUZQYPDS2GW4A
+	// To use a DB instance as a data source, specify its DbiResourceId value. For
+	// example, specify db-FAIHNTYBKTGAUSUZQYPDS2GW4A.
 	//
 	// Identifier is a required field
 	Identifier *string `type:"string" required:"true"`
@@ -691,7 +1068,7 @@ type GetResourceMetricsInput struct {
 	// An optional pagination token provided by a previous request. If this parameter
 	// is specified, the response includes only records beyond the token, up to
 	// the value specified by MaxRecords.
-	NextToken *string `type:"string"`
+	NextToken *string `min:"1" type:"string"`
 
 	// The granularity, in seconds, of the data points returned from Performance
 	// Insights. A period can be as short as one second, or as long as one day (86400
@@ -712,8 +1089,8 @@ type GetResourceMetricsInput struct {
 	// the response.
 	PeriodInSeconds *int64 `type:"integer"`
 
-	// The AWS service for which Performance Insights will return metrics. The only
-	// valid value for ServiceType is: RDS
+	// The AWS service for which Performance Insights returns metrics. The only
+	// valid value for ServiceType is RDS.
 	//
 	// ServiceType is a required field
 	ServiceType *string `type:"string" required:"true" enum:"ServiceType"`
@@ -728,12 +1105,20 @@ type GetResourceMetricsInput struct {
 	StartTime *time.Time `type:"timestamp" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetResourceMetricsInput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetResourceMetricsInput) GoString() string {
 	return s.String()
 }
@@ -752,6 +1137,9 @@ func (s *GetResourceMetricsInput) Validate() error {
 	}
 	if s.MetricQueries != nil && len(s.MetricQueries) < 1 {
 		invalidParams.Add(request.NewErrParamMinLen("MetricQueries", 1))
+	}
+	if s.NextToken != nil && len(*s.NextToken) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("NextToken", 1))
 	}
 	if s.ServiceType == nil {
 		invalidParams.Add(request.NewErrParamRequired("ServiceType"))
@@ -840,8 +1228,8 @@ type GetResourceMetricsOutput struct {
 	// An immutable, AWS Region-unique identifier for a data source. Performance
 	// Insights gathers metrics from this data source.
 	//
-	// To use an Amazon RDS instance as a data source, you specify its DbiResourceId
-	// value - for example: db-FAIHNTYBKTGAUSUZQYPDS2GW4A
+	// To use a DB instance as a data source, you specify its DbiResourceId value
+	// - for example: db-FAIHNTYBKTGAUSUZQYPDS2GW4A
 	Identifier *string `type:"string"`
 
 	// An array of metric results,, where each array element contains all of the
@@ -851,15 +1239,23 @@ type GetResourceMetricsOutput struct {
 	// An optional pagination token provided by a previous request. If this parameter
 	// is specified, the response includes only records beyond the token, up to
 	// the value specified by MaxRecords.
-	NextToken *string `type:"string"`
+	NextToken *string `min:"1" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetResourceMetricsOutput) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s GetResourceMetricsOutput) GoString() string {
 	return s.String()
 }
@@ -902,12 +1298,20 @@ type InternalServiceError struct {
 	Message_ *string `locationName:"Message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s InternalServiceError) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s InternalServiceError) GoString() string {
 	return s.String()
 }
@@ -958,12 +1362,20 @@ type InvalidArgumentException struct {
 	Message_ *string `locationName:"Message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s InvalidArgumentException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s InvalidArgumentException) GoString() string {
 	return s.String()
 }
@@ -1006,7 +1418,7 @@ func (s *InvalidArgumentException) RequestID() string {
 	return s.RespMetadata.RequestID
 }
 
-// A time-ordered series of data points, correpsonding to a dimension of a Performance
+// A time-ordered series of data points, corresponding to a dimension of a Performance
 // Insights metric.
 type MetricKeyDataPoints struct {
 	_ struct{} `type:"structure"`
@@ -1019,12 +1431,20 @@ type MetricKeyDataPoints struct {
 	Key *ResponseResourceMetricKey `type:"structure"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s MetricKeyDataPoints) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s MetricKeyDataPoints) GoString() string {
 	return s.String()
 }
@@ -1074,16 +1494,31 @@ type MetricQuery struct {
 	//    * db.sampledload.avg - the raw number of active sessions for the database
 	//    engine.
 	//
+	// If the number of active sessions is less than an internal Performance Insights
+	// threshold, db.load.avg and db.sampledload.avg are the same value. If the
+	// number of active sessions is greater than the internal threshold, Performance
+	// Insights samples the active sessions, with db.load.avg showing the scaled
+	// values, db.sampledload.avg showing the raw values, and db.sampledload.avg
+	// less than db.load.avg. For most use cases, you can query db.load.avg only.
+	//
 	// Metric is a required field
 	Metric *string `type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s MetricQuery) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s MetricQuery) GoString() string {
 	return s.String()
 }
@@ -1132,12 +1567,20 @@ type NotAuthorizedException struct {
 	Message_ *string `locationName:"Message" type:"string"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s NotAuthorizedException) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s NotAuthorizedException) GoString() string {
 	return s.String()
 }
@@ -1191,12 +1634,20 @@ type ResponsePartitionKey struct {
 	Dimensions map[string]*string `type:"map" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ResponsePartitionKey) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ResponsePartitionKey) GoString() string {
 	return s.String()
 }
@@ -1225,16 +1676,31 @@ type ResponseResourceMetricKey struct {
 	//    * db.sampledload.avg - the raw number of active sessions for the database
 	//    engine.
 	//
+	// If the number of active sessions is less than an internal Performance Insights
+	// threshold, db.load.avg and db.sampledload.avg are the same value. If the
+	// number of active sessions is greater than the internal threshold, Performance
+	// Insights samples the active sessions, with db.load.avg showing the scaled
+	// values, db.sampledload.avg showing the raw values, and db.sampledload.avg
+	// less than db.load.avg. For most use cases, you can query db.load.avg only.
+	//
 	// Metric is a required field
 	Metric *string `type:"string" required:"true"`
 }
 
-// String returns the string representation
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ResponseResourceMetricKey) String() string {
 	return awsutil.Prettify(s)
 }
 
-// GoString returns the string representation
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
 func (s ResponseResourceMetricKey) GoString() string {
 	return s.String()
 }
@@ -1249,6 +1715,26 @@ func (s *ResponseResourceMetricKey) SetDimensions(v map[string]*string) *Respons
 func (s *ResponseResourceMetricKey) SetMetric(v string) *ResponseResourceMetricKey {
 	s.Metric = &v
 	return s
+}
+
+const (
+	// DetailStatusAvailable is a DetailStatus enum value
+	DetailStatusAvailable = "AVAILABLE"
+
+	// DetailStatusProcessing is a DetailStatus enum value
+	DetailStatusProcessing = "PROCESSING"
+
+	// DetailStatusUnavailable is a DetailStatus enum value
+	DetailStatusUnavailable = "UNAVAILABLE"
+)
+
+// DetailStatus_Values returns all elements of the DetailStatus enum
+func DetailStatus_Values() []string {
+	return []string{
+		DetailStatusAvailable,
+		DetailStatusProcessing,
+		DetailStatusUnavailable,
+	}
 }
 
 const (

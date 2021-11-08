@@ -8,7 +8,7 @@ github.com/Microsoft/go-winio/pkg/guid
 ## explicit
 github.com/Workiva/go-datastructures/cache
 github.com/Workiva/go-datastructures/queue
-# github.com/aws/aws-sdk-go v1.35.23 => ./extra/aws-sdk-go
+# github.com/aws/aws-sdk-go v1.41.4 => ./extra/aws-sdk-go
 ## explicit
 github.com/aws/aws-sdk-go/aws
 github.com/aws/aws-sdk-go/aws/arn
@@ -21,6 +21,7 @@ github.com/aws/aws-sdk-go/aws/credentials
 github.com/aws/aws-sdk-go/aws/credentials/ec2rolecreds
 github.com/aws/aws-sdk-go/aws/credentials/endpointcreds
 github.com/aws/aws-sdk-go/aws/credentials/processcreds
+github.com/aws/aws-sdk-go/aws/credentials/ssocreds
 github.com/aws/aws-sdk-go/aws/credentials/stscreds
 github.com/aws/aws-sdk-go/aws/csm
 github.com/aws/aws-sdk-go/aws/defaults
@@ -41,6 +42,8 @@ github.com/aws/aws-sdk-go/internal/sdkmath
 github.com/aws/aws-sdk-go/internal/sdkrand
 github.com/aws/aws-sdk-go/internal/sdkuri
 github.com/aws/aws-sdk-go/internal/shareddefaults
+github.com/aws/aws-sdk-go/internal/smithytesting
+github.com/aws/aws-sdk-go/internal/smithytesting/xml
 github.com/aws/aws-sdk-go/internal/strings
 github.com/aws/aws-sdk-go/internal/sync/singleflight
 github.com/aws/aws-sdk-go/private/checksum
@@ -52,6 +55,7 @@ github.com/aws/aws-sdk-go/private/protocol/jsonrpc
 github.com/aws/aws-sdk-go/private/protocol/query
 github.com/aws/aws-sdk-go/private/protocol/query/queryutil
 github.com/aws/aws-sdk-go/private/protocol/rest
+github.com/aws/aws-sdk-go/private/protocol/restjson
 github.com/aws/aws-sdk-go/private/protocol/restxml
 github.com/aws/aws-sdk-go/private/protocol/xml/xmlutil
 github.com/aws/aws-sdk-go/private/util
@@ -68,6 +72,8 @@ github.com/aws/aws-sdk-go/service/ssm/ssmiface/mocks
 github.com/aws/aws-sdk-go/service/ssmmds
 github.com/aws/aws-sdk-go/service/ssmmds/ssmmdsiface
 github.com/aws/aws-sdk-go/service/ssmmds/ssmmdsiface/mocks
+github.com/aws/aws-sdk-go/service/sso
+github.com/aws/aws-sdk-go/service/sso/ssoiface
 github.com/aws/aws-sdk-go/service/sts
 github.com/aws/aws-sdk-go/service/sts/stsiface
 # github.com/carlescere/scheduler v0.0.0-20150615230211-9b78eac89dfb
@@ -249,7 +255,7 @@ golang.org/x/crypto/ssh
 golang.org/x/crypto/ssh/agent
 golang.org/x/crypto/ssh/internal/bcrypt_pbkdf
 golang.org/x/crypto/ssh/knownhosts
-# golang.org/x/net v0.0.0-20210508051633-16afe75a6701
+# golang.org/x/net v0.0.0-20210614182718-04defd469f4e
 ## explicit
 golang.org/x/net/context
 golang.org/x/net/context/ctxhttp

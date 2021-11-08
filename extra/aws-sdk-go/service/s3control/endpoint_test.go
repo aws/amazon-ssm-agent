@@ -1,3 +1,4 @@
+//go:build go1.7
 // +build go1.7
 
 package s3control
@@ -80,51 +81,31 @@ func TestEndpoint_OutpostAccessPointARN(t *testing.T) {
 			expectedHeaderForAccountID: true,
 			expectedHeaderForOutpostID: "op-01234567890123456",
 		},
-		"Outpost AccessPoint with client region as Fips": {
+		"Outpost AccessPoint with client region as FIPS": {
 			bucket: "arn:aws-us-gov:s3-outposts:us-gov-east-1:123456789012:outpost:op-01234567890123456:accesspoint:myaccesspoint",
 			config: &aws.Config{
 				EndpointResolver: endpoints.AwsUsGovPartition(),
 				Region:           aws.String("us-gov-east-1-fips"),
 			},
-			expectedErr: "InvalidARNError: resource ARN not supported for FIPS region",
+			expectedErr: "use of ARN is not supported when client or request is configured for FIPS",
 		},
-		"Outpost AccessPoint with client Fips region and use arn region enabled": {
-			bucket: "arn:aws-us-gov:s3-outposts:us-gov-east-1:123456789012:outpost:op-01234567890123456:accesspoint:myaccesspoint",
+		"Outpost AccessPoint with client FIPS region and cross-region ARN": {
+			bucket: "arn:aws-us-gov:s3-outposts:us-gov-west-1:123456789012:outpost:op-01234567890123456:accesspoint:myaccesspoint",
 			config: &aws.Config{
 				EndpointResolver: endpoints.AwsUsGovPartition(),
 				Region:           aws.String("us-gov-east-1-fips"),
 				S3UseARNRegion:   aws.Bool(true),
 			},
-			expectedSigningName:        "s3-outposts",
-			expectedSigningRegion:      "us-gov-east-1",
-			expectedEndpoint:           "https://s3-outposts.us-gov-east-1.amazonaws.com",
-			expectedHeaderForAccountID: true,
-			expectedHeaderForOutpostID: "op-01234567890123456",
+			expectedErr: "use of ARN is not supported when client or request is configured for FIPS",
 		},
-		"Outpost AccessPoint Fips region in Arn": {
-			bucket: "arn:aws-us-gov:s3-outposts:us-gov-east-1-fips:123456789012:outpost:op-01234567890123456:accesspoint:myaccesspoint",
-			config: &aws.Config{
-				EndpointResolver:        endpoints.AwsUsGovPartition(),
-				EnforceShouldRetryCheck: nil,
-				Region:                  aws.String("us-gov-east-1-fips"),
-				DisableSSL:              nil,
-				HTTPClient:              nil,
-				S3UseARNRegion:          aws.Bool(true),
-			},
-			expectedErr: "InvalidARNError: resource ARN not supported for FIPS region",
-		},
-		"Outpost AccessPoint Fips region with valid ARN region": {
+		"Outpost AccessPoint FIPS client region with matching ARN region": {
 			bucket: "arn:aws-us-gov:s3-outposts:us-gov-east-1:123456789012:outpost:op-01234567890123456:accesspoint:myaccesspoint",
 			config: &aws.Config{
 				EndpointResolver: endpoints.AwsUsGovPartition(),
 				Region:           aws.String("fips-us-gov-east-1"),
 				S3UseARNRegion:   aws.Bool(true),
 			},
-			expectedEndpoint:           "https://s3-outposts.us-gov-east-1.amazonaws.com",
-			expectedSigningName:        "s3-outposts",
-			expectedSigningRegion:      "us-gov-east-1",
-			expectedHeaderForAccountID: true,
-			expectedHeaderForOutpostID: "op-01234567890123456",
+			expectedErr: "use of ARN is not supported when client or request is configured for FIPS",
 		},
 		"Outpost AccessPoint with DualStack": {
 			bucket: "arn:aws:s3-outposts:us-west-2:123456789012:outpost:op-01234567890123456:accesspoint:myaccesspoint",
@@ -179,6 +160,22 @@ func TestEndpoint_OutpostAccessPointARN(t *testing.T) {
 				Region: aws.String("us-west-2"),
 			},
 			expectedErr: "invalid Amazon s3-outposts ARN",
+		},
+		"Invalid Outpost AccessPoint ARN with FIPS pseudo-region (prefix)": {
+			bucket: "arn:aws-us-gov:s3-outposts:fips-us-east-1:123456789012:outpost:op-01234567890123456:accesspoint:myaccesspoint",
+			config: &aws.Config{
+				Region:         aws.String("us-west-2"),
+				S3UseARNRegion: aws.Bool(true),
+			},
+			expectedErr: "FIPS region not allowed in ARN",
+		},
+		"Invalid Outpost AccessPoint ARN with FIPS pseudo-region (suffix)": {
+			bucket: "arn:aws-us-gov:s3-outposts:us-east-1-fips:123456789012:outpost:op-01234567890123456:accesspoint:myaccesspoint",
+			config: &aws.Config{
+				Region:         aws.String("us-west-2"),
+				S3UseARNRegion: aws.Bool(true),
+			},
+			expectedErr: "FIPS region not allowed in ARN",
 		},
 	}
 
@@ -238,7 +235,7 @@ func TestEndpoint_OutpostBucketARN(t *testing.T) {
 			expectedHeaderForOutpostID: "op-01234567890123456",
 			expectedHeaderForAccountID: true,
 		},
-		"Outpost Bucket Fips region": {
+		"Outpost Bucket FIPS client region": {
 			bucket: "arn:aws-us-gov:s3-outposts:us-gov-east-1:123456789012:outpost:op-01234567890123456:bucket:mybucket",
 			config: &aws.Config{
 				EndpointResolver: endpoints.AwsUsGovPartition(),
@@ -246,30 +243,23 @@ func TestEndpoint_OutpostBucketARN(t *testing.T) {
 			},
 			expectedErr: "ConfigurationError: client region does not match provided ARN region",
 		},
-		"Outpost Bucket Fips region in Arn": {
-			bucket: "arn:aws-us-gov:s3-outposts:fips-us-gov-east-1:123456789012:outpost:op-01234567890123456:bucket:mybucket",
-			config: &aws.Config{
-				EndpointResolver:        endpoints.AwsUsGovPartition(),
-				EnforceShouldRetryCheck: nil,
-				Region:                  aws.String("fips-us-gov-east-1"),
-				DisableSSL:              nil,
-				HTTPClient:              nil,
-				S3UseARNRegion:          aws.Bool(true),
-			},
-			expectedErr: "InvalidARNError: resource ARN not supported for FIPS region",
-		},
-		"Outpost Bucket Fips region with valid ARN region": {
+		"Outpost Bucket FIPS client region with match ARN region": {
 			bucket: "arn:aws-us-gov:s3-outposts:us-gov-east-1:123456789012:outpost:op-01234567890123456:bucket:mybucket",
 			config: &aws.Config{
 				EndpointResolver: endpoints.AwsUsGovPartition(),
 				Region:           aws.String("fips-us-gov-east-1"),
 				S3UseARNRegion:   aws.Bool(true),
 			},
-			expectedEndpoint:           "https://s3-outposts.us-gov-east-1.amazonaws.com",
-			expectedSigningName:        "s3-outposts",
-			expectedSigningRegion:      "us-gov-east-1",
-			expectedHeaderForOutpostID: "op-01234567890123456",
-			expectedHeaderForAccountID: true,
+			expectedErr: "use of ARN is not supported when client or request is configured for FIPS",
+		},
+		"Outpost Bucket FIPS client region with cross-region ARN": {
+			bucket: "arn:aws-us-gov:s3-outposts:us-gov-west-1:123456789012:outpost:op-01234567890123456:bucket:mybucket",
+			config: &aws.Config{
+				EndpointResolver: endpoints.AwsUsGovPartition(),
+				Region:           aws.String("fips-us-gov-east-1"),
+				S3UseARNRegion:   aws.Bool(true),
+			},
+			expectedErr: "use of ARN is not supported when client or request is configured for FIPS",
 		},
 		"Outpost Bucket with DualStack": {
 			bucket: "arn:aws:s3-outposts:us-west-2:123456789012:outpost:op-01234567890123456:bucket:mybucket",
@@ -301,6 +291,22 @@ func TestEndpoint_OutpostBucketARN(t *testing.T) {
 				Region: aws.String("us-west-2"),
 			},
 			expectedErr: "invalid Amazon s3-outposts ARN, unknown resource type",
+		},
+		"Invalid Outpost Bucket ARN with FIPS pseudo-region (prefix)": {
+			bucket: "arn:aws:s3-outposts:fips-us-east-1:123456789012:outpost:op-01234567890123456:bucket:mybucket",
+			config: &aws.Config{
+				Region:         aws.String("us-west-2"),
+				S3UseARNRegion: aws.Bool(true),
+			},
+			expectedErr: "FIPS region not allowed in ARN",
+		},
+		"Invalid Outpost Bucket ARN with FIPS pseudo-region (suffix)": {
+			bucket: "arn:aws:s3-outposts:us-east-1-fips:123456789012:outpost:op-01234567890123456:bucket:mybucket",
+			config: &aws.Config{
+				Region:         aws.String("us-west-2"),
+				S3UseARNRegion: aws.Bool(true),
+			},
+			expectedErr: "FIPS region not allowed in ARN",
 		},
 	}
 
@@ -337,7 +343,7 @@ func runValidations(t *testing.T, cases map[string]testParams) {
 					t.Errorf("expected %v, got %v", e, a)
 				}
 
-				if e, a := c.expectedSigningName, r.ClientInfo.SigningName; c.config.Endpoint == nil && e != a {
+				if e, a := c.expectedSigningName, r.ClientInfo.SigningName; e != a {
 					t.Errorf("expected %v, got %v", e, a)
 				}
 				if e, a := c.expectedSigningRegion, r.ClientInfo.SigningRegion; e != a {
@@ -373,18 +379,20 @@ func runValidations(t *testing.T, cases map[string]testParams) {
 	}
 }
 
+type testParamsWithRequestFn struct {
+	bucket                     string
+	outpostID                  string
+	config                     *aws.Config
+	requestFn                  func(c *S3Control) *request.Request
+	expectedEndpoint           string
+	expectedSigningName        string
+	expectedSigningRegion      string
+	expectedHeaderForOutpostID string
+	expectedErr                string
+}
+
 func TestCustomEndpoint_SpecialOperations(t *testing.T) {
-	cases := map[string]struct {
-		bucket                     string
-		outpostID                  string
-		config                     *aws.Config
-		requestFn                  func(c *S3Control) *request.Request
-		expectedEndpoint           string
-		expectedSigningName        string
-		expectedSigningRegion      string
-		expectedHeaderForOutpostID string
-		expectedErr                string
-	}{
+	cases := map[string]testParamsWithRequestFn{
 		"CreateBucketOperation": {
 			bucket:    "mockBucket",
 			outpostID: "op-01234567890123456",
@@ -456,54 +464,201 @@ func TestCustomEndpoint_SpecialOperations(t *testing.T) {
 
 	for name, c := range cases {
 		t.Run(name, func(t *testing.T) {
-			sess := unit.Session.Copy(c.config)
-			svc := New(sess)
-			req := c.requestFn(svc)
-			req.Handlers.Send.Clear()
-			req.Handlers.Send.PushBack(func(r *request.Request) {
-				defer func() {
-					r.HTTPResponse = &http.Response{
-						StatusCode:    200,
-						ContentLength: 0,
-						Body:          ioutil.NopCloser(bytes.NewReader(nil)),
-					}
-				}()
-				if len(c.expectedErr) != 0 {
-					return
-				}
-
-				endpoint := fmt.Sprintf("%s://%s", r.HTTPRequest.URL.Scheme, r.HTTPRequest.URL.Host)
-				if e, a := c.expectedEndpoint, endpoint; e != a {
-					t.Errorf("expected %v, got %v", e, a)
-				}
-
-				if e, a := c.expectedSigningName, r.ClientInfo.SigningName; c.config.Endpoint == nil && e != a {
-					t.Errorf("expected %v, got %v", e, a)
-				}
-				if e, a := c.expectedSigningRegion, r.ClientInfo.SigningRegion; e != a {
-					t.Errorf("expected %v, got %v", e, a)
-				}
-
-				if e, a := c.expectedHeaderForOutpostID, r.HTTPRequest.Header.Get("x-amz-outpost-id"); e != a {
-					if len(e) == 0 {
-						t.Errorf("expected no outpost id header set, got %v", a)
-					} else if len(a) == 0 {
-						t.Errorf("expected outpost id header set as %v, got none", e)
-					} else {
-						t.Errorf("expected %v as Outpost id header value, got %v", e, a)
-					}
-				}
-			})
-
-			err := req.Send()
-			if len(c.expectedErr) == 0 && err != nil {
-				t.Errorf("expected no error but got: %v", err)
-			} else if len(c.expectedErr) != 0 && err == nil {
-				t.Errorf("expected err %q, but got nil", c.expectedErr)
-			} else if len(c.expectedErr) != 0 && err != nil && !strings.Contains(err.Error(), c.expectedErr) {
-				t.Errorf("expected %v, got %v", c.expectedErr, err.Error())
-			}
+			runValidationsWithRequestFn(t, c)
 		})
+	}
+}
+
+func TestCustomEndpointURL(t *testing.T) {
+	account := "123456789012"
+	cases := map[string]testParamsWithRequestFn{
+		"standard GetAccesspoint with custom endpoint url": {
+			config: &aws.Config{
+				Endpoint: aws.String("beta.example.com"),
+				Region:   aws.String("us-west-2"),
+			},
+			requestFn: func(c *S3Control) *request.Request {
+				req, _ := c.GetAccessPointRequest(&GetAccessPointInput{
+					AccountId: aws.String(account),
+					Name:      aws.String("apname"),
+				})
+				return req
+			},
+			expectedEndpoint:      "https://123456789012.beta.example.com",
+			expectedSigningName:   "s3",
+			expectedSigningRegion: "us-west-2",
+		},
+		"Outpost Accesspoint ARN with GetAccesspoint and custom endpoint url": {
+			config: &aws.Config{
+				Endpoint: aws.String("beta.example.com"),
+				Region:   aws.String("us-west-2"),
+			},
+			requestFn: func(c *S3Control) *request.Request {
+				req, _ := c.GetAccessPointRequest(&GetAccessPointInput{
+					AccountId: aws.String(account),
+					Name:      aws.String("arn:aws:s3-outposts:us-west-2:123456789012:outpost:op-01234567890123456:accesspoint:myaccesspoint"),
+				})
+				return req
+			},
+			expectedEndpoint:           "https://beta.example.com",
+			expectedSigningName:        "s3-outposts",
+			expectedSigningRegion:      "us-west-2",
+			expectedHeaderForOutpostID: "op-01234567890123456",
+		},
+		"standard CreateBucket with custom endpoint url": {
+			config: &aws.Config{
+				Endpoint: aws.String("beta.example.com"),
+				Region:   aws.String("us-west-2"),
+			},
+			requestFn: func(c *S3Control) *request.Request {
+				req, _ := c.CreateBucketRequest(&CreateBucketInput{
+					Bucket:    aws.String("bucketname"),
+					OutpostId: aws.String("op-123"),
+				})
+				return req
+			},
+			expectedEndpoint:           "https://beta.example.com",
+			expectedSigningName:        "s3-outposts",
+			expectedSigningRegion:      "us-west-2",
+			expectedHeaderForOutpostID: "op-123",
+		},
+		"Outpost Accesspoint for GetBucket with custom endpoint url": {
+			config: &aws.Config{
+				Endpoint: aws.String("beta.example.com"),
+				Region:   aws.String("us-west-2"),
+			},
+			requestFn: func(c *S3Control) *request.Request {
+				req, _ := c.GetBucketRequest(&GetBucketInput{
+					Bucket: aws.String("arn:aws:s3-outposts:us-west-2:123456789012:outpost:op-01234567890123456:bucket:mybucket"),
+				})
+				return req
+			},
+			expectedEndpoint:           "https://beta.example.com",
+			expectedSigningName:        "s3-outposts",
+			expectedSigningRegion:      "us-west-2",
+			expectedHeaderForOutpostID: "op-01234567890123456",
+		},
+		"GetAccesspoint with dualstack and custom endpoint url": {
+			config: &aws.Config{
+				Endpoint:     aws.String("beta.example.com"),
+				Region:       aws.String("us-west-2"),
+				UseDualStack: aws.Bool(true),
+			},
+			requestFn: func(c *S3Control) *request.Request {
+				req, _ := c.GetAccessPointRequest(&GetAccessPointInput{
+					AccountId: aws.String(account),
+					Name:      aws.String("apname"),
+				})
+				return req
+			},
+			expectedEndpoint:      "https://123456789012.beta.example.com",
+			expectedSigningName:   "s3",
+			expectedSigningRegion: "us-west-2",
+		},
+		"GetAccesspoint with Outposts accesspoint ARN and dualstack": {
+			config: &aws.Config{
+				Endpoint:     aws.String("beta.example.com"),
+				UseDualStack: aws.Bool(true),
+				Region:       aws.String("us-west-2"),
+			},
+			requestFn: func(c *S3Control) *request.Request {
+				req, _ := c.GetAccessPointRequest(&GetAccessPointInput{
+					AccountId: aws.String(account),
+					Name:      aws.String("arn:aws:s3-outposts:us-west-2:123456789012:outpost:op-01234567890123456:accesspoint:myaccesspoint"),
+				})
+				return req
+			},
+			expectedErr: "client configured for S3 Dual-stack but is not supported with resource ARN",
+		},
+		"standard CreateBucket with dualstack": {
+			config: &aws.Config{
+				Endpoint:     aws.String("beta.example.com"),
+				UseDualStack: aws.Bool(true),
+				Region:       aws.String("us-west-2"),
+			},
+			requestFn: func(c *S3Control) *request.Request {
+				req, _ := c.CreateBucketRequest(&CreateBucketInput{
+					Bucket:    aws.String("bucketname"),
+					OutpostId: aws.String("op-1234567890123456"),
+				})
+				return req
+			},
+			expectedEndpoint:           "https://beta.example.com",
+			expectedSigningName:        "s3-outposts",
+			expectedSigningRegion:      "us-west-2",
+			expectedHeaderForOutpostID: "op-1234567890123456",
+		},
+		"GetBucket with Outpost bucket ARN": {
+			config: &aws.Config{
+				Endpoint:     aws.String("beta.example.com"),
+				Region:       aws.String("us-west-2"),
+				UseDualStack: aws.Bool(true),
+			},
+			requestFn: func(c *S3Control) *request.Request {
+				req, _ := c.GetBucketRequest(&GetBucketInput{
+					Bucket: aws.String("arn:aws:s3-outposts:us-west-2:123456789012:outpost:op-01234567890123456:bucket:mybucket"),
+				})
+				return req
+			},
+			expectedErr: "client configured for S3 Dual-stack but is not supported with resource ARN",
+		},
+	}
+
+	for name, c := range cases {
+		t.Run(name, func(t *testing.T) {
+			runValidationsWithRequestFn(t, c)
+		})
+	}
+}
+
+func runValidationsWithRequestFn(t *testing.T, c testParamsWithRequestFn) {
+	sess := unit.Session.Copy(c.config)
+	svc := New(sess)
+
+	req := c.requestFn(svc)
+	req.Handlers.Send.Clear()
+	req.Handlers.Send.PushBack(func(r *request.Request) {
+		defer func() {
+			r.HTTPResponse = &http.Response{
+				StatusCode:    200,
+				ContentLength: 0,
+				Body:          ioutil.NopCloser(bytes.NewReader(nil)),
+			}
+		}()
+		if len(c.expectedErr) != 0 {
+			return
+		}
+
+		endpoint := fmt.Sprintf("%s://%s", r.HTTPRequest.URL.Scheme, r.HTTPRequest.URL.Host)
+		if e, a := c.expectedEndpoint, endpoint; e != a {
+			t.Errorf("expected %v, got %v", e, a)
+		}
+
+		if e, a := c.expectedSigningName, r.ClientInfo.SigningName; e != a {
+			t.Errorf("expected %v, got %v", e, a)
+		}
+		if e, a := c.expectedSigningRegion, r.ClientInfo.SigningRegion; e != a {
+			t.Errorf("expected %v, got %v", e, a)
+		}
+
+		if e, a := c.expectedHeaderForOutpostID, r.HTTPRequest.Header.Get("x-amz-outpost-id"); e != a {
+			if len(e) == 0 {
+				t.Errorf("expected no outpost id header set, got %v", a)
+			} else if len(a) == 0 {
+				t.Errorf("expected outpost id header set as %v, got none", e)
+			} else {
+				t.Errorf("expected %v as Outpost id header value, got %v", e, a)
+			}
+		}
+	})
+
+	err := req.Send()
+	if len(c.expectedErr) == 0 && err != nil {
+		t.Errorf("expected no error but got: %v", err)
+	} else if len(c.expectedErr) != 0 && err == nil {
+		t.Errorf("expected err %q, but got nil", c.expectedErr)
+	} else if len(c.expectedErr) != 0 && err != nil && !strings.Contains(err.Error(), c.expectedErr) {
+		t.Errorf("expected %v, got %v", c.expectedErr, err.Error())
 	}
 }
 

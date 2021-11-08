@@ -63,7 +63,7 @@ const (
 	// The quota for the resource has already been reached.
 	//
 	// For information on resource and stack limitations, see Limits (https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/cloudformation-limits.html)
-	// in the AWS CloudFormation User Guide.
+	// in the CloudFormation User Guide.
 	ErrCodeLimitExceededException = "LimitExceededException"
 
 	// ErrCodeNameAlreadyExistsException for service response error code
@@ -104,6 +104,13 @@ const (
 	// The specified stack instance doesn't exist.
 	ErrCodeStackInstanceNotFoundException = "StackInstanceNotFoundException"
 
+	// ErrCodeStackNotFoundException for service response error code
+	// "StackNotFoundException".
+	//
+	// The specified stack ARN doesn’t exist or stack doesn’t exist corresponding
+	// to the ARN in input.
+	ErrCodeStackNotFoundException = "StackNotFoundException"
+
 	// ErrCodeStackSetNotEmptyException for service response error code
 	// "StackSetNotEmptyException".
 	//
@@ -131,9 +138,15 @@ const (
 	// A client request token already exists.
 	ErrCodeTokenAlreadyExistsException = "TokenAlreadyExistsException"
 
+	// ErrCodeTypeConfigurationNotFoundException for service response error code
+	// "TypeConfigurationNotFoundException".
+	//
+	// The specified extension configuration cannot be found.
+	ErrCodeTypeConfigurationNotFoundException = "TypeConfigurationNotFoundException"
+
 	// ErrCodeTypeNotFoundException for service response error code
 	// "TypeNotFoundException".
 	//
-	// The specified type does not exist in the CloudFormation registry.
+	// The specified extension does not exist in the CloudFormation registry.
 	ErrCodeTypeNotFoundException = "TypeNotFoundException"
 )
