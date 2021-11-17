@@ -19,13 +19,15 @@ package log
 import (
 	"fmt"
 	"io/ioutil"
+
+	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 )
 
-const (
+var (
 	// DefaultSeelogConfigFilePath specifies the default seelog location
 	// The underlying logger is based of https://github.com/cihub/seelog
 	// See Seelog documentation to customize the logger
-	DefaultSeelogConfigFilePath = "/opt/aws/ssm/seelog.xml"
+	DefaultSeelogConfigFilePath = appconfig.DefaultProgramFolder + appconfig.SeelogConfigFileName
 
 	DefaultLogDir = "/var/log/amazon/ssm"
 )

@@ -54,7 +54,7 @@ const (
 	defaultFileCreateMode = 0750
 )
 
-const (
+var (
 	// TestIPCChannel is test ipc channel used in this tester package
 	TestIPCChannel = message.DefaultIPCPrefix + message.DefaultCoreAgentChannel + "test"
 

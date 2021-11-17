@@ -30,7 +30,7 @@ const (
 	Respondent SocketType = "respondent"
 )
 
-const (
+var (
 	TestAddress string = message.DefaultIPCPrefix + message.DefaultCoreAgentChannel + "testPipe"
 
 	ErrorListenDial = "invoke listen or dial before this call"

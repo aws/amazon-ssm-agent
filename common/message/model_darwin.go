@@ -17,9 +17,13 @@
 //Package message contains information for the IPC messages
 package message
 
-const (
+import (
+	"github.com/aws/amazon-ssm-agent/agent/appconfig"
+)
+
+var (
 	DefaultIPCPrefix         = "ipc://"
-	DefaultCoreAgentChannel  = "/opt/aws/ssm/data/ipc/"
+	DefaultCoreAgentChannel  = appconfig.DefaultProgramFolder + "data/ipc/"
 	GetWorkerHealthChannel   = DefaultIPCPrefix + DefaultCoreAgentChannel + "health"
 	TerminationWorkerChannel = DefaultIPCPrefix + DefaultCoreAgentChannel + "termination"
 )

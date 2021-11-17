@@ -17,7 +17,7 @@
 // Package appconfig manages the configuration of the agent.
 package appconfig
 
-const (
+var (
 	// DefaultProgramFolder is the default folder for SSM
 	DefaultProgramFolder = "/opt/aws/ssm/"
 
