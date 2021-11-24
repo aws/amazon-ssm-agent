@@ -1,5 +1,15 @@
 Latest
 ===============
+- Added greengrass component recipe for the new SystemsManagerAgent component
+- Added support for registering agent on a greengrass device
+- Added support for downloading more than 1000 objects in downloadContent
+- Fixed retry logic for onprem and s3 upload
+- Fixed unit tests when running on Mac
+- Update AWS SDK to v1.41.4
+- Update logic to retrieve platform details for Rocky Linux
+
+3.1.501.0
+===============
 - Add diagnostics command to ssm-cli
 - Fix caching for onprem credentials
 - Additional configuration options for Seamless Domain Join
