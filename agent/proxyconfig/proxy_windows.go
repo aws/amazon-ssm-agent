@@ -315,9 +315,10 @@ func ParseProxySettings(log log.T, proxy string) ProxySettings {
 		HttpsProxy: https,
 	}
 
-	// If no [<scheme>=] is provided http is the default option
+	// If no [<scheme>=] is provided all schemes are handled
 	if https == nil && http == nil {
 		result.HttpProxy = other
+		result.HttpsProxy = other
 	} else if https != nil && http == nil {
 		result.HttpProxy = other
 	} else if https == nil && http != nil {
