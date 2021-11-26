@@ -72,7 +72,7 @@
             "SSM_OVERRIDE_EXISTING_REGISTRATION": "{configuration:/SSMOverrideExistingRegistration}"
           },
           "Install": {
-            "Script": "{artifacts:decompressedPath}/artifacts/ssm-setup-cli -install -local",
+            "Script": "{artifacts:decompressedPath}/artifacts/ssm-setup-cli -install",
             "RequiresPrivilege": true
           },
           "Startup": {

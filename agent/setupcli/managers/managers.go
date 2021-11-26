@@ -17,7 +17,6 @@ import (
 	"fmt"
 
 	"github.com/aws/amazon-ssm-agent/agent/log"
-	"github.com/aws/amazon-ssm-agent/agent/setupcli/managers/common"
 	"github.com/aws/amazon-ssm-agent/agent/setupcli/managers/configurationmanager"
 	"github.com/aws/amazon-ssm-agent/agent/setupcli/managers/packagemanagers"
 	"github.com/aws/amazon-ssm-agent/agent/setupcli/managers/registermanager"
@@ -36,7 +35,6 @@ func setServiceManager(log log.T) error {
 		// Should never happen
 		panic("Package manager must be selected first before service manager")
 	}
-
 	if selectedServiceManagerCache == servicemanagers.Undefined {
 		pm, ok := getPackageManager(selectedPackageManagerCache)
 		if !ok {
@@ -48,20 +46,11 @@ func setServiceManager(log log.T) error {
 			if manager, ok := getServiceManager(managerType); !ok {
 				panic(fmt.Sprintf("Failed to get service manager with index %v", managerType))
 			} else if manager.IsManagerEnvironment() {
-				status, err := manager.GetAgentStatus()
-
-				if err != nil {
-					log.Warnf("Failed to get agent status with package manager %s: %v", manager.GetName(), err)
-					continue
-				}
-
-				// Check if agent is either running or stopped, if true assume agent is installed
-				// Only set service manager cache if we know for sure the agent is installed using it
-				// We have no need for a service manager until after the agent is in place
-				if status == common.Running || status == common.Stopped {
-					selectedServiceManagerCache = managerType
-					return nil
-				}
+				log.Infof("Selecting %s as service manager", manager.GetName())
+				selectedServiceManagerCache = managerType
+				return nil
+			} else {
+				log.Infof("Not selecting %s as service manager", manager.GetName())
 			}
 		}
 	}

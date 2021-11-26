@@ -18,7 +18,6 @@ import (
 	"testing"
 
 	"github.com/aws/amazon-ssm-agent/agent/log"
-	"github.com/aws/amazon-ssm-agent/agent/setupcli/managers/common"
 	"github.com/aws/amazon-ssm-agent/agent/setupcli/managers/packagemanagers"
 	pmMock "github.com/aws/amazon-ssm-agent/agent/setupcli/managers/packagemanagers/mocks"
 	"github.com/aws/amazon-ssm-agent/agent/setupcli/managers/servicemanagers"
@@ -174,6 +173,7 @@ func TestSetServiceManager_FailedGetAgentStatus(t *testing.T) {
 
 		mockManager := &smMock.IServiceManager{}
 		mockManager.On("IsManagerEnvironment").Return(false)
+		mockManager.On("GetName").Return("SomeName")
 		return mockManager, true
 	}
 
@@ -204,8 +204,7 @@ func TestSetServiceManager_IsNotManagerEnvironment(t *testing.T) {
 		assert.Equal(t, managerType, servicemanagers.SystemCtl)
 
 		mockManager := &smMock.IServiceManager{}
-		mockManager.On("IsManagerEnvironment").Return(true)
-		mockManager.On("GetAgentStatus").Return(common.UndefinedStatus, fmt.Errorf("SomeError"))
+		mockManager.On("IsManagerEnvironment").Return(false)
 		mockManager.On("GetName").Return("SomeName")
 		return mockManager, true
 	}
@@ -215,7 +214,7 @@ func TestSetServiceManager_IsNotManagerEnvironment(t *testing.T) {
 	assert.Equal(t, servicemanagers.Undefined, selectedServiceManagerCache)
 }
 
-func TestSetServiceManager_AgentStopped(t *testing.T) {
+func TestSetServiceManager_IsManagerEnvironment(t *testing.T) {
 	replaceMocked := storeMockedFunctions()
 	defer replaceMocked()
 
@@ -226,7 +225,6 @@ func TestSetServiceManager_AgentStopped(t *testing.T) {
 	defer restorePM()
 
 	getPackageManager = func(managerType packagemanagers.PackageManager) (packagemanagers.IPackageManager, bool) {
-
 		mockManager := &pmMock.IPackageManager{}
 		mockManager.On("GetSupportedServiceManagers").Return([]servicemanagers.ServiceManager{servicemanagers.SystemCtl})
 
@@ -238,77 +236,13 @@ func TestSetServiceManager_AgentStopped(t *testing.T) {
 
 		mockManager := &smMock.IServiceManager{}
 		mockManager.On("IsManagerEnvironment").Return(true)
-		mockManager.On("GetAgentStatus").Return(common.Stopped, nil)
+		mockManager.On("GetName").Return("SomeName")
 		return mockManager, true
 	}
 
 	err := setServiceManager(logger)
 	assert.NoError(t, err)
 	assert.Equal(t, servicemanagers.SystemCtl, selectedServiceManagerCache)
-}
-
-func TestSetServiceManager_AgentRunning(t *testing.T) {
-	replaceMocked := storeMockedFunctions()
-	defer replaceMocked()
-
-	restoreSM := setServiceManagerCache(servicemanagers.Undefined)
-	defer restoreSM()
-
-	restorePM := setPackageManagerCache(packagemanagers.Snap)
-	defer restorePM()
-
-	getPackageManager = func(managerType packagemanagers.PackageManager) (packagemanagers.IPackageManager, bool) {
-
-		mockManager := &pmMock.IPackageManager{}
-		mockManager.On("GetSupportedServiceManagers").Return([]servicemanagers.ServiceManager{servicemanagers.SystemCtl})
-
-		return mockManager, true
-	}
-
-	getServiceManager = func(managerType servicemanagers.ServiceManager) (servicemanagers.IServiceManager, bool) {
-		assert.Equal(t, managerType, servicemanagers.SystemCtl)
-
-		mockManager := &smMock.IServiceManager{}
-		mockManager.On("IsManagerEnvironment").Return(true)
-		mockManager.On("GetAgentStatus").Return(common.Running, nil)
-		return mockManager, true
-	}
-
-	err := setServiceManager(logger)
-	assert.NoError(t, err)
-	assert.Equal(t, servicemanagers.SystemCtl, selectedServiceManagerCache)
-}
-
-func TestSetServiceManager_AgentNotInstalled(t *testing.T) {
-	replaceMocked := storeMockedFunctions()
-	defer replaceMocked()
-
-	restoreSM := setServiceManagerCache(servicemanagers.Undefined)
-	defer restoreSM()
-
-	restorePM := setPackageManagerCache(packagemanagers.Snap)
-	defer restorePM()
-
-	getPackageManager = func(managerType packagemanagers.PackageManager) (packagemanagers.IPackageManager, bool) {
-
-		mockManager := &pmMock.IPackageManager{}
-		mockManager.On("GetSupportedServiceManagers").Return([]servicemanagers.ServiceManager{servicemanagers.SystemCtl})
-
-		return mockManager, true
-	}
-
-	getServiceManager = func(managerType servicemanagers.ServiceManager) (servicemanagers.IServiceManager, bool) {
-		assert.Equal(t, managerType, servicemanagers.SystemCtl)
-
-		mockManager := &smMock.IServiceManager{}
-		mockManager.On("IsManagerEnvironment").Return(true)
-		mockManager.On("GetAgentStatus").Return(common.NotInstalled, nil)
-		return mockManager, true
-	}
-
-	err := setServiceManager(logger)
-	assert.NoError(t, err)
-	assert.Equal(t, servicemanagers.Undefined, selectedServiceManagerCache)
 }
 
 func TestSetPackageManager_NoAvailablePackageManagers(t *testing.T) {
