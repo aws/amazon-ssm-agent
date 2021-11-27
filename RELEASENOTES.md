@@ -1,5 +1,9 @@
 Latest
 ===============
+- Fix for ssm-setup-cli to be able to select service manager without the agent being installed
+
+3.1.630.0
+===============
 - Added greengrass component recipe for the new SystemsManagerAgent component
 - Added support for registering agent on a greengrass device
 - Added support for downloading more than 1000 objects in downloadContent
