@@ -148,7 +148,7 @@ func removeInvalidColon(pluginName string) string {
 // MakeDirs create the directories along the path if missing.
 func MakeDirs(destinationDir string) (err error) {
 	// create directory
-	err = fs.MkdirAll(destinationDir, appconfig.ReadWriteAccess)
+	err = fs.MkdirAll(destinationDir, appconfig.ReadWriteExecuteAccess)
 	if err != nil {
 		err = fmt.Errorf("failed to create directory %v. %v", destinationDir, err)
 	}

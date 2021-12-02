@@ -112,7 +112,7 @@ func (futl *Fileutil) removeInvalidColon(pluginName string) string {
 // MakeDirs create the directories along the path if missing.
 func (futl *Fileutil) MakeDirs(destinationDir string) (err error) {
 	// create directory
-	err = futl.fs.MkdirAll(destinationDir, appconfig.ReadWriteAccess)
+	err = futl.fs.MkdirAll(destinationDir, appconfig.ReadWriteExecuteAccess)
 	if err != nil {
 		err = fmt.Errorf("failed to create directory %v. %v", destinationDir, err)
 	}

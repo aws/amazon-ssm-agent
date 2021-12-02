@@ -63,7 +63,7 @@ func (r *runtimeConfigHandler) GetConfig() ([]byte, error) {
 }
 
 func (r *runtimeConfigHandler) SaveConfig(content []byte) error {
-	if err := r.fileSystem.MkdirAll(appconfig.RuntimeConfigFolderPath, appconfig.ReadWriteAccess); err != nil {
+	if err := r.fileSystem.MkdirAll(appconfig.RuntimeConfigFolderPath, appconfig.ReadWriteExecuteAccess); err != nil {
 		return fmt.Errorf("failed to create runtime config folder '%s': %v", appconfig.RuntimeConfigFolderPath, err)
 	}
 
