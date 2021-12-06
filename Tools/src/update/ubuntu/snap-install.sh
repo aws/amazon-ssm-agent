@@ -23,7 +23,7 @@ fi
 
 if [[ "$(cat /proc/1/comm)" == "systemd" ]]; then
  
-  if [[ "$(systemctl is-active snap.amazon-ssm-agent.amazon-ssm-agent)" == "active" ]]; then
+  if [[ "$(systemctl is-active snap.amazon-ssm-agent.amazon-ssm-agent.service)" == "active" ]]; then
     echo "detected snap amazon-ssm-agent running on the system, installing new snaps..."
     # stop the current agent
     systemctl stop snap.amazon-ssm-agent.amazon-ssm-agent.service

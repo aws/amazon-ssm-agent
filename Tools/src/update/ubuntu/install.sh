@@ -101,9 +101,9 @@ if [[ "$(cat /proc/1/comm)" == "init" ]]; then
   fi
 
 elif [[ "$(cat /proc/1/comm)" == "systemd" ]]; then
-  if [[ "$(systemctl is-active amazon-ssm-agent)" == "active" ]]; then
+  if [[ "$(systemctl is-active amazon-ssm-agent.service)" == "active" ]]; then
     echo "-> Agent is running in the instance"
-    systemctl stop amazon-ssm-agent
+    systemctl stop amazon-ssm-agent.service
     echo "Agent stopped"
     systemctl daemon-reload
     echo "Reload daemon"
@@ -116,7 +116,7 @@ elif [[ "$(cat /proc/1/comm)" == "systemd" ]]; then
   pmExit=$?
 
   if [ "$DO_REGISTER" = true ]; then
-    systemctl stop amazon-ssm-agent
+    systemctl stop amazon-ssm-agent.service
     amazon-ssm-agent -register -code "$RMI_CODE" -id "$RMI_ID" -region "$RMI_REGION"
   fi
 
@@ -125,10 +125,10 @@ elif [[ "$(cat /proc/1/comm)" == "systemd" ]]; then
 
   echo "Starting agent"
   systemctl daemon-reload
-  systemctl start amazon-ssm-agent
+  systemctl start amazon-ssm-agent.service
 
   echo "Status"
-  systemctl status amazon-ssm-agent
+  systemctl status amazon-ssm-agent.service
 
   if [ "$pmExit" -ne 0 ]; then
     echo "Package manager failed with exit code '$pmExit'"

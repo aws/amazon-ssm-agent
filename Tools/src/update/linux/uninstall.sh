@@ -23,7 +23,7 @@ if [[ $(/sbin/init --version 2> /dev/null) =~ upstart ]]; then
   fi
 elif [[ $(systemctl 2> /dev/null) =~ -\.mount ]]; then
   echo "Checking if the agent is installed"
-  if [[ "$(systemctl status amazon-ssm-agent)" != *"Loaded: not-found"* ]]; then
+  if [[ "$(systemctl status amazon-ssm-agent.service)" != *"Loaded: not-found"* ]]; then
 		echo "-> Agent is installed in this instance"
 		echo "Uninstalling the agent"
 		rpm --erase amazon-ssm-agent

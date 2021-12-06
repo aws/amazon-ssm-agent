@@ -23,7 +23,7 @@ import (
 func init() {
 	registerServiceManager(SystemCtl, &systemCtlManager{
 		&common.ManagerHelper{},
-		"amazon-ssm-agent",
+		"amazon-ssm-agent.service",
 		"Systemctl",
 		SystemCtl,
 		[]string{"systemctl"}})

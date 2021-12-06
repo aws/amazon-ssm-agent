@@ -53,10 +53,10 @@ if [[ $(/sbin/init --version 2> /dev/null) =~ upstart ]]; then
     exit 125
   fi
 elif [[ $(systemctl 2> /dev/null) =~ -\.mount ]]; then
-  if [[ "$(systemctl is-active amazon-ssm-agent)" == "active" ]]; then
+  if [[ "$(systemctl is-active amazon-ssm-agent.service)" == "active" ]]; then
     echo "-> Agent is running in the instance"
     echo "Stopping the agent"
-    systemctl stop amazon-ssm-agent
+    systemctl stop amazon-ssm-agent.service
     echo "Agent stopped"
     systemctl daemon-reload
     echo "Reload daemon"
@@ -88,7 +88,7 @@ elif [[ $(systemctl 2> /dev/null) =~ -\.mount ]]; then
   fi
 
   if [ "$DO_REGISTER" = true ]; then
-    systemctl stop amazon-ssm-agent
+    systemctl stop amazon-ssm-agent.service
     amazon-ssm-agent -register -code "$RMI_CODE" -id "$RMI_ID" -region "$RMI_REGION"
   fi
 
@@ -97,12 +97,12 @@ elif [[ $(systemctl 2> /dev/null) =~ -\.mount ]]; then
 
   echo "Starting agent"
   systemctl daemon-reload
-  systemctl start amazon-ssm-agent
-  systemctl status amazon-ssm-agent
+  systemctl start amazon-ssm-agent.service
+  systemctl status amazon-ssm-agent.service
 
   if [ "$pmExit" -ne 0 ]; then
     if [[ $pmOutput == *"is already installed"* ]]; then
-      echo "Install was successfull"
+      echo "Install was successful"
       exit 0
     fi
 

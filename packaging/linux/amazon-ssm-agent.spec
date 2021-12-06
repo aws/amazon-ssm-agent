@@ -70,7 +70,7 @@ if [ $1 -ge 2 ]; then
     if [[ `cat stdout.txt` =~ upstart ]]; then
         /sbin/stop amazon-ssm-agent
     elif [[ `systemctl` =~ -\.mount ]]; then
-        systemctl stop amazon-ssm-agent
+        systemctl stop amazon-ssm-agent.service
         systemctl daemon-reload
     fi
     rm stdout.txt
@@ -84,8 +84,8 @@ if [ $1 -eq 0 ] ; then
         /sbin/stop amazon-ssm-agent
         sleep 1
     elif [[ `systemctl` =~ -\.mount ]]; then
-        systemctl stop amazon-ssm-agent
-        systemctl disable amazon-ssm-agent
+        systemctl stop amazon-ssm-agent.service
+        systemctl disable amazon-ssm-agent.service
         systemctl daemon-reload
     fi
     rm stdout.txt
@@ -98,8 +98,8 @@ if [[ $1 -ge 0 ]]; then
     if [[ `cat stdout.txt` =~ upstart ]]; then
         /sbin/start amazon-ssm-agent
     elif [[ `systemctl` =~ -\.mount ]]; then
-        systemctl enable amazon-ssm-agent
-        systemctl start amazon-ssm-agent
+        systemctl enable amazon-ssm-agent.service
+        systemctl start amazon-ssm-agent.service
         systemctl daemon-reload
     fi
     rm stdout.txt
