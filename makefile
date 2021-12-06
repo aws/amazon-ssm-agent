@@ -24,7 +24,7 @@ coverage:: build-linux
 	  github.com/aws/amazon-ssm-agent/agent/... \
 	  github.com/aws/amazon-ssm-agent/core/...
 
-build:: build-linux build-freebsd build-windows build-linux-386 build-windows-386 build-arm build-arm64 build-darwin-amd64 build-darwin-arm64
+build:: build-linux build-freebsd build-windows build-linux-386 build-freebsd-386 build-windows-386 build-arm build-arm64 build-darwin-amd64 build-darwin-arm64
 
 prepack:: cpy-plugins copy-win-dep prepack-linux prepack-linux-arm64 prepack-linux-386 prepack-windows prepack-windows-386
 
@@ -46,6 +46,8 @@ dev-build-freebsd: clean quick-integtest checkstyle pre-release build-freebsd
 dev-build-windows: clean quick-integtest checkstyle pre-release build-windows
 .PHONY: dev-build-linux-386
 dev-build-linux-386: clean quick-integtest checkstyle pre-release build-linux-386
+.PHONY: dev-build-freebsd-386
+dev-build-freebsd-386: clean quick-integtest checkstyle pre-release build-freebsd-386
 .PHONY: dev-build-windows-386
 dev-build-windows-386: clean quick-integtest checkstyle pre-release build-windows-386
 .PHONY: dev-build-arm
@@ -176,6 +178,12 @@ build-linux-386: GOOS=linux
 build-linux-386: GOARCH=386
 build-linux-386: GO_BUILD=$(GO_BUILD_NOPIE)
 build-linux-386: build-any-linux-386
+
+.PHONY: build-freebsd-386
+build-freebsd-386: GOOS=freebsd
+build-freebsd-386: GOARCH=386
+build-freebsd-386: GO_BUILD=$(GO_BUILD_NOPIE)
+build-freebsd-386: build-any-freebsd-386
 
 .PHONY: build-windows-386
 build-windows-386: GOOS=windows
