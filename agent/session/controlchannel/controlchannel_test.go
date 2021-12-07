@@ -16,6 +16,7 @@ package controlchannel
 
 import (
 	"encoding/json"
+	"github.com/aws/amazon-ssm-agent/agent/framework/processor"
 	"testing"
 	"time"
 
@@ -168,7 +169,7 @@ func TestControlChannelIncomingMessageHandlerForStartSessionMessage(t *testing.T
 		Payload:        mgsPayloadJson,
 	}
 	serializedBytes, _ := agentMessage.Serialize(log.NewMockLog())
-	mockProcessor.On("Submit", mock.Anything).Return(nil)
+	mockProcessor.On("Submit", mock.Anything).Return(processor.ErrorCode(""))
 
 	err := controlChannelIncomingMessageHandler(mockContext, mockProcessor, serializedBytes, "", "", mockTaskAckChan)
 
@@ -193,7 +194,7 @@ func TestControlChannelIncomingMessageHandlerForTerminateSessionMessage(t *testi
 		Payload:        []byte(agentJson),
 	}
 	serializedBytes, _ := agentMessage.Serialize(log.NewMockLog())
-	mockProcessor.On("Cancel", mock.Anything).Return(nil)
+	mockProcessor.On("Cancel", mock.Anything).Return(processor.ErrorCode(""))
 
 	err := controlChannelIncomingMessageHandler(mockContext, mockProcessor, serializedBytes, "", "", mockTaskAckChan)
 

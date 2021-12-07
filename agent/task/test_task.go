@@ -49,10 +49,48 @@ func (mockPool *MockedPool) ShutdownAndWait(timeout time.Duration) (finished boo
 	return args.Bool(0)
 }
 
-// ShutdownAndWait mocks the method with the same name.
+// HasJob mocks the method with the same name.
 func (mockPool *MockedPool) HasJob(jobID string) bool {
 	args := mockPool.Called(jobID)
 	return args.Bool(0)
+}
+
+// BufferTokensIssued mocks the method with the same name.
+func (mockPool *MockedPool) BufferTokensIssued() int {
+	args := mockPool.Called()
+	return args.Int(0)
+}
+
+// AcquireBufferToken provides a mock function with given fields:
+func (mockPool *MockedPool) AcquireBufferToken(jobId string) PoolErrorCode {
+	ret := mockPool.Called(jobId)
+
+	var r0 PoolErrorCode
+	if rf, ok := ret.Get(0).(func(jobId string) PoolErrorCode); ok {
+		r0 = rf(jobId)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(PoolErrorCode)
+		}
+	}
+
+	return r0
+}
+
+// ReleaseBufferToken provides a mock function with given fields:
+func (mockPool *MockedPool) ReleaseBufferToken(jobId string) PoolErrorCode {
+	ret := mockPool.Called(jobId)
+
+	var r0 PoolErrorCode
+	if rf, ok := ret.Get(0).(func(jobId string) PoolErrorCode); ok {
+		r0 = rf(jobId)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(PoolErrorCode)
+		}
+	}
+
+	return r0
 }
 
 // MockCancelFlag mocks a cancel flag.

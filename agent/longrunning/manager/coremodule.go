@@ -40,25 +40,25 @@ import (
 )
 
 const (
-	//name is the core module name for long running plugins manager
+	//Name is the core module name for long running plugins manager
 	Name = "LongRunningPluginsManager"
 
 	// NameOfCloudWatchJsonFile is the name of ec2 config cloudwatch local configuration file
 	NameOfCloudWatchJsonFile = "AWS.EC2.Windows.CloudWatch.json"
 
-	//number of long running workers
+	//NumberOfLongRunningPluginWorkers represents number of long-running workers
 	NumberOfLongRunningPluginWorkers = 5
 
-	//number of cancel workers
+	//NumberOfCancelWorkers represents number of cancel workers
 	NumberOfCancelWorkers = 5
 
-	//poll frequency for managing lifecycle of long running plugins
+	// PollFrequencyMinutes represents poll frequency for managing lifecycle of long running plugins
 	PollFrequencyMinutes = 15
 
-	//hardStopTimeout is the time before the manager will be shutdown during a hardstop = 4 seconds
+	//HardStopTimeout is the time before the manager will be shutdown during a hardstop = 4 seconds
 	HardStopTimeout = 4 * time.Second
 
-	//softStopTimeout is the time before the manager will be shutdown during a softstop = 20 seconds
+	//SoftStopTimeout is the time before the manager will be shutdown during a softstop = 20 seconds
 	SoftStopTimeout = 20 * time.Second
 )
 
@@ -123,8 +123,8 @@ func EnsureInitialization(context context.T) {
 		// so we can define the number of workers for each pool
 		cancelWaitDuration := 10000 * time.Millisecond
 		clock := times.DefaultClock
-		startPluginPool := task.NewPool(log, NumberOfLongRunningPluginWorkers, cancelWaitDuration, clock)
-		stopPluginPool := task.NewPool(log, NumberOfCancelWorkers, cancelWaitDuration, clock)
+		startPluginPool := task.NewPool(log, NumberOfLongRunningPluginWorkers, 0, cancelWaitDuration, clock)
+		stopPluginPool := task.NewPool(log, NumberOfCancelWorkers, 0, cancelWaitDuration, clock)
 
 		fileSysUtil := &longrunning.FileSysUtilImpl{}
 

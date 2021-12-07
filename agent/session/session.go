@@ -113,11 +113,14 @@ func NewSession(context context.T) *Session {
 	connectionTimeout := time.Duration(messageGatewayServiceConfig.StopTimeoutMillis) * time.Millisecond
 
 	mgsService := service.NewService(context, messageGatewayServiceConfig, connectionTimeout)
+
+	// will be removed later
+	startWorker := processor.NewWorkerProcessorSpec(sessionContext, messageGatewayServiceConfig.SessionWorkersLimit, contracts.StartSession, 0)
+	cancelWorker := processor.NewWorkerProcessorSpec(sessionContext, 3, contracts.TerminateSession, 0)
 	processor := processor.NewEngineProcessor(
 		sessionContext,
-		messageGatewayServiceConfig.SessionWorkersLimit,
-		3, // TODO adjust this value
-		[]contracts.DocumentType{contracts.StartSession, contracts.TerminateSession})
+		startWorker,
+		cancelWorker)
 
 	controlChannel := &controlchannel.ControlChannel{}
 	taskAckChan := make(chan mgsContracts.AcknowledgeTaskContent)

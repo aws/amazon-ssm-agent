@@ -16,17 +16,17 @@ package runcommand
 
 import (
 	"crypto/sha256"
+	"encoding/json"
+	"path"
 	"strings"
 	"testing"
 	"time"
-
-	"encoding/json"
-	"path"
 
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/fileutil"
 	"github.com/aws/amazon-ssm-agent/agent/framework/docparser"
+	"github.com/aws/amazon-ssm-agent/agent/framework/processor"
 	processormock "github.com/aws/amazon-ssm-agent/agent/framework/processor/mock"
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
 	"github.com/aws/amazon-ssm-agent/agent/log"
@@ -80,7 +80,7 @@ func TestProcessMessageWithSendCommandTopicPrefix(t *testing.T) {
 		return &fakeDocState, nil
 	}
 
-	tc.ProcessMock.On("Submit", fakeDocState).Return(nil)
+	tc.ProcessMock.On("Submit", fakeDocState).Return(processor.ErrorCode(""))
 	// execute processMessage
 	svc.processMessage(&tc.Message)
 
@@ -104,7 +104,7 @@ func TestProcessMessageWithCancelCommandTopicPrefix(t *testing.T) {
 
 	// set the expectations
 	tc.MdsMock.On("AcknowledgeMessage", mock.Anything, *tc.Message.MessageId).Return(nil)
-	tc.ProcessMock.On("Cancel", fakeCancelDocState).Return(nil)
+	tc.ProcessMock.On("Cancel", fakeCancelDocState).Return(processor.ErrorCode(""))
 	loadDocStateFromCancelCommand = func(context context.T, msg *ssmmds.Message, messagesOrchestrationRootDir string) (*contracts.DocumentState, error) {
 		return &fakeCancelDocState, nil
 	}

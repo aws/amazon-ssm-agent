@@ -61,7 +61,7 @@ func testPool(t *testing.T, nWorkers int, nJobs int, shouldCancel bool) {
 	clock.On("After", shutdownTimeout).Return(clock.AfterChannel)
 	clock.On("After", shutdownTimeout+waitTimeout).Return(clock.AfterChannel)
 
-	pool := NewPool(logger, nWorkers, waitTimeout, clock)
+	pool := NewPool(logger, nWorkers, 0, waitTimeout, clock)
 	var wg sync.WaitGroup
 	for i := 0; i < nJobs; i++ {
 		jobID := fmt.Sprintf("job-%d", i)
@@ -84,6 +84,97 @@ func testPool(t *testing.T, nWorkers int, nJobs int, shouldCancel bool) {
 	// first time waitEither(doneChan, clock.After) is checked.
 	clock.AssertCalled(t, "After", shutdownTimeout)
 	clock.AssertCalled(t, "After", shutdownTimeout+waitTimeout)
+}
+
+// TestAcquireToken_ExpiredToken test expired tokens
+func TestAcquireToken_ExpiredToken(t *testing.T) {
+	// basic pool
+	poolRef := NewPool(logger, 1, 2, 100*time.Millisecond, times.NewMockedClock())
+	poolObj := poolRef.(*pool)
+	expirationTime := time.Now().Add(time.Duration(-unusedTokenValidityInMinutes-2) * time.Minute) // added extra expiry
+	// if buffer not full, should not delete
+	poolObj.tokenHoldingJobIds["job 2"] = &expirationTime
+	errorCode := poolObj.AcquireBufferToken("job 3")
+	assert.Equal(t, 2, len(poolObj.tokenHoldingJobIds))
+	assert.Equal(t, PoolErrorCode(""), errorCode)
+
+	// if buffer full, should delete
+	poolObj.tokenHoldingJobIds["job 4"] = &expirationTime
+	errorCode = poolObj.AcquireBufferToken("job 5")
+	assert.Equal(t, 2, len(poolObj.tokenHoldingJobIds))
+	assert.Equal(t, PoolErrorCode(""), errorCode)
+
+	errorCode = poolObj.AcquireBufferToken("job 6")
+	assert.Equal(t, JobQueueFull, errorCode)
+}
+
+// TestReleaseAndToken_BasicTest test basic release and acquire tokens operations
+func TestReleaseAndToken_BasicTest(t *testing.T) {
+	workerLimit := 5
+	bufferLimit := 5
+	newPool := NewPool(logger, workerLimit, bufferLimit, 100*time.Millisecond, times.NewMockedClock())
+	for i := 0; i < workerLimit; i++ {
+		errorCode := newPool.AcquireBufferToken(fmt.Sprintf("job %v", i))
+		assert.Equal(t, PoolErrorCode(""), errorCode) //success
+	}
+	errorCode := newPool.AcquireBufferToken(fmt.Sprintf("job %v", workerLimit))
+	assert.Equal(t, JobQueueFull, errorCode) //success
+	for i := 0; i < workerLimit; i++ {
+		errorCode = newPool.ReleaseBufferToken(fmt.Sprintf("job %v", i))
+		assert.Equal(t, PoolErrorCode(""), errorCode) //success
+	}
+	errorCode = newPool.ReleaseBufferToken(fmt.Sprintf("job %v", workerLimit))
+	assert.Equal(t, newPool.BufferTokensIssued(), 0) //success
+}
+
+// TestReleaseAndToken_ZeroBuffer test release and acquire tokens when the buffer is empty
+func TestReleaseAndToken_ZeroBuffer(t *testing.T) {
+	workerLimit := 5
+	bufferLimit := 0
+	newPool := NewPool(logger, workerLimit, bufferLimit, 100*time.Millisecond, times.NewMockedClock())
+	for i := 0; i < workerLimit; i++ {
+		errorCode := newPool.AcquireBufferToken(fmt.Sprintf("job %v", i))
+		assert.Equal(t, UninitializedBuffer, errorCode)
+	}
+	errorCode := newPool.AcquireBufferToken(fmt.Sprintf("job %v", workerLimit))
+	assert.Equal(t, UninitializedBuffer, errorCode)
+	for i := 0; i < workerLimit; i++ {
+		errorCode = newPool.ReleaseBufferToken(fmt.Sprintf("job %v", i))
+		assert.Equal(t, UninitializedBuffer, errorCode)
+	}
+	errorCode = newPool.ReleaseBufferToken(fmt.Sprintf("job %v", workerLimit))
+	assert.Equal(t, newPool.BufferTokensIssued(), 0)
+}
+
+// TestReleaseAndToken_InvalidJobId test release and acquire tokens when invalid job id passed
+func TestReleaseAndToken_InvalidJobId(t *testing.T) {
+	workerLimit := 5
+	bufferLimit := 1
+	newPool := NewPool(logger, workerLimit, bufferLimit, 100*time.Millisecond, times.NewMockedClock())
+	errorCode := newPool.AcquireBufferToken("")
+	assert.Equal(t, InvalidJobId, errorCode)
+
+	errorCode = newPool.ReleaseBufferToken("")
+	assert.Equal(t, InvalidJobId, errorCode)
+	assert.Equal(t, newPool.BufferTokensIssued(), 0)
+}
+
+// TestReleaseAndToken_DuplicateCommand test release and acquire tokens when duplicate job id sent
+func TestReleaseAndToken_DuplicateCommand(t *testing.T) {
+	workerLimit := 5
+	bufferLimit := 1
+	newPool := NewPool(logger, workerLimit, bufferLimit, 100*time.Millisecond, times.NewMockedClock())
+	errorCode := newPool.AcquireBufferToken("job id 1")
+	assert.Equal(t, PoolErrorCode(""), errorCode) //success
+	assert.Equal(t, newPool.BufferTokensIssued(), 1)
+	errorCode = newPool.AcquireBufferToken("job id 1")
+	assert.Equal(t, DuplicateCommand, errorCode) //success
+
+	errorCode = newPool.ReleaseBufferToken("job id 2") // random job id
+	assert.Equal(t, newPool.BufferTokensIssued(), 1)   //success
+
+	errorCode = newPool.ReleaseBufferToken("job id 1") // random job id
+	assert.Equal(t, newPool.BufferTokensIssued(), 0)   //success
 }
 
 func exercisePool(t *testing.T, pool Pool, jobID string, shouldCancel bool) {

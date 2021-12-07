@@ -100,7 +100,7 @@ type RunCommandService struct {
 	processor           processor.Processor
 }
 
-// NewOfflineProcessor initialize a new offline command document processor
+// NewOfflineService initialize a new offline command document processor
 func NewOfflineService(context context.T) (*RunCommandService, error) {
 	messageContext := context.With("[" + offlineName + "]")
 	log := messageContext.Log()
@@ -114,7 +114,8 @@ func NewOfflineService(context context.T) (*RunCommandService, error) {
 	return NewService(messageContext, offlineName, offlineService, 1, 1, false, []contracts.DocumentType{contracts.SendCommandOffline, contracts.CancelCommandOffline}), nil
 }
 
-// NewMdsProcessor initializes a new mds processor with the given parameters.
+// NewMDSService initializes a new mds processor with the given parameters.
+// This call will be removed later
 func NewMDSService(context context.T) *RunCommandService {
 	messageContext := context.With("[" + mdsName + "]")
 	mdsService := newMdsService(messageContext)
@@ -123,8 +124,15 @@ func NewMDSService(context context.T) *RunCommandService {
 	return NewService(messageContext, mdsName, mdsService, config.Mds.CommandWorkersLimit, CancelWorkersLimit, true, []contracts.DocumentType{contracts.SendCommand, contracts.CancelCommand})
 }
 
-// NewProcessor performs common initialization for Mds and Offline processors
-func NewService(ctx context.T, serviceName string, service mdsService.Service, commandWorkerLimit int, cancelWorkerLimit int, pollAssoc bool, supportedDocs []contracts.DocumentType) *RunCommandService {
+// NewService performs common initialization for Mds and Offline processors
+func NewService(ctx context.T,
+	serviceName string,
+	service mdsService.Service,
+	commandWorkerLimit int,
+	cancelWorkerLimit int,
+	pollAssoc bool,
+	supportedDocs []contracts.DocumentType) *RunCommandService {
+
 	log := ctx.Log()
 	config := ctx.AppConfig()
 	identity := ctx.Identity()
@@ -173,7 +181,9 @@ func NewService(ctx context.T, serviceName string, service mdsService.Service, c
 		assocProc = associationProcessor.NewAssociationProcessor(ctx)
 	}
 
-	processor := processor.NewEngineProcessor(ctx, commandWorkerLimit, cancelWorkerLimit, supportedDocs)
+	startWorker := processor.NewWorkerProcessorSpec(ctx, commandWorkerLimit, supportedDocs[0], 0)
+	cancelWorker := processor.NewWorkerProcessorSpec(ctx, cancelWorkerLimit, supportedDocs[1], 0)
+	processor := processor.NewEngineProcessor(ctx, startWorker, cancelWorker)
 	return &RunCommandService{
 		context:              ctx,
 		name:                 serviceName,

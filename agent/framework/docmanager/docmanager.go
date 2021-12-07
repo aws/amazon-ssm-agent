@@ -139,6 +139,11 @@ func (d *DocumentFileMgr) GetDocumentState(fileName, locationFolder string) cont
 	var commandState contracts.DocumentState
 	var count, retryLimit int = 0, 3
 
+	if fileExists, _ := fileutil.LocalFileExist(absoluteFileName); !fileExists {
+		log.Warnf("file not found in the docState directory %v", absoluteFileName)
+		return commandState
+	}
+
 	// retry to avoid sync problem, which arises when OfflineService and MessageDeliveryService try to access the file at the same time
 	for count < retryLimit {
 		err := jsonutil.UnmarshalFile(absoluteFileName, &commandState)

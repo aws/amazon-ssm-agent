@@ -281,12 +281,24 @@ type AgentConfiguration struct {
 
 // DocumentResult is a struct that stores information about the result of the document
 type DocumentResult struct {
-	DocumentName    string
-	DocumentVersion string
-	MessageID       string
-	AssociationID   string
-	PluginResults   map[string]*PluginResult
-	Status          ResultStatus
-	LastPlugin      string
-	NPlugins        int
+	DocumentName        string
+	DocumentVersion     string
+	MessageID           string
+	AssociationID       string
+	PluginResults       map[string]*PluginResult
+	Status              ResultStatus
+	LastPlugin          string
+	NPlugins            int
+	UpstreamServiceName UpstreamServiceName
+	ResultType          ResultType
 }
+
+// ResultType represents document Result types
+type ResultType string
+
+const (
+	// RunCommandResult represents result sent by document worker which ran runCommand documents
+	RunCommandResult ResultType = "RunCommand"
+	// SessionAgentCompleteResult represents result sent by session worker to send session complete result to service
+	SessionAgentCompleteResult ResultType = "SessionAgentComplete"
+)

@@ -83,8 +83,9 @@ func NewAssociationProcessor(context context.T) *Processor {
 	uploader := complianceUploader.NewComplianceUploader(context)
 
 	//TODO Rename everything to service and move package to framework
-	//association has no cancel worker
-	proc := processor.NewEngineProcessor(assocContext, documentWorkersLimit, documentWorkersLimit, []contracts.DocumentType{contracts.Association})
+	startWorker := processor.NewWorkerProcessorSpec(assocContext, documentWorkersLimit, contracts.Association, 0)
+	terminateWorker := processor.NewWorkerProcessorSpec(assocContext, documentWorkersLimit, "", 0) //association has no cancel worker
+	proc := processor.NewEngineProcessor(assocContext, startWorker, terminateWorker)
 	return &Processor{
 		context:            assocContext,
 		assocSvc:           assocSvc,
@@ -118,7 +119,7 @@ func (p *Processor) ModuleRequestStop(stopType contracts.StopType) (err error) {
 	return nil
 }
 
-// StartAssociationWorker starts worker to process scheduled association
+// InitializeAssociationProcessor starts worker to process scheduled association
 func (p *Processor) InitializeAssociationProcessor() {
 	log := p.context.Log()
 	if resChan, err := p.proc.Start(); err != nil {
@@ -595,9 +596,7 @@ func (r *Processor) listenToResponses() {
 			//TODO move this part to service
 			schedulemanager.UpdateNextScheduledDate(log, res.AssociationID)
 			signal.ExecuteAssociation(log)
-
 		}
-
 	}
 }
 
