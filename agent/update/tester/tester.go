@@ -10,11 +10,12 @@
 // on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
 // either express or implied. See the License for the specific language governing
 // permissions and limitations under the License
-//
+
 // Package tester is responsible for initiating testing based on the test stage value passed
 package tester
 
 import (
+	"runtime/debug"
 	"time"
 
 	"github.com/aws/amazon-ssm-agent/agent/context"
@@ -65,6 +66,7 @@ func StartTests(context context.T, stage testCommon.TestStage, timeOutSeconds in
 		defer func() {
 			if msg := recover(); msg != nil {
 				context.Log().Errorf("following test case panicked: %s", testerObj.GetCurrentRunningTest())
+				context.Log().Errorf("Stacktrace:\n%s", debug.Stack())
 			}
 		}()
 		testCompleted <- runTests()

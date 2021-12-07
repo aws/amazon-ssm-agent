@@ -10,8 +10,8 @@
 // on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
 // either express or implied. See the License for the specific language governing
 // permissions and limitations under the License
-//
-// package testcases contains test cases from all testStages
+
+// Package testcases contains test cases from all testStages
 package testcases
 
 import (
@@ -57,7 +57,7 @@ func (l *NamedPipeTestCase) Initialize(context context.T) {
 	l.expectedOutput = "reply"
 }
 
-// RegisterTestCase executes the named pipe test case
+// ExecuteTestCase executes the named pipe test case
 // creates listen go routine and tries to dial pipe for communication
 func (l *NamedPipeTestCase) ExecuteTestCase() testCommon.TestOutput {
 	l.context.Log().Info("named pipe test case started")
@@ -166,19 +166,34 @@ func (l *NamedPipeTestCase) dialPipe() {
 		Topic:         "TestRespondentTopic",
 		Payload:       []byte(l.expectedOutput),
 	}
-	for iterationNo := 1; iterationNo <= 5; iterationNo++ {
-		if msg, err = l.dialChannel.Recv(); err != nil {
-			continue
-		}
-		if err = json.Unmarshal(msg, &request); err != nil {
-			log.Error(errors.New(fmt.Sprintf("failed to unmarshal message: %v %v", err, string(msg))))
-			continue
-		}
-		log.Debugf("received message in dial pipe %+v", request)
-		if err = l.dialChannel.Send(replyMsg); err != nil {
-			log.Errorf("problem sending message: %v", err)
-			return
-		}
+	var exit bool
+	for iterationNo := 1; iterationNo <= 5 && !exit; iterationNo++ {
+		func() {
+			defer func() {
+				if r := recover(); r != nil {
+					// dial channel panic is not important in this particular testcase
+					log.Errorf("dial channel use case panicked %v", r)
+				}
+			}()
+			// nowadays socket is being set to nil on close
+			if !l.dialChannel.IsConnect() {
+				log.Infof("dial channel is closed")
+				exit = true
+			}
+			if msg, err = l.dialChannel.Recv(); err != nil {
+				log.Errorf("error while receiving message through dial channel %v", err)
+				return
+			}
+			if err = json.Unmarshal(msg, &request); err != nil {
+				log.Error(errors.New(fmt.Sprintf("failed to unmarshal message: %v %v", err, string(msg))))
+				return
+			}
+			log.Debugf("received message in dial pipe %+v", request)
+			if err = l.dialChannel.Send(replyMsg); err != nil {
+				log.Errorf("problem sending message: %v", err)
+				exit = true
+			}
+		}()
 	}
 }
 

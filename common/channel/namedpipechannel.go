@@ -32,7 +32,7 @@ type namedPipeChannel struct {
 	log    log.T
 }
 
-// NewChannel creates an new instance of Channel
+// NewNamedPipeChannel creates a new instance of named pipe channel
 func NewNamedPipeChannel(log log.T, identity identity.IAgentIdentity) IChannel {
 	return &namedPipeChannel{
 		log: log,
@@ -71,6 +71,9 @@ func (channel *namedPipeChannel) Send(message *message.Message) error {
 	if err != nil {
 		return err
 	}
+	if !channel.IsConnect() {
+		return fmt.Errorf("channel is closed")
+	}
 	return channel.socket.Send(msg)
 }
 
@@ -78,26 +81,41 @@ func (channel *namedPipeChannel) Close() error {
 	defer func() {
 		channel.socket = nil
 	}()
+	if !channel.IsConnect() {
+		return fmt.Errorf("channel is already closed")
+	}
 	return channel.socket.Close()
 }
 
-// Receive receives a complete message.
+// Recv receives a complete message.
 func (channel *namedPipeChannel) Recv() ([]byte, error) {
+	if !channel.IsConnect() {
+		return nil, fmt.Errorf("channel is closed")
+	}
 	return channel.socket.Recv()
 }
 
 // SetOption is used to specify additional options
 func (channel *namedPipeChannel) SetOption(name string, value interface{}) error {
+	if !channel.IsConnect() {
+		return fmt.Errorf("channel is closed")
+	}
 	return channel.socket.SetOption(name, value)
 }
 
 // Listen connects a local endpoint to the Socket.
 func (channel *namedPipeChannel) Listen(addr string) error {
+	if !channel.IsConnect() {
+		return fmt.Errorf("channel is closed")
+	}
 	return channel.socket.Listen(addr)
 }
 
 // Dial connects a remote endpoint to the Socket.
 func (channel *namedPipeChannel) Dial(addr string) error {
+	if !channel.IsConnect() {
+		return fmt.Errorf("channel is closed")
+	}
 	return channel.socket.Dial(addr)
 }
 
