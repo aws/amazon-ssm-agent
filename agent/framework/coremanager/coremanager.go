@@ -141,6 +141,16 @@ func initializeBookkeepingLocations(log logger.T, shortInstanceID string) bool {
 		initStatus = false
 	}
 
+	log.Infof("Initializing replies folder for MGS reply requests that couldn't reach the service")
+	mgsReplies := filepath.Join(appconfig.DefaultDataStorePath,
+		shortInstanceID,
+		appconfig.RepliesMGSRootDirName)
+
+	if err := fileutil.MakeDirs(mgsReplies); err != nil {
+		log.Error("encountered error while creating folders for MGS replies", err)
+		initStatus = false
+	}
+
 	log.Infof("Initializing healthcheck folders for long running plugins")
 	f := filepath.Join(appconfig.DefaultDataStorePath,
 		shortInstanceID,

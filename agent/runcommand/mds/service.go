@@ -15,6 +15,7 @@
 package service
 
 import (
+	reqContext "context"
 	"fmt"
 	"net"
 	"net/http"
@@ -77,7 +78,7 @@ type sdkService struct {
 	context          context.T
 	sdk              ssmmdsiface.SSMMDSAPI
 	tr               *http.Transport
-	lastRequest      *request.Request
+	cancelRequest    reqContext.CancelFunc
 	m                sync.Mutex
 	sendSdkRequest   SendSdkRequest
 	cancelSdkRequest CancelSdkRequest
@@ -173,6 +174,10 @@ func (mds *sdkService) GetMessages(log log.T, instanceID string) (messages *ssmm
 func isErrorUnexpected(log log.T, err error, requestTime, responseTime time.Time) bool {
 	//determine the time it took for the api to respond
 	timeDiff := responseTime.Sub(requestTime).Seconds()
+	if strings.Contains(err.Error(), "request context canceled") {
+		log.Debugf("MDS request cancelled in between")
+		return false
+	}
 	//check if response isn't coming too quick & if error is unexpected
 	if timeDiff < QuickResponseThreshold {
 		//response was too quick - this is unexpected
@@ -370,10 +375,11 @@ func (mds *sdkService) GetFailedReply(log log.T, fileName string) (*ssmmds.SendR
 func (mds *sdkService) Stop() {
 	mds.m.Lock()
 	defer mds.m.Unlock()
-	if mds.lastRequest != nil {
+	if mds.cancelRequest != nil {
 		// cancel the underlying http request to wake up the last call
-		mds.cancelSdkRequest(mds.tr, mds.lastRequest)
+		mds.cancelRequest()
 	}
+	mds.context.Log().Infof("Stopped Mds service")
 }
 
 // sendRequest wraps req.Send() so that it can keep track of the executing request
@@ -386,7 +392,14 @@ func (mds *sdkService) sendRequest(req *request.Request) error {
 func (mds *sdkService) storeRequest(req *request.Request) {
 	mds.m.Lock()
 	defer mds.m.Unlock()
-	mds.lastRequest = req
+	if req == nil {
+		mds.cancelRequest = nil
+		return
+	}
+	var cancel reqContext.CancelFunc
+	ctx, cancel := reqContext.WithCancel(reqContext.Background())
+	req.SetContext(ctx)
+	mds.cancelRequest = cancel
 }
 
 func (mds *sdkService) clearRequest() {
@@ -398,7 +411,7 @@ func getFailedReplyLocation(identity identity.IAgentIdentity, fileName string) s
 	return path.Join(GetFailedReplyDirectory(identity), fileName)
 }
 
-// getFailedReplyDirectory returns path to replies folder
+// GetFailedReplyDirectory returns path to replies folder
 func GetFailedReplyDirectory(identity identity.IAgentIdentity) string {
 	shortInstanceID, _ := identity.ShortInstanceID()
 	return path.Join(appconfig.DefaultDataStorePath,

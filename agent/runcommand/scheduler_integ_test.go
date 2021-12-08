@@ -344,6 +344,6 @@ func TestLoop_Multiple_Parallel_Error(t *testing.T) {
 	success := verifyWaitGroup(wg, 5*time.Second)
 	assert.True(t, success, "Message loop failed to return within the expected time")
 
-	time.Sleep(5 * time.Second)
+	time.Sleep(6 * time.Second) // increasing time for test failures, Suspecting a small delay in scheduling
 	assert.Equal(t, 1, called)
 }

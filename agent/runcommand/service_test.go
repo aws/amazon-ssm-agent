@@ -67,7 +67,7 @@ func TestProcessMessageWithSendCommandTopicPrefix(t *testing.T) {
 	// SendCommand topic prefix
 	var topic = testTopicSend
 	var fakeDocState = contracts.DocumentState{
-		DocumentType: contracts.SendCommand,
+		DocumentType: contracts.SendCommandOffline,
 	}
 	// prepare processor and test case fields
 	svc, tc := prepareTestProcessMessage(topic)
@@ -97,7 +97,7 @@ func TestProcessMessageWithCancelCommandTopicPrefix(t *testing.T) {
 	// CancelCommand topic prefix
 	var topic = testTopicCancel
 	var fakeCancelDocState = contracts.DocumentState{
-		DocumentType: contracts.CancelCommand,
+		DocumentType: contracts.CancelCommandOffline,
 	}
 	//prepare processor and test case fields
 	svc, tc := prepareTestProcessMessage(topic)

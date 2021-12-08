@@ -97,13 +97,15 @@ func DefaultConfig() SsmagentConfig {
 	}
 	var s3 S3Cfg
 	var mds = MdsCfg{
-		CommandWorkersLimit: DefaultCommandWorkersLimit,
-		StopTimeoutMillis:   DefaultStopTimeoutMillis,
-		CommandRetryLimit:   DefaultCommandRetryLimit,
+		CommandWorkersLimit:      DefaultCommandWorkersLimit,
+		StopTimeoutMillis:        DefaultStopTimeoutMillis,
+		CommandRetryLimit:        DefaultCommandRetryLimit,
+		CommandWorkerBufferLimit: DefaultCommandWorkerBufferLimit,
 	}
 	var mgs = MgsConfig{
-		SessionWorkersLimit: DefaultSessionWorkersLimit,
-		StopTimeoutMillis:   DefaultStopTimeoutMillis,
+		SessionWorkersLimit:      DefaultSessionWorkersLimit,
+		StopTimeoutMillis:        DefaultStopTimeoutMillis,
+		SessionWorkerBufferLimit: DefaultSessionWorkerBufferLimit,
 	}
 	var ssm = SsmCfg{
 		HealthFrequencyMinutes:                DefaultSsmHealthFrequencyMinutes,

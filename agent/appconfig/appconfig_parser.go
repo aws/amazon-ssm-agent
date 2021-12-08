@@ -63,6 +63,19 @@ func parser(config *SsmagentConfig) {
 		DefaultCommandWorkersLimitMin,
 		config.Mds.CommandWorkersLimit, // we do not restrict max number of worker limit here
 		DefaultCommandWorkersLimit)
+	config.Mds.CommandWorkerBufferLimit = getNumericValue(
+		config.Mds.CommandWorkerBufferLimit,
+		DefaultCommandWorkersBufferLimitMin,
+		config.Mds.CommandWorkerBufferLimit, // we do not restrict max number of worker buffer limit here
+		DefaultCommandWorkerBufferLimit)
+
+	// MGS config
+	config.Mgs.SessionWorkerBufferLimit = getNumericValue(
+		config.Mgs.SessionWorkerBufferLimit,
+		DefaultSessionWorkersBufferLimitMin,
+		config.Mgs.SessionWorkerBufferLimit, // we do not restrict max number of worker buffer limit here
+		DefaultSessionWorkerBufferLimit)
+
 	config.Mds.CommandRetryLimit = getNumericValue(
 		config.Mds.CommandRetryLimit,
 		DefaultCommandRetryLimitMin,

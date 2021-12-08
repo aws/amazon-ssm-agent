@@ -17,6 +17,7 @@ package runcommand
 import (
 	"fmt"
 	"math/rand"
+	"runtime/debug"
 	"sync"
 	"time"
 
@@ -58,12 +59,18 @@ func (s *RunCommandService) sendReplyLoop() {
 
 // loop reads messages from MDS then processes them.
 func (s *RunCommandService) messagePollLoop() {
+	log := s.context.Log()
+	defer func() {
+		if msg := recover(); msg != nil {
+			log.Errorf("message poll loop panic: %v", msg)
+			log.Errorf("Stacktrace:\n%s", debug.Stack())
+		}
+	}()
 	s.messagePollWaitGroup.Add(1)
 	defer s.messagePollWaitGroup.Done()
 	// time lock to only have one loop active anytime.
 	// this is extra insurance to prevent any race condition
 	pollStartTime := time.Now()
-	log := s.context.Log()
 	if s.name == mdsName {
 		log.Debug("Starting message poll")
 	}
@@ -135,7 +142,7 @@ func (s *RunCommandService) reset() {
 // Stop stops the message poller.
 func (s *RunCommandService) stop() {
 	log := s.context.Log()
-	log.Debugf("Stopping processor:%v", s.name)
+	log.Debugf("Stopping module:%v", s.name)
 
 	// Ask scheduler not to schedule more jobs
 	if s.messagePollJob != nil {
@@ -151,7 +158,7 @@ func (s *RunCommandService) stop() {
 	// Wait for ongoing messagePoll loops to terminate
 	log.Debugf("Waiting for polling function to return")
 	s.messagePollWaitGroup.Wait()
-	log.Debugf("processor has been stopped:%v", s.name)
+	log.Debugf("ended message poll wait")
 }
 
 // pollOnce calls GetMessages once and processes the result.

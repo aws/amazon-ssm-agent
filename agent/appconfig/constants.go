@@ -29,9 +29,22 @@ const (
 	DefaultCommandWorkersLimit    = 5
 	DefaultCommandWorkersLimitMin = 1
 
+	// DefaultCommandWorkerBufferLimit represents the default job pool buffer limit for run commands
+	DefaultCommandWorkerBufferLimit = 5
+	// DefaultCommandWorkersBufferLimitMin represents the minimum job pool buffer limit for run commands
+	DefaultCommandWorkersBufferLimitMin = 1
+
+	// DefaultSessionWorkerBufferLimit represents the default job pool buffer limit for session documents
+	DefaultSessionWorkerBufferLimit = 1
+	// DefaultSessionWorkersBufferLimitMin represents the minimum job pool buffer limit for session documents
+	DefaultSessionWorkersBufferLimitMin = 1
+
 	DefaultCommandRetryLimit    = 15
 	DefaultCommandRetryLimitMin = 1
 	DefaultCommandRetryLimitMax = 100
+
+	// DefaultCancelWorkersLimit represents default cancel worker limit
+	DefaultCancelWorkersLimit = 3
 
 	DefaultStopTimeoutMillis    = 20000
 	DefaultStopTimeoutMillisMin = 10000
@@ -102,6 +115,10 @@ const (
 
 	//aws-ssm-agent bookkeeping constants for failed sent replies
 	RepliesRootDirName = "replies"
+	//amazon-ssm-agent bookkeeping constants for failed sent replies
+	RepliesMGSRootDirName = "replies_mgs"
+	//amazon-ssm-agent bookkeeping constants for storing received commands
+	IdempotencyDirName = "idempotency"
 
 	//aws-ssm-agent bookkeeping constants for compliance
 	ComplianceRootDirName         = "compliance"

@@ -24,10 +24,11 @@ type CredentialProfile struct {
 
 // MdsCfg represents configuration for Message delivery service (MDS)
 type MdsCfg struct {
-	Endpoint            string
-	CommandWorkersLimit int
-	StopTimeoutMillis   int64
-	CommandRetryLimit   int
+	Endpoint                 string
+	CommandWorkersLimit      int
+	CommandWorkerBufferLimit int
+	StopTimeoutMillis        int64
+	CommandRetryLimit        int
 }
 
 // SsmCfg represents configuration for Simple system manager (SSM)
@@ -74,10 +75,11 @@ type AgentInfo struct {
 
 // MgsConfig represents configuration for Message Gateway service
 type MgsConfig struct {
-	Region              string
-	Endpoint            string
-	StopTimeoutMillis   int64
-	SessionWorkersLimit int
+	Region                   string
+	Endpoint                 string
+	StopTimeoutMillis        int64
+	SessionWorkersLimit      int
+	SessionWorkerBufferLimit int
 }
 
 // KmsConfig represents configuration for Key Management Service

@@ -108,7 +108,6 @@ func (suite *RunCommandOutputTestSuite) SetupTest() {
 func (suite *RunCommandOutputTestSuite) TearDownSuite() {
 	// Cleanup runtime config
 	os.RemoveAll(appconfig.RuntimeConfigFolderPath)
-	
 	// Close the log only after the all tests are done.
 	suite.log.Close()
 }

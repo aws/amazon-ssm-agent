@@ -21,11 +21,8 @@ import (
 	"sync"
 	"time"
 
-	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
-	"github.com/aws/amazon-ssm-agent/agent/fileutil"
 	"github.com/aws/amazon-ssm-agent/agent/framework/docmanager"
-	messageContracts "github.com/aws/amazon-ssm-agent/agent/runcommand/contracts"
 	mdsService "github.com/aws/amazon-ssm-agent/agent/runcommand/mds"
 	"github.com/aws/amazon-ssm-agent/agent/sdkutil"
 	"github.com/aws/aws-sdk-go/service/ssmmds"
@@ -48,12 +45,12 @@ var once sync.Once
 var loadDocStateFromSendCommand = parseSendCommandMessage
 var loadDocStateFromCancelCommand = parseCancelCommandMessage
 
-// Name returns the module name
+// ModuleName returns the module name
 func (s *RunCommandService) ModuleName() string {
 	return s.name
 }
 
-// Execute starts the scheduling of the message processor plugin
+// ModuleExecute starts the scheduling of the message processor plugin
 func (s *RunCommandService) ModuleExecute() (err error) {
 	log := s.context.Log()
 	defer func() {
@@ -85,11 +82,6 @@ func (s *RunCommandService) ModuleExecute() (err error) {
 	if s.sendReplyJob, err = scheduler.Every(sendReplyFrequencyMinutes).Minutes().Run(s.sendReplyLoop); err != nil {
 		s.context.Log().Errorf("unable to schedule send reply job. %v", err)
 	}
-
-	//TODO move association polling out in the next CR
-	if s.pollAssociations {
-		s.assocProcessor.ModuleExecute()
-	}
 	return
 }
 
@@ -98,11 +90,6 @@ func (s *RunCommandService) ModuleRequestStop(stopType contracts.StopType) (err 
 	s.stop()
 	//second stop the message processor
 	s.processor.Stop(stopType)
-
-	//TODO move this out once we have association moved to a different core module
-	if s.assocProcessor != nil {
-		s.assocProcessor.ModuleRequestStop(stopType)
-	}
 	return nil
 }
 
@@ -117,9 +104,6 @@ func (s *RunCommandService) listenReply(resultChan chan contracts.DocumentResult
 					log.Errorf("Stracktrace:\n%s", debug.Stack())
 				}
 			}()
-
-			//cloudwatch and refresh association needs to trigger the in-memory component, adding filter here
-			s.handleSpecialPlugin(res.LastPlugin, res.PluginResults, res.MessageID)
 
 			if res.LastPlugin != "" {
 				log.Infof("received plugin: %v result from Processor", res.LastPlugin)
@@ -137,26 +121,6 @@ func (s *RunCommandService) listenReply(resultChan chan contracts.DocumentResult
 			s.sendResponse(res.MessageID, res)
 		}()
 	}
-}
-
-//temporary solution on plugins with shared responsibility with agent
-func (s *RunCommandService) handleSpecialPlugin(lastPluginID string, pluginRes map[string]*contracts.PluginResult, messageID string) {
-	var newRes contracts.PluginResult
-
-	log := s.context.Log()
-	//TODO once association service switch to use RC and CW goes away, remove this block
-	for ID, pluginRes := range pluginRes {
-		if pluginRes.PluginName == appconfig.PluginNameRefreshAssociation {
-			log.Infof("Found %v to invoke refresh association immediately", pluginRes.PluginName)
-			commandID, _ := messageContracts.GetCommandID(messageID)
-			orchestrationDir := fileutil.BuildPath(s.orchestrationRootDir, commandID)
-			//apply association only when this is the last plugin run
-			s.assocProcessor.ProcessRefreshAssociation(log, pluginRes, orchestrationDir, lastPluginID == ID)
-
-			log.Infof("Finished refreshing association immediately - response: %v", newRes)
-		}
-	}
-
 }
 
 func (s *RunCommandService) processMessage(msg *ssmmds.Message) {
@@ -209,9 +173,9 @@ func (s *RunCommandService) processMessage(msg *ssmmds.Message) {
 
 	log.Debugf("SendReply done. Received message - messageId - %v", *msg.MessageId)
 	switch docState.DocumentType {
-	case contracts.SendCommand, contracts.SendCommandOffline:
+	case contracts.SendCommandOffline, contracts.SendCommand:
 		s.processor.Submit(*docState)
-	case contracts.CancelCommand, contracts.CancelCommandOffline:
+	case contracts.CancelCommandOffline, contracts.CancelCommand:
 		s.processor.Cancel(*docState)
 
 	default:

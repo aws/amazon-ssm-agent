@@ -133,7 +133,7 @@ func (suite *AgentStressTestSuite) TestCoreAgent() {
 		suite.log.Close()
 	}()
 
-	// a channel to block test execution untill the agent is done processing the required number of messages
+	// a channel to block test execution until the agent is done processing the required number of messages
 	c := make(chan int)
 	suite.mdsSdkMock.On("SendReplyRequest", mock.AnythingOfType("*ssmmds.SendReplyInput")).Return(&request.Request{}, func(input *ssmmds.SendReplyInput) *ssmmds.SendReplyOutput {
 		payload := input.Payload
