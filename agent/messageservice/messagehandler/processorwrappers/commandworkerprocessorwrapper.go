@@ -27,6 +27,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/framework/docmanager"
 	"github.com/aws/amazon-ssm-agent/agent/framework/processor"
+	"github.com/aws/amazon-ssm-agent/agent/messageservice/messagehandler/idempotency"
 	"github.com/aws/amazon-ssm-agent/agent/messageservice/utils"
 	runCommandContracts "github.com/aws/amazon-ssm-agent/agent/runcommand/contracts"
 )
@@ -113,10 +114,22 @@ func (cpw *CommandWorkerProcessorWrapper) GetTerminateWorker() contracts.Documen
 // PushToProcessor submits the command to the processor
 func (cpw *CommandWorkerProcessorWrapper) PushToProcessor(message contracts.DocumentState) processor.ErrorCode {
 	errorCode := processor.UnsupportedDocType
+	cpw.mutex.Lock()
+	defer cpw.mutex.Unlock()
+	commandPresent := idempotency.IsDocumentAlreadyReceived(cpw.context, &message)
+	if commandPresent {
+		return processor.DuplicateCommand
+	}
 	if cpw.startWorkerCmd == message.DocumentType {
 		errorCode = cpw.processor.Submit(message)
 	} else if cpw.cancelWorkerCmd == message.DocumentType {
 		errorCode = cpw.processor.Cancel(message)
+	}
+	if errorCode == "" {
+		err := idempotency.CreateIdempotencyEntry(cpw.context, &message)
+		if err != nil {
+			cpw.context.Log().Errorf("error while creating idempotency entry for command %v", message.DocumentInformation.DocumentID)
+		}
 	}
 	return errorCode
 }

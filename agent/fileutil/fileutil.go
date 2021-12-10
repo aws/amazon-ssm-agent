@@ -271,6 +271,39 @@ func IsDirEmpty(location string) (bool, error) {
 	return false, err
 }
 
+// getAllDirectoriesWithFileInfo returns directories from the path
+func getAllDirectoriesWithFileInfo(srcPath string) ([]os.FileInfo, error) {
+	f, err := os.Open(srcPath)
+	if err != nil {
+		return nil, err
+	}
+	list, err := f.Readdir(-1)
+	f.Close()
+	if err != nil {
+		return nil, err
+	}
+	return list, nil
+}
+
+// GetDirectoryNamesUnsortedOlderThan returns directory name unsorted ioutil.ReadDir uses sorting to sort the directory names
+// if date value passed in olderThan param, this function returns all files older than the passed time.
+func GetDirectoryNamesUnsortedOlderThan(srcPath string, olderThan *time.Time) ([]string, error) {
+	var err error
+	directories := make([]string, 0)
+	fileInfoList, err := getAllDirectoriesWithFileInfo(srcPath)
+	if err != nil {
+		return directories, err
+	}
+	for _, fileInfo := range fileInfoList {
+		if fileInfo.Mode().IsDir() {
+			if olderThan == nil || (olderThan != nil && fileInfo.ModTime().Before(*olderThan)) {
+				directories = append(directories, fileInfo.Name())
+			}
+		}
+	}
+	return directories, nil
+}
+
 // GetDirectoryNames returns the names of all directories under a give srcPath
 func GetDirectoryNames(srcPath string) (directories []string, err error) {
 	if list, err := ioutil.ReadDir(srcPath); err == nil {

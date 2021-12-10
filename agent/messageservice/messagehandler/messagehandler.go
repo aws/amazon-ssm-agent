@@ -22,6 +22,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/framework/processor"
+	"github.com/aws/amazon-ssm-agent/agent/messageservice/messagehandler/idempotency"
 	processorWrapperTypes "github.com/aws/amazon-ssm-agent/agent/messageservice/messagehandler/processorwrappers"
 	"github.com/aws/amazon-ssm-agent/agent/messageservice/utils"
 	"github.com/carlescere/scheduler"
@@ -58,6 +59,9 @@ const (
 
 	// UnexpectedDocumentType represents that message handler received unexpected document type
 	UnexpectedDocumentType ErrorCode = "UnexpectedDocumentType"
+
+	// idempotencyFileDeletionTimeout represents file deletion timeout after persisting command for idempotency
+	idempotencyFileDeletionTimeout = 10
 
 	// ProcessorBufferFull represents that the processor buffer is full
 	ProcessorBufferFull ErrorCode = "ProcessorBufferFull"
@@ -103,6 +107,21 @@ func (mh *MessageHandler) Initialize() (err error) {
 		processor.DuplicateCommand:   DuplicateCommand,
 		processor.InvalidDocumentId:  InvalidDocument,
 		processor.UnsupportedDocType: UnexpectedDocumentType,
+	}
+	if mh.persistedCommandDeletionJob == nil {
+		if mh.persistedCommandDeletionJob, err = scheduler.Every(idempotencyFileDeletionTimeout).Minutes().NotImmediately().Run(func() {
+			mh.context.Log().Info("started idempotency deletion thread")
+			defer func() {
+				mh.context.Log().Infof("ended idempotency deletion thread")
+				if msg := recover(); msg != nil {
+					mh.context.Log().Errorf("cleanup entries in idempotency panicked: %v", msg)
+					mh.context.Log().Errorf("stacktrace:\n%s", debug.Stack())
+				}
+			}()
+			idempotency.CleanupOldIdempotencyEntries(mh.context)
+		}); err != nil {
+			logger.Errorf("unable to schedule idempotency file deletion job - %v", err)
+		}
 	}
 	return nil
 }
