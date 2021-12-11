@@ -23,7 +23,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 )
 
-const (
+var (
 	DefaultLogDir = "/var/log/amazon/ssm"
 )
 

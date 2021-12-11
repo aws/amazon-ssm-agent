@@ -19,6 +19,7 @@ package appconfig
 
 import (
 	"fmt"
+	"io/fs"
 	"os"
 	"path/filepath"
 	"syscall"
@@ -26,7 +27,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/network/certreader"
 )
 
-const (
+var (
 
 	// AgentExtensions specified the root folder for various kinds of downloaded content
 	AgentData = "/var/lib/amazon/ssm/"
@@ -99,8 +100,8 @@ const (
 	// RunCommandScriptName is the script name where all downloaded or provided commands will be stored
 	RunCommandScriptName = "_script.sh"
 
-	NecessaryAgentBinaryPermissionMask  = 0511 // Require read/execute for root, execute for all
-	DisallowedAgentBinaryPermissionMask = 0022 // Disallow write for group and user
+	NecessaryAgentBinaryPermissionMask  fs.FileMode = 0511 // Require read/execute for root, execute for all
+	DisallowedAgentBinaryPermissionMask fs.FileMode = 0022 // Disallow write for group and user
 
 	// customCertificateFileName is the name of the custom certificate
 	customCertificateFileName = "amazon-ssm-agent.crt"
