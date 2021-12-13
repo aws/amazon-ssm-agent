@@ -180,7 +180,7 @@ func ParseSendCommandMessage(context context.T, msg model.InstanceMessage, messa
 	commandID, _ := messageContracts.GetCommandID(msg.MessageId)
 
 	log.Debug("Processing send command message ", msg.MessageId)
-	log.Trace("Processing send command message ", jsonutil.Indent(msg.Payload))
+	log.Trace("Processing send command payload:  ", jsonutil.Indent(msg.Payload))
 
 	// parse message to retrieve parameters
 	var parsedMessage messageContracts.SendCommandPayload
@@ -271,12 +271,18 @@ func ParseSendCommandMessage(context context.T, msg model.InstanceMessage, messa
 }
 
 // IsValidReplyRequest checks whether the reply is valid and had timed or not
-func IsValidReplyRequest(filename string) bool {
+func IsValidReplyRequest(filename string, name contracts.UpstreamServiceName) bool {
 	splitFileName := strings.Split(filename, "_")
 	if len(splitFileName) < 2 {
 		return false
 	}
-	t, _ := time.Parse("2006-01-02T15-04-05", splitFileName[1])
+	timeInFileName := ""
+	if name == contracts.MessageGatewayService { // MGS uses this format to have proper time based sorting
+		timeInFileName = splitFileName[0]
+	} else {
+		timeInFileName = splitFileName[1]
+	}
+	t, _ := time.Parse("2006-01-02T15-04-05", timeInFileName)
 	curTime := time.Now().UTC()
 	delta := curTime.Sub(t).Hours()
 	if delta > documentLevelTimeOutDurationHour {

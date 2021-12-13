@@ -324,7 +324,7 @@ func (dataChannel *DataChannel) SetWebSocket(context context.T,
 // Open opens the websocket connection and sends the token for service to acknowledge the connection.
 func (dataChannel *DataChannel) Open(log log.T) error {
 	// Opens websocket connection
-	if err := dataChannel.wsChannel.Open(log); err != nil {
+	if err := dataChannel.wsChannel.Open(log, nil); err != nil {
 		return fmt.Errorf("failed to connect data channel with error: %s", err)
 	}
 

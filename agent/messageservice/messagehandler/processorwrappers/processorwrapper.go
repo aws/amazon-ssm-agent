@@ -27,6 +27,7 @@ func init() {
 		processorWrapperDelegateMap = make(map[utils.WorkerName]func(context.T, *utils.ProcessorWorkerConfig) IProcessorWrapper)
 	}
 	processorWrapperDelegateMap[utils.DocumentWorkerName] = NewCommandWorkerProcessorWrapper
+	processorWrapperDelegateMap[utils.SessionWorkerName] = NewSessionWorkerProcessorWrapper
 }
 
 // GetProcessorWrapperDelegateMap returns preloaded map with worker name and processor wrapper creation function pointer as its key and value

@@ -11,7 +11,7 @@
 // either express or implied. See the License for the specific language governing
 // permissions and limitations under the License.
 
-// contracts package defines all channel messages structure.
+// Package contracts defines all channel messages structure.
 package contracts
 
 import (
@@ -28,7 +28,10 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/framework/docparser"
+	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
 	logger "github.com/aws/amazon-ssm-agent/agent/log"
+	messageContracts "github.com/aws/amazon-ssm-agent/agent/messageservice/contracts"
+	"github.com/aws/amazon-ssm-agent/agent/messageservice/utils"
 	"github.com/aws/amazon-ssm-agent/agent/times"
 	"github.com/twinj/uuid"
 )
@@ -37,7 +40,7 @@ type IAgentMessage interface {
 	Deserialize(log logger.T, input []byte) (err error)
 	Serialize(log logger.T) (result []byte, err error)
 	Validate() error
-	ParseAgentMessage(context context.T, messagesOrchestrationRootDir string, instanceId string, clientId string) (*contracts.DocumentState, error)
+	ParseAgentMessage(context context.T, messagesOrchestrationRootDir string, instanceId string) (*contracts.DocumentState, error)
 }
 
 // AgentMessage represents a message for agent to send/receive. AgentMessage Message in MGS is equivalent to MDS' InstanceMessage.
@@ -99,6 +102,14 @@ const (
 	AgentMessage_PayloadTypeOffset    = AgentMessage_PayloadDigestOffset + AgentMessage_PayloadDigestLength
 	AgentMessage_PayloadLengthOffset  = AgentMessage_PayloadTypeOffset + AgentMessage_PayloadTypeLength
 	AgentMessage_PayloadOffset        = AgentMessage_PayloadLengthOffset + AgentMessage_PayloadLengthLength
+)
+
+const (
+	documentContent  = "DocumentContent"
+	runtimeConfig    = "runtimeConfig"
+	cloudwatchPlugin = "aws:cloudWatch"
+	properties       = "properties"
+	parameters       = "Parameters"
 )
 
 // Deserialize deserializes the byte array into an AgentMessage message.
@@ -261,18 +272,48 @@ func (agentMessage *AgentMessage) Validate() error {
 	return nil
 }
 
-// ParseAgentMessage parses session message to documentState object for processor.
-func (agentMessage *AgentMessage) ParseAgentMessage(context context.T,
+func (agentMessage *AgentMessage) ParseAgentMessage(context context.T, messagesOrchestrationRootDir string, instanceId string) (*contracts.DocumentState, error) {
+	log := context.Log()
+
+	log.Infof("Parsing AgentMessage %s, Payload: %s", agentMessage.MessageId, string(agentMessage.Payload))
+
+	if agentMessage.MessageType == InteractiveShellMessage {
+		docState, err := parseAgentTaskMessage(context, messagesOrchestrationRootDir, instanceId, agentMessage)
+		if err != nil {
+			return nil, err
+		}
+		return docState, nil
+	} else if agentMessage.MessageType == AgentJobMessage {
+		docState, err := parseAgentJobMessage(context, messagesOrchestrationRootDir, instanceId, agentMessage)
+		if err != nil {
+			return nil, err
+		}
+		return docState, nil
+	} else if agentMessage.MessageType == ChannelClosedMessage {
+		docState, err := parseTerminateSessionMessage(context, agentMessage, instanceId)
+		if err != nil {
+			return nil, err
+		}
+		return docState, nil
+	}
+
+	return nil, fmt.Errorf("invalid agentmessage type: %s", agentMessage.MessageType)
+}
+
+// parseAgentTaskMessage parses session message to documentState object for processor.
+func parseAgentTaskMessage(context context.T,
 	messagesOrchestrationRootDir string,
 	instanceId string,
-	clientId string) (*contracts.DocumentState, error) {
+	agentMessage *AgentMessage) (*contracts.DocumentState, error) {
 
 	log := context.Log()
+	uuid.SwitchFormat(uuid.CleanHyphen)
+	clientId := uuid.NewV4().String()
 
 	// parse message to retrieve parameters
 	parsedMessagePayload, err := deserializeAgentTaskPayload(log, *agentMessage)
 	if err != nil {
-		errorMsg := "Encountered error while parsing input - internal error"
+		errorMsg := fmt.Errorf("encountered error while parsing input - internal error %v", err)
 		return nil, fmt.Errorf("%v", errorMsg)
 	}
 
@@ -280,7 +321,7 @@ func (agentMessage *AgentMessage) ParseAgentMessage(context context.T,
 	log.Tracef("Processing start-session message %s", agentMessage.Payload)
 
 	// adapt plugin configuration format from MGS to plugin expected format
-	documentInfo := buildDocumentInfo(*agentMessage, parsedMessagePayload.SessionId, parsedMessagePayload, instanceId)
+	documentInfo := buildSessionDocumentInfo(*agentMessage, parsedMessagePayload.SessionId, parsedMessagePayload, instanceId)
 	messageOrchestrationDirectory := filepath.Join(messagesOrchestrationRootDir, parsedMessagePayload.SessionId)
 
 	parserInfo := docparser.DocumentParserInfo{
@@ -307,9 +348,112 @@ func (agentMessage *AgentMessage) ParseAgentMessage(context context.T,
 	if err != nil {
 		return nil, fmt.Errorf("error initialing document state: %s", err)
 	}
-
+	docState.UpstreamServiceName = contracts.MessageGatewayService
 	log.Debugf("Docstate document ID after Initializing: %s", docState.DocumentInformation.DocumentID)
 	return &docState, nil
+}
+
+// parseTerminateSessionMessage parses a channel closed AgentMessage to DocumentState object for processor
+func parseTerminateSessionMessage(context context.T, agentMessage *AgentMessage, instanceId string) (*contracts.DocumentState, error) {
+	log := context.Log()
+	log.Debugf("Processing TerminateSession message %s", agentMessage.MessageId.String())
+
+	channelClosed := &ChannelClosed{}
+	if err := channelClosed.Deserialize(log, *agentMessage); err != nil {
+		log.Errorf("Cannot parse AgentTask message to ChannelClosed message: %s, err: %v.", agentMessage.MessageId, err)
+		return nil, err
+	}
+	log.Debugf("ChannelClosed message %s, sessionId %s", channelClosed.MessageId, channelClosed.SessionId)
+
+	documentInfo := contracts.DocumentInfo{
+		InstanceID:     instanceId,
+		CreatedDate:    channelClosed.CreatedDate,
+		MessageID:      channelClosed.SessionId,
+		CommandID:      channelClosed.SessionId,
+		DocumentID:     channelClosed.SessionId,
+		RunID:          times.ToIsoDashUTC(times.DefaultClock.Now()),
+		DocumentStatus: contracts.ResultStatusInProgress,
+	}
+
+	cancelSessionInfo := new(contracts.CancelCommandInfo)
+	cancelSessionInfo.Payload = ""
+	sessionId := channelClosed.SessionId
+	cancelSessionInfo.CancelMessageID = sessionId
+	cancelSessionInfo.CancelCommandID = sessionId
+	cancelSessionInfo.DebugInfo = fmt.Sprintf("Session %v is yet to be terminated", sessionId)
+
+	docState := contracts.DocumentState{
+		DocumentInformation: documentInfo,
+		CancelInformation:   *cancelSessionInfo,
+		DocumentType:        contracts.TerminateSession,
+		UpstreamServiceName: contracts.MessageGatewayService,
+	}
+
+	return &docState, nil
+}
+
+// parseAgentJobMessage parses run command SendCommand or CancelCommand to documentState object for processor.
+func parseAgentJobMessage(context context.T, commandOrchestrationRootDir string, instanceId string, agentMessage *AgentMessage) (*contracts.DocumentState, error) {
+	log := context.Log()
+
+	if agentMessage.MessageType != AgentJobMessage {
+		err := errors.New("AgentMessage is not of type agent_job")
+		return nil, err
+	}
+	log.Debugf("Processing AgentJob Message: %s", agentMessage.MessageId)
+	log.Debugf("AgentJobPayload: %s", string(agentMessage.Payload))
+
+	var agentJobPayload AgentJobPayload
+	err := json.Unmarshal(agentMessage.Payload, &agentJobPayload)
+	if err != nil {
+		log.Errorf("Could not deserialize AgentJob rawMessage: %v.", err)
+		return nil, err
+	}
+
+	var docState *contracts.DocumentState
+	if strings.HasPrefix(string(utils.SendCommandTopicPrefix), agentJobPayload.Topic) {
+		docState, err = parseAgentJobSendCommandMessage(context, agentJobPayload, commandOrchestrationRootDir, instanceId, *agentMessage)
+		if err != nil {
+			return nil, err
+		}
+	} else if strings.HasPrefix(string(utils.CancelCommandTopicPrefix), agentJobPayload.Topic) {
+		docState, err = parseAgentJobCancelCommandMessage(context, agentJobPayload, instanceId, *agentMessage)
+		if err != nil {
+			return nil, err
+		}
+	} else {
+		errorMsg := "Unexpected AgentJob Topic: " + agentJobPayload.Topic
+		log.Error(errorMsg)
+		return nil, fmt.Errorf("%v", errorMsg)
+	}
+
+	return docState, nil
+}
+
+func parseAgentJobCancelCommandMessage(context context.T, agentJobPayload AgentJobPayload, instanceId string, agentMessage AgentMessage) (*contracts.DocumentState, error) {
+	log := context.Log()
+	log.Debug("Processing agent job cancel command message - ", agentJobPayload.JobId)
+	log.Debug("Payload: ", jsonutil.Indent(agentJobPayload.Payload))
+	message := toInstanceMessage(instanceId, agentMessage, agentJobPayload)
+	return utils.ParseCancelCommandMessage(context, message, contracts.MessageGatewayService)
+}
+
+func parseAgentJobSendCommandMessage(context context.T, agentJobPayload AgentJobPayload, commandOrchestrationRootDir string, instanceId string, agentMessage AgentMessage) (*contracts.DocumentState, error) {
+	log := context.Log()
+	log.Debug("Processing agent job send command message jobId: ", agentJobPayload.JobId)
+	log.Debug("Payload: ", jsonutil.Indent(agentJobPayload.Payload))
+	message := toInstanceMessage(instanceId, agentMessage, agentJobPayload)
+	return utils.ParseSendCommandMessage(context, message, commandOrchestrationRootDir, contracts.MessageGatewayService)
+}
+
+func toInstanceMessage(instanceId string, agentMessage AgentMessage, agentJobPayload AgentJobPayload) messageContracts.InstanceMessage {
+	return messageContracts.InstanceMessage{
+		CreatedDate: time.Unix(int64(agentMessage.CreatedDate), 0).String(),
+		Destination: instanceId,
+		MessageId:   agentJobPayload.JobId,
+		Payload:     agentJobPayload.Payload,
+		Topic:       agentJobPayload.Topic,
+	}
 }
 
 // deserializeAgentTaskPayload parses agent task message payloads received.
@@ -333,8 +477,8 @@ func deserializeAgentTaskPayload(log logger.T, agentMessage AgentMessage) (agent
 	return
 }
 
-// buildDocumentInfo builds new DocumentInfo object
-func buildDocumentInfo(
+// buildSessionDocumentInfo builds new DocumentInfo object for Sessions
+func buildSessionDocumentInfo(
 	agentMessage AgentMessage,
 	sessionId string,
 	parsedMessagePayload AgentTaskPayload,

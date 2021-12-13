@@ -16,6 +16,7 @@ package websocketutil
 
 import (
 	"fmt"
+	"github.com/aws/amazon-ssm-agent/agent/network"
 	"net/http"
 	"net/http/httptest"
 	"net/url"
@@ -30,6 +31,12 @@ import (
 var upgrader = websocket.Upgrader{
 	ReadBufferSize:  1024,
 	WriteBufferSize: 1024,
+}
+
+var dialerInput = &websocket.Dialer{
+	TLSClientConfig: network.GetDefaultTLSConfig(log.NewMockLog(), appconfig.DefaultConfig()),
+	Proxy:           http.ProxyFromEnvironment,
+	WriteBufferSize: 128000,
 }
 
 func handlerToBeTested(w http.ResponseWriter, req *http.Request) {
@@ -59,6 +66,20 @@ func TestWebsocketUtilOpenCloseConnection(t *testing.T) {
 	assert.Nil(t, err, "Error closing the websocket connection.")
 }
 
+func TestWebsocketUtilOpenCloseConnectionWithWriteBuffer(t *testing.T) {
+	srv := httptest.NewServer(http.HandlerFunc(handlerToBeTested))
+	u, _ := url.Parse(srv.URL)
+	u.Scheme = "ws"
+	var log = log.NewMockLog()
+	appConfig := appconfig.SsmagentConfig{}
+	var ws = NewWebsocketUtil(log, appConfig, dialerInput)
+	conn, _ := ws.OpenConnection(u.String(), http.Header{})
+	assert.NotNil(t, conn, "Open connection failed.")
+
+	err := ws.CloseConnection(conn)
+	assert.Nil(t, err, "Error closing the websocket connection.")
+}
+
 func TestWebsocketUtilOpenConnectionInvalidUrl(t *testing.T) {
 	srv := httptest.NewServer(http.HandlerFunc(handlerToBeTested))
 	u, _ := url.Parse(srv.URL)
@@ -79,6 +100,20 @@ func TestSendMessage(t *testing.T) {
 
 	appConfig := appconfig.SsmagentConfig{}
 	var ws = NewWebsocketUtil(log, appConfig, nil)
+	conn, _ := ws.OpenConnection(u.String(), http.Header{})
+	assert.NotNil(t, conn, "Open connection failed.")
+	err := conn.WriteMessage(websocket.TextMessage, []byte("testing testing"))
+	assert.Nil(t, err)
+}
+
+func TestSendMessageWithWriteBuffer(t *testing.T) {
+	srv := httptest.NewServer(http.HandlerFunc(handlerToBeTested))
+	u, _ := url.Parse(srv.URL)
+	u.Scheme = "ws"
+	var log = log.NewMockLog()
+
+	appConfig := appconfig.SsmagentConfig{}
+	var ws = NewWebsocketUtil(log, appConfig, dialerInput)
 	conn, _ := ws.OpenConnection(u.String(), http.Header{})
 	assert.NotNil(t, conn, "Open connection failed.")
 	err := conn.WriteMessage(websocket.TextMessage, []byte("testing testing"))

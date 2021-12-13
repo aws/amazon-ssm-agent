@@ -11,20 +11,19 @@
 // either express or implied. See the License for the specific language governing
 // permissions and limitations under the License.
 
-// controlchannel package implement control communicator for web socket connection.
+// Package controlchannel implement control communicator for web socket connection.
 package controlchannel
 
 import (
 	"encoding/json"
 	"fmt"
 	"math/rand"
-	"path/filepath"
+	"net/http"
 	"time"
 
-	"github.com/aws/amazon-ssm-agent/agent/appconfig"
+	"github.com/aws/amazon-ssm-agent/agent/network"
+
 	"github.com/aws/amazon-ssm-agent/agent/context"
-	"github.com/aws/amazon-ssm-agent/agent/contracts"
-	"github.com/aws/amazon-ssm-agent/agent/framework/processor"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/platform"
 	"github.com/aws/amazon-ssm-agent/agent/session/communicator"
@@ -32,8 +31,7 @@ import (
 	mgsContracts "github.com/aws/amazon-ssm-agent/agent/session/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/session/retry"
 	"github.com/aws/amazon-ssm-agent/agent/session/service"
-	telemetry "github.com/aws/amazon-ssm-agent/agent/session/telemetry"
-	"github.com/aws/amazon-ssm-agent/agent/times"
+	"github.com/aws/amazon-ssm-agent/agent/session/telemetry"
 	"github.com/aws/amazon-ssm-agent/agent/version"
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/gorilla/websocket"
@@ -41,8 +39,8 @@ import (
 )
 
 type IControlChannel interface {
-	Initialize(context context.T, mgsService service.Service, processor processor.Processor, instanceId string, taskAckChan chan mgsContracts.AcknowledgeTaskContent)
-	SetWebSocket(context context.T, mgsService service.Service, processor processor.Processor, instanceId string) error
+	Initialize(context context.T, mgsService service.Service, instanceId string, agentMessageIncomingMessageChan chan mgsContracts.AgentMessage)
+	SetWebSocket(context context.T, mgsService service.Service) error
 	SendMessage(log log.T, input []byte, inputType int) error
 	Reconnect(log log.T) error
 	Close(log log.T) error
@@ -51,38 +49,40 @@ type IControlChannel interface {
 
 // ControlChannel used for communication between the message gateway service and the agent.
 type ControlChannel struct {
-	wsChannel         communicator.IWebSocketChannel
-	Processor         processor.Processor
-	ChannelId         string
-	Service           service.Service
-	AuditLogScheduler telemetry.IAuditLogTelemetry
-	channelType       string
-	taskAckChan       chan mgsContracts.AcknowledgeTaskContent
+	wsChannel                       communicator.IWebSocketChannel
+	context                         context.T
+	ChannelId                       string
+	Service                         service.Service
+	AuditLogScheduler               telemetry.IAuditLogTelemetry
+	channelType                     string
+	agentMessageIncomingMessageChan chan mgsContracts.AgentMessage
 }
+
+const (
+	// WriteBufferSizeLimit represents 128000 bytes is the maximum control channel can send in 1 message
+	WriteBufferSizeLimit = 128000
+)
 
 // Initialize populates controlchannel object and opens controlchannel to communicate with mgs.
 func (controlChannel *ControlChannel) Initialize(context context.T,
 	mgsService service.Service,
-	processor processor.Processor,
 	instanceId string,
-	taskAckChan chan mgsContracts.AcknowledgeTaskContent) {
+	agentMessageIncomingMessageChan chan mgsContracts.AgentMessage) {
 
 	log := context.Log()
 	controlChannel.Service = mgsService
 	controlChannel.ChannelId = instanceId
 	controlChannel.channelType = mgsConfig.RoleSubscribe
-	controlChannel.Processor = processor
 	controlChannel.wsChannel = &communicator.WebSocketChannel{}
 	controlChannel.AuditLogScheduler = telemetry.GetAuditLogTelemetryInstance(context, controlChannel.wsChannel)
-	controlChannel.taskAckChan = taskAckChan
+	controlChannel.agentMessageIncomingMessageChan = agentMessageIncomingMessageChan
+	controlChannel.context = context
 	log.Debugf("Initialized controlchannel for instance: %s", instanceId)
 }
 
 // SetWebSocket populates webchannel object.
 func (controlChannel *ControlChannel) SetWebSocket(context context.T,
-	mgsService service.Service,
-	processor processor.Processor,
-	instanceId string) error {
+	mgsService service.Service) error {
 
 	log := context.Log()
 	uuid.SwitchFormat(uuid.CleanHyphen)
@@ -95,12 +95,8 @@ func (controlChannel *ControlChannel) SetWebSocket(context context.T,
 		return err
 	}
 
-	config := context.AppConfig()
-	shortInstanceId, _ := context.Identity().ShortInstanceID()
-	orchestrationRootDir := filepath.Join(appconfig.DefaultDataStorePath, shortInstanceId, appconfig.DefaultSessionRootDirName, config.Agent.OrchestrationRootDir)
-
 	onMessageHandler := func(input []byte) {
-		controlChannelIncomingMessageHandler(context, processor, input, orchestrationRootDir, instanceId, controlChannel.taskAckChan)
+		controlChannelIncomingMessageHandler(context, input, controlChannel.agentMessageIncomingMessageChan)
 	}
 	onErrorHandler := func(err error) {
 		callable := func() (channel interface{}, err error) {
@@ -152,8 +148,14 @@ func (controlChannel *ControlChannel) SetWebSocket(context context.T,
 	return nil
 }
 
-// SendMessage sends a message to the service through controlchannel.
+// SendMessage sends a message to the service through control channel.
 func (controlChannel *ControlChannel) SendMessage(log log.T, input []byte, inputType int) error {
+	// This function may be called even before the control channel is initialized. Hence, this nil check is needed to avoid panic
+	// While loading pending and in-progress documents during agent restart, we may receive replies even before the control channel is opened.
+	// These replies will be saved in the local disk and sent immediately when the connection established
+	if controlChannel.wsChannel == nil {
+		return fmt.Errorf("ws not initialized still")
+	}
 	return controlChannel.wsChannel.SendMessage(log, input, inputType)
 }
 
@@ -176,18 +178,23 @@ func (controlChannel *ControlChannel) Reconnect(log log.T) error {
 // Close closes controlchannel - its web socket connection.
 func (controlChannel *ControlChannel) Close(log log.T) error {
 	log.Infof("Closing controlchannel with channel Id %s", controlChannel.ChannelId)
-	if controlChannel.wsChannel != nil {
-		return controlChannel.wsChannel.Close(log)
-	}
 	if controlChannel.AuditLogScheduler != nil {
 		controlChannel.AuditLogScheduler.StopScheduler()
+	}
+	if controlChannel.wsChannel != nil {
+		return controlChannel.wsChannel.Close(log)
 	}
 	return nil
 }
 
 // Open opens a websocket connection and sends the token for service to acknowledge the connection.
 func (controlChannel *ControlChannel) Open(log log.T) error {
-	if err := controlChannel.wsChannel.Open(log); err != nil {
+	controlChannelDialerInput := &websocket.Dialer{
+		TLSClientConfig: network.GetDefaultTLSConfig(log, controlChannel.context.AppConfig()),
+		Proxy:           http.ProxyFromEnvironment,
+		WriteBufferSize: WriteBufferSizeLimit,
+	}
+	if err := controlChannel.wsChannel.Open(log, controlChannelDialerInput); err != nil {
 		return fmt.Errorf("failed to connect controlchannel with error: %s", err)
 	}
 
@@ -217,14 +224,10 @@ func (controlChannel *ControlChannel) Open(log log.T) error {
 
 // controlChannelIncomingMessageHandler handles the incoming messages coming to the agent.
 func controlChannelIncomingMessageHandler(context context.T,
-	processor processor.Processor,
 	rawMessage []byte,
-	orchestrationRootDir string,
-	instanceId string,
-	taskAckChan chan mgsContracts.AcknowledgeTaskContent) error {
+	incomingAgentMessageChan chan mgsContracts.AgentMessage) error {
 
 	log := context.Log()
-
 	agentMessage := &mgsContracts.AgentMessage{}
 	if err := agentMessage.Deserialize(log, rawMessage); err != nil {
 		log.Debugf("Cannot deserialize raw message, err: %v.", err)
@@ -235,105 +238,8 @@ func controlChannelIncomingMessageHandler(context context.T,
 		log.Debugf("Invalid AgentMessage: %s, err: %v.", agentMessage.MessageId, err)
 		return err
 	}
-
-	if agentMessage.MessageType == mgsContracts.InteractiveShellMessage {
-		uuid.SwitchFormat(uuid.CleanHyphen)
-		clientId := uuid.NewV4().String()
-		return sendStartSessionMessageToProcessor(processor, context, agentMessage, orchestrationRootDir, instanceId, clientId)
-	} else if agentMessage.MessageType == mgsContracts.ChannelClosedMessage {
-		return sendTerminateSessionMessageToProcessor(processor, context, instanceId, *agentMessage)
-	} else if agentMessage.MessageType == mgsContracts.TaskAcknowledgeMessage {
-		return processAcknowledgeMessage(context, *agentMessage, taskAckChan)
-	}
-
-	return fmt.Errorf("invalid message type: %s", agentMessage.MessageType)
-}
-
-// sendStartSessionMessageToProcessor sends a StartSession message to the processor.
-func sendStartSessionMessageToProcessor(
-	processor processor.Processor,
-	context context.T,
-	agentMessage *mgsContracts.AgentMessage,
-	orchestrationRootDir string,
-	instanceId string,
-	clientId string) error {
-
-	log := context.Log()
-	log.Debugf("Processing StartSession message %s", agentMessage.MessageId.String())
-
-	docState, err := agentMessage.ParseAgentMessage(context, orchestrationRootDir, instanceId, clientId)
-	if err != nil {
-		log.Errorf("Cannot parse AgentTask message to documentState: %s, err: %v.", agentMessage.MessageId, err)
-		return err
-	}
-
-	// Submit message to processor
-	processor.Submit(*docState)
-	return nil
-}
-
-// sendTerminateSessionMessageToProcessor sends a TerminateSession message to the processor.
-func sendTerminateSessionMessageToProcessor(
-	processor processor.Processor,
-	context context.T,
-	instanceId string,
-	agentMessage mgsContracts.AgentMessage) error {
-
-	log := context.Log()
-	log.Debugf("Processing TerminateSession message %s", agentMessage.MessageId.String())
-
-	channelClosed := &mgsContracts.ChannelClosed{}
-	if err := channelClosed.Deserialize(log, agentMessage); err != nil {
-		log.Errorf("Cannot parse AgentTask message to ChannelClosed message: %s, err: %v.", agentMessage.MessageId, err)
-		return err
-	}
-	log.Debugf("ChannelClosed message %s, sessionId %s", channelClosed.MessageId, channelClosed.SessionId)
-
-	documentInfo := contracts.DocumentInfo{
-		InstanceID:     instanceId,
-		CreatedDate:    channelClosed.CreatedDate,
-		MessageID:      channelClosed.SessionId,
-		CommandID:      channelClosed.SessionId,
-		DocumentID:     channelClosed.SessionId,
-		RunID:          times.ToIsoDashUTC(times.DefaultClock.Now()),
-		DocumentStatus: contracts.ResultStatusInProgress,
-	}
-
-	cancelSessionInfo := new(contracts.CancelCommandInfo)
-	cancelSessionInfo.Payload = ""
-	sessionId := channelClosed.SessionId
-	cancelSessionInfo.CancelMessageID = sessionId
-	cancelSessionInfo.CancelCommandID = sessionId
-	cancelSessionInfo.DebugInfo = fmt.Sprintf("Session %v is yet to be terminated", sessionId)
-
-	docState := contracts.DocumentState{
-		DocumentInformation: documentInfo,
-		CancelInformation:   *cancelSessionInfo,
-		DocumentType:        contracts.TerminateSession,
-	}
-
-	// Submit message to processor
-	processor.Cancel(docState)
-	return nil
-}
-
-// processAcknowledgeMessage sends the acknowledgment message on chan so session can process it.
-func processAcknowledgeMessage(
-	context context.T,
-	agentMessage mgsContracts.AgentMessage,
-	taskAckChan chan mgsContracts.AcknowledgeTaskContent) error {
-
-	log := context.Log()
-	log.Debugf("Processing Task Acknowledge message %s", agentMessage.MessageId.String())
-	taskAcknowledge := &mgsContracts.AcknowledgeTaskContent{}
-	if err := taskAcknowledge.Deserialize(log, agentMessage); err != nil {
-		log.Errorf("Cannot parse AgentTask message to TaskAcknowledgeMessage message: %s, err: %v.", agentMessage.MessageId.String(), err)
-		return err
-	}
-	log.Debugf("TaskAcknowledgeMessage for topic [%s] and sessionId [%s]", taskAcknowledge.Topic, taskAcknowledge.TaskId)
-
-	// handover to service
-	taskAckChan <- *taskAcknowledge
+	log.Infof("received message through control channel %v", agentMessage.MessageId)
+	incomingAgentMessageChan <- *agentMessage
 	return nil
 }
 

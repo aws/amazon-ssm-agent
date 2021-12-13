@@ -16,6 +16,8 @@ package communicator
 
 import (
 	"fmt"
+	"github.com/aws/amazon-ssm-agent/agent/appconfig"
+	"github.com/aws/amazon-ssm-agent/agent/network"
 	"net/http"
 	"net/http/httptest"
 	"net/url"
@@ -48,6 +50,12 @@ var (
 var upgrader = websocket.Upgrader{
 	ReadBufferSize:  1024,
 	WriteBufferSize: 1024,
+}
+
+var dialerInput = &websocket.Dialer{
+	TLSClientConfig: network.GetDefaultTLSConfig(log.NewMockLog(), appconfig.DefaultConfig()),
+	Proxy:           http.ProxyFromEnvironment,
+	WriteBufferSize: 128000,
 }
 
 // handlerToBeTested echos all incoming input from a websocket connection back to the client while
@@ -121,7 +129,30 @@ func TestOpenCloseWebSocketChannel(t *testing.T) {
 		Context: context.NewMockDefault(),
 	}
 
-	err := websocketchannel.Open(log)
+	err := websocketchannel.Open(log, nil)
+	assert.Nil(t, err, "Error opening the websocket connection.")
+	assert.NotNil(t, websocketchannel.Connection, "Open connection failed.")
+	assert.True(t, websocketchannel.IsOpen, "IsOpen is not set to true.")
+
+	err = websocketchannel.Close(log)
+	assert.Nil(t, err, "Error closing the websocket connection.")
+	assert.False(t, websocketchannel.IsOpen, "IsOpen is not set to false.")
+	t.Log("Ending test: TestOpenCloseWebSocketChannel")
+}
+
+func TestOpenCloseWebSocketChannelWithWriteBuffer(t *testing.T) {
+	t.Log("Starting test: TestOpenCloseWebSocketChannel")
+	srv := httptest.NewServer(http.HandlerFunc(handlerToBeTested))
+	u, _ := url.Parse(srv.URL)
+	u.Scheme = "ws"
+	var log = log.NewMockLog()
+
+	websocketchannel := WebSocketChannel{
+		Url:     u.String(),
+		Context: context.NewMockDefault(),
+	}
+
+	err := websocketchannel.Open(log, dialerInput)
 	assert.Nil(t, err, "Error opening the websocket connection.")
 	assert.NotNil(t, websocketchannel.Connection, "Open connection failed.")
 	assert.True(t, websocketchannel.IsOpen, "IsOpen is not set to true.")
@@ -156,7 +187,7 @@ func TestReadWriteTextToWebSocketChannel(t *testing.T) {
 	}
 
 	// Open the websocket connection
-	err := websocketchannel.Open(log)
+	err := websocketchannel.Open(log, nil)
 	assert.Nil(t, err, "Error opening the websocket connection.")
 	assert.NotNil(t, websocketchannel.Connection, "Open connection failed.")
 
@@ -194,7 +225,45 @@ func TestReadWriteBinaryToWebSocketChannel(t *testing.T) {
 	}
 
 	// Open the websocket connection
-	err := websocketchannel.Open(log)
+	err := websocketchannel.Open(log, nil)
+	assert.Nil(t, err, "Error opening the websocket connection.")
+	assert.NotNil(t, websocketchannel.Connection, "Open connection failed.")
+
+	// Verify write to websocket server
+	websocketchannel.SendMessage(log, []byte("channelreadwrite"), websocket.BinaryMessage)
+	wg.Wait()
+
+	err = websocketchannel.Close(log)
+	assert.Nil(t, err, "Error closing the websocket connection.")
+	assert.False(t, websocketchannel.IsOpen, "IsOpen is not set to false.")
+	t.Log("Ending test: TestReadWriteWebSocketChannel ")
+}
+
+func TestReadWriteBinaryToWebSocketChannelWithWriteBuffer(t *testing.T) {
+	t.Log("Starting test: TestReadWriteWebSocketChannel ")
+	srv := httptest.NewServer(http.HandlerFunc(handlerToBeTested))
+	u, _ := url.Parse(srv.URL)
+	u.Scheme = "ws"
+	var log = log.NewMockLog()
+
+	var wg sync.WaitGroup
+	wg.Add(1)
+
+	onMessage := func(input []byte) {
+		defer wg.Done()
+		t.Log(input)
+		// Verify read from websocket server
+		assert.Equal(t, string(input), "echo channelreadwrite")
+	}
+
+	websocketchannel := WebSocketChannel{
+		Url:       u.String(),
+		OnMessage: onMessage,
+		Context:   context.NewMockDefault(),
+	}
+
+	// Open the websocket connection
+	err := websocketchannel.Open(log, dialerInput)
 	assert.Nil(t, err, "Error opening the websocket connection.")
 	assert.NotNil(t, websocketchannel.Connection, "Open connection failed.")
 
@@ -236,7 +305,7 @@ func TestMultipleReadWriteWebSocketChannel(t *testing.T) {
 	}
 
 	// Open the websocket connection
-	err := websocketchannel.Open(log)
+	err := websocketchannel.Open(log, nil)
 	assert.Nil(t, err, "Error opening the websocket connection.")
 	assert.NotNil(t, websocketchannel.Connection, "Open connection failed.")
 

@@ -156,13 +156,11 @@ func (mds *MDSInteractor) Initialize() (err error) {
 // PostProcessorInitialization registers executes PostProcessorInitialization operations
 // Will be executed after the processor initialization is done in MessageService
 // Currently we use this only for command processors/document worker
-func (mds *MDSInteractor) PostProcessorInitialization() {
-	for _, worker := range mds.GetSupportedWorkers() {
-		switch worker {
-		case utils.DocumentWorkerName:
-			mds.postCommandProcessorInitialization()
-		default:
-		}
+func (mds *MDSInteractor) PostProcessorInitialization(worker utils.WorkerName) {
+	switch worker {
+	case utils.DocumentWorkerName:
+		mds.postCommandProcessorInitialization()
+	default:
 	}
 }
 
@@ -432,7 +430,7 @@ func (mds *MDSInteractor) sendFailedReplies() {
 	log.Infof("Found document replies that need to be sent to the service")
 	for _, reply := range replies {
 		log.Debug("Loading reply ", reply)
-		if utils.IsValidReplyRequest(reply) == false {
+		if utils.IsValidReplyRequest(reply, contracts.MessageDeliveryService) == false {
 			log.Debug("Reply is old, document execution must have timed out. Deleting the reply")
 			mds.service.DeleteFailedReply(log, reply)
 			continue

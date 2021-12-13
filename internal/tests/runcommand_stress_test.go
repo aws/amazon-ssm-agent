@@ -110,6 +110,7 @@ func (suite *AgentStressTestSuite) TestCoreAgent() {
 
 	// Mock MDs service so it returns only the desired number of messages, it'll return empty messages after that.
 	// That's because the agent is a loop and it keeps polling messages
+
 	suite.mdsSdkMock.On("GetMessagesRequest", mock.AnythingOfType("*ssmmds.GetMessagesInput")).Return(&request.Request{}, func(input *ssmmds.GetMessagesInput) *ssmmds.GetMessagesOutput {
 		messageOutput, _ := testutils.GenerateMessages(suite.context, testdata.EchoMDSMessage)
 		return messageOutput

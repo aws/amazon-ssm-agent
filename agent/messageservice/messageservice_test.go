@@ -16,8 +16,6 @@
 // This package is the starting point for the message service module.
 package messageservice
 
-// Uncomment it later
-/*
 import (
 	"fmt"
 	"testing"
@@ -42,6 +40,7 @@ import (
 type MessageServiceTestSuite struct {
 	suite.Suite
 }
+
 //Execute the test suite
 func TestMessageServiceTestSuite(t *testing.T) {
 	suite.Run(t, new(MessageServiceTestSuite))
@@ -130,13 +129,13 @@ func (suite *MessageServiceTestSuite) TestMessageService_ModuleExecute() {
 	msgService.interactors = make([]interactor.IInteractor, 0)
 	interactorMockObj := &interactorMock.IInteractor{}
 	interactorMockObj.On("Initialize").Return(nil)
-	interactorMockObj.On("PostProcessorInitialization").Return(nil)
+	interactorMockObj.On("PostProcessorInitialization", mock.Anything).Return(nil)
 	interactorMockObj.On("GetName").Return(mock.Anything)
 	interactorMockObj.On("GetSupportedWorkers").Return([]utils.WorkerName{utils.DocumentWorkerName, utils.SessionWorkerName})
 	msgService.interactors = append(msgService.interactors, interactorMockObj, interactorMockObj)
 	messageHandlerMock := &mocks.IMessageHandler{}
 	msgService.messageHandler = messageHandlerMock
-	messageHandlerMock.On("Initialize")
+	messageHandlerMock.On("Initialize").Return(nil)
 	messageHandlerMock.On("Submit", mock.Anything).Return(messagehandler.ErrorCode(""))
 	messageHandlerMock.On("RegisterProcessor", mock.Anything).Return(nil)
 
@@ -153,7 +152,8 @@ func (suite *MessageServiceTestSuite) TestMessageService_ModuleExecute() {
 		return map[utils.WorkerName]func(context.T, *utils.ProcessorWorkerConfig) processorwrappers.IProcessorWrapper{}
 	}
 	msgService.ModuleExecute()
-	messageHandlerMock.AssertNumberOfCalls(suite.T(), "Initialize", 2)
+	messageHandlerMock.AssertNumberOfCalls(suite.T(), "Initialize", 1)
+	interactorMockObj.AssertNumberOfCalls(suite.T(), "Initialize", 2)
 
 	// Processor Wrapper available case
 	getProcessorWrapperDelegateMap = func() map[utils.WorkerName]func(context.T, *utils.ProcessorWorkerConfig) processorwrappers.IProcessorWrapper {
@@ -167,7 +167,8 @@ func (suite *MessageServiceTestSuite) TestMessageService_ModuleExecute() {
 		return delegateMap
 	}
 	msgService.ModuleExecute()
-	messageHandlerMock.AssertNumberOfCalls(suite.T(), "Initialize", 2)
+	messageHandlerMock.AssertNumberOfCalls(suite.T(), "Initialize", 2) // +1 from previous execution
+	interactorMockObj.AssertNumberOfCalls(suite.T(), "Initialize", 4)
 }
 
 // TestMessageService_ModuleExecute tests module execute
@@ -209,4 +210,4 @@ func (suite *MessageServiceTestSuite) TestMessageService_ModuleStop() {
 	msgService.messageHandler = messageHandlerMock
 	err = msgService.ModuleRequestStop(contracts.StopTypeHardStop)
 	interactorMockObj.AssertNumberOfCalls(suite.T(), "Close", 2)
-}*/
+}

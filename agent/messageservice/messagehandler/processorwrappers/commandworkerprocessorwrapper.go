@@ -173,8 +173,8 @@ func (cpw *CommandWorkerProcessorWrapper) listenReply(resChan chan contracts.Doc
 externalLabel:
 	for {
 		select {
-		case res, channelOpen := <-resChan:
-			if !channelOpen {
+		case res, resChannelOpen := <-resChan:
+			if !resChannelOpen {
 				log.Infof("listen reply channel closed")
 				break externalLabel
 			}
@@ -208,7 +208,7 @@ externalLabel:
 				log.Errorf("dropping reply without pushing to any interactor %v", res.MessageID)
 				break
 			}
-			log.Infof("reply submission ended %v", res.MessageID)
+			log.Debugf("reply submission ended %v", res.MessageID)
 		}
 	}
 	cpw.listenReplyEnded <- struct{}{}

@@ -22,7 +22,7 @@ type IInteractor interface {
 	Initialize() error
 	// PostProcessorInitialization sets values needed post initialization
 	// This should be called after processor initialization call
-	PostProcessorInitialization()
+	PostProcessorInitialization(name utils.WorkerName)
 	// GetName used to get the name of interactor
 	GetName() string
 	// GetSupportedWorkers returns the workers supported by the interactors

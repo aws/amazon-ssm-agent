@@ -291,6 +291,7 @@ type DocumentResult struct {
 	NPlugins            int
 	UpstreamServiceName UpstreamServiceName
 	ResultType          ResultType
+	RelatedDocumentType DocumentType
 }
 
 // ResultType represents document Result types
@@ -298,7 +299,7 @@ type ResultType string
 
 const (
 	// RunCommandResult represents result sent by document worker which ran runCommand documents
-	RunCommandResult ResultType = "RunCommand"
-	// SessionAgentCompleteResult represents result sent by session worker to send session complete result to service
-	SessionAgentCompleteResult ResultType = "SessionAgentComplete"
+	RunCommandResult ResultType = "RunCommandResult"
+	// SessionResult represents result sent by session worker to service
+	SessionResult ResultType = "SessionResult"
 )

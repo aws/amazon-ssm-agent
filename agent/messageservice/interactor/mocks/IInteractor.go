@@ -71,8 +71,8 @@ func (_m *IInteractor) Initialize() error {
 }
 
 // PostProcessorInitialization provides a mock function with given fields:
-func (_m *IInteractor) PostProcessorInitialization() {
-	_m.Called()
+func (_m *IInteractor) PostProcessorInitialization(name utils.WorkerName) {
+	_m.Called(name)
 }
 
 // PreProcessorClose provides a mock function with given fields:

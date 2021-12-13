@@ -622,6 +622,8 @@ func processCommand(context context.T, executerCreator ExecuterCreator, cancelFl
 			// whenever we receive a response, we populate with the appropriate Upstream service
 			// this is added to avoid changes in the workers
 			res.UpstreamServiceName = docState.UpstreamServiceName
+			// used to add topic to the payload in agent reply message in MGS interactor
+			res.RelatedDocumentType = docState.DocumentType
 			//hand off the message to Service
 			resChan <- res
 

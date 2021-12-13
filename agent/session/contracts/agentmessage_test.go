@@ -233,7 +233,7 @@ func TestParseAgentMessage(t *testing.T) {
 
 	assert.Nil(t, agentMessage.Validate())
 
-	docState, err := agentMessage.ParseAgentMessage(context.NewMockDefault(), "", "i-123", "client-id")
+	docState, err := agentMessage.ParseAgentMessage(context.NewMockDefault(), "", "i-123")
 	pluginInfo := docState.InstancePluginsInformation
 	assert.Nil(t, err)
 	assert.NotNil(t, docState)
@@ -244,6 +244,74 @@ func TestParseAgentMessage(t *testing.T) {
 	assert.Equal(t, "44da928d-1200-4501-a38a-f10d72e38cc4", pluginInfo[0].Configuration.SessionId)
 	assert.Equal(t, shellProps, pluginInfo[0].Configuration.Properties)
 	assert.Equal(t, "test-user", pluginInfo[0].Configuration.RunAsUser)
+}
+
+func TestParseAgentJobSendCommandMessage(t *testing.T) {
+	u, _ := uuid.Parse(messageId)
+
+	agentJSON := "{\"Parameters\":{\"workingDirectory\":\"\",\"runCommand\":[\"echo hello; sleep 10\"]},\"DocumentContent\":{\"schemaVersion\":\"1.2\",\"description\":\"This document defines the PowerShell command to run or path to a script which is to be executed.\",\"runtimeConfig\":{\"aws:runScript\":{\"properties\":[{\"workingDirectory\":\"{{ workingDirectory }}\",\"timeoutSeconds\":\"{{ timeoutSeconds }}\",\"runCommand\":\"{{ runCommand }}\",\"id\":\"0.aws:runScript\"}]}},\"parameters\":{\"workingDirectory\":{\"default\":\"\",\"description\":\"Path to the working directory (Optional)\",\"type\":\"String\"},\"timeoutSeconds\":{\"default\":\"\",\"description\":\"Timeout in seconds (Optional)\",\"type\":\"String\"},\"runCommand\":{\"description\":\"List of commands to run (Required)\",\"type\":\"Array\"}}},\"CommandId\":\"55b78ece-7a7f-4198-aaf4-d8c8a3e960e6\",\"DocumentName\":\"AWS-RunPowerShellScript\",\"CloudWatchOutputEnabled\":\"true\"}"
+
+	agentJobPayload := AgentJobPayload{
+		Payload:       string(agentJSON),
+		JobId:         taskId,
+		Topic:         "aws.ssm.sendCommand",
+		SchemaVersion: 1,
+	}
+	agentJobPayloadJson, err := json.Marshal(agentJobPayload)
+	agentMessage := &AgentMessage{
+		HeaderLength:   20,
+		MessageType:    AgentJobMessage,
+		SchemaVersion:  schemaVersion,
+		CreatedDate:    createdDate,
+		SequenceNumber: 1,
+		Flags:          2,
+		MessageId:      u,
+		Payload:        agentJobPayloadJson,
+	}
+
+	assert.Nil(t, agentMessage.Validate())
+
+	docState, err := agentMessage.ParseAgentMessage(context.NewMockDefault(), "", "i-123")
+	pluginInfo := docState.InstancePluginsInformation
+	assert.Nil(t, err)
+	assert.NotNil(t, docState)
+	assert.Equal(t, "1.2", docState.SchemaVersion)
+	assert.Equal(t, 1, len(pluginInfo))
+	assert.Equal(t, "aws.ssm.2b196342-d7d4-436e-8f09-3883a1116ac3.i-57c0a7be", pluginInfo[0].Configuration.MessageId)
+	assert.Equal(t, contracts.SendCommand, docState.DocumentType)
+}
+
+func TestParseAgentJobCancelCommandMessage(t *testing.T) {
+	u, _ := uuid.Parse(messageId)
+
+	agentJSON := "{\"CancelMessageId\":\"aws.ssm.e8b9850d-930a-4366-a5a6-34060e003170.i-0094d85abec5ef507\"}"
+
+	agentJobPayload := AgentJobPayload{
+		Payload:       string(agentJSON),
+		JobId:         taskId,
+		Topic:         "aws.ssm.cancelCommand",
+		SchemaVersion: 1,
+	}
+	agentJobPayloadJson, err := json.Marshal(agentJobPayload)
+	agentMessage := &AgentMessage{
+		HeaderLength:   20,
+		MessageType:    AgentJobMessage,
+		SchemaVersion:  schemaVersion,
+		CreatedDate:    createdDate,
+		SequenceNumber: 1,
+		Flags:          2,
+		MessageId:      u,
+		Payload:        agentJobPayloadJson,
+	}
+
+	assert.Nil(t, agentMessage.Validate())
+
+	docState, err := agentMessage.ParseAgentMessage(context.NewMockDefault(), "", "i-123")
+	assert.Nil(t, err)
+	assert.NotNil(t, docState)
+	assert.Equal(t, contracts.CancelCommand, docState.DocumentType)
+	assert.Equal(t, "e8b9850d-930a-4366-a5a6-34060e003170", docState.CancelInformation.CancelCommandID)
+	assert.Equal(t, "aws.ssm.e8b9850d-930a-4366-a5a6-34060e003170.i-0094d85abec5ef507", docState.CancelInformation.CancelMessageID)
 }
 
 func TestValidateReturnsErrorWithEmptyAgentMessage(t *testing.T) {

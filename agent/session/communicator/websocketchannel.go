@@ -43,7 +43,7 @@ type IWebSocketChannel interface {
 		signer *v4.Signer,
 		onMessageHandler func([]byte),
 		onErrorHandler func(error)) error
-	Open(log log.T) error
+	Open(log log.T, dialer *websocket.Dialer) error
 	Close(log log.T) error
 	GetChannelToken() string
 	SetChannelToken(token string)
@@ -147,7 +147,7 @@ func (webSocketChannel *WebSocketChannel) SetChannelToken(token string) {
 }
 
 // Open upgrades the http connection to a websocket connection.
-func (webSocketChannel *WebSocketChannel) Open(log log.T) error {
+func (webSocketChannel *WebSocketChannel) Open(log log.T, dialer *websocket.Dialer) error {
 
 	// initialize the write mutex
 	webSocketChannel.writeLock = &sync.Mutex{}
@@ -157,7 +157,7 @@ func (webSocketChannel *WebSocketChannel) Open(log log.T) error {
 		log.Errorf("Failed to get the v4 signature, %v", err)
 	}
 
-	ws, err := websocketutil.NewWebsocketUtil(log, webSocketChannel.Context.AppConfig(), nil).OpenConnection(webSocketChannel.Url, header)
+	ws, err := websocketutil.NewWebsocketUtil(log, webSocketChannel.Context.AppConfig(), dialer).OpenConnection(webSocketChannel.Url, header)
 	if err != nil {
 		return err
 	}
@@ -241,6 +241,7 @@ func (webSocketChannel *WebSocketChannel) StartPings(log log.T, pingInterval tim
 				err := webSocketChannel.SendMessage(log, []byte("keepalive"), websocket.PingMessage)
 				if err != nil {
 					log.Warnf("Error while sending websocket ping: %v", err)
+					// reconnection logic
 					return
 				}
 			}
@@ -259,7 +260,6 @@ func (webSocketChannel *WebSocketChannel) Close(log log.T) error {
 
 		webSocketChannel.stopPinging <- true
 		close(webSocketChannel.stopPinging)
-
 		return websocketutil.NewWebsocketUtil(log, webSocketChannel.Context.AppConfig(), nil).CloseConnection(webSocketChannel.Connection)
 	}
 

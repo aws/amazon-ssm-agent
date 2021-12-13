@@ -131,6 +131,13 @@ func (mh *MessageHandler) Submit(message *contracts.DocumentState) ErrorCode {
 	log := mh.context.Log()
 	log.Infof("submit incoming message %v", message.DocumentInformation.MessageID)
 	mhErrorCode := ErrorCode("") // Success
+	// safety panic handler
+	defer func() {
+		if msg := recover(); msg != nil {
+			mh.context.Log().Errorf("message handler submit panicked: %v", msg)
+			mh.context.Log().Errorf("stacktrace:\n%s", debug.Stack())
+		}
+	}()
 	if proc, ok := mh.docTypeProcessorFuncMap[message.DocumentType]; ok {
 		errorCode := proc.PushToProcessor(*message)
 		if errorCode != "" {

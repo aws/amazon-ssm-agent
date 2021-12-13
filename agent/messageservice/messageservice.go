@@ -25,6 +25,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/messageservice/interactor"
 	"github.com/aws/amazon-ssm-agent/agent/messageservice/interactor/mdsinteractor"
+	"github.com/aws/amazon-ssm-agent/agent/messageservice/interactor/mgsinteractor"
 	"github.com/aws/amazon-ssm-agent/agent/messageservice/messagehandler"
 	"github.com/aws/amazon-ssm-agent/agent/messageservice/messagehandler/processorwrappers"
 	"github.com/aws/amazon-ssm-agent/agent/messageservice/utils"
@@ -69,11 +70,17 @@ func NewService(context context.T) contracts.ICoreModule {
 		messageHandler: messagehandler.NewMessageHandler(messageContext),
 	}
 
-	/*isNanoServer, _ := isPlatformNanoServer(log)
+	isNanoServer, _ := isPlatformNanoServer(log)
 	if !isNanoServer {
-		messageService.interactors = append(messageService.interactors, mgsinteractor.New(messageContext, messageService.messageHandler))
-	}*/
+		log.Info("Appending MGSInteractor to MessageService interactors")
+		mgsRef, err := mgsinteractor.New(messageContext, messageService.messageHandler)
+		if err == nil {
+			messageService.interactors = append(messageService.interactors, mgsRef)
+
+		}
+	}
 	if !messageContext.AppConfig().Agent.ContainerMode {
+		log.Info("Appending MDSInteractor to MessageService interactors")
 		mdsRef, err := mdsinteractor.New(messageContext, messageService.messageHandler)
 		if err == nil {
 			messageService.interactors = append(messageService.interactors, mdsRef)
@@ -93,7 +100,7 @@ func (msgSvc *MessageService) ModuleName() string {
 // ModuleExecute starts the MessageService module
 func (msgSvc *MessageService) ModuleExecute() (err error) {
 	log := msgSvc.context.Log()
-
+	log.Info("starting MessageService")
 	// initialize message handler
 	msgSvc.messageHandler.Initialize()
 
@@ -181,7 +188,7 @@ func (msgSvc *MessageService) initializeProcessor(interactorRef interactor.IInte
 				log.Warnf("error during initialization of processor wrapper %v: %v", procWrapperName, err) // No error is returned for now
 			}
 			// post processor initialization opens agent incoming job messages in the interactors after initialization of processor id done
-			interactorRef.PostProcessorInitialization()
+			interactorRef.PostProcessorInitialization(worker)
 		}(workerName)
 	}
 	wg.Wait()

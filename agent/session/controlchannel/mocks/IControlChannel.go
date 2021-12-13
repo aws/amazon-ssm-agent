@@ -16,7 +16,6 @@ package mocks
 
 import (
 	context "github.com/aws/amazon-ssm-agent/agent/context"
-	processor "github.com/aws/amazon-ssm-agent/agent/framework/processor"
 	log "github.com/aws/amazon-ssm-agent/agent/log"
 	mgsContracts "github.com/aws/amazon-ssm-agent/agent/session/contracts"
 	service "github.com/aws/amazon-ssm-agent/agent/session/service"
@@ -43,8 +42,8 @@ func (_m *IControlChannel) Close(_a0 log.T) error {
 }
 
 // Initialize provides a mock function with given fields: _a0, mgsService, _a2, instanceId
-func (_m *IControlChannel) Initialize(_a0 context.T, mgsService service.Service, _a2 processor.Processor, instanceId string, taskAckChan chan mgsContracts.AcknowledgeTaskContent) {
-	_m.Called(_a0, mgsService, _a2, instanceId, taskAckChan)
+func (_m *IControlChannel) Initialize(_a0 context.T, mgsService service.Service, instanceId string, agentMessageIncomingMessageChan chan mgsContracts.AgentMessage) {
+	_m.Called(_a0, mgsService, instanceId, agentMessageIncomingMessageChan)
 }
 
 // Open provides a mock function with given fields: _a0
@@ -90,12 +89,12 @@ func (_m *IControlChannel) SendMessage(_a0 log.T, input []byte, inputType int) e
 }
 
 // SetWebSocket provides a mock function with given fields: _a0, mgsService, _a2, instanceId
-func (_m *IControlChannel) SetWebSocket(_a0 context.T, mgsService service.Service, _a2 processor.Processor, instanceId string) error {
-	ret := _m.Called(_a0, mgsService, _a2, instanceId)
+func (_m *IControlChannel) SetWebSocket(_a0 context.T, mgsService service.Service) error {
+	ret := _m.Called(_a0, mgsService)
 
 	var r0 error
-	if rf, ok := ret.Get(0).(func(context.T, service.Service, processor.Processor, string) error); ok {
-		r0 = rf(_a0, mgsService, _a2, instanceId)
+	if rf, ok := ret.Get(0).(func(context.T, service.Service) error); ok {
+		r0 = rf(_a0, mgsService)
 	} else {
 		r0 = ret.Error(0)
 	}

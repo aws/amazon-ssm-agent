@@ -21,7 +21,6 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/longrunning/manager"
 	"github.com/aws/amazon-ssm-agent/agent/messageservice"
 	"github.com/aws/amazon-ssm-agent/agent/runcommand"
-	"github.com/aws/amazon-ssm-agent/agent/session"
 	"github.com/aws/amazon-ssm-agent/agent/ssm"
 )
 
@@ -48,12 +47,6 @@ func loadCoreModules(context context.T) {
 	messageServiceCoreModule := messageservice.NewService(context)
 	if messageServiceCoreModule != nil {
 		registeredCoreModules = append(registeredCoreModules, messageServiceCoreModule)
-	}
-
-	// this will be removed later
-	sessionCoreModule := session.NewSession(context)
-	if sessionCoreModule != nil {
-		registeredCoreModules = append(registeredCoreModules, sessionCoreModule)
 	}
 
 	if !context.AppConfig().Agent.ContainerMode {

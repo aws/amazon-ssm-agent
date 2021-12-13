@@ -129,7 +129,7 @@ func TestSetWebSocket(t *testing.T) {
 func TestOpen(t *testing.T) {
 	dataChannel := getDataChannel()
 
-	mockWsChannel.On("Open", mock.Anything).Return(nil)
+	mockWsChannel.On("Open", mock.Anything, mock.Anything).Return(nil)
 	mockWsChannel.On("GetChannelToken").Return(token)
 	mockWsChannel.On("SendMessage", mock.Anything, mock.Anything, mock.Anything).Return(nil)
 
@@ -145,7 +145,7 @@ func TestReconnect(t *testing.T) {
 	dataChannel := getDataChannel()
 
 	mockWsChannel.On("Close", mock.Anything).Return(nil)
-	mockWsChannel.On("Open", mock.Anything).Return(nil)
+	mockWsChannel.On("Open", mock.Anything, mock.Anything).Return(nil)
 	mockWsChannel.On("GetChannelToken").Return(token)
 	mockWsChannel.On("SendMessage", mock.Anything, mock.Anything, mock.Anything).Return(nil)
 

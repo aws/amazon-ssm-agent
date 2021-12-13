@@ -16,12 +16,8 @@ package controlchannel
 
 import (
 	"encoding/json"
-	"github.com/aws/amazon-ssm-agent/agent/framework/processor"
-	"testing"
-	"time"
-
 	"github.com/aws/amazon-ssm-agent/agent/context"
-	processorMock "github.com/aws/amazon-ssm-agent/agent/framework/processor/mock"
+	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	communicatorMocks "github.com/aws/amazon-ssm-agent/agent/session/communicator/mocks"
 	mgsConfig "github.com/aws/amazon-ssm-agent/agent/session/config"
@@ -34,37 +30,38 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 	"github.com/twinj/uuid"
+	"testing"
+	"time"
 )
 
 var (
-	mockContext     = context.NewMockDefault()
-	mockLog         = log.NewMockLog()
-	mockProcessor   = new(processorMock.MockedProcessor)
-	mockService     = &serviceMock.Service{}
-	mockWsChannel   = &communicatorMocks.IWebSocketChannel{}
-	mockEventLog    = eventlogMock.IAuditLogTelemetry{}
-	messageId       = "dd01e56b-ff48-483e-a508-b5f073f31b16"
-	mockTaskAckChan = make(chan mgsContracts.AcknowledgeTaskContent)
-	schemaVersion   = uint32(1)
-	createdDate     = uint64(1503434274948)
-	topic           = "test"
-	taskId          = "2b196342-d7d4-436e-8f09-3883a1116ac3"
-	instanceId      = "i-1234"
-	token           = "token"
-	region          = "us-east-1"
-	signer          = &v4.Signer{Credentials: credentials.NewStaticCredentials("AKID", "SECRET", "SESSION")}
+	mockContext                         = context.NewMockDefault()
+	mockLog                             = log.NewMockLog()
+	mockService                         = &serviceMock.Service{}
+	mockWsChannel                       = &communicatorMocks.IWebSocketChannel{}
+	mockEventLog                        = eventlogMock.IAuditLogTelemetry{}
+	messageId                           = "dd01e56b-ff48-483e-a508-b5f073f31b16"
+	mockTaskAckChan                     = make(chan mgsContracts.AcknowledgeTaskContent)
+	mockAgentMessageIncomingMessageChan = make(chan mgsContracts.AgentMessage, 10)
+	schemaVersion                       = uint32(1)
+	createdDate                         = uint64(1503434274948)
+	topic                               = "test"
+	taskId                              = "2b196342-d7d4-436e-8f09-3883a1116ac3"
+	instanceId                          = "i-1234"
+	token                               = "token"
+	region                              = "us-east-1"
+	signer                              = &v4.Signer{Credentials: credentials.NewStaticCredentials("AKID", "SECRET", "SESSION")}
 )
 
 func TestInitialize(t *testing.T) {
 	controlChannel := &ControlChannel{}
 	controlChannel.AuditLogScheduler = &mockEventLog
-	controlChannel.Initialize(mockContext, mockService, mockProcessor, instanceId, mockTaskAckChan)
+	controlChannel.Initialize(mockContext, mockService, instanceId, mockAgentMessageIncomingMessageChan)
 
 	assert.Equal(t, instanceId, controlChannel.ChannelId)
-	assert.Equal(t, mockTaskAckChan, controlChannel.taskAckChan)
+	assert.Equal(t, mockAgentMessageIncomingMessageChan, controlChannel.agentMessageIncomingMessageChan)
 	assert.Equal(t, mockService, controlChannel.Service)
 	assert.Equal(t, mgsConfig.RoleSubscribe, controlChannel.channelType)
-	assert.Equal(t, mockProcessor, controlChannel.Processor)
 	assert.NotNil(t, controlChannel.wsChannel)
 }
 
@@ -85,7 +82,7 @@ func TestSetWebSocket(t *testing.T) {
 		mock.Anything,
 		mock.Anything).Return(nil)
 
-	err := controlChannel.SetWebSocket(mockContext, mockService, mockProcessor, instanceId)
+	err := controlChannel.SetWebSocket(mockContext, mockService)
 
 	assert.Nil(t, err)
 	mockWsChannel.AssertExpectations(t)
@@ -95,7 +92,7 @@ func TestSetWebSocket(t *testing.T) {
 func TestOpen(t *testing.T) {
 	controlChannel := getControlChannel()
 
-	mockWsChannel.On("Open", mock.Anything).Return(nil)
+	mockWsChannel.On("Open", mock.Anything, mock.Anything).Return(nil)
 	mockWsChannel.On("GetChannelToken").Return(token)
 	mockWsChannel.On("SendMessage", mock.Anything, mock.Anything, mock.Anything).Return(nil)
 	mockEventLog.On("SendAuditMessage")
@@ -112,7 +109,7 @@ func TestReconnect(t *testing.T) {
 	controlChannel := getControlChannel()
 
 	mockWsChannel.On("Close", mock.Anything).Return(nil)
-	mockWsChannel.On("Open", mock.Anything).Return(nil)
+	mockWsChannel.On("Open", mock.Anything, mock.Anything).Return(nil)
 	mockWsChannel.On("GetChannelToken").Return(token)
 	mockWsChannel.On("SendMessage", mock.Anything, mock.Anything, mock.Anything).Return(nil)
 
@@ -127,10 +124,10 @@ func TestReconnect(t *testing.T) {
 func TestClose(t *testing.T) {
 	controlChannel := getControlChannel()
 	mockWsChannel.On("Close", mock.Anything).Return(nil)
+	mockEventLog.On("StopScheduler")
 
 	// test close
 	err := controlChannel.Close(mockLog)
-
 	assert.Nil(t, err)
 	mockWsChannel.AssertExpectations(t)
 }
@@ -169,12 +166,66 @@ func TestControlChannelIncomingMessageHandlerForStartSessionMessage(t *testing.T
 		Payload:        mgsPayloadJson,
 	}
 	serializedBytes, _ := agentMessage.Serialize(log.NewMockLog())
-	mockProcessor.On("Submit", mock.Anything).Return(processor.ErrorCode(""))
 
-	err := controlChannelIncomingMessageHandler(mockContext, mockProcessor, serializedBytes, "", "", mockTaskAckChan)
+	err := controlChannelIncomingMessageHandler(mockContext, serializedBytes, mockAgentMessageIncomingMessageChan)
 
 	assert.Nil(t, err)
-	mockProcessor.AssertExpectations(t)
+}
+
+func TestControlChannelIncomingMessageHandlerForAgentJobSendCommandMessage(t *testing.T) {
+	u, _ := uuid.Parse(messageId)
+
+	agentJSON := "{\"Parameters\":{\"workingDirectory\":\"\",\"runCommand\":[\"echo hello; sleep 10\"]},\"DocumentContent\":{\"schemaVersion\":\"1.2\",\"description\":\"This document defines the PowerShell command to run or path to a script which is to be executed.\",\"runtimeConfig\":{\"aws:runScript\":{\"properties\":[{\"workingDirectory\":\"{{ workingDirectory }}\",\"timeoutSeconds\":\"{{ timeoutSeconds }}\",\"runCommand\":\"{{ runCommand }}\",\"id\":\"0.aws:runScript\"}]}},\"parameters\":{\"workingDirectory\":{\"default\":\"\",\"description\":\"Path to the working directory (Optional)\",\"type\":\"String\"},\"timeoutSeconds\":{\"default\":\"\",\"description\":\"Timeout in seconds (Optional)\",\"type\":\"String\"},\"runCommand\":{\"description\":\"List of commands to run (Required)\",\"type\":\"Array\"}}},\"CommandId\":\"55b78ece-7a7f-4198-aaf4-d8c8a3e960e6\",\"DocumentName\":\"AWS-RunPowerShellScript\",\"CloudWatchOutputEnabled\":\"true\"}"
+
+	agentJobPayload := mgsContracts.AgentJobPayload{
+		Payload:       string(agentJSON),
+		JobId:         taskId,
+		Topic:         string(contracts.SendCommand),
+		SchemaVersion: 1,
+	}
+	agentJobPayloadJson, _ := json.Marshal(agentJobPayload)
+	agentMessage := &mgsContracts.AgentMessage{
+		MessageType:    mgsContracts.AgentJobMessage,
+		SchemaVersion:  schemaVersion,
+		CreatedDate:    createdDate,
+		SequenceNumber: 1,
+		Flags:          2,
+		MessageId:      u,
+		Payload:        agentJobPayloadJson,
+	}
+	serializedBytes, _ := agentMessage.Serialize(log.NewMockLog())
+
+	err := controlChannelIncomingMessageHandler(mockContext, serializedBytes, mockAgentMessageIncomingMessageChan)
+
+	assert.Nil(t, err)
+}
+
+func TestControlChannelIncomingMessageHandlerForAgentJobCancelCommandMessage(t *testing.T) {
+	u, _ := uuid.Parse(messageId)
+
+	agentJSON := "{\"CancelMessageId\":\"55b78ece-7a7f-4198-aaf4-d8c8a3e960e6\"}"
+
+	agentJobPayload := mgsContracts.AgentJobPayload{
+		Payload:       string(agentJSON),
+		JobId:         taskId,
+		Topic:         string(contracts.CancelCommand),
+		SchemaVersion: 1,
+	}
+	agentJobPayloadJson, _ := json.Marshal(agentJobPayload)
+	agentMessage := &mgsContracts.AgentMessage{
+		MessageType:    mgsContracts.AgentJobMessage,
+		SchemaVersion:  schemaVersion,
+		CreatedDate:    createdDate,
+		SequenceNumber: 1,
+		Flags:          2,
+		MessageId:      u,
+		Payload:        agentJobPayloadJson,
+	}
+	serializedBytes, _ := agentMessage.Serialize(log.NewMockLog())
+
+	err := controlChannelIncomingMessageHandler(mockContext, serializedBytes, mockAgentMessageIncomingMessageChan)
+
+	assert.Nil(t, err)
 }
 
 func TestControlChannelIncomingMessageHandlerForTerminateSessionMessage(t *testing.T) {
@@ -194,12 +245,9 @@ func TestControlChannelIncomingMessageHandlerForTerminateSessionMessage(t *testi
 		Payload:        []byte(agentJson),
 	}
 	serializedBytes, _ := agentMessage.Serialize(log.NewMockLog())
-	mockProcessor.On("Cancel", mock.Anything).Return(processor.ErrorCode(""))
-
-	err := controlChannelIncomingMessageHandler(mockContext, mockProcessor, serializedBytes, "", "", mockTaskAckChan)
+	err := controlChannelIncomingMessageHandler(mockContext, serializedBytes, mockAgentMessageIncomingMessageChan)
 
 	assert.Nil(t, err)
-	mockProcessor.AssertExpectations(t)
 }
 
 func TestControlChannelIncomingMessageHandlerForTaskAcknowledgeMessage(t *testing.T) {
@@ -232,28 +280,29 @@ func TestControlChannelIncomingMessageHandlerForTaskAcknowledgeMessage(t *testin
 		close(mockTaskAckChan)
 	}()
 
-	err := controlChannelIncomingMessageHandler(mockContext, mockProcessor, serializedBytes, "", "", mockTaskAckChan)
+	err := controlChannelIncomingMessageHandler(mockContext, serializedBytes, mockAgentMessageIncomingMessageChan)
 	assert.Nil(t, err)
 }
 
 func TestInitializeForContainer(t *testing.T) {
 	controlChannel := getControlChannel()
 	mockInstanceId := "9781c2480-edd4cdb9a93f6-3cb662a5d3"
-	controlChannel.Initialize(mockContext, mockService, mockProcessor, mockInstanceId, mockTaskAckChan)
+	controlChannel.Initialize(mockContext, mockService, mockInstanceId, mockAgentMessageIncomingMessageChan)
 
 	assert.Equal(t, mockInstanceId, controlChannel.ChannelId)
 	assert.Equal(t, mockService, controlChannel.Service)
 	assert.Equal(t, mgsConfig.RoleSubscribe, controlChannel.channelType)
-	assert.Equal(t, mockProcessor, controlChannel.Processor)
 	assert.NotNil(t, controlChannel.wsChannel)
 }
 
 func getControlChannel() *ControlChannel {
 	return &ControlChannel{
-		wsChannel:         mockWsChannel,
-		Service:           mockService,
-		ChannelId:         instanceId,
-		AuditLogScheduler: &mockEventLog,
-		channelType:       mgsConfig.RoleSubscribe,
-		Processor:         mockProcessor}
+		wsChannel:                       mockWsChannel,
+		Service:                         mockService,
+		ChannelId:                       instanceId,
+		AuditLogScheduler:               &mockEventLog,
+		channelType:                     mgsConfig.RoleSubscribe,
+		agentMessageIncomingMessageChan: mockAgentMessageIncomingMessageChan,
+		context:                         mockContext,
+	}
 }

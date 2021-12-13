@@ -20,6 +20,7 @@ import (
 	context "github.com/aws/amazon-ssm-agent/agent/context"
 	log "github.com/aws/amazon-ssm-agent/agent/log"
 	v4 "github.com/aws/aws-sdk-go/aws/signer/v4"
+	"github.com/gorilla/websocket"
 	mock "github.com/stretchr/testify/mock"
 )
 
@@ -71,12 +72,12 @@ func (_m *IWebSocketChannel) Initialize(_a0 context.T, channelId string, channel
 }
 
 // Open provides a mock function with given fields: _a0
-func (_m *IWebSocketChannel) Open(_a0 log.T) error {
-	ret := _m.Called(_a0)
+func (_m *IWebSocketChannel) Open(_a0 log.T, dialer *websocket.Dialer) error {
+	ret := _m.Called(_a0, dialer)
 
 	var r0 error
-	if rf, ok := ret.Get(0).(func(log.T) error); ok {
-		r0 = rf(_a0)
+	if rf, ok := ret.Get(0).(func(log.T, *websocket.Dialer) error); ok {
+		r0 = rf(_a0, dialer)
 	} else {
 		r0 = ret.Error(0)
 	}
