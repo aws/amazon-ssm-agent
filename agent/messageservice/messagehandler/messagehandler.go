@@ -156,22 +156,26 @@ func (mh *MessageHandler) Submit(message *contracts.DocumentState) ErrorCode {
 // InitializeAndRegisterProcessor registers processors from Message service
 // Should be called before Initialization being called
 func (mh *MessageHandler) InitializeAndRegisterProcessor(proc processorWrapperTypes.IProcessorWrapper) error {
+	newProc := mh.registerProcessor(proc)
 	// loads all pending and in-progress documents
 	// this is a blocking call until the documents are loaded fully
-	if err := proc.Initialize(mh.replyMap); err != nil {
+	if err := newProc.Initialize(mh.replyMap); err != nil {
 		return err
 	}
-	mh.registerProcessor(proc)
 	return nil
 }
 
-func (mh *MessageHandler) registerProcessor(proc processorWrapperTypes.IProcessorWrapper) {
+func (mh *MessageHandler) registerProcessor(proc processorWrapperTypes.IProcessorWrapper) processorWrapperTypes.IProcessorWrapper {
 	mh.mhMutex.Lock()
 	defer mh.mhMutex.Unlock()
+	if procVal, ok := mh.processorsLoaded[proc.GetName()]; ok {
+		return procVal
+	}
 	// two different maps are used for performance reasons
 	mh.processorsLoaded[proc.GetName()] = proc
 	mh.docTypeProcessorFuncMap[proc.GetStartWorker()] = proc
 	mh.docTypeProcessorFuncMap[proc.GetTerminateWorker()] = proc
+	return proc
 }
 
 // RegisterReply registers the reply to the MessageHandler

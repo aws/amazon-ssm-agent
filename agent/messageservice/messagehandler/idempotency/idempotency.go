@@ -28,8 +28,6 @@ import (
 )
 
 const (
-	// persistence timeout
-	persistenceTimeoutMinutes = 10
 
 	// number of documents to delete at a time
 	deletionLimit = 200
@@ -38,19 +36,31 @@ const (
 	Name = "Idempotency"
 )
 
+var (
+	// persistence timeout
+	persistenceTimeoutMinutes = 10
+
+	getDirectoryUnsortedOlderThan = fileutil.GetDirectoryNamesUnsortedOlderThan
+	deleteDirectory               = fileutil.DeleteDirectory
+	makeDirs                      = fileutil.MakeDirs
+	stat                          = os.Stat
+	isNotExist                    = os.IsNotExist
+	getIdempotencyDir             = getIdempotencyDirectory
+)
+
 // CleanupOldIdempotencyEntries deletes the commands in idempotency folder after persistenceTimeout minutes
 func CleanupOldIdempotencyEntries(idemCtx context.T) {
 	context := idemCtx.With("[" + Name + "]")
 	log := context.Log()
-	directoryPath := getIdempotencyDirectory(context)
-	documentTypeDir, err := fileutil.GetDirectoryNamesUnsortedOlderThan(directoryPath, nil)
+	directoryPath := getIdempotencyDir(context)
+	documentTypeDir, err := getDirectoryUnsortedOlderThan(directoryPath, nil)
 	if err != nil {
 		log.Warnf("encountered error %v while listing replies in %v", err, directoryPath)
 	}
 	for _, docTypeDir := range documentTypeDir {
 		olderTime := time.Now().Add(time.Duration(-persistenceTimeoutMinutes) * time.Minute)
 		tempDocTypeDir := path.Join(directoryPath, docTypeDir)
-		commandDirs, err := fileutil.GetDirectoryNamesUnsortedOlderThan(tempDocTypeDir, &olderTime)
+		commandDirs, err := getDirectoryUnsortedOlderThan(tempDocTypeDir, &olderTime)
 		if err != nil {
 			log.Warnf("encountered error %v while listing replies in %v", err, directoryPath)
 		}
@@ -58,7 +68,7 @@ func CleanupOldIdempotencyEntries(idemCtx context.T) {
 		for _, commandDir := range commandDirs {
 			decrementCount--
 			tempCommandDir := filepath.Join(tempDocTypeDir, commandDir)
-			deleteErr := fileutil.DeleteDirectory(tempCommandDir)
+			deleteErr := deleteDirectory(tempCommandDir)
 			if deleteErr != nil {
 				log.Warnf("encountered error %v while deleting file %v", deleteErr, tempCommandDir)
 			} else {
@@ -76,12 +86,13 @@ func CreateIdempotencyEntry(idemCtx context.T, message *contracts.DocumentState)
 	var err error
 	context := idemCtx.With("[" + Name + "]")
 	log := context.Log()
-	directoryPath := getIdempotencyDirectory(context)
+	directoryPath := getIdempotencyDir(context)
 	commandID, _ := messageContracts.GetCommandID(message.DocumentInformation.MessageID)
 	commandDirPath := path.Join(directoryPath, string(message.DocumentType), commandID)
 	log.Infof("writing command in the idempotency directory for command %v", commandID)
-	if err = fileutil.MakeDirs(commandDirPath); err != nil {
+	if err = makeDirs(commandDirPath); err != nil {
 		log.Warnf("could not create command directory in %v for the command %v: err: %v", commandDirPath, commandID, err)
+		return err
 	}
 	return nil
 }
@@ -90,10 +101,11 @@ func CreateIdempotencyEntry(idemCtx context.T, message *contracts.DocumentState)
 func IsDocumentAlreadyReceived(idemCtx context.T, message *contracts.DocumentState) bool {
 	context := idemCtx.With("[" + Name + "]")
 	log := context.Log()
-	directoryPath := getIdempotencyDirectory(context)
+	directoryPath := getIdempotencyDir(context)
 	commandID, _ := messageContracts.GetCommandID(message.DocumentInformation.MessageID)
 	commandDirPath := path.Join(directoryPath, string(message.DocumentType), commandID)
-	if _, err := os.Stat(commandDirPath); os.IsNotExist(err) {
+
+	if _, err := stat(commandDirPath); isNotExist(err) {
 		log.Infof("command not found in the idempotency directory %v", commandID)
 		return false
 	}

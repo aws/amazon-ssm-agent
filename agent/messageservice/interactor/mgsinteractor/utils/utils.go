@@ -2,10 +2,10 @@ package utils
 
 import (
 	"encoding/json"
-	"github.com/aws/amazon-ssm-agent/agent/contracts"
-	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
 	"time"
 
+	"github.com/aws/amazon-ssm-agent/agent/contracts"
+	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	messageContracts "github.com/aws/amazon-ssm-agent/agent/runcommand/contracts"
 	mgsContracts "github.com/aws/amazon-ssm-agent/agent/session/contracts"

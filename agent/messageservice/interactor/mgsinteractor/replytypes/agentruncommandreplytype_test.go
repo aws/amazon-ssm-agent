@@ -27,16 +27,16 @@ import (
 	"github.com/twinj/uuid"
 )
 
-type AgentCompleteReplyTestSuite struct {
+type AgentRunCommandReplyTestSuite struct {
 	suite.Suite
 }
 
 //Execute the test suite
-func TestAgentCompleteReplyTestSuite(t *testing.T) {
-	suite.Run(t, new(AgentCompleteReplyTestSuite))
+func TestAgentRunCommandReplyTestSuite(t *testing.T) {
+	suite.Run(t, new(AgentRunCommandReplyTestSuite))
 }
 
-func (suite *AgentCompleteReplyTestSuite) TestAgentCompleteReply_Initialize() {
+func (suite *AgentRunCommandReplyTestSuite) TestAgentRunCommandReply_InitializeSuccess() {
 	ctx := context.NewMockDefault()
 	docResult := contracts.DocumentResult{ResultType: contracts.RunCommandResult}
 	uuid := uuid.NewV4()
@@ -48,7 +48,7 @@ func (suite *AgentCompleteReplyTestSuite) TestAgentCompleteReply_Initialize() {
 	assert.Equal(suite.T(), 0, agentComplete.GetRetryNumber())
 }
 
-func (suite *AgentCompleteReplyTestSuite) TestAgentCompleteReply_InitializeRetryNumber() {
+func (suite *AgentRunCommandReplyTestSuite) TestAgentRunCommandReply_RetryNumberCheck() {
 	ctx := context.NewMockDefault()
 	docResult := contracts.DocumentResult{ResultType: contracts.RunCommandResult}
 	uuid := uuid.NewV4()
@@ -60,7 +60,7 @@ func (suite *AgentCompleteReplyTestSuite) TestAgentCompleteReply_InitializeRetry
 	assert.Equal(suite.T(), 2, agentComplete.GetRetryNumber())
 }
 
-func (suite *AgentCompleteReplyTestSuite) TestAgentCompleteReply_ConvertMessage() {
+func (suite *AgentRunCommandReplyTestSuite) TestAgentRunCommandReply_AgentMessageGenerationCheck() {
 	ctx := context.NewMockDefault()
 	outputMsgId := "messageId"
 	docResult := contracts.DocumentResult{MessageID: "messageId", ResultType: contracts.RunCommandResult}

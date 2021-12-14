@@ -17,110 +17,127 @@ package messagehandler
 import (
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
-	processorMock "github.com/aws/amazon-ssm-agent/agent/framework/processor/mock"
+	"github.com/aws/amazon-ssm-agent/agent/messageservice/messagehandler/processorwrappers"
+	"github.com/aws/amazon-ssm-agent/agent/messageservice/utils"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/suite"
+	"testing"
 )
 
 var (
-	instanceId  = "i-1234"
-	messageId   = "2b196342-d7d4-436e-8f09-3883a1116ac3"
-	status      = contracts.ResultStatusInProgress
-	errorMsg    = "plugin failed"
-	s3Bucket    = "s3Bucket"
-	s3UrlSuffix = "s3UrlSuffix"
-	cwlGroup    = "cwlGroup"
-	cwlStream   = "cwlStream"
+	docInfo = contracts.DocumentInfo{
+		CreatedDate:  "2017-06-10T01-23-07.853Z",
+		CommandID:    "13e8e6ad-e195-4ccb-86ee-328153b0dafe",
+		MessageID:    "MessageID",
+		DocumentName: "AWS-RunPowerShellScript",
+		InstanceID:   "i-400e1090",
+		RunCount:     0,
+	}
+
+	docState = &contracts.DocumentState{
+		DocumentInformation: docInfo,
+		DocumentType:        contracts.StartSession,
+	}
 )
 
 type MessageHandlerTestSuite struct {
 	suite.Suite
-	mockContext             *context.Mock
-	mockCommandProcessor    *processorMock.MockedProcessor
-	mockSessionProcessor    *processorMock.MockedProcessor
-	messagehandler          *MessageHandler
-	mockIncomingMessageChan chan contracts.DocumentState
+	mockContext                    *context.Mock
+	messagehandler                 IMessageHandler
+	mockIncomingMessageChan        chan contracts.DocumentState
+	commmandWorkerProcessorWrapper processorwrappers.IProcessorWrapper
+	sessionWorkerProcessorWrapper  processorwrappers.IProcessorWrapper
+	mockReplyChan                  chan contracts.DocumentResult
+	mockReplyMap                   map[contracts.UpstreamServiceName]chan contracts.DocumentResult
+	mockDocTypeProcessorFuncMap    map[contracts.DocumentType]processorwrappers.IProcessorWrapper
+	mockProcessorsLoaded           map[utils.ProcessorName]processorwrappers.IProcessorWrapper
 }
 
 func (suite *MessageHandlerTestSuite) SetupTest() {
 	mockContext := context.NewMockDefault()
-	mockCommandProcessor := new(processorMock.MockedProcessor)
-	mockSessionProcessor := new(processorMock.MockedProcessor)
 
-	agentConfig := contracts.AgentConfiguration{
-		InstanceID: instanceId,
-	}
 	mockIncomingMessageChan := make(chan contracts.DocumentState)
-
-	suite.mockCommandProcessor = mockCommandProcessor
-	suite.mockSessionProcessor = mockSessionProcessor
+	mockReplyChan := make(chan contracts.DocumentResult)
+	workerConfigs := utils.LoadProcessorWorkerConfig(mockContext)
+	for _, config := range workerConfigs {
+		if config.WorkerName == utils.DocumentWorkerName {
+			suite.commmandWorkerProcessorWrapper = processorwrappers.NewCommandWorkerProcessorWrapper(mockContext, config)
+		}
+		if config.WorkerName == utils.SessionWorkerName {
+			suite.sessionWorkerProcessorWrapper = processorwrappers.NewSessionWorkerProcessorWrapper(mockContext, config)
+		}
+	}
+	suite.mockReplyMap = make(map[contracts.UpstreamServiceName]chan contracts.DocumentResult)
+	suite.mockDocTypeProcessorFuncMap = make(map[contracts.DocumentType]processorwrappers.IProcessorWrapper)
+	suite.mockProcessorsLoaded = make(map[utils.ProcessorName]processorwrappers.IProcessorWrapper)
 	suite.mockContext = mockContext
 	suite.mockIncomingMessageChan = mockIncomingMessageChan
 	suite.messagehandler = &MessageHandler{
-		name:        Name,
-		context:     mockContext,
-		agentConfig: agentConfig,
+		name:                    Name,
+		context:                 mockContext,
+		replyMap:                suite.mockReplyMap,
+		docTypeProcessorFuncMap: suite.mockDocTypeProcessorFuncMap,
+		processorsLoaded:        suite.mockProcessorsLoaded,
 	}
+
+	suite.mockReplyChan = mockReplyChan
 }
 
-// Testing the module name
-func (suite *MessageHandlerTestSuite) TestModuleName() {
+func (suite *MessageHandlerTestSuite) TestGetName() {
 	rst := suite.messagehandler.GetName()
 	assert.Equal(suite.T(), rst, Name)
 }
 
-/*
-// Testing the module execute
-func (suite *MessageHandlerTestSuite) TestModuleExecute() {
-	commandResultChan := make(chan contracts.DocumentResult)
-	suite.mockCommandProcessor.On("InitialProcessing", false).Return(nil)
-	suite.mockCommandProcessor.On("Start").Return(commandResultChan, nil)
+func (suite *MessageHandlerTestSuite) TestInitializeAndRegisterProcessor() {
+	cmdErr := suite.messagehandler.InitializeAndRegisterProcessor(suite.commmandWorkerProcessorWrapper)
+	sessErr := suite.messagehandler.InitializeAndRegisterProcessor(suite.sessionWorkerProcessorWrapper)
 
-	sessionResultChan := make(chan contracts.DocumentResult)
-	suite.mockSessionProcessor.On("InitialProcessing", false).Return(nil)
-	suite.mockSessionProcessor.On("Start").Return(sessionResultChan, nil)
-
-	suite.messagehandler.ModuleExecute()
-
-	pluginResults := make(map[string]*contracts.PluginResult)
-	pluginResult := contracts.PluginResult{
-		PluginName: "Standard_Stream",
-		Status:     contracts.ResultStatusInProgress,
-	}
-	pluginResults["Standard_Stream"] = &pluginResult
-
-	result := contracts.DocumentResult{
-		Status:          status,
-		PluginResults:   pluginResults,
-		LastPlugin:      "Standard_Stream",
-		MessageID:       messageId,
-		AssociationID:   "",
-		NPlugins:        1,
-		DocumentName:    "documentName",
-		DocumentVersion: "1",
-	}
-	commandResultChan <- result
-	sessionResultChan <- result
-	time.Sleep(60 * time.Millisecond)
-
-	suite.mockCommandProcessor.AssertExpectations(suite.T())
-	suite.mockSessionProcessor.AssertExpectations(suite.T())
-
-	close(commandResultChan)
-	close(sessionResultChan)
+	assert.Nil(suite.T(), cmdErr)
+	assert.Nil(suite.T(), sessErr)
 }
 
-/*
-func (suite *MessageHandlerTestSuite) TestModuleRequestStop() {
-	suite.mockCommandProcessor.On("Stop", mock.Anything).Return(nil)
-	suite.mockSessionProcessor.On("Stop", mock.Anything).Return(nil)
+func (suite *MessageHandlerTestSuite) TestInitialize() {
+	err := suite.messagehandler.Initialize()
 
-	suite.mgsInteractorService.On("Close").Return(nil)
-	suite.mdsInteractorService.On("Close").Return(nil)
-
-	suite.messageservice.ModuleRequestStop(contracts.StopTypeSoftStop)
-
-	suite.mockCommandProcessor.AssertExpectations(suite.T())
-	suite.mockSessionProcessor.AssertExpectations(suite.T())
+	assert.Nil(suite.T(), err)
 }
-*/
+
+func (suite *MessageHandlerTestSuite) TestSubmit() {
+	suite.messagehandler.InitializeAndRegisterProcessor(suite.sessionWorkerProcessorWrapper)
+	suite.messagehandler.Initialize()
+	errCode := suite.messagehandler.Submit(docState)
+
+	assert.Equal(suite.T(), ErrorCode(""), errCode)
+}
+
+func (suite *MessageHandlerTestSuite) TestSubmitWithWrongDocumentType() {
+	suite.messagehandler.InitializeAndRegisterProcessor(suite.sessionWorkerProcessorWrapper)
+	suite.messagehandler.Initialize()
+	docState.DocumentType = "wrong"
+	errCode := suite.messagehandler.Submit(docState)
+
+	assert.Equal(suite.T(), UnexpectedDocumentType, errCode)
+}
+
+func (suite *MessageHandlerTestSuite) TestRegisterReply() {
+	suite.messagehandler.RegisterReply(contracts.MessageGatewayService, suite.mockReplyChan)
+
+	assert.Equal(suite.T(), suite.mockReplyChan, suite.mockReplyMap[contracts.MessageGatewayService])
+
+}
+
+func (suite *MessageHandlerTestSuite) TestStops() {
+	suite.messagehandler.Initialize()
+	err := suite.messagehandler.Stop(contracts.StopTypeSoftStop)
+
+	assert.Nil(suite.T(), err)
+
+	suite.messagehandler.Initialize()
+	err = suite.messagehandler.Stop(contracts.StopTypeHardStop)
+
+	assert.Nil(suite.T(), err)
+}
+
+func TestMessageHandlerTestSuite(t *testing.T) {
+	suite.Run(t, new(MessageHandlerTestSuite))
+}

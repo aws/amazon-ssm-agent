@@ -139,7 +139,7 @@ func (mgs *MGSInteractor) startSendFailedReplyJob() {
 	log := mgs.context.Log()
 	mgs.mutex.Lock()
 	defer mgs.mutex.Unlock()
-	if mgs.sendReplyProp.sendFailedReplyJob != nil {
+	if mgs.sendReplyProp.sendFailedReplyJob == nil {
 		if mgs.sendReplyProp.sendFailedReplyJob, err = scheduler.Every(utils.SendFailedReplyFrequencyMinutes).Minutes().Run(mgs.sendFailedReplies); err != nil {
 			log.Errorf("unable to schedule send failed reply job. %v", err)
 		}

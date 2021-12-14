@@ -58,7 +58,7 @@ func (suite *SessionCompleteReplyTestSuite) TestName() {
 	assert.Equal(suite.T(), sessionComplete.GetName(), contracts.SessionResult)
 }
 
-func (suite *SessionCompleteReplyTestSuite) TestSessionCompleteReply_Initialize() {
+func (suite *SessionCompleteReplyTestSuite) TestSessionCompleteReply_BasicInitializationCheck() {
 	ctx := context.NewMockDefault()
 	docResult := contracts.DocumentResult{ResultType: contracts.SessionResult}
 	uuidVal := uuid.NewV4()
@@ -70,7 +70,7 @@ func (suite *SessionCompleteReplyTestSuite) TestSessionCompleteReply_Initialize(
 	assert.Equal(suite.T(), 0, sessionComplete.GetRetryNumber())
 }
 
-func (suite *SessionCompleteReplyTestSuite) TestSessionCompleteReply_InitializeNonZeroRetry() {
+func (suite *SessionCompleteReplyTestSuite) TestSessionCompleteReply_InitializeWithRetryNumberCheck() {
 	ctx := context.NewMockDefault()
 	docResult := contracts.DocumentResult{ResultType: contracts.SessionResult}
 	uuidVal := uuid.NewV4()
@@ -82,7 +82,7 @@ func (suite *SessionCompleteReplyTestSuite) TestSessionCompleteReply_InitializeN
 	assert.Equal(suite.T(), 1, sessionComplete.GetRetryNumber())
 }
 
-func (suite *SessionCompleteReplyTestSuite) TestSessionCompleteReply_ConvertMessage() {
+func (suite *SessionCompleteReplyTestSuite) TestSessionCompleteReply_AgentMessageGenerationCheck() {
 	ctx := context.NewMockDefault()
 	plugInResults := make(map[string]*contracts.PluginResult)
 	plugInResults["testPlugin"] = &contracts.PluginResult{Status: contracts.ResultStatusSuccess}
@@ -101,7 +101,7 @@ func (suite *SessionCompleteReplyTestSuite) TestSessionCompleteReply_ConvertMess
 }
 
 // test case for document result when instance reboot happens.
-func (suite *SessionCompleteReplyTestSuite) TestBuildAgentTaskCompleteWhenPluginIdIsEmptyAndStatusIsFailed() {
+func (suite *SessionCompleteReplyTestSuite) TestSessionCompleteReply_BuildAgentTaskCompleteWhenPluginIdIsEmptyAndStatusIsFailed() {
 	log := log.NewMockLog()
 	sessionPluginResultOutput := mgsContracts.SessionPluginResultOutput{
 		Output:      errorMsg,
