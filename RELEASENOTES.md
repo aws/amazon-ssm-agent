@@ -1,5 +1,10 @@
 Latest
 ===============
+- Derive default directories from appconfig on Darwin
+- Set x-bit on newly-created directories
+
+3.1.634.0
+===============
 - Fix for ssm-setup-cli to be able to select service manager without the agent being installed
 
 3.1.630.0
