@@ -69,7 +69,7 @@ const (
 )
 
 // New initiates and returns MDS Interactor when needed
-func New(context context.T, msgHandler messageHandler.IMessageHandler) (interactor.IInteractor, error) {
+func New(context context.T, msgHandler messageHandler.IMessageHandler, service mdsService.Service) (interactor.IInteractor, error) {
 	mdsContext := context.With("[" + Name + "]")
 	log := mdsContext.Log()
 
@@ -96,7 +96,9 @@ func New(context context.T, msgHandler messageHandler.IMessageHandler) (interact
 	}
 
 	// create a service object for mds
-	service := newMdsService(context)
+	if service == nil {
+		service = newMdsService(context)
+	}
 
 	// create a stop policy where we will stop after 10 consecutive errors and if time period expires.
 	stopPolicy := newStopPolicy(Name)
@@ -339,17 +341,25 @@ func (mds *MDSInteractor) processMessage(msg *ssmmds.Message) {
 
 	errorCode := mds.messageHandler.Submit(docState)
 
+	// showLog is used to minimize warn log during ProcessorBufferFull error
+	// this makes sure that warn message is showed only once
+	showLog := true
 	// sleep until the processor frees up.
 	// added to minimize the long polling frequency during this case
 	for errorCode == messageHandler.ProcessorBufferFull {
-		log.Tracef("skipping document %v due to the error: %v", docState.DocumentInformation.MessageID, errorCode)
+		if showLog {
+			log.Warnf("skipping document %v due to the error: %v. Will wake up every 10 seconds till the buffer is free", docState.DocumentInformation.MessageID, errorCode)
+			showLog = false
+		} else {
+			log.Tracef("skipping document %v due to the error: %v", docState.DocumentInformation.MessageID, errorCode)
+		}
 		time.Sleep(10 * time.Second)
 		errorCode = mds.messageHandler.Submit(docState)
 	}
 
 	// we skip for the following error codes
 	if _, ok := mds.ackSkipCodes[errorCode]; ok {
-		log.Infof("skipped document %v due to the error: %v", docState.DocumentInformation.MessageID, errorCode)
+		log.Warnf("skipped document %v due to the error: %v", docState.DocumentInformation.MessageID, errorCode)
 		return
 	}
 	log.Debugf("Pushed document type %v to channel for processing", docState.DocumentType)

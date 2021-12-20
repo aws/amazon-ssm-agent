@@ -17,7 +17,7 @@ package tests
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/aws/amazon-ssm-agent/core/app/runtimeconfiginit"
+	"net/http"
 	"os"
 	"path"
 	"path/filepath"
@@ -34,6 +34,7 @@ import (
 	logger "github.com/aws/amazon-ssm-agent/agent/log/ssmlog"
 	messageContracts "github.com/aws/amazon-ssm-agent/agent/runcommand/contracts"
 	"github.com/aws/amazon-ssm-agent/common/identity"
+	"github.com/aws/amazon-ssm-agent/core/app/runtimeconfiginit"
 	"github.com/aws/amazon-ssm-agent/internal/tests/testdata"
 	"github.com/aws/amazon-ssm-agent/internal/tests/testutils"
 	"github.com/aws/aws-sdk-go/aws/request"
@@ -85,10 +86,9 @@ func (suite *CrashWorkerTestSuite) SetupTest() {
 
 	suite.mdsSdkMock = mdsSdkMock
 
-	// The actual runcommand core module with mocked MDS service injected
-	runcommandService := testutils.NewRuncommandService(suite.context, mdsService)
+	messageServiceModule := testutils.NewMessageService(suite.context, mdsService)
 	var modules []contracts.ICoreModule
-	modules = append(modules, runcommandService)
+	modules = append(modules, messageServiceModule)
 
 	// Create core manager that accepts runcommand core module
 	// For this test we don't need to inject all the modules
@@ -141,7 +141,7 @@ func cleanUpCrashWorkerTest(suite *CrashWorkerTestSuite) {
 func (suite *CrashWorkerTestSuite) TestDocumentWorkerCrash() {
 	//send MDS message that's expected to crash document worker
 	var idOfCrashMessage string
-	suite.mdsSdkMock.On("GetMessagesRequest", mock.AnythingOfType("*ssmmds.GetMessagesInput")).Return(&request.Request{}, func(input *ssmmds.GetMessagesInput) *ssmmds.GetMessagesOutput {
+	suite.mdsSdkMock.On("GetMessagesRequest", mock.AnythingOfType("*ssmmds.GetMessagesInput")).Return(&request.Request{HTTPRequest: &http.Request{}}, func(input *ssmmds.GetMessagesInput) *ssmmds.GetMessagesOutput {
 		messageOutput, _ := testutils.GenerateMessages(suite.context, testdata.CrashWorkerMDSMessage)
 		idOfCrashMessage = *messageOutput.Messages[0].MessageId
 		return messageOutput
@@ -149,13 +149,13 @@ func (suite *CrashWorkerTestSuite) TestDocumentWorkerCrash() {
 
 	//send MDS message that's expected to succeed
 	var idOfGoodMessage string
-	suite.mdsSdkMock.On("GetMessagesRequest", mock.AnythingOfType("*ssmmds.GetMessagesInput")).Return(&request.Request{}, func(input *ssmmds.GetMessagesInput) *ssmmds.GetMessagesOutput {
+	suite.mdsSdkMock.On("GetMessagesRequest", mock.AnythingOfType("*ssmmds.GetMessagesInput")).Return(&request.Request{HTTPRequest: &http.Request{}}, func(input *ssmmds.GetMessagesInput) *ssmmds.GetMessagesOutput {
 		messageOutput, _ := testutils.GenerateMessages(suite.context, testdata.EchoMDSMessage)
 		idOfGoodMessage = *messageOutput.Messages[0].MessageId
 		return messageOutput
 	}, nil).Once()
 
-	suite.mdsSdkMock.On("GetMessagesRequest", mock.AnythingOfType("*ssmmds.GetMessagesInput")).Return(&request.Request{}, func(input *ssmmds.GetMessagesInput) *ssmmds.GetMessagesOutput {
+	suite.mdsSdkMock.On("GetMessagesRequest", mock.AnythingOfType("*ssmmds.GetMessagesInput")).Return(&request.Request{HTTPRequest: &http.Request{}}, func(input *ssmmds.GetMessagesInput) *ssmmds.GetMessagesOutput {
 		emptyMessage, _ := testutils.GenerateEmptyMessage(suite.context)
 		return emptyMessage
 	}, nil)
@@ -166,7 +166,7 @@ func (suite *CrashWorkerTestSuite) TestDocumentWorkerCrash() {
 
 	// a channel to block test execution untill the agent is done processing the required number of messages
 	c := make(chan int)
-	suite.mdsSdkMock.On("SendReplyRequest", mock.AnythingOfType("*ssmmds.SendReplyInput")).Return(&request.Request{}, func(input *ssmmds.SendReplyInput) *ssmmds.SendReplyOutput {
+	suite.mdsSdkMock.On("SendReplyRequest", mock.AnythingOfType("*ssmmds.SendReplyInput")).Return(&request.Request{HTTPRequest: &http.Request{}}, func(input *ssmmds.SendReplyInput) *ssmmds.SendReplyOutput {
 		messageId := *input.MessageId
 		payload := input.Payload
 		var sendReplyPayload messageContracts.SendReplyPayload

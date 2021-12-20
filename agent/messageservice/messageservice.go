@@ -76,18 +76,29 @@ func NewService(context context.T) contracts.ICoreModule {
 		mgsRef, err := mgsinteractor.New(messageContext, messageService.messageHandler)
 		if err == nil {
 			messageService.interactors = append(messageService.interactors, mgsRef)
-
 		}
 	}
 	if !messageContext.AppConfig().Agent.ContainerMode {
 		log.Info("Appending MDSInteractor to MessageService interactors")
-		mdsRef, err := mdsinteractor.New(messageContext, messageService.messageHandler)
+		mdsRef, err := mdsinteractor.New(messageContext, messageService.messageHandler, nil)
 		if err == nil {
 			messageService.interactors = append(messageService.interactors, mdsRef)
 		}
 	}
 
 	return messageService
+}
+
+// SetInteractor resets the interactor value
+// TODO remove once we start doing stress tests using service mock framework
+func (msgSvc *MessageService) SetInteractor(iInteractor []interactor.IInteractor) {
+	msgSvc.interactors = iInteractor
+}
+
+// GetMessageHandler returns the message handler object reference
+// TODO remove once we start doing stress tests using service mock framework
+func (msgSvc *MessageService) GetMessageHandler() messagehandler.IMessageHandler {
+	return msgSvc.messageHandler
 }
 
 // ICoreModule implementation
@@ -160,11 +171,11 @@ func (msgSvc *MessageService) initializeProcessor(interactorRef interactor.IInte
 	var wg sync.WaitGroup
 	for _, workerName := range supportedWorkers {
 		wg.Add(1)
-		log.Infof("initialize processor started for worker %v belonging to interactor %v", workerName, interactorRef.GetName())
+		log.Infof("processor initialization started for worker %v belonging to %v", workerName, interactorRef.GetName())
 		go func(worker utils.WorkerName) {
 			defer func() {
 				wg.Done()
-				log.Infof("initialize processor completed for worker %v belonging to interactor %v", workerName, interactorRef.GetName())
+				log.Infof("processor initialization completed for worker %v belonging to %v", worker, interactorRef.GetName())
 				if msg := recover(); msg != nil {
 					log.Errorf("%v processor initialization panicked: %v", worker, msg)
 					log.Errorf("stacktrace:\n%s", debug.Stack())

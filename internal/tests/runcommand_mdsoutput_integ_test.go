@@ -17,7 +17,7 @@ package tests
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/aws/amazon-ssm-agent/core/app/runtimeconfiginit"
+	"net/http"
 	"os"
 	"runtime"
 	"runtime/debug"
@@ -34,6 +34,7 @@ import (
 	logger "github.com/aws/amazon-ssm-agent/agent/log/ssmlog"
 	messageContracts "github.com/aws/amazon-ssm-agent/agent/runcommand/contracts"
 	"github.com/aws/amazon-ssm-agent/common/identity"
+	"github.com/aws/amazon-ssm-agent/core/app/runtimeconfiginit"
 	"github.com/aws/amazon-ssm-agent/internal/tests/testdata"
 	"github.com/aws/amazon-ssm-agent/internal/tests/testutils"
 	"github.com/aws/aws-sdk-go/aws/request"
@@ -88,10 +89,9 @@ func (suite *RunCommandOutputTestSuite) SetupTest() {
 	mdsService := testutils.NewMdsService(suite.context, mdsSdkMock, sendMdsSdkRequest)
 	suite.mdsSdkMock = mdsSdkMock
 
-	// The actual runcommand core module with mocked MDS service injected
-	runcommandService := testutils.NewRuncommandService(suite.context, mdsService)
+	messageServiceModule := testutils.NewMessageService(suite.context, mdsService)
 	var modules []contracts.ICoreModule
-	modules = append(modules, runcommandService)
+	modules = append(modules, messageServiceModule)
 
 	// Create core manager that accepts runcommand core module
 	var cpm *coremanager.CoreManager
@@ -130,18 +130,18 @@ func verifyRunCommandOutput(suite *RunCommandOutputTestSuite,
 	code int,
 	expectedResultStatus contracts.ResultStatus,
 	wrongResultStatus contracts.ResultStatus) {
-	suite.mdsSdkMock.On("GetMessagesRequest", mock.AnythingOfType("*ssmmds.GetMessagesInput")).Return(&request.Request{}, func(input *ssmmds.GetMessagesInput) *ssmmds.GetMessagesOutput {
+	suite.mdsSdkMock.On("GetMessagesRequest", mock.AnythingOfType("*ssmmds.GetMessagesInput")).Return(&request.Request{HTTPRequest: &http.Request{}}, func(input *ssmmds.GetMessagesInput) *ssmmds.GetMessagesOutput {
 		messageOutput, _ := testutils.GenerateMessages(suite.context, docContent)
 		return messageOutput
 	}, nil).Once()
 
-	suite.mdsSdkMock.On("GetMessagesRequest", mock.AnythingOfType("*ssmmds.GetMessagesInput")).Return(&request.Request{}, func(input *ssmmds.GetMessagesInput) *ssmmds.GetMessagesOutput {
+	suite.mdsSdkMock.On("GetMessagesRequest", mock.AnythingOfType("*ssmmds.GetMessagesInput")).Return(&request.Request{HTTPRequest: &http.Request{}}, func(input *ssmmds.GetMessagesInput) *ssmmds.GetMessagesOutput {
 		emptyMessage, _ := testutils.GenerateEmptyMessage(suite.context)
 		return emptyMessage
 	}, nil)
 
 	c := make(chan int)
-	suite.mdsSdkMock.On("SendReplyRequest", mock.AnythingOfType("*ssmmds.SendReplyInput")).Return(&request.Request{}, func(input *ssmmds.SendReplyInput) *ssmmds.SendReplyOutput {
+	suite.mdsSdkMock.On("SendReplyRequest", mock.AnythingOfType("*ssmmds.SendReplyInput")).Return(&request.Request{HTTPRequest: &http.Request{}}, func(input *ssmmds.SendReplyInput) *ssmmds.SendReplyOutput {
 		// unmarshal the reply sent back to MDS, verify plugin output
 		payload := input.Payload
 		var sendReplyPayload messageContracts.SendReplyPayload

@@ -17,7 +17,7 @@ package tests
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/aws/amazon-ssm-agent/core/app/runtimeconfiginit"
+	"net/http"
 	"os"
 	"runtime/debug"
 	"testing"
@@ -31,6 +31,7 @@ import (
 	logger "github.com/aws/amazon-ssm-agent/agent/log/ssmlog"
 	messageContracts "github.com/aws/amazon-ssm-agent/agent/runcommand/contracts"
 	"github.com/aws/amazon-ssm-agent/common/identity"
+	"github.com/aws/amazon-ssm-agent/core/app/runtimeconfiginit"
 	"github.com/aws/amazon-ssm-agent/internal/tests/testdata"
 	"github.com/aws/amazon-ssm-agent/internal/tests/testutils"
 	"github.com/aws/aws-sdk-go/aws/request"
@@ -85,10 +86,9 @@ func (suite *AgentStressTestSuite) SetupTest() {
 
 	suite.mdsSdkMock = mdsSdkMock
 
-	// The actual runcommand core module with mocked MDS service injected
-	runcommandService := testutils.NewRuncommandService(suite.context, mdsService)
+	messageServiceModule := testutils.NewMessageService(suite.context, mdsService)
 	var modules []contracts.ICoreModule
-	modules = append(modules, runcommandService)
+	modules = append(modules, messageServiceModule)
 
 	// Create core manager that accepts runcommand core module
 	// For this test we don't need to inject all the modules
@@ -111,12 +111,12 @@ func (suite *AgentStressTestSuite) TestCoreAgent() {
 	// Mock MDs service so it returns only the desired number of messages, it'll return empty messages after that.
 	// That's because the agent is a loop and it keeps polling messages
 
-	suite.mdsSdkMock.On("GetMessagesRequest", mock.AnythingOfType("*ssmmds.GetMessagesInput")).Return(&request.Request{}, func(input *ssmmds.GetMessagesInput) *ssmmds.GetMessagesOutput {
+	suite.mdsSdkMock.On("GetMessagesRequest", mock.AnythingOfType("*ssmmds.GetMessagesInput")).Return(&request.Request{HTTPRequest: &http.Request{}}, func(input *ssmmds.GetMessagesInput) *ssmmds.GetMessagesOutput {
 		messageOutput, _ := testutils.GenerateMessages(suite.context, testdata.EchoMDSMessage)
 		return messageOutput
 	}, nil).Times(numberOfMessages)
 
-	suite.mdsSdkMock.On("GetMessagesRequest", mock.AnythingOfType("*ssmmds.GetMessagesInput")).Return(&request.Request{}, func(input *ssmmds.GetMessagesInput) *ssmmds.GetMessagesOutput {
+	suite.mdsSdkMock.On("GetMessagesRequest", mock.AnythingOfType("*ssmmds.GetMessagesInput")).Return(&request.Request{HTTPRequest: &http.Request{}}, func(input *ssmmds.GetMessagesInput) *ssmmds.GetMessagesOutput {
 		emptyMessage, _ := testutils.GenerateEmptyMessage(suite.context)
 		return emptyMessage
 	}, nil)
@@ -136,7 +136,7 @@ func (suite *AgentStressTestSuite) TestCoreAgent() {
 
 	// a channel to block test execution until the agent is done processing the required number of messages
 	c := make(chan int)
-	suite.mdsSdkMock.On("SendReplyRequest", mock.AnythingOfType("*ssmmds.SendReplyInput")).Return(&request.Request{}, func(input *ssmmds.SendReplyInput) *ssmmds.SendReplyOutput {
+	suite.mdsSdkMock.On("SendReplyRequest", mock.AnythingOfType("*ssmmds.SendReplyInput")).Return(&request.Request{HTTPRequest: &http.Request{}}, func(input *ssmmds.SendReplyInput) *ssmmds.SendReplyOutput {
 		payload := input.Payload
 		// unmarshal the reply sent back to MDS, verify that the document has succeed
 		// If one document failed, it'll mark the test as failed. If we got reply for all the required messages

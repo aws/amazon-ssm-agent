@@ -16,10 +16,10 @@ package testutils
 
 import (
 	"crypto/sha256"
-	"github.com/aws/amazon-ssm-agent/agent/context"
 	"net/http"
 	"time"
 
+	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
 	messageContracts "github.com/aws/amazon-ssm-agent/agent/runcommand/contracts"
 	mdsService "github.com/aws/amazon-ssm-agent/agent/runcommand/mds"
@@ -35,7 +35,7 @@ import (
 
 func NewMdsSdkMock() *mdssdkmock.SSMMDSAPI {
 	sdkMock := new(mdssdkmock.SSMMDSAPI)
-	sdkMock.On("AcknowledgeMessageRequest", mock.AnythingOfType("*ssmmds.AcknowledgeMessageInput")).Return(&request.Request{}, &ssmmds.AcknowledgeMessageOutput{})
+	sdkMock.On("AcknowledgeMessageRequest", mock.AnythingOfType("*ssmmds.AcknowledgeMessageInput")).Return(&request.Request{HTTPRequest: &http.Request{}}, &ssmmds.AcknowledgeMessageOutput{})
 	return sdkMock
 }
 
