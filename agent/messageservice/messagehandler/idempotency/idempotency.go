@@ -38,7 +38,7 @@ const (
 
 var (
 	// persistence timeout
-	persistenceTimeoutMinutes = 10
+	persistenceTimeoutMinutes = 30
 
 	getDirectoryUnsortedOlderThan = fileutil.GetDirectoryNamesUnsortedOlderThan
 	deleteDirectory               = fileutil.DeleteDirectory
@@ -106,7 +106,7 @@ func IsDocumentAlreadyReceived(idemCtx context.T, message *contracts.DocumentSta
 	commandDirPath := path.Join(directoryPath, string(message.DocumentType), commandID)
 
 	if _, err := stat(commandDirPath); isNotExist(err) {
-		log.Infof("command not found in the idempotency directory %v", commandID)
+		log.Debugf("command not found in the idempotency directory %v", commandID)
 		return false
 	}
 	log.Infof("command found in the idempotency directory, skipping the document %v", commandID)

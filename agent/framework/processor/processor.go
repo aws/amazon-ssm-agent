@@ -153,7 +153,8 @@ func NewWorkerProcessorSpec(ctx context.T, workerLimit int, assignedDocType cont
 // TODO worker pool should be triggered in the Start() function
 //supported document types indicate the domain of the documents the Processor with run upon. There'll be race-conditions if there're multiple Processors in a certain domain.
 func NewEngineProcessor(ctx context.T, startWorker *workerProcessorSpec, cancelWorker *workerProcessorSpec) *EngineProcessor {
-	log := ctx.Log()
+	engineProcessorCtx := ctx.With("[EngineProcessor]")
+	log := engineProcessorCtx.Log()
 	// sendCommand and cancelCommand will be processed by separate worker pools,
 	// so we can define the number of workers per each
 	cancelWaitDuration := 10000 * time.Millisecond
@@ -163,9 +164,9 @@ func NewEngineProcessor(ctx context.T, startWorker *workerProcessorSpec, cancelW
 		return outofproc.NewOutOfProcExecuter(ctx)
 	}
 
-	documentMgr := docmanager.NewDocumentFileMgr(ctx, appconfig.DefaultDataStorePath, appconfig.DefaultDocumentRootDirName, appconfig.DefaultLocationOfState)
+	documentMgr := docmanager.NewDocumentFileMgr(engineProcessorCtx, appconfig.DefaultDataStorePath, appconfig.DefaultDocumentRootDirName, appconfig.DefaultLocationOfState)
 	engineProcessor := &EngineProcessor{
-		context:                     ctx.With("[EngineProcessor]"),
+		context:                     engineProcessorCtx,
 		executerCreator:             executerCreator,
 		resChan:                     resChan,
 		documentMgr:                 documentMgr,
@@ -276,51 +277,35 @@ func (p *EngineProcessor) decrementCommandBuffer(doc *contracts.DocumentState, s
 
 //Submit submits to the pool a document in form of docState object, results will be streamed back from the channel returned by Start()
 func (p *EngineProcessor) Submit(docState contracts.DocumentState) (errorCode ErrorCode) {
+	return p.submit(&docState, false)
+}
+
+// submit will send job to the sendCommandPool
+func (p *EngineProcessor) submit(docState *contracts.DocumentState, isInProgressDocument bool) (errorCode ErrorCode) {
 	log := p.context.Log()
-	jobID := p.getJobId(&docState)
-	log.Infof("document %v submission started", jobID)
-	defer log.Infof("document %v submission ended", jobID)
+	jobID := p.getJobId(docState)
 	// checks whether the document submission allowed in send command pool
 	// duplicate command check also happens here
 	// when buffer limit is zero, we return success("") always which means the pool submit will be blocking if it is full already
-	errorCode = p.checkProcessorSubmissionAllowed(&docState)
+	errorCode = p.checkProcessorSubmissionAllowed(docState)
 	if errorCode != "" {
 		return errorCode
 	}
-
+	log.Infof("document %v submission started", jobID)
+	defer log.Infof("document %v submission ended", jobID)
 	defer func() {
 		if r := recover(); r != nil {
 			errorCode = SubmissionPanic
-			p.cleanUpDocSubmissionOnError(&docState) // call this function only after acquiring token successfully
+			p.cleanUpDocSubmissionOnError(docState) // call this function only after acquiring token successfully
 			log.Errorf("document %v submission panicked", jobID)
 			log.Errorf("stacktrace:\n%s", debug.Stack())
 		}
 	}()
-
-	p.documentMgr.PersistDocumentState(docState.DocumentInformation.DocumentID, appconfig.DefaultLocationOfPending, docState)
-	err := p.submit(&docState)
-	if err != nil {
-		// currently, we have only Duplicate command error returned by the job pool
-		// * When buffer is zero, we don't have issues as we do not acquire/release token in pool
-		// * When buffer is > 0, we do acquire/release the token. In this case, the checkProcessorSubmissionAllowed would have been called at the beginning.
-		//   Listing all possible combinations of states in Job pool for a document to discuss Duplicate command error:
-		//   1) When job is in the job queue buffer and not yet processed - This case is not possible as we do not receive commands already in "job queue buffer".
-		//   2) When job is released from job queue buffer and started processing - This case is also not possible as we do not receive commands already in "job store".
-		p.cleanUpDocSubmissionOnError(&docState)
-		log.Error("Document Submission failed: ", err)
-		//move the fail-to-submit document to corrupt folder
-		p.documentMgr.MoveDocumentState(docState.DocumentInformation.DocumentID, appconfig.DefaultLocationOfPending, appconfig.DefaultLocationOfCorrupt)
-		return "" // considered submission successful even though it failed
+	if !isInProgressDocument {
+		p.documentMgr.PersistDocumentState(docState.DocumentInformation.DocumentID, appconfig.DefaultLocationOfPending, *docState)
 	}
-	return "" // considered submission successful
-}
-
-// submit will send job to the sendCommandPool
-func (p *EngineProcessor) submit(docState *contracts.DocumentState) error {
-	log := p.context.Log()
 	//TODO this is a hack, in future jobID should be managed by Processing engine itself, instead of inferring from job's internal field
-	jobID := p.getJobId(docState)
-	return p.sendCommandPool.Submit(log, jobID, func(cancelFlag task.CancelFlag) {
+	err := p.sendCommandPool.Submit(log, jobID, func(cancelFlag task.CancelFlag) {
 		processCommand(
 			p.context,
 			p.executerCreator,
@@ -329,6 +314,20 @@ func (p *EngineProcessor) submit(docState *contracts.DocumentState) error {
 			docState,
 			p.documentMgr)
 	})
+	if err != nil {
+		// currently, we have only Duplicate command error returned by the job pool
+		// * When buffer is zero, we don't have issues as we do not acquire/release token in pool
+		// * When buffer is > 0, we do acquire/release the token. In this case, the checkProcessorSubmissionAllowed would have been called at the beginning.
+		//   Listing all possible combinations of states in Job pool for a document to discuss Duplicate command error:
+		//   1) When job is in the job queue buffer and not yet processed - This case is not possible as we do not receive commands already in "job queue buffer".
+		//   2) When job is released from job queue buffer and started processing - This case is also not possible as we do not receive commands already in "job store".
+		p.cleanUpDocSubmissionOnError(docState)
+		log.Error("Document Submission failed: ", err)
+		//move the fail-to-submit document to corrupt folder
+		p.documentMgr.MoveDocumentState(docState.DocumentInformation.DocumentID, appconfig.DefaultLocationOfPending, appconfig.DefaultLocationOfCorrupt)
+		return "" // considered submission successful even though it failed
+	}
+	return "" // considered submission successful
 }
 
 // checkProcessorSubmissionAllowed checks whether the processor submission is allowed or not
@@ -354,8 +353,12 @@ func (p *EngineProcessor) getJobId(docState *contracts.DocumentState) string {
 
 // Cancel pushes the command to CancelThread which is responsible for submitting to cancelCommandPool
 func (p *EngineProcessor) Cancel(docState contracts.DocumentState) (errorCode ErrorCode) {
+	return p.cancel(&docState, false)
+}
+
+func (p *EngineProcessor) cancel(docState *contracts.DocumentState, isInProgressDocument bool) (errorCode ErrorCode) {
 	log := p.context.Log()
-	jobID := p.getJobId(&docState)
+	jobID := p.getJobId(docState)
 
 	log.Infof("document %v cancellation started", jobID)
 	defer log.Infof("document %v cancellation ended", jobID)
@@ -363,7 +366,7 @@ func (p *EngineProcessor) Cancel(docState contracts.DocumentState) (errorCode Er
 	// checks whether the document submission allowed in cancel command pool
 	// duplicate command checks also happens here
 	// when buffer limit is zero, we return success("") which means the channel will be blocking if buffer is zero
-	errorCode = p.checkProcessorSubmissionAllowed(&docState)
+	errorCode = p.checkProcessorSubmissionAllowed(docState)
 	if errorCode != "" {
 		return errorCode
 	}
@@ -371,15 +374,16 @@ func (p *EngineProcessor) Cancel(docState contracts.DocumentState) (errorCode Er
 	defer func() {
 		if r := recover(); r != nil {
 			errorCode = SubmissionPanic
-			p.cleanUpDocSubmissionOnError(&docState) // call this function only after acquiring token successfully
+			p.cleanUpDocSubmissionOnError(docState) // call this function only after acquiring token successfully
 			log.Errorf("document %v submission panicked", jobID)
 			log.Errorf("stacktrace:\n%s", debug.Stack())
 		}
 	}()
-
-	p.documentMgr.PersistDocumentState(docState.DocumentInformation.DocumentID, appconfig.DefaultLocationOfPending, docState)
+	if !isInProgressDocument {
+		p.documentMgr.PersistDocumentState(docState.DocumentInformation.DocumentID, appconfig.DefaultLocationOfPending, *docState)
+	}
 	err := p.cancelCommandPool.Submit(log, jobID, func(cancelFlag task.CancelFlag) {
-		processCancelCommand(p.context, p.sendCommandPool, &docState, p.documentMgr)
+		processCancelCommand(p.context, p.sendCommandPool, docState, p.documentMgr)
 	})
 	if err != nil {
 		// currently, we have only Duplicate command error returned by the job pool
@@ -388,7 +392,7 @@ func (p *EngineProcessor) Cancel(docState contracts.DocumentState) (errorCode Er
 		//   Listing all possible combinations of states in Job pool for a document to discuss Duplicate command error:
 		//   1) When job is in the job queue buffer and not yet processed - This case is not possible as we do not receive commands already in "job queue buffer".
 		//   2) When job is released from job queue buffer and started processing - This case is also not possible as we do not receive commands already in "job store".
-		p.cleanUpDocSubmissionOnError(&docState)
+		p.cleanUpDocSubmissionOnError(docState)
 		log.Error("CancelCommand failed", err)
 	}
 	return ""
@@ -471,7 +475,7 @@ func (p *EngineProcessor) processPendingDocuments(files []os.FileInfo) {
 		docState := p.documentMgr.GetDocumentState(f.Name(), appconfig.DefaultLocationOfPending)
 
 		if p.isSupportedDocumentType(docState.DocumentType) {
-			p.pushPersistedDocToJobPool(docState, appconfig.DefaultLocationOfPending)
+			p.pushPersistedDocToJobPool(docState, appconfig.DefaultLocationOfPending, false)
 		}
 	}
 }
@@ -537,13 +541,13 @@ func (p *EngineProcessor) processInProgressDocuments(skipDocumentIfExpired bool)
 			}
 
 			//Submit the work to Job Pool so that we don't block for processing of new messages
-			p.pushPersistedDocToJobPool(docState, appconfig.DefaultLocationOfCurrent)
+			p.pushPersistedDocToJobPool(docState, appconfig.DefaultLocationOfCurrent, true)
 		}
 	}
 }
 
 // pushPersistedDocToJobPool pushes in-progress and pending documents to job pool during restart
-func (p *EngineProcessor) pushPersistedDocToJobPool(docState contracts.DocumentState, docStateDir string) {
+func (p *EngineProcessor) pushPersistedDocToJobPool(docState contracts.DocumentState, docStateDir string, isInProgress bool) {
 	logger := p.context.Log()
 	// safety check
 	defer func() {
@@ -557,9 +561,9 @@ func (p *EngineProcessor) pushPersistedDocToJobPool(docState contracts.DocumentS
 	for {
 		var processorErrorCode ErrorCode
 		if docState.DocumentType == p.startWorker.assignedDocType {
-			processorErrorCode = p.Submit(docState)
+			processorErrorCode = p.submit(&docState, isInProgress)
 		} else if docState.DocumentType == p.cancelWorker.assignedDocType {
-			processorErrorCode = p.Cancel(docState)
+			processorErrorCode = p.cancel(&docState, isInProgress)
 		}
 		if processorErrorCode == CommandBufferFull { // sleep only for command buffer full
 			logger.Debugf("pausing in-progress submission for a second %v because of error code %v", docState.DocumentInformation.DocumentID, processorErrorCode)

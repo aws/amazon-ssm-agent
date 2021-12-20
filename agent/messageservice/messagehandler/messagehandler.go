@@ -129,7 +129,7 @@ func (mh *MessageHandler) Initialize() (err error) {
 // Submit submits the command to the processor wrapper
 func (mh *MessageHandler) Submit(message *contracts.DocumentState) ErrorCode {
 	log := mh.context.Log()
-	log.Infof("submit incoming message %v", message.DocumentInformation.MessageID)
+	log.Debugf("submit incoming message %v", message.DocumentInformation.MessageID)
 	mhErrorCode := ErrorCode("") // Success
 	// safety panic handler
 	defer func() {
@@ -159,10 +159,19 @@ func (mh *MessageHandler) InitializeAndRegisterProcessor(proc processorWrapperTy
 	newProc := mh.registerProcessor(proc)
 	// loads all pending and in-progress documents
 	// this is a blocking call until the documents are loaded fully
+	// we intentionally call the same processor twice, to block the MGS agent job incoming messages during pending and in-progress document execution.
 	if err := newProc.Initialize(mh.replyMap); err != nil {
 		return err
 	}
+	mh.registerDocTypeWithProcessor(newProc)
 	return nil
+}
+
+func (mh *MessageHandler) registerDocTypeWithProcessor(proc processorWrapperTypes.IProcessorWrapper) {
+	mh.mhMutex.Lock()
+	defer mh.mhMutex.Unlock()
+	mh.docTypeProcessorFuncMap[proc.GetStartWorker()] = proc
+	mh.docTypeProcessorFuncMap[proc.GetTerminateWorker()] = proc
 }
 
 func (mh *MessageHandler) registerProcessor(proc processorWrapperTypes.IProcessorWrapper) processorWrapperTypes.IProcessorWrapper {
@@ -173,8 +182,6 @@ func (mh *MessageHandler) registerProcessor(proc processorWrapperTypes.IProcesso
 	}
 	// two different maps are used for performance reasons
 	mh.processorsLoaded[proc.GetName()] = proc
-	mh.docTypeProcessorFuncMap[proc.GetStartWorker()] = proc
-	mh.docTypeProcessorFuncMap[proc.GetTerminateWorker()] = proc
 	return proc
 }
 

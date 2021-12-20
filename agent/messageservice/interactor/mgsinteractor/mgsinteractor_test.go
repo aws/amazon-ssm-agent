@@ -16,7 +16,6 @@ package mgsinteractor
 
 import (
 	"encoding/json"
-	"fmt"
 	"testing"
 	"time"
 
@@ -74,13 +73,6 @@ func (suite *MGSInteractorTestSuite) TestInitialize() {
 	}
 	mgsInteractor.Initialize()
 	assert.True(suite.T(), true, "initialize passed")
-}
-
-func (suite *MGSInteractorTestSuite) TestListenIncomingAgentMessageInteractiveShell2() {
-	uui := uuid.NewV4().String()
-	fmt.Println(uui)
-	id, _ := uuid.Parse(uui)
-	fmt.Println(id.String())
 }
 
 func (suite *MGSInteractorTestSuite) TestListenTaskAcknowledgeMsgDoesExist() {

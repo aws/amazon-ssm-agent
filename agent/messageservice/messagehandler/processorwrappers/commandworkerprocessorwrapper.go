@@ -36,11 +36,10 @@ import (
 func NewCommandWorkerProcessorWrapper(context context.T, worker *utils.ProcessorWorkerConfig) IProcessorWrapper {
 	processorContext := context.With("[" + string(worker.ProcessorName) + "Wrapper" + "]")
 
-	startWorker := processor.NewWorkerProcessorSpec(processorContext, worker.StartWorkerLimit, worker.StartWorkerDocType, worker.StartWorkerBufferLimit)
-	terminateWorker := processor.NewWorkerProcessorSpec(processorContext, worker.CancelWorkerLimit, worker.CancelWorkerDocType, worker.CancelWorkerBufferLimit)
-
+	startWorker := processor.NewWorkerProcessorSpec(context, worker.StartWorkerLimit, worker.StartWorkerDocType, worker.StartWorkerBufferLimit)
+	terminateWorker := processor.NewWorkerProcessorSpec(context, worker.CancelWorkerLimit, worker.CancelWorkerDocType, worker.CancelWorkerBufferLimit)
 	commandProcessor := processor.NewEngineProcessor(
-		processorContext,
+		context,
 		startWorker,
 		terminateWorker)
 

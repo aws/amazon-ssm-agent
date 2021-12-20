@@ -171,7 +171,6 @@ func init() {
 		WindowsServer 2003  -> C:\Documents and Settings\All Users\Application Data
 		WindowsServer 2008+ -> C:\ProgramData
 	*/
-
 	programData := os.Getenv("ProgramData")
 	if programData == "" {
 		programData = filepath.Join(os.Getenv("AllUsersProfile"), "Application Data")

@@ -416,6 +416,12 @@ func (mds *MDSInteractor) pollOnce() {
 // loop sends replies to MDS
 func (mds *MDSInteractor) sendReplyLoop() {
 	log := mds.context.Log()
+	defer func() {
+		if msg := recover(); msg != nil {
+			log.Errorf("sendFailedReplies panicked: %v", msg)
+			log.Errorf("stacktrace:\n%s", debug.Stack())
+		}
+	}()
 	if err := mds.checkStopPolicy(); err != nil {
 		return
 	}

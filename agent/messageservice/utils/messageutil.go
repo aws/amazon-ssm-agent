@@ -186,9 +186,9 @@ func ParseSendCommandMessage(context context.T, msg model.InstanceMessage, messa
 	var parsedMessage messageContracts.SendCommandPayload
 	err := json.Unmarshal([]byte(msg.Payload), &parsedMessage)
 	if err != nil {
-		errorMsg := "Encountered error while parsing input - internal error"
-		log.Errorf(errorMsg)
-		return nil, fmt.Errorf("%v", errorMsg)
+		errorMsg := fmt.Errorf("encountered error while parsing input - internal error %v", err)
+		log.Error(errorMsg)
+		return nil, errorMsg
 	}
 
 	// adapt plugin configuration format from MDS to plugin expected format
@@ -196,7 +196,7 @@ func ParseSendCommandMessage(context context.T, msg model.InstanceMessage, messa
 
 	cloudWatchConfig, err := generateCloudWatchConfigFromPayload(context, parsedMessage)
 	if err != nil {
-		log.Errorf("Encountered error while generating cloudWatch config from send command payload, err: %s", err)
+		log.Errorf("encountered error while generating cloudWatch config from send command payload, err: %s", err)
 	}
 
 	messageOrchestrationDirectory := filepath.Join(messagesOrchestrationRootDir, commandID)

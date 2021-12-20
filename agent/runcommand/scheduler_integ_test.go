@@ -325,7 +325,7 @@ func TestLoop_Multiple_Parallel_Error(t *testing.T) {
 	job := func() {
 		called++
 	}
-	messagePollJob, _ := scheduler.Every(10).Seconds().NotImmediately().Run(job)
+	messagePollJob, _ := scheduler.Every(7).Seconds().NotImmediately().Run(job)
 
 	wg := &sync.WaitGroup{}
 	proc := RunCommandService{
@@ -338,12 +338,16 @@ func TestLoop_Multiple_Parallel_Error(t *testing.T) {
 	}
 
 	for i := 0; i < multipleRetryCount; i++ {
-		go proc.messagePollLoop()
+		wg.Add(1) // adding additional wait
+		go func() {
+			defer wg.Done()
+			proc.messagePollLoop()
+		}()
 	}
 
 	success := verifyWaitGroup(wg, 5*time.Second)
 	assert.True(t, success, "Message loop failed to return within the expected time")
 
-	time.Sleep(6 * time.Second) // increasing time for test failures, Suspecting a small delay in scheduling
+	time.Sleep(5 * time.Second)
 	assert.Equal(t, 1, called)
 }

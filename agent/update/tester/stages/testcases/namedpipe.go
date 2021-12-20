@@ -181,7 +181,7 @@ func (l *NamedPipeTestCase) dialPipe() {
 				exit = true
 			}
 			if msg, err = l.dialChannel.Recv(); err != nil {
-				log.Errorf("error while receiving message through dial channel %v", err)
+				log.Warnf("error while receiving message through dial channel %v", err)
 				return
 			}
 			if err = json.Unmarshal(msg, &request); err != nil {

@@ -28,11 +28,11 @@ import (
 // NewSessionWorkerProcessorWrapper initiates new processor wrapper which supports session workers
 func NewSessionWorkerProcessorWrapper(context context.T, worker *utils.ProcessorWorkerConfig) IProcessorWrapper {
 	processorContext := context.With("[" + string(worker.ProcessorName) + "Wrapper" + "]")
-	startSessionWorker := processor.NewWorkerProcessorSpec(processorContext, worker.StartWorkerLimit, worker.StartWorkerDocType, worker.StartWorkerBufferLimit)
-	terminateSessionWorker := processor.NewWorkerProcessorSpec(processorContext, worker.CancelWorkerLimit, worker.CancelWorkerDocType, worker.CancelWorkerBufferLimit)
 
+	startSessionWorker := processor.NewWorkerProcessorSpec(context, worker.StartWorkerLimit, worker.StartWorkerDocType, worker.StartWorkerBufferLimit)
+	terminateSessionWorker := processor.NewWorkerProcessorSpec(context, worker.CancelWorkerLimit, worker.CancelWorkerDocType, worker.CancelWorkerBufferLimit)
 	sessionProcessor := processor.NewEngineProcessor(
-		processorContext,
+		context,
 		startSessionWorker,
 		terminateSessionWorker)
 

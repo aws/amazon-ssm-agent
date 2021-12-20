@@ -307,7 +307,7 @@ func (mgs *MGSInteractor) listenIncomingAgentMessages() {
 	}()
 
 	for agentMessage := range mgs.incomingAgentMessageChan {
-		log.Infof("Processing AgentMessage: MessageType - %s,  Id - %s", agentMessage.MessageType, agentMessage.MessageId)
+		log.Infof("Processing AgentMessage: MessageType - %s, Id - %s", agentMessage.MessageType, agentMessage.MessageId)
 		switch agentMessage.MessageType {
 		case mgsContracts.AgentJobMessage:
 			mgs.processAgentJobMessage(agentMessage)
