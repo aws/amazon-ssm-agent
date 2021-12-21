@@ -55,11 +55,8 @@ const (
 	// PollFrequencyMinutes represents poll frequency for managing lifecycle of long running plugins
 	PollFrequencyMinutes = 15
 
-	//HardStopTimeout is the time before the manager will be shutdown during a hardstop = 4 seconds
-	HardStopTimeout = 4 * time.Second
-
-	//SoftStopTimeout is the time before the manager will be shutdown during a softstop = 20 seconds
-	SoftStopTimeout = 20 * time.Second
+	// StopTimeout is the time before the manager will be shutdown during a stop = 24 seconds
+	StopTimeout = 24 * time.Second
 )
 
 // T manages long running plugins - get information of long running plugins and starts, stops & configures long running plugins
@@ -255,15 +252,7 @@ func (m *Manager) ModuleExecute() (err error) {
 }
 
 // RequestStop handles the termination of the long running plugin manager
-func (m *Manager) ModuleRequestStop(stopType contracts.StopType) (err error) {
-	var waitTimeout time.Duration
-
-	if stopType == contracts.StopTypeSoftStop {
-		waitTimeout = SoftStopTimeout
-	} else {
-		waitTimeout = HardStopTimeout
-	}
-
+func (m *Manager) ModuleStop() (err error) {
 	var wg sync.WaitGroup
 
 	// stop lifecycle management job that monitors execution of all long running plugins
@@ -282,7 +271,7 @@ func (m *Manager) ModuleRequestStop(stopType contracts.StopType) (err error) {
 			}
 		}()
 		defer wg.Done()
-		m.startPlugin.ShutdownAndWait(waitTimeout)
+		m.startPlugin.ShutdownAndWait(StopTimeout)
 	}()
 
 	// shutdown the cancel command pool in a separate go routine
@@ -295,11 +284,11 @@ func (m *Manager) ModuleRequestStop(stopType contracts.StopType) (err error) {
 			}
 		}()
 		defer wg.Done()
-		m.stopPlugin.ShutdownAndWait(waitTimeout)
+		m.stopPlugin.ShutdownAndWait(StopTimeout)
 	}()
 
 	if len(m.runningPlugins) > 0 {
-		m.stopLongRunningPlugins(stopType)
+		m.stopLongRunningPlugins()
 	}
 
 	// wait for everything to shutdown
@@ -308,35 +297,34 @@ func (m *Manager) ModuleRequestStop(stopType contracts.StopType) (err error) {
 }
 
 // stopLongRunningPlugins requests the long running plugins to stop
-func (m *Manager) stopLongRunningPlugins(stopType contracts.StopType) {
+func (m *Manager) stopLongRunningPlugins() {
 	log := m.context.Log()
-	log.Infof("long running manager stop requested. Stop type: %v", stopType)
+	log.Infof("long running manager stop requested")
 
 	var wg sync.WaitGroup
-	i := 0
 	for pluginName := range m.runningPlugins {
-		go func(wgc *sync.WaitGroup, i int) {
+		wg.Add(1)
+
+		go func(innerPluginName string) {
+			defer wg.Done()
 			defer func() {
 				if r := recover(); r != nil {
-					log.Errorf("Stop long running plugins panic: %v", r)
+					log.Errorf("Stop long running plugin %s panic: %v", innerPluginName, r)
 					log.Errorf("Stacktrace:\n%s", debug.Stack())
 				}
 			}()
-			if stopType == contracts.StopTypeSoftStop {
-				wgc.Add(1)
-				defer wgc.Done()
-			}
 
-			plugin := m.registeredPlugins[pluginName]
+			plugin := m.registeredPlugins[innerPluginName]
 			if err := plugin.Handler.Stop(task.NewChanneledCancelFlag()); err != nil {
 				log.Errorf("Plugin (%v) failed to stop with error: %v",
-					pluginName,
+					innerPluginName,
 					err)
 			}
 
-		}(&wg, i)
-		i++
+		}(pluginName)
 	}
+
+	wg.Wait()
 }
 
 // EnsurePluginRegistered adds a long-running plugin if it is not already in the registry

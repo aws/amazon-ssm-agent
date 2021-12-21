@@ -87,6 +87,6 @@ func (_m *IProcessorWrapper) PushToProcessor(_a0 contracts.DocumentState) proces
 }
 
 // Stop provides a mock function with given fields: stopType
-func (_m *IProcessorWrapper) Stop(stopType contracts.StopType) {
-	_m.Called(stopType)
+func (_m *IProcessorWrapper) Stop() {
+	_m.Called()
 }

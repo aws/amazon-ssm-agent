@@ -95,13 +95,13 @@ func TestEngineProcessor_Stop(t *testing.T) {
 	}
 	sendCommandPoolMock.On("ShutdownAndWait", mock.AnythingOfType("time.Duration")).Return(true)
 	cancelCommandPoolMock.On("ShutdownAndWait", mock.AnythingOfType("time.Duration")).Return(true)
-	processor.Stop(contracts.StopTypeSoftStop)
+	processor.Stop()
 	sendCommandPoolMock.AssertExpectations(t)
 	cancelCommandPoolMock.AssertExpectations(t)
 	// multiple stop
 	sendCommandPoolMock = new(task.MockedPool)
 	cancelCommandPoolMock = new(task.MockedPool)
-	processor.Stop(contracts.StopTypeHardStop)
+	processor.Stop()
 	sendCommandPoolMock.AssertNotCalled(t, "ShutdownAndWait", mock.AnythingOfType("time.Duration"))
 	cancelCommandPoolMock.AssertNotCalled(t, "ShutdownAndWait", mock.AnythingOfType("time.Duration"))
 }

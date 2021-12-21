@@ -1,11 +1,12 @@
 package utils
 
 import (
+	"testing"
+
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/stretchr/testify/assert"
-	"testing"
 )
 
 func TestLoadProcessorWorkerConfig(t *testing.T) {

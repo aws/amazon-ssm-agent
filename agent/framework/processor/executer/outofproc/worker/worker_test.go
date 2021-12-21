@@ -14,8 +14,3 @@ func TestParseArgs(t *testing.T) {
 	assert.NoError(t, err)
 	assert.Equal(t, "documentID", channelName)
 }
-
-func TestWorkerInitializeLightWeight(t *testing.T) {
-	_, _, err := initialize([]string{"test_binary", "documentID"})
-	assert.Error(t, err)
-}

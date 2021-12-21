@@ -23,7 +23,7 @@ import (
 )
 
 // NewCoreManager creates coremanager with mock mds service injected
-func NewCoreManager(context context.T, coremodules *[]contracts.ICoreModule) (cpm *coremanager.CoreManager, err error) {
+func NewCoreManager(context context.T, coremodules *[]contracts.ICoreModuleWrapper) (cpm *coremanager.CoreManager, err error) {
 	cloudwatchPublisher := cloudwatchlogspublisher.NewCloudWatchPublisher(context)
 	reboot := &rebooter.SSMRebooter{}
 	cpm, err = coremanager.NewCoreManager(context, *coremodules, cloudwatchPublisher, reboot)

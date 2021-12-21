@@ -20,8 +20,8 @@ func (m *MockedProcessor) InitialProcessing(skipDocumentIfExpired bool) (err err
 	return args.Error(0)
 }
 
-func (m *MockedProcessor) Stop(stopType contracts.StopType) {
-	m.Called(stopType)
+func (m *MockedProcessor) Stop() {
+	m.Called()
 	return
 }
 

@@ -16,9 +16,10 @@
 package processorwrappers
 
 import (
-	"github.com/aws/amazon-ssm-agent/agent/framework/processor"
 	"testing"
 	"time"
+
+	"github.com/aws/amazon-ssm-agent/agent/framework/processor"
 
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"

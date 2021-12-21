@@ -16,6 +16,7 @@ package tests
 import (
 	"errors"
 	"fmt"
+	"github.com/aws/amazon-ssm-agent/agent/framework/coremodules"
 	"github.com/aws/amazon-ssm-agent/core/app/runtimeconfiginit"
 	"os"
 	"runtime/debug"
@@ -89,8 +90,8 @@ func (suite *AgentHealthIntegrationTestSuite) SetupTest() {
 	hs := hibernation.NewHibernateMode(healthcheck, suite.context)
 	assert.NotNil(suite.T(), hs)
 
-	var modules []contracts.ICoreModule
-	modules = append(modules, healthcheck)
+	var modules []contracts.ICoreModuleWrapper
+	modules = append(modules, coremodules.NewCoreModuleWrapper(log, healthcheck))
 
 	// Only inject the healthcheck module into coremanager
 	var cpm *coremanager.CoreManager

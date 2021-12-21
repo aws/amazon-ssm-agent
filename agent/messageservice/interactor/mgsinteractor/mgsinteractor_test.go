@@ -130,7 +130,7 @@ func (suite *MGSInteractorTestSuite) TestListenTaskAcknowledgeMsgDoesNotExist() 
 	assert.False(suite.T(), outputVal, "should not receive ack")
 }
 
-func (suite *MGSInteractorTestSuite) TestModuleRequestStopClosingAlreadyClosedChannel() {
+func (suite *MGSInteractorTestSuite) TestModuleStopClosingAlreadyClosedChannel() {
 	mockContext := context.NewMockDefault()
 	messageHandlerMock := &mocks.IMessageHandler{}
 	messageHandlerMock.On("RegisterReply", mock.Anything, mock.Anything)

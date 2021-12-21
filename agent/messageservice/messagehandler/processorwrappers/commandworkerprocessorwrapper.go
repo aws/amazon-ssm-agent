@@ -138,14 +138,14 @@ func (cpw *CommandWorkerProcessorWrapper) PushToProcessor(message contracts.Docu
 }
 
 // Stop stops the processor
-func (cpw *CommandWorkerProcessorWrapper) Stop(stopType contracts.StopType) {
+func (cpw *CommandWorkerProcessorWrapper) Stop() {
 	log := cpw.context.Log()
 	// takes care of making sure that not jobs are pending in the job queue
 	// this closes the result chan too.
 	// should not expect many replies after this stop
-	cpw.processor.Stop(stopType)
+	cpw.processor.Stop()
 	if cpw.assocProcessor != nil {
-		cpw.assocProcessor.ModuleRequestStop(stopType)
+		cpw.assocProcessor.ModuleStop()
 	}
 	select {
 	case <-cpw.listenReplyEnded:

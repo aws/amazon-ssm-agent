@@ -16,7 +16,6 @@ package gatherers
 
 import (
 	"github.com/aws/amazon-ssm-agent/agent/context"
-	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/inventory/model"
 	"github.com/stretchr/testify/mock"
 )
@@ -47,7 +46,7 @@ func (m *Mock) Run(context context.T, configuration model.Config) ([]model.Item,
 }
 
 // RequestStop mock implementation of namesake
-func (m *Mock) RequestStop(stopType contracts.StopType) error {
-	args := m.Called(stopType)
+func (m *Mock) RequestStop() error {
+	args := m.Called()
 	return args.Error(0)
 }

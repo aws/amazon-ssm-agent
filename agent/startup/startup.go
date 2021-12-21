@@ -19,7 +19,6 @@ import (
 	"runtime/debug"
 
 	"github.com/aws/amazon-ssm-agent/agent/context"
-	"github.com/aws/amazon-ssm-agent/agent/contracts"
 )
 
 const (
@@ -62,6 +61,6 @@ func (p *Processor) ModuleExecute() (err error) {
 }
 
 // RequestStop is not necessarily used since startup task only happens once.
-func (p *Processor) ModuleRequestStop(stopType contracts.StopType) (err error) {
+func (p *Processor) ModuleStop() (err error) {
 	return nil
 }

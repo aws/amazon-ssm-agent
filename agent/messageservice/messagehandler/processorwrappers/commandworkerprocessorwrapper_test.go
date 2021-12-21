@@ -1,6 +1,9 @@
 package processorwrappers
 
 import (
+	"testing"
+	"time"
+
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/framework/processor"
@@ -8,8 +11,6 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/suite"
 	"github.com/twinj/uuid"
-	"testing"
-	"time"
 )
 
 var (

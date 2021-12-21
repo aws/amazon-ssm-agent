@@ -2,12 +2,13 @@ package utils
 
 import (
 	"encoding/json"
+	"testing"
+
 	logger "github.com/aws/amazon-ssm-agent/agent/log"
 	model "github.com/aws/amazon-ssm-agent/agent/runcommand/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/session/contracts"
 	"github.com/stretchr/testify/assert"
 	"github.com/twinj/uuid"
-	"testing"
 )
 
 func TestGenerateAgentJobReplyPayload(t *testing.T) {

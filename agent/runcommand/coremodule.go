@@ -85,11 +85,11 @@ func (s *RunCommandService) ModuleExecute() (err error) {
 	return
 }
 
-func (s *RunCommandService) ModuleRequestStop(stopType contracts.StopType) (err error) {
+func (s *RunCommandService) ModuleStop() (err error) {
 	//first stop sending failed replies to the service and the message poller
 	s.stop()
 	//second stop the message processor
-	s.processor.Stop(stopType)
+	s.processor.Stop()
 	return nil
 }
 

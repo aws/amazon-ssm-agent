@@ -17,6 +17,7 @@ package tests
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/aws/amazon-ssm-agent/agent/framework/coremodules"
 	"net/http"
 	"os"
 	"path"
@@ -87,8 +88,8 @@ func (suite *CrashWorkerTestSuite) SetupTest() {
 	suite.mdsSdkMock = mdsSdkMock
 
 	messageServiceModule := testutils.NewMessageService(suite.context, mdsService)
-	var modules []contracts.ICoreModule
-	modules = append(modules, messageServiceModule)
+	var modules []contracts.ICoreModuleWrapper
+	modules = append(modules, coremodules.NewCoreModuleWrapper(log, messageServiceModule))
 
 	// Create core manager that accepts runcommand core module
 	// For this test we don't need to inject all the modules

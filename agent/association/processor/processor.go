@@ -112,10 +112,10 @@ func (p *Processor) ModuleExecute() {
 	p.InitializeAssociationProcessor()
 	p.SetPollJob(job)
 }
-func (p *Processor) ModuleRequestStop(stopType contracts.StopType) (err error) {
+func (p *Processor) ModuleStop() (err error) {
 	assocScheduler.Stop(p.pollJob)
 	signal.Stop()
-	p.proc.Stop(stopType)
+	p.proc.Stop()
 	return nil
 }
 

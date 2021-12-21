@@ -20,7 +20,6 @@ import (
 	"time"
 
 	"github.com/aws/amazon-ssm-agent/agent/context"
-	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/sdkutil"
 	"github.com/aws/amazon-ssm-agent/agent/ssm"
 	"github.com/aws/amazon-ssm-agent/agent/version"
@@ -30,7 +29,7 @@ import (
 type IHealthCheck interface {
 	ModuleName() string
 	ModuleExecute() (err error)
-	ModuleRequestStop(stopType contracts.StopType) (err error)
+	ModuleStop() (err error)
 	GetAgentState() (a AgentState, err error)
 }
 
@@ -166,8 +165,8 @@ func (h *HealthCheck) ModuleExecute() (err error) {
 	return
 }
 
-// ModuleRequestStop handles the termination of the health check module job
-func (h *HealthCheck) ModuleRequestStop(stopType contracts.StopType) (err error) {
+// ModuleStop handles the termination of the health check module job
+func (h *HealthCheck) ModuleStop() (err error) {
 	if h.healthJob != nil {
 		h.context.Log().Info("stopping update instance health job.")
 		h.healthJob.Quit <- true

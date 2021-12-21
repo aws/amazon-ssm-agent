@@ -28,7 +28,6 @@ import (
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/context"
-	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/inventory/model"
 )
@@ -150,10 +149,9 @@ func (t *T) Run(context context.T, configuration model.Config) (items []model.It
 }
 
 // RequestStop stops the execution of custom gatherer
-func (t *T) RequestStop(stopType contracts.StopType) error {
+func (t *T) RequestStop() error {
 	//TODO: set a stop flag so Run thread would stop when flag is set to true
-	var err error
-	return err
+	return nil
 }
 
 // getItemFromFile Reads one custom inventory file

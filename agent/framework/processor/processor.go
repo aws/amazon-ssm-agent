@@ -76,7 +76,7 @@ type Processor interface {
 	//InitialProcessing processes any initial documents loaded from file directory. This should be run after Start().
 	InitialProcessing(skipDocumentIfExpired bool) error
 	//Stop the processor, save the current state to resume later
-	Stop(stopType contracts.StopType)
+	Stop()
 	//Submit to the pool a document in form of docState object, results will be streamed back from the central channel returned by Start()
 	Submit(docState contracts.DocumentState) ErrorCode
 	//Cancel cancels processing of the given document
@@ -417,18 +417,13 @@ func (p *EngineProcessor) hasProcessorStopCalledAlready() bool {
 }
 
 //Stop set the cancel flags of all the running jobs, which are to be captured by the command worker and shutdown gracefully
-func (p *EngineProcessor) Stop(stopType contracts.StopType) {
+func (p *EngineProcessor) Stop() {
 	if p.hasProcessorStopCalledAlready() {
 		p.context.Log().Info("Processor stop called already")
 		return
 	}
 
-	var waitTimeout time.Duration
-	if stopType == contracts.StopTypeSoftStop {
-		waitTimeout = time.Duration(p.context.AppConfig().Mds.StopTimeoutMillis) * time.Millisecond
-	} else {
-		waitTimeout = hardStopTimeout
-	}
+	waitTimeout := time.Duration(p.context.AppConfig().Mds.StopTimeoutMillis) * time.Millisecond
 
 	var wg sync.WaitGroup
 

@@ -19,7 +19,6 @@ import (
 
 	"github.com/aws/amazon-ssm-agent/agent/agentlogstocloudwatch/cloudwatchlogspublisher"
 	"github.com/aws/amazon-ssm-agent/agent/context"
-	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	moduleMock "github.com/aws/amazon-ssm-agent/agent/contracts/mocks"
 	"github.com/aws/amazon-ssm-agent/agent/framework/coremodules"
 	"github.com/aws/amazon-ssm-agent/agent/log"
@@ -35,7 +34,7 @@ type CoreManagerTestSuite struct {
 	contextMock *context.Mock
 	logMock     *log.Mock
 	coreManager ICoreManager
-	moduleMock  *moduleMock.ICoreModule
+	moduleMock  *moduleMock.ICoreModuleWrapper
 	rebootMock  *rebootMock.IRebootType
 }
 
@@ -44,7 +43,7 @@ func (suite *CoreManagerTestSuite) SetupTest() {
 	logMock := log.NewMockLog()
 	contextMock := context.NewMockDefault()
 	coreModulesMock := make(coremodules.ModuleRegistry, 1)
-	moduleMock := new(moduleMock.ICoreModule)
+	moduleMock := new(moduleMock.ICoreModuleWrapper)
 	coreModulesMock[0] = moduleMock
 	rebootMock := new(rebootMock.IRebootType)
 	cloudwatchPublisher := cloudwatchlogspublisher.NewCloudWatchPublisher(contextMock)
@@ -60,7 +59,7 @@ func (suite *CoreManagerTestSuite) SetupTest() {
 		rebooter:            rebootMock,
 	}
 	suite.coreManager = cm
-	suite.moduleMock.On("ModuleRequestStop", mock.Anything).Return(nil)
+	suite.moduleMock.On("ModuleStop", mock.Anything).Return(nil)
 	suite.moduleMock.On("ModuleExecute", mock.Anything).Return(nil)
 	suite.moduleMock.On("ModuleName").Return("TestExecuteModule")
 	suite.rebootMock.On("RebootMachine", mock.Anything).Return(nil)
@@ -73,7 +72,7 @@ func (suite *CoreManagerTestSuite) TestCoremanager_Start_WithoutSignal() {
 	suite.coreManager.Start()
 	close(ch)
 	suite.rebootMock.AssertNotCalled(suite.T(), "RebootMachine", mock.Anything)
-	suite.moduleMock.AssertNotCalled(suite.T(), "ModuleRequestStop", mock.Anything)
+	suite.moduleMock.AssertNotCalled(suite.T(), "ModuleStop")
 }
 
 // CoreManager Start api test, send the update signal
@@ -93,7 +92,7 @@ func (suite *CoreManagerTestSuite) TestCoreManager_Start_Update() {
 		// coremanager start launch a new go routine in stopModules function, sleep one second to wait the routine launched
 		time.Sleep(100 * time.Millisecond)
 		suite.moduleMock.AssertNotCalled(suite.T(), "ModuleName")
-		suite.moduleMock.AssertNotCalled(suite.T(), "ModuleRequestStop", mock.Anything)
+		suite.moduleMock.AssertNotCalled(suite.T(), "ModuleStop", mock.Anything)
 		suite.moduleMock.AssertCalled(suite.T(), "ModuleExecute", mock.Anything)
 		suite.rebootMock.AssertCalled(suite.T(), "GetChannel")
 		suite.rebootMock.AssertNotCalled(suite.T(), "RebootMachine", mock.Anything)
@@ -115,7 +114,7 @@ func (suite *CoreManagerTestSuite) TestCoreManager_Start_Reboot() {
 		defer wgc.Done()
 		suite.coreManager.Start()
 		time.Sleep(100 * time.Millisecond)
-		suite.moduleMock.AssertCalled(suite.T(), "ModuleRequestStop", mock.Anything)
+		suite.moduleMock.AssertCalled(suite.T(), "ModuleStop", mock.Anything)
 		suite.rebootMock.AssertCalled(suite.T(), "GetChannel")
 		suite.rebootMock.AssertCalled(suite.T(), "RebootMachine", mock.Anything)
 	}(wg)
@@ -128,8 +127,7 @@ func (suite *CoreManagerTestSuite) TestCoreManager_Start_Reboot() {
 // Unit testing function for Stop() method
 func (suite *CoreManagerTestSuite) TestCoreManager_Stop() {
 	suite.coreManager.Stop()
-	suite.moduleMock.AssertCalled(suite.T(), "ModuleRequestStop", contracts.StopTypeHardStop)
-	suite.moduleMock.AssertNotCalled(suite.T(), "ModuleRequestStop", contracts.StopTypeSoftStop)
+	suite.moduleMock.AssertCalled(suite.T(), "ModuleStop", mock.Anything)
 	suite.moduleMock.AssertNotCalled(suite.T(), "ModuleName")
 }
 

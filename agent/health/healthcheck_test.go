@@ -21,7 +21,6 @@ import (
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/context"
-	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/sdkutil"
 	ssmMock "github.com/aws/amazon-ssm-agent/agent/ssm/mocks"
@@ -93,8 +92,8 @@ func (suite *HealthCheckTestSuite) TestModuleExecute() {
 	suite.serviceMock.AssertCalled(suite.T(), "UpdateInstanceInformation", mock.Anything, version.Version, "Active", AgentName)
 }
 
-//Testing the ModuleRequestStop method with healthjob define
-func (suite *HealthCheckTestSuite) TestModuleRequestStopWithHealthJob() {
+//Testing the ModuleStop method with healthjob define
+func (suite *HealthCheckTestSuite) TestModuleStopWithHealthJob() {
 	suite.healthCheck = &HealthCheck{
 		context:               suite.contextMock,
 		healthJob:             suite.healthJob,
@@ -106,24 +105,24 @@ func (suite *HealthCheckTestSuite) TestModuleRequestStopWithHealthJob() {
 	go func(wgc *sync.WaitGroup) {
 		wgc.Add(1)
 		defer wgc.Done()
-		suite.healthCheck.ModuleRequestStop(contracts.StopTypeSoftStop)
+		suite.healthCheck.ModuleStop()
 	}(wg)
 	// Check the value is sent to healthJobMock channel. And the value is true.
 	val := <-suite.healthJob.Quit
 	close(suite.healthJob.Quit)
 	wg.Wait()
-	assert.Equal(suite.T(), val, true, "ModuleRequestStop should return true")
+	assert.Equal(suite.T(), val, true, "ModuleStop should return true")
 }
 
-// Testing the ModuleRequestStop method which doesn't have healthjob defination
-func (suite *HealthCheckTestSuite) TestModuleRequestStopWithoutHealthJob() {
+// Testing the ModuleStop method which doesn't have healthjob defination
+func (suite *HealthCheckTestSuite) TestModuleStopWithoutHealthJob() {
 	// Start a new wg to avoid go panic
 	wg := new(sync.WaitGroup)
 	go func(wgc *sync.WaitGroup) {
 		wgc.Add(1)
 		defer wgc.Done()
-		rst := suite.healthCheck.ModuleRequestStop(contracts.StopTypeSoftStop)
-		assert.Nil(suite.T(), rst, "result from ModuleRequestStop should be nil")
+		rst := suite.healthCheck.ModuleStop()
+		assert.Nil(suite.T(), rst, "result from ModuleStop should be nil")
 	}(wg)
 }
 

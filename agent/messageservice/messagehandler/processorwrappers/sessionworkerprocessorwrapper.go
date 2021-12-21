@@ -100,8 +100,8 @@ func (spw *SessionWorkerProcessorWrapper) GetTerminateWorker() contracts.Documen
 }
 
 // Stop stops the processor
-func (spw *SessionWorkerProcessorWrapper) Stop(stopType contracts.StopType) {
-	spw.processor.Stop(stopType)
+func (spw *SessionWorkerProcessorWrapper) Stop() {
+	spw.processor.Stop()
 }
 
 // listenSessionReply listens to document result from the executor and pushes to outputChan.

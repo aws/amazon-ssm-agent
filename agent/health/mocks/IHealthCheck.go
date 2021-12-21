@@ -15,7 +15,6 @@
 package mocks
 
 import (
-	contracts "github.com/aws/amazon-ssm-agent/agent/contracts"
 	health "github.com/aws/amazon-ssm-agent/agent/health"
 	mock "github.com/stretchr/testify/mock"
 )
@@ -74,13 +73,13 @@ func (_m *IHealthCheck) ModuleName() string {
 	return r0
 }
 
-// ModuleRequestStop provides a mock function with given fields: stopType
-func (_m *IHealthCheck) ModuleRequestStop(stopType contracts.StopType) error {
-	ret := _m.Called(stopType)
+// ModuleStop provides a mock function with given fields: stopType
+func (_m *IHealthCheck) ModuleStop() error {
+	ret := _m.Called()
 
 	var r0 error
-	if rf, ok := ret.Get(0).(func(contracts.StopType) error); ok {
-		r0 = rf(stopType)
+	if rf, ok := ret.Get(0).(func() error); ok {
+		r0 = rf()
 	} else {
 		r0 = ret.Error(0)
 	}

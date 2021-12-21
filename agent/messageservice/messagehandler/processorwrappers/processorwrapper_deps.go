@@ -28,5 +28,5 @@ type IProcessorWrapper interface {
 	GetStartWorker() contracts.DocumentType
 	GetTerminateWorker() contracts.DocumentType
 	PushToProcessor(contracts.DocumentState) processor.ErrorCode
-	Stop(stopType contracts.StopType)
+	Stop()
 }

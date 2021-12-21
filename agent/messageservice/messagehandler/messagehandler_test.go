@@ -15,13 +15,14 @@
 package messagehandler
 
 import (
+	"testing"
+
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/messageservice/messagehandler/processorwrappers"
 	"github.com/aws/amazon-ssm-agent/agent/messageservice/utils"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/suite"
-	"testing"
 )
 
 var (
@@ -128,12 +129,12 @@ func (suite *MessageHandlerTestSuite) TestRegisterReply() {
 
 func (suite *MessageHandlerTestSuite) TestStops() {
 	suite.messagehandler.Initialize()
-	err := suite.messagehandler.Stop(contracts.StopTypeSoftStop)
+	err := suite.messagehandler.Stop()
 
 	assert.Nil(suite.T(), err)
 
 	suite.messagehandler.Initialize()
-	err = suite.messagehandler.Stop(contracts.StopTypeHardStop)
+	err = suite.messagehandler.Stop()
 
 	assert.Nil(suite.T(), err)
 }

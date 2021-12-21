@@ -48,7 +48,7 @@ type PluginResult struct {
 type IPlugin interface {
 	Name() string
 	Execute(context context.T, input PluginConfig) (output PluginResult, err error)
-	RequestStop(stopType StopType) (err error)
+	RequestStop() (err error)
 }
 
 // ICoreModule is the very much of core itself will be implemented as plugins
@@ -57,7 +57,15 @@ type IPlugin interface {
 type ICoreModule interface {
 	ModuleName() string
 	ModuleExecute() (err error)
-	ModuleRequestStop(stopType StopType) (err error)
+	ModuleStop() error
+}
+
+// ICoreModuleWrapper is the
+type ICoreModuleWrapper interface {
+	ModuleName() string
+	ModuleExecute() (err error)
+
+	ModuleStop(waitTime time.Duration) error
 }
 
 // IWorkerPlugin is the plugins which do not form part of core

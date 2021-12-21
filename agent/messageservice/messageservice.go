@@ -205,8 +205,8 @@ func (msgSvc *MessageService) initializeProcessor(interactorRef interactor.IInte
 	wg.Wait()
 }
 
-// ModuleRequestStop stops the MessageService module
-func (msgSvc *MessageService) ModuleRequestStop(stopType contracts.StopType) error {
+// ModuleStop stops the MessageService module
+func (msgSvc *MessageService) ModuleStop() error {
 	log := msgSvc.context.Log()
 	log.Infof("Stopping %v", msgSvc.name)
 	var err error
@@ -218,7 +218,7 @@ func (msgSvc *MessageService) ModuleRequestStop(stopType contracts.StopType) err
 		interactRef.PreProcessorClose()
 	}
 	// close the launched processors
-	err = msgSvc.messageHandler.Stop(stopType)
+	err = msgSvc.messageHandler.Stop()
 	if err != nil {
 		log.Errorf("error occurred during closing message handlers: %v", err)
 	}

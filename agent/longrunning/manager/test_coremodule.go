@@ -15,7 +15,6 @@
 package manager
 
 import (
-	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/iohandler"
 	managerContracts "github.com/aws/amazon-ssm-agent/agent/longrunning/plugin"
 	"github.com/aws/amazon-ssm-agent/agent/longrunning/plugin/cloudwatch"
@@ -71,7 +70,7 @@ func (m *Mock) ModuleExecute() (err error) {
 }
 
 // RequestStop handles the termination of the message processor plugin job and returns encountered error - returns nil here for testing
-func (m *Mock) ModuleRequestStop(stopType contracts.StopType) (err error) {
+func (m *Mock) ModuleStop() (err error) {
 	return nil
 }
 

@@ -22,7 +22,6 @@ import (
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/context"
-	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/messageservice/interactor"
 	interactorMock "github.com/aws/amazon-ssm-agent/agent/messageservice/interactor/mocks"
@@ -194,7 +193,7 @@ func (suite *MessageServiceTestSuite) TestMessageService_ModuleStop() {
 	messageHandlerMock := &mocks.IMessageHandler{}
 	messageHandlerMock.On("Stop", mock.Anything).Return(nil)
 	msgService.messageHandler = messageHandlerMock
-	err := msgService.ModuleRequestStop(contracts.StopTypeHardStop)
+	err := msgService.ModuleStop()
 	assert.Nil(suite.T(), err, "stop should not return error")
 
 	// Close error - expected stop error
@@ -207,6 +206,6 @@ func (suite *MessageServiceTestSuite) TestMessageService_ModuleStop() {
 	messageHandlerMock = &mocks.IMessageHandler{}
 	messageHandlerMock.On("Stop", mock.Anything).Return(nil)
 	msgService.messageHandler = messageHandlerMock
-	err = msgService.ModuleRequestStop(contracts.StopTypeHardStop)
+	err = msgService.ModuleStop()
 	interactorMockObj.AssertNumberOfCalls(suite.T(), "Close", 2)
 }

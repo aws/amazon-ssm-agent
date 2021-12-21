@@ -62,12 +62,12 @@ func (_m *IMessageHandler) RegisterReply(name contracts.UpstreamServiceName, rep
 }
 
 // Stop provides a mock function with given fields: stopType
-func (_m *IMessageHandler) Stop(stopType contracts.StopType) error {
-	ret := _m.Called(stopType)
+func (_m *IMessageHandler) Stop() error {
+	ret := _m.Called()
 
 	var r0 error
-	if rf, ok := ret.Get(0).(func(contracts.StopType) error); ok {
-		r0 = rf(stopType)
+	if rf, ok := ret.Get(0).(func() error); ok {
+		r0 = rf()
 	} else {
 		r0 = ret.Error(0)
 	}

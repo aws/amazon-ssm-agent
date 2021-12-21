@@ -34,7 +34,7 @@ type IMessageHandler interface {
 	InitializeAndRegisterProcessor(proc processorWrapperTypes.IProcessorWrapper) error
 	RegisterReply(name contracts.UpstreamServiceName, reply chan contracts.DocumentResult)
 	Submit(message *contracts.DocumentState) ErrorCode
-	Stop(stopType contracts.StopType) (err error)
+	Stop() (err error)
 }
 
 // MessageHandler defines methods to be used by Interactors for submission of commands to the processors through ProcessorWrappers
@@ -193,7 +193,7 @@ func (mh *MessageHandler) RegisterReply(name contracts.UpstreamServiceName, repl
 }
 
 // Stop stops the message handlers
-func (mh *MessageHandler) Stop(stopType contracts.StopType) (err error) {
+func (mh *MessageHandler) Stop() (err error) {
 	log := mh.context.Log()
 	log.Infof("stopping %s.", Name)
 	var wg sync.WaitGroup
@@ -208,7 +208,7 @@ func (mh *MessageHandler) Stop(stopType contracts.StopType) (err error) {
 				}
 			}()
 
-			processorObj.Stop(stopType)
+			processorObj.Stop()
 		}(processorObj)
 	}
 	wg.Wait()

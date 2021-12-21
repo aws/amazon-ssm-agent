@@ -23,7 +23,6 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/agentlogstocloudwatch/cloudwatchlogspublisher"
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/context"
-	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/fileutil"
 	"github.com/aws/amazon-ssm-agent/agent/framework/coremodules"
 	"github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/plugin"
@@ -33,8 +32,8 @@ import (
 )
 
 const (
-	rebootPollingInterval = time.Second
-	hardStopTimeout       = time.Second * 5
+	softStopTimeout = time.Second * 15
+	hardStopTimeout = time.Second * 5
 )
 
 type ICoreManager interface {
@@ -218,7 +217,7 @@ func (c *CoreManager) Start() {
 // Stop requests the core modules to stop executing
 // Stop would be called by the agent and should be treated as hard stop
 func (c *CoreManager) Stop() {
-	c.stopCoreModules(contracts.StopTypeHardStop)
+	c.stopCoreModules(hardStopTimeout)
 }
 
 // executeCoreModules launches all the core modules
@@ -244,45 +243,33 @@ func (c *CoreManager) executeCoreModules() {
 }
 
 // stopCoreModules requests the core modules to stop
-func (c *CoreManager) stopCoreModules(stopType contracts.StopType) {
-	// use waitgroups in case of softstop to wait for the core modules to finish their work
-	// use timeout for hardstop and return control
+func (c *CoreManager) stopCoreModules(timeout time.Duration) {
 	log := c.context.Log()
-	log.Infof("core manager stop requested. Stop type: %v", stopType)
+	log.Infof("core manager stop requested. timeout: %v", timeout)
 	var wg sync.WaitGroup
 	l := len(c.coreModules)
+
 	for i := 0; i < l; i++ {
-		if stopType == contracts.StopTypeSoftStop {
-			wg.Add(1)
-		}
-		go func(wgc *sync.WaitGroup, i int) {
+		wg.Add(1)
+		go func(i int) {
+			defer wg.Done()
 			defer func() {
 				if r := recover(); r != nil {
 					log.Errorf("Core module stop request panic: %v", r)
 					log.Errorf("Stacktrace:\n%s", debug.Stack())
 				}
 			}()
-			if stopType == contracts.StopTypeSoftStop {
-				defer wgc.Done()
-			}
 
 			module := c.coreModules[i]
-			if err := module.ModuleRequestStop(stopType); err != nil {
+			if err := module.ModuleStop(timeout); err != nil {
 				log.Errorf("Plugin (%v) failed to stop with error: %v",
 					module.ModuleName(),
 					err)
 			}
-
-		}(&wg, i)
+		}(i)
 	}
 
-	// use waitgroups in case of softstop to wait for the core modules to finish their work
-	// use timeout for hardstop and return control
-	if stopType == contracts.StopTypeSoftStop {
-		wg.Wait()
-	} else {
-		time.Sleep(hardStopTimeout)
-	}
+	wg.Wait()
 }
 
 // watchForReboot watches for reboot events and request core modules to stop when necessary
@@ -302,7 +289,7 @@ func (c *CoreManager) watchForReboot() {
 	log.Info("A plugin has requested a reboot.")
 	if val == rebooter.RebootRequestTypeReboot {
 		log.Info("Processing reboot request...")
-		c.stopCoreModules(contracts.StopTypeSoftStop)
+		c.stopCoreModules(softStopTimeout)
 		c.rebooter.RebootMachine(log)
 	} else {
 		log.Error("reboot type not supported yet")

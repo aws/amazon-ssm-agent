@@ -16,6 +16,9 @@ package controlchannel
 
 import (
 	"encoding/json"
+	"testing"
+	"time"
+
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/log"
@@ -30,8 +33,6 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 	"github.com/twinj/uuid"
-	"testing"
-	"time"
 )
 
 var (

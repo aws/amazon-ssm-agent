@@ -16,7 +16,6 @@ package gatherers
 
 import (
 	"github.com/aws/amazon-ssm-agent/agent/context"
-	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/inventory/gatherers/application"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/inventory/gatherers/awscomponent"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/inventory/gatherers/billinginfo"
@@ -40,7 +39,7 @@ type T interface {
 	//inventory items at a time
 	Run(context context.T, configuration model.Config) ([]model.Item, error)
 	//stops the execution of a gatherer
-	RequestStop(stopType contracts.StopType) error
+	RequestStop() error
 }
 
 // SupportedGatherer is a map of supported gatherer on current platform

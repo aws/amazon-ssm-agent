@@ -167,13 +167,6 @@ const (
 	ParamTypeStringMap = "StringMap"
 )
 
-type StopType string
-
-const (
-	StopTypeSoftStop StopType = "SoftStop"
-	StopTypeHardStop StopType = "HardStop"
-)
-
 // A Parameter in the DocumentContent of an MDS message.
 type Parameter struct {
 	DefaultVal     interface{} `json:"default" yaml:"default"`
