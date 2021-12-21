@@ -54,10 +54,10 @@ const (
 	documentLevelTimeOutDurationHour = 2
 
 	// SendCommandTopicPrefix is the topic prefix for a send command MDS message.
-	SendCommandTopicPrefix TopicPrefix = "aws.ssm.sendCommand."
+	SendCommandTopicPrefix TopicPrefix = "aws.ssm.sendCommand"
 
 	// CancelCommandTopicPrefix is the topic prefix for a cancel command MDS message.
-	CancelCommandTopicPrefix TopicPrefix = "aws.ssm.cancelCommand."
+	CancelCommandTopicPrefix TopicPrefix = "aws.ssm.cancelCommand"
 
 	// SendFailedReplyFrequencyMinutes is the frequency at which to send failed reply requests back to MDS
 	SendFailedReplyFrequencyMinutes = 5

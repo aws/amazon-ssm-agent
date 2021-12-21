@@ -32,6 +32,10 @@ import (
 	runCommandContracts "github.com/aws/amazon-ssm-agent/agent/runcommand/contracts"
 )
 
+var (
+	isDocumentAlreadyReceived = idempotency.IsDocumentAlreadyReceived
+)
+
 // NewCommandWorkerProcessorWrapper initiates new processor wrapper which supports document workers
 func NewCommandWorkerProcessorWrapper(context context.T, worker *utils.ProcessorWorkerConfig) IProcessorWrapper {
 	processorContext := context.With("[" + string(worker.ProcessorName) + "Wrapper" + "]")
@@ -115,7 +119,7 @@ func (cpw *CommandWorkerProcessorWrapper) PushToProcessor(message contracts.Docu
 	errorCode := processor.UnsupportedDocType
 	cpw.mutex.Lock()
 	defer cpw.mutex.Unlock()
-	commandPresent := idempotency.IsDocumentAlreadyReceived(cpw.context, &message)
+	commandPresent := isDocumentAlreadyReceived(cpw.context, &message)
 	if commandPresent {
 		return processor.DuplicateCommand
 	}

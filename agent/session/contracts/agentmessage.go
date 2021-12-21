@@ -411,12 +411,12 @@ func parseAgentJobMessage(context context.T, commandOrchestrationRootDir string,
 	}
 
 	var docState *contracts.DocumentState
-	if strings.HasPrefix(string(utils.SendCommandTopicPrefix), agentJobPayload.Topic) {
+	if strings.HasPrefix(agentJobPayload.Topic, string(utils.SendCommandTopicPrefix)) {
 		docState, err = parseAgentJobSendCommandMessage(context, agentJobPayload, commandOrchestrationRootDir, instanceId, *agentMessage)
 		if err != nil {
 			return nil, err
 		}
-	} else if strings.HasPrefix(string(utils.CancelCommandTopicPrefix), agentJobPayload.Topic) {
+	} else if strings.HasPrefix(agentJobPayload.Topic, string(utils.CancelCommandTopicPrefix)) {
 		docState, err = parseAgentJobCancelCommandMessage(context, agentJobPayload, instanceId, *agentMessage)
 		if err != nil {
 			return nil, err

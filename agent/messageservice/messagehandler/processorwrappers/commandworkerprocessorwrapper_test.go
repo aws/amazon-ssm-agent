@@ -75,14 +75,32 @@ func (suite *CommandProcessorWrapperTestSuite) TestGetTerminateWorker() {
 }
 
 func (suite *CommandProcessorWrapperTestSuite) TestPushToProcessor() {
+	isDocumentAlreadyReceived = func(idemCtx context.T, message *contracts.DocumentState) bool {
+		return false
+	}
 	errorCode := suite.commmandWorkerProcessorWrapper.PushToProcessor(docState)
 	assert.Equal(suite.T(), processor.ErrorCode(""), errorCode)
 }
 
 func (suite *CommandProcessorWrapperTestSuite) TestPushToProcessorWithUnsupportedDoc() {
 	docState.DocumentType = contracts.StartSession
+	isDocumentAlreadyReceived = func(idemCtx context.T, message *contracts.DocumentState) bool {
+		return false
+	}
 	errorCode := suite.commmandWorkerProcessorWrapper.PushToProcessor(docState)
 	assert.Equal(suite.T(), processor.UnsupportedDocType, errorCode)
+}
+
+func (suite *CommandProcessorWrapperTestSuite) TestPushToProcessorDuplicateDoc() {
+	isDocumentAlreadyReceived = func(idemCtx context.T, message *contracts.DocumentState) bool {
+		return false
+	}
+	suite.commmandWorkerProcessorWrapper.PushToProcessor(docState)
+	isDocumentAlreadyReceived = func(idemCtx context.T, message *contracts.DocumentState) bool {
+		return true
+	}
+	errorCode := suite.commmandWorkerProcessorWrapper.PushToProcessor(docState)
+	assert.Equal(suite.T(), processor.DuplicateCommand, errorCode)
 }
 
 func (suite *CommandProcessorWrapperTestSuite) TestListenReply() {
