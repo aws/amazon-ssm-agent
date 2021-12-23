@@ -73,7 +73,7 @@ func TestUpdater(t *testing.T) {
 	os.Args = updateCommand
 
 	// action
-	main()
+	updateAgent()
 }
 
 func TestUpdaterFailedStartOrResume(t *testing.T) {
@@ -86,7 +86,7 @@ func TestUpdaterFailedStartOrResume(t *testing.T) {
 	os.Args = updateCommand
 
 	// action
-	main()
+	updateAgent()
 }
 
 func TestUpdaterFailedSetRegion(t *testing.T) {
@@ -103,7 +103,7 @@ func TestUpdaterFailedSetRegion(t *testing.T) {
 	os.Args = updateCommand
 
 	// action
-	main()
+	updateAgent()
 }
 
 func TestUpdaterWithDowngrade(t *testing.T) {
@@ -117,7 +117,7 @@ func TestUpdaterWithDowngrade(t *testing.T) {
 		"-target.version", "1.0.0.0", "-target.location", "http://target"}
 
 	// action
-	main()
+	updateAgent()
 
 	// assert
 	assert.Equal(t, *sourceVersion, "5.0.0.0")
@@ -135,7 +135,7 @@ func TestUpdaterFailedWithoutSourceTargetCmd(t *testing.T) {
 		"-target.version", "", "-target.location", "http://target"}
 
 	// action
-	main()
+	updateAgent()
 
 	// assert
 	assert.Equal(t, *update, true)
@@ -153,6 +153,6 @@ func TestCleanupFailed(t *testing.T) {
 	os.Args = updateCommand
 
 	// action
-	main()
+	updateAgent()
 
 }

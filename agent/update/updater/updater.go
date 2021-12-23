@@ -39,6 +39,8 @@ import (
 const (
 	defaultLogFileName              = "AmazonSSMAgent-update.txt"
 	defaultWaitTimeForAgentToFinish = 3
+	errorExitCode                   = 1
+	nonErrorExitCode                = 0
 )
 
 var (
@@ -98,10 +100,14 @@ func init() {
 }
 
 func main() {
+	log.Infof("SSM Agent Updater - %s", version.String())
+	os.Exit(updateAgent())
+}
+
+func updateAgent() int {
 	defer log.Close()
 	defer log.Flush()
 
-	log.Infof("SSM Agent Updater - %s", version.String())
 	// Initialize agent config for agent identity
 	appConfig, err := appconfig.Config(true)
 	if err != nil {
@@ -111,7 +117,7 @@ func main() {
 	agentIdentity, err := resolveAgentIdentity(appConfig)
 	if err != nil {
 		log.Errorf("Failed to assume agent identity: %v", err)
-		os.Exit(1)
+		return errorExitCode
 	}
 
 	agentContext = context.Default(log, appConfig, agentIdentity)
@@ -120,7 +126,7 @@ func main() {
 	updateInfo, err := updateinfo.New(agentContext)
 	if err != nil {
 		log.Errorf("Failed to initialize update info object: %v", err)
-		os.Exit(1)
+		return errorExitCode
 	}
 
 	// Sleep 3 seconds to allow agent to finishing up it's work
@@ -137,7 +143,7 @@ func main() {
 	if err != nil {
 		if err == lockfile.ErrBusy {
 			log.Warnf("Failed to lock update lockfile, another update is in progress: %s", err)
-			return
+			return nonErrorExitCode
 		} else {
 			log.Warnf("Proceeding update process with new lock. Failed to lock update lockfile: %s", err)
 		}
@@ -151,7 +157,7 @@ func main() {
 	if !*update {
 		log.Error("incorrect usage (use -update).")
 		flag.Usage()
-		return
+		return nonErrorExitCode
 	}
 
 	// Basic Validation
@@ -192,7 +198,7 @@ func main() {
 	updateDetail.UpdateRoot, err = resolveUpdateRoot(updateDetail.SourceVersion)
 	if err != nil {
 		log.Errorf("Failed to resolve update root: %v", err)
-		return
+		return nonErrorExitCode
 	}
 
 	log.Infof("Update root is: %v", updateDetail.UpdateRoot)
@@ -201,7 +207,7 @@ func main() {
 	err = updater.InitializeUpdate(log, updateDetail)
 	if err != nil {
 		log.Errorf(err.Error())
-		return
+		return nonErrorExitCode
 	}
 
 	// Recover updater if panic occurs and fail the updater
@@ -215,6 +221,7 @@ func main() {
 		log.Infof(updateDetail.StandardOut)
 	}
 
+	return nonErrorExitCode
 }
 
 func resolveAgentIdentity(appConfig appconfig.SsmagentConfig) (identity.IAgentIdentity, error) {
