@@ -79,12 +79,15 @@ func isServiceRunningAsSnap() (bool, error) {
 }
 
 func isServiceRunningSystemctl() (bool, error) {
-	_, err := diagnosticsutil.ExecuteCommandWithTimeout(serviceManagerTimeoutSeconds*time.Second, "systemctl", "status", "amazon-ssm-agent")
+	if _, err := exec.LookPath("systemctl"); err != nil {
+		return false, nil
+	}
+	_, err := diagnosticsutil.ExecuteCommandWithTimeout(serviceManagerTimeoutSeconds*time.Second, "systemctl", "status", "amazon-ssm-agent.service")
 	if err != nil {
 		if exitError, ok := err.(*exec.ExitError); ok {
 			if exitError.ExitCode() == systemctlServiceStopExitCode {
 				return false, fmt.Errorf(serviceCheckStrAgentNotRunningSystemctl)
-			} else if exitError.ExitCode() == commandNotFoundExitCode || exitError.ExitCode() == systemctlServiceNotFoundExitCode {
+			} else if exitError.ExitCode() == systemctlServiceNotFoundExitCode {
 				// systemctl is not installed on the instance or amazon-ssm-agent service is not in systemctl
 				return false, nil
 			} else {
@@ -102,11 +105,14 @@ func isServiceRunningSystemctl() (bool, error) {
 }
 
 func isServiceRunningUpstart() (bool, error) {
+	if _, err := exec.LookPath("status"); err != nil {
+		return false, nil
+	}
 	output, err := diagnosticsutil.ExecuteCommandWithTimeout(serviceManagerTimeoutSeconds*time.Second, "status", "amazon-ssm-agent")
 
 	if err != nil {
 		if exitError, ok := err.(*exec.ExitError); ok {
-			if exitError.ExitCode() == upstartServiceNotFoundExitCode || exitError.ExitCode() == commandNotFoundExitCode {
+			if exitError.ExitCode() == upstartServiceNotFoundExitCode {
 				// upstart is not installed or the amazon-ssm-agent is not in upstart
 				return false, nil
 			}
