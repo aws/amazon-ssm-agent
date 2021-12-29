@@ -106,6 +106,10 @@ func (s3 *S3Resource) DownloadRemoteResource(filesys filemanager.FileSystem, des
 	s3.s3Object = s3util.ParseAmazonS3URL(log, fileURL)
 	log.Debug("S3 object - ", s3.s3Object.String())
 
+	if !s3.s3Object.IsValidS3URI {
+		return fmt.Errorf("invalid S3 path parameter"), nil
+	}
+
 	// Create an object for the source URL. This can be used to list the objects in the folder
 	if folders, err = dep.ListS3Directory(s3.context, s3.s3Object); err != nil {
 		if isPathType(s3.s3Object.Key) {
