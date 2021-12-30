@@ -1,5 +1,14 @@
 Latest
 ===============
+- Add support for upstart when running get-diagnostic command using ssm-cli
+- Fix systemctl service name to support older versions of systemctl
+- Include changes to facilitate testing
+- Update DNS server selection logic for seamless domain join on linux and darwin
+- Update go version to go1.17.5
+- Update golang sys package dependency
+
+3.1.715.0
+===============
 - Derive default directories from appconfig on Darwin
 - Set x-bit on newly-created directories
 
