@@ -252,7 +252,8 @@ func (p *pool) AcquireBufferToken(jobId string) PoolErrorCode {
 		// removing expired tokens only when the job queue is full
 		expirationTime := currentTime.Add(time.Duration(-unusedTokenValidityInMinutes) * time.Minute)
 		for tokenId, tokenTime := range p.tokenHoldingJobIds {
-			if tokenTime.Before(expirationTime) {
+			// hasJob condition added to handle long-running commands
+			if tokenTime.Before(expirationTime) && !p.HasJob(tokenId) {
 				p.log.Warnf("removing expired token %v from the TokenBuffer", tokenId)
 				delete(p.tokenHoldingJobIds, tokenId)
 			}

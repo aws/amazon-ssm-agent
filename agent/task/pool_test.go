@@ -108,6 +108,24 @@ func TestAcquireToken_ExpiredToken(t *testing.T) {
 	assert.Equal(t, JobQueueFull, errorCode)
 }
 
+// TestAcquireToken_JobAlreadyPresentInJobStore_ShouldNotDeleteToken
+// tests expired token deletion when the job already present in Job Store
+func TestAcquireToken_JobAlreadyPresentInJobStore_ShouldNotDeleteToken(t *testing.T) {
+	// basic pool
+	poolRef := NewPool(logger, 1, 2, 100*time.Millisecond, times.NewMockedClock())
+	poolObj := poolRef.(*pool)
+	expirationTime := time.Now().Add(time.Duration(-unusedTokenValidityInMinutes-2) * time.Minute) // added extra expiry
+	// If buffer full, delete tokens only not in job store
+	// In this case, no deletion happens
+	poolObj.tokenHoldingJobIds["job 1"] = &expirationTime
+	poolObj.jobStore.AddJob("job 1", &JobToken{})
+	poolObj.tokenHoldingJobIds["job 2"] = &expirationTime
+	poolObj.jobStore.AddJob("job 2", &JobToken{})
+
+	errorCode := poolObj.AcquireBufferToken("job 3")
+	assert.Equal(t, JobQueueFull, errorCode)
+}
+
 // TestReleaseAndToken_BasicTest test basic release and acquire tokens operations
 func TestReleaseAndToken_BasicTest(t *testing.T) {
 	workerLimit := 5
