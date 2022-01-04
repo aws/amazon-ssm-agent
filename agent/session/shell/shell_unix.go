@@ -25,6 +25,7 @@ import (
 	"fmt"
 	"os"
 	"os/exec"
+	"os/user"
 	"path/filepath"
 	"strconv"
 	"strings"
@@ -118,6 +119,10 @@ func StartCommandExecutor(
 				return errors.New("please set the RunAs default user")
 			}
 
+			if os.Geteuid() != 0 {
+				return errors.New("the agent must run as root to use RunAs")
+			}
+
 			// Check if user exists
 			if userExists, _ := u.DoesUserExist(config.RunAsUser); !userExists {
 				// if user does not exist, fail the session
@@ -126,11 +131,16 @@ func StartCommandExecutor(
 
 			sessionUser = config.RunAsUser
 		} else {
-			// Start as ssm-user
-			// Create ssm-user before starting a session.
-			u.CreateLocalAdminUser(log)
+			if os.Geteuid() == 0 {
+				// Start as ssm-user
+				// Create ssm-user before starting a session.
+				u.CreateLocalAdminUser(log)
 
-			sessionUser = appconfig.DefaultRunAsUserName
+				sessionUser = appconfig.DefaultRunAsUserName
+			} else {
+				user, _ := user.Current()
+				sessionUser = user.Username
+			}
 		}
 
 		// Get the uid and gid of the runas user.
@@ -138,8 +148,11 @@ func StartCommandExecutor(
 		if err != nil {
 			return err
 		}
-		cmd.SysProcAttr = &syscall.SysProcAttr{}
-		cmd.SysProcAttr.Credential = &syscall.Credential{Uid: uid, Gid: gid, Groups: groups, NoSetGroups: false}
+
+		if os.Geteuid() == 0 {
+			cmd.SysProcAttr = &syscall.SysProcAttr{}
+			cmd.SysProcAttr.Credential = &syscall.Credential{Uid: uid, Gid: gid, Groups: groups, NoSetGroups: false}
+		}
 
 		// Setting home environment variable for RunAs user
 		runAsUserHomeEnvVariable := constants.HomeEnvVariable + sessionUser
