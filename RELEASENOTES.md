@@ -1,5 +1,15 @@
 Latest
 ===============
+- Implement new core module named MessageService to start processing commands from both MGS and MDS
+  - Merge functionalities from RunCommandService core module and Session core module.
+  - Receive run command documents through MGS if connected and fallback to MDS otherwise. This functionality requires appropriate permissions for both endpoints and will be rolled out gradually to end users.
+  - Provide filesystem based idempotency check to avoid duplicate run command document execution.
+  - Increase default run command pool buffer size from 1 to 5 to load additional documents before-hand for processing.
+- Fix nil pointer deference panic produced in named pipe test case during agent update
+- Remove StopType concept in ssm-agent-worker and add different waits for reboot and shutdown stop
+
+3.1.804.0
+===============
 - Add support for upstart when running get-diagnostic command using ssm-cli
 - Fix systemctl service name to support older versions of systemctl
 - Include changes to facilitate testing
