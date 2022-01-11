@@ -341,6 +341,7 @@ func getRedhatishPlatform(data string) (string, error) {
 		{`(?i)Red Hat Enterprise Linux`, c.PlatformRedhat},
 		{`(?i)Oracle Linux`, c.PlatformOracleLinux},
 		{`(?i)CentOS( Linux)?`, c.PlatformCentos},
+		{`(?i)Rocky( Linux)?`, c.PlatformRockyLinux},
 		{`(?i)Fedora( Linux)?`, c.PlatformFedora},
 		{`(?i)Amazon Linux`, c.PlatformAmazon},
 	}
@@ -398,7 +399,7 @@ func platformFamilyForPlatform(platform string) (string, error) {
 	switch platform {
 	case c.PlatformUbuntu, c.PlatformDebian, c.PlatformRaspbian:
 		return c.PlatformFamilyDebian, nil
-	case c.PlatformRedhat, c.PlatformCentos, c.PlatformAmazon, c.PlatformOracleLinux:
+	case c.PlatformRedhat, c.PlatformCentos, c.PlatformAmazon, c.PlatformOracleLinux, c.PlatformRockyLinux:
 		return c.PlatformFamilyRhel, nil
 	case c.PlatformFedora:
 		return c.PlatformFamilyFedora, nil

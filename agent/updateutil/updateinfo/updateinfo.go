@@ -90,6 +90,7 @@ func getMinimumVersionForSystemD() (systemDMap *map[string]string) {
 		isUsingSystemD[updateconstants.PlatformCentOS] = "7"
 		isUsingSystemD[updateconstants.PlatformRedHat] = "7"
 		isUsingSystemD[updateconstants.PlatformOracleLinux] = "7"
+		isUsingSystemD[updateconstants.PlatformRockyLinux] = "7"
 		isUsingSystemD[updateconstants.PlatformUbuntu] = "15"
 		isUsingSystemD[updateconstants.PlatformSuseOS] = "12"
 		isUsingSystemD[updateconstants.PlatformDebian] = "8"
@@ -168,6 +169,10 @@ func newInner(context context.T) (updateInfo *updateInfoImpl, err error) {
 	} else if strings.Contains(platformName, updateconstants.PlatformCentOS) {
 		log.Info("Detected platform CentOS")
 		platformName = updateconstants.PlatformCentOS
+		downloadPlatformOverride = updateconstants.PlatformLinux
+	} else if strings.Contains(platformName, updateconstants.PlatformRockyLinux) {
+		log.Info("Detected platform Rocky Linux")
+		platformName = updateconstants.PlatformRockyLinux
 		downloadPlatformOverride = updateconstants.PlatformLinux
 	} else if strings.Contains(platformName, updateconstants.PlatformSuseOS) {
 		log.Info("Detected platform SuseOS")

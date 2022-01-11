@@ -90,6 +90,9 @@ const (
 	// PlatformCentOS represents CentOS
 	PlatformCentOS = "centos"
 
+	// PlatformCentOS represents CentOS
+	PlatformRockyLinux = "rocky"
+
 	// PlatformSuse represents SLES(SUSe)
 	PlatformSuseOS = "sles"
 
