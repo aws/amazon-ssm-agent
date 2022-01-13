@@ -705,12 +705,20 @@ is_directory_reachable() {
 ##################################################
 do_domainjoin() {
     MAX_RETRIES=10
+
+    if echo "$DOMAIN_USERNAME" | grep "@" 2>&1 > /dev/null; then
+       # Use username@RemoteTrustedDir (Active Directory Trust) to join
+       echo "do_domainjoin(): Found directory in username as username@directory"
+    else
+       DOMAIN_USERNAME=${DOMAIN_USERNAME}@${DIRECTORY_NAME}
+    fi
+
     for i in $(seq 1 $MAX_RETRIES)
     do
         if [ -z "$DIRECTORY_OU" ]; then
-            LOG_MSG=$(echo $DOMAIN_PASSWORD | realm join --client-software=winbind -U ${DOMAIN_USERNAME}@${DIRECTORY_NAME} "$DIRECTORY_NAME" -v 2>&1)
+            LOG_MSG=$(echo $DOMAIN_PASSWORD | realm join --client-software=winbind -U ${DOMAIN_USERNAME} "$DIRECTORY_NAME" -v 2>&1)
         else
-            LOG_MSG=$(echo $DOMAIN_PASSWORD | realm join --client-software=winbind -U ${DOMAIN_USERNAME}@${DIRECTORY_NAME} "$DIRECTORY_NAME" --computer-ou="$DIRECTORY_OU" -v 2>&1)
+            LOG_MSG=$(echo $DOMAIN_PASSWORD | realm join --client-software=winbind -U ${DOMAIN_USERNAME} "$DIRECTORY_NAME" --computer-ou="$DIRECTORY_OU" -v 2>&1)
         fi
         STATUS=$?
         if [ $STATUS -eq 0 ]; then
