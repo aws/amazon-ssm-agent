@@ -61,6 +61,7 @@ type Utility struct {
 }
 
 var getDiskSpaceInfo = fileutil.GetDiskSpaceInfo
+var getCredentialsRefresherIdentity = identity.GetCredentialsRefresherIdentity
 var mkDirAll = os.MkdirAll
 var openFile = os.OpenFile
 var execCommand = exec.Command
@@ -99,6 +100,7 @@ func (util *Utility) ExeCommand(
 	if isAsync {
 		command := execCommand(parts[0], parts[1:]...)
 		command.Dir = workingDir
+		util.setCommandEnvironmentVariables(command)
 		prepareProcess(command)
 		// Start command asynchronously
 		err := cmdStart(command)
@@ -179,6 +181,7 @@ func (util *Utility) ExeCommandOutput(
 
 	command := execCommand(tempCmd[0], tempCmd[1:]...)
 	command.Dir = workingDir
+	util.setCommandEnvironmentVariables(command)
 	stdoutWriter, stderrWriter, exeErr := setExeOutErr(outputRoot, stdOutFileName, stdErrFileName)
 	if exeErr != nil {
 		return output, exeErr
@@ -223,7 +226,7 @@ func (util *Utility) NewExeCommandOutput(
 
 	command := execCommand(tempCmd[0], tempCmd[1:]...)
 	command.Dir = workingDir
-
+	util.setCommandEnvironmentVariables(command)
 	// Don't set command.Stdout - we're going to return it instead of writing it
 	command.Stderr = stderrWriter
 
@@ -672,4 +675,27 @@ func IsIdentityRuntimeConfigSupported(sourceVersion string) bool {
 
 	comp, err := versionutil.VersionCompare(sourceVersion, LastAgentVersionBeforeIdentityRuntimeConfig)
 	return err == nil && comp > 0
+}
+
+func (util *Utility) setCommandEnvironmentVariables(command *exec.Cmd) {
+	shareCredsIdentity, ok := getCredentialsRefresherIdentity(util.Context.Identity())
+	if !ok {
+		return
+	}
+
+	// Don't set environment variables if credentials are not being shared
+	if !shareCredsIdentity.ShouldShareCredentials() {
+		return
+	}
+
+	osEnv := os.Environ()
+	command.Env = osEnv
+	if _, ok := os.LookupEnv("AWS_SHARED_CREDENTIALS_FILE"); !ok && shareCredsIdentity.ShareFile() != "" {
+		command.Env = append(command.Env, fmt.Sprintf("%s=%s", "AWS_SHARED_CREDENTIALS_FILE", shareCredsIdentity.ShareFile()))
+	}
+
+	if _, ok := os.LookupEnv("AWS_PROFILE"); !ok && shareCredsIdentity.ShareProfile() != "" {
+		command.Env = append(command.Env, fmt.Sprintf("%s=%s", "AWS_PROFILE", shareCredsIdentity.ShareProfile()))
+	}
+
 }

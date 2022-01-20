@@ -14,7 +14,6 @@
 package onprem
 
 import (
-	"fmt"
 	"sync"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
@@ -44,7 +43,7 @@ func (*Identity) InstanceType() (string, error) {
 
 // ServiceDomain returns the service domain of a OnPrem instance
 func (*Identity) ServiceDomain() (string, error) {
-	return "", fmt.Errorf("No service domain available in OnPrem")
+	return "", nil
 }
 
 // initShareCreds initializes credentials using shared credentials provider that reads credentials from shared location, falls back to non shared credentials provider for any failure

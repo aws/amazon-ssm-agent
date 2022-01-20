@@ -63,6 +63,7 @@ func (DepWindows) TempDir(dir, prefix string) (name string, err error) {
 }
 
 func (DepWindows) UpdateUtilExeCommandOutput(
+	context context.T,
 	customUpdateExecutionTimeoutInSeconds int,
 	log log.T,
 	cmd string,
@@ -72,7 +73,9 @@ func (DepWindows) UpdateUtilExeCommandOutput(
 	stdOut string,
 	stdErr string,
 	usePlatformSpecificCommand bool) (output string, err error) {
-	util := updateutil.Utility{CustomUpdateExecutionTimeoutInSeconds: customUpdateExecutionTimeoutInSeconds}
+	util := updateutil.Utility{
+		CustomUpdateExecutionTimeoutInSeconds: customUpdateExecutionTimeoutInSeconds,
+	}
 	return util.ExeCommandOutput(log, cmd, parameters, workingDir, outputRoot, stdOut, stdErr, usePlatformSpecificCommand)
 }
 

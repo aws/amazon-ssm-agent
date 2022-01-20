@@ -23,6 +23,7 @@ var dep dependencies
 
 type dependencies interface {
 	UpdateUtilExeCommandOutput(
+		context context.T,
 		customUpdateExecutionTimeoutInSeconds int,
 		log log.T,
 		cmd string,

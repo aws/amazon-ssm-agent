@@ -28,6 +28,7 @@ type dependencies interface {
 	MakeDirs(destinationDir string) (err error)
 	TempDir(dir, prefix string) (name string, err error)
 	UpdateUtilExeCommandOutput(
+		context context.T,
 		customUpdateExecutionTimeoutInSeconds int,
 		log log.T,
 		cmd string,

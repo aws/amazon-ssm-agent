@@ -25,7 +25,7 @@ import (
 
 func successMock() *DepMock {
 	depmock := DepMock{}
-	depmock.On("UpdateUtilExeCommandOutput", mock.Anything, mock.Anything, mock.Anything, mock.Anything,
+	depmock.On("UpdateUtilExeCommandOutput", mock.Anything, mock.Anything, mock.Anything, mock.Anything, mock.Anything,
 		mock.Anything, mock.Anything, mock.Anything, mock.Anything, mock.Anything).Return("True", nil)
 
 	info := &updateinfomocks.T{}
@@ -37,7 +37,7 @@ func successMock() *DepMock {
 
 func unsupportedPlatformMock() *DepMock {
 	depmock := DepMock{}
-	depmock.On("UpdateUtilExeCommandOutput", mock.Anything, mock.Anything, mock.Anything, mock.Anything,
+	depmock.On("UpdateUtilExeCommandOutput", mock.Anything, mock.Anything, mock.Anything, mock.Anything, mock.Anything,
 		mock.Anything, mock.Anything, mock.Anything, mock.Anything, mock.Anything).Return("True", nil)
 
 	info := &updateinfomocks.T{}

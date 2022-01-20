@@ -34,6 +34,7 @@ func (DepLinux) GetInstanceInfo(context context.T) (instancInfo updateinfo.T, er
 }
 
 func (DepLinux) UpdateUtilExeCommandOutput(
+	context context.T,
 	customUpdateExecutionTimeoutInSeconds int,
 	log log.T,
 	cmd string,
@@ -43,6 +44,9 @@ func (DepLinux) UpdateUtilExeCommandOutput(
 	stdOut string,
 	stdErr string,
 	usePlatformSpecificCommand bool) (output string, err error) {
-	util := updateutil.Utility{CustomUpdateExecutionTimeoutInSeconds: customUpdateExecutionTimeoutInSeconds}
+	util := updateutil.Utility{
+		Context:                               context,
+		CustomUpdateExecutionTimeoutInSeconds: customUpdateExecutionTimeoutInSeconds,
+	}
 	return util.ExeCommandOutput(log, cmd, parameters, workingDir, outputRoot, stdOut, stdErr, usePlatformSpecificCommand)
 }

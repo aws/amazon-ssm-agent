@@ -38,10 +38,10 @@ func RunInstallCommands(context context.T, orchestrationDirectory string, out io
 		out.MarkAsFailed(fmt.Errorf("Ubuntu platform is not currently supported: %v", err))
 		return
 	} else if info.GetPlatform() == updateconstants.PlatformLinux {
-		runAmazonLinuxPlatformInstallCommands(log, orchestrationDirectory, out)
+		runAmazonLinuxPlatformInstallCommands(context, log, orchestrationDirectory, out)
 		return
 	} else if info.GetPlatform() == updateconstants.PlatformRedHat {
-		runRedhatLinuxPlatformInstallCommands(log, orchestrationDirectory, out)
+		runRedhatLinuxPlatformInstallCommands(context, log, orchestrationDirectory, out)
 		return
 	} else {
 		log.Error("Unsupported Linux variant", err)
@@ -50,7 +50,7 @@ func RunInstallCommands(context context.T, orchestrationDirectory string, out io
 	}
 }
 
-func runAmazonLinuxPlatformInstallCommands(log log.T, orchestrationDirectory string, out iohandler.IOHandler) {
+func runAmazonLinuxPlatformInstallCommands(context context.T, log log.T, orchestrationDirectory string, out iohandler.IOHandler) {
 	var err error
 	var command string
 	var output string
@@ -59,7 +59,7 @@ func runAmazonLinuxPlatformInstallCommands(log log.T, orchestrationDirectory str
 	out.AppendInfo("Updating yum")
 	command = "yum"
 	parameters = []string{"update", "-y", "docker"}
-	output, err = dep.UpdateUtilExeCommandOutput(120, log, command, parameters, "", "", "", "", false)
+	output, err = dep.UpdateUtilExeCommandOutput(context, 120, log, command, parameters, "", "", "", "", false)
 	if err != nil {
 		log.Error("Error running yum update", err)
 		out.MarkAsFailed(fmt.Errorf("Error running yum update: %v", err))
@@ -70,7 +70,7 @@ func runAmazonLinuxPlatformInstallCommands(log log.T, orchestrationDirectory str
 	out.AppendInfo("Installation docker through yum")
 	command = "yum"
 	parameters = []string{"install", "-y", "docker"}
-	output, err = dep.UpdateUtilExeCommandOutput(120, log, command, parameters, "", "", "", "", false)
+	output, err = dep.UpdateUtilExeCommandOutput(context, 120, log, command, parameters, "", "", "", "", false)
 	if err != nil {
 		log.Error("Error running yum install", err)
 		out.MarkAsFailed(fmt.Errorf("Error running yum install: %v", err))
@@ -81,7 +81,7 @@ func runAmazonLinuxPlatformInstallCommands(log log.T, orchestrationDirectory str
 	out.AppendInfo("Starting docker service")
 	command = "service"
 	parameters = []string{"docker", "start"}
-	output, err = dep.UpdateUtilExeCommandOutput(120, log, command, parameters, "", "", "", "", false)
+	output, err = dep.UpdateUtilExeCommandOutput(context, 120, log, command, parameters, "", "", "", "", false)
 	if err != nil {
 		log.Error("Error running service docker start", err)
 		out.MarkAsFailed(fmt.Errorf("Error running ervice docker start: %v", err))
@@ -94,7 +94,7 @@ func runAmazonLinuxPlatformInstallCommands(log log.T, orchestrationDirectory str
 	return
 }
 
-func runRedhatLinuxPlatformInstallCommands(log log.T, orchestrationDirectory string, out iohandler.IOHandler) {
+func runRedhatLinuxPlatformInstallCommands(context context.T, log log.T, orchestrationDirectory string, out iohandler.IOHandler) {
 	var err error
 	var command string
 	var output string
@@ -103,7 +103,7 @@ func runRedhatLinuxPlatformInstallCommands(log log.T, orchestrationDirectory str
 	out.AppendInfo("Installing yum-utils")
 	command = "yum"
 	parameters = []string{"install", "-y", "yum-utils"}
-	output, err = dep.UpdateUtilExeCommandOutput(120, log, command, parameters, "", "", "", "", false)
+	output, err = dep.UpdateUtilExeCommandOutput(context, 120, log, command, parameters, "", "", "", "", false)
 	if err != nil {
 		log.Error("Error running yum install", err)
 		out.MarkAsFailed(fmt.Errorf("Error running yum install: %v", err))
@@ -114,7 +114,7 @@ func runRedhatLinuxPlatformInstallCommands(log log.T, orchestrationDirectory str
 	out.AppendInfo("Add docker repo")
 	command = "yum-config-manager"
 	parameters = []string{"--add-repo", "https://docs.docker.com/engine/installation/linux/repo_files/centos/docker.repo"}
-	output, err = dep.UpdateUtilExeCommandOutput(120, log, command, parameters, "", "", "", "", false)
+	output, err = dep.UpdateUtilExeCommandOutput(context, 120, log, command, parameters, "", "", "", "", false)
 	if err != nil {
 		log.Error("Error running yum-config-manage", err)
 		out.MarkAsFailed(fmt.Errorf("Error running yum-config-manager: %v", err))
@@ -125,7 +125,7 @@ func runRedhatLinuxPlatformInstallCommands(log log.T, orchestrationDirectory str
 	out.AppendInfo("Update yum package index")
 	command = "yum"
 	parameters = []string{"makecache", "fast"}
-	output, err = dep.UpdateUtilExeCommandOutput(120, log, command, parameters, "", "", "", "", false)
+	output, err = dep.UpdateUtilExeCommandOutput(context, 120, log, command, parameters, "", "", "", "", false)
 	if err != nil {
 		log.Error("Error running yum makecache", err)
 		out.MarkAsFailed(fmt.Errorf("Error running yum makecache: %v", err))
@@ -136,7 +136,7 @@ func runRedhatLinuxPlatformInstallCommands(log log.T, orchestrationDirectory str
 	out.AppendInfo("Installation docker through yum")
 	command = "yum"
 	parameters = []string{"install", "-y", "docker-engine"}
-	output, err = dep.UpdateUtilExeCommandOutput(120, log, command, parameters, "", "", "", "", false)
+	output, err = dep.UpdateUtilExeCommandOutput(context, 120, log, command, parameters, "", "", "", "", false)
 	if err != nil {
 		log.Error("Error running yum install", err)
 		out.MarkAsFailed(fmt.Errorf("Error running yum install: %v", err))
@@ -147,7 +147,7 @@ func runRedhatLinuxPlatformInstallCommands(log log.T, orchestrationDirectory str
 	out.AppendInfo("Starting docker service")
 	command = "systemctl"
 	parameters = []string{"start", "docker"}
-	output, err = dep.UpdateUtilExeCommandOutput(120, log, command, parameters, "", "", "", "", false)
+	output, err = dep.UpdateUtilExeCommandOutput(context, 120, log, command, parameters, "", "", "", "", false)
 	if err != nil {
 		log.Error("Error running systemctl docker start", err)
 		out.MarkAsFailed(fmt.Errorf("Error running systemctl docker start: %v", err))
@@ -175,10 +175,10 @@ func RunUninstallCommands(context context.T, orchestrationDirectory string, out 
 		out.MarkAsFailed(fmt.Errorf("Ubuntu platform is not currently supported: %v", err))
 		return
 	} else if info.GetPlatform() == updateconstants.PlatformLinux {
-		runAmazonLinuxPlatformUninstallCommands(log, orchestrationDirectory, out)
+		runAmazonLinuxPlatformUninstallCommands(context, log, orchestrationDirectory, out)
 		return
 	} else if info.GetPlatform() == updateconstants.PlatformRedHat {
-		runRedhatLinuxPlatformUninstallCommands(log, orchestrationDirectory, out)
+		runRedhatLinuxPlatformUninstallCommands(context, log, orchestrationDirectory, out)
 		return
 	} else {
 		log.Error("Unsupported Linux variant", err)
@@ -187,7 +187,7 @@ func RunUninstallCommands(context context.T, orchestrationDirectory string, out 
 	}
 }
 
-func runAmazonLinuxPlatformUninstallCommands(log log.T, orchestrationDirectory string, out iohandler.IOHandler) {
+func runAmazonLinuxPlatformUninstallCommands(context context.T, log log.T, orchestrationDirectory string, out iohandler.IOHandler) {
 	var err error
 	var command string
 	var output string
@@ -195,7 +195,7 @@ func runAmazonLinuxPlatformUninstallCommands(log log.T, orchestrationDirectory s
 	out.AppendInfo("Removing docker though yum")
 	command = "yum"
 	parameters = []string{"remove", "-y", "docker"}
-	output, err = dep.UpdateUtilExeCommandOutput(120, log, command, parameters, "", "", "", "", false)
+	output, err = dep.UpdateUtilExeCommandOutput(context, 120, log, command, parameters, "", "", "", "", false)
 	if err != nil {
 		log.Error("Error running yum remove", err)
 		out.MarkAsFailed(fmt.Errorf("Error running yum remove: %v", err))
@@ -207,7 +207,7 @@ func runAmazonLinuxPlatformUninstallCommands(log log.T, orchestrationDirectory s
 	return
 }
 
-func runRedhatLinuxPlatformUninstallCommands(log log.T, orchestrationDirectory string, out iohandler.IOHandler) {
+func runRedhatLinuxPlatformUninstallCommands(context context.T, log log.T, orchestrationDirectory string, out iohandler.IOHandler) {
 	var err error
 	var command string
 	var output string
@@ -215,7 +215,7 @@ func runRedhatLinuxPlatformUninstallCommands(log log.T, orchestrationDirectory s
 	out.AppendInfo("Removing docker though yum")
 	command = "yum"
 	parameters = []string{"remove", "-y", "docker-engine"}
-	output, err = dep.UpdateUtilExeCommandOutput(120, log, command, parameters, "", "", "", "", false)
+	output, err = dep.UpdateUtilExeCommandOutput(context, 120, log, command, parameters, "", "", "", "", false)
 	if err != nil {
 		log.Error("Error running yum remove", err)
 		out.MarkAsFailed(fmt.Errorf("Error running yum remove: %v", err))

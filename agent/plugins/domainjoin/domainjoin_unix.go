@@ -116,7 +116,10 @@ func (p *Plugin) Execute(config contracts.Configuration, cancelFlag task.CancelF
 	} else if cancelFlag.Canceled() {
 		output.MarkAsCancelled()
 	} else {
-		util := updateutil.Utility{CustomUpdateExecutionTimeoutInSeconds: UpdateExecutionTimeoutInSeconds}
+		util := updateutil.Utility{
+			Context:                               p.context,
+			CustomUpdateExecutionTimeoutInSeconds: UpdateExecutionTimeoutInSeconds,
+		}
 		utilExe = util.NewExeCommandOutput
 		p.runCommandsRawInput(config.PluginID, properties, config.OrchestrationDirectory, cancelFlag, output, utilExe)
 

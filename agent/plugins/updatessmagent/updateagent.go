@@ -290,7 +290,7 @@ func (p *Plugin) Execute(config contracts.Configuration, cancelFlag task.CancelF
 		// If we don't change ownership, other updates can start before before the updater has finished
 		err = lock.ChangeOwner(pid)
 		if err != nil {
-			log.Warnf("Failed to transfer ownership of update lockfile to updater, unlocking: %s", err)
+			log.Warnf("failed to transfer ownership of update lockfile to updater, unlocking: %s", err)
 			_ = lock.Unlock()
 		}
 	}

@@ -23,6 +23,7 @@ func TestCompareSemVer(t *testing.T) {
 	// SemVer and non-SemVer compliant versions
 	assert.True(t, Compare("3.0.0+foo", "3.0", false) > 0)
 	assert.True(t, Compare("3.0.0+foo", "3.0.0.1", false) > 0)
+	assert.True(t, Compare("3.2.0.0+foo", "3.1.9999.99999+foo", false) > 0)
 }
 
 func TestCompareVersion(t *testing.T) {

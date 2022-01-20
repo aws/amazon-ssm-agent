@@ -29,6 +29,7 @@ type DepMock struct {
 }
 
 func (m *DepMock) UpdateUtilExeCommandOutput(
+	context context.T,
 	customUpdateExecutionTimeoutInSeconds int,
 	log log.T,
 	cmd string,
@@ -38,7 +39,7 @@ func (m *DepMock) UpdateUtilExeCommandOutput(
 	stdOut string,
 	stdErr string,
 	usePlatformSpecificCommand bool) (output string, err error) {
-	args := m.Called(log, cmd, parameters, workingDir, outputRoot, stdOut, stdErr, usePlatformSpecificCommand)
+	args := m.Called(context, log, cmd, parameters, workingDir, outputRoot, stdOut, stdErr, usePlatformSpecificCommand)
 	return args.String(0), args.Error(1)
 }
 

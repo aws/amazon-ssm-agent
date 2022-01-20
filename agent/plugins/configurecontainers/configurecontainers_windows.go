@@ -27,5 +27,5 @@ func runInstallCommands(context context.T, pluginInput ConfigureContainerPluginI
 }
 
 func runUninstallCommands(context context.T, pluginInput ConfigureContainerPluginInput, orchestrationDirectory string, out iohandler.IOHandler) {
-	windowscontainerutil.RunUninstallCommands(context.Log(), orchestrationDirectory, out)
+	windowscontainerutil.RunUninstallCommands(context, orchestrationDirectory, out)
 }

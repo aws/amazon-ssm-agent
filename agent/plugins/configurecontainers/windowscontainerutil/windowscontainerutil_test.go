@@ -32,7 +32,7 @@ func successMock() *DepMock {
 	depmock.On("SetDaemonConfig", mock.Anything, mock.Anything).Return(nil)
 	depmock.On("MakeDirs", mock.Anything).Return(nil)
 	depmock.On("TempDir", mock.Anything, mock.Anything).Return("test", nil)
-	depmock.On("UpdateUtilExeCommandOutput", mock.Anything, mock.Anything, mock.Anything, mock.Anything,
+	depmock.On("UpdateUtilExeCommandOutput", mock.Anything, mock.Anything, mock.Anything, mock.Anything, mock.Anything,
 		mock.Anything, mock.Anything, mock.Anything, mock.Anything, mock.Anything).Return("True", nil)
 	depmock.On("ArtifactDownload", mock.Anything, mock.Anything).Return(artifact.DownloadOutput{}, nil)
 	depmock.On("LocalRegistryKeySetDWordValue", mock.Anything, mock.Anything, mock.Anything).Return(nil)

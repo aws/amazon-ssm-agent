@@ -23,11 +23,14 @@ import (
 	"time"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
+	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/fileutil"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/updateutil/updateconstants"
 	"github.com/aws/amazon-ssm-agent/agent/updateutil/updateinfo"
 	updateinfomocks "github.com/aws/amazon-ssm-agent/agent/updateutil/updateinfo/mocks"
+	"github.com/aws/amazon-ssm-agent/common/identity"
+	identityMocks "github.com/aws/amazon-ssm-agent/common/identity/mocks"
 	"github.com/aws/amazon-ssm-agent/core/executor"
 	executormocks "github.com/aws/amazon-ssm-agent/core/executor/mocks"
 	"github.com/aws/amazon-ssm-agent/core/workerprovider/longrunningprovider/model"
@@ -60,7 +63,11 @@ func TestCreateUpdateDownloadFolderSucceeded(t *testing.T) {
 	mkDirAll = func(path string, perm os.FileMode) error {
 		return nil
 	}
-	util := Utility{}
+
+	util := Utility{
+		Context: context.NewMockDefault(),
+	}
+
 	result, _ := util.CreateUpdateDownloadFolder()
 	assert.Contains(t, result, "update")
 }
@@ -69,7 +76,10 @@ func TestCreateUpdateDownloadFolderFailed(t *testing.T) {
 	mkDirAll = func(path string, perm os.FileMode) error {
 		return fmt.Errorf("Folder cannot be created")
 	}
-	util := Utility{}
+
+	util := Utility{
+		Context: context.NewMockDefault(),
+	}
 	_, err := util.CreateUpdateDownloadFolder()
 	assert.Error(t, err)
 }
@@ -227,6 +237,7 @@ func TestIsServiceRunning(t *testing.T) {
 
 	util := Utility{
 		ProcessExecutor: mock,
+		Context:         context.NewMockDefault(),
 	}
 	testCases := []struct {
 		info   updateinfo.T
@@ -270,6 +281,7 @@ func TestIsServiceRunningWithErrorMessageFromCommandExec(t *testing.T) {
 	mock.On("Processes").Return(nil, fmt.Errorf("SomeError"))
 	util := Utility{
 		ProcessExecutor: mock,
+		Context:         context.NewMockDefault(),
 	}
 	testCases := []struct {
 		info updateinfo.T
@@ -318,7 +330,9 @@ func TestExeCommandSucceeded(t *testing.T) {
 	execCommand = fakeExecCommand
 	cmdStart = func(*exec.Cmd) error { return nil }
 
-	util := Utility{}
+	util := Utility{
+		Context: context.NewMockDefault(),
+	}
 
 	for _, test := range testCases {
 		_, _, err := util.ExeCommand(logger,
@@ -430,7 +444,9 @@ func TestIsDiskSpaceSufficientForUpdateWithSufficientSpace(t *testing.T) {
 		}, nil
 	}
 
-	util := Utility{}
+	util := Utility{
+		Context: context.NewMockDefault(),
+	}
 	isSufficient, err := util.IsDiskSpaceSufficientForUpdate(logger)
 
 	assert.NoError(t, err)
@@ -446,7 +462,9 @@ func TestIsDiskSpaceSufficientForUpdateWithInsufficientSpace(t *testing.T) {
 		}, nil
 	}
 
-	util := Utility{}
+	util := Utility{
+		Context: context.NewMockDefault(),
+	}
 	isSufficient, err := util.IsDiskSpaceSufficientForUpdate(logger)
 
 	assert.NoError(t, err)
@@ -462,7 +480,9 @@ func TestIsDiskSpaceSufficientForUpdateWithDiskSpaceLoadFail(t *testing.T) {
 		}, fmt.Errorf("mock error - failed to load the disk space")
 	}
 
-	util := Utility{}
+	util := Utility{
+		Context: context.NewMockDefault(),
+	}
 	isSufficient, err := util.IsDiskSpaceSufficientForUpdate(logger)
 
 	assert.Error(t, err)
@@ -600,6 +620,36 @@ func TestIsIdentityRuntimeConfigSupported(t *testing.T) {
 
 	// invalid source
 	assert.False(t, IsIdentityRuntimeConfigSupported("SomeInvalidVersion"))
+}
+
+func TestUtility_setShareCredsEnvironment_SetsCommandAWSEnvironmentVariables_WhenIdentitySharesCredentials(t *testing.T) {
+	ctx := new(context.Mock)
+	agentIdentity := identityMocks.NewDefaultMockAgentIdentity()
+	ctx.On("Identity").Return(agentIdentity)
+	ctx.On("Log").Return(log.NewMockLog())
+
+	refresherAgentIdentity := &identityMocks.ICredentialRefresherAgentIdentity{}
+	refresherAgentIdentity.On("ShouldShareCredentials").Return(true)
+	expectedShareProfile := "SomeShareFileLocation"
+	expectedShareFile := "SomeShareFileLocation"
+	refresherAgentIdentity.On("ShareProfile").Return(expectedShareProfile)
+	refresherAgentIdentity.On("ShareFile").Return(expectedShareFile)
+	getCredentialsRefresherIdentity = func(agentIdentity identity.IAgentIdentity) (identity.ICredentialRefresherAgentIdentity, bool) {
+		return refresherAgentIdentity, true
+	}
+
+	utility := &Utility{
+		Context: ctx,
+	}
+
+	command := &exec.Cmd{}
+	utility.setCommandEnvironmentVariables(command)
+
+	expectedProfileVar := fmt.Sprintf("AWS_PROFILE=%s", expectedShareProfile)
+	expectedSharedFileVar := fmt.Sprintf("AWS_SHARED_CREDENTIALS_FILE=%s", expectedShareFile)
+
+	assert.Contains(t, command.Env, expectedProfileVar, "AWS_PROFILE environment variable not set")
+	assert.Contains(t, command.Env, expectedSharedFileVar, "AWS_SHARED_CREDENTIALS_FILE environment variable not set")
 }
 
 func (p *testProcess) Start(*model.WorkerConfig) (*model.Process, error) { return nil, nil }

@@ -69,6 +69,7 @@ func (m *DepMock) LocalRegistryKeyGetStringValue(path string, name string) (val 
 }
 
 func (m *DepMock) UpdateUtilExeCommandOutput(
+	context context.T,
 	customUpdateExecutionTimeoutInSeconds int,
 	log log.T,
 	cmd string,
