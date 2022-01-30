@@ -108,8 +108,11 @@ const (
 	//PlatformWindowsNano represents windows nano
 	PlatformWindowsNano = "windows-nano"
 
-	//PlatformMacOsX represents mac os
+	//PlatformMacOsX represents macOS for versions before BigSur
 	PlatformMacOsX = "mac os x"
+
+	//PlatformMacOs represents macOS
+	PlatformMacOs = "macos"
 
 	// DefaultUpdateExecutionTimeoutInSeconds represents default timeout time for execution update related scripts in seconds
 	DefaultUpdateExecutionTimeoutInSeconds = 150

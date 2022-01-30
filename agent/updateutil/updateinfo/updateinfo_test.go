@@ -53,6 +53,7 @@ func TestCreateInstanceContext(t *testing.T) {
 		{updateconstants.PlatformUbuntu, nil, "12", nil, updateconstants.PlatformUbuntu, updateconstants.PlatformUbuntu, false},
 		{updateconstants.PlatformWindows, nil, "5", nil, updateconstants.PlatformWindows, updateconstants.PlatformWindows, false},
 		{updateconstants.PlatformMacOsX, nil, "10.14.2", nil, updateconstants.PlatformMacOsX, updateconstants.PlatformDarwin, false},
+		{updateconstants.PlatformMacOs, nil, "12.1", nil, updateconstants.PlatformMacOsX, updateconstants.PlatformDarwin, false},
 		{"", fmt.Errorf("error"), "", nil, "", "", true},
 		{"", nil, "", fmt.Errorf("error"), "", "", true},
 	}
@@ -115,7 +116,7 @@ func TestFileNameConstruction(t *testing.T) {
 		{updateInfoImpl{contextMock, "linux", "2015.9", "linux", "amd64", "tar.gz", "installer", "uninstaller"}, "amazon-ssm-agent-linux-amd64.tar.gz"},
 		{updateInfoImpl{contextMock, "linux", "2015.9", "linux", "386", "tar.gz", "installer", "uninstaller"}, "amazon-ssm-agent-linux-386.tar.gz"},
 		{updateInfoImpl{contextMock, "ubuntu", "12", "ubuntu", "386", "tar.gz", "installer", "uninstaller"}, "amazon-ssm-agent-ubuntu-386.tar.gz"},
-		{updateInfoImpl{contextMock, "max os x", "10.14.2", "darwin", "amd64", "tar.gz", "installer", "uninstaller"}, "amazon-ssm-agent-darwin-amd64.tar.gz"},
+		{updateInfoImpl{contextMock, "mac os x", "10.14.2", "darwin", "amd64", "tar.gz", "installer", "uninstaller"}, "amazon-ssm-agent-darwin-amd64.tar.gz"},
 	}
 
 	for _, test := range testCases {

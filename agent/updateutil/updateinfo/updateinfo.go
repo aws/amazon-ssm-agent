@@ -186,7 +186,7 @@ func newInner(context context.T) (updateInfo *updateInfoImpl, err error) {
 		log.Info("Detected platform Debian")
 		platformName = updateconstants.PlatformDebian
 		downloadPlatformOverride = updateconstants.PlatformUbuntu
-	} else if strings.Contains(platformName, updateconstants.PlatformMacOsX) {
+	} else if strings.Contains(platformName, updateconstants.PlatformMacOsX) || strings.Contains(platformName, updateconstants.PlatformMacOs) {
 		log.Info("Detected platform MacOS")
 		platformName = updateconstants.PlatformMacOsX
 		downloadPlatformOverride = updateconstants.PlatformDarwin
