@@ -568,7 +568,7 @@ func Name() string {
 // GetUpdatePluginConfig returns the default values for the update plugin
 func GetUpdatePluginConfig(context context.T) UpdatePluginConfig {
 	var manifestURL string
-	dynamicS3Endpoint := context.Identity().GetDefaultEndpoint("s3")
+	dynamicS3Endpoint := context.Identity().GetServiceEndpoint("s3")
 	if dynamicS3Endpoint != "" {
 		manifestURL = "https://" + dynamicS3Endpoint + ManifestPath
 	} else {

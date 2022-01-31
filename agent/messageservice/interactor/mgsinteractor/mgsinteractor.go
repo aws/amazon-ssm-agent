@@ -525,7 +525,7 @@ var setupControlChannel = func(context context.T, mgsService service.Service, in
 
 // getMgsEndpoint builds mgs endpoint.
 func getMgsEndpoint(context context.T, region string) (string, error) {
-	hostName := mgsConfig.GetMgsEndpointFromRip(context, region)
+	hostName := mgsConfig.GetMgsEndpoint(context, region)
 	if hostName == "" {
 		return "", fmt.Errorf("no MGS endpoint found for region %s", region)
 	}

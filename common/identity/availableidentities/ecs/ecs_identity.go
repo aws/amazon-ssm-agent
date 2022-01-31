@@ -14,8 +14,6 @@
 package ecs
 
 import (
-	"fmt"
-
 	"github.com/aws/amazon-ssm-agent/common/identity/credentialproviders"
 	"github.com/aws/aws-sdk-go/aws/credentials"
 )
@@ -41,11 +39,6 @@ func (e *Identity) AvailabilityZone() (string, error) { return fetchAvailability
 
 // InstanceType returns the managed instance instanceType
 func (e *Identity) InstanceType() (string, error) { return ecsInstanceType, nil }
-
-// ServiceDomain returns the service domain of a ecs container
-func (e *Identity) ServiceDomain() (string, error) {
-	return "", fmt.Errorf("No service domain available in ECS")
-}
 
 // Credentials returns the managed instance credentials
 func (e *Identity) Credentials() *credentials.Credentials {

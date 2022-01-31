@@ -31,7 +31,7 @@ const (
 )
 
 func NewBirdwatcherFacade(context context.T) BirdwatcherFacade {
-	awsConfig := sdkutil.AwsConfig(context)
+	awsConfig := sdkutil.AwsConfig(context, "ssm")
 	// overriding the retry strategy
 	retryer := retry.BirdwatcherRetryer{
 		DefaultRetryer: client.DefaultRetryer{
@@ -45,9 +45,8 @@ func NewBirdwatcherFacade(context context.T) BirdwatcherFacade {
 	appCfg := context.AppConfig()
 	if appCfg.Ssm.Endpoint != "" {
 		cfg.Endpoint = &appCfg.Ssm.Endpoint
-	} else if defaultEndpoint := context.Identity().GetDefaultEndpoint("ssm"); defaultEndpoint != "" {
-		cfg.Endpoint = &defaultEndpoint
 	}
+
 	if appCfg.Agent.Region != "" {
 		cfg.Region = &appCfg.Agent.Region
 	}

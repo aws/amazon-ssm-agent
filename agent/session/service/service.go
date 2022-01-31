@@ -132,7 +132,7 @@ var makeRestcall = func(log log.T, appConfig appconfig.SsmagentConfig, request [
 // channelType can be control-channel or data-channel
 func getMGSBaseUrl(context context.T, channelType string, channelId string, region string) (output string, err error) {
 	// build url for CreateControlChannel or CreateDataChannel
-	hostName := mgsconfig.GetMgsEndpointFromRip(context, region)
+	hostName := mgsconfig.GetMgsEndpoint(context, region)
 	if hostName == "" {
 		return "", fmt.Errorf("failed to get host name with error: %s", err)
 	}

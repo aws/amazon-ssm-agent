@@ -53,6 +53,7 @@ func NewCredentialsProvider(log log.T, config *appconfig.SsmagentConfig, info re
 		registrationInfo:      info,
 		isSharingCreds:        sharingCreds,
 		executableToRotateKey: executableToRotateKey,
+		endpointHelper:        endpoint.NewEndpointHelper(log, *config),
 	}
 
 	provider.initializeClient(info.PrivateKey(log))
@@ -249,8 +250,5 @@ var createNewClient = func(m *onpremCredentialsProvider, privateKey string) rsaa
 	instanceID := m.registrationInfo.InstanceID(m.log)
 	region := m.registrationInfo.Region(m.log)
 
-	// Get default SSM Endpoint
-	defaultEndpoint := endpoint.GetDefaultEndpoint(m.log, "ssm", region, "")
-
-	return rsaauth.NewRsaService(m.log, m.config, instanceID, region, defaultEndpoint, privateKey)
+	return rsaauth.NewRsaService(m.log, m.config, instanceID, region, privateKey)
 }

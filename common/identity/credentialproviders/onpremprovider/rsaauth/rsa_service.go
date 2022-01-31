@@ -37,17 +37,13 @@ type sdkService struct {
 }
 
 // NewRsaService creates a new SSM service instance.
-func NewRsaService(log log.T, appConfig *appconfig.SsmagentConfig, serverId, region, defaultEndpoint, encodedPrivateKey string) RsaSignedService {
+func NewRsaService(log log.T, appConfig *appconfig.SsmagentConfig, serverId, region, encodedPrivateKey string) RsaSignedService {
+	awsConfig := util.AwsConfig(log, *appConfig, "ssm", region)
 
-	awsConfig := util.AwsConfig(log, *appConfig)
-
-	awsConfig.Region = &region
 	awsConfig.Credentials = credentials.NewStaticCredentials(serverId, encodedPrivateKey, "")
 
 	if appConfig.Ssm.Endpoint != "" {
 		awsConfig.Endpoint = &appConfig.Ssm.Endpoint
-	} else if defaultEndpoint != "" {
-		awsConfig.Endpoint = &defaultEndpoint
 	}
 
 	// Create a session to share service client config and handlers with

@@ -128,14 +128,14 @@ func (suite *SelfUpdateTestSuite) TestGetDownloadManifestURL() {
 	var manifestUrl, chinaRegion, commonRegion string
 	chinaRegion = "cn-north-1"
 	chinaManifestUrl := "https://s3.cn-north-1.amazonaws.com.cn/amazon-ssm-cn-north-1/ssm-agent-manifest.json"
-	suite.identityMock.On("GetDefaultEndpoint", "s3").Return("s3.cn-north-1.amazonaws.com.cn").Once()
+	suite.identityMock.On("GetServiceEndpoint", "s3").Return("s3.cn-north-1.amazonaws.com.cn").Once()
 
 	manifestUrl = suite.selfUpdater.generateDownloadManifestURL(suite.logMock, chinaRegion)
 	assert.Equal(suite.T(), manifestUrl, chinaManifestUrl)
 
 	commonRegion = "us-east-1"
 	commonManifestUrl := "https://s3.us-east-1.amazonaws.com/amazon-ssm-us-east-1/ssm-agent-manifest.json"
-	suite.identityMock.On("GetDefaultEndpoint", "s3").Return("s3.us-east-1.amazonaws.com").Once()
+	suite.identityMock.On("GetServiceEndpoint", "s3").Return("s3.us-east-1.amazonaws.com").Once()
 
 	manifestUrl = suite.selfUpdater.generateDownloadManifestURL(suite.logMock, commonRegion)
 	assert.Equal(suite.T(), manifestUrl, commonManifestUrl)
@@ -147,14 +147,14 @@ func (suite *SelfUpdateTestSuite) TestGetDownloadUpdaterChina() {
 
 	chinaRegion = "cn-north-1"
 	chinaUpdaterUrl := "https://s3.cn-north-1.amazonaws.com.cn/amazon-ssm-cn-north-1/amazon-ssm-agent-updater/latest/amazon-ssm-agent-updater-linux-amd64.tar.gz"
-	suite.identityMock.On("GetDefaultEndpoint", "s3").Return("s3.cn-north-1.amazonaws.com.cn").Once()
+	suite.identityMock.On("GetServiceEndpoint", "s3").Return("s3.cn-north-1.amazonaws.com.cn").Once()
 
 	updaterUrl = suite.selfUpdater.generateDownloadUpdaterURL(suite.logMock, chinaRegion, fileName)
 	assert.Equal(suite.T(), chinaUpdaterUrl, updaterUrl)
 
 	commonRegion = "eu-west-1"
 	commonUpdaterUrl := "https://s3.eu-west-1.amazonaws.com/amazon-ssm-eu-west-1/amazon-ssm-agent-updater/latest/amazon-ssm-agent-updater-linux-amd64.tar.gz"
-	suite.identityMock.On("GetDefaultEndpoint", "s3").Return("s3.eu-west-1.amazonaws.com").Once()
+	suite.identityMock.On("GetServiceEndpoint", "s3").Return("s3.eu-west-1.amazonaws.com").Once()
 
 	updaterUrl = suite.selfUpdater.generateDownloadUpdaterURL(suite.logMock, commonRegion, fileName)
 	assert.Equal(suite.T(), commonUpdaterUrl, updaterUrl)

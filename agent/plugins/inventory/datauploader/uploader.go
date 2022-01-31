@@ -68,16 +68,14 @@ func NewInventoryUploader(context context.T) (*InventoryUploader, error) {
 	uploader.context = c
 	log := c.Log()
 	appCfg = c.AppConfig()
-	identity := c.Identity()
 
 	// setting ssm client config
-	cfg := sdkutil.AwsConfig(c)
+	cfg := sdkutil.AwsConfig(c, "ssm")
 
 	if appCfg.Ssm.Endpoint != "" {
 		cfg.Endpoint = &appCfg.Ssm.Endpoint
-	} else if defaultEndpoint := identity.GetDefaultEndpoint("ssm"); defaultEndpoint != "" {
-		cfg.Endpoint = &defaultEndpoint
 	}
+
 	if appCfg.Agent.Region != "" {
 		cfg.Region = &appCfg.Agent.Region
 	}

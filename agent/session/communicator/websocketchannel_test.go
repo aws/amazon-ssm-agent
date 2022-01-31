@@ -81,7 +81,7 @@ func handlerToBeTested(w http.ResponseWriter, req *http.Request) {
 }
 
 func TestInitialize(t *testing.T) {
-	mgsConfig.GetMgsEndpointFromRip = func(context context.T, region string) string {
+	mgsConfig.GetMgsEndpoint = func(context context.T, region string) string {
 		return mgsHost
 	}
 

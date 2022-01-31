@@ -16,7 +16,6 @@ package identity
 import (
 	"strings"
 
-	"github.com/aws/amazon-ssm-agent/common/identity/endpoint"
 	"github.com/aws/aws-sdk-go/aws/credentials"
 )
 
@@ -128,19 +127,17 @@ func (c *agentIdentityCacher) IdentityType() string {
 	return c.identityType
 }
 
-func (c *agentIdentityCacher) GetDefaultEndpoint(service string) string {
+func (c *agentIdentityCacher) GetServiceEndpoint(service string) string {
 	c.mutex.Lock()
 	defer c.mutex.Unlock()
-	var region, serviceDomain string
+	var region string
 	var err error
 
 	if region, err = c.regionInner(); err != nil {
 		c.log.Warnf("failed to get region with err: %v", err)
 	}
 
-	serviceDomain, _ = c.client.ServiceDomain()
-
-	return endpoint.GetDefaultEndpoint(c.log, service, region, serviceDomain)
+	return c.endpointHelper.GetServiceEndpoint(service, region)
 }
 
 func (c *agentIdentityCacher) getInner() IAgentIdentityInner {

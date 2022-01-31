@@ -29,7 +29,7 @@ func NewDefaultMockAgentIdentity() *IAgentIdentity {
 	agentIdentity.On("Region").Return(MockRegion, nil)
 	agentIdentity.On("ServiceDomain").Return(MockServiceDomain, nil)
 	agentIdentity.On("ShortInstanceID").Return(MockShortInstanceID, nil)
-	agentIdentity.On("GetDefaultEndpoint", mock.AnythingOfType("string")).Return(func(service string) string {
+	agentIdentity.On("GetServiceEndpoint", mock.AnythingOfType("string")).Return(func(service string) string {
 		return service + "." + MockRegion + "." + MockServiceDomain
 	})
 	return &agentIdentity

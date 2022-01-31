@@ -99,21 +99,6 @@ func TestEC2IdentityType_InstanceType(t *testing.T) {
 	assert.NoError(t, err)
 }
 
-func TestEC2IdentityType_ServiceDomain(t *testing.T) {
-	client := &iEC2MdsSdkClientMock{}
-
-	identity := Identity{
-		Log:    log.NewMockLog(),
-		Client: client,
-	}
-	val := "SomeServiceDomain"
-	client.On("GetMetadata", ec2ServiceDomainResource).Return(val, nil).Once()
-
-	res, err := identity.ServiceDomain()
-	assert.Equal(t, res, val)
-	assert.NoError(t, err)
-}
-
 func TestEC2IdentityType_Credentials(t *testing.T) {
 	client := &iEC2MdsSdkClientMock{}
 

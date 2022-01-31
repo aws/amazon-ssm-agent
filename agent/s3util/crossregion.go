@@ -80,7 +80,7 @@ func GetS3CrossRegionCapableSession(context context.T, bucketName string) (*sess
 		log.Infof("using instance region %v for bucket %v", initialRegion, bucketName)
 	}
 
-	config := makeAwsConfig(context, initialRegion)
+	config := makeAwsConfig(context, "s3", initialRegion)
 
 	appConfig := context.AppConfig()
 

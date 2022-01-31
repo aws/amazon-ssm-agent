@@ -153,7 +153,7 @@ func (suite *MGSInteractorTestSuite) TestGetMgsEndpoint() {
 	// create mock context and log
 	contextMock := context.NewMockDefault()
 
-	mgsConfig.GetMgsEndpointFromRip = func(context context.T, region string) string {
+	mgsConfig.GetMgsEndpoint = func(context context.T, region string) string {
 		if region == "us-east-1" {
 			return "ssmmessages.us-east-1.amazonaws.com"
 		} else if region == "cn-north-1" {

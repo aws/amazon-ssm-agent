@@ -48,7 +48,7 @@ func TestResolveManifestUrl_EmptyURL_DynamicEndpointSuccess(t *testing.T) {
 
 	context.On("Identity").Return(identity)
 	context.On("Log").Return(log.NewMockLog())
-	identity.On("GetDefaultEndpoint", "s3").Return("SomeRandom_{Region}_URL")
+	identity.On("GetServiceEndpoint", "s3").Return("SomeRandom_{Region}_URL")
 	util := &updateS3UtilImpl{
 		context,
 	}
@@ -65,7 +65,7 @@ func TestResolveManifestUrl_EmptyURL_EmptyDynamicEndpoint(t *testing.T) {
 
 	context.On("Identity").Return(identity)
 	context.On("Log").Return(log.NewMockLog())
-	identity.On("GetDefaultEndpoint", "s3").Return("")
+	identity.On("GetServiceEndpoint", "s3").Return("")
 	util := &updateS3UtilImpl{
 		context,
 	}

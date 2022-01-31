@@ -15,16 +15,18 @@
 package config
 
 import (
+	"net/url"
 	"time"
 
 	"github.com/aws/amazon-ssm-agent/agent/context"
-	"github.com/aws/amazon-ssm-agent/agent/rip"
+	"github.com/aws/amazon-ssm-agent/common/identity/endpoint"
 )
 
 const (
-	SessionServiceName            = "MessageGatewayService"
-	DotDelimiter                  = "."
-	ServiceName                   = rip.MgsServiceName
+	SessionServiceName = "MessageGatewayService"
+	DotDelimiter       = "."
+
+	ServiceName                   = "ssmmessages"
 	HttpsPrefix                   = "https://"
 	WebSocketPrefix               = "wss://"
 	ControlChannel                = "control-channel"
@@ -86,6 +88,23 @@ const (
 	S3EncryptionErrorMsg                             = "We couldn't start the session because encryption is not set up on the selected Amazon S3 bucket. Either encrypt the bucket or choose an option to enable logging without encryption."
 )
 
-var GetMgsEndpointFromRip = func(context context.T, region string) string {
-	return rip.GetMgsEndpoint(context, region)
+var GetMgsEndpoint = func(context context.T, region string) string {
+	appConfig := context.AppConfig()
+	if appConfig.Mgs.Endpoint != "" {
+		// use net/url package to parse endpoint, if endpoint doesn't contain protocol,
+		// fullUrl.Host is empty, should return fullUrl.Path. For backwards compatible, return the non-empty one.
+		fullUrl, err := url.Parse(appConfig.Mgs.Endpoint)
+		if err == nil {
+			if fullUrl.Host != "" {
+				return fullUrl.Host
+			}
+
+			return fullUrl.Path
+		}
+	}
+
+	endpointHelper := endpoint.NewEndpointHelper(context.Log(), appConfig)
+	mgsEndpoint := endpointHelper.GetServiceEndpoint(ServiceName, region)
+
+	return mgsEndpoint
 }

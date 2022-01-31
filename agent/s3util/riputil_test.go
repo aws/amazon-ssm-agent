@@ -46,12 +46,3 @@ func TestGetFallbackS3Endpoint(t *testing.T) {
 		assert.Equal(t, test.output, output, "The two urls should be the same")
 	}
 }
-
-func TestIsKnownRegion(t *testing.T) {
-	assert.True(t, isKnownRegion("us-east-1"))
-	assert.True(t, isKnownRegion("eu-west-1"))
-	assert.True(t, isKnownRegion("us-gov-east-1"))
-	assert.True(t, isKnownRegion("cn-north-1"))
-	assert.False(t, isKnownRegion(""))
-	assert.False(t, isKnownRegion("not-a-region"))
-}

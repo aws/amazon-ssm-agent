@@ -646,7 +646,7 @@ func GetManifestURLFromSourceUrl(sourceURL string) (string, error) {
 // ResolveAgentReleaseBucketURL makes best effort to generate an url for the ssm agent bucket
 func ResolveAgentReleaseBucketURL(region string, identity identity.IAgentIdentity) string {
 	s3Url := ""
-	if dynamicS3Endpoint := identity.GetDefaultEndpoint("s3"); dynamicS3Endpoint != "" {
+	if dynamicS3Endpoint := identity.GetServiceEndpoint("s3"); dynamicS3Endpoint != "" {
 		s3Url = "https://" + dynamicS3Endpoint
 	} else if strings.HasPrefix(region, s3util.ChinaRegionPrefix) {
 		s3Url = updateconstants.ChinaS3URL

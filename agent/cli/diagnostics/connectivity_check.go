@@ -243,7 +243,7 @@ func (q connectivityCheckQuery) Execute() diagnosticsutil.DiagnosticOutput {
 		}
 	}
 
-	address := agentIdentity.GetDefaultEndpoint(q.service)
+	address := agentIdentity.GetServiceEndpoint(q.service)
 
 	proxyMap := proxyconfig.GetProxyConfig()
 	if isProxyDefined(proxyMap) {

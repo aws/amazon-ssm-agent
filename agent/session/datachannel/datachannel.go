@@ -29,7 +29,6 @@ import (
 
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/log"
-	"github.com/aws/amazon-ssm-agent/agent/rip"
 	"github.com/aws/amazon-ssm-agent/agent/session/communicator"
 	mgsConfig "github.com/aws/amazon-ssm-agent/agent/session/config"
 	mgsContracts "github.com/aws/amazon-ssm-agent/agent/session/contracts"
@@ -1134,7 +1133,7 @@ func getDataChannelToken(log log.T,
 
 // getMgsEndpoint builds mgs endpoint.
 func getMgsEndpoint(context context.T, region string) (string, error) {
-	hostName := rip.GetMgsEndpoint(context, region)
+	hostName := mgsConfig.GetMgsEndpoint(context, region)
 	if hostName == "" {
 		return "", fmt.Errorf("no MGS endpoint found in region %s", region)
 	}

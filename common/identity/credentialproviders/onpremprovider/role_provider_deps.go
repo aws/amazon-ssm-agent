@@ -22,6 +22,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/managedInstances/registration"
 	"github.com/aws/amazon-ssm-agent/common/identity/credentialproviders/onpremprovider/rsaauth"
+	"github.com/aws/amazon-ssm-agent/common/identity/endpoint"
 	"github.com/aws/aws-sdk-go/aws/credentials"
 	"github.com/cenkalti/backoff/v4"
 )
@@ -53,4 +54,6 @@ type onpremCredentialsProvider struct {
 
 	isSharingCreds        bool
 	executableToRotateKey string
+
+	endpointHelper endpoint.IEndpointHelper
 }

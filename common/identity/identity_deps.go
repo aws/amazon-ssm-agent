@@ -18,6 +18,7 @@ import (
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/log"
+	"github.com/aws/amazon-ssm-agent/common/identity/endpoint"
 	"github.com/aws/aws-sdk-go/aws/credentials"
 )
 
@@ -30,7 +31,7 @@ type IAgentIdentity interface {
 	InstanceType() (string, error)
 	Credentials() *credentials.Credentials
 	IdentityType() string
-	GetDefaultEndpoint(string) string
+	GetServiceEndpoint(string) string
 }
 
 type iInnerIdentityGetter interface {
@@ -43,7 +44,6 @@ type IAgentIdentityInner interface {
 	Region() (string, error)
 	AvailabilityZone() (string, error)
 	InstanceType() (string, error)
-	ServiceDomain() (string, error)
 	IsIdentityEnvironment() bool
 	Credentials() *credentials.Credentials
 	IdentityType() string
@@ -68,6 +68,7 @@ type agentIdentityCacher struct {
 	mutex            sync.Mutex
 	log              log.T
 	client           IAgentIdentityInner
+	endpointHelper   endpoint.IEndpointHelper
 }
 
 type createIdentityFunc func(log.T, *appconfig.SsmagentConfig) []IAgentIdentityInner

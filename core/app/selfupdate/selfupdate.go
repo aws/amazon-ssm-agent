@@ -391,7 +391,7 @@ func (u *SelfUpdate) unCompress(log logger.T,
 func (u *SelfUpdate) generateDownloadUpdaterURL(log logger.T, region string, fileName string) (url string) {
 	var urlFormat string
 
-	if dynamicS3Endpoint := u.context.Identity().GetDefaultEndpoint("s3"); dynamicS3Endpoint != "" {
+	if dynamicS3Endpoint := u.context.Identity().GetServiceEndpoint("s3"); dynamicS3Endpoint != "" {
 		urlFormat = "https://" + dynamicS3Endpoint + UrlPath
 	} else {
 		// could not retrieve the default s3 endpoint, generate endpoint from region information
@@ -408,7 +408,7 @@ func (u *SelfUpdate) generateDownloadUpdaterURL(log logger.T, region string, fil
 
 func (u *SelfUpdate) generateDownloadManifestURL(log logger.T, region string) (manifestUrl string) {
 
-	if dynamicS3Endpoint := u.context.Identity().GetDefaultEndpoint("s3"); dynamicS3Endpoint != "" {
+	if dynamicS3Endpoint := u.context.Identity().GetServiceEndpoint("s3"); dynamicS3Endpoint != "" {
 		manifestUrl = "https://" + dynamicS3Endpoint + ManifestPath
 	} else {
 		// could not retrieve the default s3 endpoint, generate endpoint from region information

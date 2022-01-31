@@ -49,8 +49,8 @@ func (_m *IAgentIdentity) Credentials() *credentials.Credentials {
 	return r0
 }
 
-// GetDefaultEndpoint provides a mock function with given fields: _a0
-func (_m *IAgentIdentity) GetDefaultEndpoint(_a0 string) string {
+// GetServiceEndpoint provides a mock function with given fields: _a0
+func (_m *IAgentIdentity) GetServiceEndpoint(_a0 string) string {
 	ret := _m.Called(_a0)
 
 	var r0 string

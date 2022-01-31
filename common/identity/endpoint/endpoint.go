@@ -14,97 +14,114 @@
 package endpoint
 
 import (
+	"regexp"
 	"strings"
+	"sync"
 
+	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/log"
-	"github.com/aws/aws-sdk-go/aws"
-	"github.com/aws/aws-sdk-go/aws/ec2metadata"
-	"github.com/aws/aws-sdk-go/aws/session"
 )
 
-var awsRegionServiceDomainMap = map[string]string{
-	"ap-east-1":      "amazonaws.com",
-	"ap-northeast-1": "amazonaws.com",
-	"ap-northeast-2": "amazonaws.com",
-	"ap-south-1":     "amazonaws.com",
-	"ap-southeast-1": "amazonaws.com",
-	"ap-southeast-2": "amazonaws.com",
-	"ca-central-1":   "amazonaws.com",
-	"cn-north-1":     "amazonaws.com.cn",
-	"cn-northwest-1": "amazonaws.com.cn",
-	"eu-central-1":   "amazonaws.com",
-	"eu-north-1":     "amazonaws.com",
-	"eu-west-1":      "amazonaws.com",
-	"eu-west-2":      "amazonaws.com",
-	"eu-west-3":      "amazonaws.com",
-	"me-south-1":     "amazonaws.com",
-	"sa-east-1":      "amazonaws.com",
-	"us-east-1":      "amazonaws.com",
-	"us-east-2":      "amazonaws.com",
-	"us-gov-east-1":  "amazonaws.com",
-	"us-gov-west-1":  "amazonaws.com",
-	"us-west-1":      "amazonaws.com",
-	"us-west-2":      "amazonaws.com",
+// Map defining region prefixes and the default service domain for prefix, keys are processed in random order
+var regionPrefixServiceDomain = map[string]string{
+	"cn-":      "amazonaws.com.cn",
+	"us-iso-":  "c2s.ic.gov",
+	"us-isob-": "sc2s.sgov.gov",
 }
 
+// default service domain if prefix does not exist in awsFallbackServiceDomain map
 const (
-	ec2ServiceDomainResource = "services/domain"
-	defaultServiceDomain     = "amazonaws.com"
-	defaultCNServiceDomain   = "amazonaws.com.cn"
-	maxRetries               = 3
+	defaultServiceDomain = "amazonaws.com"
+
+	regionMaxLength = 100
 )
 
-// iEC2MdsSdkClient defines the functions that ec2_identity depends on from the aws sdk
-type iEC2MdsSdkClient interface {
-	GetMetadata(string) (string, error)
+// The following regex only allows a-z upper/lower case characters, digits and dashes for region strings
+var supportedRegionReg = regexp.MustCompile(`^[A-Za-z0-9-]+$`)
+
+type IEndpointHelper interface {
+	// GetServiceEndpoint returns the endpoint for a service in a specific region
+	GetServiceEndpoint(service, region string) string
 }
 
-// NewEC2MetadataClient creates new ec2 metadata client
-func newEC2MetadataClient() iEC2MdsSdkClient {
-	awsConfig := &aws.Config{}
-	awsConfig = awsConfig.WithMaxRetries(3)
-	awsConfig = awsConfig.WithEC2MetadataDisableTimeoutOverride(true)
-	sess, _ := session.NewSession(awsConfig)
+func GetServiceDomainByPrefix(region string) string {
+	for regionPrefix, serviceDomain := range regionPrefixServiceDomain {
+		if strings.HasPrefix(region, regionPrefix) {
+			return serviceDomain
+		}
+	}
 
-	return ec2metadata.New(sess)
+	return defaultServiceDomain
 }
 
-var ec2Metadata = newEC2MetadataClient()
+type endpointImpl struct {
+	log    log.T
+	config appconfig.SsmagentConfig
 
-// getDefaultEndpoint returns the default endpoint for a service
-func GetDefaultEndpoint(log log.T, service, region, serviceDomain string) string {
+	cacheLock                  sync.RWMutex
+	regionServiceEndpointCache map[string]map[string]string
+}
+
+func (e *endpointImpl) isRegionValid(region string) bool {
+	return len(region) <= regionMaxLength && supportedRegionReg.Match([]byte(region))
+}
+
+func (e *endpointImpl) endpointCacheLookup(service, region string) string {
+	e.cacheLock.RLock()
+	defer e.cacheLock.RUnlock()
+	if serviceEndpointCache, ok := e.regionServiceEndpointCache[region]; ok {
+		if endpoint, ok := serviceEndpointCache[service]; ok {
+			return endpoint
+		}
+	}
+	return ""
+}
+
+func (e *endpointImpl) setEndpointCache(service, region, endpoint string) {
+	e.cacheLock.Lock()
+	defer e.cacheLock.Unlock()
+	if _, ok := e.regionServiceEndpointCache[region]; !ok {
+		e.regionServiceEndpointCache[region] = map[string]string{}
+	}
+
+	e.regionServiceEndpointCache[region][service] = endpoint
+}
+
+func (e *endpointImpl) GetServiceEndpoint(service, region string) string {
+	e.log.Debugf("Determining endpoint for service %s in region %s", service, region)
+	var serviceDomain string
 	if region == "" {
-		log.Error("Cannot get default endpoint for service due to unspecified region.")
+		// If region is not defined, we are unable to determine endpoint for the service
+		e.log.Errorf("Cannot get endpoint for service %s due to unspecified region.", service)
 		return ""
+	} else if service == "" {
+		// If service is not defined, we are unable to determine endpoint
+		e.log.Errorf("Cannot get endpoint for service in region %s due to unspecified service.", service)
+		return ""
+	} else if !e.isRegionValid(region) {
+		e.log.Errorf("Unable to determine endpoint because region %s has invalid characters", region)
+		return ""
+	} else if endpoint := e.endpointCacheLookup(service, region); endpoint != "" {
+		return endpoint
 	}
 
-	var endpoint string
-	if serviceDomain != "" {
-		endpoint = serviceDomain
-	} else if val, ok := awsRegionServiceDomainMap[region]; ok {
-		endpoint = val
+	if e.config.Agent.ServiceDomain != "" {
+		serviceDomain = e.config.Agent.ServiceDomain
 	} else {
-		dynamicServiceDomain, err := ec2Metadata.GetMetadata(ec2ServiceDomainResource)
-		if err == nil {
-			endpoint = dynamicServiceDomain
-		} else {
-			log.Warnf("Failed to get service domain from ec2 metadata: %v", err)
-		}
+		serviceDomain = GetServiceDomainByPrefix(region)
 	}
 
-	if endpoint == "" {
-		if strings.HasPrefix(region, "cn-") {
-			endpoint = defaultCNServiceDomain
-		} else {
-			endpoint = defaultServiceDomain
-		}
-
-		log.Warnf("Service domain not found in region-domain map and could not be retrieved from instance metadata. Using %s as default", endpoint)
-	}
-
-	return getServiceEndpoint(region, service, endpoint)
+	// Build the full endpoint for the service in the region
+	endpoint := service + "." + region + "." + serviceDomain
+	e.setEndpointCache(service, region, endpoint)
+	return endpoint
 }
 
-func getServiceEndpoint(region string, service string, endpoint string) string {
-	return service + "." + region + "." + endpoint
+func NewEndpointHelper(log log.T, config appconfig.SsmagentConfig) *endpointImpl {
+	return &endpointImpl{
+		log,
+		config,
+		sync.RWMutex{},
+		map[string]map[string]string{},
+	}
 }

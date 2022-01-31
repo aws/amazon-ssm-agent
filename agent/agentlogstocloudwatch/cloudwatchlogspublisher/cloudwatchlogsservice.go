@@ -95,13 +95,13 @@ func createCloudWatchStopPolicy() *sdkutil.StopPolicy {
 
 // createCloudWatchClient creates a client to call CloudWatchLogs APIs
 func createCloudWatchClient(context context.T) cloudwatchlogsinterface.CloudWatchLogsClient {
-	config := sdkutil.AwsConfig(context)
+	config := sdkutil.AwsConfig(context, "logs")
 	return createCloudWatchClientWithConfig(context, config)
 }
 
 // createCloudWatchClientWithCredentials creates a client to call CloudWatchLogs APIs using credentials from the id and secret passed
 func createCloudWatchClientWithCredentials(context context.T, id, secret string) cloudwatchlogsinterface.CloudWatchLogsClient {
-	config := sdkutil.AwsConfig(context).WithCredentials(credentials.NewStaticCredentials(id, secret, ""))
+	config := sdkutil.AwsConfig(context, "logs").WithCredentials(credentials.NewStaticCredentials(id, secret, ""))
 	return createCloudWatchClientWithConfig(context, config)
 }
 
@@ -111,10 +111,6 @@ func createCloudWatchClientWithConfig(context context.T, config *aws.Config) clo
 	config = request.WithRetryer(config, client.DefaultRetryer{
 		NumMaxRetries: maxRetries,
 	})
-
-	if defaultEndpoint := context.Identity().GetDefaultEndpoint("logs"); defaultEndpoint != "" {
-		config.Endpoint = &defaultEndpoint
-	}
 
 	appConfig := context.AppConfig()
 

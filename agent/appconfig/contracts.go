@@ -33,13 +33,10 @@ type MdsCfg struct {
 
 // SsmCfg represents configuration for Simple system manager (SSM)
 type SsmCfg struct {
-	Endpoint                    string
-	HealthFrequencyMinutes      int
-	AssociationFrequencyMinutes int
-	AssociationRetryLimit       int
-	// TODO: test hook, can be removed before release
-	// this is to skip ssl verification for the beta self signed certs
-	InsecureSkipVerify             bool
+	Endpoint                       string
+	HealthFrequencyMinutes         int
+	AssociationFrequencyMinutes    int
+	AssociationRetryLimit          int
 	CustomInventoryDefaultLocation string
 	// Hours to retain association logs in the orchestration folder
 	AssociationLogsRetentionDurationHours int
@@ -58,6 +55,7 @@ type AgentInfo struct {
 	Name                                    string
 	Version                                 string
 	Region                                  string
+	ServiceDomain                           string
 	OrchestrationRootDir                    string
 	DownloadRootDir                         string
 	ContainerMode                           bool
@@ -134,7 +132,6 @@ type CustomIdentity struct {
 	Region              string
 	AvailabilityZone    string
 	InstanceType        string
-	ServiceDomain       string
 	CredentialsProvider string
 }
 

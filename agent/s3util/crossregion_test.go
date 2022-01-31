@@ -185,7 +185,7 @@ func TestGetS3CrossRegionCapableSession_noRegionFromHead_withConfigOverrides(t *
 
 func setupMocksForGetS3CrossRegionCapableSession(instanceRegion, bucketName, headBucketResponse string) {
 	setupMockHeadBucketResponse(bucketName, instanceRegion, headBucketResponse)
-	makeAwsConfig = func(context context.T, region string) *aws.Config {
+	makeAwsConfig = func(context context.T, service, region string) *aws.Config {
 		result := aws.NewConfig()
 		result.Region = aws.String(region)
 		result.Credentials = credentials.NewCredentials(&mockCredentialsProvider{})

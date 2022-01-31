@@ -50,11 +50,6 @@ func (i *Identity) InstanceType() (string, error) {
 	return i.Client.GetMetadata(ec2InstanceTypeResource)
 }
 
-// ServiceDomain returns the service domain of a ec2 instance
-func (i *Identity) ServiceDomain() (string, error) {
-	return i.Client.GetMetadata(ec2ServiceDomainResource)
-}
-
 // Credentials returns the managed instance credentials.
 // Since credentials expire in about 6 hours, setting the ExpiryWindow to 5 hours
 // will trigger a refresh 5 hours before they actually expire. So the TTL of credentials

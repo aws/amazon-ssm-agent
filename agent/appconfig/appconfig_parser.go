@@ -35,6 +35,7 @@ func parser(config *SsmagentConfig) {
 	config.Agent.Name = getStringValue(config.Agent.Name, DefaultAgentName)
 	config.Agent.OrchestrationRootDir = getStringValue(config.Agent.OrchestrationRootDir, defaultOrchestrationRootDirName)
 	config.Agent.Region = getStringValue(config.Agent.Region, "")
+	config.Agent.ServiceDomain = getStringValue(config.Agent.ServiceDomain, "")
 	config.Agent.TelemetryMetricsNamespace = getStringValue(config.Agent.TelemetryMetricsNamespace, DefaultTelemetryNamespace)
 	config.Agent.LongRunningWorkerMonitorIntervalSeconds = getNumericValue(
 		config.Agent.LongRunningWorkerMonitorIntervalSeconds,

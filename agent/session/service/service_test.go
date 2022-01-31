@@ -63,7 +63,7 @@ func TestCreateControlChannel(t *testing.T) {
 		MessageSchemaVersion: aws.String(mgsConfig.MessageSchemaVersion),
 		RequestId:            aws.String(uuid.NewV4().String()),
 	}
-	mgsConfig.GetMgsEndpointFromRip = func(context context.T, region string) string {
+	mgsConfig.GetMgsEndpoint = func(context context.T, region string) string {
 		return mgsHost
 	}
 	makeRestcall = func(log log.T, appConfig appconfig.SsmagentConfig, request []byte, methodType string, url string, region string, signer *v4.Signer) ([]byte, error) {
@@ -86,7 +86,7 @@ func TestCreateDataChannel(t *testing.T) {
 		RequestId:            aws.String(uuid.NewV4().String()),
 		ClientId:             aws.String(uuid.NewV4().String()),
 	}
-	mgsConfig.GetMgsEndpointFromRip = func(context context.T, region string) string {
+	mgsConfig.GetMgsEndpoint = func(context context.T, region string) string {
 		return mgsHost
 	}
 	makeRestcall = func(log log.T, appConfig appconfig.SsmagentConfig, request []byte, methodType string, url string, region string, signer *v4.Signer) ([]byte, error) {
@@ -103,7 +103,7 @@ func TestCreateDataChannel(t *testing.T) {
 }
 
 func TestGetBaseUrl(t *testing.T) {
-	mgsConfig.GetMgsEndpointFromRip = func(context context.T, region string) string {
+	mgsConfig.GetMgsEndpoint = func(context context.T, region string) string {
 		return mgsHost
 	}
 

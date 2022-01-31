@@ -80,7 +80,7 @@ func (webSocketChannel *WebSocketChannel) Initialize(context context.T,
 	onMessageHandler func([]byte),
 	onErrorHandler func(error)) error {
 
-	hostName := mgsconfig.GetMgsEndpointFromRip(context, region)
+	hostName := mgsconfig.GetMgsEndpoint(context, region)
 	if hostName == "" {
 		return fmt.Errorf("no MGS endpoint found")
 	}

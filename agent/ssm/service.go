@@ -15,7 +15,6 @@ package ssm
 
 import (
 	"fmt"
-	"net/http"
 	"runtime"
 	"time"
 
@@ -88,25 +87,15 @@ func NewService(context context.T) Service {
 		ssmStopPolicy = sdkutil.NewStopPolicy("ssmService", 10)
 	}
 
-	awsConfig := sdkutil.AwsConfig(context)
+	awsConfig := sdkutil.AwsConfig(context, "ssm")
 	// parse appConfig overrides
 	appConfig := context.AppConfig()
 	if appConfig.Ssm.Endpoint != "" {
 		awsConfig.Endpoint = &appConfig.Ssm.Endpoint
-	} else {
-		if defaultEndpoint := context.Identity().GetDefaultEndpoint("ssm"); defaultEndpoint != "" {
-			awsConfig.Endpoint = &defaultEndpoint
-		}
-	}
-	if appConfig.Agent.Region != "" {
-		awsConfig.Region = &appConfig.Agent.Region
 	}
 
-	// TODO: test hook, can be removed before release
-	// this is to skip ssl verification for the beta self signed certs
-	if appConfig.Ssm.InsecureSkipVerify {
-		tlsConfig := awsConfig.HTTPClient.Transport.(*http.Transport).TLSClientConfig
-		tlsConfig.InsecureSkipVerify = true
+	if appConfig.Agent.Region != "" {
+		awsConfig.Region = &appConfig.Agent.Region
 	}
 
 	sess := session.New(awsConfig)

@@ -19,7 +19,6 @@ import (
 	"fmt"
 	"os/exec"
 	"strings"
-	"sync"
 	"time"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
@@ -31,11 +30,6 @@ import (
 	"github.com/aws/amazon-ssm-agent/core/executor"
 	"github.com/aws/aws-sdk-go/aws/session"
 )
-
-// variables to cache aws session
-var awsSession *session.Session
-var awsSessionErr error
-var awsSessionOnce sync.Once
 
 const (
 	DiagnosticsStatusSuccess = "Success"
@@ -63,12 +57,9 @@ func RegisterDiagnosticQuery(diagnosticQuery DiagnosticQuery) {
 }
 
 // GetAwsSession create a single session and shares the session cross diagnostics queries
-func GetAwsSession(agentIdentity identity.IAgentIdentity) (*session.Session, error) {
-	awsSessionOnce.Do(func() {
-		awsConfig := sdkutil.AwsConfig(agentContext.Default(logger.NewSilentMockLog(), appconfig.DefaultConfig(), agentIdentity))
-		awsSession, awsSessionErr = session.NewSession(awsConfig)
-	})
-	return awsSession, awsSessionErr
+func GetAwsSession(agentIdentity identity.IAgentIdentity, service string) (*session.Session, error) {
+	awsConfig := sdkutil.AwsConfig(agentContext.Default(logger.NewSilentMockLog(), appconfig.DefaultConfig(), agentIdentity), service)
+	return session.NewSession(awsConfig)
 }
 
 func IsOnPremRegistration() bool {

@@ -49,7 +49,7 @@ func NewKMSService(context context.T) (kmsService *KMSService, err error) {
 		agentVersion     string
 	)
 
-	awsConfig = sdkutil.AwsConfig(context)
+	awsConfig = sdkutil.AwsConfig(context, "kms")
 
 	appConfig = context.AppConfig()
 	if appConfig.Kms.Endpoint != "" {

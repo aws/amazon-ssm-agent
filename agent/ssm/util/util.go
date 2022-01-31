@@ -22,25 +22,20 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/network"
 	"github.com/aws/amazon-ssm-agent/agent/sdkutil/retryer"
+	"github.com/aws/amazon-ssm-agent/common/identity/endpoint"
 	"github.com/aws/aws-sdk-go/aws"
 )
 
-func AwsConfig(log log.T, appConfig appconfig.SsmagentConfig) *aws.Config {
-	// create default config
-	awsConfig := &aws.Config{
+func AwsConfig(log log.T, appConfig appconfig.SsmagentConfig, service, region string) *aws.Config {
+	endpointHelper := endpoint.NewEndpointHelper(log, appConfig)
+
+	return &aws.Config{
 		Retryer:    newRetryer(),
 		SleepDelay: sleepDelay,
+		HTTPClient: &http.Client{Transport: network.GetDefaultTransport(log, appConfig)},
+		Region:     aws.String(region),
+		Endpoint:   aws.String(endpointHelper.GetServiceEndpoint(service, region)),
 	}
-
-	// TODO: test hook, can be removed before release
-	// this is to skip ssl verification for the beta self signed certs
-	awsConfig.HTTPClient = &http.Client{Transport: network.GetDefaultTransport(log, appConfig)}
-	if appConfig.Ssm.InsecureSkipVerify {
-		tlsConfig := awsConfig.HTTPClient.Transport.(*http.Transport).TLSClientConfig
-		tlsConfig.InsecureSkipVerify = true
-	}
-
-	return awsConfig
 
 }
 

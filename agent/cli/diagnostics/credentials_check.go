@@ -57,7 +57,7 @@ func (q credentialsCheckQuery) Execute() diagnosticsutil.DiagnosticOutput {
 		}
 	}
 
-	awsSession, err := diagnosticsutil.GetAwsSession(agentIdentity)
+	awsSession, err := diagnosticsutil.GetAwsSession(agentIdentity, "sts")
 	if err != nil {
 		return diagnosticsutil.DiagnosticOutput{
 			Check:  q.GetName(),

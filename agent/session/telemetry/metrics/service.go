@@ -155,17 +155,13 @@ func createCloudWatchStopPolicy() *sdkutil.StopPolicy {
 
 // createCloudWatchClient creates a client to call CloudWatchLogs APIs
 func (c *CloudWatchService) createCloudWatchClient() *cloudwatch.CloudWatch {
-	config := sdkutil.AwsConfig(c.context)
+	config := sdkutil.AwsConfig(c.context, "monitoring")
 
 	config = request.WithRetryer(config, client.DefaultRetryer{
 		NumMaxRetries: maxRetries,
 	})
 
 	appConfig := c.context.AppConfig()
-	if defaultEndpoint := c.context.Identity().GetDefaultEndpoint("monitoring"); defaultEndpoint != "" {
-		config.Endpoint = &defaultEndpoint
-	}
-
 	sess := session.New(config)
 	sess.Handlers.Build.PushBack(request.MakeAddToUserAgentHandler(appConfig.Agent.Name, appConfig.Agent.Version))
 

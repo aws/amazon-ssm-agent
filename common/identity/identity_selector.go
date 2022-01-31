@@ -18,6 +18,7 @@ import (
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/log"
+	"github.com/aws/amazon-ssm-agent/common/identity/endpoint"
 	"github.com/aws/amazon-ssm-agent/common/runtimeconfig"
 )
 
@@ -65,8 +66,9 @@ func newAgentIdentityInner(log log.T, config *appconfig.SsmagentConfig, selector
 
 		log.Info("Agent will take identity from ECS")
 		return &agentIdentityCacher{
-			log:    log,
-			client: agentIdentity,
+			log:            log,
+			client:         agentIdentity,
+			endpointHelper: endpoint.NewEndpointHelper(log, *config),
 		}, nil
 	}
 
@@ -83,8 +85,9 @@ func newAgentIdentityInner(log log.T, config *appconfig.SsmagentConfig, selector
 		if agentIdentity != nil {
 			log.Infof("Agent will take identity from %s", identityKey)
 			return &agentIdentityCacher{
-				log:    log,
-				client: agentIdentity,
+				log:            log,
+				client:         agentIdentity,
+				endpointHelper: endpoint.NewEndpointHelper(log, *config),
 			}, nil
 		}
 	}

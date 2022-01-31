@@ -21,7 +21,6 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/backoffconfig"
 	logger "github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/ssm/util"
-	"github.com/aws/amazon-ssm-agent/common/identity/endpoint"
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/awserr"
 	"github.com/aws/aws-sdk-go/aws/credentials"
@@ -68,19 +67,11 @@ func NewAnonymousService(logger logger.T, region string) AnonymousService {
 	if appErr != nil {
 		log.Printf("encountered error while loading appconfig - %v", appErr)
 	}
-	awsConfig := util.AwsConfig(logger, appConfig).WithLogLevel(aws.LogOff)
-
-	awsConfig.Region = &region
+	awsConfig := util.AwsConfig(logger, appConfig, "ssm", region).WithLogLevel(aws.LogOff)
 	awsConfig.Credentials = credentials.AnonymousCredentials
 
-	if appErr == nil {
-		if appConfig.Ssm.Endpoint != "" {
-			awsConfig.Endpoint = &appConfig.Ssm.Endpoint
-		} else {
-			// Get the default ssm endpoint for this region
-			defaultEndpoint := endpoint.GetDefaultEndpoint(logger, "ssm", region, "")
-			awsConfig.Endpoint = &defaultEndpoint
-		}
+	if appErr == nil && appConfig.Ssm.Endpoint != "" {
+		awsConfig.Endpoint = &appConfig.Ssm.Endpoint
 	}
 
 	// Create a session to share service client config and handlers with

@@ -21,40 +21,39 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/network"
 	"github.com/aws/amazon-ssm-agent/agent/sdkutil/retryer"
+	"github.com/aws/amazon-ssm-agent/common/identity/endpoint"
 	"github.com/aws/aws-sdk-go/aws"
 )
 
 // AwsConfig returns the default aws.Config object with the appropriate
-// credentials. Callers should override returned config properties with any
-// values they want for service specific overrides.
-func AwsConfig(context context.T) (awsConfig *aws.Config) {
+// credentials.
+func AwsConfig(context context.T, service string) (awsConfig *aws.Config) {
 	region, _ := context.Identity().Region()
-	return AwsConfigForRegion(context, region)
+	endpoint := context.Identity().GetServiceEndpoint(service)
+	return AwsConfigForEndpoint(context, endpoint, region)
 }
 
 // AwsConfigForRegion returns the default aws.Config object with the appropriate
-// credentials and the specified region. Callers should override returned config
-// properties with any values they want for service specific overrides.
-func AwsConfigForRegion(context context.T, region string) (awsConfig *aws.Config) {
+// credentials and endpoint.
+func AwsConfigForRegion(context context.T, service, region string) (awsConfig *aws.Config) {
+	endpointHelper := endpoint.NewEndpointHelper(context.Log(), context.AppConfig())
+	return AwsConfigForEndpoint(context, endpointHelper.GetServiceEndpoint(service, region), region)
+}
+
+// AwsConfigForEndpoint returns the default aws.Config object with the appropriate
+// credentials and endpoint.
+func AwsConfigForEndpoint(context context.T, endpoint, region string) (awsConfig *aws.Config) {
 	// create default config
-	awsConfig = &aws.Config{
+	return &aws.Config{
 		Retryer:    newRetryer(),
 		SleepDelay: sleepDelay,
+		Region:     aws.String(region),
+		Endpoint:   aws.String(endpoint),
+		HTTPClient: &http.Client{
+			Transport: network.GetDefaultTransport(context.Log(), context.AppConfig()),
+		},
+		Credentials: context.Identity().Credentials(),
 	}
-
-	// update region if given
-	if region != "" {
-		awsConfig.Region = &region
-	}
-
-	// set Http Client
-	awsConfig.HTTPClient = &http.Client{
-		Transport: network.GetDefaultTransport(context.Log(), context.AppConfig()),
-	}
-
-	awsConfig.Credentials = context.Identity().Credentials()
-
-	return
 }
 
 var newRetryer = func() aws.RequestRetryer {

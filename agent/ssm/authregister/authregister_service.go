@@ -21,7 +21,6 @@ import (
 	logger "github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/ssm/util"
 	"github.com/aws/amazon-ssm-agent/common/identity/credentialproviders"
-	"github.com/aws/amazon-ssm-agent/common/identity/endpoint"
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/request"
 	"github.com/aws/aws-sdk-go/aws/session"
@@ -45,17 +44,13 @@ func NewAuthRegisterService(log logger.T, region string) AuthRegisterService {
 		log.Warnf("encountered error while loading appconfig - %v", appErr)
 	}
 
-	awsConfig := util.AwsConfig(log, appConfig).WithLogLevel(aws.LogOff)
-	awsConfig.Region = &region
+	awsConfig := util.AwsConfig(log, appConfig, "ssm", region).WithLogLevel(aws.LogOff)
 
 	if appErr == nil {
 		if appConfig.Ssm.Endpoint != "" {
 			awsConfig.Endpoint = &appConfig.Ssm.Endpoint
-		} else {
-			if defaultEndpoint := endpoint.GetDefaultEndpoint(log, "ssm", region, ""); defaultEndpoint != "" {
-				awsConfig.Endpoint = &defaultEndpoint
-			}
 		}
+
 		if appConfig.Agent.Region != "" {
 			awsConfig.Region = &appConfig.Agent.Region
 		}

@@ -39,11 +39,6 @@ func (i *Identity) InstanceType() (string, error) {
 	return i.CustomIdentity.InstanceType, nil
 }
 
-// ServiceDomain returns the service domain of a ec2 instance
-func (i *Identity) ServiceDomain() (string, error) {
-	return i.CustomIdentity.ServiceDomain, nil
-}
-
 // Credentials returns the configured credentials
 func (i *Identity) Credentials() *credentials.Credentials {
 	switch i.CustomIdentity.CredentialsProvider {

@@ -89,9 +89,8 @@ var clientBasedErrorMessages, serverBasedErrorMessages []string
 // NewService creates a new MDS service instance.
 func NewService(context context.T, connectionTimeout time.Duration) Service {
 
-	config := sdkutil.AwsConfig(context)
+	config := sdkutil.AwsConfig(context, "ec2messages")
 	agentConfig := context.AppConfig()
-	identity := context.Identity()
 
 	if agentConfig.Agent.Region != "" {
 		config.Region = &agentConfig.Agent.Region
@@ -99,10 +98,6 @@ func NewService(context context.T, connectionTimeout time.Duration) Service {
 
 	if agentConfig.Mds.Endpoint != "" {
 		config.Endpoint = &agentConfig.Mds.Endpoint
-	} else {
-		if defaultEndpoint := identity.GetDefaultEndpoint("ec2messages"); defaultEndpoint != "" {
-			config.Endpoint = &defaultEndpoint
-		}
 	}
 
 	// capture Transport so we can use it to cancel requests
