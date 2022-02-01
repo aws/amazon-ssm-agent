@@ -1,5 +1,14 @@
 Latest
 ===============
+- Added support for Rocky linux
+- Fixed sharefile/shareprofile not being propagated to updateutil
+- Fixed incorrect darwin platform detection post BigSur
+- Fixed log flush issue in updater
+- Updated .NET dependencies for domainjoin and cloudwatch (windows only)
+- Updated go version to 1.17.6
+
+3.1.821.0
+===============
 - Implement new core module named MessageService to start processing commands from both MGS and MDS
   - Merge functionalities from RunCommandService core module and Session core module.
   - Receive run command documents through MGS if connected and fallback to MDS otherwise. This functionality requires appropriate permissions for both endpoints and will be rolled out gradually to end users.
