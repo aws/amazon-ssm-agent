@@ -344,6 +344,7 @@ func getRedhatishPlatform(data string) (string, error) {
 		{`(?i)Rocky( Linux)?`, c.PlatformRockyLinux},
 		{`(?i)Fedora( Linux)?`, c.PlatformFedora},
 		{`(?i)Amazon Linux`, c.PlatformAmazon},
+		{`(?i)Bottlerocket( OS)?`, c.PlatformBottlerocketOs},
 	}
 
 	for _, m := range mapping {
@@ -356,7 +357,7 @@ func getRedhatishPlatform(data string) (string, error) {
 }
 
 func getRedhatishVersion(data string) (string, error) {
-	versionRexp := regexp.MustCompile(`^.*release ([0-9.]+).*$`)
+	versionRexp := regexp.MustCompile(`^.* ([0-9.]+).*$`)
 	match := versionRexp.FindStringSubmatch(data)
 	if len(match) > 0 {
 		return string(match[1]), nil
@@ -376,6 +377,8 @@ func scanDistributionReleaseFiles() (string, string, error) {
 	if _, err = os.Stat("/etc/debian_version"); err == nil {
 		platform = c.PlatformDebian
 		platformVersion, err = utils.ReadFileTrim("/etc/debian_version")
+	} else if _, err = os.Stat("/etc/bottlerocket-release"); err == nil {
+		platform, platformVersion, err = scanRhelFile("/etc/bottlerocket-release")
 	} else if _, err = os.Stat("/etc/redhat-release"); err == nil {
 		platform, platformVersion, err = scanRhelFile("/etc/redhat-release")
 	} else if _, err = os.Stat("/etc/system-release"); err == nil {
@@ -399,7 +402,7 @@ func platformFamilyForPlatform(platform string) (string, error) {
 	switch platform {
 	case c.PlatformUbuntu, c.PlatformDebian, c.PlatformRaspbian:
 		return c.PlatformFamilyDebian, nil
-	case c.PlatformRedhat, c.PlatformCentos, c.PlatformAmazon, c.PlatformOracleLinux, c.PlatformRockyLinux:
+	case c.PlatformRedhat, c.PlatformCentos, c.PlatformAmazon, c.PlatformBottlerocketOs, c.PlatformOracleLinux, c.PlatformRockyLinux:
 		return c.PlatformFamilyRhel, nil
 	case c.PlatformFedora:
 		return c.PlatformFamilyFedora, nil

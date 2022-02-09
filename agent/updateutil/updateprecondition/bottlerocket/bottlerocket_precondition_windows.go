@@ -11,18 +11,11 @@
 // either express or implied. See the License for the specific language governing
 // permissions and limitations under the License.
 
-package updateprecondition
+//go:build windows
+// +build windows
 
-import (
-	"github.com/aws/amazon-ssm-agent/agent/context"
-	bottlerocketprecondition "github.com/aws/amazon-ssm-agent/agent/updateutil/updateprecondition/bottlerocket"
-	staticpieprecondition "github.com/aws/amazon-ssm-agent/agent/updateutil/updateprecondition/staticpie"
-)
+package bottlerocketprecondition
 
-// GetPreconditions returns a list of all update preconditions that the updater should check
-func GetPreconditions(context context.T) []T {
-	return []T{
-		bottlerocketprecondition.New(context),
-		staticpieprecondition.New(context),
-	}
+func isNotBottlerocket(_ *bottlerocketPrecondition) error {
+	return nil
 }

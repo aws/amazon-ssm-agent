@@ -11,18 +11,25 @@
 // either express or implied. See the License for the specific language governing
 // permissions and limitations under the License.
 
-package updateprecondition
+//go:build freebsd || linux || netbsd || openbsd
+// +build freebsd linux netbsd openbsd
+
+package bottlerocketprecondition
 
 import (
-	"github.com/aws/amazon-ssm-agent/agent/context"
-	bottlerocketprecondition "github.com/aws/amazon-ssm-agent/agent/updateutil/updateprecondition/bottlerocket"
-	staticpieprecondition "github.com/aws/amazon-ssm-agent/agent/updateutil/updateprecondition/staticpie"
+	"fmt"
+	"os"
 )
 
-// GetPreconditions returns a list of all update preconditions that the updater should check
-func GetPreconditions(context context.T) []T {
-	return []T{
-		bottlerocketprecondition.New(context),
-		staticpieprecondition.New(context),
+var isNotBottlerocket = func(b *bottlerocketPrecondition) error {
+	_, err := os.Stat("/etc/bottlerocket-release")
+
+	if err != nil {
+		if !os.IsNotExist(err) {
+			b.context.Log().Warn("Unexpected error when checking for Bottlerocket release file: %v", err)
+		}
+		return nil
 	}
+
+	return fmt.Errorf("Bottlerocket has an immutable root filesystem")
 }

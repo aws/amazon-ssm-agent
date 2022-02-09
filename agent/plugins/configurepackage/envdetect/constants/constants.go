@@ -58,6 +58,9 @@ const PlatformFedora = "fedora"
 // PlatformAmazon uses Ohai identifier for amazon platform
 const PlatformAmazon = "amazon"
 
+// PlatformBottlerocketOs uses Ohai identifier for bottlerocket platform
+const PlatformBottlerocketOs = "bottlerocket"
+
 // PlatformAlpine uses Ohai identifier for alpine platform
 const PlatformAlpine = "alpine"
 

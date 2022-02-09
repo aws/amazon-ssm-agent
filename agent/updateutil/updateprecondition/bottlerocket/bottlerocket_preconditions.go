@@ -11,18 +11,33 @@
 // either express or implied. See the License for the specific language governing
 // permissions and limitations under the License.
 
-package updateprecondition
+package bottlerocketprecondition
 
 import (
+	"fmt"
+
 	"github.com/aws/amazon-ssm-agent/agent/context"
-	bottlerocketprecondition "github.com/aws/amazon-ssm-agent/agent/updateutil/updateprecondition/bottlerocket"
-	staticpieprecondition "github.com/aws/amazon-ssm-agent/agent/updateutil/updateprecondition/staticpie"
 )
 
-// GetPreconditions returns a list of all update preconditions that the updater should check
-func GetPreconditions(context context.T) []T {
-	return []T{
-		bottlerocketprecondition.New(context),
-		staticpieprecondition.New(context),
+// New returns an instance of the static pie preconditons to verify the host is not Bottlerocket OS
+func New(context context.T) *bottlerocketPrecondition {
+	return &bottlerocketPrecondition{
+		context: context,
 	}
+}
+
+func (b *bottlerocketPrecondition) GetPreconditionName() string {
+	return preconditionName
+}
+
+func (b *bottlerocketPrecondition) CheckPrecondition(version string) error {
+
+	b.context.Log().Info("Checking for Bottlerocket")
+	err := isNotBottlerocket(b)
+
+	if err != nil {
+		return fmt.Errorf("Failed Bottlerocket precondition: %v", err)
+	}
+
+	return nil
 }

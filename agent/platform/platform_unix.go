@@ -30,14 +30,15 @@ import (
 )
 
 const (
-	osReleaseFile          = "/etc/os-release"
-	systemReleaseFile      = "/etc/system-release"
-	centosReleaseFile      = "/etc/centos-release"
-	redhatReleaseFile      = "/etc/redhat-release"
-	unameCommand           = "/usr/bin/uname"
-	lsbReleaseCommand      = "lsb_release"
-	fetchingDetailsMessage = "fetching platform details from %v"
-	errorOccurredMessage   = "There was an error running %v, err: %v"
+	osReleaseFile           = "/etc/os-release"
+	systemReleaseFile       = "/etc/system-release"
+	centosReleaseFile       = "/etc/centos-release"
+	redhatReleaseFile       = "/etc/redhat-release"
+	bottlerocketReleaseFile = "/etc/bottlerocket-release"
+	unameCommand            = "/usr/bin/uname"
+	lsbReleaseCommand       = "lsb_release"
+	fetchingDetailsMessage  = "fetching platform details from %v"
+	errorOccurredMessage    = "There was an error running %v, err: %v"
 )
 
 // this structure is similar to the /etc/os-release file
@@ -94,6 +95,22 @@ func getPlatformDetails(log log.T) (name string, version string, err error) {
 	}
 	if !(strings.EqualFold(name, notAvailableMessage)) || !(strings.EqualFold(version, notAvailableMessage)) {
 		return
+	} else if fileutil.Exists(bottlerocketReleaseFile) {
+		// Bottlerocket's osReleaseFile contains information from its
+		// control container's base OS, with the Bottlerocket data
+		// stored in a separate bottlerocketReleasefile and therefore
+		// needs to be before osReleaseFile exist check
+		log.Debugf(fetchingDetailsMessage, bottlerocketReleaseFile)
+		contents := new(osRelease)
+		err = ini.MapTo(contents, bottlerocketReleaseFile)
+		log.Debugf(commandOutputMessage, contents)
+		if err != nil {
+			log.Debugf(errorOccurredMessage, bottlerocketReleaseFile, err)
+			return
+		}
+
+		name = contents.NAME
+		version = contents.VERSION_ID
 	} else if fileutil.Exists(osReleaseFile) {
 
 		log.Debugf(fetchingDetailsMessage, osReleaseFile)
