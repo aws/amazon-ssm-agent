@@ -1,5 +1,10 @@
 Latest
 ===============
+- Added platform detection for Bottlerocket OS
+- Consolidated regional endpoint generation to common endpoint module
+
+3.1.941.0
+===============
 - Added support for Rocky linux
 - Fixed sharefile/shareprofile not being propagated to updateutil
 - Fixed incorrect darwin platform detection post BigSur
