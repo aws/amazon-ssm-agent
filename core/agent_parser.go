@@ -30,6 +30,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/ssm/anonauth"
 	"github.com/aws/amazon-ssm-agent/agent/ssm/authregister"
 	"github.com/aws/amazon-ssm-agent/agent/version"
+	"github.com/aws/amazon-ssm-agent/core/tools"
 )
 
 // parseFlags displays flags and handles them
@@ -57,6 +58,14 @@ func parseFlags() {
 	// force flag
 	flag.BoolVar(&force, "y", false, "")
 
+	// tool flag
+	toolDescription := "Tools flag should not be used by anybody manually, commands might be removed without notice and we don't guarantee backwards compatibility"
+	flag.BoolVar(&tool, toolFlag, false, toolDescription)
+
+	// windows on first install checks flag
+	flag.BoolVar(&winOnFirstInstallChecks, winOnFirstInstallChecksFlag, false, "Must be used in combination with tools flag")
+	// allow link deletions during windows on first install checks
+	flag.StringVar(&allowLinkDeletions, allowLinkDeletionsFlag, "", "Must be used in combination with tools and winOnFirstInstallChecks flag")
 	flag.Parse()
 }
 
@@ -84,6 +93,38 @@ func handleAgentVersionFlag() {
 		if agentVersionFlag {
 			fmt.Println("SSM Agent version: " + version.Version)
 			os.Exit(0)
+		}
+	}
+}
+
+// handles tools flag
+func handleToolsFlag() {
+	if tool {
+		if flag.NFlag() == 2 {
+			if winOnFirstInstallChecks {
+				// no link deletion
+				if err := tools.DataDirChecksOnInitialInstall(false); err != nil {
+					fmt.Println(err)
+					os.Exit(1)
+				}
+				os.Exit(0)
+			}
+		} else if flag.NFlag() == 3 {
+			if winOnFirstInstallChecks {
+				if strings.EqualFold(allowLinkDeletions, "yes") {
+					if err := tools.DataDirChecksOnInitialInstall(true); err != nil {
+						fmt.Println(err)
+						os.Exit(1)
+					}
+					os.Exit(0)
+				} else if strings.EqualFold(allowLinkDeletions, "no") {
+					if err := tools.DataDirChecksOnInitialInstall(false); err != nil {
+						fmt.Println(err)
+						os.Exit(1)
+					}
+					os.Exit(0)
+				}
+			}
 		}
 	}
 }

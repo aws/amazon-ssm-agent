@@ -220,6 +220,9 @@ const (
 	// ErrorFailedPrecondition represents An non fulfilled precondition
 	ErrorFailedPrecondition ErrorCode = "ErrorFailedPrecondition"
 
+	// ErrorFailedLinksCheck represents link check failure
+	ErrorFailedLinksCheck ErrorCode = "ErrorFailedLinksCheck"
+
 	// ErrorInitializationFailed represents An update is failed to initialize
 	ErrorInitializationFailed ErrorCode = "ErrorInitializationFailed"
 
@@ -298,6 +301,7 @@ var NonAlarmingErrors = map[ErrorCode]struct{}{
 	ErrorUnsupportedServiceManager: {},
 	ErrorAttemptToDowngrade:        {},
 	ErrorFailedPrecondition:        {},
+	ErrorFailedLinksCheck:          {},
 }
 
 type SelfUpdateState string

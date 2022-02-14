@@ -60,7 +60,7 @@ func NewCoreManager(context context.T, mr coremodules.ModuleRegistry, cwp *cloud
 		return nil, err
 	}
 
-	if err = fileutil.HardenDataFolder(); err != nil {
+	if err = fileutil.HardenDataFolder(log); err != nil {
 		log.Errorf("error initializing SSM data folder with hardened ACL, %v", err)
 		return
 	}

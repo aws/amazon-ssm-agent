@@ -24,6 +24,7 @@ import (
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/log"
+	"github.com/aws/amazon-ssm-agent/core/tools"
 )
 
 // Uncompress unzips the installation package
@@ -60,6 +61,13 @@ func GetDiskSpaceInfo() (diskSpaceInfo DiskSpaceInfo, err error) {
 
 // HardenDataFolder sets permission of %PROGRAM_DATA% folder for Windows. In
 // Linux, each components handles the permission of its data.
-func HardenDataFolder() error {
-	return Harden(appconfig.SSMDataPath)
+func HardenDataFolder(log log.T) error {
+	err := Harden(appconfig.SSMDataPath)
+	if err == nil {
+		log.Info("Adding hardened flag to registry")
+		if err := tools.AddHardenedFlagToRegistry(); err != nil {
+			log.Errorf("Error adding hardened flag to registry: %v", err)
+		}
+	}
+	return err
 }

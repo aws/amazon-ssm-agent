@@ -24,6 +24,9 @@ import (
 )
 
 const (
+	// AmazonFolder is parent of SSMFolder
+	AmazonFolder = "Amazon"
+
 	// SSMFolder is the path under local app data.
 	SSMFolder = "Amazon\\SSM"
 
@@ -144,6 +147,9 @@ var EC2UpdaterDownloadRoot string
 // UpdateContextFilePath is the path where the updatecontext.json file exists for Ec2 updater to find
 var UpdateContextFilePath string
 
+// AmazonDataPath specifies the parent directory of SSM data.
+var AmazonDataPath string
+
 // SSMData specifies the directory we used to store SSM data.
 var SSMDataPath string
 
@@ -176,6 +182,7 @@ func init() {
 		programData = filepath.Join(os.Getenv("AllUsersProfile"), "Application Data")
 	}
 	SSMDataPath = filepath.Join(programData, SSMFolder)
+	AmazonDataPath = filepath.Join(programData, AmazonFolder)
 
 	EnvProgramFiles = os.Getenv("ProgramFiles")
 	EnvWinDir = os.Getenv("WINDIR")

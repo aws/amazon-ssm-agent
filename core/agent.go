@@ -33,23 +33,30 @@ import (
 )
 
 const (
-	activationCodeFlag         = "code"
-	activationIDFlag           = "id"
-	regionFlag                 = "region"
-	registerFlag               = "register"
-	disableSimilarityCheckFlag = "disableSimilarityCheck"
-	versionFlag                = "version"
-	fingerprintFlag            = "fingerprint"
-	similarityThresholdFlag    = "similarityThreshold"
-	roleFlag                   = "role"
-	tagsFlag                   = "tags"
+	activationCodeFlag          = "code"
+	activationIDFlag            = "id"
+	regionFlag                  = "region"
+	registerFlag                = "register"
+	disableSimilarityCheckFlag  = "disableSimilarityCheck"
+	versionFlag                 = "version"
+	fingerprintFlag             = "fingerprint"
+	similarityThresholdFlag     = "similarityThreshold"
+	roleFlag                    = "role"
+	tagsFlag                    = "tags"
+	toolFlag                    = "tools"
+	winOnFirstInstallChecksFlag = "winOnFirstInstallChecks"
+	allowLinkDeletionsFlag      = "allowLinkDeletions"
 )
 
 var (
-	activationCode, activationID, region, role, tagsJson                     string
-	register, clear, force, fpFlag, agentVersionFlag, disableSimilarityCheck bool
-	similarityThreshold                                                      int
-	registrationFile                                                         = filepath.Join(appconfig.DefaultDataStorePath, "registration")
+	activationCode, activationID, region, role, tagsJson string
+	register, clear, force, fpFlag, tool                 bool
+	agentVersionFlag                                     bool
+	disableSimilarityCheck                               bool
+	winOnFirstInstallChecks                              bool
+	allowLinkDeletions                                   string
+	similarityThreshold                                  int
+	registrationFile                                     = filepath.Join(appconfig.DefaultDataStorePath, "registration")
 )
 
 func start(log logger.T) (app.CoreAgent, logger.T, error) {

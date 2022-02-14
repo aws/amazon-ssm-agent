@@ -109,6 +109,6 @@ func GetDiskSpaceInfo() (diskSpaceInfo DiskSpaceInfo, err error) {
 
 // HardenDataFolder sets permission of %PROGRAM_DATA% folder for Windows. In
 // Linux, each components handles the permission of its data.
-func HardenDataFolder() error {
+func HardenDataFolder(log log.T) error {
 	return nil // do nothing
 }

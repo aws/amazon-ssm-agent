@@ -51,6 +51,7 @@ func main() {
 	// parse input parameters
 	parseFlags()
 	handleAgentVersionFlag()
+	handleToolsFlag()
 
 	log := ssmlog.SSMLogger(true)
 	defer log.Close()
