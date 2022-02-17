@@ -215,11 +215,14 @@ func parseAndValidateInput(rawPluginInput interface{}) (*DownloadContentPlugin, 
 	if err = jsonutil.Remarshal(rawPluginInput, &pluginInputMap); err != nil {
 		return nil, fmt.Errorf("problem while remarshalling %v; \nerror %v", rawPluginInput, err)
 	}
-	sourceInfo := "SourceInfo"
-	if info, ok := pluginInputMap[sourceInfo]; ok {
-		if reflect.ValueOf(info).Kind() == reflect.Map {
-			if sourceInfoBytes, err := json.Marshal(info); err == nil {
-				pluginInputMap[sourceInfo] = string(sourceInfoBytes)
+
+	// the below conversion is done for handling the change in parameter structure when sent from CLI and Console
+	for paramName, paramValue := range pluginInputMap {
+		if strings.ToLower(paramName) == "sourceinfo" {
+			if reflect.ValueOf(paramValue).Kind() == reflect.Map {
+				if sourceInfoBytes, err := json.Marshal(paramValue); err == nil {
+					pluginInputMap[paramName] = string(sourceInfoBytes)
+				}
 			}
 		}
 	}

@@ -46,7 +46,9 @@ func (exec ExecDocumentImpl) ParseDocument(context context.T, documentRaw []byte
 	s3Bucket string, s3KeyPrefix string, messageID string, documentID string, defaultWorkingDirectory string,
 	params map[string]interface{}) (pluginsInfo []contracts.PluginState, err error) {
 	log := context.Log()
-	docContent := docparser.DocContent{}
+	docContent := docparser.DocContent{
+		InvokedPlugin: appconfig.PluginRunDocument,
+	}
 	if err := json.Unmarshal(documentRaw, &docContent); err != nil {
 		if err := yaml.Unmarshal(documentRaw, &docContent); err != nil {
 			log.Error("Unmarshaling remote resource document failed. Please make sure the document is in the correct JSON or YAML formal")

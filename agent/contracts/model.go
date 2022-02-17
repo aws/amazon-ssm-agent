@@ -15,6 +15,8 @@
 // necessary for communication and sharing within the agent.
 package contracts
 
+import "encoding/json"
+
 // ResultStatus provides the granular status of a plugin.
 // These are internal states maintained by agent during the execution of a command/config
 type ResultStatus string
@@ -174,6 +176,10 @@ type Parameter struct {
 	ParamType      string      `json:"type" yaml:"type"`
 	AllowedVal     []string    `json:"allowedValues" yaml:"allowedValues"`
 	AllowedPattern string      `json:"allowedPattern" yaml:"allowedPattern"`
+	MinChars       json.Number `json:"minChars,omitempty" yaml:"minChars,omitempty"`
+	MaxChars       json.Number `json:"maxChars,omitempty" yaml:"maxChars,omitempty"`
+	MinItems       json.Number `json:"minItems,omitempty" yaml:"minItems,omitempty"`
+	MaxItems       json.Number `json:"maxItems,omitempty" yaml:"maxItems,omitempty"`
 }
 
 // PluginConfig stores plugin configuration
@@ -202,6 +208,10 @@ type DocumentContent struct {
 	RuntimeConfig map[string]*PluginConfig `json:"runtimeConfig" yaml:"runtimeConfig"`
 	MainSteps     []*InstancePluginConfig  `json:"mainSteps" yaml:"mainSteps"`
 	Parameters    map[string]*Parameter    `json:"parameters" yaml:"parameters"`
+
+	// InvokedPlugin field is set when document is invoked from any other plugin.
+	// Currently, InvokedPlugin is set only in runDocument Plugin
+	InvokedPlugin string
 }
 
 // SessionInputs stores session configuration

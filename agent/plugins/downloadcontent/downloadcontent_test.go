@@ -415,6 +415,20 @@ func TestParseAndValidateInput_SourceInfoJsonInput(t *testing.T) {
 	assert.Equal(t, downloadContent.SourceType, sourceTypeTest)
 }
 
+func TestParseAndValidateInput_SourceInfoJsonInput_CamelCase_Success(t *testing.T) {
+	sourceInfoOutput := "{\"Path\":\"test://test.com\"}"
+	sourceTypeTest := "S3"
+	destinationPathTest := "destinationPathTest"
+	var rawPluginInput interface{}
+	rawPluginInputBytes := "{\"SourceType\":\"" + sourceTypeTest + "\", \"DestinationPath\" : \"" + destinationPathTest + "\", \"sourceInfo\": " + sourceInfoOutput + "}"
+	_ = json.Unmarshal([]byte(rawPluginInputBytes), &rawPluginInput)
+	downloadContent, err := parseAndValidateInput(rawPluginInput)
+	assert.NoError(t, err)
+	assert.Equal(t, downloadContent.SourceInfo, sourceInfoOutput)
+	assert.Equal(t, downloadContent.DestinationPath, destinationPathTest)
+	assert.Equal(t, downloadContent.SourceType, sourceTypeTest)
+}
+
 // Mock and stub functions
 func fakeRemoteResource(context context.T, locationType string, locationInfo string) (remoteresource.RemoteResource, error) {
 
