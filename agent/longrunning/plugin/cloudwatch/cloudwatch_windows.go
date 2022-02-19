@@ -41,7 +41,7 @@ import (
 type Plugin struct {
 	Context                            context.T
 	CommandExecuter                    executers.T
-	Process                            os.Process
+	Process                            *os.Process
 	WorkingDir                         string
 	ExeLocation                        string
 	Name                               string
@@ -71,6 +71,10 @@ type CloudwatchProcessInfo struct {
 // TODO change these to deps.go later
 var fileExist = fileutil.Exists
 var exec = executers.ShellCommandExecuter{}
+var findProcess = os.FindProcess
+var killProcess = func(process *os.Process) error {
+	return process.Kill()
+}
 
 // var createScript = pluginutil.CreateScriptFile
 
@@ -87,8 +91,6 @@ func NewPlugin(context context.T, pluginConfig iohandler.PluginConfig) (*Plugin,
 	plugin.WorkingDir = fileutil.BuildPath(appconfig.DefaultPluginPath, CloudWatchFolderName)
 	plugin.ExeLocation = filepath.Join(plugin.WorkingDir, CloudWatchExeName)
 
-	//Process details of cloudwatch.exe will be stored here accordingly
-	plugin.Process = os.Process{}
 	plugin.Name = Name()
 
 	//health check specific stuff will be done here
@@ -123,7 +125,7 @@ func (p *Plugin) Start(configuration string, orchestrationDir string, cancelFlag
 
 	//check if the exe is located
 	if !fileExist(p.ExeLocation) {
-		errorMessage := "Unable to locate cloudwatch.exe"
+		errorMessage := "unable to locate cloudwatch.exe"
 		log.Errorf(errorMessage)
 		return errors.New(errorMessage)
 	}
@@ -215,7 +217,7 @@ func (p *Plugin) Start(configuration string, orchestrationDir string, cancelFlag
 	}
 
 	// Cloudwatch process details
-	p.Process = *process
+	p.Process = process
 	log.Infof("Process id of cloudwatch.exe -> %v", p.Process.Pid)
 
 	return nil
@@ -230,30 +232,38 @@ func (p *Plugin) Stop(cancelFlag task.CancelFlag) (err error) {
 		p.DefaultHealthCheckOrchestrationDir,
 		p.DefaultHealthCheckOrchestrationDir,
 		task.NewChanneledCancelFlag()); err != nil {
-		log.Errorf("Can't stop cloudwatch because unable to find Pid of cloudwatch.exe : %s", err)
+		log.Errorf("Can't stop cloudwatch because unable to find Pid of cloudwatch.exe : %v", err)
 		return err
 	}
+
 	log.Info("The number of cloudwatch processes running are ", len(cwProcInfo))
 	var processKillError error
-	var currentProcess os.Process
+	var currentProcess *os.Process
 	processKillError = nil
 	//Iterating through the cwProcess info to in case multiple Cloudwatch processes are running.
 	//All existing processes must be killed
 	for _, cloudwatchInfo := range cwProcInfo {
 		//Assigning existing cloudwatch process Id to currentProcess in order to kill that process.
-		currentProcess.Pid = cloudwatchInfo.PId
-		log.Debug("PID of Cloudwatch is ", p.Process.Pid)
-		if err = currentProcess.Kill(); err != nil {
+		log.Debug("PID of Cloudwatch is ", cloudwatchInfo.PId)
+
+		if currentProcess, err = findProcess(cloudwatchInfo.PId); err != nil {
+			err = fmt.Errorf("failed to find process CloudWatch process with pid %v. Err: %w", cloudwatchInfo.PId, err)
+			log.Error(err)
+			processKillError = err
+			continue
+		}
+
+		if err = killProcess(currentProcess); err != nil {
 			// Continuing here without returning to kill whatever processes can be killed even if something
 			// goes wrong. Return on error later
-			log.Errorf("Encountered error while trying to kill the process %v : %s", p.Process.Pid, err)
+			log.Errorf("Encountered error while trying to kill the process %v : %v", currentProcess.Pid, err)
 			processKillError = err
 		} else {
-			log.Infof("Successfully killed the process %v", p.Process.Pid)
+			log.Infof("Successfully killed the process %v", currentProcess.Pid)
 		}
 	}
 	if p.IsRunning() || processKillError != nil {
-		log.Errorf("There was an error while killing Cloudwatch: %s", processKillError)
+		log.Errorf("There was an error while killing Cloudwatch: %v", processKillError)
 		return processKillError
 	} else {
 		log.Infof("All existing Cloudwatch processes killed successfully.")
@@ -320,7 +330,7 @@ func (p *Plugin) GetProcInfoOfCloudWatchExe(orchestrationDir, workingDirectory s
 
 	//Unmarshal the result into json obj.
 	if err = jsonutil.Unmarshal(commandOutput, &cwProcInfo); err != nil {
-		log.Errorf("Error unmarshalling Cloudwatch process information is %s", err)
+		log.Errorf("Error unmarshalling Cloudwatch process information is %v", err)
 		return cwProcInfo, err
 	}
 
