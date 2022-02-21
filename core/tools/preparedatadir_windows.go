@@ -155,9 +155,24 @@ func scanSSMDataDirectory(allowLinkDeletions bool) ([]string, []string, error) {
 			if dirEntryInfo, err = dirEntry.Info(); err != nil {
 				return fmt.Errorf("Directory info error during data folder validation at %v: %v", path, err)
 			}
-			if pathStatInfo, err = os.Stat(path); err != nil {
-				return fmt.Errorf("Stat error during data folder validation at %v: %v", path, err)
+
+			retries := 3
+			for i := 1; i <= retries; i++ {
+				if pathStatInfo, err = os.Stat(path); err != nil {
+					if os.IsNotExist(err) {
+						fmt.Println("Skipping stat at %v, path no longer exists", path)
+						return nil
+					} else if i == retries {
+						return fmt.Errorf("Stat error during data folder validation at %v: %v", path, err)
+					} else {
+						fmt.Println("Stat error during data folder validation at %v: %v", path, err)
+						time.Sleep(500 * time.Millisecond)
+					}
+				} else {
+					break
+				}
 			}
+
 			if !os.SameFile(dirEntryInfo, pathStatInfo) {
 				fmt.Println(fmt.Sprintf("Forbidden link at: %v", path))
 				if dirEntry.IsDir() {
