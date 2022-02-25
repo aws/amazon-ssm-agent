@@ -1,5 +1,12 @@
 Latest
 ===============
+- Fixed sourceHash validation for aws:application document plugin
+- Added document parameter validation for values passed to target document of aws:runDocument plugin
+- (windows only) Fix process leak when legacy cloudwatch plugin is enabled
+- (windows only) Fail installation if C:\ProgramData\Amazon\SSM\ has symlinks
+
+3.1.1004.0
+===============
 - Added platform detection for Bottlerocket OS
 - Consolidated regional endpoint generation to common endpoint module
 
