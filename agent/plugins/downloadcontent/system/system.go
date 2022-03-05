@@ -16,10 +16,10 @@
 package system
 
 import (
+	"path/filepath"
+
 	"github.com/aws/amazon-ssm-agent/agent/fileutil/filemanager"
 	"github.com/aws/amazon-ssm-agent/agent/log"
-
-	"path/filepath"
 )
 
 // SaveFileContent is a method that returns the content in a file and saves it on disk

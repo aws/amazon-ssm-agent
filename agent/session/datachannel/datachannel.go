@@ -27,13 +27,13 @@ import (
 	"time"
 
 	"github.com/aws/amazon-ssm-agent/agent/context"
-	"github.com/aws/amazon-ssm-agent/agent/crypto"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/platform"
 	"github.com/aws/amazon-ssm-agent/agent/rip"
 	"github.com/aws/amazon-ssm-agent/agent/session/communicator"
 	mgsConfig "github.com/aws/amazon-ssm-agent/agent/session/config"
 	mgsContracts "github.com/aws/amazon-ssm-agent/agent/session/contracts"
+	"github.com/aws/amazon-ssm-agent/agent/session/crypto"
 	"github.com/aws/amazon-ssm-agent/agent/session/retry"
 	"github.com/aws/amazon-ssm-agent/agent/session/service"
 	"github.com/aws/amazon-ssm-agent/agent/task"
@@ -69,6 +69,9 @@ type IDataChannel interface {
 	RemoveDataFromIncomingMessageBuffer(sequenceNumber int64)
 	SkipHandshake(log log.T)
 	PerformHandshake(log log.T, kmsKeyId string, encryptionEnabled bool, sessionTypeRequest mgsContracts.SessionTypeRequest) (err error)
+	GetClientVersion() string
+	GetInstanceId() string
+	GetRegion() string
 }
 
 // DataChannel used for session communication between the message gateway service and the agent.
@@ -130,6 +133,8 @@ type StreamingMessage struct {
 type InputStreamMessageHandler func(log log.T, streamDataMessage mgsContracts.AgentMessage) error
 
 type Handshake struct {
+	// Version of the client
+	clientVersion string
 	// Channel used to signal when handshake response is received
 	responseChan chan bool
 	// Random byte string used to verify encryption
@@ -822,6 +827,8 @@ func (dataChannel *DataChannel) handleHandshakeResponse(log log.T, streamDataMes
 			case mgsContracts.KMSEncryption:
 				err = dataChannel.finalizeKMSEncryption(log, action.ActionResult)
 				break
+			case mgsContracts.SessionType:
+				break
 			default:
 				log.Warnf("Unknown handshake client action found, %s", action.ActionType)
 			}
@@ -834,6 +841,7 @@ func (dataChannel *DataChannel) handleHandshakeResponse(log log.T, streamDataMes
 			dataChannel.handshake.error = err
 		}
 	}
+	dataChannel.handshake.clientVersion = handshakeResponse.ClientVersion
 	dataChannel.handshake.responseChan <- true
 	return nil
 }
@@ -1054,6 +1062,21 @@ func (dataChannel *DataChannel) sendStreamDataMessageJson(log log.T,
 	log.Tracef("Sending message with content %v", serializableStruct)
 	err = dataChannel.SendStreamDataMessage(log, payloadType, messageBytes)
 	return err
+}
+
+// GetClientVersion returns version of the client
+func (dataChannel *DataChannel) GetClientVersion() string {
+	return dataChannel.handshake.clientVersion
+}
+
+// GetInstanceId returns id of the target
+func (dataChannel *DataChannel) GetInstanceId() string {
+	return dataChannel.InstanceId
+}
+
+// GetRegion returns aws region of the target
+func (dataChannel *DataChannel) GetRegion() string {
+	return dataChannel.Service.GetRegion()
 }
 
 // getDataChannelToken calls CreateDataChannel to get the token for this session.

@@ -33,8 +33,10 @@ func NewMockLog() *Mock {
 	log.On("Flush").Return()
 	log.On("Debug", mock.Anything).Return()
 	log.On("Error", mock.Anything).Return(mock.AnythingOfType("error"))
+	log.On("Warn", mock.Anything).Return(mock.AnythingOfType("error"))
 	log.On("Trace", mock.Anything).Return()
 	log.On("Info", mock.Anything).Return()
+	log.On("WriteEvent", mock.AnythingOfType("string"), mock.AnythingOfType("string"), mock.AnythingOfType("string")).Return()
 	log.On("Debugf", mock.Anything, mock.Anything).Return()
 	log.On("Errorf", mock.AnythingOfType("string"), mock.Anything).Return(mock.AnythingOfType("error"))
 	log.On("Warnf", mock.AnythingOfType("string"), mock.Anything).Return(mock.AnythingOfType("error"))
@@ -50,8 +52,10 @@ func NewMockLogWithContext(ctx string) *Mock {
 	log.On("Flush").Return()
 	log.On("Debug", mock.Anything).Return()
 	log.On("Error", mock.Anything).Return(mock.AnythingOfType("error"))
+	log.On("Warn", mock.Anything).Return(mock.AnythingOfType("error"))
 	log.On("Trace", mock.Anything).Return()
 	log.On("Info", mock.Anything).Return()
+	log.On("WriteEvent", mock.AnythingOfType("string"), mock.AnythingOfType("string"), mock.AnythingOfType("string")).Return()
 	log.On("Debugf", mock.Anything, mock.Anything).Return()
 	log.On("Errorf", mock.AnythingOfType("string"), mock.Anything).Return(mock.AnythingOfType("error"))
 	log.On("Warnf", mock.AnythingOfType("string"), mock.Anything).Return(mock.AnythingOfType("error"))
@@ -65,6 +69,13 @@ func (_m *Mock) WithContext(context ...string) (contextLogger T) {
 	fmt.Printf("WithContext: %v", context)
 	ret := _m.Called(context)
 	return ret.Get(0).(T)
+}
+
+func (_m *Mock) WriteEvent(eventType string, agentVersion string, content string) {
+	fmt.Print(_m.context)
+	fmt.Print("Write Event: ")
+	fmt.Println(content)
+	_m.Called(eventType, agentVersion, content)
 }
 
 // Tracef mocks the Tracef function.
@@ -147,10 +158,11 @@ func (_m *Mock) Info(v ...interface{}) {
 // Warn mocks the Warn function.
 func (_m *Mock) Warn(v ...interface{}) error {
 	fmt.Print(_m.context)
-	fmt.Print("Warn: ")
-	fmt.Println(v...)
-	ret := _m.Called(v)
-	return ret.Error(0)
+	msg := "Warn: " + fmt.Sprint(v...)
+	fmt.Print(msg)
+	fmt.Println()
+	_m.Called(v)
+	return errors.New(msg)
 }
 
 // Error mocks the Error function.

@@ -13,7 +13,7 @@ Source0      : https://github.com/aws/amazon-ssm-agent/%{name}-%{version}.tar.gz
 Packager     : Amazon.com, Inc. <http://aws.amazon.com>
 Vendor       : Amazon.com
 
-BuildRequires: golang >= 1.7.4
+BuildRequires: golang >= 1.13.14
 
 %if 0%{?amzn} >= 2
 BuildRequires: systemd-devel
@@ -35,11 +35,12 @@ sed -i -e 's#const[ \s]*Version.*#const Version = "%{version}"#g' agent/version/
 export GOPATH=`pwd`/vendor:`pwd`
 
 ln -s `pwd` vendor/src/github.com/aws/amazon-ssm-agent
-go build -ldflags "-s -w -extldflags=-Wl,-z,now,-z,relro,-z,defs" -o bin/amazon-ssm-agent -v agent/agent.go agent/agent_unix.go agent/agent_parser.go
-go build -ldflags "-s -w -extldflags=-Wl,-z,now,-z,relro,-z,defs" -o bin/ssm-document-worker -v agent/framework/processor/executer/outofproc/worker/main.go
-go build -ldflags "-s -w -extldflags=-Wl,-z,now,-z,relro,-z,defs" -o bin/ssm-session-worker -v agent/framework/processor/executer/outofproc/sessionworker/main.go
-go build -ldflags "-s -w -extldflags=-Wl,-z,now,-z,relro,-z,defs" -o bin/ssm-session-logger -v agent/session/logging/main.go
-go build -ldflags "-s -w -extldflags=-Wl,-z,now,-z,relro,-z,defs" -o bin/ssm-cli -v agent/cli-main/cli-main.go
+CGO_ENABLED=0 go build -ldflags "-s -w -extldflags=-Wl,-z,now,-z,relro,-z,defs" -buildmode=pie -o bin/amazon-ssm-agent -v core/agent.go core/agent_unix.go core/agent_parser.go
+CGO_ENABLED=0 go build -ldflags "-s -w -extldflags=-Wl,-z,now,-z,relro,-z,defs" -buildmode=pie -o bin/ssm-agent-worker -v agent/agent.go agent/agent_unix.go agent/agent_parser.go
+CGO_ENABLED=0 go build -ldflags "-s -w -extldflags=-Wl,-z,now,-z,relro,-z,defs" -buildmode=pie -o bin/ssm-document-worker -v agent/framework/processor/executer/outofproc/worker/main.go
+CGO_ENABLED=0 go build -ldflags "-s -w -extldflags=-Wl,-z,now,-z,relro,-z,defs" -buildmode=pie -o bin/ssm-session-worker -v agent/framework/processor/executer/outofproc/sessionworker/main.go
+CGO_ENABLED=0 go build -ldflags "-s -w -extldflags=-Wl,-z,now,-z,relro,-z,defs" -buildmode=pie -o bin/ssm-session-logger -v agent/session/logging/main.go
+CGO_ENABLED=0 go build -ldflags "-s -w -extldflags=-Wl,-z,now,-z,relro,-z,defs" -buildmode=pie -o bin/ssm-cli -v agent/cli-main/cli-main.go
 
 %install
 
@@ -50,8 +51,8 @@ mkdir -p %{buildroot}%{_sysconfdir}/amazon/ssm/ \
          %{buildroot}%{_localstatedir}/lib/amazon/ssm/ \
          %{buildroot}%{_localstatedir}/log/amazon/ssm/
 
-cp {README.md,RELEASENOTES.md} %{buildroot}%{_sysconfdir}/amazon/ssm/
-cp bin/{amazon-ssm-agent,ssm-document-worker,ssm-session-worker,ssm-session-logger,ssm-cli} %{buildroot}%{_prefix}/bin/
+cp {README.md,RELEASENOTES.md,NOTICE.md} %{buildroot}%{_sysconfdir}/amazon/ssm/
+cp bin/{amazon-ssm-agent,ssm-agent-worker,ssm-document-worker,ssm-session-worker,ssm-session-logger,ssm-cli} %{buildroot}%{_prefix}/bin/
 %if 0%{?amzn} >= 2
 mkdir -p %{buildroot}%{_unitdir}/
 cp packaging/linux/amazon-ssm-agent.service %{buildroot}%{_unitdir}/
@@ -61,7 +62,7 @@ cp packaging/linux/amazon-ssm-agent.conf %{buildroot}%{_sysconfdir}/init/
 cp amazon-ssm-agent.json.template %{buildroot}%{_sysconfdir}/amazon/ssm/amazon-ssm-agent.json.template
 cp seelog_unix.xml %{buildroot}%{_sysconfdir}/amazon/ssm/seelog.xml.template
 
-strip --strip-unneeded %{buildroot}%{_prefix}/bin/{amazon-ssm-agent,ssm-document-worker,ssm-session-worker,ssm-session-logger,ssm-cli}
+strip --strip-unneeded %{buildroot}%{_prefix}/bin/{amazon-ssm-agent,ssm-agent-worker,ssm-document-worker,ssm-session-worker,ssm-session-logger,ssm-cli}
 
 %files
 %defattr(-,root,root,-)
@@ -69,12 +70,14 @@ strip --strip-unneeded %{buildroot}%{_prefix}/bin/{amazon-ssm-agent,ssm-document
 %{_sysconfdir}/amazon/ssm/seelog.xml.template
 %{_sysconfdir}/amazon/ssm/README.md
 %{_sysconfdir}/amazon/ssm/RELEASENOTES.md
+%{_sysconfdir}/amazon/ssm/NOTICE.md
 %if 0%{?amzn} >= 2
 %{_unitdir}/amazon-ssm-agent.service
 %else
 %{_sysconfdir}/init/amazon-ssm-agent.conf
 %endif
 %{_prefix}/bin/amazon-ssm-agent
+%{_prefix}/bin/ssm-agent-worker
 %{_prefix}/bin/ssm-document-worker
 %{_prefix}/bin/ssm-session-worker
 %{_prefix}/bin/ssm-session-logger
@@ -86,6 +89,7 @@ strip --strip-unneeded %{buildroot}%{_prefix}/bin/{amazon-ssm-agent,ssm-document
 %doc
 %{_sysconfdir}/amazon/ssm/README.md
 %{_sysconfdir}/amazon/ssm/RELEASENOTES.md
+%{_sysconfdir}/amazon/ssm/NOTICE.md
 
 %if 0%{?amzn} < 2
 %config(noreplace) %{_sysconfdir}/init/amazon-ssm-agent.conf

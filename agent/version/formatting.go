@@ -15,6 +15,5 @@ package version
 
 // String produces a human-readable string showing the agent version.
 func String() string {
-	ret := "amazon-ssm-agent - v" + Version
-	return ret
+	return "v" + Version
 }

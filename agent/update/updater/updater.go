@@ -31,7 +31,11 @@ import (
 
 const (
 	defaultLogFileName              = "AmazonSSMAgent-update.txt"
-	defaultWaitTimeForAgentToFinish = 2
+	defaultWaitTimeForAgentToFinish = 3
+	defaultStdoutFileName           = "stdout"
+	defaultStderrFileName           = "stderr"
+	defaultSSMAgentName             = "amazon-ssm-agent"
+	defaultSelfUpdateMessageID      = "aws.ssm.self-update-agent.i-instanceid"
 )
 
 var (
@@ -54,15 +58,15 @@ var (
 	stderr          *string
 	outputKeyPrefix *string
 	outputBucket    *string
+	manifestURL     *string
+	manifestPath    *string
+	selfUpdate      *bool
 )
-
-//Constants
-var lockFileMinutes = int64(60)
 
 func init() {
 	log = ssmlog.GetUpdaterLogger(logger.DefaultLogDir, defaultLogFileName)
 
-	// Sleep 2 seconds to allow agent to finishing up it's work
+	// Sleep 3 seconds to allow agent to finishing up it's work
 	time.Sleep(defaultWaitTimeForAgentToFinish * time.Second)
 
 	updater = processor.NewUpdater()
@@ -81,6 +85,13 @@ func init() {
 	stderr = flag.String(updateutil.StderrFileName, "", "standard error file path")
 	outputKeyPrefix = flag.String(updateutil.OutputKeyPrefixCmd, "", "output key prefix")
 	outputBucket = flag.String(updateutil.OutputBucketNameCmd, "", "output bucket name")
+
+	manifestURL = flag.String(updateutil.ManifestFileUrlCmd, "", "Manifest file url")
+	manifestLocation := ""
+	manifestPath = &manifestLocation
+
+	selfUpdate = flag.Bool(updateutil.SelfUpdateCmd, false, "SelfUpdate command")
+
 }
 
 // Config holds Runtime info of plugins.
@@ -98,7 +109,7 @@ func main() {
 	// If there is no lockfile, the updater will own it
 	// If the updater is unable to lock the file, we retry and then fail
 	lock, _ := lockfile.New(appconfig.UpdaterPidLockfile)
-	err := lock.TryLockExpireWithRetry(lockFileMinutes)
+	err := lock.TryLockExpireWithRetry(updateutil.UpdateLockFileMinutes)
 
 	if err != nil {
 		if err == lockfile.ErrBusy {
@@ -112,6 +123,53 @@ func main() {
 	defer lock.Unlock()
 
 	flag.Parse()
+
+	// self update command,
+	if *selfUpdate {
+		// manifest path will only be specified in self update use case
+		var err error
+		if len(*manifestURL) == 0 {
+			log.Error("Please provide manifest path for self update")
+			flag.Usage()
+		}
+
+		log.Infof("Starting getting self update required information")
+
+		if *sourceLocation, *sourceHash, *targetVersion, *targetLocation, *targetHash, *manifestURL, *manifestPath, err =
+			updateutil.PrepareResourceForSelfUpdate(log, *manifestURL, *sourceVersion); err != nil {
+			log.Errorf(err.Error())
+			return
+		}
+
+		log.WriteEvent(logger.AgentUpdateResultMessage,
+			*sourceVersion,
+			updateutil.GenerateSelUpdateSuccessEvent(string(updateutil.Stage))) // UpdateSucceeded_SelfUpdate_Stage
+
+		if *targetVersion == *sourceVersion {
+			log.Infof("Current version %v is not deprecated, skipping self update", *sourceVersion)
+			return
+		}
+
+		*stdout = defaultStdoutFileName
+		*stderr = defaultStderrFileName
+		*packageName = defaultSSMAgentName
+		*messageID = defaultSelfUpdateMessageID
+
+		log.Infof("stdout: %v", *stdout)
+		log.Infof("stderr: %v", *stderr)
+		log.Infof("packageName: %v", *packageName)
+		log.Infof("messageId: %v", *messageID)
+
+		// current version and current resource download url location
+		log.Infof("sourceVersion : %v", *sourceVersion)
+		log.Infof("sourceLocation : %v", *sourceLocation)
+		log.Infof("sourceHash : %v", *sourceHash)
+
+		// latest active version and resource download url location
+		log.Infof("targetVersion : %v", *targetVersion)
+		log.Infof("targetLocation : %v", *targetLocation)
+		log.Infof("targetHash : %v", *targetHash)
+	}
 
 	// Return if update is not present in the command
 	if !*update {
@@ -148,6 +206,9 @@ func main() {
 		MessageID:          *messageID,
 		StartDateTime:      time.Now().UTC(),
 		RequiresUninstall:  false,
+		ManifestUrl:        *manifestURL,
+		ManifestPath:       *manifestPath,
+		SelfUpdate:         *selfUpdate,
 	}
 
 	if err = resolveUpdateDetail(detail); err != nil {
@@ -168,7 +229,7 @@ func main() {
 	defer recoverUpdaterFromPanic(context)
 
 	// Start or resume update
-	if err = updater.StartOrResumeUpdate(log, context); err != nil { // We do not send any error above this to ICS except panic message
+	if err = updater.StartOrResumeUpdate(log, context); err != nil { // We do not send any error above this to ICS/MGS except panic message
 		// Rolled back, but service cannot start, Update failed.
 		updater.Failed(context, log, updateutil.ErrorUnexpected, err.Error(), false)
 	} else {

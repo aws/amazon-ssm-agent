@@ -28,6 +28,7 @@ import (
 	mgsContracts "github.com/aws/amazon-ssm-agent/agent/session/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/session/service"
 	serviceMock "github.com/aws/amazon-ssm-agent/agent/session/service/mocks"
+	eventlogMock "github.com/aws/amazon-ssm-agent/agent/session/telemetry/mocks"
 	"github.com/aws/aws-sdk-go/aws/credentials"
 	v4 "github.com/aws/aws-sdk-go/aws/signer/v4"
 	"github.com/stretchr/testify/assert"
@@ -41,6 +42,7 @@ var (
 	mockProcessor = new(processorMock.MockedProcessor)
 	mockService   = &serviceMock.Service{}
 	mockWsChannel = &communicatorMocks.IWebSocketChannel{}
+	mockEventLog  = eventlogMock.IAuditLogTelemetry{}
 	messageId     = "dd01e56b-ff48-483e-a508-b5f073f31b16"
 	schemaVersion = uint32(1)
 	createdDate   = uint64(1503434274948)
@@ -54,6 +56,7 @@ var (
 
 func TestInitialize(t *testing.T) {
 	controlChannel := &ControlChannel{}
+	controlChannel.AuditLogScheduler = &mockEventLog
 	controlChannel.Initialize(mockContext, mockService, mockProcessor, instanceId)
 
 	assert.Equal(t, instanceId, controlChannel.ChannelId)
@@ -93,6 +96,7 @@ func TestOpen(t *testing.T) {
 	mockWsChannel.On("Open", mock.Anything).Return(nil)
 	mockWsChannel.On("GetChannelToken").Return(token)
 	mockWsChannel.On("SendMessage", mock.Anything, mock.Anything, mock.Anything).Return(nil)
+	mockEventLog.On("SendAuditMessage")
 
 	// test open (includes SendMessage)
 	err := controlChannel.Open(mockLog)
@@ -227,9 +231,10 @@ func TestGetOrchestrationFolder(t *testing.T) {
 
 func getControlChannel() *ControlChannel {
 	return &ControlChannel{
-		wsChannel:   mockWsChannel,
-		Service:     mockService,
-		ChannelId:   instanceId,
-		channelType: mgsConfig.RoleSubscribe,
-		Processor:   mockProcessor}
+		wsChannel:         mockWsChannel,
+		Service:           mockService,
+		ChannelId:         instanceId,
+		AuditLogScheduler: &mockEventLog,
+		channelType:       mgsConfig.RoleSubscribe,
+		Processor:         mockProcessor}
 }

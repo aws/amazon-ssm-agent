@@ -16,20 +16,20 @@
 package ssmdocresource
 
 import (
+	"errors"
+	"fmt"
+	"os"
+	"path/filepath"
+
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
-	"github.com/aws/amazon-ssm-agent/agent/docparser"
 	"github.com/aws/amazon-ssm-agent/agent/fileutil/filemanager"
+	"github.com/aws/amazon-ssm-agent/agent/framework/docparser"
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/downloadcontent/remoteresource"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/downloadcontent/system"
 	ssmsvc "github.com/aws/amazon-ssm-agent/agent/ssm"
 	"github.com/aws/aws-sdk-go/service/ssm"
-
-	"errors"
-	"fmt"
-	"os"
-	"path/filepath"
 )
 
 // S3Resource is a struct for the remote resource of type git

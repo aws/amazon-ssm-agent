@@ -24,8 +24,8 @@ import (
 	"strings"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
-	"github.com/aws/amazon-ssm-agent/agent/fingerprint"
 	logger "github.com/aws/amazon-ssm-agent/agent/log"
+	"github.com/aws/amazon-ssm-agent/agent/managedInstances/fingerprint"
 	"github.com/aws/amazon-ssm-agent/agent/managedInstances/registration"
 	"github.com/aws/amazon-ssm-agent/agent/platform"
 	"github.com/aws/amazon-ssm-agent/agent/ssm/anonauth"
@@ -56,9 +56,13 @@ func parseFlags(log logger.T) {
 	// force flag
 	flag.BoolVar(&force, "y", false, "")
 
+	// start agent as a worker instead of the windows service
+	flag.BoolVar(&isWorker, workerFlag, false, "")
+
 	flag.Parse()
 
 	if flag.NFlag() > 0 {
+
 		exitCode := 1
 		if register {
 			exitCode = processRegistration(log)

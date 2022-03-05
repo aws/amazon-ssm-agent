@@ -25,8 +25,8 @@ import (
 
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
-	"github.com/aws/amazon-ssm-agent/agent/docparser"
 	"github.com/aws/amazon-ssm-agent/agent/fileutil"
+	"github.com/aws/amazon-ssm-agent/agent/framework/docparser"
 	processormock "github.com/aws/amazon-ssm-agent/agent/framework/processor/mock"
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
 	"github.com/aws/amazon-ssm-agent/agent/log"
@@ -374,6 +374,15 @@ func getPluginConfigurationsFromMainStep(mainSteps []*contracts.InstancePluginCo
 	isPreconditionEnabled := contracts.IsPreconditionEnabled(schemaVersion)
 	commandID, _ := messageContracts.GetCommandID(messageID)
 	for index, instancePluginConfig := range mainSteps {
+		resolvedPreconditions := map[string][]contracts.PreconditionArgument{}
+		for operator, arguments := range instancePluginConfig.Preconditions {
+			for _, arg := range arguments {
+				resolvedPreconditions[operator] = append(resolvedPreconditions[operator], contracts.PreconditionArgument{
+					InitialArgumentValue:  arg,
+					ResolvedArgumentValue: arg,
+				})
+			}
+		}
 		pluginId := instancePluginConfig.Name
 		pluginName := instancePluginConfig.Action
 		res[index] = &contracts.Configuration{
@@ -386,7 +395,7 @@ func getPluginConfigurationsFromMainStep(mainSteps []*contracts.InstancePluginCo
 			BookKeepingFileName:    commandID,
 			PluginName:             pluginName,
 			PluginID:               pluginId,
-			Preconditions:          instancePluginConfig.Preconditions,
+			Preconditions:          resolvedPreconditions,
 			IsPreconditionEnabled:  isPreconditionEnabled,
 		}
 	}

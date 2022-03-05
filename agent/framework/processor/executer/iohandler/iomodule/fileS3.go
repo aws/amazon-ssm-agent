@@ -67,7 +67,16 @@ func (file File) Read(log log.T, reader *io.PipeReader) {
 	if file.LogGroupName != "" {
 		log.Debugf("Received CloudWatch Configs: LogGroupName: %s\n, LogStreamName: %s\n", file.LogGroupName, file.LogStreamName)
 		//Start CWL logging on different go routine
-		go cwl.StreamData(log, file.LogGroupName, file.LogStreamName, filePath, false, false)
+		go cwl.StreamData(
+			log,
+			file.LogGroupName,
+			file.LogStreamName,
+			filePath,
+			false,
+			false,
+			make(chan bool),
+			false,
+			false)
 	}
 
 	// Read byte by byte and write to file
@@ -93,8 +102,10 @@ func (file File) Read(log log.T, reader *io.PipeReader) {
 	// Upload output file to S3
 	if file.OutputS3BucketName != "" && fi.Size() > 0 {
 		s3Key := fileutil.BuildS3Path(file.OutputS3KeyPrefix, file.FileName)
-		if err := s3util.NewAmazonS3Util(log, file.OutputS3BucketName).S3Upload(log, file.OutputS3BucketName, s3Key, filePath); err != nil {
-			log.Errorf("Failed to upload the output to s3: %v", err)
+		if s3, err := s3util.NewAmazonS3Util(log, file.OutputS3BucketName); err == nil {
+			if err := s3.S3Upload(log, file.OutputS3BucketName, s3Key, filePath); err != nil {
+				log.Errorf("Failed to upload the output to s3: %v", err)
+			}
 		}
 	}
 

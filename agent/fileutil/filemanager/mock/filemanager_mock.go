@@ -16,6 +16,8 @@
 package fileutil_mock
 
 import (
+	"os"
+
 	"github.com/stretchr/testify/mock"
 )
 
@@ -66,4 +68,14 @@ func (fileMock FileSystemMock) IsDirectory(root string) bool {
 func (fileMock FileSystemMock) AppendToFile(fileDirectory string, filename string, content string) (filePath string, err error) {
 	args := fileMock.Called(fileDirectory, filename, content)
 	return args.Get(0).(string), args.Error(1)
+}
+
+func (fileMock FileSystemMock) CreateFile(name string) (file *os.File, err error) {
+	args := fileMock.Called(name)
+	return args.Get(0).(*os.File), args.Error(1)
+}
+
+func (fileMock FileSystemMock) CreateTempDir(dir, prefix string) (name string, err error) {
+	args := fileMock.Called(dir, prefix)
+	return args.String(0), args.Error(1)
 }

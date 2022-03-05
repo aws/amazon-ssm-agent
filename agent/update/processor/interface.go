@@ -19,6 +19,8 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/fileutil/artifact"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/updateutil"
+
+	testCommon "github.com/aws/amazon-ssm-agent/agent/update/tester/common"
 )
 
 // T represents the interface for agent update
@@ -37,10 +39,11 @@ type prepare func(mgr *updateManager, log log.T, context *UpdateContext) (err er
 type update func(mgr *updateManager, log log.T, context *UpdateContext) (err error)
 type verify func(mgr *updateManager, log log.T, context *UpdateContext, isRollback bool) (err error)
 type rollback func(mgr *updateManager, log log.T, context *UpdateContext) (err error)
-type uninstall func(mgr *updateManager, log log.T, version string, context *UpdateContext) (err error)
-type install func(mgr *updateManager, log log.T, version string, context *UpdateContext) (err error)
+type uninstall func(mgr *updateManager, log log.T, version string, context *UpdateContext) (exitCode updateutil.UpdateScriptExitCode, err error)
+type install func(mgr *updateManager, log log.T, version string, context *UpdateContext) (exitCode updateutil.UpdateScriptExitCode, err error)
 type download func(mgr *updateManager, log log.T, downloadInput artifact.DownloadInput, context *UpdateContext, version string) (err error)
 type clean func(mgr *updateManager, log log.T, context *UpdateContext) (err error)
+type runTests func(logger log.T, stage testCommon.TestStage, timeOutSeconds int) (testOutput string)
 
 type updateManager struct {
 	util      updateutil.T
@@ -54,6 +57,7 @@ type updateManager struct {
 	install   install
 	download  download
 	clean     clean
+	runTests  runTests
 	subStatus string // Values currently being used - downgrade, InstallRollback, VerificationRollback. It is good to place it here as UpdateContext is being saved on the filesystem
 }
 

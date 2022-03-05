@@ -75,4 +75,5 @@ type BasicT interface {
 type T interface {
 	BasicT
 	WithContext(context ...string) (contextLogger T)
+	WriteEvent(eventType string, agentVersion string, event string)
 }

@@ -15,7 +15,9 @@
 package updateutil
 
 import (
+	"encoding/json"
 	"fmt"
+	"io/ioutil"
 	"os"
 	"os/exec"
 	"strings"
@@ -25,10 +27,25 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/fileutil"
 	"github.com/aws/amazon-ssm-agent/agent/log"
+	"github.com/aws/amazon-ssm-agent/core/workerprovider/longrunningprovider/executor"
+	"github.com/aws/amazon-ssm-agent/core/workerprovider/longrunningprovider/model"
 	"github.com/stretchr/testify/assert"
 )
 
 var logger = log.NewMockLog()
+
+//Valid manifest file with Status field
+var sampleManifestWithStatus = []string{
+	"testdata/sampleManifestWithStatus.json",
+}
+
+type testCase struct {
+	Input  string
+	Output *Manifest
+}
+
+type testProcess struct {
+}
 
 type testInstanceContext struct {
 	region                string
@@ -395,6 +412,14 @@ func TestIsServiceRunning(t *testing.T) {
 	}
 }
 
+func TestIsWorkerRunning(t *testing.T) {
+	util := Utility{}
+	util.ProcessExecutor = &testProcess{}
+	result, err := util.IsWorkerRunning(logger)
+	assert.Equal(t, result, true)
+	assert.Nil(t, err)
+}
+
 func TestIsServiceRunningWithErrorMessageFromCommandExec(t *testing.T) {
 	util := Utility{}
 	testCases := []struct {
@@ -444,7 +469,7 @@ func TestExeCommandSucceeded(t *testing.T) {
 	util := Utility{}
 
 	for _, test := range testCases {
-		_, err := util.ExeCommand(logger,
+		_, _, err := util.ExeCommand(logger,
 			test.cmd,
 			test.workingDir,
 			appconfig.UpdaterArtifactsRoot,
@@ -653,4 +678,87 @@ func TestCompareVersion(t *testing.T) {
 	res, err = CompareVersion("2.5.7.8.9", "2.5.7.8.9")
 	assert.NotNil(t, err)
 
+}
+
+// Test version status validation
+func TestVersionStatusValidation(t *testing.T) {
+	assert.True(t, isVersionActive("Active"))
+	assert.False(t, isVersionActive("Inactive"))
+	assert.False(t, isVersionActive("Deprecated"))
+	assert.True(t, isVersionActive(""))
+	assert.False(t, isVersionActive("Foo"))
+}
+
+//Test parsing manifest file with version Status field
+func TestParseManifestWithStatus(t *testing.T) {
+	// generate test cases
+	var testCases []testCase
+	for _, manifestFile := range sampleManifestWithStatus {
+		testCases = append(testCases, testCase{
+			Input:  string(manifestFile),
+			Output: loadManifestFromFile(t, manifestFile),
+		})
+	}
+	agentName := "amazon-ssm-agent"
+	log := log.NewMockLog()
+	context := mockInstanceContext()
+	// run tests
+	for _, tst := range testCases {
+		// call method
+		parsedMsg, err := ParseManifest(log, tst.Input, context, agentName)
+
+		// check results
+		assert.Nil(t, err)
+		assert.Equal(t, tst.Output, parsedMsg)
+		assert.Equal(t, parsedMsg.Packages[0].Name, agentName)
+		assert.Equal(t, parsedMsg.Packages[0].Files[0].Name, "amazon-ssm-agent-linux-amd64.tar.gz")
+		assert.Equal(
+			t,
+			parsedMsg.Packages[0].Files[0].AvailableVersions[0].Version,
+			"1.1.0.0")
+		assert.Equal(
+			t,
+			parsedMsg.Packages[0].Files[0].AvailableVersions[0].Checksum,
+			"84fc818a7e21068c47412ddd18d3748a04a16b8f8836a259191920f854c4edc7")
+		assert.Equal(t, parsedMsg.Packages[0].Files[0].AvailableVersions[0].Status, "Foo")
+	}
+}
+
+//Parse manifest file
+func loadManifestFromFile(t *testing.T, fileName string) (manifest *Manifest) {
+	var result []byte
+	var err error
+	if result, err = ioutil.ReadFile(fileName); err != nil {
+		t.Fatal(err)
+	}
+
+	if err := json.Unmarshal(result, &manifest); err != nil {
+		t.Fatal(err)
+	}
+
+	return manifest
+}
+
+func mockInstanceContext() *InstanceContext {
+	return &InstanceContext{
+		Region:         "us-east-1",
+		Platform:       "linux",
+		InstallerName:  "linux",
+		Arch:           "amd64",
+		CompressFormat: "tar.gz",
+	}
+}
+
+func (p *testProcess) Start(*model.WorkerConfig) (*model.Process, error) { return nil, nil }
+
+func (p *testProcess) Kill(pid int) error { return nil }
+
+func (p *testProcess) Processes() ([]executor.OsProcess, error) {
+	var allProcess []executor.OsProcess
+	var process = executor.OsProcess{
+		Pid:        1,
+		Executable: model.SSMAgentWorkerBinaryName,
+	}
+	allProcess = append(allProcess, process)
+	return allProcess, nil
 }

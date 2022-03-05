@@ -18,6 +18,7 @@ package utility
 
 import (
 	"fmt"
+	"net"
 	"os"
 	"os/exec"
 
@@ -123,4 +124,9 @@ func (u *SessionUtil) changeModeOfSudoersFile(log log.T) error {
 func (u *SessionUtil) DisableLocalUser(log log.T) (err error) {
 	// Do nothing here as no password is required for unix platform local user, so that no need to disable user.
 	return nil
+}
+
+// NewListener starts a new socket listener on the address.
+func NewListener(log log.T, address string) (net.Listener, error) {
+	return net.Listen("unix", address)
 }

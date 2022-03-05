@@ -17,9 +17,11 @@ package cloudwatchlogspublisher
 
 import (
 	"bufio"
+	"encoding/json"
 	"errors"
 	"io"
 	"os"
+	"strings"
 	"time"
 
 	"github.com/aws/amazon-ssm-agent/agent/agentlogstocloudwatch/cloudwatchlogspublisher/cloudwatchlogsinterface"
@@ -33,14 +35,15 @@ import (
 	"github.com/aws/aws-sdk-go/aws/request"
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/cloudwatchlogs"
+	"github.com/pborman/ansi"
 )
 
 const (
 	stopPolicyErrorThreshold = 10
 	stopPolicyName           = "CloudWatchLogsService"
 	maxRetries               = 5
-	UploadFrequency          = 3 * time.Second
-	NewLineCharacter         = "\n"
+	UploadFrequency          = 1 * time.Second
+	NewLineCharacter         = '\n'
 	maxNumberOfEventsPerCall = 4
 
 	// Event size - https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/cloudwatch_limits_cwl.html
@@ -53,6 +56,35 @@ type CloudWatchLogsService struct {
 	stopPolicy           *sdkutil.StopPolicy
 	IsFileComplete       bool
 	IsUploadComplete     bool
+	CloudWatchMessage    CloudWatchMessage
+}
+
+// CloudWatchMessage captures all the information that are published in an event for streaming logs
+type CloudWatchMessage struct {
+	_ struct{} `type:"structure"`
+
+	EventVersion *string       `json:"eventVersion"`
+	EventTime    *string       `json:"eventTime"`
+	AwsRegion    *string       `json:"awsRegion"`
+	Target       *Target       `json:"target"`
+	UserIdentity *UserIdentity `json:"userIdentity"`
+	RunAsUser    *string       `json:"runAsUser"`
+	SessionId    *string       `json:"sessionId"`
+	SessionData  []*string     `json:"sessionData"`
+}
+
+// UserIdentity represents iam arn of the requester
+type UserIdentity struct {
+	_ struct{} `type:"structure"`
+
+	Arn *string `json:"arn"`
+}
+
+// Target represents id of the target
+type Target struct {
+	_ struct{} `type:"structure"`
+
+	Id *string `json:"id"`
 }
 
 // createCloudWatchStopPolicy creates a new policy for cloudwatchlogs
@@ -104,6 +136,7 @@ func NewCloudWatchLogsService(log log.T) *CloudWatchLogsService {
 		stopPolicy:           createCloudWatchStopPolicy(),
 		IsFileComplete:       false,
 		IsUploadComplete:     false,
+		CloudWatchMessage:    CloudWatchMessage{},
 	}
 	return &cloudWatchLogsService
 }
@@ -117,6 +150,25 @@ func NewCloudWatchLogsServiceWithCredentials(log log.T, id, secret string) *Clou
 		IsUploadComplete:     false,
 	}
 	return &cloudWatchLogsService
+}
+
+// SetCloudWatchMessage initializes CloudWatchMessage
+func (service *CloudWatchLogsService) SetCloudWatchMessage(
+	eventVersion string,
+	awsRegion string,
+	targetId string,
+	runAsUser string,
+	sessionId string,
+	sessionOwner string) {
+
+	service.CloudWatchMessage = CloudWatchMessage{
+		EventVersion: aws.String(eventVersion),
+		AwsRegion:    aws.String(awsRegion),
+		Target:       &Target{Id: aws.String(targetId)},
+		UserIdentity: &UserIdentity{Arn: aws.String(sessionOwner)},
+		RunAsUser:    aws.String(runAsUser),
+		SessionId:    aws.String(sessionId),
+	}
 }
 
 // CreateNewServiceIfUnHealthy checks service healthy and create new service if original is unhealthy
@@ -306,9 +358,9 @@ func (service *CloudWatchLogsService) getLogGroupDetails(log log.T, logGroup str
 }
 
 // IsLogGroupPresent checks and returns true when the log group is present
-func (service *CloudWatchLogsService) IsLogGroupPresent(log log.T, logGroup string) bool {
+func (service *CloudWatchLogsService) IsLogGroupPresent(log log.T, logGroup string) (bool, *cloudwatchlogs.LogGroup) {
 	logGroupDetails, _ := service.getLogGroupDetails(log, logGroup)
-	return logGroupDetails != nil
+	return logGroupDetails != nil, logGroupDetails
 }
 
 // IsLogStreamPresent checks and returns true when the log stream is present
@@ -427,16 +479,7 @@ func (service *CloudWatchLogsService) retryPutWithNewSequenceToken(log log.T, me
 }
 
 //IsLogGroupEncryptedWithKMS return true if the log group is encrypted with KMS key.
-func (service *CloudWatchLogsService) IsLogGroupEncryptedWithKMS(log log.T, logGroupName string) (bool, error) {
-	var (
-		logGroup *cloudwatchlogs.LogGroup
-		err      error
-	)
-
-	if logGroup, err = service.getLogGroupDetails(log, logGroupName); err != nil {
-		return false, err
-	}
-
+func (service *CloudWatchLogsService) IsLogGroupEncryptedWithKMS(log log.T, logGroup *cloudwatchlogs.LogGroup) (bool, error) {
 	if logGroup == nil {
 		return false, nil
 	}
@@ -445,23 +488,36 @@ func (service *CloudWatchLogsService) IsLogGroupEncryptedWithKMS(log log.T, logG
 		return true, nil
 	}
 
-	log.Errorf("CloudWatch log group %s is not encrypted with KMS", logGroupName)
+	log.Debugf("CloudWatch log group %s is not encrypted with KMS", logGroup.LogGroupName)
 	return false, nil
 }
 
 //StreamData streams data from the absoluteFilePath file to cloudwatch logs.
-func (service *CloudWatchLogsService) StreamData(log log.T, logGroupName string, logStreamName string, absoluteFilePath string, isFileComplete bool, isLogStreamCreated bool) {
-	log.Debugf("Uploading logs at %s to CloudWatch", absoluteFilePath)
+func (service *CloudWatchLogsService) StreamData(
+	log log.T,
+	logGroupName string,
+	logStreamName string,
+	absoluteFilePath string,
+	isFileComplete bool,
+	isLogStreamCreated bool,
+	fileCompleteSignal chan bool,
+	cleanupControlCharacters bool,
+	structuredLogs bool) (success bool) {
+
+	log.Infof("Uploading logs at %s to CloudWatch", absoluteFilePath)
 
 	service.IsFileComplete = isFileComplete
+	go func() {
+		service.IsFileComplete = <-fileCompleteSignal
+		log.Debugf("Received file complete signal %v", service.IsFileComplete)
+	}()
 
 	// Keeps track of the last known line number that was successfully uploaded to CloudWatch.
 	var lastKnownLineUploadedToCWL int64 = 0
-	var lastKnownLinePrefixUploadedToCWL int64 = 0
-
 	// Keeps track of the next line number upto which the logs will be uploaded to CloudWatch.
 	var currentLineNumber int64 = 0
-	var currentLinePrefixNumber int64 = 0
+	var sequenceToken *string
+	var err error
 
 	IsLogStreamCreated := isLogStreamCreated
 
@@ -474,30 +530,31 @@ func (service *CloudWatchLogsService) StreamData(log log.T, logGroupName string,
 			log,
 			absoluteFilePath,
 			&lastKnownLineUploadedToCWL,
-			&lastKnownLinePrefixUploadedToCWL,
 			&currentLineNumber,
-			&currentLinePrefixNumber)
+			cleanupControlCharacters,
+			structuredLogs)
 
 		// Exit case determining that the file is complete and has been scanned till EOF.
 		if eof {
 			ticker.Stop()
-			log.Debug("Finished uploading events to Cloudwatch")
+			log.Info("Finished uploading events to CloudWatch")
 			service.IsUploadComplete = true
+			success = true
 			break
 		}
 
 		// If no new messages found then skip uploading.
 		if len(events) == 0 {
-			log.Debug("No events to upload to CloudWatch")
+			log.Trace("No events to upload to CloudWatch")
 			continue
 		}
 
-		log.Debugf("Uploading message %v to CloudWatch", events)
+		log.Tracef("Uploading message line %d to CloudWatch", currentLineNumber)
 
 		if !IsLogStreamCreated {
 
 			// Terminate process if the log group is not present.
-			if !service.IsLogGroupPresent(log, logGroupName) {
+			if logGroupPresent, _ := service.IsLogGroupPresent(log, logGroupName); !logGroupPresent {
 				log.Errorf("CloudWatch log group resource not created: %s", logGroupName)
 				ticker.Stop()
 				break
@@ -513,25 +570,33 @@ func (service *CloudWatchLogsService) StreamData(log log.T, logGroupName string,
 			}
 		}
 
-		sequenceToken := service.GetSequenceTokenForStream(log, logGroupName, logStreamName)
+		// Use sequenceToken returned by PutLogEvents if present, else fetch new one
+		if sequenceToken == nil {
+			sequenceToken = service.GetSequenceTokenForStream(log, logGroupName, logStreamName)
+		}
 
-		_, err := service.PutLogEvents(log, events, logGroupName, logStreamName, sequenceToken)
+		sequenceToken, err = service.PutLogEvents(log, events, logGroupName, logStreamName, sequenceToken)
 		if err == nil {
 			// Set the last known line to current since the upload was successful.
 			lastKnownLineUploadedToCWL = currentLineNumber
-			lastKnownLinePrefixUploadedToCWL = currentLinePrefixNumber
-			log.Debug("Successfully uploaded message to CloudWatch")
+			log.Trace("Successfully uploaded message line %d to CloudWatch", currentLineNumber)
 		} else {
 			// Reset the current line to last known line since the upload failed and retry again in the next iteration.
 			currentLineNumber = lastKnownLineUploadedToCWL
-			currentLinePrefixNumber = lastKnownLinePrefixUploadedToCWL
-			log.Debug("Failed to upload message to CloudWatch")
+			log.Debugf("Failed to upload message to CloudWatch, err: %v", err)
 		}
 	}
+	return success
 }
 
 //getNextMessage gets the next message to be uploaded to cloudwatch.
-func (service *CloudWatchLogsService) getNextMessage(log log.T, absoluteFilePath string, lastKnownLineUploadedToCWL *int64, lastKnownLinePrefixUploadedToCWL *int64, currentLineNumber *int64, currentLinePrefixNumber *int64) (allEvents []*cloudwatchlogs.InputLogEvent, eof bool) {
+func (service *CloudWatchLogsService) getNextMessage(
+	log log.T, absoluteFilePath string,
+	lastKnownLineUploadedToCWL *int64,
+	currentLineNumber *int64,
+	cleanupControlCharacters bool,
+	structuredLogs bool) (allEvents []*cloudwatchlogs.InputLogEvent, eof bool) {
+
 	// Open file to read.
 	file, err := os.Open(absoluteFilePath)
 	if err != nil {
@@ -544,23 +609,15 @@ func (service *CloudWatchLogsService) getNextMessage(log log.T, absoluteFilePath
 	reader := bufio.NewReaderSize(file, MessageLengthThresholdInBytes)
 
 	// Skip to the last uploaded line.
-	if *lastKnownLineUploadedToCWL > 0 || *lastKnownLinePrefixUploadedToCWL > 0 {
+	if *lastKnownLineUploadedToCWL > 0 {
 		var lastLine int64 = 0
-		var lastPrefix int64 = 0
-		_, isPrefix, err := reader.ReadLine()
-		for err == nil {
-			if isPrefix {
-				lastPrefix++
-			} else {
-				lastLine++
-				lastPrefix = 0
-			}
-
-			if lastLine == *lastKnownLineUploadedToCWL &&
-				lastPrefix == *lastKnownLinePrefixUploadedToCWL {
+		_, err := reader.ReadSlice(NewLineCharacter)
+		for err == nil || err == bufio.ErrBufferFull {
+			lastLine++
+			if lastLine == *lastKnownLineUploadedToCWL {
 				break
 			}
-			_, isPrefix, err = reader.ReadLine()
+			_, err = reader.ReadSlice(NewLineCharacter)
 		}
 		if err != nil && err != io.EOF {
 			log.Debugf("Error skipping to last uploaded Cloudwatch line: %v", err)
@@ -568,54 +625,50 @@ func (service *CloudWatchLogsService) getNextMessage(log log.T, absoluteFilePath
 		}
 	}
 
-	var message []byte
-	// Scan the next set of lines to upload.
-	line, isPrefix, err := reader.ReadLine()
-	for err == nil {
-		if len(message) == 0 {
-			message = append(message, line...)
-		} else if (len(message) + len(line)) > MessageLengthThresholdInBytes {
-			log.Debugf("Appending line to current Cloudwatch event message"+
-				" exceeds length limit %v bytes. [Line: %v][Prefix: %v]",
-				MessageLengthThresholdInBytes, *currentLineNumber, *currentLinePrefixNumber)
-
-			event := &cloudwatchlogs.InputLogEvent{
-				Message:   aws.String(string(message)),
-				Timestamp: aws.Int64(time.Now().UnixNano() / int64(time.Millisecond)),
+	var message, line []byte
+	for {
+		// Scan the next set of lines to upload.
+		line, err = reader.ReadSlice(NewLineCharacter)
+		if err != nil && err != bufio.ErrBufferFull {
+			// Breaking out of loop since nothing to upload
+			if err != io.EOF || len(line) == 0 || !service.IsFileComplete {
+				break
 			}
+		}
 
-			log.Debug("Created Cloudwatch event from current event message buffer")
+		// Process message if needed before uploading to CW
+		line = processMessage(log, line, cleanupControlCharacters)
+
+		// Check if message length threshold for the event has reached.
+		// If true, then construct event with existing message so that new line will get added to the next event.
+		// If false, then continue to append new line to existing message.
+		if (len(message) + len(line)) > MessageLengthThresholdInBytes {
+			log.Tracef("Appending line to current Cloudwatch event message"+
+				" exceeds length limit %v bytes. [Line: %v]",
+				MessageLengthThresholdInBytes, *currentLineNumber)
+
+			event := service.buildEventInfo(message, structuredLogs)
+
+			log.Trace("Created CloudWatch event from current event message buffer")
 			allEvents = append(allEvents, event)
 			if len(allEvents) >= maxNumberOfEventsPerCall {
 				return
 			}
 
-			log.Debug("Reset Cloudwatch event message buffer")
+			log.Trace("Reset Cloudwatch event message buffer")
 			message = nil
-			message = append(message, line...)
-		} else {
-			message = append(append(message, []byte(NewLineCharacter)...), line...)
 		}
-
-		if isPrefix {
-			*currentLinePrefixNumber++
-		} else {
-			*currentLineNumber++
-			*currentLinePrefixNumber = 0
-		}
-
-		line, isPrefix, err = reader.ReadLine()
+		message = append(message, line...)
+		*currentLineNumber++
 	}
+
 	if err != io.EOF && err != nil {
 		log.Debug("Error reading from Cloudwatch logs file:", err)
 	}
 
+	// Build event with the message read so far to be uploaded to CW
 	if len(message) > 0 {
-		event := &cloudwatchlogs.InputLogEvent{
-			Message:   aws.String(string(message)),
-			Timestamp: aws.Int64(time.Now().UnixNano() / int64(time.Millisecond)),
-		}
-
+		event := service.buildEventInfo(message, structuredLogs)
 		allEvents = append(allEvents, event)
 		return
 	}
@@ -626,4 +679,59 @@ func (service *CloudWatchLogsService) getNextMessage(log log.T, absoluteFilePath
 	}
 
 	return
+}
+
+// processMessage is used to process message before uploading to CW like cleaning up ANSI control characters
+func processMessage(log log.T, line []byte, cleanupANSICharacters bool) (processedLine []byte) {
+	defer func() {
+		if err := recover(); err != nil {
+			log.Tracef("processMessage encountered error: %v", err)
+		}
+	}()
+
+	// Do nothing if cleanup of ANSI characters not required
+	if !cleanupANSICharacters {
+		return line
+	}
+
+	// Strip ANSI control sequences like color codes
+	processedLine = line
+	processedLine, err := ansi.Strip(line)
+	if err != nil {
+		processedLine = line
+	}
+
+	return processedLine
+}
+
+// buildEventInfo constructs event to be uploaded to CW
+func (service *CloudWatchLogsService) buildEventInfo(message []byte, structuredLogs bool) *cloudwatchlogs.InputLogEvent {
+	var formattedMessage string
+	// Construct CloudWatch event in JSON format if structured logs required
+	if structuredLogs {
+		currentTime := time.Now().UTC()
+		messageString := string(message)
+		messageString = strings.ReplaceAll(messageString, "\t", " ")
+		messageString = strings.ReplaceAll(messageString, "\r", "")
+		messageList := strings.Split(messageString, "\n")
+		if messageList[len(messageList)-1] == "" {
+			messageList = messageList[:len(messageList)-1]
+		}
+
+		service.CloudWatchMessage.EventTime = aws.String(currentTime.Format(time.RFC3339))
+		service.CloudWatchMessage.SessionData = aws.StringSlice(messageList)
+		formattedMessageBytes, _ := json.Marshal(service.CloudWatchMessage)
+		formattedMessage = string(formattedMessageBytes)
+	} else {
+		formattedMessage = strings.ReplaceAll(string(message), "\r\n", "\n")
+		if service.IsFileComplete && message[len(message)-1] == byte(NewLineCharacter) {
+			formattedMessage = formattedMessage[:len(formattedMessage)-1]
+		}
+	}
+
+	event := &cloudwatchlogs.InputLogEvent{
+		Message:   aws.String(formattedMessage),
+		Timestamp: aws.Int64(time.Now().UnixNano() / int64(time.Millisecond)),
+	}
+	return event
 }

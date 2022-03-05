@@ -21,7 +21,6 @@ import (
 	"github.com/aws/aws-sdk-go/aws/credentials"
 	"github.com/aws/aws-sdk-go/aws/request"
 	"github.com/aws/aws-sdk-go/aws/session"
-	v4 "github.com/aws/aws-sdk-go/private/signer/v4"
 	"github.com/aws/aws-sdk-go/service/ssm"
 )
 
@@ -53,7 +52,7 @@ func NewRsaService(serverId string, region string, encodedPrivateKey string) Rsa
 	// use Beagle's RSA signer override
 	// whenever we update sdk, we need to make sure it's using Beagle's RSA signing protocol
 	ssmService.Handlers.Sign.Clear()
-	ssmService.Handlers.Sign.PushBack(v4.SignRsa)
+	ssmService.Handlers.Sign.PushBack(SignRsa)
 	return &sdkService{sdk: ssmService}
 }
 

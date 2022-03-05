@@ -275,7 +275,7 @@ func (da *PackageArchive) getDocument(packageName, version string) (manifest str
 
 func getRandomBackOffTime(timeInSeconds int) int {
 	rand.Seed(time.Now().UnixNano())
-	delay := rand.Intn(timeInSeconds)
+	delay := rand.Intn(timeInSeconds) + 1
 
 	return delay
 }

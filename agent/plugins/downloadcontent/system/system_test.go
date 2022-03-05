@@ -16,13 +16,13 @@
 package system
 
 import (
-	filemock "github.com/aws/amazon-ssm-agent/agent/fileutil/filemanager/mock"
-	"github.com/aws/amazon-ssm-agent/agent/log"
-	"github.com/stretchr/testify/assert"
-
 	"errors"
 	"fmt"
 	"testing"
+
+	filemock "github.com/aws/amazon-ssm-agent/agent/fileutil/filemanager/mock"
+	"github.com/aws/amazon-ssm-agent/agent/log"
+	"github.com/stretchr/testify/assert"
 )
 
 var logMock = log.NewMockLog()

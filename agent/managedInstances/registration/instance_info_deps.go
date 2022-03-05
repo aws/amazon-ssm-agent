@@ -16,7 +16,7 @@ package registration
 
 import (
 	"github.com/aws/amazon-ssm-agent/agent/fileutil"
-	"github.com/aws/amazon-ssm-agent/agent/vault/fsvault"
+	"github.com/aws/amazon-ssm-agent/agent/managedInstances/vault/fsvault"
 )
 
 // dependency for fileutil

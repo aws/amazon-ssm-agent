@@ -104,6 +104,7 @@ type AgentTaskPayload struct {
 	SessionId       string                           `json:"SessionId"`
 	Parameters      map[string]interface{}           `json:"Parameters"`
 	RunAsUser       string                           `json:"RunAsUser"`
+	SessionOwner    string                           `json:"SessionOwner"`
 }
 
 // AcknowledgeContent is used to inform the sender of an acknowledge message that the message has been received.
@@ -228,8 +229,9 @@ const (
 type PayloadTypeFlag uint32
 
 const (
-	DisconnectToPort PayloadTypeFlag = 1
-	TerminateSession PayloadTypeFlag = 2
+	DisconnectToPort   PayloadTypeFlag = 1
+	TerminateSession   PayloadTypeFlag = 2
+	ConnectToPortError PayloadTypeFlag = 3
 )
 
 type SessionStatus string

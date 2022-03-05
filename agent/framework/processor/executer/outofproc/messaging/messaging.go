@@ -3,9 +3,9 @@ package messaging
 import (
 	"errors"
 
-	"github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/outofproc/channel"
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
 	"github.com/aws/amazon-ssm-agent/agent/log"
+	"github.com/aws/amazon-ssm-agent/common/filewatcherbasedipc"
 )
 
 type MessageType string
@@ -75,7 +75,7 @@ func ParseDatagram(datagram string) (MessageType, string) {
 
 // Messaging implements the duplex transmission between master and worker, it send datagram it received to data backend,
 // TODO ipc should not be destroyed within this worker, destroying ipc object should be done in its caller: Executer
-func Messaging(log log.T, ipc channel.Channel, backend MessagingBackend, stopTimer chan bool) (err error) {
+func Messaging(log log.T, ipc filewatcherbasedipc.IPCChannel, backend MessagingBackend, stopTimer chan bool) (err error) {
 
 	defer func() {
 		if msg := recover(); msg != nil {

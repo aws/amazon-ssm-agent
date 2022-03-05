@@ -29,6 +29,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/birdwatcher/facade"
 	facadeMock "github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/birdwatcher/facade/mocks"
+	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/envdetect/ec2infradetect"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/localpackages"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/packageservice"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/trace"
@@ -37,6 +38,13 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 )
+
+// getConfig mock
+func init() {
+	getConfig = func(reload bool) (appconfig.SsmagentConfig, error) {
+		return appconfig.DefaultConfig(), nil
+	}
+}
 
 func createStubPluginInputInstall() *ConfigurePackagePluginInput {
 	input := ConfigurePackagePluginInput{}
@@ -968,6 +976,55 @@ func TestConfigurePackageForUpdate_BirdwatcherService_InvalidInPlaceInstallation
 	serviceMock.AssertExpectations(t)
 }
 
+func TestParseAndValidateInputWithAdditionalArgument(t *testing.T) {
+	var inputMap = map[string]interface{}{"name": "PVDriver", "action": "Install", "additionalArguments": "{\"SSM_var1\":\"customVal1\",\"SSM_var2\":\"customVal2\"}"}
+	var rawPluginInput = interface{}(inputMap)
+	input, err := parseAndValidateInput(rawPluginInput)
+
+	assert.NoError(t, err)
+	assert.Equal(t, "PVDriver", input.Name)
+	assert.Equal(t, "Install", input.Action)
+	assert.Empty(t, input.Version)
+	assert.NotEmpty(t, input.AdditionalArguments)
+	assert.Equal(t, "{\"SSM_var1\":\"customVal1\",\"SSM_var2\":\"customVal2\"}", input.AdditionalArguments)
+}
+
+func TestParseAndValidateInputWithEmptyAdditionalArgumentsMap(t *testing.T) {
+	var inputMap = map[string]interface{}{"name": "PVDriver", "action": "Install", "additionalArguments": make(map[string]interface{})}
+	var rawPluginInput = interface{}(inputMap)
+	input, err := parseAndValidateInput(rawPluginInput)
+
+	assert.NoError(t, err)
+	assert.Equal(t, "PVDriver", input.Name)
+	assert.Equal(t, "Install", input.Action)
+	assert.Empty(t, input.Version)
+	assert.Empty(t, input.AdditionalArguments)
+}
+
+func TestParseAndValidateInputWithEmptyAdditionalArgumentsString(t *testing.T) {
+	var inputMap = map[string]interface{}{"name": "PVDriver", "action": "Install", "additionalArguments": ""}
+	var rawPluginInput = interface{}(inputMap)
+	input, err := parseAndValidateInput(rawPluginInput)
+
+	assert.NoError(t, err)
+	assert.Equal(t, "PVDriver", input.Name)
+	assert.Equal(t, "Install", input.Action)
+	assert.Empty(t, input.Version)
+	assert.Empty(t, input.AdditionalArguments)
+}
+
+func TestParseAndValidateInputWithoutAdditionalArguments(t *testing.T) {
+	var inputMap = map[string]interface{}{"name": "PVDriver", "action": "Install"}
+	var rawPluginInput = interface{}(inputMap)
+	input, err := parseAndValidateInput(rawPluginInput)
+
+	assert.NoError(t, err)
+	assert.Equal(t, "PVDriver", input.Name)
+	assert.Equal(t, "Install", input.Action)
+	assert.Empty(t, input.Version)
+	assert.Empty(t, input.AdditionalArguments)
+}
+
 func TestValidateInput(t *testing.T) {
 	input := ConfigurePackagePluginInput{}
 
@@ -1318,6 +1375,15 @@ func TestExecuteConfigurePackagePlugin_DocumentService(t *testing.T) {
 	getDocument_DocVersion := "2"
 	fakeHash := "djfhsfdse3498234bbar8821344bncdklsr023445fskdsgg"
 
+	ec2infradetect.CollectEc2Infrastructure = func(log log.T) (*ec2infradetect.Ec2Infrastructure, error) {
+		return &ec2infradetect.Ec2Infrastructure{
+			InstanceID:       "i-1234",
+			Region:           "us-east-1",
+			AvailabilityZone: "us-east-1a",
+			InstanceType:     "c3.4xlarge",
+		}, nil
+	}
+
 	data := []struct {
 		name                    string
 		mockVersion             string
@@ -1452,7 +1518,6 @@ func TestExecuteConfigurePackagePlugin_DocumentService(t *testing.T) {
 				mockIOHandler.AssertExpectations(t)
 			}
 			assert.Equal(t, true, plugin.isDocumentArchive)
-
 		})
 	}
 }

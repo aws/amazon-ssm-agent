@@ -58,7 +58,11 @@ func (s *RunCommandService) ModuleName() string {
 // Execute starts the scheduling of the message processor plugin
 func (s *RunCommandService) ModuleExecute(context context.T) (err error) {
 	log := s.context.Log()
-
+	defer func() {
+		if msg := recover(); msg != nil {
+			log.Errorf("run command ModuleExecute run panic: %v", msg)
+		}
+	}()
 	log.Info("Starting document processing engine...")
 	var resultChan chan contracts.DocumentResult
 	if resultChan, err = s.processor.Start(); err != nil {

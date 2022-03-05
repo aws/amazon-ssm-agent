@@ -296,6 +296,16 @@ func GetFileNames(srcPath string) (files []string, err error) {
 	return
 }
 
+// CreateFile creates a file with the given name
+func CreateFile(name string) (*os.File, error) {
+	return fs.Create(name)
+}
+
+// CreateTempDir creates a new temporary directory in the directory dir with a name beginning with prefix
+func CreateTempDir(dir, prefix string) (name string, err error) {
+	return ioUtil.TempDir(dir, prefix)
+}
+
 // ReadDir returns files within the given location
 func ReadDir(location string) ([]os.FileInfo, error) {
 	files := []os.FileInfo{}
@@ -370,4 +380,57 @@ func Unzip(src, dest string) error {
 	}
 
 	return nil
+}
+
+// MoveFiles moves all files and directories from *sourceDir* to *destDir*
+func MoveFiles(sourceDir, destDir string) error {
+	filesInfo, err := ioutil.ReadDir(sourceDir)
+	if err != nil {
+		return err
+	}
+
+	for _, fileInfo := range filesInfo {
+		_, err := MoveAndRenameFile(sourceDir, fileInfo.Name(), destDir, fileInfo.Name())
+		if err != nil {
+			return fmt.Errorf("Cannot move contents to destination path: %s", err.Error())
+		}
+	}
+
+	return nil
+}
+
+// CollectFilesAndRebase collects all files and directories of the *sourceDir* changing their relative path to be rooted in *rebaseToDir*. E.g:
+// ####
+// sourceDir = "/a/b"
+// filesInSourceDir = ["/a/b/file.txt", "/a/b/c/another_file.txt"]
+// rebaseToDir = "/d"
+//
+// outputFiles = ["/d/file.txt", "/d/c/another_file.txt"]
+// ####
+func CollectFilesAndRebase(sourceDir, rebaseToDir string) (files []string, err error) {
+	err = filepath.Walk(sourceDir,
+		func(path string, info os.FileInfo, err error) error {
+			if err != nil {
+				return err
+			}
+
+			if !info.IsDir() {
+				// Compute the actual path of the file after the contents will be moved
+				relParentPath, err := filepath.Rel(sourceDir, filepath.Dir(path))
+				if err != nil {
+					return err
+				}
+
+				destFilePath := filepath.Join(rebaseToDir, relParentPath, info.Name())
+				files = append(files, destFilePath)
+			}
+
+			return err
+		})
+
+	if err != nil {
+		return nil, fmt.Errorf("Cannot acknowledge downloaded files: %v", err.Error())
+	}
+
+	return files, nil
 }

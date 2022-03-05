@@ -21,39 +21,44 @@ import (
 	"os"
 	"path/filepath"
 	"syscall"
+
+	"github.com/aws/amazon-ssm-agent/agent/tlsconfig/certreader"
 )
 
 const (
 
+	// AgentExtensions specified the root folder for various kinds of downloaded content
+	AgentData = "/var/lib/amazon/ssm/"
+
 	// PackageRoot specifies the directory under which packages will be downloaded and installed
-	PackageRoot = "/var/lib/amazon/ssm/packages"
+	PackageRoot = AgentData + "packages"
 
 	// PackageLockRoot specifies the directory under which package lock files will reside
-	PackageLockRoot = "/var/lib/amazon/ssm/locks/packages"
+	PackageLockRoot = AgentData + "locks/packages"
 
 	// PackagePlatform is the platform name to use when looking for packages
 	PackagePlatform = "linux"
 
 	// DaemonRoot specifies the directory where daemon registration information is stored
-	DaemonRoot = "/var/lib/amazon/ssm/daemons"
+	DaemonRoot = AgentData + "daemons"
 
 	// LocalCommandRoot specifies the directory where users can submit command documents offline
-	LocalCommandRoot = "/var/lib/amazon/ssm/localcommands"
+	LocalCommandRoot = AgentData + "localcommands"
 
 	// LocalCommandRootSubmitted is the directory where locally submitted command documents
 	// are moved when they have been picked up
-	LocalCommandRootSubmitted = "/var/lib/amazon/ssm/localcommands/submitted"
-	LocalCommandRootCompleted = "/var/lib/amazon/ssm/localcommands/completed"
+	LocalCommandRootSubmitted = AgentData + "localcommands/submitted"
+	LocalCommandRootCompleted = AgentData + "localcommands/completed"
 
 	// LocalCommandRootInvalid is the directory where locally submitted command documents
 	// are moved if the service cannot validate the document (generally impossible via cli)
-	LocalCommandRootInvalid = "/var/lib/amazon/ssm/localcommands/invalid"
+	LocalCommandRootInvalid = AgentData + "localcommands/invalid"
 
 	// DownloadRoot specifies the directory under which files will be downloaded
-	DownloadRoot = "/var/log/amazon/ssm/download/"
+	DownloadRoot = AgentData + "download/"
 
 	// DefaultDataStorePath represents the directory for storing system data
-	DefaultDataStorePath = "/var/lib/amazon/ssm/"
+	DefaultDataStorePath = AgentData
 
 	// EC2ConfigDataStorePath represents the directory for storing ec2 config data
 	EC2ConfigDataStorePath = "/var/lib/amazon/ec2config/"
@@ -62,16 +67,16 @@ const (
 	EC2ConfigSettingPath = "/var/lib/amazon/ec2configservice/"
 
 	// UpdaterArtifactsRoot represents the directory for storing update related information
-	UpdaterArtifactsRoot = "/var/lib/amazon/ssm/update/"
+	UpdaterArtifactsRoot = AgentData + "update/"
 
 	// UpdaterPidLockfile represents the location of the updater lockfile
-	UpdaterPidLockfile = DefaultDataStorePath + "update.lock"
+	UpdaterPidLockfile = AgentData + "update.lock"
 
 	// DefaultPluginPath represents the directory for storing plugins in SSM
-	DefaultPluginPath = "/var/lib/amazon/ssm/plugins"
+	DefaultPluginPath = AgentData + "plugins"
 
 	// ManifestCacheDirectory represents the directory for storing all downloaded manifest files
-	ManifestCacheDirectory = "/var/lib/amazon/ssm/manifests"
+	ManifestCacheDirectory = AgentData + "manifests"
 
 	// List all plugin names, unfortunately golang doesn't support const arrays of strings
 
@@ -79,7 +84,10 @@ const (
 	RebootExitCode = 194
 
 	// Default Custom Inventory Inventory Folder
-	DefaultCustomInventoryFolder = DefaultDataStorePath + "inventory/custom"
+	DefaultCustomInventoryFolder = AgentData + "inventory/custom"
+
+	// Default Session files Folder
+	SessionFilesPath = AgentData + "session"
 
 	// PowerShellPluginCommandArgs is the arguments of powershell.exe to be used by the runPowerShellScript plugin
 	PowerShellPluginCommandArgs = "-f"
@@ -92,6 +100,12 @@ const (
 
 	NecessaryAgentBinaryPermissionMask  = 0511 // Require read/execute for root, execute for all
 	DisallowedAgentBinaryPermissionMask = 0022 // Disallow write for group and user
+
+	// customCertificateFileName is the name of the custom certificate
+	customCertificateFileName = "amazon-ssm-agent.crt"
+
+	// seelogFileName is the name of the log configuration file
+	seelogFileName = "seelog.xml"
 )
 
 // PowerShellPluginCommandName is the path of the powershell.exe to be used by the runPowerShellScript plugin
@@ -99,12 +113,21 @@ var PowerShellPluginCommandName string
 
 // DefaultProgramFolder is the default folder for SSM
 var DefaultProgramFolder = "/etc/amazon/ssm/"
-var DefaultDocumentWorker = "/usr/bin/ssm-document-worker"
-var DefaultSessionWorker = "/usr/bin/ssm-session-worker"
-var DefaultSessionLogger = "/usr/bin/ssm-session-logger"
+
+var defaultWorkerPath = "/usr/bin/"
+var DefaultSSMAgentWorker = defaultWorkerPath + "ssm-agent-worker"
+var DefaultDocumentWorker = defaultWorkerPath + "ssm-document-worker"
+var DefaultSessionWorker = defaultWorkerPath + "ssm-session-worker"
+var DefaultSessionLogger = defaultWorkerPath + "ssm-session-logger"
 
 // AppConfigPath is the path of the AppConfig
 var AppConfigPath = DefaultProgramFolder + AppConfigFileName
+
+// CustomCertificatePath is the path of the custom certificate
+var CustomCertificatePath = ""
+
+// SeelogFilePath specifies the path to the seelog
+var SeelogFilePath = DefaultProgramFolder + seelogFileName
 
 func init() {
 	/*
@@ -115,18 +138,44 @@ func init() {
 		PowerShellPluginCommandName = "/usr/bin/pwsh"
 	}
 
-	// Find current directory path for amazon-ssm-agent, DefaultDocumentWorker should exist in same directory
-	// if document-worker is not in the default location, try finding it in the same directory as amazon-ssm-agent
-	if _, err := os.Stat(DefaultDocumentWorker); err != nil {
-		// curdir is amazon-ssm-agent current directory path
-		if curdir, err := filepath.Abs(filepath.Dir(os.Args[0])); err == nil {
-			if validateAgentBinary("ssm-document-worker", curdir) &&
-				validateAgentBinary("ssm-session-worker", curdir) &&
-				validateAgentBinary("ssm-session-logger", curdir) {
+	// curdir is amazon-ssm-agent current directory path
+	curdir, err := filepath.Abs(filepath.Dir(os.Args[0]))
+	if err != nil {
+		return
+	}
+
+	// if curdir is not default worker dir, update paths of other binaries
+	if curdir != defaultWorkerPath[:len(defaultWorkerPath)-1] {
+		if validateAgentBinary("ssm-session-worker", curdir) &&
+			validateAgentBinary("ssm-agent-worker", curdir) {
+
+			DefaultSessionWorker = filepath.Join(curdir, "ssm-session-worker")
+			DefaultSSMAgentWorker = filepath.Join(curdir, "ssm-agent-worker")
+			DefaultProgramFolder = curdir
+
+			if validateAgentBinary("ssm-document-worker", curdir) {
 				DefaultDocumentWorker = filepath.Join(curdir, "ssm-document-worker")
-				DefaultSessionWorker = filepath.Join(curdir, "ssm-session-worker")
+			}
+
+			if validateAgentBinary("ssm-session-logger", curdir) {
 				DefaultSessionLogger = filepath.Join(curdir, "ssm-session-logger")
-				DefaultProgramFolder = curdir
+			}
+
+			// Check if config is available in relative path
+			const relativeConfigFolder = "configuration"
+			if validateRelativeConfigFile(filepath.Join(curdir, relativeConfigFolder, AppConfigFileName)) {
+				AppConfigPath = filepath.Join(curdir, relativeConfigFolder, AppConfigFileName)
+			}
+
+			// Check if seelog.xml is available in relative path
+			if validateRelativeConfigFile(filepath.Join(curdir, relativeConfigFolder, seelogFileName)) {
+				SeelogFilePath = filepath.Join(curdir, relativeConfigFolder, seelogFileName)
+			}
+
+			// Check if certificate is available in relative path
+			const relativeCertsFolder = "certs"
+			if _, err := certreader.ReadCertificate(filepath.Join(curdir, relativeCertsFolder, customCertificateFileName)); err == nil {
+				CustomCertificatePath = filepath.Join(curdir, relativeCertsFolder, customCertificateFileName)
 			}
 		}
 	}
@@ -157,4 +206,39 @@ func validateAgentBinary(filename, curdir string) bool {
 		}
 	}
 	return false
+}
+
+func validateRelativeConfigFile(filePath string) bool {
+	// Get folder info
+	info, err := os.Stat(filepath.Dir(filePath))
+	if err != nil {
+		return false
+	}
+
+	// Get folder resource information
+	folderSys := info.Sys()
+	if folderSys.(*syscall.Stat_t).Uid != 0 ||
+		folderSys.(*syscall.Stat_t).Gid != 0 {
+		return false
+	}
+
+	// Get file info
+	info, err = os.Stat(filePath)
+	if err != nil {
+		return false
+	}
+
+	// Check if is file
+	if !info.Mode().IsRegular() {
+		return false
+	}
+
+	// check if file is owned by root
+	fileSys := info.Sys()
+	if fileSys.(*syscall.Stat_t).Uid != 0 ||
+		fileSys.(*syscall.Stat_t).Gid != 0 {
+		return false
+	}
+
+	return true
 }

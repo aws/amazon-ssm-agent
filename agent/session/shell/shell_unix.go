@@ -28,6 +28,7 @@ import (
 	"strings"
 	"syscall"
 	"time"
+	"unsafe"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	agentContracts "github.com/aws/amazon-ssm-agent/agent/contracts"
@@ -44,10 +45,14 @@ const (
 	langEnvVariable       = "LANG=C.UTF-8"
 	langEnvVariableKey    = "LANG"
 	startRecordSessionCmd = "script"
+	newLineCharacter      = "\n"
 	catCmd                = "cat"
 	scriptFlag            = "-c"
 	homeEnvVariable       = "HOME=/home/"
 	groupsIdentifier      = "groups="
+	fs_ioc_setflags       = uintptr(0x40086602)
+	fs_append_fl          = 0x00000020 /* writes to file may only append */
+	fs_ioc_getflags       = uintptr(0x80086601)
 )
 
 //StartPty starts pty and provides handles to stdin and stdout
@@ -56,7 +61,9 @@ func StartPty(
 	log log.T,
 	shellProps mgsContracts.ShellProperties,
 	isSessionLogger bool,
-	config agentContracts.Configuration) (stdin *os.File, stdout *os.File, err error) {
+	config agentContracts.Configuration,
+	plugin *ShellPlugin) (err error) {
+
 	log.Info("Starting pty")
 	//Start the command with a pty
 	var cmd *exec.Cmd
@@ -80,20 +87,20 @@ func StartPty(
 
 	appConfig, _ := appconfig.Config(false)
 
+	var sessionUser string
 	if !shellProps.Linux.RunAsElevated && !isSessionLogger && !appConfig.Agent.ContainerMode {
 		// We get here only when its a customer shell that needs to be started in a specific user mode.
 
-		var sessionUser string
 		u := &utility.SessionUtil{}
 		if config.RunAsEnabled {
 			if strings.TrimSpace(config.RunAsUser) == "" {
-				return nil, nil, errors.New("please set the RunAs default user")
+				return errors.New("please set the RunAs default user")
 			}
 
 			// Check if user exists
 			if userExists, _ := u.DoesUserExist(config.RunAsUser); !userExists {
 				// if user does not exist, fail the session
-				return nil, nil, fmt.Errorf("failed to start pty since RunAs user %s does not exist", config.RunAsUser)
+				return fmt.Errorf("failed to start pty since RunAs user %s does not exist", config.RunAsUser)
 			}
 
 			sessionUser = config.RunAsUser
@@ -108,7 +115,7 @@ func StartPty(
 		// Get the uid and gid of the runas user.
 		uid, gid, groups, err := getUserCredentials(log, sessionUser)
 		if err != nil {
-			return nil, nil, err
+			return err
 		}
 		cmd.SysProcAttr = &syscall.SysProcAttr{}
 		cmd.SysProcAttr.Credential = &syscall.Credential{Uid: uid, Gid: gid, Groups: groups, NoSetGroups: false}
@@ -121,14 +128,18 @@ func StartPty(
 	ptyFile, err = pty.Start(cmd)
 	if err != nil {
 		log.Errorf("Failed to start pty: %s\n", err)
-		return nil, nil, fmt.Errorf("Failed to start pty: %s\n", err)
+		return fmt.Errorf("Failed to start pty: %s\n", err)
 	}
 
-	return ptyFile, ptyFile, nil
+	plugin.stdin = ptyFile
+	plugin.stdout = ptyFile
+	plugin.runAsUser = sessionUser
+
+	return nil
 }
 
-//Stop closes pty file.
-func Stop(log log.T) (err error) {
+//stop closes pty file.
+func (p *ShellPlugin) stop(log log.T) (err error) {
 	log.Info("Stopping pty")
 	if err := ptyFile.Close(); err != nil {
 		if err, ok := err.(*os.PathError); ok && err.Err != os.ErrClosed {
@@ -219,17 +230,30 @@ func getUserCredentials(log log.T, sessionUser string) (uint32, uint32, []uint32
 	return 0, 0, nil, errors.New("invalid uid and gid")
 }
 
+// runShellProfile executes the shell profile config
+func (p *ShellPlugin) runShellProfile(log log.T, config agentContracts.Configuration) error {
+	if strings.TrimSpace(config.ShellProfile.Linux) == "" {
+		return nil
+	}
+
+	if _, err := p.stdin.Write([]byte(config.ShellProfile.Linux + newLineCharacter)); err != nil {
+		log.Errorf("Unable to write to stdin, err: %v.", err)
+		return err
+	}
+	return nil
+}
+
 // generateLogData generates a log file with the executed commands.
 func (p *ShellPlugin) generateLogData(log log.T, config agentContracts.Configuration) error {
 	var flagStderr bytes.Buffer
-	loggerCmd := fmt.Sprintf("%s %s", catCmd, p.ipcFilePath)
+	loggerCmd := fmt.Sprintf("%s %s", catCmd, p.logger.ipcFilePath)
 
 	// Sixty minutes is the maximum amount of time before the command is cancelled
 	// If a command is running this long it is most likely a stuck process
 	ctx, cancel := context.WithTimeout(context.Background(), 60*time.Minute)
 	defer cancel()
 
-	cmdWithFlag := exec.CommandContext(ctx, startRecordSessionCmd, p.logFilePath, scriptFlag, loggerCmd)
+	cmdWithFlag := exec.CommandContext(ctx, startRecordSessionCmd, p.logger.logFilePath, scriptFlag, loggerCmd)
 	cmdWithFlag.Stderr = &flagStderr
 	flagErr := cmdWithFlag.Run()
 	if flagErr != nil {
@@ -238,16 +262,87 @@ func (p *ShellPlugin) generateLogData(log log.T, config agentContracts.Configura
 		var noFlagStderr bytes.Buffer
 
 		// some versions of "script" does not take a -c flag when passing in commands.
-		cmdWithoutFlag := exec.CommandContext(ctx, startRecordSessionCmd, p.logFilePath, catCmd, p.ipcFilePath)
+		cmdWithoutFlag := exec.CommandContext(ctx, startRecordSessionCmd, p.logger.logFilePath, catCmd, p.logger.ipcFilePath)
 		cmdWithoutFlag.Stderr = &noFlagStderr
 		noFlagErr := cmdWithoutFlag.Run()
 		if noFlagErr != nil {
 			log.Debugf("Failed to generate transcript without -c flag: %v: %s", noFlagErr, noFlagStderr.String())
-			return errors.New(fmt.Sprintf("Failed to generate transcript with the following errors:\n%v: %s\n%v:%s", flagErr, flagStderr.String(), noFlagErr, noFlagStderr.String()))
+			return fmt.Errorf("Failed to generate transcript with the following errors:\n%v: %s\n%v:%s", flagErr, flagStderr.String(), noFlagErr, noFlagStderr.String())
 		}
 	}
 
 	return nil
+}
+
+// isLogStreamingSupported checks if streaming of logs is supported since it depends on PowerShell's transcript logging
+func (p *ShellPlugin) isLogStreamingSupported(log log.T) (logStreamingSupported bool, err error) {
+	return true, nil
+}
+
+// getStreamingFilePath returns the file path of ipcFile for streaming
+func (p *ShellPlugin) getStreamingFilePath(log log.T) (streamingFilePath string, err error) {
+	return p.logger.ipcFilePath, nil
+}
+
+// isCleanupOfControlCharactersRequired returns true/false depending on whether log needs to be cleanup of control characters before streaming to destination
+func (p *ShellPlugin) isCleanupOfControlCharactersRequired() bool {
+	// Source of logs for linux platform is directly from shell stdout which contains control characters and need cleanup
+	return true
+}
+
+// checkForLoggingInterruption is used to detect if log streaming to CW has been interrupted
+var checkForLoggingInterruption = func(log log.T, ipcFile *os.File, plugin *ShellPlugin) {
+	// Enable append only mode for the ipcTempFile to protect it from being modified
+	ticker := time.NewTicker(time.Second)
+	if err := setAttr(ipcFile, fs_append_fl); err != nil {
+		log.Debugf("Unable to set FS_APPEND_FL flag, %v", err)
+		// Periodically check if ipcTempFile is missing
+		for range ticker.C {
+			if _, err := os.Stat(ipcFile.Name()); os.IsNotExist(err) {
+				log.Warn("Local temp log file is missing, logging might be interrupted.")
+				break
+			}
+		}
+	} else {
+		// Periodically check if ipcTempFile's append only attribute has been modified
+		for range ticker.C {
+			if attr, err := getAttr(ipcFile); err != nil {
+				log.Warnf("Unable to get attributes of local temp log file, logging might be interrupted. Err: %v", err)
+				break
+			} else if attr != fs_append_fl {
+				log.Warn("Append only attribute of local temp log file has been modified, logging might be interrupted.")
+				break
+			}
+		}
+	}
+}
+
+// ioctl is used for making system calls to manipulate file attributes
+func ioctl(f *os.File, request uintptr, attrp *int32) error {
+	argp := uintptr(unsafe.Pointer(attrp))
+	_, _, errno := syscall.Syscall(syscall.SYS_IOCTL, f.Fd(), request, argp)
+	if errno != 0 {
+		return os.NewSyscallError("ioctl", errno)
+	}
+
+	return nil
+}
+
+// setAttr sets the attributes of a file on a linux filesystem to the given value
+func setAttr(f *os.File, attr int32) error {
+	return ioctl(f, fs_ioc_setflags, &attr)
+}
+
+// getAttr retrieves the attributes of a file on a linux filesystem
+func getAttr(f *os.File) (int32, error) {
+	attr := int32(-1)
+	err := ioctl(f, fs_ioc_getflags, &attr)
+	return attr, err
+}
+
+//cleanupLogFile cleans up temporary log file on disk
+func (p *ShellPlugin) cleanupLogFile(log log.T) {
+	// no cleanup required for linux
 }
 
 // InputStreamMessageHandler passes payload byte stream to shell stdin

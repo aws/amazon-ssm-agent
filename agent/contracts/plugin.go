@@ -64,6 +64,14 @@ type ICoreModule interface {
 // These plugins are invoked on demand.
 type IWorkerPlugin IPlugin
 
+// PreconditionArgument represents a single input value for the plugin precondition operators
+// InitialArgumentValue contains the original value of the argument as specified by the user (e.g. "parameter: {{ paramName }}")
+// ResolvedArgumentValue contains the value of the argument with resolved document parameters (e.g. "parameter: paramValue")
+type PreconditionArgument struct {
+	InitialArgumentValue  string
+	ResolvedArgumentValue string
+}
+
 // Configuration represents a plugin configuration as in the json format.
 type Configuration struct {
 	Settings                    interface{}
@@ -73,13 +81,14 @@ type Configuration struct {
 	S3EncryptionEnabled         bool
 	CloudWatchLogGroup          string
 	CloudWatchEncryptionEnabled bool
+	CloudWatchStreamingEnabled  bool
 	OrchestrationDirectory      string
 	MessageId                   string
 	BookKeepingFileName         string
 	PluginName                  string
 	PluginID                    string
 	DefaultWorkingDirectory     string
-	Preconditions               map[string][]string
+	Preconditions               map[string][]PreconditionArgument
 	IsPreconditionEnabled       bool
 	CurrentAssociations         []string
 	SessionId                   string
@@ -87,6 +96,8 @@ type Configuration struct {
 	KmsKeyId                    string
 	RunAsEnabled                bool
 	RunAsUser                   string
+	ShellProfile                ShellProfileConfig
+	SessionOwner                string
 }
 
 // Plugin wraps the plugin configuration and plugin result.

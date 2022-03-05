@@ -22,8 +22,9 @@ import (
 )
 
 const (
-	LogFile   = "amazon-ssm-agent.log"
-	ErrorFile = "errors.log"
+	LogFile      = "amazon-ssm-agent.log"
+	ErrorFile    = "errors.log"
+	EventLogFile = "amazon-ssm-agent-audit"
 )
 
 var loadedLogger T

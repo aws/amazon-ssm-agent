@@ -18,6 +18,7 @@ package utility
 
 import (
 	"fmt"
+	"net"
 	"syscall"
 	"unsafe"
 
@@ -25,6 +26,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"golang.org/x/sys/windows"
+	"golang.org/x/sys/windows/registry"
 	"golang.org/x/sys/windows/svc"
 	"golang.org/x/sys/windows/svc/mgr"
 )
@@ -62,6 +64,9 @@ const (
 	errCodeForUserAlreadyExists = 2224
 	// Windows error code for account name already a member of the group
 	errCodeForUserAlreadyGroupMember = 1378
+
+	logon32LogonNetwork    = uintptr(3)
+	logon32ProviderDefault = uintptr(0)
 )
 
 type USER_INFO_1003 struct {
@@ -98,7 +103,27 @@ var (
 	netUserAdd              = modNetapi32.NewProc("NetUserAdd")
 	netApiBufferFree        = modNetapi32.NewProc("NetApiBufferFree")
 	netLocalGroupAddMembers = modNetapi32.NewProc("NetLocalGroupAddMembers")
+	advapi32                = syscall.NewLazyDLL("advapi32.dll")
+	userenv                 = syscall.NewLazyDLL("userenv.dll")
+	logonProc               = advapi32.NewProc("LogonUserW")
+	loadUserProfileW        = userenv.NewProc("LoadUserProfileW")
+	unloadUserProfile       = userenv.NewProc("UnloadUserProfile")
+	getUserProfileDirectory = userenv.NewProc("GetUserProfileDirectoryW")
+	duplicateToken          = advapi32.NewProc("DuplicateToken")
+	impersonateProc         = advapi32.NewProc("ImpersonateLoggedOnUser")
+	revertSelfProc          = advapi32.NewProc("RevertToSelf")
 )
+
+type ProfileInfo struct {
+	Size        uint32
+	Flags       uint32
+	UserName    *uint16
+	ProfilePath *uint16
+	DefaultPath *uint16
+	ServerName  *uint16
+	PolicyPath  *uint16
+	Profile     syscall.Handle
+}
 
 // AddNewUser adds new user using NetUserAdd function of netapi32.dll on local machine
 func (u *SessionUtil) AddNewUser(username string, password string) (userExists bool, err error) {
@@ -376,9 +401,156 @@ func (u *SessionUtil) CreateLocalAdminUser(log log.T) (newPassword string, err e
 	return
 }
 
+//Impersonate attempts to impersonate the user.
+func (u *SessionUtil) Impersonate(log log.T, user string, pass string) error {
+	token, err := logonUser(user, pass)
+	if err != nil {
+		return err
+	}
+	defer mustCloseHandle(log, token)
+
+	if rc, _, ec := syscall.Syscall(impersonateProc.Addr(), 1, uintptr(token), 0, 0); rc == 0 {
+		return error(ec)
+	}
+	return nil
+}
+
+// LoadUserProfile loads user profile and return user handle to user's registry hive
+func (u *SessionUtil) LoadUserProfile(user string, pass string) (syscall.Handle, syscall.Handle, error) {
+	token, err := logonUser(user, pass)
+	if err != nil {
+		return 0, 0, err
+	}
+
+	var ret uintptr
+	var lUser, _ = syscall.UTF16PtrFromString(user)
+	var profileInfo = ProfileInfo{UserName: lUser}
+	var profileInfoSize = unsafe.Sizeof(profileInfo)
+	profileInfo.Size = uint32(profileInfoSize)
+	if ret, _, err = loadUserProfileW.Call(uintptr(token), uintptr(unsafe.Pointer(&profileInfo))); ret == 0 {
+		return 0, 0, err
+	}
+
+	return token, profileInfo.Profile, nil
+}
+
+//logonUser attempts to log a user on to the local computer to generate a token.
+func logonUser(user, pass string) (token syscall.Handle, err error) {
+	// ".\0" meaning "this computer:
+	domain := [2]uint16{uint16('.'), 0}
+
+	var pu, pp []uint16
+	if pu, err = syscall.UTF16FromString(user); err != nil {
+		return
+	}
+	if pp, err = syscall.UTF16FromString(pass); err != nil {
+		return
+	}
+
+	if rc, _, ec := syscall.Syscall6(logonProc.Addr(), 6,
+		uintptr(unsafe.Pointer(&pu[0])),
+		uintptr(unsafe.Pointer(&domain[0])),
+		uintptr(unsafe.Pointer(&pp[0])),
+		logon32LogonNetwork,
+		logon32ProviderDefault,
+		uintptr(unsafe.Pointer(&token))); rc == 0 {
+		err = error(ec)
+	}
+	return
+}
+
+// UnloadUserProfile attempts to unload user profile
+func (u *SessionUtil) UnloadUserProfile(log log.T, token, profile syscall.Handle) {
+	var ret uintptr
+	var err error
+	if ret, _, err = unloadUserProfile.Call(uintptr(token), uintptr(profile)); ret == 0 {
+		log.Debugf("unloading of user profile failed: ret: %d, %v", ret, err)
+	}
+	defer mustCloseHandle(log, token)
+}
+
+// EnablePowerShellTranscription enabled PowerShell's transcript logging by modifying user's registry hive
+func (u *SessionUtil) EnablePowerShellTranscription(transcriptFilePath string, keyHandle syscall.Handle) (err error) {
+	winkey, err := registry.OpenKey(registry.Key(keyHandle), `Software\Policies\Microsoft\Windows`, registry.CREATE_SUB_KEY)
+	if err != nil {
+		return fmt.Errorf("error opening Windows key: %v", err)
+	}
+	defer winkey.Close()
+
+	powerShellKey, alreadyExists, err := registry.CreateKey(winkey, `PowerShell`, registry.SET_VALUE)
+	if err != nil && !alreadyExists {
+		return fmt.Errorf("error creating Powershell key: %v", err)
+	}
+	defer powerShellKey.Close()
+
+	transcriptionKey, alreadyExists, err := registry.CreateKey(powerShellKey, `Transcription`, registry.SET_VALUE)
+	if err != nil && !alreadyExists {
+		return fmt.Errorf("error creating Transcription key: %v", err)
+
+	}
+	defer transcriptionKey.Close()
+
+	err = transcriptionKey.SetDWordValue("EnableTranscripting", 1)
+	if err != nil {
+		return fmt.Errorf("error setting value for EnableTranscripting key: %v", err)
+	}
+
+	err = transcriptionKey.SetStringValue("OutputDirectory", transcriptFilePath)
+	if err != nil {
+		return fmt.Errorf("error setting value for OutputDirectory key: %v", err)
+	}
+
+	return
+}
+
+//revertToSelf reverts the impersonation process.
+func (u *SessionUtil) RevertToSelf() error {
+	if rc, _, ec := syscall.Syscall(revertSelfProc.Addr(), 0, 0, 0, 0); rc == 0 {
+		return error(ec)
+	}
+	return nil
+}
+
+//mustCloseHandle ensures to close the user token handle.
+func mustCloseHandle(log log.T, handle syscall.Handle) {
+	if err := syscall.CloseHandle(handle); err != nil {
+		log.Error(err)
+	}
+}
+
+// GetInstalledVersionOfPowerShell fetches installed version of PowerShell
+func (u *SessionUtil) GetInstalledVersionOfPowerShell() (powerShellVersion string, err error) {
+	powerShellEngineKey, err := registry.OpenKey(registry.LOCAL_MACHINE, `SOFTWARE\Microsoft\PowerShell\3\PowerShellEngine`, registry.READ)
+	if err != nil {
+		err = fmt.Errorf("error fetching PowerShellEngine registry key: %v", err)
+		return
+	}
+	defer powerShellEngineKey.Close()
+
+	powerShellVersion, _, err = powerShellEngineKey.GetStringValue("PowerShellVersion")
+	if err != nil {
+		err = fmt.Errorf("error fetching PowerShellVersion registry value: %v", err)
+		return
+	}
+	return
+}
+
+// IsSystemLevelPowerShellTranscriptionConfigured checks if PowerShell Transcript logging has been configured at system level
+func (u *SessionUtil) IsSystemLevelPowerShellTranscriptionConfigured(log log.T) bool {
+	powerShellTranscription, err := registry.OpenKey(registry.LOCAL_MACHINE, `SOFTWARE\Policies\Microsoft\Windows\PowerShell\Transcription`, registry.READ)
+	if err != nil {
+		log.Debugf("error fetching PowerShell Transcription registry key: %v", err)
+		return false
+	}
+	defer powerShellTranscription.Close()
+
+	// return true as PowerShell Transcription is configured
+	return true
+}
+
 func (u *SessionUtil) EnableLocalUser(log log.T) (err error) {
 	if err = u.userDelFlags(log, appconfig.DefaultRunAsUserName, USER_UF_ACCOUNTDISABLE); err != nil {
-		log.Errorf("error occurred disabling %s: %v", appconfig.DefaultRunAsUserName, err)
+		log.Errorf("error occurred enabling %s: %v", appconfig.DefaultRunAsUserName, err)
 		return err
 	}
 
@@ -454,4 +626,14 @@ func (u *SessionUtil) userGetFlags(log log.T, username string) (uint32, error) {
 	var data = (*USER_INFO_1)(unsafe.Pointer(dataPointer))
 	log.Debugf("existing user flags: %d\r\n", data.Usri1_flags)
 	return data.Usri1_flags, nil
+}
+
+// NewListener starts a new socket listener on the address.
+// unix sockets are not supported in older windows versions, start tcp loopback server in such cases
+func NewListener(log log.T, address string) (listener net.Listener, err error) {
+	if listener, err = net.Listen("unix", address); err != nil {
+		log.Debugf("Failed to open unix socket listener, %v. Starting TCP listener.", err)
+		return net.Listen("tcp", "localhost:0")
+	}
+	return
 }

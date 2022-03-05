@@ -24,9 +24,10 @@ type DelegateLogger struct {
 
 // Wrapper is a logger that can modify the format of a log message before delegating to another logger.
 type Wrapper struct {
-	Format   FormatFilter
-	M        *sync.Mutex
-	Delegate *DelegateLogger
+	Format      FormatFilter
+	M           *sync.Mutex
+	Delegate    *DelegateLogger
+	EventLogger *EventLog
 }
 
 // FormatFilter can modify the format and or parameters to be passed to a logger.
@@ -42,15 +43,23 @@ type FormatFilter interface {
 // WithContext creates a wrapper logger with context
 func (w *Wrapper) WithContext(context ...string) (contextLogger T) {
 	formatFilter := &ContextFormatFilter{Context: context}
-	contextLogger = &Wrapper{Format: formatFilter, M: w.M, Delegate: w.Delegate}
+	contextLogger = &Wrapper{Format: formatFilter, M: w.M, Delegate: w.Delegate, EventLogger: w.EventLogger}
 	return contextLogger
+}
+
+// WriteEvent creates event in audit log.
+// When blank value passed, will use the version number generated in version package
+func (w *Wrapper) WriteEvent(eventType string, agentVersion string, event string) {
+	if w.EventLogger == nil {
+		return
+	}
+	w.EventLogger.loadEvent(eventType, agentVersion, event)
 }
 
 // Tracef formats message according to format specifier
 // and writes to log with level = Trace.
 func (w *Wrapper) Tracef(format string, params ...interface{}) {
 	format, params = w.Format.Filterf(format, params...)
-
 	w.M.Lock()
 	defer w.M.Unlock()
 	w.Delegate.BaseLoggerInstance.Tracef(format, params...)
@@ -177,6 +186,11 @@ func (w *Wrapper) Close() {
 	w.M.Lock()
 	defer w.M.Unlock()
 	w.Delegate.BaseLoggerInstance.Close()
+	if w.EventLogger == nil {
+		return
+	}
+	//Will revisit later
+	//w.EventLogger.Close()
 }
 
 // ReplaceDelegate replaces the delegate logger with a new logger

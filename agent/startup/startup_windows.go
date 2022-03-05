@@ -55,6 +55,10 @@ const (
 	currentMajorVersionNumber  = "CurrentMajorVersionNumber"
 	currentMinorVersionNumber  = "CurrentMinorVersionNumber"
 
+	// PvEntity Properties
+	PvName            = "Name"
+	PvVersionProperty = "Version"
+
 	// PnpEntity Properties
 	deviceIDProperty = "DeviceID"
 	serviceProperty  = "Service"
@@ -83,7 +87,10 @@ const (
 	// PS command to get OS information
 	getOSInfoCmd = "Get-CimInstance Win32_OperatingSystem"
 
-	// PS command to get AWS PV driver entry shown in Device Manager
+	// PS command to get AWS PV package entry from registry HKLM:\SOFTWARE\Amazon\PVDriver
+	getPvPackageVersionCmd = "Get-ItemProperty -Path 'HKLM:\\SOFTWARE\\Amazon\\PVDriver'"
+
+	// PS command to get AWS PV Storage Host Adapter entry shown in Device Manager
 	getPvDriverPnpEntityCmd = "Get-CimInstance Win32_PnPEntity | Where-Object { $_.Service -eq 'xenvbd' }"
 
 	// PS command to get all AWS signed drivers
@@ -234,6 +241,12 @@ func (p *Processor) ExecuteTasks() (err error) {
 		sp.WritePort(fmt.Sprintf("OsBuildLabEx: %v", windowsInfo.BuildLabEx))
 	}
 
+	pvPackageInfo, PvError := getAWSPvPackageInfo(log)
+	// write AWS PV Driver Package version to serial port if exists
+	if PvError == nil {
+		sp.WritePort(fmt.Sprintf("Driver: AWS PV Driver Package v%v", pvPackageInfo.Version))
+	}
+
 	// write all running AWS drivers to serial port.
 	if driverInfo, err = getAWSDriverInfo(log); err == nil {
 		for _, di := range driverInfo {
@@ -251,7 +264,7 @@ func (p *Processor) ExecuteTasks() (err error) {
 	return
 }
 
-// getSystemInfo quries Windows information from registry key and OS information from Win32_OperatingSystem.
+// getSystemInfo queries Windows information from registry key and OS information from Win32_OperatingSystem.
 func getSystemInfo(log log.T) (windowsInfo model.WindowsInfo, osInfo model.OperatingSystemInfo, err error) {
 	// this queries Windows info.
 	properties := []string{productNameProperty, buildLabExProperty, currentMajorVersionNumber, currentMinorVersionNumber}
@@ -280,6 +293,30 @@ func getSystemInfo(log log.T) (windowsInfo model.WindowsInfo, osInfo model.Opera
 	return
 }
 
+// getAWSPvPackage queries PvDriver information from registry key.
+func getAWSPvPackageInfo(log log.T) (pvPackageInfo model.PvPackageInfo, err error) {
+	var isNano bool
+
+	// Nano Server does not contain AWS PV DriverPackage in registry, need to query for all drivers
+	if isNano, err = platform.IsPlatformNanoServer(log); err != nil || !isNano {
+
+		// this queries the registry for AWS PV Package version
+		// PVDrivers after 8.2.1 store version information in the registry.
+		// Attempt to pull from new registry entry, ignore and fallback to PvEntity logic if not found
+		properties := []string{PvName, PvVersionProperty}
+		if err = runPowershell(&pvPackageInfo, getPvPackageVersionCmd, properties, false); err != nil {
+			log.Infof("Error occurred while querying Version for AWSPVPackage: %v", err.Error())
+			return
+		}
+	} else if isNano {
+
+		// Create a new error to detect nano servers
+		err = errors.New("is a nano server")
+	}
+
+	return
+}
+
 // getAWSDriverInfo queries driver information from instance using powershell.
 // because Nano server doesn't support Win32_PnpSignedDriver.
 func getAWSDriverInfo(log log.T) (driverInfo []model.DriverInfo, err error) {
@@ -300,10 +337,10 @@ func getAWSDriverInfoForFull(log log.T) (driverInfo []model.DriverInfo, err erro
 	var pnpEntities []model.PnpEntity
 	var deviceID string
 
-	// this queries xenvbd (AWS PVDriver) to get its DeviceId.
+	// this queries xenvbd (AWS PV Storage Host Adapter) to get its DeviceId.
 	properties := []string{deviceIDProperty}
 	if err = runPowershell(&pnpEntities, getPvDriverPnpEntityCmd, properties, true); err != nil {
-		log.Infof("Error occurred while querying DeviceID for AWSPVDriver: %v", err.Error())
+		log.Infof("Error occurred while querying DeviceID for AWS PV Storage Host Adapter: %v", err.Error())
 		return
 	}
 

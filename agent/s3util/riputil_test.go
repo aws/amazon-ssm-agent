@@ -25,7 +25,7 @@ type s3EndpointTest struct {
 }
 
 var (
-	genericEndpointTests = []s3EndpointTest{
+	getFallbackS3EndpointTests = []s3EndpointTest{
 		// {region, output},
 		{"us-east-1", "s3.amazonaws.com"},
 		{"us-west-1", "s3.amazonaws.com"},
@@ -33,15 +33,24 @@ var (
 		{"eu-south-1", "s3.amazonaws.com"},
 		{"ap-southeast-2", "s3.amazonaws.com"},
 		{"us-gov-east-1", "s3.us-gov-west-1.amazonaws.com"},
-		{"us-gov-west-1", "s3.us-gov-west-1.amazonaws.com"},
-		{"cn-north-1", "s3.cn-north-1.amazonaws.com.cn"},
+		{"us-gov-west-1", "s3.us-gov-east-1.amazonaws.com"},
+		{"cn-north-1", "s3.cn-northwest-1.amazonaws.com.cn"},
 		{"cn-northwest-1", "s3.cn-north-1.amazonaws.com.cn"},
 	}
 )
 
-func TestGetS3GenericEndPoint(t *testing.T) {
-	for _, test := range genericEndpointTests {
-		output := GetS3GenericEndPoint(test.region)
+func TestGetFallbackS3Endpoint(t *testing.T) {
+	for _, test := range getFallbackS3EndpointTests {
+		output := getFallbackS3Endpoint(test.region)
 		assert.Equal(t, test.output, output, "The two urls should be the same")
 	}
+}
+
+func TestIsKnownRegion(t *testing.T) {
+	assert.True(t, isKnownRegion("us-east-1"))
+	assert.True(t, isKnownRegion("eu-west-1"))
+	assert.True(t, isKnownRegion("us-gov-east-1"))
+	assert.True(t, isKnownRegion("cn-north-1"))
+	assert.False(t, isKnownRegion(""))
+	assert.False(t, isKnownRegion("not-a-region"))
 }

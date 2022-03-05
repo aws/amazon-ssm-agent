@@ -112,6 +112,7 @@ func (m *Manager) StartPlugin(name, configuration string, orchestrationDir strin
 	// Update the config file with new configuration
 	var engineConfigurationParser cloudwatch.EngineConfigurationParser
 	json.Unmarshal([]byte(p.Info.Configuration), &engineConfigurationParser)
+	log.Debugf("unmarshal engine configuration parser: %v", engineConfigurationParser)
 	if err = cloudwatch.Instance().Enable(engineConfigurationParser.EngineConfiguration); err != nil {
 		log.Errorf("Failed to update config file - because of %s", err)
 	}

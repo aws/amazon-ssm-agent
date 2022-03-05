@@ -1,5 +1,94 @@
 Latest
 ===============
+- Use DefaultTransport as underlying RoundTripper for S3 access
+
+3.0.413.0
+===============
+- Add additional checks and logs to install scripts
+- Add retry logic to handle ssm document during reboot
+- Add dockerfile to build agent
+- Add script to package binaries to tar
+- Change default download directory on Linux to /var/lib/amazon/ssm
+- Extend SSM Agent ability to execute from relative path and use custom certificates
+- Fix IP address parsing in domain join plugin
+- Fix self update logging
+- Log fingerprint similarity check failures as ERROR and each changed machine property as WARN
+- Prefix ecs target id with 'ecs:'
+- Prefer non-link-local addresses to show in Console
+- Use IMDSv1 after IMDSv2
+
+3.0.356.0
+===============
+- Fail update document if updater fails to execute
+- Fallback to file-based IPC if named pipes are not available
+- Add support for streaming of logs to CloudWatch for Session Manager
+- Add support for following cross-region redirects from S3
+- Refactor .deb and .rpm packaging scripts
+- Fix intermittent test failures
+- Search full path for valid sc.exe
+- Log PV driver version on Windows instances
+- Add -trimpath to build flags
+
+3.0.284.0
+===============
+- Added steps to the updater to validate IPC functionality
+- Added SSM_COMMAND_ID environment variable to runShellScript plugin
+- Improved retry for S3 and http(s) downloads
+- Fix to clean up terminated worker processes
+- Fix for DomainJoin when using domain-ou
+
+3.0.222.0
+===============
+- Added agent and worker version logging
+- Added new config parameters to README.md
+- Added support for TCP multiplexing in port plugin
+- Fix for s3Upload to retry with an exponential backoff when uploading logs
+- Fix for startup modules to handle panic
+- Fix for systemd configuration to always restart the agent when it exits for any reason 
+
+3.0.196.0
+===============
+- Add support for document parameters in document plugin’s preconditions
+- Add support for new source types in aws:downloadContent plugin: HTTP(S) endpoints and private Git repositories
+- Add support for Session Manager configurable shell profile
+- Fix parsing of irregular inventory version strings
+- Fix error handling for windows wmi service
+- Fix to stop BillingInfo call for OnPremise systems
+- Fix to correct OS parsing map for openSUSE leap platform in configurePackage plugin
+- Fix to treat timed out docs in SuccessAndReboot state as failed
+
+3.0.161.0
+===============
+- Fix install scripts to report errors from package manager and enable retries
+
+3.0.151.0
+===============
+- First release of SSM Agent v3
+- Moved v2 amazon-ssm-agent to new ssm-agent-worker binary
+- New amazon-ssm-agent binary:
+  - Opt-in self update feature to upgrade if agent is running a deprecated version
+  - Telemetry feature to send important audit events to AWS. Opt-in send to customer CloudWatch
+  - Monitor and keep the ssm-agent-worker process running
+- Upgrade vendor dependencies and build to use go1.13
+
+2.3.1644.0
+===============
+- Enable aws:domainJoin SSM API for Linux
+- Sanitize platform name
+
+2.3.1613.0
+===============
+- Adjust retry settings for update operations
+- Fix Session manager initialization issue
+- Fix deserialization issue in configurePackage plugin
+
+2.3.1569.0
+===============
+- Add code to cleanup interim documents if unable to parse
+- Bug fix for executing StartProcess module in a goroutine to avoid blocking the main thread
+
+2.3.1550.0
+===============
 - Add retry to install/uninstall during update
 - Bug fix in updater logging
 - Bug fix for object downloads from s3

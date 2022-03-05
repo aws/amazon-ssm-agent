@@ -66,7 +66,7 @@ type pluginHelper interface {
 		manifest *Manifest,
 		pluginInput *UpdatePluginInput,
 		context *updateutil.InstanceContext,
-		updaterPath string,
+		updaterVersion string,
 		messageID string,
 		stdout string,
 		stderr string,
@@ -106,9 +106,6 @@ func NewPlugin(updatePluginConfig UpdatePluginConfig) (*Plugin, error) {
 	plugin.ManifestLocation = updatePluginConfig.ManifestLocation
 	return &plugin, nil
 }
-
-//Constants
-var lockFileMinutes = int64(60)
 
 // updateAgent downloads the installation packages and update the agent
 func runUpdateAgent(
@@ -163,16 +160,7 @@ func runUpdateAgent(
 	updateRetryDelayBase := 1000 // 1000 millisecond
 	updateRetryDelay := 500      // 500 millisecond
 
-	for retryCounter := 1; retryCounter <= noOfRetries; retryCounter++ {
-		manifest, downloadErr = manager.downloadManifest(log, util, &pluginInput, context, output)
-		if downloadErr == nil {
-			break
-		}
-		if retryCounter < noOfRetries {
-			time.Sleep(time.Duration(updateRetryDelayBase+rand.Intn(updateRetryDelay)) * time.Millisecond)
-		}
-	}
-
+	manifest, downloadErr = manager.downloadManifest(log, util, &pluginInput, context, output)
 	if downloadErr != nil {
 		output.MarkAsFailed(downloadErr)
 		return
@@ -201,7 +189,7 @@ func runUpdateAgent(
 		manifest,
 		&pluginInput,
 		context,
-		updateutil.UpdaterFilePath(appconfig.UpdaterArtifactsRoot, pluginInput.UpdaterName, updaterVersion),
+		updaterVersion,
 		config.MessageId,
 		pluginConfig.StdoutFileName,
 		pluginConfig.StderrFileName,
@@ -237,7 +225,7 @@ func runUpdateAgent(
 		appconfig.UpdaterArtifactsRoot, pluginInput.UpdaterName, updaterVersion)
 
 	for retryCounter := 1; retryCounter <= noOfRetries; retryCounter++ {
-		pid, err = util.ExeCommand(
+		pid, _, err = util.ExeCommand(
 			log,
 			cmd,
 			workDir,
@@ -258,6 +246,24 @@ func runUpdateAgent(
 		return
 	}
 
+	// Sleep for 1 second and verify updater is running
+	time.Sleep(time.Second)
+	isRunning, procErr := util.IsProcessRunning(log, pid)
+	if procErr != nil {
+		log.Warnf("Failed to check if updater process is running: %s", err)
+	} else {
+		if !isRunning {
+			errMsg := "Updater died before updating, make sure your system is supported"
+			log.Error(errMsg)
+			output.MarkAsFailed(fmt.Errorf(errMsg))
+
+			util.CleanupCommand(log, pid)
+			return
+		} else {
+			log.Info("Updater is running")
+		}
+	}
+
 	output.MarkAsInProgress()
 	return
 }
@@ -267,12 +273,13 @@ func (m *updateManager) generateUpdateCmd(log log.T,
 	manifest *Manifest,
 	pluginInput *UpdatePluginInput,
 	context *updateutil.InstanceContext,
-	updaterPath string,
+	updaterVersion string,
 	messageID string,
 	stdout string,
 	stderr string,
 	keyPrefix string,
 	bucketName string) (cmd string, err error) {
+	updaterPath := updateutil.UpdaterFilePath(appconfig.UpdaterArtifactsRoot, pluginInput.UpdaterName, updaterVersion)
 	cmd = updaterPath + " -update"
 	source := ""
 	hash := ""
@@ -304,6 +311,11 @@ func (m *updateManager) generateUpdateCmd(log log.T,
 	cmd = updateutil.BuildUpdateCommand(cmd, updateutil.OutputKeyPrefixCmd, keyPrefix)
 	cmd = updateutil.BuildUpdateCommand(cmd, updateutil.OutputBucketNameCmd, bucketName)
 
+	versionSplit := strings.Split(updaterVersion, ".")
+	majorVersion, _ := strconv.Atoi(versionSplit[0])
+	if majorVersion > 2 {
+		cmd = updateutil.BuildUpdateCommand(cmd, updateutil.ManifestFileUrlCmd, pluginInput.Source)
+	}
 	return
 }
 
@@ -457,7 +469,7 @@ func (p *Plugin) Execute(context context.T, config contracts.Configuration, canc
 
 		// First check if lock is locked by anyone
 		lock, _ := getLockObj(appconfig.UpdaterPidLockfile)
-		err := lock.TryLockExpireWithRetry(lockFileMinutes)
+		err := lock.TryLockExpireWithRetry(updateutil.UpdateLockFileMinutes)
 
 		if err != nil {
 			if err == lockfile.ErrBusy {

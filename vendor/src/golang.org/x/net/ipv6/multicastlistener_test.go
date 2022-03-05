@@ -5,13 +5,12 @@
 package ipv6_test
 
 import (
-	"fmt"
 	"net"
 	"runtime"
 	"testing"
 
-	"golang.org/x/net/internal/nettest"
 	"golang.org/x/net/ipv6"
+	"golang.org/x/net/nettest"
 )
 
 var udpMultipleGroupListenerTests = []net.Addr{
@@ -22,10 +21,10 @@ var udpMultipleGroupListenerTests = []net.Addr{
 
 func TestUDPSinglePacketConnWithMultipleGroupListeners(t *testing.T) {
 	switch runtime.GOOS {
-	case "nacl", "plan9", "windows":
+	case "fuchsia", "hurd", "js", "nacl", "plan9", "windows":
 		t.Skipf("not supported on %s", runtime.GOOS)
 	}
-	if !supportsIPv6 {
+	if !nettest.SupportsIPv6() {
 		t.Skip("ipv6 is not supported")
 	}
 
@@ -44,7 +43,7 @@ func TestUDPSinglePacketConnWithMultipleGroupListeners(t *testing.T) {
 			t.Fatal(err)
 		}
 		for i, ifi := range ift {
-			if _, ok := nettest.IsMulticastCapable("ip6", &ifi); !ok {
+			if _, err := nettest.MulticastSource("ip6", &ifi); err != nil {
 				continue
 			}
 			if err := p.JoinGroup(&ifi, gaddr); err != nil {
@@ -62,21 +61,24 @@ func TestUDPSinglePacketConnWithMultipleGroupListeners(t *testing.T) {
 
 func TestUDPMultiplePacketConnWithMultipleGroupListeners(t *testing.T) {
 	switch runtime.GOOS {
-	case "nacl", "plan9", "windows":
+	case "fuchsia", "hurd", "js", "nacl", "plan9", "windows":
 		t.Skipf("not supported on %s", runtime.GOOS)
 	}
-	if !supportsIPv6 {
+	if !nettest.SupportsIPv6() {
 		t.Skip("ipv6 is not supported")
 	}
 
 	for _, gaddr := range udpMultipleGroupListenerTests {
-		c1, err := net.ListenPacket("udp6", "[ff02::]:1024") // wildcard address with reusable port
+		c1, err := net.ListenPacket("udp6", "[ff02::]:0") // wildcard address with reusable port
 		if err != nil {
 			t.Fatal(err)
 		}
 		defer c1.Close()
-
-		c2, err := net.ListenPacket("udp6", "[ff02::]:1024") // wildcard address with reusable port
+		_, port, err := net.SplitHostPort(c1.LocalAddr().String())
+		if err != nil {
+			t.Fatal(err)
+		}
+		c2, err := net.ListenPacket("udp6", net.JoinHostPort("ff02::", port)) // wildcard address with reusable port
 		if err != nil {
 			t.Fatal(err)
 		}
@@ -92,7 +94,7 @@ func TestUDPMultiplePacketConnWithMultipleGroupListeners(t *testing.T) {
 			t.Fatal(err)
 		}
 		for i, ifi := range ift {
-			if _, ok := nettest.IsMulticastCapable("ip6", &ifi); !ok {
+			if _, err := nettest.MulticastSource("ip6", &ifi); err != nil {
 				continue
 			}
 			for _, p := range ps {
@@ -114,10 +116,10 @@ func TestUDPMultiplePacketConnWithMultipleGroupListeners(t *testing.T) {
 
 func TestUDPPerInterfaceSinglePacketConnWithSingleGroupListener(t *testing.T) {
 	switch runtime.GOOS {
-	case "nacl", "plan9", "windows":
+	case "fuchsia", "hurd", "js", "nacl", "plan9", "windows":
 		t.Skipf("not supported on %s", runtime.GOOS)
 	}
-	if !supportsIPv6 {
+	if !nettest.SupportsIPv6() {
 		t.Skip("ipv6 is not supported")
 	}
 
@@ -132,16 +134,29 @@ func TestUDPPerInterfaceSinglePacketConnWithSingleGroupListener(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
+	port := "0"
 	for i, ifi := range ift {
-		ip, ok := nettest.IsMulticastCapable("ip6", &ifi)
-		if !ok {
+		ip, err := nettest.MulticastSource("ip6", &ifi)
+		if err != nil {
 			continue
 		}
-		c, err := net.ListenPacket("udp6", fmt.Sprintf("[%s%%%s]:1024", ip.String(), ifi.Name)) // unicast address with non-reusable port
+		c, err := net.ListenPacket("udp6", net.JoinHostPort(ip.String()+"%"+ifi.Name, port)) // unicast address with non-reusable port
 		if err != nil {
-			t.Fatal(err)
+			// The listen may fail when the serivce is
+			// already in use, but it's fine because the
+			// purpose of this is not to test the
+			// bookkeeping of IP control block inside the
+			// kernel.
+			t.Log(err)
+			continue
 		}
 		defer c.Close()
+		if port == "0" {
+			_, port, err = net.SplitHostPort(c.LocalAddr().String())
+			if err != nil {
+				t.Fatal(err)
+			}
+		}
 		p := ipv6.NewPacketConn(c)
 		if err := p.JoinGroup(&ifi, &gaddr); err != nil {
 			t.Fatal(err)
@@ -157,14 +172,14 @@ func TestUDPPerInterfaceSinglePacketConnWithSingleGroupListener(t *testing.T) {
 
 func TestIPSinglePacketConnWithSingleGroupListener(t *testing.T) {
 	switch runtime.GOOS {
-	case "nacl", "plan9", "windows":
+	case "fuchsia", "hurd", "js", "nacl", "plan9", "windows":
 		t.Skipf("not supported on %s", runtime.GOOS)
 	}
-	if !supportsIPv6 {
+	if !nettest.SupportsIPv6() {
 		t.Skip("ipv6 is not supported")
 	}
-	if m, ok := nettest.SupportsRawIPSocket(); !ok {
-		t.Skip(m)
+	if !nettest.SupportsRawSocket() {
+		t.Skipf("not supported on %s/%s", runtime.GOOS, runtime.GOARCH)
 	}
 
 	c, err := net.ListenPacket("ip6:ipv6-icmp", "::") // wildcard address
@@ -182,7 +197,7 @@ func TestIPSinglePacketConnWithSingleGroupListener(t *testing.T) {
 		t.Fatal(err)
 	}
 	for i, ifi := range ift {
-		if _, ok := nettest.IsMulticastCapable("ip6", &ifi); !ok {
+		if _, err := nettest.MulticastSource("ip6", &ifi); err != nil {
 			continue
 		}
 		if err := p.JoinGroup(&ifi, &gaddr); err != nil {
@@ -201,14 +216,14 @@ func TestIPPerInterfaceSinglePacketConnWithSingleGroupListener(t *testing.T) {
 	switch runtime.GOOS {
 	case "darwin", "dragonfly", "openbsd": // platforms that return fe80::1%lo0: bind: can't assign requested address
 		t.Skipf("not supported on %s", runtime.GOOS)
-	case "nacl", "plan9", "windows":
+	case "fuchsia", "hurd", "js", "nacl", "plan9", "windows":
 		t.Skipf("not supported on %s", runtime.GOOS)
 	}
-	if !supportsIPv6 {
+	if !nettest.SupportsIPv6() {
 		t.Skip("ipv6 is not supported")
 	}
-	if m, ok := nettest.SupportsRawIPSocket(); !ok {
-		t.Skip(m)
+	if !nettest.SupportsRawSocket() {
+		t.Skipf("not supported on %s/%s", runtime.GOOS, runtime.GOARCH)
 	}
 
 	gaddr := net.IPAddr{IP: net.ParseIP("ff02::114")} // see RFC 4727
@@ -223,11 +238,11 @@ func TestIPPerInterfaceSinglePacketConnWithSingleGroupListener(t *testing.T) {
 		t.Fatal(err)
 	}
 	for i, ifi := range ift {
-		ip, ok := nettest.IsMulticastCapable("ip6", &ifi)
-		if !ok {
+		ip, err := nettest.MulticastSource("ip6", &ifi)
+		if err != nil {
 			continue
 		}
-		c, err := net.ListenPacket("ip6:ipv6-icmp", fmt.Sprintf("%s%%%s", ip.String(), ifi.Name)) // unicast address
+		c, err := net.ListenPacket("ip6:ipv6-icmp", ip.String()+"%"+ifi.Name) // unicast address
 		if err != nil {
 			t.Fatal(err)
 		}

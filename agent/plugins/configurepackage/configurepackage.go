@@ -16,8 +16,10 @@
 package configurepackage
 
 import (
+	"encoding/json"
 	"errors"
 	"fmt"
+	"reflect"
 	"regexp"
 	"strings"
 
@@ -53,6 +55,8 @@ const resourceNotFoundException = "ResourceNotFoundException"
 const birdwatcherVersionPattern = "^[A-Za-z0-9.]+$"
 const documentArnPattern = "^arn:[a-z0-9][-.a-z0-9]{0,62}:[a-z0-9][-.a-z0-9]{0,62}:([a-z0-9][-.a-z0-9]{0,62})?:([a-z0-9][-.a-z0-9]{0,62})?:document\\/[a-zA-Z0-9/:.\\-_]{1,128}$"
 
+var getConfig = appconfig.Config
+
 // Plugin is the type for the configurepackage plugin.
 type Plugin struct {
 	packageServiceSelector func(tracer trace.Tracer, input *ConfigurePackagePluginInput, localrepo localpackages.Repository, appCfg *appconfig.SsmagentConfig, bwfacade facade.BirdwatcherFacade, isDocumentArchive *bool) (packageservice.PackageService, error)
@@ -64,10 +68,11 @@ type Plugin struct {
 // ConfigurePackagePluginInput represents one set of commands executed by the ConfigurePackage plugin.
 type ConfigurePackagePluginInput struct {
 	contracts.PluginInput
-	Name                string `json:"name"`
-	Version             string `json:"version"`
-	Action              string `json:"action"`
-	InstallationType    string `json:"installationType"`
+	Name             string `json:"name"`
+	Version          string `json:"version"`
+	Action           string `json:"action"`
+	InstallationType string `json:"installationType"`
+	// TODO: Replace "additionalArguments" from string type to map[string]inteface{} type once Runcommand supports string maps
 	AdditionalArguments string `json:"additionalArguments"`
 	Source              string `json:"source"`
 	Repository          string `json:"repository"`
@@ -292,10 +297,28 @@ func getVersionToUninstall(
 
 // parseAndValidateInput marshals raw JSON and returns the result of input validation or an error
 func parseAndValidateInput(rawPluginInput interface{}) (*ConfigurePackagePluginInput, error) {
-	var input ConfigurePackagePluginInput
 	var err error
-	if err = jsonutil.Remarshal(rawPluginInput, &input); err != nil {
-		return nil, fmt.Errorf("invalid format in plugin properties %v; \nerror %v", rawPluginInput, err)
+	var input ConfigurePackagePluginInput
+
+	pluginInputMap := make(map[string]interface{})
+	b, err := json.Marshal(rawPluginInput)
+	if err != nil {
+		return nil, fmt.Errorf("cannot marshal plugin properties %v; \nerror %v", rawPluginInput, err)
+	}
+	err = json.Unmarshal(b, &pluginInputMap)
+	if err != nil {
+		return nil, fmt.Errorf("cannot unmarshal plugin properties %v; \nerror %v", string(b), err)
+	}
+	for k, v := range pluginInputMap {
+		// Runcommand passes StringMap (i.e "additionalArguments" parameter) as string type as of 8/3/2020/.
+		// It can be parsed as an empty map after json serialization only if it is not defined in the input.
+		// Convert to empty string if the "additionalArguments" is a map; otherwise, use the defined value from input.
+		if "additionalArguments" == k && reflect.ValueOf(v).Kind() == reflect.Map {
+			pluginInputMap[k] = ""
+		}
+	}
+	if err = jsonutil.Remarshal(pluginInputMap, &input); err != nil {
+		return nil, fmt.Errorf("invalid format in plugin properties %v; \nerror %v", pluginInputMap, err)
 	}
 
 	if valid, err := validateInput(&input); !valid {
@@ -517,7 +540,7 @@ func (p *Plugin) execute(context context.T, config contracts.Configuration, canc
 		tracer.CurrentTrace().WithError(err).End()
 		out.MarkAsFailed(nil, nil)
 	} else {
-		appCfg, err := appconfig.Config(false)
+		appCfg, err := getConfig(false)
 		var appConfig *appconfig.SsmagentConfig
 		if err != nil {
 			appConfig = nil

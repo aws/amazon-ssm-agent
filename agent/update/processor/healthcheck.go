@@ -42,6 +42,8 @@ const (
 	updateSucceeded = "UpdateSucceeded"
 	// updateFailed represents update is failed
 	updateFailed = "UpdateFailed"
+	// testFailed represents tests fail during update
+	testFailed = "TestFailed"
 )
 
 var ssmSvc ssm.Service
@@ -55,7 +57,7 @@ func (s *svcManager) UpdateHealthCheck(log log.T, update *UpdateDetail, errorCod
 	if svc, err = getSsmSvc(); err != nil {
 		return fmt.Errorf("Failed to load ssm service, %v", err)
 	}
-	status := PrepareHealthStatus(update, errorCode)
+	status := PrepareHealthStatus(update, errorCode, update.TargetVersion)
 	if _, err = svc.UpdateInstanceInformation(log, update.SourceVersion, status, health.AgentName); err != nil {
 		return
 	}
@@ -75,8 +77,8 @@ func getSsmSvc() (ssm.Service, error) {
 	return ssmSvc, nil
 }
 
-// PrepareHealthStatus prepares health status payload
-func PrepareHealthStatus(update *UpdateDetail, errorCode string) (result string) {
+// prepareHealthStatus prepares health status payload
+func PrepareHealthStatus(update *UpdateDetail, errorCode string, additionalStatus string) (result string) {
 	switch update.State {
 	default:
 		result = active
@@ -95,6 +97,10 @@ func PrepareHealthStatus(update *UpdateDetail, errorCode string) (result string)
 		if update.Result == contracts.ResultStatusSuccess {
 			result = updateSucceeded
 		}
+	case TestExecution:
+		if update.Result == contracts.ResultStatusTestFailure {
+			result = testFailed
+		}
 	case Rollback:
 		result = rollingBack
 	case RolledBack:
@@ -103,6 +109,10 @@ func PrepareHealthStatus(update *UpdateDetail, errorCode string) (result string)
 
 	if len(errorCode) > 0 {
 		result = fmt.Sprintf("%v_%v", result, errorCode)
+	}
+
+	if len(additionalStatus) > 0 {
+		result = fmt.Sprintf("%v-%v", result, additionalStatus)
 	}
 
 	return result

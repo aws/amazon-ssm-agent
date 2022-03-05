@@ -15,8 +15,6 @@
 package s3util
 
 import (
-	"errors"
-	"fmt"
 	"math"
 	"os"
 	"time"
@@ -26,17 +24,22 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/platform"
 	"github.com/aws/amazon-ssm-agent/agent/sdkutil"
 	"github.com/aws/aws-sdk-go/aws"
-	"github.com/aws/aws-sdk-go/aws/request"
-	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/s3"
 	"github.com/aws/aws-sdk-go/service/s3/s3manager"
 )
 
-const (
-	s3ResponseRegionHeader = "x-amz-bucket-region"
-)
-
 var getRegion = platform.Region
+var makeAwsConfig = sdkutil.AwsConfigForRegion
+var getAppConfig = func() (appconfig.SsmagentConfig, error) {
+	return appconfig.Config(false)
+}
+var getS3Endpoint = GetS3Endpoint
+var getFallbackS3EndpointFunc = getFallbackS3Endpoint
+var getHttpProvider = func(logger log.T) HttpProvider {
+	return HttpProviderImpl{
+		logger: logger,
+	}
+}
 
 type IAmazonS3Util interface {
 	S3Upload(log log.T, bucketName string, objectKey string, filePath string) error
@@ -47,37 +50,16 @@ type AmazonS3Util struct {
 	myUploader *s3manager.Uploader
 }
 
-func NewAmazonS3Util(log log.T, bucketName string) *AmazonS3Util {
-
-	httpProvider := HttpProviderImpl{}
-	bucketRegion := GetBucketRegion(log, bucketName, httpProvider)
-
-	config := sdkutil.AwsConfig()
-	var appConfig appconfig.SsmagentConfig
-	appConfig, errConfig := appconfig.Config(false)
-	if errConfig != nil {
-		log.Error("failed to read appconfig.")
-	} else {
-		if appConfig.S3.Endpoint != "" {
-			config.Endpoint = &appConfig.S3.Endpoint
-		} else {
-			if region, err := platform.Region(); err == nil {
-				if defaultEndpoint := platform.GetDefaultEndPoint(region, "s3"); defaultEndpoint != "" {
-					config.Endpoint = &defaultEndpoint
-				}
-			} else {
-				log.Errorf("error fetching the region, %v", err)
-			}
+func NewAmazonS3Util(log log.T, bucketName string) (res *AmazonS3Util, err error) {
+	sess, err := GetS3CrossRegionCapableSession(log, bucketName)
+	if err == nil {
+		res = &AmazonS3Util{
+			myUploader: s3manager.NewUploader(sess),
 		}
+	} else {
+		log.Errorf("failed to create AmazonS3Util: %v", err)
 	}
-	config.Region = &bucketRegion
-
-	sess := session.New(config)
-	sess.Handlers.Build.PushBack(request.MakeAddToUserAgentHandler(appConfig.Agent.Name, appConfig.Agent.Version))
-
-	return &AmazonS3Util{
-		myUploader: s3manager.NewUploader(sess),
-	}
+	return
 }
 
 // S3Upload uploads a file to s3.
@@ -97,33 +79,22 @@ func (u *AmazonS3Util) S3Upload(log log.T, bucketName string, objectKey string, 
 		ContentType: aws.String("text/plain"),
 		ACL:         aws.String("bucket-owner-full-control"),
 	}
-	if result, err := u.myUploader.Upload(params); err == nil {
-		log.Infof("Successfully uploaded file to ", result.Location)
-	} else {
-		log.Errorf("Failed uploading %v to s3://%v/%v err:%v", filePath, bucketName, objectKey, err)
+
+	for attempt := 1; attempt <= 4; attempt++ {
+		var result *s3manager.UploadOutput
+		if result, err = u.myUploader.Upload(params); err == nil {
+			log.Infof("Successfully uploaded file to ", result.Location)
+			break
+		} else {
+			log.Errorf("Attempt %s: Failed uploading %v to s3://%v/%v err:%v ", attempt, filePath, bucketName, objectKey, err)
+			time.Sleep(time.Duration(math.Pow(2, float64(attempt))*100) * time.Millisecond)
+		}
 	}
+
 	return err
 }
 
-// This function returns the Amazon S3 Bucket region based on its name and the EC2 instance region.
-// It will return the same instance region if it failed to guess the bucket region.
-func GetBucketRegion(log log.T, bucketName string, httpProvider HttpProvider) (region string) {
-	instanceRegion, err := getRegion()
-	if err != nil {
-		log.Error("Cannot get the current instance region information")
-		return instanceRegion // Default
-	}
-	log.Infof("Instance region is %v", instanceRegion)
-
-	bucketRegion := GetS3Header(log, bucketName, instanceRegion, httpProvider)
-	if bucketRegion == "" {
-		return instanceRegion // Default
-	} else {
-		return bucketRegion
-	}
-}
-
-//IsBucketEncrypted checks if the bucket is encrypted
+// IsBucketEncrypted checks if the bucket is encrypted
 func (u *AmazonS3Util) IsBucketEncrypted(log log.T, bucketName string) (bool, error) {
 	input := &s3.GetBucketEncryptionInput{
 		Bucket: aws.String(bucketName),
@@ -143,90 +114,4 @@ func (u *AmazonS3Util) IsBucketEncrypted(log log.T, bucketName string) (bool, er
 
 	log.Errorf("S3 bucket %s is not encrypted", bucketName)
 	return false, nil
-}
-
-/*
-This function return the S3 bucket region that is returned as a result of a CURL operation on an S3 path.
-The starting endpoint does not need to be the same as the returned region.
-For example, we might query an endpoint in us-east-1 and get a return of us-west-2, if the bucket is actually in us-west-2.
-*/
-func GetS3Header(log log.T, bucketName string, instanceRegion string, httpProvider HttpProvider) string {
-	var err error
-	var region string
-
-	s3Endpoint := GetS3Endpoint(instanceRegion)
-	// Fail over to the generic regional end point, if different from the regional end point
-	genericEndPoint := GetS3GenericEndPoint(instanceRegion)
-	for retryCount := 1; retryCount <= 5; retryCount++ {
-		// Try to get the s3 region with https protocol, it's required for S3 upload when https-only enabled
-		if region, err = getRegionFromS3URL(log, "https://"+bucketName+"."+s3Endpoint, httpProvider); err == nil {
-			return region
-		}
-		if region, err = getRegionFromS3URL(log, "http://"+bucketName+"."+s3Endpoint, httpProvider); err == nil {
-			return region
-		}
-
-		if genericEndPoint != s3Endpoint {
-			log.Infof("Error when querying S3 bucket using address http://%v.%v. Error details: %v. Retrying with the generic regional endpoint %v...",
-				bucketName, s3Endpoint, err, genericEndPoint)
-			if region, err = getRegionFromS3URL(log, "https://"+bucketName+"."+genericEndPoint, httpProvider); err == nil {
-				return region
-			}
-			if region, err = getRegionFromS3URL(log, "http://"+bucketName+"."+genericEndPoint, httpProvider); err == nil {
-				return region
-			}
-		}
-		// Ensure the maximum sleep limit less than 500 ms.
-		newRetryTimeCount := math.Min(math.Pow(2, float64(retryCount)), float64(5)) * 100
-		time.Sleep(time.Duration(newRetryTimeCount) * time.Millisecond)
-	}
-
-	log.Infof("Failed to get S3 bucket region using s3 regional endpoint address http://%v.%v. Error details: %v. ",
-		bucketName, s3Endpoint, err, genericEndPoint)
-	// Could not query the bucket region. Log the error.
-	log.Infof("Failed to get S3 bucket region using s3 generic endpoint address http://%v.%v. Error details: %v",
-		bucketName, genericEndPoint, err)
-	return ""
-}
-
-func getRegionFromS3URLWithExponentialBackoff(url string, httpProvider HttpProvider) (region string, err error) {
-	// Sleep with exponential backoff strategy if response had unexpected error, 502, 503 or 504 http code
-	// For any other failed cases, we try it without exponential back off.
-	for retryCount := 1; retryCount <= 5; retryCount++ {
-		resp, err := httpProvider.Head(url)
-		if err != nil || resp == nil {
-			continue
-		}
-
-		if resp.StatusCode == 502 || resp.StatusCode == 503 || resp.StatusCode == 504 {
-			time.Sleep(time.Duration(math.Pow(2, float64(retryCount))*100) * time.Millisecond)
-		} else if region = resp.Header.Get(s3ResponseRegionHeader); region != "" {
-			// Region is fetched correctly at this point
-			return region, nil
-		}
-	}
-
-	err = errors.New(fmt.Sprintf("Failed to fetch region from the header - %s", err))
-
-	return
-}
-
-func getRegionFromS3URL(log log.T, url string, httpProvider HttpProvider) (region string, err error) {
-	resp, err := httpProvider.Head(url)
-	if err != nil || resp == nil {
-		log.Infof("Error when query S3 using url %v, error details : %v", url, err)
-		err = errors.New(fmt.Sprintf("Failed query S3 using url %v - %s", url, err))
-		return "", err
-	}
-
-	if resp.StatusCode == 502 || resp.StatusCode == 503 || resp.StatusCode == 504 {
-		err = errors.New(fmt.Sprintf("Failed to make request to s3 endpoint - %s", err))
-		return "", err
-	} else if region = resp.Header.Get(s3ResponseRegionHeader); region != "" {
-		// Region is fetched correctly at this point
-		log.Infof("Getting region information about bucket %v", region)
-		return region, nil
-	}
-	err = errors.New(fmt.Sprintf("Failed to fetch region from the header - %s", err))
-	return
 }

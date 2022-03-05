@@ -25,12 +25,12 @@ import (
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/context"
-	"github.com/aws/amazon-ssm-agent/agent/crypto"
-	cryptoMocks "github.com/aws/amazon-ssm-agent/agent/crypto/mocks"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	communicatorMocks "github.com/aws/amazon-ssm-agent/agent/session/communicator/mocks"
 	mgsConfig "github.com/aws/amazon-ssm-agent/agent/session/config"
 	mgsContracts "github.com/aws/amazon-ssm-agent/agent/session/contracts"
+	"github.com/aws/amazon-ssm-agent/agent/session/crypto"
+	cryptoMocks "github.com/aws/amazon-ssm-agent/agent/session/crypto/mocks"
 	"github.com/aws/amazon-ssm-agent/agent/session/service"
 	serviceMock "github.com/aws/amazon-ssm-agent/agent/session/service/mocks"
 	"github.com/aws/amazon-ssm-agent/agent/task"
@@ -480,6 +480,7 @@ func TestDataChannelHandshakeResponse(t *testing.T) {
 	assert.Nil(t, err)
 	assert.True(t, dataChannel.encryptionEnabled)
 	assert.True(t, <-dataChannel.handshake.responseChan)
+	assert.Equal(t, versionString, dataChannel.handshake.clientVersion)
 
 	mockChannel.AssertExpectations(t)
 	mockCipher.AssertExpectations(t)

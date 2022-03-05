@@ -25,7 +25,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/association/model"
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
-	"github.com/aws/amazon-ssm-agent/agent/docparser"
+	"github.com/aws/amazon-ssm-agent/agent/framework/docparser"
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	messageContracts "github.com/aws/amazon-ssm-agent/agent/runcommand/contracts"
@@ -52,6 +52,7 @@ func ParseDocumentForPayload(log log.T,
 		log.Debugf("Could not unmarshal parameters ", err)
 		return nil, fmt.Errorf("%v", ErrorMsg)
 	}
+	log.Debugf("unmarshal parameters: %v", payload.DocumentContent)
 
 	payload.DocumentName = *rawData.Association.Name
 	payload.CommandID = *rawData.Association.AssociationId

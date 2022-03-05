@@ -27,7 +27,7 @@ import (
 
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
-	"github.com/aws/amazon-ssm-agent/agent/docparser"
+	"github.com/aws/amazon-ssm-agent/agent/framework/docparser"
 	logger "github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/times"
 	"github.com/twinj/uuid"
@@ -173,7 +173,7 @@ func (agentMessage *AgentMessage) Serialize(log logger.T) (result []byte, err er
 	headerLength := uint32(AgentMessage_PayloadLengthOffset)
 	// If the payloadinfo length is incorrect, fix it.
 	if payloadLength != agentMessage.PayloadLength {
-		log.Debugf("Payload length will be adjusted: ", agentMessage.PayloadLength)
+		log.Debugf("Payload length will be adjusted: %v", agentMessage.PayloadLength)
 		agentMessage.PayloadLength = payloadLength
 	}
 
@@ -328,7 +328,7 @@ func deserializeAgentTaskPayload(log logger.T, agentMessage AgentMessage) (agent
 
 	// workaround to unmarshal the real payload (should be fixed from the service side)
 	if err = json.Unmarshal([]byte(mgsPayload.Payload), &agentTaskPayload); err != nil {
-		log.Errorf("Could not deserialize AgentTask payload rawMessage: %s", string(mgsPayload.Payload))
+		log.Errorf("Could not deserialize AgentTask payload rawMessage: %v", err)
 	}
 	return
 }
@@ -352,6 +352,7 @@ func buildDocumentInfo(
 		DocumentName:   parsedMessagePayload.DocumentName,
 		DocumentStatus: contracts.ResultStatusInProgress,
 		RunAsUser:      parsedMessagePayload.RunAsUser,
+		SessionOwner:   parsedMessagePayload.SessionOwner,
 	}
 }
 

@@ -19,8 +19,11 @@ package shell
 import (
 	"bufio"
 	"encoding/json"
+	"errors"
 	"fmt"
+	"io/ioutil"
 	"os"
+	"path"
 	"path/filepath"
 	"regexp"
 	"runtime"
@@ -29,7 +32,6 @@ import (
 	"sync"
 	"syscall"
 	"time"
-	"unsafe"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	agentContracts "github.com/aws/amazon-ssm-agent/agent/contracts"
@@ -44,25 +46,25 @@ import (
 
 var pty *winpty.WinPTY
 var u = &utility.SessionUtil{}
+var token, profile syscall.Handle
 
 const (
-	defaultConsoleCol      = 200
-	defaultConsoleRow      = 60
-	winptyDllName          = "winpty.dll"
-	winptyDllFolderName    = "SessionManagerShell"
-	winptyCmd              = "powershell"
-	startRecordSessionCmd  = "Start-Transcript"
-	newLineCharacter       = "\r\n"
-	screenBufferSizeCmd    = "$host.UI.RawUI.BufferSize = New-Object System.Management.Automation.Host.Size($host.UI.RawUI.BufferSize.Width,%d)%s"
-	logon32LogonNetwork    = uintptr(3)
-	logon32ProviderDefault = uintptr(0)
+	defaultConsoleCol                                = 200
+	defaultConsoleRow                                = 60
+	winptyDllName                                    = "winpty.dll"
+	winptyDllFolderName                              = "SessionManagerShell"
+	winptyCmd                                        = "powershell"
+	startRecordSessionCmd                            = "Start-Transcript"
+	newLineCharacter                                 = "\r\n"
+	shellProfileNewLineCharacter                     = "\r"
+	screenBufferSizeCmd                              = "$host.UI.RawUI.BufferSize = New-Object System.Management.Automation.Host.Size($host.UI.RawUI.BufferSize.Width,%d)%s"
+	powerShellTranscriptLoggingSupportedMajorVersion = 5
+	powerShellTranscriptLoggingSupportedMinorVersion = 1
+	transcriptDirCustomPath                          = `Amazon/SSM/Session/`
+	dateformatyyyymmdd                               = "20060102"
 )
 
 var (
-	advapi32          = syscall.NewLazyDLL("advapi32.dll")
-	logonProc         = advapi32.NewProc("LogonUserW")
-	impersonateProc   = advapi32.NewProc("ImpersonateLoggedOnUser")
-	revertSelfProc    = advapi32.NewProc("RevertToSelf")
 	winptyDllDir      = fileutil.BuildPath(appconfig.DefaultPluginPath, winptyDllFolderName)
 	winptyDllFilePath = filepath.Join(winptyDllDir, winptyDllName)
 )
@@ -73,10 +75,12 @@ func StartPty(
 	log log.T,
 	shellProps mgsContracts.ShellProperties,
 	isSessionLogger bool,
-	config agentContracts.Configuration) (stdin *os.File, stdout *os.File, err error) {
+	config agentContracts.Configuration,
+	plugin *ShellPlugin) (err error) {
+
 	log.Info("Starting winpty")
 	if _, err := os.Stat(winptyDllFilePath); os.IsNotExist(err) {
-		return nil, nil, fmt.Errorf("Missing %s file.", winptyDllFilePath)
+		return fmt.Errorf("Missing %s file.", winptyDllFilePath)
 	}
 
 	var finalCmd string
@@ -93,7 +97,7 @@ func StartPty(
 		var newPassword string
 		newPassword, err = u.GeneratePasswordForDefaultUser()
 		if err != nil {
-			return nil, nil, err
+			return err
 		}
 		var userExists bool
 		if userExists, err = u.ChangePassword(appconfig.DefaultRunAsUserName, newPassword); err != nil {
@@ -104,12 +108,12 @@ func StartPty(
 		// create ssm-user before starting a new session
 		if !userExists {
 			if newPassword, err = u.CreateLocalAdminUser(log); err != nil {
-				return nil, nil, fmt.Errorf("Failed to create user %s: %v", appconfig.DefaultRunAsUserName, err)
+				return fmt.Errorf("Failed to create user %s: %v", appconfig.DefaultRunAsUserName, err)
 			}
 		} else {
 			// enable user
 			if err = u.EnableLocalUser(log); err != nil {
-				return nil, nil, fmt.Errorf("Failed to enable user %s: %v", appconfig.DefaultRunAsUserName, err)
+				return fmt.Errorf("Failed to enable user %s: %v", appconfig.DefaultRunAsUserName, err)
 			}
 		}
 
@@ -117,7 +121,7 @@ func StartPty(
 		wg.Add(1)
 		go func() {
 			defer wg.Done()
-			err = startPtyAsUser(log, appconfig.DefaultRunAsUserName, newPassword, finalCmd)
+			plugin.logger.transcriptDirPath, err = plugin.startPtyAsUser(log, config, appconfig.DefaultRunAsUserName, newPassword, finalCmd)
 		}()
 		wg.Wait()
 	} else {
@@ -125,14 +129,18 @@ func StartPty(
 	}
 
 	if err != nil {
-		return nil, nil, err
+		return err
 	}
 
-	return pty.StdIn, pty.StdOut, err
+	plugin.stdin = pty.StdIn
+	plugin.stdout = pty.StdOut
+	plugin.runAsUser = appconfig.DefaultRunAsUserName
+
+	return err
 }
 
-//Stop closes winpty process handle and stdin/stdout.
-func Stop(log log.T) (err error) {
+//stop closes winpty process handle and stdin/stdout.
+func (p *ShellPlugin) stop(log log.T) (err error) {
 	log.Info("Stopping winpty")
 	if err = pty.Close(); err != nil {
 		return fmt.Errorf("Stop winpty failed: %s", err)
@@ -140,6 +148,11 @@ func Stop(log log.T) (err error) {
 
 	log.Debugf("Disabling ssm-user")
 	u.DisableLocalUser(log)
+
+	if token != 0 && profile != 0 {
+		u.UnloadUserProfile(log, token, profile)
+	}
+
 	return nil
 }
 
@@ -153,14 +166,38 @@ func SetSize(log log.T, ws_col, ws_row uint32) (err error) {
 }
 
 //startPtyAsUser starts a winpty process in runas user context.
-func startPtyAsUser(log log.T, user string, pass string, shellCmd string) (err error) {
+func (p *ShellPlugin) startPtyAsUser(log log.T, config agentContracts.Configuration, user string, pass string, shellCmd string) (transcriptDirPath string, err error) {
 	runtime.LockOSThread()
 	defer runtime.UnlockOSThread()
 
-	log.Debugf("Impersonating %s", appconfig.DefaultRunAsUserName)
-	if err = impersonate(log, user, pass); err != nil {
-		log.Error(err)
-		return
+	// CloudWatch streaming depends on PowerShell's Transcript logging feature.
+	// If streaming enabled:
+	// 1) then load user profile and get handle
+	// 2) fetch user profile directory
+	// 3) use profile directory as transcript output path and enable transcript logging
+	if p.logger.streamLogsToCloudWatch {
+		log.Debugf("Load UserProfile %s", user)
+		if token, profile, err = u.LoadUserProfile(user, pass); err != nil {
+			return "", fmt.Errorf("error loading user profile: %v", err)
+		}
+
+		var profileDir string
+		if profileDir, err = syscall.Token(token).GetUserProfileDirectory(); err != nil {
+			return "", fmt.Errorf("error fetching user profile directory: %v", err)
+		}
+		log.Debugf("Fetched user profile directory, %s", profileDir)
+		transcriptDirPath = path.Join(profileDir, transcriptDirCustomPath, config.SessionId)
+
+		log.Debugf("Enable PowerShell's Transcript logging with output directory as: %s", transcriptDirPath)
+		if err = u.EnablePowerShellTranscription(transcriptDirPath, profile); err != nil {
+			return "", fmt.Errorf("error enabling powershell transcription: %v", err)
+		}
+	}
+
+	// Impersonate current thread as runAs user
+	log.Debugf("Impersonating %s", user)
+	if err = u.Impersonate(log, user, pass); err != nil {
+		return "", fmt.Errorf("error impersonating: %v", err)
 	}
 
 	// Start Winpty under the user context thread.
@@ -169,7 +206,8 @@ func startPtyAsUser(log log.T, user string, pass string, shellCmd string) (err e
 		return
 	}
 
-	if err = revertToSelf(); err != nil {
+	// Revert thread to original context
+	if err = u.RevertToSelf(); err != nil {
 		log.Error(err)
 		return
 	}
@@ -178,58 +216,17 @@ func startPtyAsUser(log log.T, user string, pass string, shellCmd string) (err e
 	return
 }
 
-//impersonate attempts to impersonate the user.
-func impersonate(log log.T, user string, pass string) error {
-	token, err := logonUser(user, pass)
-	if err != nil {
+// runShellProfile executes the shell profile config
+func (p *ShellPlugin) runShellProfile(log log.T, config agentContracts.Configuration) error {
+	if strings.TrimSpace(config.ShellProfile.Windows) == "" {
+		return nil
+	}
+
+	if _, err := p.stdin.Write([]byte(config.ShellProfile.Windows + shellProfileNewLineCharacter)); err != nil {
+		log.Errorf("Unable to write to stdin, err: %v.", err)
 		return err
 	}
-	defer mustCloseHandle(log, token)
-
-	if rc, _, ec := syscall.Syscall(impersonateProc.Addr(), 1, uintptr(token), 0, 0); rc == 0 {
-		return error(ec)
-	}
 	return nil
-}
-
-//logonUser attempts to log a user on to the local computer to generate a token.
-func logonUser(user, pass string) (token syscall.Handle, err error) {
-	// ".\0" meaning "this computer:
-	domain := [2]uint16{uint16('.'), 0}
-
-	var pu, pp []uint16
-	if pu, err = syscall.UTF16FromString(user); err != nil {
-		return
-	}
-	if pp, err = syscall.UTF16FromString(pass); err != nil {
-		return
-	}
-
-	if rc, _, ec := syscall.Syscall6(logonProc.Addr(), 6,
-		uintptr(unsafe.Pointer(&pu[0])),
-		uintptr(unsafe.Pointer(&domain[0])),
-		uintptr(unsafe.Pointer(&pp[0])),
-		logon32LogonNetwork,
-		logon32ProviderDefault,
-		uintptr(unsafe.Pointer(&token))); rc == 0 {
-		err = error(ec)
-	}
-	return
-}
-
-//revertToSelf reverts the impersonation process.
-func revertToSelf() error {
-	if rc, _, ec := syscall.Syscall(revertSelfProc.Addr(), 0, 0, 0, 0); rc == 0 {
-		return error(ec)
-	}
-	return nil
-}
-
-//mustCloseHandle ensures to close the user token handle.
-func mustCloseHandle(log log.T, handle syscall.Handle) {
-	if err := syscall.CloseHandle(handle); err != nil {
-		log.Error(err)
-	}
 }
 
 // generateLogData generates a log file with the executed commands.
@@ -255,37 +252,37 @@ func (p *ShellPlugin) generateLogData(log log.T, config agentContracts.Configura
 	// Generate logs based on the OS version number
 	// https://docs.microsoft.com/en-us/windows/desktop/SysInfo/operating-system-version
 	if osMajorVersion >= 10 {
-		if err = generateTranscriptFile(log, p.logFilePath, p.ipcFilePath, true, config); err != nil {
+		if err = p.generateTranscriptFile(log, p.logger.logFilePath, p.logger.ipcFilePath, true, config); err != nil {
 			return err
 		}
 	} else if osMajorVersion >= 6 && osMinorVersion >= 3 {
 		transcriptFile := filepath.Join(config.OrchestrationDirectory, "transcriptFile"+mgsConfig.LogFileExtension)
-		if err = generateTranscriptFile(log, transcriptFile, p.ipcFilePath, false, config); err != nil {
+		if err = p.generateTranscriptFile(log, transcriptFile, p.logger.ipcFilePath, false, config); err != nil {
 			return err
 		}
-		cleanControlCharacters(transcriptFile, p.logFilePath)
+		cleanControlCharacters(transcriptFile, p.logger.logFilePath)
 	} else {
-		cleanControlCharacters(p.ipcFilePath, p.logFilePath)
+		cleanControlCharacters(p.logger.ipcFilePath, p.logger.logFilePath)
 	}
 
 	return nil
 }
 
 // generateTranscriptFile generates a transcript file using PowerShell
-func generateTranscriptFile(
+func (p *ShellPlugin) generateTranscriptFile(
 	log log.T,
 	transcriptFile string,
 	loggerFile string,
 	enableVirtualTerminalProcessingForWindows bool,
 	config agentContracts.Configuration) error {
-	shadowShellInput, _, err := StartPty(log, mgsContracts.ShellProperties{}, true, config)
+	err := StartPty(log, mgsContracts.ShellProperties{}, true, config, p)
 	if err != nil {
 		return err
 	}
 
 	defer func() {
 		if err := recover(); err != nil {
-			if err = Stop(log); err != nil {
+			if err = p.stop(log); err != nil {
 				log.Errorf("Error occured while closing pty: %v", err)
 			}
 		}
@@ -295,26 +292,26 @@ func generateTranscriptFile(
 
 	// Increase buffer size
 	screenBufferSizeCmdInput := fmt.Sprintf(screenBufferSizeCmd, mgsConfig.ScreenBufferSize, newLineCharacter)
-	shadowShellInput.Write([]byte(screenBufferSizeCmdInput))
+	p.stdin.Write([]byte(screenBufferSizeCmdInput))
 
 	time.Sleep(5 * time.Second)
 
 	// Start shell recording
 	recordCmdInput := fmt.Sprintf("%s %s%s", startRecordSessionCmd, transcriptFile, newLineCharacter)
-	shadowShellInput.Write([]byte(recordCmdInput))
+	p.stdin.Write([]byte(recordCmdInput))
 
 	time.Sleep(5 * time.Second)
 
 	// Start shell logger
 	loggerCmdInput := fmt.Sprintf("%s %s %t%s", appconfig.DefaultSessionLogger, loggerFile, enableVirtualTerminalProcessingForWindows, newLineCharacter)
-	shadowShellInput.Write([]byte(loggerCmdInput))
+	p.stdin.Write([]byte(loggerCmdInput))
 
 	// Sleep till the logger completes execution
 	time.Sleep(time.Minute)
 
 	// Exit shell
 	exitCmdInput := fmt.Sprintf("%s%s", mgsConfig.Exit, newLineCharacter)
-	shadowShellInput.Write([]byte(exitCmdInput))
+	p.stdin.Write([]byte(exitCmdInput))
 
 	// Sleep till the shell successfully exits before uploading
 	time.Sleep(5 * time.Second)
@@ -365,6 +362,104 @@ func cleanControlCharacters(sourceFileName, destinationFileName string) error {
 		destinationFile.Write(append(output, []byte(newLineCharacter)...))
 	}
 	return nil
+}
+
+// checkForLoggingInterruption is used to detect if log streaming to CW has been interrupted
+var checkForLoggingInterruption = func(log log.T, ipcFile *os.File, plugin *ShellPlugin) {
+	// nothing to detect in case of windows
+}
+
+// isLogStreamingSupported checks if streaming of logs is supported since it depends on PowerShell's transcript logging
+func (p *ShellPlugin) isLogStreamingSupported(log log.T) (bool, error) {
+	if powerShellVersionSupportedForLogStreaming, err := isPowerShellVersionSupportedForLogStreaming(log); err != nil {
+		return false, fmt.Errorf("PowerShell version can't be verified on the instance. No logs will be streamed to CloudWatch. The error is: %v", err)
+	} else if !powerShellVersionSupportedForLogStreaming {
+		return false, errors.New(mgsConfig.UnsupportedPowerShellVersionForStreamingErrorMsg)
+	}
+
+	if systemLevelPowerShellTranscriptLoggingConfigured := u.IsSystemLevelPowerShellTranscriptionConfigured(log); systemLevelPowerShellTranscriptLoggingConfigured {
+		return false, errors.New(mgsConfig.PowerShellTranscriptLoggingEnabledErrorMsg)
+	}
+
+	log.Debug("Streaming of logs is supported.")
+	return true, nil
+}
+
+// isPowerShellVersionSupportedForLogStreaming checks if PowerShell's version is 5.1 or higher in order to support streaming of logs.
+// Streaming of logs depends on PowerShell's transcript logging feature which is supported from version 5.1 or higher.
+func isPowerShellVersionSupportedForLogStreaming(log log.T) (bool, error) {
+	powerShellVersion, err := u.GetInstalledVersionOfPowerShell()
+	if err != nil {
+		return false, fmt.Errorf("unable to get installed version of PowerShell, err: %v", err)
+	}
+	log.Debugf("Installed version of PowerShell is: %s", powerShellVersion)
+
+	powerShellVersionSplit := strings.Split(powerShellVersion, ".")
+	if powerShellVersionSplit == nil || len(powerShellVersionSplit) < 2 {
+		return false, fmt.Errorf("error occurred while parsing PowerShell version")
+	}
+
+	powerShellMajorVersion, err := strconv.Atoi(powerShellVersionSplit[0])
+	if err != nil {
+		return false, fmt.Errorf("error occurred while parsing PowerShell version, err: %v", err)
+	}
+
+	powerShellMinorVersion, err := strconv.Atoi(powerShellVersionSplit[1])
+	if err != nil {
+		return false, fmt.Errorf("error occurred while parsing PowerShell version, err: %v", err)
+	}
+
+	// return true if the PowerShell version is 5.1 or higher for Transcript Logging to work
+	if powerShellMajorVersion < powerShellTranscriptLoggingSupportedMajorVersion {
+		return false, nil
+	} else if powerShellMajorVersion == powerShellTranscriptLoggingSupportedMajorVersion && powerShellMinorVersion < powerShellTranscriptLoggingSupportedMinorVersion {
+		return false, nil
+	} else {
+		return true, nil
+	}
+}
+
+// getStreamingFilePath returns the file path of transcript log file created by PowerShell
+func (p *ShellPlugin) getStreamingFilePath(log log.T) (streamingFilePath string, err error) {
+	currentDate := fmt.Sprintf(time.Now().Format(dateformatyyyymmdd))
+	dirPath := fmt.Sprintf(p.logger.transcriptDirPath + `/` + currentDate)
+
+	// Check periodically for the presence of transcript file. Ideally file should be created as soon as shell starts.
+	ticker := time.NewTicker(time.Second)
+	for range ticker.C {
+		files, err := ioutil.ReadDir(dirPath)
+		if err != nil {
+			return "", fmt.Errorf("error reading dir path %s, err: %v", p.logger.transcriptDirPath, err)
+		}
+
+		// Continue to check for the presence of the file, break out of the loop when found
+		if files == nil {
+			continue
+		} else {
+			streamingFilePath = dirPath + `/` + files[0].Name()
+			log.Debugf("Transcript logging file path is: %s", streamingFilePath)
+			break
+		}
+	}
+
+	return
+}
+
+// isCleanupOfControlCharactersRequired returns true/false depending on whether log needs to be cleanup of control characters before streaming to destination
+func (p *ShellPlugin) isCleanupOfControlCharactersRequired() bool {
+	// Windows streaming of logs depends on PowerShell's transcript logging which takes care of control characters
+	// and no additional cleanup is required.
+	return false
+}
+
+//cleanupLogFile cleans up temporary log file on disk created by PowerShell's transcript logging
+func (p *ShellPlugin) cleanupLogFile(log log.T) {
+	if p.logger.transcriptDirPath != "" {
+		log.Debugf("Deleting transcript directory: %s", p.logger.transcriptDirPath)
+		if err := os.RemoveAll(p.logger.transcriptDirPath); err != nil {
+			log.Debugf("Encountered error deleting transcript directory: %v", err)
+		}
+	}
 }
 
 // InputStreamMessageHandler passes payload byte stream to shell stdin

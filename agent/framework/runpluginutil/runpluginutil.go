@@ -28,6 +28,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/platform"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/pluginutil"
+	"github.com/aws/amazon-ssm-agent/agent/ssm/ssmparameterresolver"
 	"github.com/aws/amazon-ssm-agent/agent/task"
 )
 
@@ -345,7 +346,7 @@ func getStepExecutionOperation(
 	isSupported bool,
 	isPluginHandlerFound bool,
 	isPreconditionEnabled bool,
-	preconditions map[string][]string,
+	preconditions map[string][]contracts.PreconditionArgument,
 ) (string, string) {
 	log.Debugf("isSupported flag = %t", isSupported)
 	log.Debugf("isPluginHandlerFound flag = %t", isPluginHandlerFound)
@@ -391,7 +392,8 @@ func getStepExecutionOperation(
 				return executeStep, ""
 			} else {
 				return skipStep, fmt.Sprintf(
-					"Step execution skipped due to incompatible platform. Step name: %s",
+					"Step execution skipped due to unsupported plugin: %s. Step name: %s",
+					pluginName,
 					pluginId)
 			}
 		} else {
@@ -404,9 +406,15 @@ func getStepExecutionOperation(
 					"Plugin with name %s is not supported by this version of ssm agent, please update to latest version. Step name: %s",
 					pluginName,
 					pluginId)
-			} else if !isAllowed || !isSupported || !isPluginHandlerFound {
+			} else if !isSupported || !isPluginHandlerFound {
 				return skipStep, fmt.Sprintf(
-					"Step execution skipped due to incompatible platform. Step name: %s",
+					"Step execution skipped due to unsupported plugin: %s. Step name: %s",
+					pluginName,
+					pluginId)
+			} else if !isAllowed {
+				return skipStep, fmt.Sprintf(
+					"Step execution skipped due to unsatisfied preconditions: '%s'. Step name: %s",
+					strings.Join(unrecognizedPreconditionList, ", "),
 					pluginId)
 			} else if len(unrecognizedPreconditionList) > 0 {
 				return failStep, fmt.Sprintf(
@@ -423,7 +431,7 @@ func getStepExecutionOperation(
 // Evaluate precondition and return precondition result and unrecognized preconditions (if any)
 func evaluatePreconditions(
 	log log.T,
-	preconditions map[string][]string,
+	preconditions map[string][]contracts.PreconditionArgument,
 ) (bool, []string) {
 
 	var isAllowed = true
@@ -434,33 +442,59 @@ func evaluatePreconditions(
 	for key, value := range preconditions {
 		switch key {
 		case "StringEquals":
-			// Platform type of OS on the instance
-			instancePlatformType, _ := platform.PlatformType(log)
-			log.Debugf("OS platform type of this instance = %s", instancePlatformType)
-
-			if len(value) != 2 ||
-				(strings.Compare(value[0], "platformType") == 0 && strings.Compare(value[1], "platformType") == 0) ||
-				(strings.Compare(value[0], "platformType") != 0 && strings.Compare(value[1], "platformType") != 0) {
-
-				unrecognizedPreconditionList = append(unrecognizedPreconditionList, fmt.Sprintf("\"%s\": %v", key, value))
+			if len(value) != 2 {
+				unrecognizedPreconditionList = append(unrecognizedPreconditionList, fmt.Sprintf("\"%s\": operator accepts exactly 2 arguments", key))
 			} else {
-				// Variable and value can be in any order, i.e. both "StringEquals": ["platformType", "Windows"]
-				// and "StringEquals": ["Windows", "platformType"] are valid
-				var platformTypeValue string
-				if strings.Compare(value[0], "platformType") == 0 {
-					platformTypeValue = value[1]
-				} else {
-					platformTypeValue = value[0]
-				}
+				if strings.Compare(value[0].InitialArgumentValue, value[1].InitialArgumentValue) == 0 {
+					// StringEquals preconditions with identical arguments are not allowed
+					if strings.Compare(value[0].InitialArgumentValue, "platformType") == 0 {
+						unrecognizedPreconditionList = append(unrecognizedPreconditionList, fmt.Sprintf("\"%s\": [%v %v]", key, value[0].InitialArgumentValue, value[1].InitialArgumentValue))
+					} else {
+						// hide customer's parameters and constants
+						unrecognizedPreconditionList = append(unrecognizedPreconditionList, fmt.Sprintf("\"%s\": operator's arguments can't be identical", key))
+					}
+				} else if ssmparameterresolver.TextContainsSsmParameters(value[0].InitialArgumentValue) || ssmparameterresolver.TextContainsSsmParameters(value[1].InitialArgumentValue) {
+					unrecognizedPreconditionList = append(unrecognizedPreconditionList, fmt.Sprintf("\"%s\": operator's arguments can't contain SSM parameters", key))
+				} else if ssmparameterresolver.TextContainsSecureSsmParameters(value[0].InitialArgumentValue) || ssmparameterresolver.TextContainsSecureSsmParameters(value[1].InitialArgumentValue) {
+					unrecognizedPreconditionList = append(unrecognizedPreconditionList, fmt.Sprintf("\"%s\": operator's arguments can't contain secure SSM parameters", key))
+				} else if strings.Compare(value[0].InitialArgumentValue, "platformType") == 0 || strings.Compare(value[1].InitialArgumentValue, "platformType") == 0 {
+					// keep original logic for platformType variable
+					// Platform type of OS on the instance
+					instancePlatformType, _ := platform.PlatformType(log)
+					log.Debugf("OS platform type of this instance = %s", instancePlatformType)
 
-				if strings.Compare(instancePlatformType, strings.ToLower(platformTypeValue)) != 0 {
-					// if precondition doesn't match for platformType, mark step for skip
-					isAllowed = false
+					// Variable and value can be in any order, i.e. both "StringEquals": ["platformType", "Windows"]
+					// and "StringEquals": ["Windows", "platformType"] are valid
+					var initialPlatformTypeValue string
+					var resolvedPlatformTypeValue string
+					if strings.Compare(value[0].InitialArgumentValue, "platformType") == 0 {
+						initialPlatformTypeValue = value[1].InitialArgumentValue
+						resolvedPlatformTypeValue = value[1].ResolvedArgumentValue
+					} else {
+						initialPlatformTypeValue = value[0].InitialArgumentValue
+						resolvedPlatformTypeValue = value[0].ResolvedArgumentValue
+					}
+
+					if strings.Compare(strings.ToLower(initialPlatformTypeValue), strings.ToLower(resolvedPlatformTypeValue)) != 0 {
+						unrecognizedPreconditionList = append(unrecognizedPreconditionList, fmt.Sprintf("\"%s\": the second argument for the platformType variable can't contain document parameters", key))
+					} else if strings.Compare(instancePlatformType, strings.ToLower(initialPlatformTypeValue)) != 0 {
+						// if precondition doesn't match for platformType, mark step for skip
+						isAllowed = false
+						unrecognizedPreconditionList = append(unrecognizedPreconditionList, fmt.Sprintf("\"%s\": [%v, %v]", key, value[0].InitialArgumentValue, value[1].InitialArgumentValue))
+					}
+				} else if strings.Compare(value[0].InitialArgumentValue, value[0].ResolvedArgumentValue) == 0 && strings.Compare(value[1].InitialArgumentValue, value[1].ResolvedArgumentValue) == 0 {
+					unrecognizedPreconditionList = append(unrecognizedPreconditionList, fmt.Sprintf("\"%s\": at least one of operator's arguments must contain a valid document parameter", key))
+				} else {
+					if strings.Compare(value[0].ResolvedArgumentValue, value[1].ResolvedArgumentValue) != 0 {
+						// if arbitrary StringEquals precondition is not satisfied, mark step for skip
+						isAllowed = false
+						unrecognizedPreconditionList = append(unrecognizedPreconditionList, fmt.Sprintf("\"%s\": [%v, %v]", key, value[0].InitialArgumentValue, value[1].InitialArgumentValue))
+					}
 				}
 			}
 		default:
 			// mark for unrecognizedPrecondition (which is a form of failure)
-			unrecognizedPreconditionList = append(unrecognizedPreconditionList, fmt.Sprintf("\"%s\": %v", key, value))
+			unrecognizedPreconditionList = append(unrecognizedPreconditionList, fmt.Sprintf("unrecognized operator: \"%s\"", key))
 		}
 	}
 

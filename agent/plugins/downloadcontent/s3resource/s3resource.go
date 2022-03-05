@@ -16,6 +16,13 @@
 package s3resource
 
 import (
+	"errors"
+	"fmt"
+	"net/url"
+	"os"
+	"path/filepath"
+	"strings"
+
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/fileutil"
 	"github.com/aws/amazon-ssm-agent/agent/fileutil/artifact"
@@ -25,13 +32,6 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/plugins/downloadcontent/remoteresource"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/downloadcontent/system"
 	"github.com/aws/amazon-ssm-agent/agent/s3util"
-
-	"errors"
-	"fmt"
-	"net/url"
-	"os"
-	"path/filepath"
-	"strings"
 )
 
 // S3Resource is a struct for the remote resource of type git
@@ -103,11 +103,9 @@ func (s3 *S3Resource) DownloadRemoteResource(log log.T, filesys filemanager.File
 	s3.s3Object = s3util.ParseAmazonS3URL(log, fileURL)
 	log.Debug("S3 object - ", s3.s3Object.String())
 
-	s3.s3Object.Region = s3util.GetBucketRegion(log, s3.s3Object.Bucket, s3util.HttpProviderImpl{})
-
 	// Create an object for the source URL. This can be used to list the objects in the folder
 	if folders, err = dep.ListS3Directory(log, s3.s3Object); err != nil {
-		if !isPathType(s3.s3Object.Key) {
+		if isPathType(s3.s3Object.Key) {
 			return err, nil
 		}
 
@@ -130,7 +128,7 @@ func (s3 *S3Resource) DownloadRemoteResource(log log.T, filesys filemanager.File
 			subFolderPath := strings.TrimPrefix(files, s3.s3Object.Key)
 			var bucketURL *url.URL
 			if bucketURL, err = s3.getS3BucketURLString(log); err != nil {
-				return fmt.Errorf("Error while obtaining URL parsing - %v", bucketURL), nil
+				return fmt.Errorf("error while obtaining URL parsing - %v", bucketURL), nil
 			}
 			if bucketURL == nil {
 				return errors.New("URL obtained is nil"), nil
@@ -199,7 +197,6 @@ func (s3 *S3Resource) ValidateLocationInfo() (valid bool, err error) {
 
 // getS3BucketURLString returns the URL up to the bucket name
 func (s3 *S3Resource) getS3BucketURLString(log log.T) (Url *url.URL, err error) {
-
 	endpoint := s3util.GetS3Endpoint(s3.s3Object.Region)
 	bucketURL := "https://" + endpoint + "/" + s3.s3Object.Bucket
 	return url.Parse(bucketURL)

@@ -22,7 +22,6 @@ import (
 	"syscall"
 
 	"github.com/aws/amazon-ssm-agent/agent/agent"
-
 	"github.com/aws/amazon-ssm-agent/agent/agentlogstocloudwatch/cloudwatchlogspublisher"
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/context"
@@ -30,6 +29,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/framework/coremodules"
 	"github.com/aws/amazon-ssm-agent/agent/health"
 	"github.com/aws/amazon-ssm-agent/agent/hibernation"
+	"github.com/aws/amazon-ssm-agent/agent/ipc/messagebus"
 	logger "github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/rebooter"
 	"github.com/aws/amazon-ssm-agent/agent/session/utility"
@@ -44,24 +44,27 @@ const (
 	registerFlag            = "register"
 	fingerprintFlag         = "fingerprint"
 	similarityThresholdFlag = "similarityThreshold"
+	workerFlag              = "worker"
 )
 
 var (
-	instanceIDPtr, regionPtr             *string
-	activationCode, activationID, region string
-	register, clear, force, fpFlag       bool
-	similarityThreshold                  int
-	process                              *startup.Processor
-	registrationFile                     = filepath.Join(appconfig.DefaultDataStorePath, "registration")
+	instanceIDPtr, regionPtr                 *string
+	activationCode, activationID, region     string
+	register, clear, force, fpFlag, isWorker bool
+	similarityThreshold                      int
+	registrationFile                         = filepath.Join(appconfig.DefaultDataStorePath, "registration")
+	messageBusClient                         *messagebus.MessageBus
+	process                                  *startup.Processor
 )
 
 func start(log logger.T, instanceIDPtr *string, regionPtr *string, shouldCheckHibernation bool) (ssmAgent agent.ISSMAgent, err error) {
-	config, err := appconfig.Config(true)
+	config, err := appconfig.Config(false)
 	if err != nil {
 		log.Debugf("appconfig could not be loaded - %v", err)
 		return
 	}
 	context := context.Default(log, config)
+	context = context.With("[ssm-agent-worker]")
 
 	//Reset password for default RunAs user if already exists
 	sessionUtil := &utility.SessionUtil{}
@@ -72,14 +75,21 @@ func start(log logger.T, instanceIDPtr *string, regionPtr *string, shouldCheckHi
 	//Initializing the health module to send empty health pings to the service.
 	healthModule := health.NewHealthCheck(context, ssm.NewService())
 	hibernateState := hibernation.NewHibernateMode(healthModule, context)
+	messageBusClient = messagebus.NewMessageBus(context)
 
 	ssmAgent = agent.NewSSMAgent(context, healthModule, hibernateState)
+	go messageBusClient.ProcessTerminationRequest()
+	go messageBusClient.ProcessHealthRequest()
 
 	// Initialize the startup module during agent start, before agent can potentially enter hibernation mode
-	process = startup.NewProcessor(context)
-	processErr := process.ModuleExecute(context)
-	if processErr != nil {
-		log.Errorf("Error occurred during startup of processor: %v", processErr)
+	if !context.AppConfig().Agent.ContainerMode {
+		go func() {
+			process = startup.NewProcessor(context)
+			processErr := process.ModuleExecute(context)
+			if processErr != nil {
+				log.Errorf("Error occurred during startup of processor: %v", processErr)
+			}
+		}()
 	}
 
 	// Do a health check before starting the agent.
@@ -114,7 +124,7 @@ func startAgent(ssmAgent agent.ISSMAgent, context context.T, log logger.T, insta
 	return
 }
 
-func blockUntilSignaled(log logger.T) {
+func blockUntilSignaled(ssmAgent agent.ISSMAgent, log logger.T) {
 	// Below channel will handle all machine initiated shutdown/reboot requests.
 
 	// Set up channel on which to receive signal notifications.
@@ -127,27 +137,32 @@ func blockUntilSignaled(log logger.T) {
 	// Otherwise we will continue execution and exit the program.
 	signal.Notify(c, os.Interrupt, os.Kill, syscall.SIGTERM)
 
-	s := <-c
-	log.Info("Got signal:", s, " value:", s.Signal)
+	select {
+	case s := <-c:
+		log.Info("Got signal:", s, " value:", s.Signal)
+	case <-messageBusClient.RebootRequestChannel():
+		log.Info("Received core agent reboot signal")
+	}
 }
 
 // Run as a single process. Used by Unix systems and when running agent from console.
-func run(log logger.T) {
+func run(log logger.T, shouldCheckHibernation bool) {
 	defer func() {
 		// recover in case the agent panics
 		// this should handle some kind of seg fault errors.
 		if msg := recover(); msg != nil {
-			log.Errorf("Agent crashed with message %v!", msg)
+			log.Errorf("SSM Agent Worker crashed with message %v!", msg)
 			log.Errorf("%s: %s", msg, debug.Stack())
 		}
 	}()
 
+	log.WriteEvent(logger.AgentTelemetryMessage, "", logger.AmazonAgentWorkerStartEvent)
 	// run ssm agent
-	agent, err := start(log, instanceIDPtr, regionPtr, true)
+	agent, err := start(log, instanceIDPtr, regionPtr, shouldCheckHibernation)
 	if err != nil {
-		log.Errorf("error occurred when starting amazon-ssm-agent: %v", err)
+		log.Errorf("error occurred when starting ssm-agent-worker: %v", err)
 		return
 	}
-	blockUntilSignaled(log)
+	blockUntilSignaled(agent, log)
 	agent.Stop()
 }

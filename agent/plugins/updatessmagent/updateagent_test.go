@@ -33,22 +33,44 @@ import (
 
 var logger = log.NewMockLog()
 
-func TestGenerateUpdateCmd(t *testing.T) {
+func TestGenerateUpdateCmdWithV2(t *testing.T) {
 	plugin := createStubPluginInput()
+	plugin.Source = "testSource"
 	context := createStubInstanceContext()
 	manifest := createStubManifest(plugin, context, true, true)
 	manager := updateManager{}
 
 	result, err := manager.generateUpdateCmd(logger, manifest, plugin, context,
-		"path", "messageID", "stdout", "stderr", "prefix", "bucket")
+		"2.0.0.0", "messageID", "stdout", "stderr", "prefix", "bucket")
 
 	assert.NoError(t, err)
-	assert.Contains(t, result, "path")
+	assert.Contains(t, result, "2.0.0.0")
 	assert.Contains(t, result, "messageID")
 	assert.Contains(t, result, "stdout")
 	assert.Contains(t, result, "stderr")
 	assert.Contains(t, result, "prefix")
 	assert.Contains(t, result, "bucket")
+	assert.NotContains(t, result, "manifest")
+}
+
+func TestGenerateUpdateCmdWithV3(t *testing.T) {
+	plugin := createStubPluginInput()
+	plugin.Source = "testSource"
+	context := createStubInstanceContext()
+	manifest := createStubManifest(plugin, context, true, true)
+	manager := updateManager{}
+
+	result, err := manager.generateUpdateCmd(logger, manifest, plugin, context,
+		"3.0.0.0", "messageID", "stdout", "stderr", "prefix", "bucket")
+
+	assert.NoError(t, err)
+	assert.Contains(t, result, "3.0.0.0")
+	assert.Contains(t, result, "messageID")
+	assert.Contains(t, result, "stdout")
+	assert.Contains(t, result, "stderr")
+	assert.Contains(t, result, "prefix")
+	assert.Contains(t, result, "bucket")
+	assert.Contains(t, result, "manifest")
 }
 
 func TestDownloadManifest(t *testing.T) {
@@ -256,21 +278,6 @@ func TestUpdateAgent_InvalidPluginRaw(t *testing.T) {
 	assert.Contains(t, out.GetStderr(), "invalid format in plugin properties")
 }
 
-func TestUpdateAgent_ManifestRetry(t *testing.T) {
-	config := contracts.Configuration{}
-	plugin := &Plugin{}
-	mockCancelFlag := new(task.MockCancelFlag)
-	manager := &fakeUpdateManager{
-		downloadManifestError: fmt.Errorf("test"),
-	}
-	util := &fakeUtility{}
-	out := iohandler.DefaultIOHandler{}
-	pluginInput := createStubPluginInput()
-	pluginInput.TargetVersion = ""
-	updateAgent(plugin, config, logger, manager, util, pluginInput, mockCancelFlag, &out, time.Now())
-	assert.Equal(t, manager.retryCounter, 2)
-}
-
 func TestUpdateAgent_UpdaterRetry(t *testing.T) {
 	config := contracts.Configuration{}
 	plugin := &Plugin{}
@@ -281,7 +288,6 @@ func TestUpdateAgent_UpdaterRetry(t *testing.T) {
 	pluginInput := createStubPluginInput()
 	pluginInput.TargetVersion = ""
 	updateAgent(plugin, config, logger, manager, util, pluginInput, mockCancelFlag, &out, time.Now())
-	assert.Equal(t, manager.retryCounter, 1)
 	assert.Equal(t, util.retryCounter, 2)
 }
 
@@ -612,11 +618,23 @@ func (u *fakeUtility) CreateInstanceContext(log log.T) (context *updateutil.Inst
 	return createStubInstanceContext(), nil
 }
 
+func (u *fakeUtility) CleanupCommand(log log.T, pid int) error {
+	return nil
+}
+
 func (u *fakeUtility) IsServiceRunning(log log.T, i *updateutil.InstanceContext) (result bool, err error) {
 	return true, nil
 }
 
-func (u *fakeUtility) WaitForServiceToStart(log log.T, i *updateutil.InstanceContext) (result bool, err error) {
+func (u *fakeUtility) IsProcessRunning(log log.T, pid int) (result bool, err error) {
+	return true, nil
+}
+
+func (u *fakeUtility) IsWorkerRunning(log log.T) (result bool, err error) {
+	return true, nil
+}
+
+func (u *fakeUtility) WaitForServiceToStart(log log.T, i *updateutil.InstanceContext, targetVersion string) (result bool, err error) {
 	return true, nil
 }
 
@@ -631,9 +649,9 @@ func (u *fakeUtility) ExeCommand(
 	workingDir string,
 	stdOut string,
 	stdErr string,
-	isAsync bool) (pid int, err error) {
+	isAsync bool) (pid int, exitCode updateutil.UpdateScriptExitCode, err error) {
 	u.retryCounter++
-	return u.pid, u.execCommandError
+	return u.pid, exitCode, u.execCommandError
 }
 
 func (u *fakeUtility) SaveUpdatePluginResult(
@@ -647,6 +665,15 @@ func (u *fakeUtility) IsDiskSpaceSufficientForUpdate(log log.T) (bool, error) {
 	return true, nil
 }
 
+func (u *fakeUtility) DownloadManifestFile(log log.T, updateDownloadFolder string, manifestUrl string, region string) (*artifact.DownloadOutput, string, error) {
+
+	return &artifact.DownloadOutput{
+		LocalFilePath: "testPath",
+		IsUpdated:     true,
+		IsHashMatched: true,
+	}, "manifestUrl", nil
+}
+
 type fakeUpdateManager struct {
 	generateUpdateCmdResult string
 	generateUpdateCmdError  error
@@ -656,14 +683,13 @@ type fakeUpdateManager struct {
 	downloadUpdaterError    error
 	validateUpdateResult    bool
 	validateUpdateError     error
-	retryCounter            int
 }
 
 func (u *fakeUpdateManager) generateUpdateCmd(log log.T,
 	manifest *Manifest,
 	pluginInput *UpdatePluginInput,
 	context *updateutil.InstanceContext,
-	updaterPath string,
+	updaterVersion string,
 	messageID string,
 	stdout string,
 	stderr string,
@@ -678,7 +704,6 @@ func (u *fakeUpdateManager) downloadManifest(log log.T,
 	pluginInput *UpdatePluginInput,
 	context *updateutil.InstanceContext,
 	out iohandler.IOHandler) (manifest *Manifest, err error) {
-	u.retryCounter++
 	return u.downloadManifestResult, u.downloadManifestError
 }
 

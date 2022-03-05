@@ -483,7 +483,7 @@ func TestRunPluginsWithDuplicatePluginType(t *testing.T) {
 
 // Crossplatform document with compatible precondition, steps must be executed
 // Precondition = "StringEquals": ["platformType", "Linux"]
-func TestRunPluginsWithCompatiblePrecondition(t *testing.T) {
+func TestRunPluginsWithCompatiblePlatformPrecondition(t *testing.T) {
 	setIsSupportedMock()
 	defer restoreIsSupported()
 	pluginNames := []string{testPlugin1, testPlugin2}
@@ -499,7 +499,19 @@ func TestRunPluginsWithCompatiblePrecondition(t *testing.T) {
 	defaultTime := time.Now()
 	pluginConfigs2 := make([]contracts.PluginState, len(pluginNames))
 
-	preconditions := map[string][]string{"StringEquals": []string{"platformType", "Linux"}}
+	// initial precondition: "StringEquals": ["platformType", "Linux"]
+	parsedPreconditions := map[string][]contracts.PreconditionArgument{
+		"StringEquals": {
+			contracts.PreconditionArgument{
+				InitialArgumentValue:  "platformType",
+				ResolvedArgumentValue: "platformType",
+			},
+			contracts.PreconditionArgument{
+				InitialArgumentValue:  "Linux",
+				ResolvedArgumentValue: "Linux",
+			},
+		},
+	}
 
 	for index, name := range pluginNames {
 
@@ -511,7 +523,7 @@ func TestRunPluginsWithCompatiblePrecondition(t *testing.T) {
 			PluginID:              name,
 			PluginName:            name,
 			IsPreconditionEnabled: true,
-			Preconditions:         preconditions,
+			Preconditions:         parsedPreconditions,
 		}
 
 		// setup expectations
@@ -573,7 +585,7 @@ func TestRunPluginsWithCompatiblePrecondition(t *testing.T) {
 
 // Crossplatform document with compatible precondition, steps must be executed
 // Precondition = "StringEquals": ["Linux", "platformType"]
-func TestRunPluginsWithCompatiblePreconditionWithValueFirst(t *testing.T) {
+func TestRunPluginsWithCompatiblePlatformPreconditionWithValueFirst(t *testing.T) {
 	setIsSupportedMock()
 	defer restoreIsSupported()
 	pluginNames := []string{testPlugin1, testPlugin2}
@@ -589,7 +601,19 @@ func TestRunPluginsWithCompatiblePreconditionWithValueFirst(t *testing.T) {
 	defaultTime := time.Now()
 	pluginConfigs2 := make([]contracts.PluginState, len(pluginNames))
 
-	preconditions := map[string][]string{"StringEquals": []string{"Linux", "platformType"}}
+	// initial precondition: "StringEquals": ["Linux", "platformType"]
+	parsedPreconditions := map[string][]contracts.PreconditionArgument{
+		"StringEquals": {
+			contracts.PreconditionArgument{
+				InitialArgumentValue:  "Linux",
+				ResolvedArgumentValue: "Linux",
+			},
+			contracts.PreconditionArgument{
+				InitialArgumentValue:  "platformType",
+				ResolvedArgumentValue: "platformType",
+			},
+		},
+	}
 
 	for index, name := range pluginNames {
 
@@ -601,7 +625,7 @@ func TestRunPluginsWithCompatiblePreconditionWithValueFirst(t *testing.T) {
 			PluginID:              name,
 			PluginName:            name,
 			IsPreconditionEnabled: true,
-			Preconditions:         preconditions,
+			Preconditions:         parsedPreconditions,
 		}
 
 		// setup expectations
@@ -660,8 +684,9 @@ func TestRunPluginsWithCompatiblePreconditionWithValueFirst(t *testing.T) {
 	assert.Equal(t, pluginResults, outputs)
 }
 
-// Crossplatform document with incompatible precondition, steps must be skipped
-func TestRunPluginsWithIncompatiblePrecondition(t *testing.T) {
+// Crossplatform document with incompatible platform precondition, steps must be skipped
+// Precondition = "StringEquals": ["platformType", "Windows"]
+func TestRunPluginsWithIncompatiblePlatformPrecondition(t *testing.T) {
 	setIsSupportedMock()
 	defer restoreIsSupported()
 	pluginNames := []string{testPlugin1, testPlugin2}
@@ -678,7 +703,19 @@ func TestRunPluginsWithIncompatiblePrecondition(t *testing.T) {
 	defaultOutput := ""
 	pluginConfigs2 := make([]contracts.PluginState, len(pluginNames))
 
-	preconditions := map[string][]string{"StringEquals": []string{"platformType", "Windows"}}
+	// initial precondition: "StringEquals": ["platformType", "Windows"]
+	parsedPreconditions := map[string][]contracts.PreconditionArgument{
+		"StringEquals": {
+			contracts.PreconditionArgument{
+				InitialArgumentValue:  "platformType",
+				ResolvedArgumentValue: "platformType",
+			},
+			contracts.PreconditionArgument{
+				InitialArgumentValue:  "Windows",
+				ResolvedArgumentValue: "Windows",
+			},
+		},
+	}
 
 	for index, name := range pluginNames {
 
@@ -690,7 +727,7 @@ func TestRunPluginsWithIncompatiblePrecondition(t *testing.T) {
 			PluginID:              name,
 			PluginName:            name,
 			IsPreconditionEnabled: true,
-			Preconditions:         preconditions,
+			Preconditions:         parsedPreconditions,
 		}
 
 		// setup expectations
@@ -700,7 +737,110 @@ func TestRunPluginsWithIncompatiblePrecondition(t *testing.T) {
 			Configuration: config,
 		}
 		pluginResults[name] = &contracts.PluginResult{
-			Output:         "Step execution skipped due to incompatible platform. Step name: " + name,
+			Output:         "Step execution skipped due to unsatisfied preconditions: '\"StringEquals\": [platformType, Windows]'. Step name: " + name,
+			PluginName:     name,
+			PluginID:       name,
+			StartDateTime:  defaultTime,
+			EndDateTime:    defaultTime,
+			StandardOutput: defaultOutput,
+			StandardError:  defaultOutput,
+			Status:         contracts.ResultStatusSkipped,
+		}
+		pluginFactory := new(PluginFactoryMock)
+		pluginFactory.On("Create", mock.Anything).Return(pluginInstances[name], nil)
+		pluginRegistry[name] = pluginFactory
+		pluginConfigs2[index] = pluginConfigs[name]
+	}
+	called := 0
+	ch := make(chan contracts.PluginResult)
+	go func() {
+		for result := range ch {
+			result.EndDateTime = defaultTime
+			result.StartDateTime = defaultTime
+			if called == 0 {
+				assert.Equal(t, result, *pluginResults[testPlugin1])
+			} else if called == 1 {
+				assert.Equal(t, result, *pluginResults[testPlugin2])
+			} else {
+				assert.Fail(t, "there shouldn't be more than 2 update")
+			}
+			called++
+		}
+	}()
+	// call the code we are testing
+	outputs := RunPlugins(ctx, pluginConfigs2, ioConfig, pluginRegistry, ch, cancelFlag)
+	// fix the times expectation.
+	for _, result := range outputs {
+		result.EndDateTime = defaultTime
+		result.StartDateTime = defaultTime
+	}
+
+	// assert that the expectations were met
+	for _, mockPlugin := range pluginInstances {
+		mockPlugin.AssertExpectations(t)
+	}
+	ctx.AssertCalled(t, "Log")
+	assert.Equal(t, pluginResults[testPlugin1], outputs[testPlugin1])
+	assert.Equal(t, pluginResults[testPlugin2], outputs[testPlugin2])
+
+	assert.Equal(t, pluginResults, outputs)
+}
+
+// Crossplatform document preconditions must be forward-compatible for future platform types
+// Preconditions with such OS types will be skipped for now
+// Precondition = "StringEquals": ["platformType", "FutureOS"]
+func TestRunPluginsWithFuturePlatformPrecondition(t *testing.T) {
+	setIsSupportedMock()
+	defer restoreIsSupported()
+	pluginNames := []string{testPlugin1, testPlugin2}
+	pluginConfigs := make(map[string]contracts.PluginState)
+	pluginResults := make(map[string]*contracts.PluginResult)
+	pluginInstances := make(map[string]*PluginMock)
+	pluginRegistry := PluginRegistry{}
+	ioConfig := contracts.IOConfiguration{}
+
+	var cancelFlag task.CancelFlag = task.NewChanneledCancelFlag()
+
+	ctx := context.NewMockDefault()
+	defaultTime := time.Now()
+	defaultOutput := ""
+	pluginConfigs2 := make([]contracts.PluginState, len(pluginNames))
+
+	// initial precondition: "StringEquals": ["platformType", "FutureOS"]
+	parsedPreconditions := map[string][]contracts.PreconditionArgument{
+		"StringEquals": {
+			contracts.PreconditionArgument{
+				InitialArgumentValue:  "platformType",
+				ResolvedArgumentValue: "platformType",
+			},
+			contracts.PreconditionArgument{
+				InitialArgumentValue:  "FutureOS",
+				ResolvedArgumentValue: "FutureOS",
+			},
+		},
+	}
+
+	for index, name := range pluginNames {
+
+		// create an instance of our test object
+		pluginInstances[name] = new(PluginMock)
+
+		// create configuration for execution
+		config := contracts.Configuration{
+			PluginID:              name,
+			PluginName:            name,
+			IsPreconditionEnabled: true,
+			Preconditions:         parsedPreconditions,
+		}
+
+		// setup expectations
+		pluginConfigs[name] = contracts.PluginState{
+			Name:          name,
+			Id:            name,
+			Configuration: config,
+		}
+		pluginResults[name] = &contracts.PluginResult{
+			Output:         "Step execution skipped due to unsatisfied preconditions: '\"StringEquals\": [platformType, FutureOS]'. Step name: " + name,
 			PluginName:     name,
 			PluginID:       name,
 			StartDateTime:  defaultTime,
@@ -753,7 +893,7 @@ func TestRunPluginsWithIncompatiblePrecondition(t *testing.T) {
 func TestRunPluginsWithCompatiblePreconditionButMissingPluginHandler(t *testing.T) {
 	setIsSupportedMock()
 	defer restoreIsSupported()
-	pluginNames := []string{testPlugin1, testPlugin2}
+	pluginNames := []string{testPlugin1, testUnsupportedPlugin, testPlugin2}
 	pluginConfigs := make(map[string]contracts.PluginState)
 	pluginResults := make(map[string]*contracts.PluginResult)
 	pluginInstances := make(map[string]*PluginMock)
@@ -767,7 +907,19 @@ func TestRunPluginsWithCompatiblePreconditionButMissingPluginHandler(t *testing.
 	defaultOutput := ""
 	pluginConfigs2 := make([]contracts.PluginState, len(pluginNames))
 
-	preconditions := map[string][]string{"StringEquals": []string{"platformType", "Linux"}}
+	// initial precondition: "StringEquals": ["platformType", "Linux"]
+	parsedPreconditions := map[string][]contracts.PreconditionArgument{
+		"StringEquals": {
+			contracts.PreconditionArgument{
+				InitialArgumentValue:  "platformType",
+				ResolvedArgumentValue: "platformType",
+			},
+			contracts.PreconditionArgument{
+				InitialArgumentValue:  "Linux",
+				ResolvedArgumentValue: "Linux",
+			},
+		},
+	}
 
 	for index, name := range pluginNames {
 
@@ -779,7 +931,7 @@ func TestRunPluginsWithCompatiblePreconditionButMissingPluginHandler(t *testing.
 			PluginID:              name,
 			PluginName:            name,
 			IsPreconditionEnabled: true,
-			Preconditions:         preconditions,
+			Preconditions:         parsedPreconditions,
 		}
 
 		// setup expectations
@@ -788,16 +940,31 @@ func TestRunPluginsWithCompatiblePreconditionButMissingPluginHandler(t *testing.
 			Id:            name,
 			Configuration: config,
 		}
-		pluginResults[name] = &contracts.PluginResult{
-			Output:         "Step execution skipped due to incompatible platform. Step name: " + name,
-			PluginName:     name,
-			PluginID:       name,
-			StartDateTime:  defaultTime,
-			EndDateTime:    defaultTime,
-			StandardOutput: defaultOutput,
-			StandardError:  defaultOutput,
-			Status:         contracts.ResultStatusSkipped,
+
+		if name == testUnsupportedPlugin {
+			pluginResults[name] = &contracts.PluginResult{
+				Output:         "Step execution skipped due to unsupported plugin: " + name + ". Step name: " + name,
+				PluginName:     name,
+				PluginID:       name,
+				StartDateTime:  defaultTime,
+				EndDateTime:    defaultTime,
+				StandardOutput: defaultOutput,
+				StandardError:  defaultOutput,
+				Status:         contracts.ResultStatusSkipped,
+			}
+		} else {
+			pluginResults[name] = &contracts.PluginResult{
+				Output:        "",
+				PluginID:      name,
+				PluginName:    name,
+				StartDateTime: defaultTime,
+				EndDateTime:   defaultTime,
+			}
+			pluginInstances[name].On("Execute", ctx, pluginConfigs[name].Configuration, cancelFlag, mock.Anything).Return(*pluginResults[name])
 		}
+		pluginFactory := new(PluginFactoryMock)
+		pluginFactory.On("Create", mock.Anything).Return(pluginInstances[name], nil)
+		pluginRegistry[name] = pluginFactory
 
 		pluginConfigs2[index] = pluginConfigs[name]
 	}
@@ -807,12 +974,8 @@ func TestRunPluginsWithCompatiblePreconditionButMissingPluginHandler(t *testing.
 		for result := range ch {
 			result.EndDateTime = defaultTime
 			result.StartDateTime = defaultTime
-			if called == 0 {
-				assert.Equal(t, result, *pluginResults[testPlugin1])
-			} else if called == 1 {
-				assert.Equal(t, result, *pluginResults[testPlugin2])
-			} else {
-				assert.Fail(t, "there shouldn't be more than 2 update")
+			if called > 2 {
+				assert.Fail(t, "there shouldn't be more than 3 update")
 			}
 			called++
 		}
@@ -831,6 +994,7 @@ func TestRunPluginsWithCompatiblePreconditionButMissingPluginHandler(t *testing.
 	}
 	ctx.AssertCalled(t, "Log")
 	assert.Equal(t, pluginResults[testPlugin1], outputs[testPlugin1])
+	assert.Equal(t, pluginResults[testUnsupportedPlugin], outputs[testUnsupportedPlugin])
 	assert.Equal(t, pluginResults[testPlugin2], outputs[testPlugin2])
 
 	assert.Equal(t, pluginResults, outputs)
@@ -854,9 +1018,28 @@ func TestRunPluginsWithMoreThanOnePrecondition(t *testing.T) {
 	defaultOutput := ""
 	pluginConfigs2 := make([]contracts.PluginState, len(pluginNames))
 
-	preconditions := map[string][]string{
-		"StringEquals": []string{"platformType", "Linux"},
-		"foo":          []string{"operand1", "operand2"},
+	// initial precondition: {"StringEquals": ["Linux", "platformType"], "foo": ["operand1", "operand2"]}
+	parsedPreconditions := map[string][]contracts.PreconditionArgument{
+		"StringEquals": {
+			contracts.PreconditionArgument{
+				InitialArgumentValue:  "Linux",
+				ResolvedArgumentValue: "Linux",
+			},
+			contracts.PreconditionArgument{
+				InitialArgumentValue:  "platformType",
+				ResolvedArgumentValue: "platformType",
+			},
+		},
+		"foo": {
+			contracts.PreconditionArgument{
+				InitialArgumentValue:  "operand1",
+				ResolvedArgumentValue: "operand1",
+			},
+			contracts.PreconditionArgument{
+				InitialArgumentValue:  "operand2",
+				ResolvedArgumentValue: "operand2",
+			},
+		},
 	}
 
 	for index, name := range pluginNames {
@@ -869,7 +1052,7 @@ func TestRunPluginsWithMoreThanOnePrecondition(t *testing.T) {
 			PluginID:              name,
 			PluginName:            name,
 			IsPreconditionEnabled: true,
-			Preconditions:         preconditions,
+			Preconditions:         parsedPreconditions,
 		}
 
 		// setup expectations
@@ -880,7 +1063,7 @@ func TestRunPluginsWithMoreThanOnePrecondition(t *testing.T) {
 		}
 
 		pluginError := fmt.Sprintf(
-			"Unrecognized precondition(s): '\"foo\": [operand1 operand2]', please update agent to latest version. Step name: %s",
+			"Unrecognized precondition(s): 'unrecognized operator: \"foo\"', please update agent to latest version. Step name: %s",
 			name)
 
 		pluginResults[name] = &contracts.PluginResult{
@@ -952,7 +1135,19 @@ func TestRunPluginsWithUnrecognizedPreconditionOperator(t *testing.T) {
 	defaultOutput := ""
 	pluginConfigs2 := make([]contracts.PluginState, len(pluginNames))
 
-	preconditions := map[string][]string{"foo": []string{"platformType", "Linux"}}
+	// initial precondition: "foo": ["platformType", "Linux"]
+	parsedPreconditions := map[string][]contracts.PreconditionArgument{
+		"foo": {
+			contracts.PreconditionArgument{
+				InitialArgumentValue:  "platformType",
+				ResolvedArgumentValue: "platformType",
+			},
+			contracts.PreconditionArgument{
+				InitialArgumentValue:  "Linux",
+				ResolvedArgumentValue: "Linux",
+			},
+		},
+	}
 
 	for index, name := range pluginNames {
 
@@ -964,7 +1159,7 @@ func TestRunPluginsWithUnrecognizedPreconditionOperator(t *testing.T) {
 			PluginID:              name,
 			PluginName:            name,
 			IsPreconditionEnabled: true,
-			Preconditions:         preconditions,
+			Preconditions:         parsedPreconditions,
 		}
 
 		// setup expectations
@@ -975,7 +1170,7 @@ func TestRunPluginsWithUnrecognizedPreconditionOperator(t *testing.T) {
 		}
 
 		pluginError := fmt.Sprintf(
-			"Unrecognized precondition(s): '\"foo\": [platformType Linux]', please update agent to latest version. Step name: %s",
+			"Unrecognized precondition(s): 'unrecognized operator: \"foo\"', please update agent to latest version. Step name: %s",
 			name)
 
 		pluginResults[name] = &contracts.PluginResult{
@@ -992,102 +1187,6 @@ func TestRunPluginsWithUnrecognizedPreconditionOperator(t *testing.T) {
 		pluginFactory.On("Create", mock.Anything).Return(pluginInstances[name], nil)
 		pluginRegistry[name] = pluginFactory
 
-		pluginConfigs2[index] = pluginConfigs[name]
-	}
-	called := 0
-	ch := make(chan contracts.PluginResult)
-	go func() {
-		for result := range ch {
-			result.EndDateTime = defaultTime
-			result.StartDateTime = defaultTime
-			if called == 0 {
-				assert.Equal(t, result, *pluginResults[testPlugin1])
-			} else if called == 1 {
-				assert.Equal(t, result, *pluginResults[testPlugin2])
-			} else {
-				assert.Fail(t, "there shouldn't be more than 2 update")
-			}
-			called++
-		}
-	}()
-	// call the code we are testing
-	outputs := RunPlugins(ctx, pluginConfigs2, ioConfig, pluginRegistry, ch, cancelFlag)
-
-	// fix the times expectation.
-	for _, result := range outputs {
-		result.EndDateTime = defaultTime
-		result.StartDateTime = defaultTime
-	}
-
-	// assert that the expectations were met
-	for _, mockPlugin := range pluginInstances {
-		mockPlugin.AssertExpectations(t)
-	}
-	ctx.AssertCalled(t, "Log")
-	assert.Equal(t, pluginResults[testPlugin1], outputs[testPlugin1])
-	assert.Equal(t, pluginResults[testPlugin2], outputs[testPlugin2])
-
-	assert.Equal(t, pluginResults, outputs)
-}
-
-// Crossplatform document with unrecognized precondition operand, steps must fail
-func TestRunPluginsWithUnrecognizedPreconditionOperand(t *testing.T) {
-	setIsSupportedMock()
-	defer restoreIsSupported()
-	pluginNames := []string{testPlugin1, testPlugin2}
-	pluginConfigs := make(map[string]contracts.PluginState)
-	pluginResults := make(map[string]*contracts.PluginResult)
-	pluginInstances := make(map[string]*PluginMock)
-	pluginRegistry := PluginRegistry{}
-	ioConfig := contracts.IOConfiguration{}
-
-	var cancelFlag task.CancelFlag = task.NewChanneledCancelFlag()
-
-	ctx := context.NewMockDefault()
-	defaultTime := time.Now()
-	defaultOutput := ""
-	pluginConfigs2 := make([]contracts.PluginState, len(pluginNames))
-
-	preconditions := map[string][]string{"StringEquals": []string{"foo", "Linux"}}
-
-	for index, name := range pluginNames {
-
-		// create an instance of our test object
-		pluginInstances[name] = new(PluginMock)
-
-		// create configuration for execution
-		config := contracts.Configuration{
-			PluginID:              name,
-			PluginName:            name,
-			IsPreconditionEnabled: true,
-			Preconditions:         preconditions,
-		}
-
-		// setup expectations
-		pluginConfigs[name] = contracts.PluginState{
-			Name:          name,
-			Id:            name,
-			Configuration: config,
-		}
-
-		pluginError := fmt.Sprintf(
-			"Unrecognized precondition(s): '\"StringEquals\": [foo Linux]', please update agent to latest version. Step name: %s",
-			name)
-
-		pluginResults[name] = &contracts.PluginResult{
-			PluginName:     name,
-			PluginID:       name,
-			StartDateTime:  defaultTime,
-			EndDateTime:    defaultTime,
-			StandardOutput: defaultOutput,
-			StandardError:  defaultOutput,
-			Status:         contracts.ResultStatusFailed,
-			Error:          pluginError,
-		}
-
-		pluginFactory := new(PluginFactoryMock)
-		pluginFactory.On("Create", mock.Anything).Return(pluginInstances[name], nil)
-		pluginRegistry[name] = pluginFactory
 		pluginConfigs2[index] = pluginConfigs[name]
 	}
 	called := 0
@@ -1145,7 +1244,19 @@ func TestRunPluginsWithUnrecognizedPreconditionDuplicateVariable(t *testing.T) {
 	defaultOutput := ""
 	pluginConfigs2 := make([]contracts.PluginState, len(pluginNames))
 
-	preconditions := map[string][]string{"StringEquals": []string{"platformType", "platformType"}}
+	// initial precondition: "StringEquals": ["platformType", "platformType"]
+	parsedPreconditions := map[string][]contracts.PreconditionArgument{
+		"StringEquals": {
+			contracts.PreconditionArgument{
+				InitialArgumentValue:  "platformType",
+				ResolvedArgumentValue: "platformType",
+			},
+			contracts.PreconditionArgument{
+				InitialArgumentValue:  "platformType",
+				ResolvedArgumentValue: "platformType",
+			},
+		},
+	}
 
 	for index, name := range pluginNames {
 
@@ -1157,7 +1268,7 @@ func TestRunPluginsWithUnrecognizedPreconditionDuplicateVariable(t *testing.T) {
 			PluginID:              name,
 			PluginName:            name,
 			IsPreconditionEnabled: true,
-			Preconditions:         preconditions,
+			Preconditions:         parsedPreconditions,
 		}
 
 		// setup expectations
@@ -1224,6 +1335,1490 @@ func TestRunPluginsWithUnrecognizedPreconditionDuplicateVariable(t *testing.T) {
 	assert.Equal(t, pluginResults, outputs)
 }
 
+// Crossplatform document with invalid precondition, steps must fail
+// Precondition: "StringEquals": ["{{ paramName }}", "{{ paramName }}"]
+func TestRunPluginsWithUnrecognizedPreconditionDuplicateParameter(t *testing.T) {
+	setIsSupportedMock()
+	defer restoreIsSupported()
+	pluginNames := []string{testPlugin1, testPlugin2}
+	pluginConfigs := make(map[string]contracts.PluginState)
+	pluginResults := make(map[string]*contracts.PluginResult)
+	pluginInstances := make(map[string]*PluginMock)
+	pluginRegistry := PluginRegistry{}
+	ioConfig := contracts.IOConfiguration{}
+
+	var cancelFlag task.CancelFlag = task.NewChanneledCancelFlag()
+
+	ctx := context.NewMockDefault()
+	defaultTime := time.Now()
+	defaultOutput := ""
+	pluginConfigs2 := make([]contracts.PluginState, len(pluginNames))
+
+	// initial precondition: "StringEquals": ["{{ paramName }}", "{{ paramName }}"]
+	parsedPreconditions := map[string][]contracts.PreconditionArgument{
+		"StringEquals": {
+			contracts.PreconditionArgument{
+				InitialArgumentValue:  "{{ paramName }}",
+				ResolvedArgumentValue: "paramValue",
+			},
+			contracts.PreconditionArgument{
+				InitialArgumentValue:  "{{ paramName }}",
+				ResolvedArgumentValue: "paramValue",
+			},
+		},
+	}
+
+	for index, name := range pluginNames {
+
+		// create an instance of our test object
+		pluginInstances[name] = new(PluginMock)
+
+		// create configuration for execution
+		config := contracts.Configuration{
+			PluginID:              name,
+			PluginName:            name,
+			IsPreconditionEnabled: true,
+			Preconditions:         parsedPreconditions,
+		}
+
+		// setup expectations
+		pluginConfigs[name] = contracts.PluginState{
+			Name:          name,
+			Id:            name,
+			Configuration: config,
+		}
+
+		pluginError := fmt.Sprintf(
+			"Unrecognized precondition(s): '\"StringEquals\": operator's arguments can't be identical', please update agent to latest version. Step name: %s",
+			name)
+
+		pluginResults[name] = &contracts.PluginResult{
+			PluginName:     name,
+			PluginID:       name,
+			StartDateTime:  defaultTime,
+			EndDateTime:    defaultTime,
+			StandardOutput: defaultOutput,
+			StandardError:  defaultOutput,
+			Status:         contracts.ResultStatusFailed,
+			Error:          pluginError,
+		}
+
+		pluginFactory := new(PluginFactoryMock)
+		pluginFactory.On("Create", mock.Anything).Return(pluginInstances[name], nil)
+		pluginRegistry[name] = pluginFactory
+
+		pluginConfigs2[index] = pluginConfigs[name]
+	}
+	called := 0
+	ch := make(chan contracts.PluginResult)
+	go func() {
+		for result := range ch {
+			result.EndDateTime = defaultTime
+			result.StartDateTime = defaultTime
+			if called == 0 {
+				assert.Equal(t, result, *pluginResults[testPlugin1])
+			} else if called == 1 {
+				assert.Equal(t, result, *pluginResults[testPlugin2])
+			} else {
+				assert.Fail(t, "there shouldn't be more than 2 update")
+			}
+			called++
+		}
+	}()
+	// call the code we are testing
+	outputs := RunPlugins(ctx, pluginConfigs2, ioConfig, pluginRegistry, ch, cancelFlag)
+
+	// fix the times expectation.
+	for _, result := range outputs {
+		result.EndDateTime = defaultTime
+		result.StartDateTime = defaultTime
+	}
+
+	// assert that the expectations were met
+	for _, mockPlugin := range pluginInstances {
+		mockPlugin.AssertExpectations(t)
+	}
+	ctx.AssertCalled(t, "Log")
+	assert.Equal(t, pluginResults[testPlugin1], outputs[testPlugin1])
+	assert.Equal(t, pluginResults[testPlugin2], outputs[testPlugin2])
+
+	assert.Equal(t, pluginResults, outputs)
+}
+
+// Crossplatform document with invalid precondition, steps must fail
+// Precondition: "StringEquals": ["foo", "foo"]
+func TestRunPluginsWithUnrecognizedPreconditionDuplicateConstant(t *testing.T) {
+	setIsSupportedMock()
+	defer restoreIsSupported()
+	pluginNames := []string{testPlugin1, testPlugin2}
+	pluginConfigs := make(map[string]contracts.PluginState)
+	pluginResults := make(map[string]*contracts.PluginResult)
+	pluginInstances := make(map[string]*PluginMock)
+	pluginRegistry := PluginRegistry{}
+	ioConfig := contracts.IOConfiguration{}
+
+	var cancelFlag task.CancelFlag = task.NewChanneledCancelFlag()
+
+	ctx := context.NewMockDefault()
+	defaultTime := time.Now()
+	defaultOutput := ""
+	pluginConfigs2 := make([]contracts.PluginState, len(pluginNames))
+
+	// initial precondition: "StringEquals": ["foo", "foo"]
+	parsedPreconditions := map[string][]contracts.PreconditionArgument{
+		"StringEquals": {
+			contracts.PreconditionArgument{
+				InitialArgumentValue:  "foo",
+				ResolvedArgumentValue: "foo",
+			},
+			contracts.PreconditionArgument{
+				InitialArgumentValue:  "foo",
+				ResolvedArgumentValue: "foo",
+			},
+		},
+	}
+
+	for index, name := range pluginNames {
+
+		// create an instance of our test object
+		pluginInstances[name] = new(PluginMock)
+
+		// create configuration for execution
+		config := contracts.Configuration{
+			PluginID:              name,
+			PluginName:            name,
+			IsPreconditionEnabled: true,
+			Preconditions:         parsedPreconditions,
+		}
+
+		// setup expectations
+		pluginConfigs[name] = contracts.PluginState{
+			Name:          name,
+			Id:            name,
+			Configuration: config,
+		}
+
+		pluginError := fmt.Sprintf(
+			"Unrecognized precondition(s): '\"StringEquals\": operator's arguments can't be identical', please update agent to latest version. Step name: %s",
+			name)
+
+		pluginResults[name] = &contracts.PluginResult{
+			PluginName:     name,
+			PluginID:       name,
+			StartDateTime:  defaultTime,
+			EndDateTime:    defaultTime,
+			StandardOutput: defaultOutput,
+			StandardError:  defaultOutput,
+			Status:         contracts.ResultStatusFailed,
+			Error:          pluginError,
+		}
+
+		pluginFactory := new(PluginFactoryMock)
+		pluginFactory.On("Create", mock.Anything).Return(pluginInstances[name], nil)
+		pluginRegistry[name] = pluginFactory
+
+		pluginConfigs2[index] = pluginConfigs[name]
+	}
+	called := 0
+	ch := make(chan contracts.PluginResult)
+	go func() {
+		for result := range ch {
+			result.EndDateTime = defaultTime
+			result.StartDateTime = defaultTime
+			if called == 0 {
+				assert.Equal(t, result, *pluginResults[testPlugin1])
+			} else if called == 1 {
+				assert.Equal(t, result, *pluginResults[testPlugin2])
+			} else {
+				assert.Fail(t, "there shouldn't be more than 2 update")
+			}
+			called++
+		}
+	}()
+	// call the code we are testing
+	outputs := RunPlugins(ctx, pluginConfigs2, ioConfig, pluginRegistry, ch, cancelFlag)
+
+	// fix the times expectation.
+	for _, result := range outputs {
+		result.EndDateTime = defaultTime
+		result.StartDateTime = defaultTime
+	}
+
+	// assert that the expectations were met
+	for _, mockPlugin := range pluginInstances {
+		mockPlugin.AssertExpectations(t)
+	}
+	ctx.AssertCalled(t, "Log")
+	assert.Equal(t, pluginResults[testPlugin1], outputs[testPlugin1])
+	assert.Equal(t, pluginResults[testPlugin2], outputs[testPlugin2])
+
+	assert.Equal(t, pluginResults, outputs)
+}
+
+// Crossplatform document with invalid precondition, steps must fail
+// Precondition: "StringEquals": ["{{ ssm:parameter }}", "bar"]
+func TestRunPluginsWithUnrecognizedPreconditionSSMParameter(t *testing.T) {
+	setIsSupportedMock()
+	defer restoreIsSupported()
+	pluginNames := []string{testPlugin1, testPlugin2}
+	pluginConfigs := make(map[string]contracts.PluginState)
+	pluginResults := make(map[string]*contracts.PluginResult)
+	pluginInstances := make(map[string]*PluginMock)
+	pluginRegistry := PluginRegistry{}
+	ioConfig := contracts.IOConfiguration{}
+
+	var cancelFlag task.CancelFlag = task.NewChanneledCancelFlag()
+
+	ctx := context.NewMockDefault()
+	defaultTime := time.Now()
+	defaultOutput := ""
+	pluginConfigs2 := make([]contracts.PluginState, len(pluginNames))
+
+	// initial precondition: "StringEquals": ["{{ ssm:parameter }}", "bar"]
+	parsedPreconditions := map[string][]contracts.PreconditionArgument{
+		"StringEquals": {
+			contracts.PreconditionArgument{
+				InitialArgumentValue:  "{{ ssm:parameter }}",
+				ResolvedArgumentValue: "{{ ssm:parameter }}",
+			},
+			contracts.PreconditionArgument{
+				InitialArgumentValue:  "bar",
+				ResolvedArgumentValue: "bar",
+			},
+		},
+	}
+
+	for index, name := range pluginNames {
+
+		// create an instance of our test object
+		pluginInstances[name] = new(PluginMock)
+
+		// create configuration for execution
+		config := contracts.Configuration{
+			PluginID:              name,
+			PluginName:            name,
+			IsPreconditionEnabled: true,
+			Preconditions:         parsedPreconditions,
+		}
+
+		// setup expectations
+		pluginConfigs[name] = contracts.PluginState{
+			Name:          name,
+			Id:            name,
+			Configuration: config,
+		}
+
+		pluginError := fmt.Sprintf(
+			"Unrecognized precondition(s): '\"StringEquals\": operator's arguments can't contain SSM parameters', please update agent to latest version. Step name: %s",
+			name)
+
+		pluginResults[name] = &contracts.PluginResult{
+			PluginName:     name,
+			PluginID:       name,
+			StartDateTime:  defaultTime,
+			EndDateTime:    defaultTime,
+			StandardOutput: defaultOutput,
+			StandardError:  defaultOutput,
+			Status:         contracts.ResultStatusFailed,
+			Error:          pluginError,
+		}
+
+		pluginFactory := new(PluginFactoryMock)
+		pluginFactory.On("Create", mock.Anything).Return(pluginInstances[name], nil)
+		pluginRegistry[name] = pluginFactory
+
+		pluginConfigs2[index] = pluginConfigs[name]
+	}
+	called := 0
+	ch := make(chan contracts.PluginResult)
+	go func() {
+		for result := range ch {
+			result.EndDateTime = defaultTime
+			result.StartDateTime = defaultTime
+			if called == 0 {
+				assert.Equal(t, result, *pluginResults[testPlugin1])
+			} else if called == 1 {
+				assert.Equal(t, result, *pluginResults[testPlugin2])
+			} else {
+				assert.Fail(t, "there shouldn't be more than 2 update")
+			}
+			called++
+		}
+	}()
+	// call the code we are testing
+	outputs := RunPlugins(ctx, pluginConfigs2, ioConfig, pluginRegistry, ch, cancelFlag)
+
+	// fix the times expectation.
+	for _, result := range outputs {
+		result.EndDateTime = defaultTime
+		result.StartDateTime = defaultTime
+	}
+
+	// assert that the expectations were met
+	for _, mockPlugin := range pluginInstances {
+		mockPlugin.AssertExpectations(t)
+	}
+	ctx.AssertCalled(t, "Log")
+	assert.Equal(t, pluginResults[testPlugin1], outputs[testPlugin1])
+	assert.Equal(t, pluginResults[testPlugin2], outputs[testPlugin2])
+
+	assert.Equal(t, pluginResults, outputs)
+}
+
+// Crossplatform document with invalid precondition, steps must fail
+// Precondition: "StringEquals": ["{{ ssm-secure:parameter }}", "bar"]
+func TestRunPluginsWithUnrecognizedPreconditionSecureSSMParameter(t *testing.T) {
+	setIsSupportedMock()
+	defer restoreIsSupported()
+	pluginNames := []string{testPlugin1, testPlugin2}
+	pluginConfigs := make(map[string]contracts.PluginState)
+	pluginResults := make(map[string]*contracts.PluginResult)
+	pluginInstances := make(map[string]*PluginMock)
+	pluginRegistry := PluginRegistry{}
+	ioConfig := contracts.IOConfiguration{}
+
+	var cancelFlag task.CancelFlag = task.NewChanneledCancelFlag()
+
+	ctx := context.NewMockDefault()
+	defaultTime := time.Now()
+	defaultOutput := ""
+	pluginConfigs2 := make([]contracts.PluginState, len(pluginNames))
+
+	// initial precondition: "StringEquals": ["{{ ssm-secure:parameter }}", "bar"]
+	parsedPreconditions := map[string][]contracts.PreconditionArgument{
+		"StringEquals": {
+			contracts.PreconditionArgument{
+				InitialArgumentValue:  "{{ ssm-secure:parameter }}",
+				ResolvedArgumentValue: "{{ ssm-secure:parameter }}",
+			},
+			contracts.PreconditionArgument{
+				InitialArgumentValue:  "bar",
+				ResolvedArgumentValue: "bar",
+			},
+		},
+	}
+
+	for index, name := range pluginNames {
+
+		// create an instance of our test object
+		pluginInstances[name] = new(PluginMock)
+
+		// create configuration for execution
+		config := contracts.Configuration{
+			PluginID:              name,
+			PluginName:            name,
+			IsPreconditionEnabled: true,
+			Preconditions:         parsedPreconditions,
+		}
+
+		// setup expectations
+		pluginConfigs[name] = contracts.PluginState{
+			Name:          name,
+			Id:            name,
+			Configuration: config,
+		}
+
+		pluginError := fmt.Sprintf(
+			"Unrecognized precondition(s): '\"StringEquals\": operator's arguments can't contain secure SSM parameters', please update agent to latest version. Step name: %s",
+			name)
+
+		pluginResults[name] = &contracts.PluginResult{
+			PluginName:     name,
+			PluginID:       name,
+			StartDateTime:  defaultTime,
+			EndDateTime:    defaultTime,
+			StandardOutput: defaultOutput,
+			StandardError:  defaultOutput,
+			Status:         contracts.ResultStatusFailed,
+			Error:          pluginError,
+		}
+
+		pluginFactory := new(PluginFactoryMock)
+		pluginFactory.On("Create", mock.Anything).Return(pluginInstances[name], nil)
+		pluginRegistry[name] = pluginFactory
+
+		pluginConfigs2[index] = pluginConfigs[name]
+	}
+	called := 0
+	ch := make(chan contracts.PluginResult)
+	go func() {
+		for result := range ch {
+			result.EndDateTime = defaultTime
+			result.StartDateTime = defaultTime
+			if called == 0 {
+				assert.Equal(t, result, *pluginResults[testPlugin1])
+			} else if called == 1 {
+				assert.Equal(t, result, *pluginResults[testPlugin2])
+			} else {
+				assert.Fail(t, "there shouldn't be more than 2 update")
+			}
+			called++
+		}
+	}()
+	// call the code we are testing
+	outputs := RunPlugins(ctx, pluginConfigs2, ioConfig, pluginRegistry, ch, cancelFlag)
+
+	// fix the times expectation.
+	for _, result := range outputs {
+		result.EndDateTime = defaultTime
+		result.StartDateTime = defaultTime
+	}
+
+	// assert that the expectations were met
+	for _, mockPlugin := range pluginInstances {
+		mockPlugin.AssertExpectations(t)
+	}
+	ctx.AssertCalled(t, "Log")
+	assert.Equal(t, pluginResults[testPlugin1], outputs[testPlugin1])
+	assert.Equal(t, pluginResults[testPlugin2], outputs[testPlugin2])
+
+	assert.Equal(t, pluginResults, outputs)
+}
+
+// Crossplatform document with invalid precondition, steps must fail
+// Precondition: "StringEquals": ["foo", "bar"]
+func TestRunPluginsWithUnrecognizedPreconditionNoDocumentParameters(t *testing.T) {
+	setIsSupportedMock()
+	defer restoreIsSupported()
+	pluginNames := []string{testPlugin1, testPlugin2}
+	pluginConfigs := make(map[string]contracts.PluginState)
+	pluginResults := make(map[string]*contracts.PluginResult)
+	pluginInstances := make(map[string]*PluginMock)
+	pluginRegistry := PluginRegistry{}
+	ioConfig := contracts.IOConfiguration{}
+
+	var cancelFlag task.CancelFlag = task.NewChanneledCancelFlag()
+
+	ctx := context.NewMockDefault()
+	defaultTime := time.Now()
+	defaultOutput := ""
+	pluginConfigs2 := make([]contracts.PluginState, len(pluginNames))
+
+	// initial precondition: "StringEquals": ["foo", "bar"]
+	parsedPreconditions := map[string][]contracts.PreconditionArgument{
+		"StringEquals": {
+			contracts.PreconditionArgument{
+				InitialArgumentValue:  "foo",
+				ResolvedArgumentValue: "foo",
+			},
+			contracts.PreconditionArgument{
+				InitialArgumentValue:  "bar",
+				ResolvedArgumentValue: "bar",
+			},
+		},
+	}
+
+	for index, name := range pluginNames {
+
+		// create an instance of our test object
+		pluginInstances[name] = new(PluginMock)
+
+		// create configuration for execution
+		config := contracts.Configuration{
+			PluginID:              name,
+			PluginName:            name,
+			IsPreconditionEnabled: true,
+			Preconditions:         parsedPreconditions,
+		}
+
+		// setup expectations
+		pluginConfigs[name] = contracts.PluginState{
+			Name:          name,
+			Id:            name,
+			Configuration: config,
+		}
+
+		pluginError := fmt.Sprintf(
+			"Unrecognized precondition(s): '\"StringEquals\": at least one of operator's arguments must contain a valid document parameter', please update agent to latest version. Step name: %s",
+			name)
+
+		pluginResults[name] = &contracts.PluginResult{
+			PluginName:     name,
+			PluginID:       name,
+			StartDateTime:  defaultTime,
+			EndDateTime:    defaultTime,
+			StandardOutput: defaultOutput,
+			StandardError:  defaultOutput,
+			Status:         contracts.ResultStatusFailed,
+			Error:          pluginError,
+		}
+
+		pluginFactory := new(PluginFactoryMock)
+		pluginFactory.On("Create", mock.Anything).Return(pluginInstances[name], nil)
+		pluginRegistry[name] = pluginFactory
+
+		pluginConfigs2[index] = pluginConfigs[name]
+	}
+	called := 0
+	ch := make(chan contracts.PluginResult)
+	go func() {
+		for result := range ch {
+			result.EndDateTime = defaultTime
+			result.StartDateTime = defaultTime
+			if called == 0 {
+				assert.Equal(t, result, *pluginResults[testPlugin1])
+			} else if called == 1 {
+				assert.Equal(t, result, *pluginResults[testPlugin2])
+			} else {
+				assert.Fail(t, "there shouldn't be more than 2 update")
+			}
+			called++
+		}
+	}()
+	// call the code we are testing
+	outputs := RunPlugins(ctx, pluginConfigs2, ioConfig, pluginRegistry, ch, cancelFlag)
+
+	// fix the times expectation.
+	for _, result := range outputs {
+		result.EndDateTime = defaultTime
+		result.StartDateTime = defaultTime
+	}
+
+	// assert that the expectations were met
+	for _, mockPlugin := range pluginInstances {
+		mockPlugin.AssertExpectations(t)
+	}
+	ctx.AssertCalled(t, "Log")
+	assert.Equal(t, pluginResults[testPlugin1], outputs[testPlugin1])
+	assert.Equal(t, pluginResults[testPlugin2], outputs[testPlugin2])
+
+	assert.Equal(t, pluginResults, outputs)
+}
+
+// Crossplatform document with invalid precondition, steps must fail
+// Precondition: "StringEquals": ["{{ unknown }} foo", "{{ unknown }} foo"]
+func TestRunPluginsWithUnrecognizedPreconditionUnrecognizedParameter(t *testing.T) {
+	setIsSupportedMock()
+	defer restoreIsSupported()
+	pluginNames := []string{testPlugin1, testPlugin2}
+	pluginConfigs := make(map[string]contracts.PluginState)
+	pluginResults := make(map[string]*contracts.PluginResult)
+	pluginInstances := make(map[string]*PluginMock)
+	pluginRegistry := PluginRegistry{}
+	ioConfig := contracts.IOConfiguration{}
+
+	var cancelFlag task.CancelFlag = task.NewChanneledCancelFlag()
+
+	ctx := context.NewMockDefault()
+	defaultTime := time.Now()
+	defaultOutput := ""
+	pluginConfigs2 := make([]contracts.PluginState, len(pluginNames))
+
+	// initial precondition: "StringEquals": ["{{ unknown }}", "bar"]
+	parsedPreconditions := map[string][]contracts.PreconditionArgument{
+		"StringEquals": {
+			contracts.PreconditionArgument{
+				InitialArgumentValue:  "{{ unknown }}",
+				ResolvedArgumentValue: "{{ unknown }}",
+			},
+			contracts.PreconditionArgument{
+				InitialArgumentValue:  "bar",
+				ResolvedArgumentValue: "bar",
+			},
+		},
+	}
+
+	for index, name := range pluginNames {
+
+		// create an instance of our test object
+		pluginInstances[name] = new(PluginMock)
+
+		// create configuration for execution
+		config := contracts.Configuration{
+			PluginID:              name,
+			PluginName:            name,
+			IsPreconditionEnabled: true,
+			Preconditions:         parsedPreconditions,
+		}
+
+		// setup expectations
+		pluginConfigs[name] = contracts.PluginState{
+			Name:          name,
+			Id:            name,
+			Configuration: config,
+		}
+
+		pluginError := fmt.Sprintf(
+			"Unrecognized precondition(s): '\"StringEquals\": at least one of operator's arguments must contain a valid document parameter', please update agent to latest version. Step name: %s",
+			name)
+
+		pluginResults[name] = &contracts.PluginResult{
+			PluginName:     name,
+			PluginID:       name,
+			StartDateTime:  defaultTime,
+			EndDateTime:    defaultTime,
+			StandardOutput: defaultOutput,
+			StandardError:  defaultOutput,
+			Status:         contracts.ResultStatusFailed,
+			Error:          pluginError,
+		}
+
+		pluginFactory := new(PluginFactoryMock)
+		pluginFactory.On("Create", mock.Anything).Return(pluginInstances[name], nil)
+		pluginRegistry[name] = pluginFactory
+
+		pluginConfigs2[index] = pluginConfigs[name]
+	}
+	called := 0
+	ch := make(chan contracts.PluginResult)
+	go func() {
+		for result := range ch {
+			result.EndDateTime = defaultTime
+			result.StartDateTime = defaultTime
+			if called == 0 {
+				assert.Equal(t, result, *pluginResults[testPlugin1])
+			} else if called == 1 {
+				assert.Equal(t, result, *pluginResults[testPlugin2])
+			} else {
+				assert.Fail(t, "there shouldn't be more than 2 update")
+			}
+			called++
+		}
+	}()
+	// call the code we are testing
+	outputs := RunPlugins(ctx, pluginConfigs2, ioConfig, pluginRegistry, ch, cancelFlag)
+
+	// fix the times expectation.
+	for _, result := range outputs {
+		result.EndDateTime = defaultTime
+		result.StartDateTime = defaultTime
+	}
+
+	// assert that the expectations were met
+	for _, mockPlugin := range pluginInstances {
+		mockPlugin.AssertExpectations(t)
+	}
+	ctx.AssertCalled(t, "Log")
+	assert.Equal(t, pluginResults[testPlugin1], outputs[testPlugin1])
+	assert.Equal(t, pluginResults[testPlugin2], outputs[testPlugin2])
+
+	assert.Equal(t, pluginResults, outputs)
+}
+
+// Crossplatform document with platformType and document parameters should fail
+// Precondition: "StringEquals": ["platformType", "{{ platformValue }}=Linux"]
+func TestRunPluginsPlatformPreconditionWithDocumentParameters(t *testing.T) {
+	setIsSupportedMock()
+	defer restoreIsSupported()
+	pluginNames := []string{testPlugin1, testPlugin2}
+	pluginConfigs := make(map[string]contracts.PluginState)
+	pluginResults := make(map[string]*contracts.PluginResult)
+	pluginInstances := make(map[string]*PluginMock)
+	pluginRegistry := PluginRegistry{}
+	ioConfig := contracts.IOConfiguration{}
+
+	var cancelFlag task.CancelFlag = task.NewChanneledCancelFlag()
+
+	ctx := context.NewMockDefault()
+	defaultTime := time.Now()
+	defaultOutput := ""
+	pluginConfigs2 := make([]contracts.PluginState, len(pluginNames))
+
+	// initial precondition: "StringEquals": ["platformType", "{{ platformValue }}"]
+	parsedPreconditions := map[string][]contracts.PreconditionArgument{
+		"StringEquals": {
+			contracts.PreconditionArgument{
+				InitialArgumentValue:  "platformType",
+				ResolvedArgumentValue: "platformType",
+			},
+			contracts.PreconditionArgument{
+				InitialArgumentValue:  "{{ platformValue }}",
+				ResolvedArgumentValue: "Linux",
+			},
+		},
+	}
+
+	for index, name := range pluginNames {
+
+		// create an instance of our test object
+		pluginInstances[name] = new(PluginMock)
+
+		// create configuration for execution
+		config := contracts.Configuration{
+			PluginID:              name,
+			PluginName:            name,
+			IsPreconditionEnabled: true,
+			Preconditions:         parsedPreconditions,
+		}
+
+		// setup expectations
+		pluginConfigs[name] = contracts.PluginState{
+			Name:          name,
+			Id:            name,
+			Configuration: config,
+		}
+
+		pluginError := fmt.Sprintf(
+			"Unrecognized precondition(s): '\"StringEquals\": the second argument for the platformType variable can't contain document parameters', please update agent to latest version. Step name: %s",
+			name)
+
+		pluginResults[name] = &contracts.PluginResult{
+			PluginName:     name,
+			PluginID:       name,
+			StartDateTime:  defaultTime,
+			EndDateTime:    defaultTime,
+			StandardOutput: defaultOutput,
+			StandardError:  defaultOutput,
+			Status:         contracts.ResultStatusFailed,
+			Error:          pluginError,
+		}
+
+		pluginFactory := new(PluginFactoryMock)
+		pluginFactory.On("Create", mock.Anything).Return(pluginInstances[name], nil)
+		pluginRegistry[name] = pluginFactory
+
+		pluginConfigs2[index] = pluginConfigs[name]
+	}
+	called := 0
+	ch := make(chan contracts.PluginResult)
+	go func() {
+		for result := range ch {
+			result.EndDateTime = defaultTime
+			result.StartDateTime = defaultTime
+			if called == 0 {
+				assert.Equal(t, result, *pluginResults[testPlugin1])
+			} else if called == 1 {
+				assert.Equal(t, result, *pluginResults[testPlugin2])
+			} else {
+				assert.Fail(t, "there shouldn't be more than 2 update")
+			}
+			called++
+		}
+	}()
+	// call the code we are testing
+	outputs := RunPlugins(ctx, pluginConfigs2, ioConfig, pluginRegistry, ch, cancelFlag)
+
+	// fix the times expectation.
+	for _, result := range outputs {
+		result.EndDateTime = defaultTime
+		result.StartDateTime = defaultTime
+	}
+
+	// assert that the expectations were met
+	for _, mockPlugin := range pluginInstances {
+		mockPlugin.AssertExpectations(t)
+	}
+	ctx.AssertCalled(t, "Log")
+	assert.Equal(t, pluginResults[testPlugin1], outputs[testPlugin1])
+	assert.Equal(t, pluginResults[testPlugin2], outputs[testPlugin2])
+
+	assert.Equal(t, pluginResults, outputs)
+}
+
+// Crossplatform document with compatible precondition, steps must be executed
+// Precondition = "StringEquals": ["{{ param1 }}", "{{ param2 }}"]
+func TestRunPluginsWithCompatibleParamParamPrecondition(t *testing.T) {
+	setIsSupportedMock()
+	defer restoreIsSupported()
+	pluginNames := []string{testPlugin1, testPlugin2}
+	pluginConfigs := make(map[string]contracts.PluginState)
+	pluginResults := make(map[string]*contracts.PluginResult)
+	pluginInstances := make(map[string]*PluginMock)
+	pluginRegistry := PluginRegistry{}
+	ioConfig := contracts.IOConfiguration{}
+
+	var cancelFlag task.CancelFlag = task.NewChanneledCancelFlag()
+
+	ctx := context.NewMockDefault()
+	defaultTime := time.Now()
+	pluginConfigs2 := make([]contracts.PluginState, len(pluginNames))
+
+	// initial precondition: "StringEquals": ["{{ param1 }}", "{{ param2 }}"]
+	parsedPreconditions := map[string][]contracts.PreconditionArgument{
+		"StringEquals": {
+			contracts.PreconditionArgument{
+				InitialArgumentValue:  "{{ param1 }}",
+				ResolvedArgumentValue: "foo",
+			},
+			contracts.PreconditionArgument{
+				InitialArgumentValue:  "{{ param2 }}",
+				ResolvedArgumentValue: "foo",
+			},
+		},
+	}
+
+	for index, name := range pluginNames {
+
+		// create an instance of our test object
+		pluginInstances[name] = new(PluginMock)
+
+		// create configuration for execution
+		config := contracts.Configuration{
+			PluginID:              name,
+			PluginName:            name,
+			IsPreconditionEnabled: true,
+			Preconditions:         parsedPreconditions,
+		}
+
+		// setup expectations
+		pluginConfigs[name] = contracts.PluginState{
+			Name:          name,
+			Id:            name,
+			Configuration: config,
+		}
+		pluginResults[name] = &contracts.PluginResult{
+			Output:        "",
+			PluginName:    name,
+			PluginID:      name,
+			StartDateTime: defaultTime,
+			EndDateTime:   defaultTime,
+		}
+
+		pluginFactory := new(PluginFactoryMock)
+		pluginFactory.On("Create", mock.Anything).Return(pluginInstances[name], nil)
+		pluginRegistry[name] = pluginFactory
+		pluginInstances[name].On("Execute", ctx, pluginConfigs[name].Configuration, cancelFlag, mock.Anything).Return()
+
+		pluginConfigs2[index] = pluginConfigs[name]
+	}
+	called := 0
+	ch := make(chan contracts.PluginResult)
+	go func() {
+		for result := range ch {
+			result.EndDateTime = defaultTime
+			result.StartDateTime = defaultTime
+			if called == 0 {
+				assert.Equal(t, result, *pluginResults[testPlugin1])
+			} else if called == 1 {
+				assert.Equal(t, result, *pluginResults[testPlugin2])
+			} else {
+				assert.Fail(t, "there shouldn't be more than 2 update")
+			}
+			called++
+		}
+	}()
+	// call the code we are testing
+	outputs := RunPlugins(ctx, pluginConfigs2, ioConfig, pluginRegistry, ch, cancelFlag)
+
+	// fix the times expectation.
+	for _, result := range outputs {
+		result.EndDateTime = defaultTime
+		result.StartDateTime = defaultTime
+	}
+
+	// assert that the expectations were met
+	for _, mockPlugin := range pluginInstances {
+		mockPlugin.AssertExpectations(t)
+	}
+	ctx.AssertCalled(t, "Log")
+	assert.Equal(t, pluginResults[testPlugin1], outputs[testPlugin1])
+	assert.Equal(t, pluginResults[testPlugin2], outputs[testPlugin2])
+
+	assert.Equal(t, pluginResults, outputs)
+}
+
+// Crossplatform document with incompatible platform precondition, steps must be skipped
+// Precondition = "StringEquals": ["{{ param1 }}", "{{ param2 }}"]
+func TestRunPluginsWithIncompatibleParamParamPrecondition(t *testing.T) {
+	setIsSupportedMock()
+	defer restoreIsSupported()
+	pluginNames := []string{testPlugin1, testPlugin2}
+	pluginConfigs := make(map[string]contracts.PluginState)
+	pluginResults := make(map[string]*contracts.PluginResult)
+	pluginInstances := make(map[string]*PluginMock)
+	pluginRegistry := PluginRegistry{}
+	ioConfig := contracts.IOConfiguration{}
+
+	var cancelFlag task.CancelFlag = task.NewChanneledCancelFlag()
+
+	ctx := context.NewMockDefault()
+	defaultTime := time.Now()
+	defaultOutput := ""
+	pluginConfigs2 := make([]contracts.PluginState, len(pluginNames))
+
+	// initial precondition: "StringEquals": ["{{ param1 }}", "{{ param2 }}"]
+	parsedPreconditions := map[string][]contracts.PreconditionArgument{
+		"StringEquals": {
+			contracts.PreconditionArgument{
+				InitialArgumentValue:  "{{ param1 }}",
+				ResolvedArgumentValue: "foo",
+			},
+			contracts.PreconditionArgument{
+				InitialArgumentValue:  "{{ param2 }}",
+				ResolvedArgumentValue: "bar",
+			},
+		},
+	}
+
+	for index, name := range pluginNames {
+
+		// create an instance of our test object
+		pluginInstances[name] = new(PluginMock)
+
+		// create configuration for execution
+		config := contracts.Configuration{
+			PluginID:              name,
+			PluginName:            name,
+			IsPreconditionEnabled: true,
+			Preconditions:         parsedPreconditions,
+		}
+
+		// setup expectations
+		pluginConfigs[name] = contracts.PluginState{
+			Name:          name,
+			Id:            name,
+			Configuration: config,
+		}
+		pluginResults[name] = &contracts.PluginResult{
+			Output:         "Step execution skipped due to unsatisfied preconditions: '\"StringEquals\": [{{ param1 }}, {{ param2 }}]'. Step name: " + name,
+			PluginName:     name,
+			PluginID:       name,
+			StartDateTime:  defaultTime,
+			EndDateTime:    defaultTime,
+			StandardOutput: defaultOutput,
+			StandardError:  defaultOutput,
+			Status:         contracts.ResultStatusSkipped,
+		}
+		pluginFactory := new(PluginFactoryMock)
+		pluginFactory.On("Create", mock.Anything).Return(pluginInstances[name], nil)
+		pluginRegistry[name] = pluginFactory
+		pluginConfigs2[index] = pluginConfigs[name]
+	}
+	called := 0
+	ch := make(chan contracts.PluginResult)
+	go func() {
+		for result := range ch {
+			result.EndDateTime = defaultTime
+			result.StartDateTime = defaultTime
+			if called == 0 {
+				assert.Equal(t, result, *pluginResults[testPlugin1])
+			} else if called == 1 {
+				assert.Equal(t, result, *pluginResults[testPlugin2])
+			} else {
+				assert.Fail(t, "there shouldn't be more than 2 update")
+			}
+			called++
+		}
+	}()
+	// call the code we are testing
+	outputs := RunPlugins(ctx, pluginConfigs2, ioConfig, pluginRegistry, ch, cancelFlag)
+	// fix the times expectation.
+	for _, result := range outputs {
+		result.EndDateTime = defaultTime
+		result.StartDateTime = defaultTime
+	}
+
+	// assert that the expectations were met
+	for _, mockPlugin := range pluginInstances {
+		mockPlugin.AssertExpectations(t)
+	}
+	ctx.AssertCalled(t, "Log")
+	assert.Equal(t, pluginResults[testPlugin1], outputs[testPlugin1])
+	assert.Equal(t, pluginResults[testPlugin2], outputs[testPlugin2])
+
+	assert.Equal(t, pluginResults, outputs)
+}
+
+// Crossplatform document with compatible precondition, steps must be executed
+// Precondition = "StringEquals": ["{{ param }}", "foo"]
+func TestRunPluginsWithCompatibleParamValuePrecondition(t *testing.T) {
+	setIsSupportedMock()
+	defer restoreIsSupported()
+	pluginNames := []string{testPlugin1, testPlugin2}
+	pluginConfigs := make(map[string]contracts.PluginState)
+	pluginResults := make(map[string]*contracts.PluginResult)
+	pluginInstances := make(map[string]*PluginMock)
+	pluginRegistry := PluginRegistry{}
+	ioConfig := contracts.IOConfiguration{}
+
+	var cancelFlag task.CancelFlag = task.NewChanneledCancelFlag()
+
+	ctx := context.NewMockDefault()
+	defaultTime := time.Now()
+	pluginConfigs2 := make([]contracts.PluginState, len(pluginNames))
+
+	// initial precondition: "StringEquals": ["{{ param }}", "foo"]
+	parsedPreconditions := map[string][]contracts.PreconditionArgument{
+		"StringEquals": {
+			contracts.PreconditionArgument{
+				InitialArgumentValue:  "{{ param }}",
+				ResolvedArgumentValue: "",
+			},
+			contracts.PreconditionArgument{
+				InitialArgumentValue:  "",
+				ResolvedArgumentValue: "",
+			},
+		},
+	}
+
+	for index, name := range pluginNames {
+
+		// create an instance of our test object
+		pluginInstances[name] = new(PluginMock)
+
+		// create configuration for execution
+		config := contracts.Configuration{
+			PluginID:              name,
+			PluginName:            name,
+			IsPreconditionEnabled: true,
+			Preconditions:         parsedPreconditions,
+		}
+
+		// setup expectations
+		pluginConfigs[name] = contracts.PluginState{
+			Name:          name,
+			Id:            name,
+			Configuration: config,
+		}
+		pluginResults[name] = &contracts.PluginResult{
+			Output:        "",
+			PluginName:    name,
+			PluginID:      name,
+			StartDateTime: defaultTime,
+			EndDateTime:   defaultTime,
+		}
+
+		pluginFactory := new(PluginFactoryMock)
+		pluginFactory.On("Create", mock.Anything).Return(pluginInstances[name], nil)
+		pluginRegistry[name] = pluginFactory
+		pluginInstances[name].On("Execute", ctx, pluginConfigs[name].Configuration, cancelFlag, mock.Anything).Return()
+
+		pluginConfigs2[index] = pluginConfigs[name]
+	}
+	called := 0
+	ch := make(chan contracts.PluginResult)
+	go func() {
+		for result := range ch {
+			result.EndDateTime = defaultTime
+			result.StartDateTime = defaultTime
+			if called == 0 {
+				assert.Equal(t, result, *pluginResults[testPlugin1])
+			} else if called == 1 {
+				assert.Equal(t, result, *pluginResults[testPlugin2])
+			} else {
+				assert.Fail(t, "there shouldn't be more than 2 update")
+			}
+			called++
+		}
+	}()
+	// call the code we are testing
+	outputs := RunPlugins(ctx, pluginConfigs2, ioConfig, pluginRegistry, ch, cancelFlag)
+
+	// fix the times expectation.
+	for _, result := range outputs {
+		result.EndDateTime = defaultTime
+		result.StartDateTime = defaultTime
+	}
+
+	// assert that the expectations were met
+	for _, mockPlugin := range pluginInstances {
+		mockPlugin.AssertExpectations(t)
+	}
+	ctx.AssertCalled(t, "Log")
+	assert.Equal(t, pluginResults[testPlugin1], outputs[testPlugin1])
+	assert.Equal(t, pluginResults[testPlugin2], outputs[testPlugin2])
+
+	assert.Equal(t, pluginResults, outputs)
+}
+
+// Crossplatform document with compatible precondition, steps must be executed
+// Precondition = "StringEquals": ["foo", "{{ param }}"]
+func TestRunPluginsWithCompatibleValueParamPrecondition(t *testing.T) {
+	setIsSupportedMock()
+	defer restoreIsSupported()
+	pluginNames := []string{testPlugin1, testPlugin2}
+	pluginConfigs := make(map[string]contracts.PluginState)
+	pluginResults := make(map[string]*contracts.PluginResult)
+	pluginInstances := make(map[string]*PluginMock)
+	pluginRegistry := PluginRegistry{}
+	ioConfig := contracts.IOConfiguration{}
+
+	var cancelFlag task.CancelFlag = task.NewChanneledCancelFlag()
+
+	ctx := context.NewMockDefault()
+	defaultTime := time.Now()
+	pluginConfigs2 := make([]contracts.PluginState, len(pluginNames))
+
+	// initial precondition: "StringEquals": ["foo", "{{ param }}"]
+	parsedPreconditions := map[string][]contracts.PreconditionArgument{
+		"StringEquals": {
+			contracts.PreconditionArgument{
+				InitialArgumentValue:  "foo",
+				ResolvedArgumentValue: "foo",
+			},
+			contracts.PreconditionArgument{
+				InitialArgumentValue:  "{{ param1 }}",
+				ResolvedArgumentValue: "foo",
+			},
+		},
+	}
+
+	for index, name := range pluginNames {
+
+		// create an instance of our test object
+		pluginInstances[name] = new(PluginMock)
+
+		// create configuration for execution
+		config := contracts.Configuration{
+			PluginID:              name,
+			PluginName:            name,
+			IsPreconditionEnabled: true,
+			Preconditions:         parsedPreconditions,
+		}
+
+		// setup expectations
+		pluginConfigs[name] = contracts.PluginState{
+			Name:          name,
+			Id:            name,
+			Configuration: config,
+		}
+		pluginResults[name] = &contracts.PluginResult{
+			Output:        "",
+			PluginName:    name,
+			PluginID:      name,
+			StartDateTime: defaultTime,
+			EndDateTime:   defaultTime,
+		}
+
+		pluginFactory := new(PluginFactoryMock)
+		pluginFactory.On("Create", mock.Anything).Return(pluginInstances[name], nil)
+		pluginRegistry[name] = pluginFactory
+		pluginInstances[name].On("Execute", ctx, pluginConfigs[name].Configuration, cancelFlag, mock.Anything).Return()
+
+		pluginConfigs2[index] = pluginConfigs[name]
+	}
+	called := 0
+	ch := make(chan contracts.PluginResult)
+	go func() {
+		for result := range ch {
+			result.EndDateTime = defaultTime
+			result.StartDateTime = defaultTime
+			if called == 0 {
+				assert.Equal(t, result, *pluginResults[testPlugin1])
+			} else if called == 1 {
+				assert.Equal(t, result, *pluginResults[testPlugin2])
+			} else {
+				assert.Fail(t, "there shouldn't be more than 2 update")
+			}
+			called++
+		}
+	}()
+	// call the code we are testing
+	outputs := RunPlugins(ctx, pluginConfigs2, ioConfig, pluginRegistry, ch, cancelFlag)
+
+	// fix the times expectation.
+	for _, result := range outputs {
+		result.EndDateTime = defaultTime
+		result.StartDateTime = defaultTime
+	}
+
+	// assert that the expectations were met
+	for _, mockPlugin := range pluginInstances {
+		mockPlugin.AssertExpectations(t)
+	}
+	ctx.AssertCalled(t, "Log")
+	assert.Equal(t, pluginResults[testPlugin1], outputs[testPlugin1])
+	assert.Equal(t, pluginResults[testPlugin2], outputs[testPlugin2])
+
+	assert.Equal(t, pluginResults, outputs)
+}
+
+// Crossplatform document with incompatible platform precondition, steps must be skipped
+// Precondition = "StringEquals": ["{{ param }}", "bar}"]
+func TestRunPluginsWithIncompatibleParamValuePrecondition(t *testing.T) {
+	setIsSupportedMock()
+	defer restoreIsSupported()
+	pluginNames := []string{testPlugin1, testPlugin2}
+	pluginConfigs := make(map[string]contracts.PluginState)
+	pluginResults := make(map[string]*contracts.PluginResult)
+	pluginInstances := make(map[string]*PluginMock)
+	pluginRegistry := PluginRegistry{}
+	ioConfig := contracts.IOConfiguration{}
+
+	var cancelFlag task.CancelFlag = task.NewChanneledCancelFlag()
+
+	ctx := context.NewMockDefault()
+	defaultTime := time.Now()
+	defaultOutput := ""
+	pluginConfigs2 := make([]contracts.PluginState, len(pluginNames))
+
+	// initial precondition: "StringEquals": ["{{ param }}", "bar"]
+	parsedPreconditions := map[string][]contracts.PreconditionArgument{
+		"StringEquals": {
+			contracts.PreconditionArgument{
+				InitialArgumentValue:  "{{ param }}",
+				ResolvedArgumentValue: "foo",
+			},
+			contracts.PreconditionArgument{
+				InitialArgumentValue:  "bar",
+				ResolvedArgumentValue: "bar",
+			},
+		},
+	}
+
+	for index, name := range pluginNames {
+
+		// create an instance of our test object
+		pluginInstances[name] = new(PluginMock)
+
+		// create configuration for execution
+		config := contracts.Configuration{
+			PluginID:              name,
+			PluginName:            name,
+			IsPreconditionEnabled: true,
+			Preconditions:         parsedPreconditions,
+		}
+
+		// setup expectations
+		pluginConfigs[name] = contracts.PluginState{
+			Name:          name,
+			Id:            name,
+			Configuration: config,
+		}
+		pluginResults[name] = &contracts.PluginResult{
+			Output:         "Step execution skipped due to unsatisfied preconditions: '\"StringEquals\": [{{ param }}, bar]'. Step name: " + name,
+			PluginName:     name,
+			PluginID:       name,
+			StartDateTime:  defaultTime,
+			EndDateTime:    defaultTime,
+			StandardOutput: defaultOutput,
+			StandardError:  defaultOutput,
+			Status:         contracts.ResultStatusSkipped,
+		}
+		pluginFactory := new(PluginFactoryMock)
+		pluginFactory.On("Create", mock.Anything).Return(pluginInstances[name], nil)
+		pluginRegistry[name] = pluginFactory
+		pluginConfigs2[index] = pluginConfigs[name]
+	}
+	called := 0
+	ch := make(chan contracts.PluginResult)
+	go func() {
+		for result := range ch {
+			result.EndDateTime = defaultTime
+			result.StartDateTime = defaultTime
+			if called == 0 {
+				assert.Equal(t, result, *pluginResults[testPlugin1])
+			} else if called == 1 {
+				assert.Equal(t, result, *pluginResults[testPlugin2])
+			} else {
+				assert.Fail(t, "there shouldn't be more than 2 update")
+			}
+			called++
+		}
+	}()
+	// call the code we are testing
+	outputs := RunPlugins(ctx, pluginConfigs2, ioConfig, pluginRegistry, ch, cancelFlag)
+	// fix the times expectation.
+	for _, result := range outputs {
+		result.EndDateTime = defaultTime
+		result.StartDateTime = defaultTime
+	}
+
+	// assert that the expectations were met
+	for _, mockPlugin := range pluginInstances {
+		mockPlugin.AssertExpectations(t)
+	}
+	ctx.AssertCalled(t, "Log")
+	assert.Equal(t, pluginResults[testPlugin1], outputs[testPlugin1])
+	assert.Equal(t, pluginResults[testPlugin2], outputs[testPlugin2])
+
+	assert.Equal(t, pluginResults, outputs)
+}
+
+// Crossplatform document with compatible precondition, steps must be executed
+// Precondition = "StringEquals": ["{{ param1 }} bar {{ not a param }}", "foo {{ param2 }} {{ not a param }}"]
+func TestRunPluginsWithCompatibleMixedPrecondition(t *testing.T) {
+	setIsSupportedMock()
+	defer restoreIsSupported()
+	pluginNames := []string{testPlugin1, testPlugin2}
+	pluginConfigs := make(map[string]contracts.PluginState)
+	pluginResults := make(map[string]*contracts.PluginResult)
+	pluginInstances := make(map[string]*PluginMock)
+	pluginRegistry := PluginRegistry{}
+	ioConfig := contracts.IOConfiguration{}
+
+	var cancelFlag task.CancelFlag = task.NewChanneledCancelFlag()
+
+	ctx := context.NewMockDefault()
+	defaultTime := time.Now()
+	pluginConfigs2 := make([]contracts.PluginState, len(pluginNames))
+
+	// initial precondition: "StringEquals": ["{{ param1 }} bar {{ not a param }}", "foo {{ param2 }} {{ not a param }}"]
+	parsedPreconditions := map[string][]contracts.PreconditionArgument{
+		"StringEquals": {
+			contracts.PreconditionArgument{
+				InitialArgumentValue:  "{{ param1 }} bar {{ not a param }}",
+				ResolvedArgumentValue: "foo bar {{ not a param }}",
+			},
+			contracts.PreconditionArgument{
+				InitialArgumentValue:  "foo {{ param2 }} {{ not a param }}",
+				ResolvedArgumentValue: "foo bar {{ not a param }}",
+			},
+		},
+	}
+
+	for index, name := range pluginNames {
+
+		// create an instance of our test object
+		pluginInstances[name] = new(PluginMock)
+
+		// create configuration for execution
+		config := contracts.Configuration{
+			PluginID:              name,
+			PluginName:            name,
+			IsPreconditionEnabled: true,
+			Preconditions:         parsedPreconditions,
+		}
+
+		// setup expectations
+		pluginConfigs[name] = contracts.PluginState{
+			Name:          name,
+			Id:            name,
+			Configuration: config,
+		}
+		pluginResults[name] = &contracts.PluginResult{
+			Output:        "",
+			PluginName:    name,
+			PluginID:      name,
+			StartDateTime: defaultTime,
+			EndDateTime:   defaultTime,
+		}
+
+		pluginFactory := new(PluginFactoryMock)
+		pluginFactory.On("Create", mock.Anything).Return(pluginInstances[name], nil)
+		pluginRegistry[name] = pluginFactory
+		pluginInstances[name].On("Execute", ctx, pluginConfigs[name].Configuration, cancelFlag, mock.Anything).Return()
+
+		pluginConfigs2[index] = pluginConfigs[name]
+	}
+	called := 0
+	ch := make(chan contracts.PluginResult)
+	go func() {
+		for result := range ch {
+			result.EndDateTime = defaultTime
+			result.StartDateTime = defaultTime
+			if called == 0 {
+				assert.Equal(t, result, *pluginResults[testPlugin1])
+			} else if called == 1 {
+				assert.Equal(t, result, *pluginResults[testPlugin2])
+			} else {
+				assert.Fail(t, "there shouldn't be more than 2 update")
+			}
+			called++
+		}
+	}()
+	// call the code we are testing
+	outputs := RunPlugins(ctx, pluginConfigs2, ioConfig, pluginRegistry, ch, cancelFlag)
+
+	// fix the times expectation.
+	for _, result := range outputs {
+		result.EndDateTime = defaultTime
+		result.StartDateTime = defaultTime
+	}
+
+	// assert that the expectations were met
+	for _, mockPlugin := range pluginInstances {
+		mockPlugin.AssertExpectations(t)
+	}
+	ctx.AssertCalled(t, "Log")
+	assert.Equal(t, pluginResults[testPlugin1], outputs[testPlugin1])
+	assert.Equal(t, pluginResults[testPlugin2], outputs[testPlugin2])
+
+	assert.Equal(t, pluginResults, outputs)
+}
+
+// Crossplatform document with incompatible precondition, steps must be skipped
+// Precondition = "StringEquals": ["{{ param1 }} bar {{ not a param }}", "foo {{ param2 }} {{ wrong not a param }}"]
+func TestRunPluginsWithIncompatibleMixedPrecondition(t *testing.T) {
+	setIsSupportedMock()
+	defer restoreIsSupported()
+	pluginNames := []string{testPlugin1, testPlugin2}
+	pluginConfigs := make(map[string]contracts.PluginState)
+	pluginResults := make(map[string]*contracts.PluginResult)
+	pluginInstances := make(map[string]*PluginMock)
+	pluginRegistry := PluginRegistry{}
+	ioConfig := contracts.IOConfiguration{}
+
+	var cancelFlag task.CancelFlag = task.NewChanneledCancelFlag()
+
+	ctx := context.NewMockDefault()
+	defaultTime := time.Now()
+	defaultOutput := ""
+	pluginConfigs2 := make([]contracts.PluginState, len(pluginNames))
+
+	// initial precondition: "StringEquals": ["{{ param1 }} bar {{ not a param }}", "{{ param2 }}"]
+	parsedPreconditions := map[string][]contracts.PreconditionArgument{
+		"StringEquals": {
+			contracts.PreconditionArgument{
+				InitialArgumentValue:  "{{ param1 }} bar {{ not a param }}",
+				ResolvedArgumentValue: "foo bar {{ not a param }}",
+			},
+			contracts.PreconditionArgument{
+				InitialArgumentValue:  "foo {{ param2 }} {{ wrong not a param }}",
+				ResolvedArgumentValue: "foo bar {{ wrong not a param }}",
+			},
+		},
+	}
+
+	for index, name := range pluginNames {
+
+		// create an instance of our test object
+		pluginInstances[name] = new(PluginMock)
+
+		// create configuration for execution
+		config := contracts.Configuration{
+			PluginID:              name,
+			PluginName:            name,
+			IsPreconditionEnabled: true,
+			Preconditions:         parsedPreconditions,
+		}
+
+		// setup expectations
+		pluginConfigs[name] = contracts.PluginState{
+			Name:          name,
+			Id:            name,
+			Configuration: config,
+		}
+		pluginResults[name] = &contracts.PluginResult{
+			Output:         "Step execution skipped due to unsatisfied preconditions: '\"StringEquals\": [{{ param1 }} bar {{ not a param }}, foo {{ param2 }} {{ wrong not a param }}]'. Step name: " + name,
+			PluginName:     name,
+			PluginID:       name,
+			StartDateTime:  defaultTime,
+			EndDateTime:    defaultTime,
+			StandardOutput: defaultOutput,
+			StandardError:  defaultOutput,
+			Status:         contracts.ResultStatusSkipped,
+		}
+		pluginFactory := new(PluginFactoryMock)
+		pluginFactory.On("Create", mock.Anything).Return(pluginInstances[name], nil)
+		pluginRegistry[name] = pluginFactory
+		pluginConfigs2[index] = pluginConfigs[name]
+	}
+	called := 0
+	ch := make(chan contracts.PluginResult)
+	go func() {
+		for result := range ch {
+			result.EndDateTime = defaultTime
+			result.StartDateTime = defaultTime
+			if called == 0 {
+				assert.Equal(t, result, *pluginResults[testPlugin1])
+			} else if called == 1 {
+				assert.Equal(t, result, *pluginResults[testPlugin2])
+			} else {
+				assert.Fail(t, "there shouldn't be more than 2 update")
+			}
+			called++
+		}
+	}()
+	// call the code we are testing
+	outputs := RunPlugins(ctx, pluginConfigs2, ioConfig, pluginRegistry, ch, cancelFlag)
+	// fix the times expectation.
+	for _, result := range outputs {
+		result.EndDateTime = defaultTime
+		result.StartDateTime = defaultTime
+	}
+
+	// assert that the expectations were met
+	for _, mockPlugin := range pluginInstances {
+		mockPlugin.AssertExpectations(t)
+	}
+	ctx.AssertCalled(t, "Log")
+	assert.Equal(t, pluginResults[testPlugin1], outputs[testPlugin1])
+	assert.Equal(t, pluginResults[testPlugin2], outputs[testPlugin2])
+
+	assert.Equal(t, pluginResults, outputs)
+}
+
 // Crossplatform document with more than 2 precondition operands, steps must fail
 func TestRunPluginsWithMoreThanTwoPreconditionOperands(t *testing.T) {
 	setIsSupportedMock()
@@ -1242,7 +2837,23 @@ func TestRunPluginsWithMoreThanTwoPreconditionOperands(t *testing.T) {
 	defaultOutput := ""
 	pluginConfigs2 := make([]contracts.PluginState, len(pluginNames))
 
-	preconditions := map[string][]string{"StringEquals": []string{"platformType", "Linux", "foo"}}
+	// initial precondition: "StringEquals": ["platformType", "Linux", "foo"]
+	parsedPreconditions := map[string][]contracts.PreconditionArgument{
+		"StringEquals": {
+			contracts.PreconditionArgument{
+				InitialArgumentValue:  "platformType",
+				ResolvedArgumentValue: "platformType",
+			},
+			contracts.PreconditionArgument{
+				InitialArgumentValue:  "Linux",
+				ResolvedArgumentValue: "Linux",
+			},
+			contracts.PreconditionArgument{
+				InitialArgumentValue:  "foo",
+				ResolvedArgumentValue: "foo",
+			},
+		},
+	}
 
 	for index, name := range pluginNames {
 
@@ -1254,7 +2865,7 @@ func TestRunPluginsWithMoreThanTwoPreconditionOperands(t *testing.T) {
 			PluginID:              name,
 			PluginName:            name,
 			IsPreconditionEnabled: true,
-			Preconditions:         preconditions,
+			Preconditions:         parsedPreconditions,
 		}
 
 		// setup expectations
@@ -1265,7 +2876,7 @@ func TestRunPluginsWithMoreThanTwoPreconditionOperands(t *testing.T) {
 		}
 
 		pluginError := fmt.Sprintf(
-			"Unrecognized precondition(s): '\"StringEquals\": [platformType Linux foo]', please update agent to latest version. Step name: %s",
+			"Unrecognized precondition(s): '\"StringEquals\": operator accepts exactly 2 arguments', please update agent to latest version. Step name: %s",
 			name)
 
 		pluginResults[name] = &contracts.PluginResult{
@@ -1339,7 +2950,19 @@ func TestRunPluginsWithUnknownPlugin(t *testing.T) {
 	defaultOutput := ""
 	pluginConfigs2 := make([]contracts.PluginState, len(pluginNames))
 
-	preconditions := map[string][]string{"StringEquals": []string{"platformType", "Linux"}}
+	// initial precondition: "StringEquals": ["platformType", "Linux"]
+	parsedPreconditions := map[string][]contracts.PreconditionArgument{
+		"StringEquals": {
+			contracts.PreconditionArgument{
+				InitialArgumentValue:  "platformType",
+				ResolvedArgumentValue: "platformType",
+			},
+			contracts.PreconditionArgument{
+				InitialArgumentValue:  "Linux",
+				ResolvedArgumentValue: "Linux",
+			},
+		},
+	}
 
 	for index, name := range pluginNames {
 
@@ -1353,7 +2976,7 @@ func TestRunPluginsWithUnknownPlugin(t *testing.T) {
 			PluginID:              name,
 			PluginName:            name,
 			IsPreconditionEnabled: true,
-			Preconditions:         preconditions,
+			Preconditions:         parsedPreconditions,
 		}
 
 		// setup expectations

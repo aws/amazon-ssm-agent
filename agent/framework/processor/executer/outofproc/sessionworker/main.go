@@ -20,13 +20,14 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
-	"github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/outofproc/channel"
 	"github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/outofproc/messaging"
 	"github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/outofproc/proc"
 	"github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/plugin"
 	"github.com/aws/amazon-ssm-agent/agent/framework/runpluginutil"
 	"github.com/aws/amazon-ssm-agent/agent/log/ssmlog"
 	"github.com/aws/amazon-ssm-agent/agent/task"
+	"github.com/aws/amazon-ssm-agent/agent/version"
+	"github.com/aws/amazon-ssm-agent/common/filewatcherbasedipc"
 )
 
 const (
@@ -56,8 +57,12 @@ func initialize(args []string) (context.T, string, error) {
 	// intialize a light weight logger, use the default seelog config logger
 	logger := ssmlog.SSMLogger(false)
 
-	// initialize appconfig, use default config
-	config := appconfig.DefaultConfig()
+	// initialize appconfig
+	config, err := appconfig.Config(false)
+	if err != nil {
+		logger.Errorf("Failed to initialize config: %v", err)
+		return nil, "", err
+	}
 
 	logger.Debugf("Session worker parse args: %v", args)
 	channelName, _, err := proc.ParseArgv(args)
@@ -77,6 +82,7 @@ func main() {
 
 	context, channelName, err := initialize(args)
 	log := context.Log()
+	log.Infof("ssm-session-worker - %v", version.String())
 	//ensure logs are flushed
 	defer log.Close()
 	if err != nil {
@@ -95,7 +101,7 @@ func createFileChannelAndExecutePlugin(context context.T, channelName string) {
 	log := context.Log()
 	log.Infof("document: %v worker started", channelName)
 	//create channel from the given handle identifier by master
-	ipc, err, _ := channel.CreateFileChannel(log, channel.ModeWorker, channelName)
+	ipc, err, _ := filewatcherbasedipc.CreateFileWatcherChannel(log, filewatcherbasedipc.ModeWorker, channelName, false)
 	if err != nil {
 		log.Errorf("failed to create channel: %v", err)
 		return

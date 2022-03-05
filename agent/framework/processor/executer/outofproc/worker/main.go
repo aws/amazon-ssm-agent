@@ -7,7 +7,6 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
-	"github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/outofproc/channel"
 	"github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/outofproc/messaging"
 	"github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/outofproc/proc"
 	"github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/plugin"
@@ -16,6 +15,8 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/log/ssmlog"
 	"github.com/aws/amazon-ssm-agent/agent/platform"
 	"github.com/aws/amazon-ssm-agent/agent/task"
+	"github.com/aws/amazon-ssm-agent/agent/version"
+	"github.com/aws/amazon-ssm-agent/common/filewatcherbasedipc"
 )
 
 const (
@@ -42,6 +43,7 @@ func initialize(args []string) (context.T, string, error) {
 	logger := ssmlog.SSMLogger(false)
 	// initialize appconfig, use default config
 	config := appconfig.DefaultConfig()
+	logger.Infof("ssm-document-worker - %v", version.String())
 	logger.Infof("parsing args: %v", args)
 	channelName, instanceID, err := proc.ParseArgv(args)
 	logger.Infof("using channelName %v, instanceID: %v", channelName, instanceID)
@@ -67,7 +69,7 @@ func main() {
 	}
 	logger.Infof("document: %v worker started", channelName)
 	//create channel from the given handle identifier by master
-	ipc, err, _ := channel.CreateFileChannel(logger, channel.ModeWorker, channelName)
+	ipc, err, _ := filewatcherbasedipc.CreateFileWatcherChannel(logger, filewatcherbasedipc.ModeWorker, channelName, false)
 	if err != nil {
 		logger.Errorf("failed to create channel: %v", err)
 		logger.Close()

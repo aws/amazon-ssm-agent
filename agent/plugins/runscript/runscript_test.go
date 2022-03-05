@@ -51,8 +51,8 @@ const (
 )
 
 var TestCases = []TestCase{
-	generateTestCaseOk("0", make(map[string]string)),
-	generateTestCaseOk("1", make(map[string]string)),
+	generateTestCaseOk("0", envVars),
+	generateTestCaseOk("1", envVars),
 	generateTestCaseFail("2"),
 	generateTestCaseFail("3"),
 }
@@ -60,9 +60,9 @@ var TestCases = []TestCase{
 var MultiInputTestCases = generateTestCaseMultipleInputsOk([]string{"0", "1"})
 
 var envVars = map[string]string{
-	"key1": "val1",
-	"key2": "val2",
+	"SSM_COMMAND_ID": "21cd24ac-4aca-4d53-bd65-c06d64b7b343",
 }
+
 var TestCasesWithEnvironment = []TestCase{generateTestCaseOk("0", envVars)}
 
 var logger = log.NewMockLog()
@@ -97,7 +97,7 @@ func generateTestCaseOk(id string, envVars map[string]string) TestCase {
 func generateTestCaseMultipleInputsOk(ids []string) []TestCase {
 	testCases := make([]TestCase, 0)
 	for _, id := range ids {
-		testCases = append(testCases, generateTestCaseOk(id, make(map[string]string)))
+		testCases = append(testCases, generateTestCaseOk(id, envVars))
 	}
 	return testCases
 }
@@ -117,7 +117,7 @@ func combinedErrorOutput(stderr string, err error) string {
 }
 
 func generateTestCaseFail(id string) TestCase {
-	t := generateTestCaseOk(id, make(map[string]string))
+	t := generateTestCaseOk(id, envVars)
 	t.ExecuterError = fmt.Errorf("Error happened for cmd %v", id)
 	t.Output.SetStderr(combinedErrorOutput(t.ExecuterStdErr, t.ExecuterError))
 	t.Output.ExitCode = 1
@@ -142,6 +142,8 @@ func testRunScripts(t *testing.T, testCase TestCase, rawInput bool) {
 		setExecuterExpectations(mockExecuter, testCase, mockCancelFlag, p)
 		setIOHandlerExpectations(mockIOHandler, testCase)
 
+		runCommandID := "21cd24ac-4aca-4d53-bd65-c06d64b7b343"
+
 		// call method under test
 		if rawInput {
 			// prepare plugin input
@@ -149,7 +151,7 @@ func testRunScripts(t *testing.T, testCase TestCase, rawInput bool) {
 			err := jsonutil.Remarshal(testCase.Input, &rawPluginInput)
 			assert.Nil(t, err)
 
-			p.runCommandsRawInput(logger, pluginID, rawPluginInput, orchestrationDirectory, defaultWorkingDirectory, mockCancelFlag, mockIOHandler)
+			p.runCommandsRawInput(logger, pluginID, rawPluginInput, orchestrationDirectory, defaultWorkingDirectory, mockCancelFlag, mockIOHandler, runCommandID)
 		} else {
 			p.runCommands(logger, pluginID, testCase.Input, orchestrationDirectory, defaultWorkingDirectory, mockCancelFlag, mockIOHandler)
 		}
@@ -268,6 +270,7 @@ func testExecuteMultiInput(t *testing.T, testCases []TestCase) {
 				OrchestrationDirectory: orchestrationDirectory,
 				BookKeepingFileName:    commandID,
 				PluginID:               pluginID,
+				MessageId:              "aws.ssm.21cd24ac-4aca-4d53-bd65-c06d64b7b343.i-03b9244a8137e5bac",
 			}, mockCancelFlag, mockIOHandler)
 	}
 
@@ -301,6 +304,7 @@ func testExecute(t *testing.T, testCase TestCase) {
 				OrchestrationDirectory: orchestrationDirectory,
 				BookKeepingFileName:    commandID,
 				PluginID:               pluginID,
+				MessageId:              "aws.ssm.21cd24ac-4aca-4d53-bd65-c06d64b7b343.i-03b9244a8137e5bac",
 			}, mockCancelFlag, mockIOHandler)
 	}
 
@@ -334,6 +338,7 @@ func testExecuteWithEnvironment(t *testing.T, testCase TestCase) {
 				OrchestrationDirectory: orchestrationDirectory,
 				BookKeepingFileName:    commandID,
 				PluginID:               pluginID,
+				MessageId:              "aws.ssm.21cd24ac-4aca-4d53-bd65-c06d64b7b343.i-03b9244a8137e5bac",
 			}, mockCancelFlag, mockIOHandler)
 	}
 

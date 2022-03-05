@@ -25,7 +25,12 @@
     },
     "Agent": {
         "Region": "",
-        "OrchestrationRootDir": ""
+        "OrchestrationRootDir": "",
+        "SelfUpdate": false,
+        "TelemetryMetricsToCloudWatch": false,
+        "TelemetryMetricsToSSM": true,
+        "AuditExpirationDay" : 7,
+        "LongRunningWorkerMonitorIntervalSeconds": 60
     },
     "Os": {
         "Lang": "en-US",

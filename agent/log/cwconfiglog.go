@@ -45,6 +45,7 @@ func PrintCWConfig(jsonConfig string, log T) string {
 	if err := jsonutil.Unmarshal(jsonConfig, &config); err != nil {
 		log.Error("Unmarshalling CW config file failed - ", err)
 	}
+	log.Debugf("unmarshalling CW config file: %v", config)
 
 	// grabbing the components field in the configuration that could have exposed credentials
 	components := config.EngineConfig.Components

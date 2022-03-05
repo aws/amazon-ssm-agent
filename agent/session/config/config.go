@@ -75,8 +75,10 @@ const (
 	// with scenario of sshd server port forwarding.
 	LocalPortForwarding = "LocalPortForwarding"
 
-	CloudWatchEncryptionErrorMsg = "We couldn't start the session because encryption is not set up on the selected CloudWatch Logs log group. Either encrypt the log group or choose an option to enable logging without encryption."
-	S3EncryptionErrorMsg         = "We couldn't start the session because encryption is not set up on the selected Amazon S3 bucket. Either encrypt the bucket or choose an option to enable logging without encryption."
+	CloudWatchEncryptionErrorMsg                     = "We couldn't start the session because encryption is not set up on the selected CloudWatch Logs log group. Either encrypt the log group or choose an option to enable logging without encryption."
+	UnsupportedPowerShellVersionForStreamingErrorMsg = "The PowerShell version installed on the instance doesn’t support streaming logs to CloudWatch. Updated PowerShell to version 5.1 or later to stream session data to CloudWatch."
+	PowerShellTranscriptLoggingEnabledErrorMsg       = "The PowerShell Transcription policy setting is configured on the instance. Update PowerShell Transcription policy setting to 'Not Configured' to stream session data to CloudWatch."
+	S3EncryptionErrorMsg                             = "We couldn't start the session because encryption is not set up on the selected Amazon S3 bucket. Either encrypt the bucket or choose an option to enable logging without encryption."
 )
 
 var GetMgsEndpointFromRip = func(region string) string {

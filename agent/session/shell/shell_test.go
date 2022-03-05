@@ -28,9 +28,11 @@ import (
 	iohandlermocks "github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/iohandler/mock"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/s3util"
+	mgsConfig "github.com/aws/amazon-ssm-agent/agent/session/config"
 	mgsContracts "github.com/aws/amazon-ssm-agent/agent/session/contracts"
 	dataChannelMock "github.com/aws/amazon-ssm-agent/agent/session/datachannel/mocks"
 	"github.com/aws/amazon-ssm-agent/agent/task"
+	"github.com/aws/aws-sdk-go/service/cloudwatchlogs"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 	"github.com/stretchr/testify/suite"
@@ -38,11 +40,17 @@ import (
 )
 
 var (
-	payload       = []byte("testPayload")
-	messageId     = "dd01e56b-ff48-483e-a508-b5f073f31b16"
-	schemaVersion = uint32(1)
-	createdDate   = uint64(1503434274948)
-	mockLog       = log.NewMockLog()
+	payload            = []byte("testPayload")
+	messageId          = "dd01e56b-ff48-483e-a508-b5f073f31b16"
+	schemaVersion      = uint32(1)
+	createdDate        = uint64(1503434274948)
+	mockLog            = log.NewMockLog()
+	sessionId          = "sessionId"
+	sessionOwner       = "sessionOwner"
+	testCwLogGroupName = "testCW"
+	testCwlLogGroup    = cloudwatchlogs.LogGroup{
+		LogGroupName: &testCwLogGroupName,
+	}
 )
 
 type ShellTestSuite struct {
@@ -78,8 +86,15 @@ func (suite *ShellTestSuite) SetupTest() {
 	suite.stdin = stdin
 	suite.stdout = stdout
 	suite.plugin = &ShellPlugin{
-		stdin:  stdin,
-		stdout: stdout,
+		stdin:       stdin,
+		stdout:      stdout,
+		dataChannel: mockDataChannel,
+		logger: logger{
+			cwl:                         mockCWL,
+			s3Util:                      mockS3,
+			ptyTerminated:               make(chan bool),
+			cloudWatchStreamingFinished: make(chan bool),
+		},
 	}
 }
 
@@ -134,15 +149,13 @@ func (suite *ShellTestSuite) TestExecute() {
 
 	stdout, stdin, _ := os.Pipe()
 	stdin.Write(payload)
-	startPty = func(log log.T, shellProps mgsContracts.ShellProperties, isSessionLogger bool, config contracts.Configuration) (stdin *os.File, stdout *os.File, err error) {
-		return stdin, stdout, nil
-	}
-	plugin := &ShellPlugin{
-		stdout:      stdout,
-		dataChannel: suite.mockDataChannel,
+	startPty = func(log log.T, shellProps mgsContracts.ShellProperties, isSessionLogger bool, config contracts.Configuration, plugin *ShellPlugin) (err error) {
+		plugin.stdin = stdin
+		plugin.stdout = stdout
+		return nil
 	}
 
-	plugin.Execute(suite.mockContext,
+	suite.plugin.Execute(suite.mockContext,
 		contracts.Configuration{},
 		suite.mockCancelFlag,
 		suite.mockIohandler,
@@ -152,6 +165,145 @@ func (suite *ShellTestSuite) TestExecute() {
 	suite.mockCancelFlag.AssertExpectations(suite.T())
 	suite.mockIohandler.AssertExpectations(suite.T())
 	suite.mockDataChannel.AssertExpectations(suite.T())
+
+	stdin.Close()
+	stdout.Close()
+}
+
+// Testing Execute when CW logging(at the end of the session) is enabled
+func (suite *ShellTestSuite) TestExecuteWithCWLoggingEnabled() {
+	suite.mockCancelFlag.On("Canceled").Return(false)
+	suite.mockCancelFlag.On("ShutDown").Return(false)
+	suite.mockCancelFlag.On("Wait").Return(task.Completed)
+	suite.mockIohandler.On("SetExitCode", 0).Return(nil)
+	suite.mockIohandler.On("SetStatus", contracts.ResultStatusSuccess).Return()
+	suite.mockIohandler.On("SetOutput", mock.Anything).Return()
+	suite.mockDataChannel.On("SendAgentSessionStateMessage", mock.Anything, mgsContracts.Terminating).
+		Return(nil).Times(1)
+
+	stdout, stdin, _ := os.Pipe()
+	stdin.Write(payload)
+	startPty = func(log log.T, shellProps mgsContracts.ShellProperties, isSessionLogger bool, config contracts.Configuration, plugin *ShellPlugin) (err error) {
+		plugin.stdin = stdin
+		plugin.stdout = stdout
+		return nil
+	}
+
+	// When CW logging is enabled with streaming disabled then IsFileComplete is expected to be true since log to CW is uploaded once at the end of the session
+	expectedIsFileComplete := true
+	suite.mockCWL.On("IsLogGroupPresent", mock.Anything, testCwLogGroupName).Return(true, &testCwlLogGroup)
+	suite.mockCWL.On("StreamData", mock.Anything, testCwLogGroupName, sessionId, sessionId+mgsConfig.LogFileExtension, expectedIsFileComplete, false, mock.Anything, false, false).Return(true)
+
+	suite.plugin.Execute(suite.mockContext,
+		contracts.Configuration{
+			CloudWatchLogGroup: testCwLogGroupName,
+			SessionId:          sessionId,
+			SessionOwner:       sessionOwner,
+		},
+		suite.mockCancelFlag,
+		suite.mockIohandler,
+		suite.mockDataChannel,
+		mgsContracts.ShellProperties{})
+
+	suite.mockCancelFlag.AssertExpectations(suite.T())
+	suite.mockIohandler.AssertExpectations(suite.T())
+	suite.mockDataChannel.AssertExpectations(suite.T())
+	suite.mockCWL.AssertExpectations(suite.T())
+	assert.Equal(suite.T(), false, suite.plugin.logger.streamLogsToCloudWatch)
+
+	stdin.Close()
+	stdout.Close()
+}
+
+// Testing Execute when near real time CW log streaming is enabled
+func (suite *ShellTestSuite) TestExecuteWithCWLogStreamingEnabled() {
+	suite.mockCancelFlag.On("Canceled").Return(false)
+	suite.mockCancelFlag.On("ShutDown").Return(false)
+	suite.mockCancelFlag.On("Wait").Return(task.Completed)
+	suite.mockIohandler.On("SetExitCode", 0).Return(nil)
+	suite.mockIohandler.On("SetStatus", contracts.ResultStatusSuccess).Return()
+	suite.mockIohandler.On("SetOutput", mock.Anything).Return()
+	suite.mockDataChannel.On("SendAgentSessionStateMessage", mock.Anything, mgsContracts.Terminating).
+		Return(nil).Times(1)
+
+	stdout, stdin, _ := os.Pipe()
+	stdin.Write(payload)
+	startPty = func(log log.T, shellProps mgsContracts.ShellProperties, isSessionLogger bool, config contracts.Configuration, plugin *ShellPlugin) (err error) {
+		plugin.stdin = stdin
+		plugin.stdout = stdout
+		return nil
+	}
+
+	// When CW log streaming is enabled then IsFileComplete is expected to be false since log to CW will uploaded periodically since the beginning of the session
+	expectedIsFileComplete := false
+	suite.mockCWL.On("IsLogGroupPresent", mock.Anything, testCwLogGroupName).Return(true, &testCwlLogGroup)
+	suite.mockCWL.On("StreamData", mock.Anything, testCwLogGroupName, sessionId, "ipcTempFile.log", expectedIsFileComplete, false, mock.Anything, true, true).Return(true)
+	suite.mockDataChannel.On("GetRegion").Return("region")
+	suite.mockDataChannel.On("GetInstanceId").Return("instanceId")
+
+	checkForLoggingInterruption = func(log log.T, ipcFile *os.File, plugin *ShellPlugin) {}
+	go func() {
+		<-suite.plugin.logger.ptyTerminated
+		suite.plugin.logger.cloudWatchStreamingFinished <- true
+	}()
+
+	suite.plugin.Execute(suite.mockContext,
+		contracts.Configuration{
+			CloudWatchLogGroup:         testCwLogGroupName,
+			CloudWatchStreamingEnabled: true,
+			SessionId:                  sessionId,
+			SessionOwner:               sessionOwner,
+		},
+		suite.mockCancelFlag,
+		suite.mockIohandler,
+		suite.mockDataChannel,
+		mgsContracts.ShellProperties{})
+
+	suite.mockCancelFlag.AssertExpectations(suite.T())
+	suite.mockIohandler.AssertExpectations(suite.T())
+	suite.mockDataChannel.AssertExpectations(suite.T())
+	suite.mockCWL.AssertExpectations(suite.T())
+	assert.Equal(suite.T(), true, suite.plugin.logger.streamLogsToCloudWatch)
+
+	stdin.Close()
+	stdout.Close()
+}
+
+// Testing Execute when CW logging is disabled but streaming is enabled
+func (suite *ShellTestSuite) TestExecuteWithCWLoggingDisabledButStreamingEnabled() {
+	suite.mockCancelFlag.On("Canceled").Return(false)
+	suite.mockCancelFlag.On("ShutDown").Return(false)
+	suite.mockCancelFlag.On("Wait").Return(task.Completed)
+	suite.mockIohandler.On("SetExitCode", 0).Return(nil)
+	suite.mockIohandler.On("SetStatus", contracts.ResultStatusSuccess).Return()
+	suite.mockIohandler.On("SetOutput", mock.Anything).Return()
+	suite.mockDataChannel.On("SendAgentSessionStateMessage", mock.Anything, mgsContracts.Terminating).
+		Return(nil).Times(1)
+
+	stdout, stdin, _ := os.Pipe()
+	stdin.Write(payload)
+	startPty = func(log log.T, shellProps mgsContracts.ShellProperties, isSessionLogger bool, config contracts.Configuration, plugin *ShellPlugin) (err error) {
+		plugin.stdin = stdin
+		plugin.stdout = stdout
+		return nil
+	}
+
+	suite.plugin.Execute(suite.mockContext,
+		contracts.Configuration{
+			CloudWatchLogGroup:         "",
+			CloudWatchStreamingEnabled: true,
+			SessionId:                  sessionId,
+			SessionOwner:               sessionOwner,
+		},
+		suite.mockCancelFlag,
+		suite.mockIohandler,
+		suite.mockDataChannel,
+		mgsContracts.ShellProperties{})
+
+	suite.mockCancelFlag.AssertExpectations(suite.T())
+	suite.mockIohandler.AssertExpectations(suite.T())
+	suite.mockDataChannel.AssertExpectations(suite.T())
+	assert.Equal(suite.T(), false, suite.plugin.logger.streamLogsToCloudWatch)
 
 	stdin.Close()
 	stdout.Close()
@@ -171,15 +323,13 @@ func (suite *ShellTestSuite) TestExecuteWithCancelFlag() {
 
 	stdout, stdin, _ := os.Pipe()
 	stdin.Write(payload)
-	startPty = func(log log.T, shellProps mgsContracts.ShellProperties, isSessionLogger bool, config contracts.Configuration) (stdin *os.File, stdout *os.File, err error) {
-		return stdin, stdout, nil
-	}
-	plugin := &ShellPlugin{
-		stdout:      stdout,
-		dataChannel: suite.mockDataChannel,
+	startPty = func(log log.T, shellProps mgsContracts.ShellProperties, isSessionLogger bool, config contracts.Configuration, plugin *ShellPlugin) (err error) {
+		plugin.stdin = stdin
+		plugin.stdout = stdout
+		return nil
 	}
 
-	plugin.Execute(suite.mockContext,
+	suite.plugin.Execute(suite.mockContext,
 		contracts.Configuration{},
 		suite.mockCancelFlag,
 		suite.mockIohandler,
@@ -201,11 +351,12 @@ func (suite *ShellTestSuite) TestWritePump() {
 	//suite.mockDataChannel := &dataChannelMock.IDataChannel{}
 	suite.mockDataChannel.On("SendStreamDataMessage", mock.Anything, mock.Anything, payload).Return(nil)
 
-	plugin := &ShellPlugin{
-		stdout:      stdout,
-		ipcFilePath: "test.log",
-		dataChannel: suite.mockDataChannel,
-	}
+	suite.plugin.stdout = stdout
+	suite.plugin.logger = logger{ipcFilePath: "test.log"}
+
+	// Create ipc file
+	ipcFile, _ := os.Create(suite.plugin.logger.ipcFilePath)
+	defer ipcFile.Close()
 
 	// Spawning a separate go routine to close read and write pipes after a few seconds.
 	// This is required as plugin.writePump() has a for loop which will continuosly read data from pipe until it is closed.
@@ -214,7 +365,7 @@ func (suite *ShellTestSuite) TestWritePump() {
 		stdin.Close()
 		stdout.Close()
 	}()
-	plugin.writePump(suite.mockLog)
+	suite.plugin.writePump(suite.mockLog, ipcFile)
 
 	// Assert if SendStreamDataMessage function was called with same data from stdout
 	suite.mockDataChannel.AssertExpectations(suite.T())
@@ -231,11 +382,12 @@ func (suite *ShellTestSuite) TestWritePumpForInvalidUtf8Character() {
 	//suite.mockDataChannel := &dataChannelMock.IDataChannel{}
 	suite.mockDataChannel.On("SendStreamDataMessage", mock.Anything, mock.Anything, invalidUtf8Payload).Return(nil)
 
-	plugin := &ShellPlugin{
-		stdout:      stdout,
-		ipcFilePath: "test.log",
-		dataChannel: suite.mockDataChannel,
-	}
+	suite.plugin.stdout = stdout
+	suite.plugin.logger = logger{ipcFilePath: "test.log"}
+
+	// Create ipc file
+	ipcFile, _ := os.Create(suite.plugin.logger.ipcFilePath)
+	defer ipcFile.Close()
 
 	// Spawning a separate go routine to close read and write pipes after a few seconds.
 	// This is required as plugin.writePump() has a for loop which will continuosly read data from pipe until it is closed.
@@ -244,7 +396,7 @@ func (suite *ShellTestSuite) TestWritePumpForInvalidUtf8Character() {
 		stdin.Close()
 		stdout.Close()
 	}()
-	plugin.writePump(suite.mockLog)
+	suite.plugin.writePump(suite.mockLog, ipcFile)
 
 	// Assert if SendStreamDataMessage function was called with same data from stdout
 	suite.mockDataChannel.AssertExpectations(suite.T())
@@ -259,12 +411,8 @@ func (suite *ShellTestSuite) TestProcessStdoutData() {
 	file, _ := ioutil.TempFile("/tmp", "file")
 	defer os.Remove(file.Name())
 
-	plugin := &ShellPlugin{
-		dataChannel: suite.mockDataChannel,
-	}
-
 	suite.mockDataChannel.On("SendStreamDataMessage", suite.mockLog, mgsContracts.Output, []byte("Ȁ is a utf8 character.")).Return(nil)
-	outputBuf, err := plugin.processStdoutData(suite.mockLog, stdoutBytes, len(stdoutBytes), unprocessedBuf, file)
+	outputBuf, err := suite.plugin.processStdoutData(suite.mockLog, stdoutBytes, len(stdoutBytes), unprocessedBuf, file)
 
 	suite.mockDataChannel.AssertExpectations(suite.T())
 	assert.Equal(suite.T(), []byte("\xc9"), outputBuf.Bytes())
@@ -276,12 +424,10 @@ func (suite *ShellTestSuite) TestProcessStreamMessage() {
 	stdoutFile, _ := ioutil.TempFile("/tmp", "stdout")
 	defer os.Remove(stdinFile.Name())
 	defer os.Remove(stdoutFile.Name())
-	plugin := &ShellPlugin{
-		stdin:  stdinFile,
-		stdout: stdoutFile,
-	}
+	suite.plugin.stdin = stdinFile
+	suite.plugin.stdout = stdoutFile
 	agentMessage := getAgentMessage(uint32(mgsContracts.Output), payload)
-	plugin.InputStreamMessageHandler(mockLog, *agentMessage)
+	suite.plugin.InputStreamMessageHandler(mockLog, *agentMessage)
 
 	stdinFileContent, _ := ioutil.ReadFile(stdinFile.Name())
 	assert.Equal(suite.T(), "testPayload", string(stdinFileContent))
@@ -308,8 +454,36 @@ func getAgentMessage(payloadType uint32, payload []byte) *mgsContracts.AgentMess
 	return &agentMessage
 }
 
+func (suite *ShellTestSuite) TestValidateCWLogGroupDoesNotExistWithEncryptionEnabled() {
+	configuration := contracts.Configuration{
+		OutputS3BucketName:          "",
+		S3EncryptionEnabled:         false,
+		CloudWatchLogGroup:          testCwLogGroupName,
+		CloudWatchEncryptionEnabled: true,
+	}
+
+	// When cw log group is missing and encryption is enabled
+	suite.mockCWL.On("IsLogGroupPresent", mock.Anything, testCwLogGroupName).Return(false, &testCwlLogGroup)
+	suite.mockCWL.On("IsLogGroupEncryptedWithKMS", mock.Anything, mock.Anything).Return(true, nil)
+	err := suite.plugin.validate(suite.mockContext, configuration)
+	assert.Nil(suite.T(), err)
+}
+
+func (suite *ShellTestSuite) TestValidateCWLogGroupDoesNotExistWithEncryptionDisabled() {
+	configuration := contracts.Configuration{
+		OutputS3BucketName:          "",
+		S3EncryptionEnabled:         false,
+		CloudWatchLogGroup:          testCwLogGroupName,
+		CloudWatchEncryptionEnabled: false,
+	}
+
+	// When cw log group is missing and encryption is disabled
+	suite.mockCWL.On("IsLogGroupPresent", mock.Anything, testCwLogGroupName).Return(false, &testCwlLogGroup)
+	err := suite.plugin.validate(suite.mockContext, configuration)
+	assert.Nil(suite.T(), err)
+}
+
 func (suite *ShellTestSuite) TestValidateCWLogGroupNotEncrypted() {
-	testCwLogGroupName := "testCW"
 	configuration := contracts.Configuration{
 		OutputS3BucketName:          "",
 		S3EncryptionEnabled:         false,
@@ -318,15 +492,13 @@ func (suite *ShellTestSuite) TestValidateCWLogGroupNotEncrypted() {
 	}
 
 	// When cw log group is not encrypted, validate returns error
-	suite.mockCWL.On("IsLogGroupEncryptedWithKMS", mock.Anything, testCwLogGroupName).Return(false, nil)
-	err := suite.plugin.validate(suite.mockContext, configuration, suite.mockCWL, suite.mockS3)
+	suite.mockCWL.On("IsLogGroupPresent", mock.Anything, testCwLogGroupName).Return(true, &testCwlLogGroup)
+	suite.mockCWL.On("IsLogGroupEncryptedWithKMS", mock.Anything, &testCwlLogGroup).Return(false, nil)
+	err := suite.plugin.validate(suite.mockContext, configuration)
 	assert.NotNil(suite.T(), err)
 }
 
 func (suite *ShellTestSuite) TestValidateCWLogGroupEncrypted() {
-	cwMock := new(cloudwatchlogspublisher_mock.CloudWatchLogsServiceMock)
-	s3Mock := new(s3util.MockS3Uploader)
-
 	testCwLogGroupName := "testCW"
 	configuration := contracts.Configuration{
 		OutputS3BucketName:          "",
@@ -335,9 +507,10 @@ func (suite *ShellTestSuite) TestValidateCWLogGroupEncrypted() {
 	}
 
 	// When cw log group is encrypted and CreateLogStream succeed, validate returns nil
-	cwMock.On("IsLogGroupEncryptedWithKMS", mock.Anything, testCwLogGroupName).Return(true, nil)
-	cwMock.On("CreateLogStream", mock.Anything, testCwLogGroupName, mock.Anything).Return(nil)
-	err := suite.plugin.validate(suite.mockContext, configuration, cwMock, s3Mock)
+	suite.mockCWL.On("IsLogGroupPresent", mock.Anything, testCwLogGroupName).Return(true, &testCwlLogGroup)
+	suite.mockCWL.On("IsLogGroupEncryptedWithKMS", mock.Anything, &testCwlLogGroup).Return(true, nil)
+	suite.mockCWL.On("CreateLogStream", mock.Anything, testCwLogGroupName, mock.Anything).Return(nil)
+	err := suite.plugin.validate(suite.mockContext, configuration)
 	assert.Nil(suite.T(), err)
 }
 
@@ -351,9 +524,10 @@ func (suite *ShellTestSuite) TestValidateBypassCWLogGroupEncryptionCheck() {
 	}
 
 	// When cw log group is not encrypted but we choose to bypass encryption check, validate returns true
-	suite.mockCWL.On("IsLogGroupEncryptedWithKMS", mock.Anything, testCwLogGroupName).Return(false, nil)
+	suite.mockCWL.On("IsLogGroupPresent", mock.Anything, testCwLogGroupName).Return(true, &testCwlLogGroup)
+	suite.mockCWL.On("IsLogGroupEncryptedWithKMS", mock.Anything, &testCwlLogGroup).Return(false, nil)
 	suite.mockCWL.On("CreateLogStream", mock.Anything, testCwLogGroupName, mock.Anything).Return(nil)
-	err := suite.plugin.validate(suite.mockContext, configuration, suite.mockCWL, suite.mockS3)
+	err := suite.plugin.validate(suite.mockContext, configuration)
 	assert.Nil(suite.T(), err)
 }
 
@@ -366,9 +540,10 @@ func (suite *ShellTestSuite) TestValidateGetCWLogGroupFailed() {
 	}
 
 	// When get cw log group is failed, validate returns error
-	suite.mockCWL.On("IsLogGroupEncryptedWithKMS", mock.Anything, testCwLogGroupName).Return(false, errors.New("unable to get log groups"))
+	suite.mockCWL.On("IsLogGroupPresent", mock.Anything, testCwLogGroupName).Return(true, &testCwlLogGroup)
+	suite.mockCWL.On("IsLogGroupEncryptedWithKMS", mock.Anything, &testCwlLogGroup).Return(false, errors.New("unable to get log groups"))
 	suite.mockCWL.On("CreateLogStream", mock.Anything, testCwLogGroupName, mock.Anything).Return(nil)
-	err := suite.plugin.validate(suite.mockContext, configuration, suite.mockCWL, suite.mockS3)
+	err := suite.plugin.validate(suite.mockContext, configuration)
 	assert.NotNil(suite.T(), err)
 }
 
@@ -382,7 +557,7 @@ func (suite *ShellTestSuite) TestValidateS3BucketNotEncrypted() {
 
 	// When s3 bucket is not encrypted, validate returns error
 	suite.mockS3.On("IsBucketEncrypted", mock.Anything, testS3BucketName).Return(false, nil)
-	err := suite.plugin.validate(suite.mockContext, configuration, suite.mockCWL, suite.mockS3)
+	err := suite.plugin.validate(suite.mockContext, configuration)
 	assert.NotNil(suite.T(), err)
 }
 
@@ -396,7 +571,7 @@ func (suite *ShellTestSuite) TestValidateS3BucketEncrypted() {
 
 	// When s3 bucket is encrypted, validate returns nil
 	suite.mockS3.On("IsBucketEncrypted", mock.Anything, testS3BucketName).Return(true, nil)
-	err := suite.plugin.validate(suite.mockContext, configuration, suite.mockCWL, suite.mockS3)
+	err := suite.plugin.validate(suite.mockContext, configuration)
 	assert.Nil(suite.T(), err)
 }
 
@@ -410,7 +585,7 @@ func (suite *ShellTestSuite) TestValidateBypassS3BucketEncryptionCheck() {
 
 	// When s3 bucket is not encrypted but choose to bypass encryption check, validate returns nil
 	suite.mockS3.On("IsBucketEncrypted", mock.Anything, testS3BucketName).Return(false, nil)
-	err := suite.plugin.validate(suite.mockContext, configuration, suite.mockCWL, suite.mockS3)
+	err := suite.plugin.validate(suite.mockContext, configuration)
 	assert.Nil(suite.T(), err)
 }
 
@@ -424,6 +599,6 @@ func (suite *ShellTestSuite) TestValidateGetS3BucketEncryptionFailed() {
 
 	// When agent failed to get s3 bucket encryption, validate returns error
 	suite.mockS3.On("IsBucketEncrypted", mock.Anything, testS3BucketName).Return(false, errors.New("get encryption failed"))
-	err := suite.plugin.validate(suite.mockContext, configuration, suite.mockCWL, suite.mockS3)
+	err := suite.plugin.validate(suite.mockContext, configuration)
 	assert.NotNil(suite.T(), err)
 }

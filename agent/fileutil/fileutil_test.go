@@ -15,9 +15,11 @@ package fileutil
 
 import (
 	"fmt"
+	"io/ioutil"
 	"log"
 	"os"
 	"path/filepath"
+	"strings"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -161,6 +163,41 @@ func TestMakeDirs(t *testing.T) {
 	fs = osFS{}
 }
 
+func TestCreateFile(t *testing.T) {
+	testFile := os.File{}
+	fs = osFSStub{osFile: testFile}
+	filePath := "sampleFile"
+	file, err := CreateFile(filePath)
+	assert.NoError(t, err, "expected no error")
+	assert.Equal(t, &testFile, file)
+
+	// error test
+	fs = osFSStub{err: fmt.Errorf("someerror")}
+	_, err = CreateFile(filePath)
+	assert.Error(t, err, "expected some error")
+
+	// reset
+	fs = osFS{}
+}
+
+func TestCreateTempDir(t *testing.T) {
+	// No error test
+	ioUtil = ioUtilStub{s: "sampledir123"}
+
+	dir := "sampledir"
+	name, err := CreateTempDir("", dir)
+	assert.NoError(t, err, "expected no error")
+	assert.True(t, strings.HasPrefix(name, dir))
+
+	// error test
+	ioUtil = ioUtilStub{err: fmt.Errorf("someerror")}
+	_, err = CreateTempDir("", dir)
+	assert.Error(t, err, "expected some error")
+
+	// reset
+	ioUtil = ioU{}
+}
+
 func TestDeleteFile(t *testing.T) {
 	file := "samplefile"
 
@@ -241,6 +278,7 @@ type osFSStub struct {
 	exists   bool
 	file     ioFile
 	fileInfo os.FileInfo
+	osFile   os.File
 	err      error
 }
 
@@ -250,15 +288,25 @@ func (a osFSStub) Open(name string) (ioFile, error)             { return a.file,
 func (a osFSStub) Stat(name string) (os.FileInfo, error)        { return a.fileInfo, a.err }
 func (a osFSStub) Remove(name string) error                     { return a.err }
 func (a osFSStub) Rename(oldpath string, newpath string) error  { return a.err }
+func (a osFSStub) Create(name string) (*os.File, error)         { return &a.osFile, a.err }
 
 // ioutil stub
 type ioUtilStub struct {
 	b   []byte
 	err error
+	s   string
 }
 
 func (a ioUtilStub) ReadFile(filename string) ([]byte, error) {
 	return a.b, a.err
+}
+
+func (a ioUtilStub) TempDir(dir, prefix string) (name string, err error) {
+	return a.s, a.err
+}
+
+func (a ioUtilStub) WriteFile(filename string, data []byte, perm os.FileMode) error {
+	return a.err
 }
 
 func TestAppendToFile(t *testing.T) {
@@ -268,4 +316,55 @@ func TestAppendToFile(t *testing.T) {
 	filePath, err := AppendToFile("", file, " This is a sample text")
 	assert.NoError(t, err, "expected no error")
 	fmt.Println(filePath)
+}
+
+func TestIOHelperMock_MoveFiles(t *testing.T) {
+	destDir, err := ioutil.TempDir(os.TempDir(), "base")
+	assert.NoError(t, err)
+	tempCloneDir, err := ioutil.TempDir(destDir, "tempCloneDir")
+	assert.NoError(t, err)
+	testSubDir, err := ioutil.TempDir(tempCloneDir, "testsubdir")
+	assert.NoError(t, err)
+	_, err = ioutil.TempFile(tempCloneDir, "test")
+	assert.NoError(t, err)
+	_, err = ioutil.TempFile(testSubDir, "test")
+	assert.NoError(t, err)
+	defer os.RemoveAll(destDir)
+
+	files, err := ioutil.ReadDir(destDir)
+	assert.NoError(t, err)
+	assert.Equal(t, 1, len(files))
+
+	assert.NoError(t, MoveFiles(tempCloneDir, destDir))
+
+	files, err = ioutil.ReadDir(destDir)
+	assert.NoError(t, err)
+	assert.Equal(t, 3, len(files))
+}
+
+func TestIOHelperMock_MoveFilesMoveError(t *testing.T) {
+	err := MoveFiles("", "")
+	assert.Error(t, err)
+	assert.Equal(t, "open : no such file or directory", err.Error())
+}
+
+func TestIOHelperMock_MoveFilesMoveErrorReadDirError(t *testing.T) {
+	err := MoveFiles("", "")
+	assert.Error(t, err)
+	assert.Equal(t, "open : no such file or directory", err.Error())
+}
+
+func TestIOHelperMock_CollectFilesAndRebase(t *testing.T) {
+	destDir, err := ioutil.TempDir(os.TempDir(), "base")
+	assert.NoError(t, err)
+	tempCloneDir, err := ioutil.TempDir(destDir, "tempCloneDir")
+	assert.NoError(t, err)
+	testFile, err := ioutil.TempFile(tempCloneDir, "test")
+	assert.NoError(t, err)
+	defer os.RemoveAll(destDir)
+
+	files, err := CollectFilesAndRebase(tempCloneDir, destDir)
+
+	assert.Equal(t, 1, len(files))
+	assert.Equal(t, filepath.Join(destDir, filepath.Base(testFile.Name())), files[0])
 }

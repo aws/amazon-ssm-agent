@@ -17,7 +17,7 @@
 package model
 
 import (
-	"github.com/aws/amazon-ssm-agent/agent/util/interop"
+	"github.com/aws/amazon-ssm-agent/agent/startup/util/interop"
 )
 
 // Dcb structure
@@ -58,6 +58,12 @@ type WindowsInfo struct {
 type OperatingSystemInfo struct {
 	Version            string `json:"Version"`
 	OperatingSystemSKU int    `json:"OperatingSystemSKU"`
+}
+
+// PvEntity contains Version from HKLM:\SOFTWARE\Amazon\PVDriver.
+type PvPackageInfo struct {
+	Name    string `json:"PSChildName"`
+	Version string `json:"Version"`
 }
 
 // PnpEntity contains DeviceId, Service, Name from Win32_PnpEntity.

@@ -16,30 +16,34 @@
 package downloadcontent
 
 import (
-	"github.com/aws/amazon-ssm-agent/agent/appconfig"
-	"github.com/aws/amazon-ssm-agent/agent/context"
-	"github.com/aws/amazon-ssm-agent/agent/contracts"
-	"github.com/aws/amazon-ssm-agent/agent/fileutil"
-	"github.com/aws/amazon-ssm-agent/agent/fileutil/filemanager"
-	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
-	"github.com/aws/amazon-ssm-agent/agent/log"
-	"github.com/aws/amazon-ssm-agent/agent/plugins/downloadcontent/gitresource"
-	"github.com/aws/amazon-ssm-agent/agent/plugins/downloadcontent/gitresource/privategithub"
-	"github.com/aws/amazon-ssm-agent/agent/plugins/downloadcontent/remoteresource"
-	"github.com/aws/amazon-ssm-agent/agent/plugins/downloadcontent/s3resource"
-	"github.com/aws/amazon-ssm-agent/agent/plugins/downloadcontent/ssmdocresource"
-	"github.com/aws/amazon-ssm-agent/agent/task"
-
 	"errors"
 	"fmt"
 	"os"
 	"path/filepath"
 	"strings"
 
+	"github.com/aws/amazon-ssm-agent/agent/appconfig"
+	"github.com/aws/amazon-ssm-agent/agent/context"
+	"github.com/aws/amazon-ssm-agent/agent/contracts"
+	"github.com/aws/amazon-ssm-agent/agent/fileutil"
+	"github.com/aws/amazon-ssm-agent/agent/fileutil/filemanager"
 	"github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/iohandler"
+	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
+	"github.com/aws/amazon-ssm-agent/agent/log"
+	"github.com/aws/amazon-ssm-agent/agent/plugins/downloadcontent/gitresource/github"
+	"github.com/aws/amazon-ssm-agent/agent/plugins/downloadcontent/gitresource/github/privategithub"
+	"github.com/aws/amazon-ssm-agent/agent/plugins/downloadcontent/gitresource/privategit"
+	"github.com/aws/amazon-ssm-agent/agent/plugins/downloadcontent/httpresource"
+	"github.com/aws/amazon-ssm-agent/agent/plugins/downloadcontent/remoteresource"
+	"github.com/aws/amazon-ssm-agent/agent/plugins/downloadcontent/s3resource"
+	"github.com/aws/amazon-ssm-agent/agent/plugins/downloadcontent/ssmdocresource"
+	"github.com/aws/amazon-ssm-agent/agent/ssm/ssmparameterresolver"
+	"github.com/aws/amazon-ssm-agent/agent/task"
 )
 
 const (
+	Git         = "Git"         //Git represents any arbitrary "Git" repository from where the resource can be downloaded
+	HTTP        = "HTTP"        //HTTP represents any arbitrary URL from where the resource can be downloaded
 	GitHub      = "GitHub"      //Github represents the source type "GitHub" from where the resource can be downloaded
 	S3          = "S3"          //S3 represents the source type "S3" from where the resource is being downloaded
 	SSMDocument = "SSMDocument" //SSMDocument represents the source type as SSM Document
@@ -49,6 +53,14 @@ const (
 	FailExitCode = 1
 	PassExitCode = 0
 )
+
+var sourceTypes = map[string]bool{
+	Git:         true,
+	HTTP:        true,
+	GitHub:      true,
+	S3:          true,
+	SSMDocument: true,
+}
 
 var SetPermission = SetFilePermissions
 
@@ -82,11 +94,17 @@ func newRemoteResource(log log.T, SourceType string, SourceInfo string) (resourc
 		// TODO: meloniam@ 08/24/2017 Replace string type to map[string]inteface{} type once Runcommand supports string maps
 		// TODO: https://amazon.awsapps.com/workdocs/index.html#/document/7d56a42ea5b040a7c33548d77dc98040f0fb380bbbfb2fd580c861225e2ee1c7
 		token := privategithub.NewTokenInfoImpl()
-		return gitresource.NewGitResource(log, SourceInfo, token)
+		return github.NewGitHubResource(log, SourceInfo, token)
 	case S3:
 		return s3resource.NewS3Resource(log, SourceInfo)
 	case SSMDocument:
 		return ssmdocresource.NewSSMDocResource(SourceInfo)
+	case HTTP:
+		ssmParameterResolverBridge := ssmparameterresolver.NewSsmParameterResolverBridge(ssmparameterresolver.NewService())
+		return httpresource.NewHTTPResource(log, SourceInfo, ssmParameterResolverBridge)
+	case Git:
+		ssmParameterResolverBridge := ssmparameterresolver.NewSsmParameterResolverBridge(ssmparameterresolver.NewService())
+		return privategit.NewGitResource(log, SourceInfo, ssmParameterResolverBridge)
 	default:
 		return nil, fmt.Errorf("Invalid SourceType - %v", SourceType)
 	}
@@ -205,7 +223,7 @@ func validateInput(input *DownloadContentPlugin) (valid bool, err error) {
 		return false, errors.New("SourceType must be specified")
 	}
 	//ensure all entries are valid
-	if input.SourceType != GitHub && input.SourceType != S3 && input.SourceType != SSMDocument {
+	if !sourceTypes[input.SourceType] {
 		return false, errors.New("Unsupported source type")
 	}
 	// ensure non-empty source info

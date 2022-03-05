@@ -1,0 +1,26 @@
+{
+  "schemaVersion": "2.2",
+  "description": "Cross-platform document",
+  "mainSteps": [
+    {
+      "action": "aws:runPowerShellScript",
+      "precondition": {
+        "StringEquals": ["{{ messagePrecondition }}", "MessagePreconditionValue"]
+      },
+      "inputs": {
+        "commands": "date"
+      },
+      "maxAttempts": 0,
+      "name": "runPowerShellScript1",
+      "onFailure": "",
+      "settings": null,
+      "timeoutSeconds": 0
+    }
+  ],
+  "parameters": {
+    "messagePrecondition": {
+      "type": "String",
+      "description": "(Required) Specify a value for the precondition argument."
+    }
+  }
+}
