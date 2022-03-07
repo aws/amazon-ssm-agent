@@ -21,10 +21,10 @@ import (
 	"net/url"
 	"testing"
 
-	"github.com/aws/amazon-ssm-agent/agent/network"
-
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/log"
+	"github.com/aws/amazon-ssm-agent/agent/network"
+	mgsConfig "github.com/aws/amazon-ssm-agent/agent/session/config"
 	"github.com/gorilla/websocket"
 	"github.com/stretchr/testify/assert"
 )
@@ -37,7 +37,7 @@ var upgrader = websocket.Upgrader{
 var dialerInput = &websocket.Dialer{
 	TLSClientConfig: network.GetDefaultTLSConfig(log.NewMockLog(), appconfig.DefaultConfig()),
 	Proxy:           http.ProxyFromEnvironment,
-	WriteBufferSize: 128000,
+	WriteBufferSize: mgsConfig.ControlChannelWriteBufferSizeLimit,
 }
 
 func handlerToBeTested(w http.ResponseWriter, req *http.Request) {

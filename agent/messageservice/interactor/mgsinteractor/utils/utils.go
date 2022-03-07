@@ -2,6 +2,7 @@ package utils
 
 import (
 	"encoding/json"
+	"fmt"
 	"time"
 
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
@@ -25,6 +26,10 @@ const (
 
 	// SessionCompleteTopic represents session agent complete topic
 	SessionCompleteTopic = CommandTopic(mgsContracts.TaskCompleteMessage)
+
+	// ControlChannelAgentReplyPayloadSizeLimit represents 120000 bytes is the maximum agent reply payload
+	// in a message that can be sent through control channel.
+	ControlChannelAgentReplyPayloadSizeLimit = 120000
 )
 
 // GetTopicFromDocResult returns topic based on doc result
@@ -51,6 +56,9 @@ func GenerateAgentJobReplyPayload(log log.T, agentMessageUUID uuid.UUID, message
 	}
 	payload := string(payloadB)
 	log.Info("Sending reply ", jsonutil.Indent(payload))
+	if len(payloadB) > ControlChannelAgentReplyPayloadSizeLimit {
+		return nil, fmt.Errorf("dropping reply message %v because it is too large to send over control channel", agentMessageUUID.String())
+	}
 	finalReplyContent := mgsContracts.AgentJobReplyContent{
 		SchemaVersion: 1,
 		JobId:         messageID,

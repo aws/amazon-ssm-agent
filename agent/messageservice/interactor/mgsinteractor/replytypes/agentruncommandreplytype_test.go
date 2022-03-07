@@ -16,6 +16,8 @@ package replytypes
 
 import (
 	"encoding/json"
+	"fmt"
+	"strings"
 	"testing"
 
 	"github.com/aws/amazon-ssm-agent/agent/context"
@@ -64,6 +66,37 @@ func (suite *AgentRunCommandReplyTestSuite) TestAgentRunCommandReply_AgentMessag
 	ctx := context.NewMockDefault()
 	outputMsgId := "messageId"
 	docResult := contracts.DocumentResult{MessageID: "messageId", ResultType: contracts.RunCommandResult}
+	uuid := uuid.NewV4()
+	agentComplete := NewAgentRunCommandReplyType(ctx, docResult, uuid, 0)
+	agentMessage, err := agentComplete.ConvertToAgentMessage()
+	assert.Nil(suite.T(), err)
+	assert.Equal(suite.T(), uuid.String(), agentMessage.MessageId.String())
+	replyContent := mgsContracts.AgentJobReplyContent{}
+	err = json.Unmarshal(agentMessage.Payload, &replyContent)
+	assert.Nil(suite.T(), err)
+	assert.Equal(suite.T(), string(mgsUtils.SendCommandTopic), replyContent.Topic)
+	assert.Equal(suite.T(), outputMsgId, replyContent.JobId)
+}
+
+func (suite *AgentRunCommandReplyTestSuite) TestAgentCommandReply_HugePayloadGreaterThan120000_Fail() {
+	ctx := context.NewMockDefault()
+	pluginResult := make(map[string]*contracts.PluginResult)
+	pluginResult["test"] = &contracts.PluginResult{Output: strings.Repeat("a", 120000)}
+	docResult := contracts.DocumentResult{MessageID: "messageId", ResultType: contracts.RunCommandResult, PluginResults: pluginResult}
+	uuid := uuid.NewV4()
+	agentComplete := NewAgentRunCommandReplyType(ctx, docResult, uuid, 0)
+	agentMessage, err := agentComplete.ConvertToAgentMessage()
+	errorString := fmt.Sprintf("dropping reply message %v because it is too large to send over control channel", uuid.String())
+	assert.Contains(suite.T(), err.Error(), errorString)
+	assert.Nil(suite.T(), agentMessage)
+}
+
+func (suite *AgentRunCommandReplyTestSuite) TestAgentCommandReply_HugePayloadGreaterThan80000to120000_Success() {
+	ctx := context.NewMockDefault()
+	outputMsgId := "messageId"
+	pluginResult := make(map[string]*contracts.PluginResult)
+	pluginResult["test"] = &contracts.PluginResult{Output: strings.Repeat("a", 80000)}
+	docResult := contracts.DocumentResult{MessageID: "messageId", ResultType: contracts.RunCommandResult, PluginResults: pluginResult}
 	uuid := uuid.NewV4()
 	agentComplete := NewAgentRunCommandReplyType(ctx, docResult, uuid, 0)
 	agentMessage, err := agentComplete.ConvertToAgentMessage()

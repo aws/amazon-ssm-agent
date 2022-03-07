@@ -29,7 +29,6 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/messageservice/interactor/mgsinteractor/replytypes"
 	"github.com/aws/amazon-ssm-agent/agent/messageservice/utils"
-	"github.com/aws/amazon-ssm-agent/agent/session/controlchannel"
 	"github.com/aws/amazon-ssm-agent/common/identity"
 	"github.com/carlescere/scheduler"
 	"github.com/gorilla/websocket"
@@ -40,11 +39,16 @@ const (
 	failedReplyProcessingLimit = 50
 )
 
+var (
+	writeIntoFile = fileutil.WriteIntoFileWithPermissions
+	getFileNames  = fileutil.GetFileNames
+)
+
 // loadFailedReplies loads failed replies from local mgs replies folder on disk
 func (mgs *MGSInteractor) loadFailedReplies(log log.T) []string {
 	log.Debug("Checking MGS Replies folder for failed sent replies")
 	absoluteDirPath := getFailedReplyDirectory(mgs.context.Identity())
-	files, err := fileutil.GetFileNames(absoluteDirPath)
+	files, err := getFileNames(absoluteDirPath)
 	if err != nil {
 		log.Errorf("encountered error %v while listing mgs replies in %v", err, absoluteDirPath)
 	}
@@ -186,19 +190,20 @@ func (mgs *MGSInteractor) persistResult(replyBytes AgentResultLocalStoreData) (e
 	if err != nil {
 		log.Errorf("encountered error with message %v while marshalling %v to string", err)
 	} else {
-		files, _ := fileutil.GetFileNames(getFailedReplyDirectory(mgs.context.Identity()))
+		files, _ := getFileNames(getFailedReplyDirectory(mgs.context.Identity()))
+		persistTime := time.Now().UTC()
+		fileName := fmt.Sprintf("%v_%v", persistTime.Format("2006-01-02T15-04-05"), replyBytes.ReplyId) //changing the format a bit from MDS replies to support proper sorting
 		for fileIndex := len(files) - 1; fileIndex >= 0; fileIndex-- {
 			file := files[fileIndex]
 			if strings.HasSuffix(file, replyBytes.ReplyId) {
-				log.Debugf("Reply %v already saved in file %v, skipping", replyBytes.ReplyId, file)
-				return
+				log.Debugf("updating the file %v as reply %v is already present", replyBytes.ReplyId, file)
+				fileName = file
+				break
 			}
 		}
-		persistTime := time.Now().UTC()
-		fileName := fmt.Sprintf("%v_%v", persistTime.Format("2006-01-02T15-04-05"), replyBytes.ReplyId) //changing the format a bit from MDS replies to support proper sorting
 		absoluteFileName := getFailedReplyLocation(mgs.context.Identity(), fileName)
 		log.Tracef("persisting reply %v in file %v", jsonutil.Indent(content), absoluteFileName)
-		if s, err := fileutil.WriteIntoFileWithPermissions(absoluteFileName, jsonutil.Indent(content), os.FileMode(appconfig.ReadWriteAccess)); s && err == nil {
+		if s, err := writeIntoFile(absoluteFileName, jsonutil.Indent(content), os.FileMode(appconfig.ReadWriteAccess)); s && err == nil {
 			log.Debugf("successfully persisted reply in %v", absoluteFileName)
 		} else {
 			log.Debugf("persisting reply in %v failed with error %v", absoluteFileName, err)
@@ -237,14 +242,21 @@ externalLoop:
 			ReplyId:     docResult.GetMessageUUID().String(),
 			RetryNumber: docResult.GetRetryNumber(),
 		}
-		if mgs.warnErrors(err) { // save and return
+		if mgs.isTempError(err) { // do not retry or wait when we see these errors
+			log.Debugf("skipping wait after send reply due to the following temporary error %v", err)
 			mgs.persistResult(persist)
-			return
+			break
 		}
+		if err != nil {
+			log.Errorf("error while sending reply %v to MGS - %v ", agentMessageUUID, err)
+		}
+		// increment retries count
+		docResult.IncrementRetries()
 		select {
 		case <-time.After(time.Duration(docResult.GetBackOffSecond()) * time.Second):
 			if docResult.ShouldPersistData() && ((retryNo + 1) == totalNoOfRetries) {
-				log.Errorf("no ack received so persisting the reply %v", agentMessageUUID)
+				log.Warnf("no ack received while sending reply %v", agentMessageUUID)
+				persist.RetryNumber = docResult.GetRetryNumber()
 				mgs.persistResult(persist)
 			}
 		case <-replyAckChan:
@@ -328,7 +340,6 @@ func (mgs *MGSInteractor) resultProcessingDone() {
 // sendReplyToMGS send replies to MGS
 func (mgs *MGSInteractor) sendReplyToMGS(result replytypes.IReplyType) error {
 	log := mgs.context.Log()
-	result.IncrementRetries()
 	var err error
 	agentMessage, err := result.ConvertToAgentMessage()
 	if err != nil {
@@ -338,12 +349,6 @@ func (mgs *MGSInteractor) sendReplyToMGS(result replytypes.IReplyType) error {
 	if err != nil {
 		return fmt.Errorf("error while serializing agent message: %v", err)
 	}
-
-	// Subtract 4000 from Write Buffer Limit for any overhead frames Gorilla may add
-	if len(msg) > controlchannel.WriteBufferSizeLimit-4000 {
-		return fmt.Errorf("dropping Message %s because it is too large to send over control channel", result.GetResult().MessageID)
-	}
-
 	if mgs.controlChannel != nil {
 		if err = mgs.controlChannel.SendMessage(log, msg, websocket.BinaryMessage); err != nil {
 			err = fmt.Errorf("error while sending agent reply message, ID [%v], err: %v", result.GetMessageUUID().String(), err) // modify
@@ -355,7 +360,7 @@ func (mgs *MGSInteractor) sendReplyToMGS(result replytypes.IReplyType) error {
 	return fmt.Errorf("control channel is not open")
 }
 
-func (mgs *MGSInteractor) warnErrors(err error) bool {
+func (mgs *MGSInteractor) isTempError(err error) bool {
 	if err == nil {
 		return false
 	}

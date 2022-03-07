@@ -23,10 +23,9 @@ import (
 	"testing"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
-	"github.com/aws/amazon-ssm-agent/agent/network"
-
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/log"
+	"github.com/aws/amazon-ssm-agent/agent/network"
 	mgsConfig "github.com/aws/amazon-ssm-agent/agent/session/config"
 	"github.com/aws/aws-sdk-go/aws/credentials"
 	v4 "github.com/aws/aws-sdk-go/aws/signer/v4"
@@ -56,7 +55,7 @@ var upgrader = websocket.Upgrader{
 var dialerInput = &websocket.Dialer{
 	TLSClientConfig: network.GetDefaultTLSConfig(log.NewMockLog(), appconfig.DefaultConfig()),
 	Proxy:           http.ProxyFromEnvironment,
-	WriteBufferSize: 128000,
+	WriteBufferSize: mgsConfig.ControlChannelWriteBufferSizeLimit,
 }
 
 // handlerToBeTested echos all incoming input from a websocket connection back to the client while

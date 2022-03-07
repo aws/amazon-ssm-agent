@@ -21,10 +21,9 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/aws/amazon-ssm-agent/agent/network"
-
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/log"
+	"github.com/aws/amazon-ssm-agent/agent/network"
 	"github.com/aws/amazon-ssm-agent/agent/platform"
 	"github.com/aws/amazon-ssm-agent/agent/session/communicator"
 	mgsConfig "github.com/aws/amazon-ssm-agent/agent/session/config"
@@ -57,11 +56,6 @@ type ControlChannel struct {
 	channelType                     string
 	agentMessageIncomingMessageChan chan mgsContracts.AgentMessage
 }
-
-const (
-	// WriteBufferSizeLimit represents 128000 bytes is the maximum control channel can send in 1 message
-	WriteBufferSizeLimit = 128000
-)
 
 // Initialize populates controlchannel object and opens controlchannel to communicate with mgs.
 func (controlChannel *ControlChannel) Initialize(context context.T,
@@ -192,7 +186,7 @@ func (controlChannel *ControlChannel) Open(log log.T) error {
 	controlChannelDialerInput := &websocket.Dialer{
 		TLSClientConfig: network.GetDefaultTLSConfig(log, controlChannel.context.AppConfig()),
 		Proxy:           http.ProxyFromEnvironment,
-		WriteBufferSize: WriteBufferSizeLimit,
+		WriteBufferSize: mgsConfig.ControlChannelWriteBufferSizeLimit,
 	}
 	if err := controlChannel.wsChannel.Open(log, controlChannelDialerInput); err != nil {
 		return fmt.Errorf("failed to connect controlchannel with error: %s", err)

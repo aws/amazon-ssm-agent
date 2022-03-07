@@ -50,6 +50,9 @@ const (
 	OutgoingMessageBufferCapacity = 100000
 	IncomingMessageBufferCapacity = 100000
 
+	// ControlChannelWriteBufferSizeLimit represents 142000 bytes is the maximum control channel can send in 1 message
+	ControlChannelWriteBufferSizeLimit = 142000
+
 	// Round trip time constant
 	RTTConstant = 1.0 / 8.0
 	// Round trip time variation constant
