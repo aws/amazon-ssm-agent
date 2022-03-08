@@ -33,7 +33,6 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/updateutil/updatemanifest"
 	"github.com/aws/amazon-ssm-agent/agent/version"
 	"github.com/aws/amazon-ssm-agent/common/identity"
-	"github.com/aws/amazon-ssm-agent/core/tools"
 	"github.com/nightlyone/lockfile"
 )
 
@@ -214,15 +213,8 @@ func updateAgent() int {
 	// Recover updater if panic occurs and fail the updater
 	defer recoverUpdaterFromPanic(updateDetail)
 
-	// We do not send any error above this to ICS/MGS except panic message
-
-	// Data directory checks when updating from <= 3.1.821.0
-	if err = tools.DataDirChecksOnInitialInstall(false); err != nil {
-		updater.Failed(updateDetail, log, updateconstants.ErrorFailedLinksCheck, err.Error(), false)
-	}
-
 	// Start or resume update
-	if err = updater.StartOrResumeUpdate(log, updateDetail); err != nil {
+	if err = updater.StartOrResumeUpdate(log, updateDetail); err != nil { // We do not send any error above this to ICS/MGS except panic message
 		// Rolled back, but service cannot start, Update failed.
 		updater.Failed(updateDetail, log, updateconstants.ErrorUnexpected, err.Error(), false)
 	} else {
