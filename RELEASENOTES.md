@@ -1,5 +1,9 @@
 Latest
 ===============
+- (windows only) Remove symlink scan during update
+
+3.1.1045.0
+===============
 - Fixed sourceHash validation for aws:application document plugin
 - Added document parameter validation for values passed to target document of aws:runDocument plugin
 - (windows only) Fix process leak when legacy cloudwatch plugin is enabled
