@@ -20,6 +20,7 @@ package application
 import (
 	"encoding/json"
 	"fmt"
+	"os"
 	"os/exec"
 	"strconv"
 	"strings"
@@ -31,6 +32,10 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/plugins/inventory/model"
 	"github.com/twinj/uuid"
 )
+
+type InventoryApplicationFile struct {
+	Content []model.ApplicationData
+}
 
 var (
 	startMarker = "<start" + randomString(8) + ">"
@@ -57,6 +62,9 @@ var (
 	snapCmd                        = "snap"
 	snapArgsToGetAllInstalledSnaps = "list"
 	snapQueryFormat                = "{\"Name\":\"%s\",\"Publisher\":\"%s\",\"Version\":\"%s\",\"ApplicationType\":\"%s\",\"Architecture\":\"%s\",\"Url\":\"%s\",\"Summary\":\"%s\",\"PackageId\":\"%s\"}"
+
+	// platforms that can pass application inventory files, as the agent cannot gather the data from the local package manager
+	inventoryApplicationFileSupportedPlatforms = []string{"Bottlerocket"}
 )
 
 func randomString(length int) string {
@@ -81,6 +89,12 @@ func commandExists(cmd string) bool {
 	return err == nil
 }
 
+// returns true if an inventory file is available on the instance
+func fileExists(path string) bool {
+	_, err := os.Stat(path)
+	return err == nil
+}
+
 func platformInfoProvider(log log.T) (name string, err error) {
 	return platform.PlatformName(log)
 }
@@ -93,6 +107,27 @@ func collectPlatformDependentApplicationData(context context.T) (appData []model
 	var args []string
 
 	log := context.Log()
+
+	platformName, _ := platformInfoProvider(log)
+	for _, fileSupportedPlatform := range inventoryApplicationFileSupportedPlatforms {
+		lowerPlatformName := strings.ToLower(platformName)
+		formattedPlatformName := strings.ReplaceAll(lowerPlatformName, " ", "-")
+		inventoryApplicationFileLocation := "/var/lib/" + formattedPlatformName + "/inventory/application.json"
+		if platformName == fileSupportedPlatform && fileExists(inventoryApplicationFileLocation) {
+			var inventoryApplicationFileBytes []byte
+			if inventoryApplicationFileBytes, err = os.ReadFile(inventoryApplicationFileLocation); err != nil {
+				log.Errorf("Unable to read inventory file - hence no inventory data for %v: %v", GathererName, err)
+				return
+			}
+			if appData, err = getInventoryApplicationFileData(inventoryApplicationFileBytes); err != nil {
+				log.Errorf("Failed to gather inventory data from inventory file %v: %v", GathererName, err)
+				return
+			}
+			log.Infof("Used file to gather application")
+			return
+
+		}
+	}
 
 	if checkCommandExists(dpkgCmd) {
 		cmd = dpkgCmd
@@ -162,6 +197,16 @@ func parseSnapOutput(context context.T, cmdOutput string) (snapOutput string) {
 		snapOutput = snapOutput + ","
 	}
 	snapOutput = strings.TrimSuffix(snapOutput, ",")
+	return
+}
+
+// getInventoryApplicationFileData reads an inventory file's bytes and gets information about all packages/applications
+func getInventoryApplicationFileData(inventoryApplicationFileBytes []byte) (data []model.ApplicationData, err error) {
+	var inventory InventoryApplicationFile
+	//unmarshal json bytes accordingly.
+	if err = json.Unmarshal(inventoryApplicationFileBytes, &inventory); err == nil {
+		data = inventory.Content
+	}
 	return
 }
 

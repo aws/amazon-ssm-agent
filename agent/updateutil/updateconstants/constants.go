@@ -72,8 +72,8 @@ const (
 	// PlatformAmazonLinux represents amazon linux
 	PlatformAmazonLinux = "amazon"
 
-	// PlatformBottlerocketOs represents bottlerocket
-	PlatformBottlerocketOs = "bottlerocket"
+	// PlatformBottlerocket represents bottlerocket
+	PlatformBottlerocket = "bottlerocket"
 
 	// PlatformRedHat represents RedHat
 	PlatformRedHat = "red hat"

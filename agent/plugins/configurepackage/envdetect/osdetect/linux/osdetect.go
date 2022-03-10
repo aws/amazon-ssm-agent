@@ -344,7 +344,7 @@ func getRedhatishPlatform(data string) (string, error) {
 		{`(?i)Rocky( Linux)?`, c.PlatformRockyLinux},
 		{`(?i)Fedora( Linux)?`, c.PlatformFedora},
 		{`(?i)Amazon Linux`, c.PlatformAmazon},
-		{`(?i)Bottlerocket( OS)?`, c.PlatformBottlerocketOs},
+		{`(?i)Bottlerocket( OS)?`, c.PlatformBottlerocket},
 	}
 
 	for _, m := range mapping {
@@ -402,7 +402,7 @@ func platformFamilyForPlatform(platform string) (string, error) {
 	switch platform {
 	case c.PlatformUbuntu, c.PlatformDebian, c.PlatformRaspbian:
 		return c.PlatformFamilyDebian, nil
-	case c.PlatformRedhat, c.PlatformCentos, c.PlatformAmazon, c.PlatformBottlerocketOs, c.PlatformOracleLinux, c.PlatformRockyLinux:
+	case c.PlatformRedhat, c.PlatformCentos, c.PlatformAmazon, c.PlatformOracleLinux, c.PlatformRockyLinux:
 		return c.PlatformFamilyRhel, nil
 	case c.PlatformFedora:
 		return c.PlatformFamilyFedora, nil
@@ -414,6 +414,8 @@ func platformFamilyForPlatform(platform string) (string, error) {
 		return c.PlatformFamilyGentoo, nil
 	case c.PlatformArch:
 		return c.PlatformFamilyArch, nil
+	case c.PlatformBottlerocket:
+		return "", fmt.Errorf("Configure Package is not supported on Bottlerocket.")
 	default:
 		return "", fmt.Errorf("unknown platform: %s", platform)
 	}

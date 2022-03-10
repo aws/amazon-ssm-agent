@@ -352,7 +352,6 @@ func TestPlatformFamilyForPlatform(t *testing.T) {
 		{"rocky", "rhel", false},
 		{"oracle", "rhel", false},
 		{"amazon", "rhel", false},
-		{"bottlerocket", "rhel", false},
 		{"suse", "suse", false},
 		{"opensuse", "suse", false},
 		{"opensuseleap", "suse", false},
@@ -361,6 +360,7 @@ func TestPlatformFamilyForPlatform(t *testing.T) {
 		{"arch", "arch", false},
 		{"alpine", "alpine", false},
 		{"asdf", "", true},
+		{"bottlerocket", "", true},
 	}
 
 	for _, m := range data {

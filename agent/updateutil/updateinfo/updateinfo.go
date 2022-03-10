@@ -145,8 +145,8 @@ func newInner(context context.T) (updateInfo *updateInfoImpl, err error) {
 	if strings.Contains(platformName, updateconstants.PlatformAmazonLinux) {
 		log.Info("Detected platform Amazon Linux")
 		platformName = updateconstants.PlatformLinux
-	} else if strings.Contains(platformName, updateconstants.PlatformBottlerocketOs) {
-		log.Info("Detected platform BottlerocketOs")
+	} else if strings.Contains(platformName, updateconstants.PlatformBottlerocket) {
+		log.Info("Detected platform Bottlerocket")
 		platformName = updateconstants.PlatformLinux
 	} else if strings.Contains(platformName, updateconstants.PlatformRedHat) {
 		log.Info("Detected platform RedHat")
