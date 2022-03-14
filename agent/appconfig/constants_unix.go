@@ -19,7 +19,6 @@ package appconfig
 
 import (
 	"fmt"
-	"io/fs"
 	"os"
 	"path/filepath"
 	"syscall"
@@ -100,8 +99,8 @@ var (
 	// RunCommandScriptName is the script name where all downloaded or provided commands will be stored
 	RunCommandScriptName = "_script.sh"
 
-	NecessaryAgentBinaryPermissionMask  fs.FileMode = 0511 // Require read/execute for root, execute for all
-	DisallowedAgentBinaryPermissionMask fs.FileMode = 0022 // Disallow write for group and user
+	NecessaryAgentBinaryPermissionMask  os.FileMode = 0511 // Require read/execute for root, execute for all
+	DisallowedAgentBinaryPermissionMask os.FileMode = 0022 // Disallow write for group and user
 
 	// customCertificateFileName is the name of the custom certificate
 	customCertificateFileName = "amazon-ssm-agent.crt"

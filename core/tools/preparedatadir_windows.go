@@ -18,7 +18,6 @@ package tools
 
 import (
 	"fmt"
-	"io/fs"
 	"os"
 	"path/filepath"
 	"time"
@@ -142,7 +141,7 @@ func scanSSMDataDirectory(allowLinkDeletions bool) ([]string, []string, error) {
 	var dirLinks []string
 	// recursively check through ssm data folder
 	if _, err := os.Stat(appconfig.SSMDataPath); !os.IsNotExist(err) {
-		walkDirFn := func(path string, dirEntry fs.DirEntry, err error) error {
+		walkFn := func(path string, dirEntry os.FileInfo, err error) error {
 			var dirEntryInfo os.FileInfo
 			var pathStatInfo os.FileInfo
 
@@ -152,9 +151,8 @@ func scanSSMDataDirectory(allowLinkDeletions bool) ([]string, []string, error) {
 			if dirEntry == nil {
 				return nil
 			}
-			if dirEntryInfo, err = dirEntry.Info(); err != nil {
-				return fmt.Errorf("Directory info error during data folder validation at %v: %v", path, err)
-			}
+
+			dirEntryInfo = dirEntry
 
 			retries := 3
 			for i := 1; i <= retries; i++ {
@@ -184,7 +182,7 @@ func scanSSMDataDirectory(allowLinkDeletions bool) ([]string, []string, error) {
 			return nil
 		}
 
-		err := filepath.WalkDir(appconfig.SSMDataPath, walkDirFn)
+		err := filepath.Walk(appconfig.SSMDataPath, walkFn)
 		if err != nil {
 			return nil, nil, err
 		}
