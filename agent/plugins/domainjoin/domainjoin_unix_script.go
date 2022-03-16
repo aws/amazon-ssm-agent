@@ -643,12 +643,19 @@ resolve_name_to_ip() {
    fi
 
    RESOLVED_DNS_IP_ADDRESSES=$(dig "$1" +short | tr '\n' ' ')
+   echo "Resolved DNS IP addresses are $RESOLVED_DNS_IP_ADDRESSES"
 
    # Derive DNS IPs if they are not provided as inputs
    if [ -z "$INPUT_DNS_IP_ADDRESS1" ] && [ -z "$INPUT_DNS_IP_ADDRESS2" ]; then
      DS_DNS_IP_ADDRESSES=$($AWSCLI ds describe-directories --region $REGION --directory-id $DIRECTORY_ID --query 'DirectoryDescriptions[*].DnsIpAddrs' --output text)
      if [ $? -ne 0 ] || [ -z "$DS_DNS_IP_ADDRESSES" ]; then
-        echo "***Failed: Cannot find IPs from directory $DIRECTORY_ID" && exit 1
+         echo "Cannot find IPs from directory $DIRECTORY_ID"
+         # This may be a shared directory connected over a peering VPC connection
+         DS_DNS_IP_ADDRESSES=$($AWSCLI ds describe-directories --region $REGION --query "DirectoryDescriptions[?DirectoryId =='$DIRECTORY_ID'].OwnerDirectoryDescription.DnsIpAddrs | [0]" --output text)
+         if [ $? -ne 0 ] || [ -z "$DS_DNS_IP_ADDRESSES" ]; then
+              echo "**Failed: Cannot find IPs from shared directory $DIRECTORY_ID" && exit 1
+         fi
+         echo "DNS IP addresses from Directory Service are $DS_DNS_IP_ADDRESSES"
      fi
 
      # Only use resolved IPs that match DNS IPs of Directory Service
@@ -675,6 +682,7 @@ resolve_name_to_ip() {
      INPUT_DNS_IP_ADDRESS1=$(echo $DS_DNS_IP_ADDRESSES | awk '{ print $1 }')
      INPUT_DNS_IP_ADDRESS2=$(echo $DS_DNS_IP_ADDRESSES | awk '{ print $2 }')
    fi
+   echo "Using DNS IP addresses $INPUT_DNS_IP_ADDRESS1 $INPUT_DNS_IP_ADDRESS2"
 }
 
 ##################################################
