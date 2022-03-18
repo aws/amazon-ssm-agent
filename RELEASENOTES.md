@@ -1,5 +1,11 @@
 Latest
 ===============
+- Add application inventory by file for Bottlerocket
+- Fix infinite retry logic to send failed replies in MGSInteractor
+- Remove usage of io/fs package
+
+3.1.1080.0
+===============
 - (windows only) Remove symlink scan during update
 
 3.1.1045.0
