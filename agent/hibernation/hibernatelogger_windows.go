@@ -34,7 +34,7 @@ func getHibernateSeelogConfig() string {
 			<rollingfile type="size" filename="` + seelogConfigFilePath + `" maxsize="30000" maxrolls="2"/>
 		</outputs>
 		<formats>
-			<format id="fmtinfo" format="%Date %Time %LEVEL %Msg%n"/>
+			<format id="fmtinfo" format="%UTCDateT%UTCTimeZ %LEVEL %Msg%n"/>
 		</formats>
 	</seelog>`
 	return seelogConfig
