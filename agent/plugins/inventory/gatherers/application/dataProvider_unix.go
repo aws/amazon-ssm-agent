@@ -20,6 +20,7 @@ package application
 import (
 	"encoding/json"
 	"fmt"
+	"io/ioutil"
 	"os"
 	"os/exec"
 	"strconv"
@@ -115,7 +116,7 @@ func collectPlatformDependentApplicationData(context context.T) (appData []model
 		inventoryApplicationFileLocation := "/var/lib/" + formattedPlatformName + "/inventory/application.json"
 		if platformName == fileSupportedPlatform && fileExists(inventoryApplicationFileLocation) {
 			var inventoryApplicationFileBytes []byte
-			if inventoryApplicationFileBytes, err = os.ReadFile(inventoryApplicationFileLocation); err != nil {
+			if inventoryApplicationFileBytes, err = ioutil.ReadFile(inventoryApplicationFileLocation); err != nil {
 				log.Errorf("Unable to read inventory file - hence no inventory data for %v: %v", GathererName, err)
 				return
 			}
