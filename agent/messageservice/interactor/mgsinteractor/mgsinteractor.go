@@ -422,16 +422,20 @@ func (mgs *MGSInteractor) sendDocResponse(payloadDoc messageContracts.SendReplyP
 	replyUUID := uuid.NewV4()
 	commandTopic := interactorutils.GetTopicFromDocResult(contracts.RunCommandResult, docState.DocumentType)
 	agentMsg, err := interactorutils.GenerateAgentJobReplyPayload(log, replyUUID, docState.DocumentInformation.MessageID, payloadDoc, commandTopic)
+	if err != nil {
+		log.Errorf("error while generating agent job reply payload: %v", err)
+		return
+	}
 	msg, err := agentMsg.Serialize(log)
 	if err != nil {
 		// Should never happen
-		log.Errorf("Error serializing agent message: %v", err)
+		log.Errorf("error serializing agent message: %v", err)
 		return
 	}
 	if err = mgs.controlChannel.SendMessage(log, msg, websocket.BinaryMessage); err == nil {
-		log.Debugf("Successfully sent doc response client message id : %s back for CommandId %s", replyUUID, docState.DocumentInformation.CommandID)
+		log.Debugf("successfully sent document response with client message id : %v for CommandId %s", replyUUID, docState.DocumentInformation.CommandID)
 	} else {
-		log.Errorf("Error sending doc response message, client message id : %s, err: %v", replyUUID, err)
+		log.Errorf("error while sending document response message with client message id : %v, err: %v", replyUUID, err)
 	}
 }
 
