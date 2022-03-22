@@ -273,3 +273,18 @@ func CleanupFile(log log.T, file string) {
 		log.Debugf("failed to get file info: %v", file)
 	}
 }
+
+// AddSingleQuotesToStringArray put single quote around each string in array
+// - add escape if value has single quote in it
+func AddSingleQuotesToStringArray(stringValues []string) []string {
+	for index := range stringValues {
+		stringValues[index] = addSingleQuotesToStringValue(stringValues[index])
+	}
+	return stringValues
+}
+
+func addSingleQuotesToStringValue(stringValue string) string {
+	stringValue = strings.Replace(stringValue, "'", "''", -1)
+	stringValue = "'" + stringValue + "'"
+	return stringValue
+}

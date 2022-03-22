@@ -128,6 +128,8 @@ func collectRegistryData(context context.T, config model.Config) (data []model.R
 			execScript += " -Recursive"
 		}
 		if valueNames != nil && len(valueNames) > 0 {
+			valueNames = pluginutil.AddSingleQuotesToStringArray(valueNames)
+			log.Infof("Formatted valueNames %v", valueNames)
 			valueNamesArg := strings.Join(valueNames, ",")
 			execScript += " -Values " + valueNamesArg
 		}

@@ -190,3 +190,14 @@ func TestCleanupJSONField(t *testing.T) {
 		assert.Equal(t, output, result)
 	}
 }
+
+func TestAddSingleQuotesAroundValue(t *testing.T) {
+	inOut := [][][]string{
+		{{"a'b", "ab"}, {"'a''b'", "'ab'"}},
+	}
+	for _, test := range inOut {
+		input, output := test[0], test[1]
+		result := AddSingleQuotesToStringArray(input)
+		assert.Equal(t, output, result)
+	}
+}
