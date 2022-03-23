@@ -427,10 +427,8 @@ func downloadPackages(mgr *updateManager, log log.T, updateDetail *UpdateDetail)
 		updateDetail.PackageName,
 		updateDetail.TargetVersion)
 
-	// Update state to Staged
-	if err = mgr.inProgress(updateDetail, log, Staged); err != nil {
-		return err
-	}
+	updateDetail.State = Staged
+	updateDetail.Result = contracts.ResultStatusInProgress
 
 	// Process update
 	return mgr.update(mgr, log, updateDetail)
@@ -489,11 +487,8 @@ func proceedUpdate(mgr *updateManager, log log.T, updateDetail *UpdateDetail) (e
 		return mgr.rollback(mgr, log, updateDetail)
 	}
 
-	// Update state to installed to indicate there is no error occur during installation
-	// Updater has installed the new version and started the verify process
-	if err = mgr.inProgress(updateDetail, log, Installed); err != nil {
-		return err
-	}
+	updateDetail.State = Installed
+	updateDetail.Result = contracts.ResultStatusInProgress
 
 	// verify target version
 	return mgr.verify(mgr, log, updateDetail, false)
