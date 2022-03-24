@@ -24,6 +24,11 @@ import (
 func parser(config *SsmagentConfig) {
 	log.Printf("processing appconfig overrides")
 
+	booleanStringOptions := []string{
+		"true",
+		"false",
+	}
+
 	// Agent creds profile
 	config.Profile.KeyAutoRotateDays = getNumericValue(
 		config.Profile.KeyAutoRotateDays,
@@ -125,6 +130,7 @@ func parser(config *SsmagentConfig) {
 		OrchestartionDirCleanupOtions,
 		DefaultOrchestrationDirCleanup)
 
+	config.Identity.Ec2SystemInfoDetectionResponse = getStringEnum(config.Identity.Ec2SystemInfoDetectionResponse, booleanStringOptions, "")
 	IdentityConsumptionOrderOptions := map[string]bool{
 		"OnPrem":         true,
 		"ECS":            true,
