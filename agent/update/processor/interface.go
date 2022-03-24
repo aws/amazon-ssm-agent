@@ -17,9 +17,9 @@ package processor
 
 import (
 	"github.com/aws/amazon-ssm-agent/agent/context"
+	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/fileutil/artifact"
 	"github.com/aws/amazon-ssm-agent/agent/log"
-	testCommon "github.com/aws/amazon-ssm-agent/agent/update/tester/common"
 	"github.com/aws/amazon-ssm-agent/agent/updateutil"
 	"github.com/aws/amazon-ssm-agent/agent/updateutil/updateconstants"
 	"github.com/aws/amazon-ssm-agent/agent/updateutil/updateinfo"
@@ -47,7 +47,7 @@ type uninstall func(mgr *updateManager, log log.T, version string, updateDetail 
 type install func(mgr *updateManager, log log.T, version string, updateDetail *UpdateDetail) (exitCode updateconstants.UpdateScriptExitCode, err error)
 type download func(mgr *updateManager, log log.T, downloadInput artifact.DownloadInput, updateDetail *UpdateDetail, version string) (err error)
 type clean func(log log.T, updateDetail *UpdateDetail)
-type runTests func(context context.T, stage testCommon.TestStage, timeOutSeconds int) (testOutput string)
+type runTests func(context context.T, reportResults func(contracts.ResultStatus, string))
 type finalize func(mgr *updateManager, updateDetail *UpdateDetail, errorCode string) (err error)
 
 type updateManager struct {

@@ -42,6 +42,8 @@ const (
 	ResultStatusSkipped ResultStatus = "Skipped"
 	// ResultStatusTestFailure represents test failure
 	ResultStatusTestFailure ResultStatus = "TestFailure"
+	// ResultStatusTestPass represents test passing
+	ResultStatusTestPass ResultStatus = "TestPass"
 )
 
 const (

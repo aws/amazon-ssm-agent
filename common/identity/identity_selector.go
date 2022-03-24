@@ -15,6 +15,7 @@ package identity
 
 import (
 	"fmt"
+	"time"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/log"
@@ -97,14 +98,18 @@ func newAgentIdentityInner(log log.T, config *appconfig.SsmagentConfig, selector
 }
 
 func NewAgentIdentity(log log.T, config *appconfig.SsmagentConfig, selector IAgentIdentitySelector) (identity IAgentIdentity, err error) {
-	for i := 0; i < MaxRetriesIdentitySelector; i++ {
+	for i := 0; i < maxRetriesIdentitySelector; i++ {
 		identity, err = newAgentIdentityInner(log, config, selector, config.Identity.ConsumptionOrder, allIdentityGenerators)
 		if err == nil {
 			break
 		}
-		if i+1 < MaxRetriesIdentitySelector {
+		if i+1 < maxRetriesIdentitySelector {
 			log.Errorf("failed to find identity, retrying: %v", err)
+
+			// Sleep 500ms in case of IMDS not being online yet
+			time.Sleep(sleepBeforeRetry)
 		}
+
 	}
 	return
 }

@@ -47,6 +47,29 @@ func TestIsOnPremInstance(t *testing.T) {
 	assert.True(t, IsOnPremInstance(agentIdentity))
 }
 
+func TestIsEC2Instance(t *testing.T) {
+
+	logger := log.NewMockLog()
+	appConfig := &appconfig.SsmagentConfig{}
+
+	assert.False(t, IsEC2Instance(nil))
+
+	agentIdentity := &agentIdentityCacher{
+		client: newOnPremIdentity(logger, appConfig)[0],
+	}
+	assert.False(t, IsEC2Instance(agentIdentity))
+
+	agentIdentity = &agentIdentityCacher{
+		client: newECSIdentity(logger, appConfig)[0],
+	}
+	assert.False(t, IsEC2Instance(agentIdentity))
+
+	agentIdentity = &agentIdentityCacher{
+		client: newEC2Identity(logger, appConfig)[0],
+	}
+	assert.True(t, IsEC2Instance(agentIdentity))
+}
+
 func TestGetCredentialsRefresherIdentity(t *testing.T) {
 	cacher := &agentIdentityCacher{
 		client: &ec2.Identity{},

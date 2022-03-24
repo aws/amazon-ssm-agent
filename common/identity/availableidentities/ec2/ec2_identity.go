@@ -16,6 +16,8 @@ package ec2
 import (
 	"time"
 
+	"github.com/aws/amazon-ssm-agent/agent/log"
+	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/credentials"
 	"github.com/aws/aws-sdk-go/aws/credentials/ec2rolecreds"
 	"github.com/aws/aws-sdk-go/aws/ec2metadata"
@@ -71,3 +73,16 @@ func (i *Identity) IsIdentityEnvironment() bool {
 
 // IdentityType returns the identity type of the ec2 instance
 func (i *Identity) IdentityType() string { return IdentityType }
+
+// NewEC2Identity initializes the ec2 identity
+func NewEC2Identity(log log.T) *Identity {
+	awsConfig := &aws.Config{}
+	awsConfig = awsConfig.WithMaxRetries(3)
+	sess, _ := session.NewSession(awsConfig)
+
+	log = log.WithContext("[EC2Identity]")
+	return &Identity{
+		Log:    log,
+		Client: ec2metadata.New(sess),
+	}
+}

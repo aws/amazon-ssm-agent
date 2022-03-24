@@ -46,6 +46,8 @@ const (
 	updateFailed = "UpdateFailed"
 	// testFailed represents tests fail during update
 	testFailed = "TestFailed"
+	// testPassed represents tests passed during update
+	testPassed = "TestPassed"
 	// noAlarm represents suffix which will be added to unimportant error messages
 	noAlarm = "NoAlarm"
 )
@@ -104,6 +106,8 @@ func PrepareHealthStatus(updateDetail *UpdateDetail, errorCode string, additiona
 	case TestExecution:
 		if updateDetail.Result == contracts.ResultStatusTestFailure {
 			result = testFailed
+		} else if updateDetail.Result == contracts.ResultStatusTestPass {
+			result = testPassed
 		}
 	case Rollback:
 		result = rollingBack

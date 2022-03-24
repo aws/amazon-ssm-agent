@@ -19,9 +19,6 @@ import (
 	"github.com/aws/amazon-ssm-agent/common/identity/availableidentities/ec2"
 	"github.com/aws/amazon-ssm-agent/common/identity/availableidentities/ecs"
 	"github.com/aws/amazon-ssm-agent/common/identity/availableidentities/onprem"
-	"github.com/aws/aws-sdk-go/aws"
-	"github.com/aws/aws-sdk-go/aws/ec2metadata"
-	"github.com/aws/aws-sdk-go/aws/session"
 )
 
 func init() {
@@ -34,14 +31,7 @@ func init() {
 }
 
 func newEC2Identity(log log.T, _ *appconfig.SsmagentConfig) []IAgentIdentityInner {
-	awsConfig := &aws.Config{}
-	awsConfig = awsConfig.WithMaxRetries(3)
-	sess, _ := session.NewSession(awsConfig)
-
-	return []IAgentIdentityInner{&ec2.Identity{
-		Log:    log,
-		Client: ec2metadata.New(sess),
-	}}
+	return []IAgentIdentityInner{ec2.NewEC2Identity(log)}
 }
 
 func newECSIdentity(log log.T, _ *appconfig.SsmagentConfig) []IAgentIdentityInner {

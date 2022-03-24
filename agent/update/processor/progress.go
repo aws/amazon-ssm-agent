@@ -60,15 +60,18 @@ func (u *updateManager) inProgress(updateDetail *UpdateDetail, log logPkg.T, sta
 	return nil
 }
 
-func (u *updateManager) reportTestFailure(updateDetail *UpdateDetail, log logPkg.T, testOutput string) {
-	updateStatus := &UpdateDetail{
-		State:         TestExecution,
-		Result:        contracts.ResultStatusTestFailure,
-		TargetVersion: updateDetail.TargetVersion,
-		SourceVersion: updateDetail.SourceVersion,
-	}
-	if err := u.svc.UpdateHealthCheck(log, updateStatus, testOutput); err != nil {
-		log.Errorf("error while sending test failure metric: %v", err.Error())
+func (u *updateManager) reportTestResultGenerator(updateDetail *UpdateDetail, log logPkg.T) func(contracts.ResultStatus, string) {
+	return func(testStatus contracts.ResultStatus, testName string) {
+		updateStatus := &UpdateDetail{
+			State:         TestExecution,
+			Result:        testStatus,
+			TargetVersion: updateDetail.TargetVersion,
+			SourceVersion: updateDetail.SourceVersion,
+		}
+
+		if err := u.svc.UpdateHealthCheck(log, updateStatus, testName); err != nil {
+			log.Errorf("error while sending test failure metric: %v", err.Error())
+		}
 	}
 }
 

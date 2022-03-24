@@ -19,65 +19,84 @@ import (
 	"time"
 
 	"github.com/aws/amazon-ssm-agent/agent/context"
+	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	testCommon "github.com/aws/amazon-ssm-agent/agent/update/tester/common"
-	testStage "github.com/aws/amazon-ssm-agent/agent/update/tester/stages"
+	"github.com/aws/amazon-ssm-agent/agent/update/tester/testcases"
 )
 
-var (
-	// getPreInstallTestObj fetches pre-install tester object
-	getPreInstallTestObj = testStage.GetPreInstallTestObj
+// getUpdateTests fetches the list of tests to run
+var getUpdateTests = func(context context.T) []testCommon.ITestCase {
+	return []testCommon.ITestCase{
+		testcases.NewEc2DetectorTestCase(context),
+	}
+}
 
-	// runTests references test execution function based on test stage value
-	runTests func() bool
-)
+var runTests = func(context context.T, testCases []testCommon.ITestCase, reportResults func(contracts.ResultStatus, string), doneChan chan bool, stopChan chan bool) {
+	var currentRunningTest string
+	defer func() {
+		if msg := recover(); msg != nil {
+			context.Log().Errorf("following test case panicked: %s", currentRunningTest)
+			context.Log().Errorf("Stacktrace:\n%s", debug.Stack())
+		}
+
+		close(doneChan)
+	}()
+
+	for _, testCase := range testCases {
+		select {
+		case <-stopChan:
+			return
+		default:
+		}
+
+		if !testCase.ShouldRunTest() {
+			// test should not be executed, pass
+			continue
+		}
+
+		currentRunningTest = testCase.GetTestCaseName()
+		testCase.Initialize()
+
+		testCaseOutput := testCase.ExecuteTestCase()
+		if testCaseOutput.Err != nil {
+			context.Log().Errorf("error during %s test case execution %v", currentRunningTest, testCaseOutput.Err)
+		}
+
+		if testCaseOutput.Result == testCommon.TestCaseFail {
+			reportResults(contracts.ResultStatusTestFailure, currentRunningTest)
+		} else if testCaseOutput.Result == testCommon.TestCasePass {
+			reportResults(contracts.ResultStatusTestPass, currentRunningTest)
+		}
+
+		testCase.CleanupTestCase()
+	}
+}
+
+var defaultTestTimeOut = 10 * time.Second
 
 // StartTests starts the tests based on TestStage value
 // This function times out based on timeOut value passed
 // Returns failed or timed out test case
-func StartTests(context context.T, stage testCommon.TestStage, timeOutSeconds int) (testOutput string) {
-	context = context.With("[Preinstall Tests]")
+func StartTests(context context.T, reportResults func(contracts.ResultStatus, string)) {
+	context = context.With("[UpdaterTests]")
 	defer func() {
 		if msg := recover(); msg != nil {
 			context.Log().Errorf("test framework panicked: %v", msg)
 		}
 	}()
-	var timeOutDuration time.Duration
-	var testerObj testCommon.ITestStage
 
+	// Closed in runTests function, listened to in this function
 	testCompleted := make(chan bool, 1)
-	// sets the timeout
-	if timeOutSeconds <= testCommon.DefaultTestTimeOutSeconds {
-		timeOutDuration = time.Duration(testCommon.DefaultTestTimeOutSeconds) * time.Second
-	} else {
-		timeOutDuration = time.Duration(timeOutSeconds) * time.Second
-	}
+	// Closed in this function, listened to in runTests function
+	shouldStopTests := make(chan bool, 1)
 
-	if stage == testCommon.PreInstallTest {
-		testerObj = getPreInstallTestObj(context)
-	} else {
-		return
-	}
-
-	if runTests == nil {
-		runTests = testerObj.RunTests
-	}
-	testerObj.Initialize()
-	go func() {
-		defer func() {
-			if msg := recover(); msg != nil {
-				context.Log().Errorf("following test case panicked: %s", testerObj.GetCurrentRunningTest())
-				context.Log().Errorf("Stacktrace:\n%s", debug.Stack())
-			}
-		}()
-		testCompleted <- runTests()
-	}()
+	testCases := getUpdateTests(context)
+	go runTests(context, testCases, reportResults, testCompleted, shouldStopTests)
 
 	select {
-	case <-time.After(timeOutDuration):
+	case <-time.After(defaultTestTimeOut):
 	case <-testCompleted:
 	}
 
-	testOutput = testerObj.GetCurrentRunningTest() // better to fetch value immediately
-	testerObj.CleanUpTests()
-	return testOutput
+	close(shouldStopTests)
 }

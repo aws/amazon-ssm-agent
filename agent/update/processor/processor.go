@@ -32,7 +32,6 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/fileutil/artifact"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	testerPkg "github.com/aws/amazon-ssm-agent/agent/update/tester"
-	testerCommon "github.com/aws/amazon-ssm-agent/agent/update/tester/common"
 	"github.com/aws/amazon-ssm-agent/agent/updateutil"
 	"github.com/aws/amazon-ssm-agent/agent/updateutil/updateconstants"
 	"github.com/aws/amazon-ssm-agent/agent/updateutil/updateinfo"
@@ -456,10 +455,9 @@ func proceedUpdate(mgr *updateManager, log log.T, updateDetail *UpdateDetail) (e
 			return mgr.failed(updateDetail, log, updateconstants.ErrorUninstallFailed, message, true)
 		}
 	}
-	preInstallTestTimeoutSeconds := 7
-	if testResult := mgr.runTests(mgr.Context, testerCommon.PreInstallTest, preInstallTestTimeoutSeconds); testResult != "" {
-		mgr.reportTestFailure(updateDetail, log, testResult)
-	}
+
+	mgr.runTests(mgr.Context, mgr.reportTestResultGenerator(updateDetail, log))
+
 	if exitCode, err := mgr.install(mgr, log, updateDetail.TargetVersion, updateDetail); err != nil {
 		// Install target failed with err
 		// log the error and initiating rollback to the source version

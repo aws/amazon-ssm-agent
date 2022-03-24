@@ -15,12 +15,16 @@ package identity
 
 import (
 	"sync"
+	"time"
 
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/common/runtimeconfig"
 )
 
-const MaxRetriesIdentitySelector = 3
+const (
+	maxRetriesIdentitySelector = 3
+	sleepBeforeRetry           = 500 * time.Millisecond
+)
 
 type defaultAgentIdentitySelector struct {
 	log   log.T

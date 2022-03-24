@@ -13,11 +13,19 @@
 
 package identity
 
-import "github.com/aws/amazon-ssm-agent/common/identity/availableidentities/onprem"
+import (
+	"github.com/aws/amazon-ssm-agent/common/identity/availableidentities/ec2"
+	"github.com/aws/amazon-ssm-agent/common/identity/availableidentities/onprem"
+)
 
 // IsOnPremInstance returns true if the agent identity is onprem
 func IsOnPremInstance(agentIdentity IAgentIdentity) bool {
 	return agentIdentity != nil && agentIdentity.IdentityType() == onprem.IdentityType
+}
+
+// IsEC2Instance return true if the agent identity is ec2
+func IsEC2Instance(agentIdentity IAgentIdentity) bool {
+	return agentIdentity != nil && agentIdentity.IdentityType() == ec2.IdentityType
 }
 
 // GetCredentialsRefresherIdentity returns the credentials refresher interface if the identity supports it
