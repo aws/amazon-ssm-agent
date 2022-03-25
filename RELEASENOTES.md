@@ -1,5 +1,13 @@
 Latest
 ===============
+- Added new ec2detector module to determine if agent is on EC2
+- Added support for port forwarding to remote host
+- Added quotes around inventory parameter ValueName on Windows
+- Fix for domain join DNS IP assignments in shared directories
+- Replaced namedpipe updater test with ec2detector test
+
+3.1.1141.0
+===============
 - Add application inventory by file for Bottlerocket
 - Fix infinite retry logic to send failed replies in MGSInteractor
 - Remove usage of io/fs package
