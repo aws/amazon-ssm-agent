@@ -16,6 +16,8 @@ package port
 
 import (
 	"errors"
+	"fmt"
+	"net"
 	"testing"
 	"time"
 
@@ -24,6 +26,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	iohandlermocks "github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/iohandler/mock"
 	"github.com/aws/amazon-ssm-agent/agent/log"
+	platform "github.com/aws/amazon-ssm-agent/agent/platform"
 	mgsContracts "github.com/aws/amazon-ssm-agent/agent/session/contracts"
 	dataChannelMock "github.com/aws/amazon-ssm-agent/agent/session/datachannel/mocks"
 	portSessionMock "github.com/aws/amazon-ssm-agent/agent/session/plugins/port/mocks"
@@ -35,14 +38,19 @@ import (
 )
 
 var (
-	mockLog         = log.NewMockLog()
-	configuration   = contracts.Configuration{Properties: map[string]interface{}{"portNumber": "22"}, SessionId: "sessionId"}
-	configurationPF = contracts.Configuration{Properties: map[string]interface{}{"portNumber": "22", "type": "LocalPortForwarding"}, SessionId: "sessionId"}
-	payload         = []byte("testPayload")
-	messageId       = "dd01e56b-ff48-483e-a508-b5f073f31b16"
-	schemaVersion   = uint32(1)
-	createdDate     = uint64(1503434274948)
-	clientVersion   = "1.2.0"
+	mockLog                     = log.NewMockLog()
+	configuration               = contracts.Configuration{Properties: map[string]interface{}{"portNumber": port}, SessionId: sessionId}
+	configurationPF             = contracts.Configuration{Properties: map[string]interface{}{"portNumber": port, "type": "LocalPortForwarding"}, SessionId: sessionId}
+	configurationWithRemoteHost = contracts.Configuration{Properties: map[string]interface{}{"portNumber": port, "host": remoteHost, "type": "LocalPortForwarding"}, SessionId: sessionId}
+	payload                     = []byte("testPayload")
+	messageId                   = "dd01e56b-ff48-483e-a508-b5f073f31b16"
+	schemaVersion               = uint32(1)
+	createdDate                 = uint64(1503434274948)
+	clientVersion               = "1.2.0"
+	sessionId                   = "sessionId"
+	port                        = "8080"
+	localhost                   = "localhost"
+	remoteHost                  = "https://remote.server.com"
 )
 
 type PortTestSuite struct {
@@ -69,6 +77,8 @@ func TestInitializeParametersWhenPortTypeIsNil(t *testing.T) {
 
 	portPlugin.initializeParameters(configuration)
 	assert.IsType(t, &BasicPortSession{}, portPlugin.session)
+	basicPortSession := portPlugin.session.(*BasicPortSession)
+	assert.Equal(t, net.JoinHostPort(localhost, port), basicPortSession.destinationAddress)
 	mockDataChannel.AssertExpectations(t)
 }
 
@@ -84,6 +94,8 @@ func TestInitializeParametersWhenPortTypeIsLocalPortForwarding(t *testing.T) {
 
 	portPlugin.initializeParameters(configurationPF)
 	assert.IsType(t, &MuxPortSession{}, portPlugin.session)
+	muxPortSession := portPlugin.session.(*MuxPortSession)
+	assert.Equal(t, net.JoinHostPort(localhost, port), muxPortSession.destinationAddress)
 	mockDataChannel.AssertExpectations(t)
 }
 
@@ -99,6 +111,25 @@ func TestInitializeParametersWhenPortTypeIsLocalPortForwardingAndOldClient(t *te
 
 	portPlugin.initializeParameters(configurationPF)
 	assert.IsType(t, &BasicPortSession{}, portPlugin.session)
+	basicPortSession := portPlugin.session.(*BasicPortSession)
+	assert.Equal(t, net.JoinHostPort(localhost, port), basicPortSession.destinationAddress)
+	mockDataChannel.AssertExpectations(t)
+}
+
+func TestInitializeParametersWhenHostIsProvided(t *testing.T) {
+	mockDataChannel := &dataChannelMock.IDataChannel{}
+	mockDataChannel.On("GetClientVersion").Return(clientVersion)
+
+	portPlugin := &PortPlugin{
+		context:     context.NewMockDefault(),
+		dataChannel: mockDataChannel,
+		cancelled:   make(chan struct{}),
+	}
+
+	portPlugin.initializeParameters(configurationWithRemoteHost)
+	assert.IsType(t, &MuxPortSession{}, portPlugin.session)
+	muxPortSession := portPlugin.session.(*MuxPortSession)
+	assert.Equal(t, net.JoinHostPort(remoteHost, port), muxPortSession.destinationAddress)
 	mockDataChannel.AssertExpectations(t)
 }
 
@@ -249,6 +280,85 @@ func (suite *PortTestSuite) TestInputStreamHandlerConnectionNotReady() {
 	suite.mockPortSession.On("IsConnectionAvailable").Return(false)
 	suite.plugin.InputStreamMessageHandler(suite.mockLog, getAgentMessage(uint32(mgsContracts.Output), payload))
 	suite.mockPortSession.AssertExpectations(suite.T())
+}
+
+func (suite *PortTestSuite) TestValidateParametersWhenInvalidPort() {
+	err := suite.plugin.validateParameters(PortParameters{PortNumber: ""}, configuration)
+	assert.Contains(suite.T(), err.Error(), "Port number is empty in session properties.")
+}
+
+func (suite *PortTestSuite) TestValidateParametersWhenIMDSV4HostNotAllowed() {
+	mockContext := &context.Mock{}
+	suite.plugin.context = mockContext
+
+	mockContext.On("AppConfig").Return(appconfig.SsmagentConfig{Mgs: appconfig.MgsConfig{DeniedPortForwardingRemoteIPs: []string{"169.254.169.254", "fd00:ec2::254", "169.254.169.253", "fd00:ec2::253"}}})
+
+	err := suite.plugin.validateParameters(PortParameters{PortNumber: "80", Host: "169.254.169.254"}, configuration)
+	assert.Contains(suite.T(), err.Error(), "Forwarding to IP address 169.254.169.254 is forbidden.")
+
+	mockContext.AssertExpectations(suite.T())
+}
+
+func (suite *PortTestSuite) TestValidateParametersWhenIMDSV6HostNotAllowed() {
+	mockContext := &context.Mock{}
+	suite.plugin.context = mockContext
+
+	mockContext.On("AppConfig").Return(appconfig.SsmagentConfig{Mgs: appconfig.MgsConfig{DeniedPortForwardingRemoteIPs: []string{"169.254.169.254", "fd00:ec2::254", "169.254.169.253", "fd00:ec2::253"}}})
+
+	err := suite.plugin.validateParameters(PortParameters{PortNumber: "80", Host: "fd00:ec2::253"}, configuration)
+	assert.Contains(suite.T(), err.Error(), "Forwarding to IP address fd00:ec2::253 is forbidden.")
+
+	mockContext.AssertExpectations(suite.T())
+}
+
+func (suite *PortTestSuite) TestValidateParametersWhenHostIsVPCIPV4() {
+	mockContext := &context.Mock{}
+	suite.plugin.context = mockContext
+
+	mockContext.On("AppConfig").Return(appconfig.SsmagentConfig{Mgs: appconfig.MgsConfig{DeniedPortForwardingRemoteIPs: []string{"169.254.169.254", "fd00:ec2::254", "169.254.169.253", "fd00:ec2::253"}}})
+
+	err := suite.plugin.validateParameters(PortParameters{PortNumber: "80", Host: "169.254.169.253"}, configuration)
+	assert.Contains(suite.T(), err.Error(), "Forwarding to IP address 169.254.169.253 is forbidden.")
+
+	mockContext.AssertExpectations(suite.T())
+}
+
+func (suite *PortTestSuite) TestValidateParametersWhenHostIsVPCIPV6() {
+	mockContext := &context.Mock{}
+	suite.plugin.context = mockContext
+
+	mockContext.On("AppConfig").Return(appconfig.SsmagentConfig{Mgs: appconfig.MgsConfig{DeniedPortForwardingRemoteIPs: []string{"169.254.169.254", "fd00:ec2::254", "169.254.169.253", "fd00:ec2::253"}}})
+
+	err := suite.plugin.validateParameters(PortParameters{PortNumber: "80", Host: "fd00:ec2::253"}, configuration)
+	assert.Contains(suite.T(), err.Error(), "Forwarding to IP address fd00:ec2::253 is forbidden.")
+
+	mockContext.AssertExpectations(suite.T())
+}
+
+func (suite *PortTestSuite) TestValidateParametersWhenHostIsLocalIP() {
+	mockContext := &context.Mock{}
+	suite.plugin.context = mockContext
+
+	mockContext.On("AppConfig").Return(appconfig.SsmagentConfig{Mgs: appconfig.MgsConfig{DeniedPortForwardingRemoteIPs: []string{"169.254.169.254", "fd00:ec2::254", "169.254.169.253", "fd00:ec2::253"}}})
+
+	ipAddress, err := platform.IP()
+	assert.NoError(suite.T(), err, "expected no error fetching the local ip")
+	err = suite.plugin.validateParameters(PortParameters{PortNumber: "80", Host: ipAddress}, configuration)
+	assert.Contains(suite.T(), err.Error(), fmt.Sprintf("Forwarding to IP address %s is forbidden.", ipAddress))
+
+	mockContext.AssertExpectations(suite.T())
+}
+
+func (suite *PortTestSuite) TestValidateParametersWhenValidHostAndPort() {
+	mockContext := &context.Mock{}
+	suite.plugin.context = mockContext
+
+	mockContext.On("AppConfig").Return(appconfig.SsmagentConfig{Mgs: appconfig.MgsConfig{DeniedPortForwardingRemoteIPs: []string{"169.254.169.254", "fd00:ec2::254", "169.254.169.253", "fd00:ec2::253"}}})
+
+	err := suite.plugin.validateParameters(PortParameters{PortNumber: "80", Host: "127.0.0.1"}, configuration)
+	assert.Nil(suite.T(), err)
+
+	mockContext.AssertExpectations(suite.T())
 }
 
 // Execute the test suite

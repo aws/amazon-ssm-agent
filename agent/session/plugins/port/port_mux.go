@@ -53,14 +53,14 @@ type MuxServer struct {
 // MuxPortSession is the type for the multiplexer port session.
 // supports making multiple connections to the destination server.
 type MuxPortSession struct {
-	context          agentContext.T
-	portSession      IPortSession
-	cancelled        chan struct{}
-	serverPortNumber string
-	sessionId        string
-	socketFile       string
-	muxServer        *MuxServer
-	mgsConn          *MgsConn
+	context            agentContext.T
+	portSession        IPortSession
+	cancelled          chan struct{}
+	destinationAddress string
+	sessionId          string
+	socketFile         string
+	muxServer          *MuxServer
+	mgsConn            *MgsConn
 }
 
 func (c *MgsConn) close() {
@@ -74,12 +74,12 @@ func (s *MuxServer) close() {
 }
 
 // NewMuxPortSession returns a new instance of the MuxPortSession.
-func NewMuxPortSession(context agentContext.T, cancelled chan struct{}, portNumber string, sessionId string) (IPortSession, error) {
+func NewMuxPortSession(context agentContext.T, cancelled chan struct{}, destinationAddress string, sessionId string) (IPortSession, error) {
 	var plugin = MuxPortSession{
-		context:          context,
-		cancelled:        cancelled,
-		serverPortNumber: portNumber,
-		sessionId:        sessionId}
+		context:            context,
+		cancelled:          cancelled,
+		destinationAddress: destinationAddress,
+		sessionId:          sessionId}
 	return &plugin, nil
 }
 
@@ -248,8 +248,7 @@ func (p *MuxPortSession) handleServerConnections(ctx context.Context, dataChanne
 			log.Errorf("Handle server connections crashed with message: %v", r)
 		}
 	}()
-	// net.Dial assumes local system when host in addr is empty
-	localAddr := fmt.Sprintf(":%s", p.serverPortNumber)
+
 	for {
 		select {
 		case <-ctx.Done():
@@ -263,8 +262,8 @@ func (p *MuxPortSession) handleServerConnections(ctx context.Context, dataChanne
 
 			log.Debugf("Started a new mux stream %d\n", stream.ID())
 
-			if conn, err := net.Dial("tcp", localAddr); err == nil {
-				log.Tracef("Established connection to port %s", p.serverPortNumber)
+			if conn, err := net.Dial("tcp", p.destinationAddress); err == nil {
+				log.Tracef("Established connection to port %s", p.destinationAddress)
 				go func() {
 					defer func() {
 						if r := recover(); r != nil {

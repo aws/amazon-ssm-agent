@@ -103,9 +103,10 @@ func DefaultConfig() SsmagentConfig {
 		CommandWorkerBufferLimit: DefaultCommandWorkerBufferLimit,
 	}
 	var mgs = MgsConfig{
-		SessionWorkersLimit:      DefaultSessionWorkersLimit,
-		StopTimeoutMillis:        DefaultStopTimeoutMillis,
-		SessionWorkerBufferLimit: DefaultSessionWorkerBufferLimit,
+		SessionWorkersLimit:           DefaultSessionWorkersLimit,
+		StopTimeoutMillis:             DefaultStopTimeoutMillis,
+		SessionWorkerBufferLimit:      DefaultSessionWorkerBufferLimit,
+		DeniedPortForwardingRemoteIPs: DefaultDeniedPortForwardingRemoteIPs,
 	}
 	var ssm = SsmCfg{
 		HealthFrequencyMinutes:                DefaultSsmHealthFrequencyMinutes,

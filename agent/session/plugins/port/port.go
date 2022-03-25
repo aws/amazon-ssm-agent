@@ -17,6 +17,7 @@ package port
 import (
 	"errors"
 	"fmt"
+	"net"
 	"os"
 	"runtime/debug"
 
@@ -26,6 +27,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/iohandler"
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
 	"github.com/aws/amazon-ssm-agent/agent/log"
+	platform "github.com/aws/amazon-ssm-agent/agent/platform"
 	mgsConfig "github.com/aws/amazon-ssm-agent/agent/session/config"
 	mgsContracts "github.com/aws/amazon-ssm-agent/agent/session/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/session/datachannel"
@@ -38,6 +40,7 @@ const muxSupportedClientVersion = "1.1.70"
 
 // PortParameters contains inputs required to execute port plugin.
 type PortParameters struct {
+	Host       string `json:"host" yaml:"host"`
 	PortNumber string `json:"portNumber" yaml:"portNumber"`
 	Type       string `json:"type"`
 }
@@ -62,14 +65,21 @@ type IPortSession interface {
 // GetSession initializes session based on the type of the port session
 // mux for port forwarding session and if client supports multiplexing; basic otherwise
 var GetSession = func(context context.T, portParameters PortParameters, cancelled chan struct{}, clientVersion string, sessionId string) (session IPortSession, err error) {
+	host := "localhost"
+	if portParameters.Host != "" {
+		host = portParameters.Host
+		context.Log().Debug("Using remote host: %s", host)
+	}
+	destinationAddress := net.JoinHostPort(host, portParameters.PortNumber)
+
 	if portParameters.Type == mgsConfig.LocalPortForwarding &&
 		versionutil.Compare(clientVersion, muxSupportedClientVersion, true) >= 0 {
 
-		if session, err = NewMuxPortSession(context, cancelled, portParameters.PortNumber, sessionId); err == nil {
+		if session, err = NewMuxPortSession(context, cancelled, destinationAddress, sessionId); err == nil {
 			return session, nil
 		}
 	} else {
-		if session, err = NewBasicPortSession(context, cancelled, portParameters.PortNumber, portParameters.Type); err == nil {
+		if session, err = NewBasicPortSession(context, cancelled, destinationAddress, portParameters.Type); err == nil {
 			return session, nil
 		}
 	}
@@ -240,10 +250,35 @@ func (p *PortPlugin) initializeParameters(config agentContracts.Configuration) (
 		return errors.New(fmt.Sprintf("Unable to remarshal session properties. %v", err))
 	}
 
+	if err := p.validateParameters(portParameters, config); err != nil {
+		return err
+	}
+
+	p.session, err = GetSession(p.context, portParameters, p.cancelled, p.dataChannel.GetClientVersion(), config.SessionId)
+
+	return
+}
+
+// validateParameters validates port plugin parameters
+func (p *PortPlugin) validateParameters(portParameters PortParameters, config agentContracts.Configuration) (err error) {
 	if portParameters.PortNumber == "" {
 		return errors.New(fmt.Sprintf("Port number is empty in session properties. %v", config.Properties))
 	}
-	p.session, err = GetSession(p.context, portParameters, p.cancelled, p.dataChannel.GetClientVersion(), config.SessionId)
+
+	ipAddress, err := platform.IP()
+	if err != nil {
+		p.context.Log().Warn("Error retrieving local ip address: %v", err)
+	}
+
+	appConfig := p.context.AppConfig()
+	if portParameters.Host != "" {
+		// Port forwarding to IMDS, VPC DNS, and local IP address is not allowed
+		for _, address := range append(appConfig.Mgs.DeniedPortForwardingRemoteIPs, ipAddress) {
+			if portParameters.Host == address {
+				return errors.New(fmt.Sprintf("Forwarding to IP address %s is forbidden.", portParameters.Host))
+			}
+		}
+	}
 
 	return
 }

@@ -40,7 +40,7 @@ type BasicPortSession struct {
 	context            context.T
 	portSession        IPortSession
 	conn               net.Conn
-	serverPortNumber   string
+	destinationAddress string
 	portType           string
 	reconnectToPort    bool
 	reconnectToPortErr chan error
@@ -48,10 +48,10 @@ type BasicPortSession struct {
 }
 
 // NewBasicPortSession returns a new instance of the BasicPortSession.
-func NewBasicPortSession(context context.T, cancelled chan struct{}, portNumber string, portType string) (IPortSession, error) {
+func NewBasicPortSession(context context.T, cancelled chan struct{}, destinationAddress string, portType string) (IPortSession, error) {
 	var plugin = BasicPortSession{
 		context:            context,
-		serverPortNumber:   portNumber,
+		destinationAddress: destinationAddress,
 		portType:           portType,
 		reconnectToPortErr: make(chan error),
 		cancelled:          cancelled,
@@ -72,7 +72,7 @@ func (p *BasicPortSession) HandleStreamMessage(streamDataMessage mgsContracts.Ag
 		log.Tracef("Output message received: %d", streamDataMessage.SequenceNumber)
 
 		if p.reconnectToPort {
-			log.Debugf("Reconnect to port: %s", p.serverPortNumber)
+			log.Debugf("Reconnect to port: %s", p.destinationAddress)
 			err := p.InitializeSession()
 
 			// Pass err to reconnectToPortErr chan to unblock writePump go routine to resume reading from localhost:p.serverPortNumber
@@ -131,7 +131,7 @@ func (p *BasicPortSession) WritePump(dataChannel datachannel.IDataChannel) (erro
 			if err != nil {
 				var exitCode int
 				if exitCode = p.handleTCPReadError(err); exitCode == mgsConfig.ResumeReadExitCode {
-					log.Debugf("Reconnection to port %v is successful, resume reading from port.", p.serverPortNumber)
+					log.Debugf("Reconnection to port %v is successful, resume reading from port.", p.destinationAddress)
 					continue
 				}
 				return exitCode
@@ -149,7 +149,7 @@ func (p *BasicPortSession) WritePump(dataChannel datachannel.IDataChannel) (erro
 
 // InitializeSession dials a connection to port
 func (p *BasicPortSession) InitializeSession() (err error) {
-	if p.conn, err = DialCall("tcp", "localhost:"+p.serverPortNumber); err != nil {
+	if p.conn, err = DialCall("tcp", p.destinationAddress); err != nil {
 		return errors.New(fmt.Sprintf("Unable to connect to specified port: %v", err))
 	}
 	return nil
@@ -158,7 +158,7 @@ func (p *BasicPortSession) InitializeSession() (err error) {
 // handleTCPReadError handles TCP read error
 func (p *BasicPortSession) handleTCPReadError(err error) int {
 	if p.portType == mgsConfig.LocalPortForwarding {
-		p.context.Log().Debugf("Initiating reconnection to port %s as existing connection resulted in read error: %v", p.serverPortNumber, err)
+		p.context.Log().Debugf("Initiating reconnection to port %s as existing connection resulted in read error: %v", p.destinationAddress, err)
 		return p.handlePortError(err)
 	}
 	return p.handleSSHDPortError(err)
@@ -182,7 +182,7 @@ func (p *BasicPortSession) handlePortError(err error) int {
 	// Read from tcp connection to localhost:p.serverPortNumber resulted in error. Close existing connection and
 	// set reconnectToPort to true. ReconnectToPort is used when new steam data message arrives on
 	// web socket channel to trigger reconnection to localhost:p.serverPortNumber.
-	log.Debugf("Encountered error while reading from port %v, %v", p.serverPortNumber, err)
+	log.Debugf("Encountered error while reading from port %v, %v", p.destinationAddress, err)
 	p.Stop()
 	p.reconnectToPort = true
 

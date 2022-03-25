@@ -242,6 +242,9 @@ const (
 	DefaultRunAsUserName = "ssm-user"
 )
 
+// Default deny list IP addresses for remote host port forwarding: IMDS ipv4, IMDS ipv6, VPC ipv4, VPC ipv6
+var DefaultDeniedPortForwardingRemoteIPs = []string{"169.254.169.254", "fd00:ec2::254", "169.254.169.253", "fd00:ec2::253"}
+
 // Document versions that are supported by this Agent version.
 // Note that 1.1 and 2.1 are deprecated schemas and hence are not added here.
 // Version 2.0.1, 2.0.2, and 2.0.3 are added to support install documents for configurePackage

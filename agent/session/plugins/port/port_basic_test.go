@@ -20,6 +20,7 @@ import (
 	"errors"
 	"io"
 	"net"
+	"strconv"
 	"sync"
 	"testing"
 	"time"
@@ -220,6 +221,43 @@ func (suite *BasicPortTestSuite) TestWritePumpWhenDatachannelIsNotActive() {
 	// Assert if SendStreamDataMessage function was not called
 	suite.mockDataChannel.AssertExpectations(suite.T())
 	suite.mockDataChannel.AssertNotCalled(suite.T(), "SendStreamDataMessage", suite.mockContext.Log(), mgsContracts.Output, payload)
+}
+
+func (suite *BasicPortTestSuite) TestInitializeWithReachableEndpoint() {
+	addr, _ := suite.SpawnMockServer()
+	suite.session.destinationAddress = net.JoinHostPort(addr.IP.String(), strconv.Itoa(addr.Port))
+
+	DialCall = func(network string, address string) (net.Conn, error) {
+		return net.Dial(network, address)
+	}
+
+	assert.Nil(suite.T(), suite.session.InitializeSession())
+}
+
+func (suite *BasicPortTestSuite) TestInitializeWithUnreachableEndpoint() {
+	addr, listener := suite.SpawnMockServer()
+	listener.Close()
+
+	suite.session.destinationAddress = net.JoinHostPort(addr.IP.String(), strconv.Itoa(addr.Port))
+
+	DialCall = func(network string, address string) (net.Conn, error) {
+		return net.Dial(network, address)
+	}
+
+	assert.Error(suite.T(), suite.session.InitializeSession())
+}
+
+func (suite *BasicPortTestSuite) SpawnMockServer() (addr *net.TCPAddr, listener net.Listener) {
+	listener, _ = net.Listen("tcp", "127.0.0.1:0")
+	addr = listener.Addr().(*net.TCPAddr)
+	go func() {
+		if conn, _ := listener.Accept(); conn != nil {
+			conn.Write(payload)
+			conn.Close()
+		}
+	}()
+	time.Sleep(200 * time.Millisecond)
+	return
 }
 
 // Execute the test suite

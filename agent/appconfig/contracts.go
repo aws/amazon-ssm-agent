@@ -73,11 +73,12 @@ type AgentInfo struct {
 
 // MgsConfig represents configuration for Message Gateway service
 type MgsConfig struct {
-	Region                   string
-	Endpoint                 string
-	StopTimeoutMillis        int64
-	SessionWorkersLimit      int
-	SessionWorkerBufferLimit int
+	Region                        string
+	Endpoint                      string
+	StopTimeoutMillis             int64
+	SessionWorkersLimit           int
+	SessionWorkerBufferLimit      int
+	DeniedPortForwardingRemoteIPs []string
 }
 
 // KmsConfig represents configuration for Key Management Service

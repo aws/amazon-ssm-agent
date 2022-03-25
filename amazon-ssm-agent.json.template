@@ -25,7 +25,13 @@
         "Region": "",
         "Endpoint": "",
         "StopTimeoutMillis" : 20000,
-        "SessionWorkersLimit" : 1000
+        "SessionWorkersLimit" : 1000,
+        "DeniedPortForwardingRemoteIPs" : [
+            "169.254.169.254",
+            "fd00:ec2::254",
+            "169.254.169.253",
+            "fd00:ec2::253"
+        ]
     },
     "Agent": {
         "Region": "",

@@ -202,6 +202,8 @@ To set up your own custom configuration for the agent:
         * Default: 20000
     * SessionWorkersLimit (int)
         * Default: 1000
+    * DeniedPortForwardingRemoteIPs ([]string)
+        * Default: ["169.254.169.254", "fd00:ec2::254", "169.254.169.253", "fd00:ec2::253"]
 * Agent - represents metadata for amazon-ssm-agent
     * Region (string)
     * OrchestrationRootDir (string)
