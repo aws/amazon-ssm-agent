@@ -37,12 +37,13 @@ var ShellPluginCommandName = "sh"
 var ShellPluginCommandArgs = []string{"-c"}
 
 const (
-	sudoersFile     = "/etc/sudoers.d/ssm-agent-users"
-	sudoersFileMode = 0440
-	fs_ioc_getflags = uintptr(0x80086601)
-	fs_ioc_setflags = uintptr(0x40086602)
-	FS_APPEND_FL    = 0x00000020 /* writes to file may only append */
-	FS_RESET_FL     = 0x00000000 /* reset file property */
+	sudoersFile                = "/etc/sudoers.d/ssm-agent-users"
+	sudoersFileCreateWriteMode = 0640
+	sudoersFileReadOnlyMode    = 0440
+	fs_ioc_getflags            = uintptr(0x80086601)
+	fs_ioc_setflags            = uintptr(0x40086602)
+	FS_APPEND_FL               = 0x00000020 /* writes to file may only append */
+	FS_RESET_FL                = 0x00000000 /* reset file property */
 )
 
 // ResetPasswordIfDefaultUserExists resets default RunAs user password if user exists
@@ -106,8 +107,8 @@ func (u *SessionUtil) createSudoersFileIfNotPresent(log log.T) error {
 		return err
 	}
 
-	// Create a sudoers file for ssm-user
-	file, err := os.Create(sudoersFile)
+	// Create a sudoers file for ssm-user with read/write access
+	file, err := os.OpenFile(sudoersFile, os.O_WRONLY|os.O_CREATE, sudoersFileCreateWriteMode)
 	if err != nil {
 		log.Errorf("Failed to add %s to sudoers file: %v", appconfig.DefaultRunAsUserName, err)
 		return err
@@ -132,12 +133,12 @@ func (u *SessionUtil) createSudoersFileIfNotPresent(log log.T) error {
 // changeModeOfSudoersFile will change the sudoersFile mode to 0440 (read only).
 // This file is created with mode 0666 using os.Create() so needs to be updated to read only with chmod.
 func (u *SessionUtil) changeModeOfSudoersFile(log log.T) error {
-	fileMode := os.FileMode(sudoersFileMode)
+	fileMode := os.FileMode(sudoersFileReadOnlyMode)
 	if err := os.Chmod(sudoersFile, fileMode); err != nil {
-		log.Errorf("Failed to change mode of %s to %d: %v", sudoersFile, sudoersFileMode, err)
+		log.Errorf("Failed to change mode of %s to %d: %v", sudoersFile, sudoersFileReadOnlyMode, err)
 		return err
 	}
-	log.Infof("Successfully changed mode of %s to %d", sudoersFile, sudoersFileMode)
+	log.Infof("Successfully changed mode of %s to %d", sudoersFile, sudoersFileReadOnlyMode)
 	return nil
 }
 
