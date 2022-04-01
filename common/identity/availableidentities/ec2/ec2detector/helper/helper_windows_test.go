@@ -24,29 +24,61 @@ type returnFromCommand struct {
 	err error
 }
 
+func getOutputString(uuid, vendor, version string) string {
+	return "SMBIOSBIOSVersion : " + version +
+		"\r\nManufacturer      : " + vendor +
+		"\r\nName              : Revision: 1.221" +
+		"\r\nSerialNumber      : " + uuid +
+		"\r\nVersion           : Xen - 0"
+}
+
 func TestReadSystemProductInfo(t *testing.T) {
 	var obj detectorHelper
 	var returnThis returnFromCommand
 
+	oldExecCommand := execCommand
+	defer func() { execCommand = oldExecCommand }()
+
+	var called int
 	execCommand = func(string, ...string) (string, error) {
+		called++
 		return returnThis.str, returnThis.err
 	}
 
-	returnThis.str, returnThis.err = "", nil
-	assert.Equal(t, "", obj.GetSystemInfo(""))
+	returnThis.str, returnThis.err = getOutputString("uuid123", "vendor123", "version123"), nil
 
-	returnThis.str, returnThis.err = "UUID                          = EC2493C6-586B-1C89-DD8E-EB2F21F5E50D", nil
-	assert.Equal(t, "EC2493C6-586B-1C89-DD8E-EB2F21F5E50D", obj.GetSystemInfo(""))
+	assert.Equal(t, "version123", obj.GetSystemInfo("SMBIOSBIOSVersion"))
+	assert.Equal(t, "uuid123", obj.GetSystemInfo("SerialNumber"))
+	assert.Equal(t, "vendor123", obj.GetSystemInfo("Manufacturer"))
+	assert.Equal(t, 1, called)
+}
 
-	returnThis.str, returnThis.err = "UUID =                 EC2493C6-586B-1C89-DD8E-EB2F21F5E50D", nil
-	assert.Equal(t, "EC2493C6-586B-1C89-DD8E-EB2F21F5E50D", obj.GetSystemInfo(""))
+func TestReadSystemProductInfo_CacheMiss(t *testing.T) {
+	var obj detectorHelper
+	var returnThis returnFromCommand
 
-	returnThis.str, returnThis.err = "UUID = EC2493C6-586B-1C89-DD8E-EB2F21F5E50D", nil
-	assert.Equal(t, "EC2493C6-586B-1C89-DD8E-EB2F21F5E50D", obj.GetSystemInfo(""))
+	oldExecCommand := execCommand
+	defer func() { execCommand = oldExecCommand }()
 
-	returnThis.str, returnThis.err = "UUID \r\n EC2493C6-586B-1C89-DD8E-EB2F21F5E50D \r\n", nil
-	assert.Equal(t, "EC2493C6-586B-1C89-DD8E-EB2F21F5E50D", obj.GetSystemInfo(""))
+	var called int
+	execCommand = func(string, ...string) (string, error) {
+		called++
+		return returnThis.str, returnThis.err
+	}
 
-	returnThis.str, returnThis.err = "somerandomsingleline", nil
-	assert.Equal(t, "", obj.GetSystemInfo(""))
+	returnThis.str, returnThis.err = getOutputString("uuid123", "vendor123", "version123"), nil
+
+	assert.Equal(t, "version123", obj.GetSystemInfo("SMBIOSBIOSVersion"))
+	assert.Equal(t, "uuid123", obj.GetSystemInfo("SerialNumber"))
+	assert.Equal(t, "vendor123", obj.GetSystemInfo("Manufacturer"))
+	assert.Equal(t, 1, called)
+
+	obj.GetSystemInfo("NonExistentAttribute")
+	assert.Equal(t, 2, called)
+
+	assert.Equal(t, "version123", obj.GetSystemInfo("SMBIOSBIOSVersion"))
+	assert.Equal(t, "uuid123", obj.GetSystemInfo("SerialNumber"))
+	assert.Equal(t, "vendor123", obj.GetSystemInfo("Manufacturer"))
+	assert.Equal(t, 2, called)
+
 }

@@ -62,6 +62,6 @@ func (d *nitroDetector) GetName() string {
 	return Name
 }
 
-func New() *nitroDetector {
-	return &nitroDetector{helper: helper.GetDetectorHelper()}
+func New(helper helper.DetectorHelper) *nitroDetector {
+	return &nitroDetector{helper: helper}
 }

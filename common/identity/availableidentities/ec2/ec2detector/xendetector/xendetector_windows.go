@@ -14,6 +14,6 @@
 package xendetector
 
 const (
-	xenVersionSystemInfoParam = "version"
-	xenUuidSystemInfoParam    = "uuid"
+	xenVersionSystemInfoParam = "SMBIOSBIOSVersion"
+	xenUuidSystemInfoParam    = "SerialNumber"
 )

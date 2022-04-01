@@ -16,7 +16,6 @@ package helper
 import (
 	"context"
 	"os/exec"
-	"path/filepath"
 	"strings"
 	"time"
 
@@ -24,37 +23,63 @@ import (
 )
 
 const (
-	commandExecTimeout = 5 * time.Second
+	commandExecTimeout = 10 * time.Second
+	commandMaxRetry    = 3
+	biosInfoCmd        = "Get-CimInstance -ClassName Win32_BIOS"
 )
 
 var execCommand = func(cmd string, params ...string) (string, error) {
+	var err error
+	var byteOutput []byte
+
 	ctx, cancel := context.WithTimeout(context.Background(), commandExecTimeout)
 	defer cancel()
-	b, e := exec.CommandContext(ctx, cmd, params...).Output()
-
-	if e != nil {
-		return "", e
-	}
-
-	return strings.TrimSpace(string(b)), e
-}
-
-func (*detectorHelper) GetSystemInfo(attribute string) string {
-	wmicCommand := filepath.Join(appconfig.EnvWinDir, "System32", "wbem", "wmic.exe")
-	output, err := execCommand(wmicCommand, "path", "win32_computersystemproduct", "get", attribute)
-	if err != nil {
-		return ""
-	}
-
-	data := strings.Split(output, "\r\n")
-	if len(data) > 1 {
-		return strings.TrimSpace(data[1])
-	} else if len(data) == 1 {
-		data = strings.Split(data[0], " = ")
-		if len(data) > 1 {
-			return strings.TrimSpace(data[1])
+	for i := 0; i < commandMaxRetry; i++ {
+		byteOutput, err = exec.CommandContext(ctx, cmd, params...).Output()
+		if err == nil {
+			break
 		}
 	}
+	return strings.TrimSpace(string(byteOutput)), err
+}
 
-	return ""
+func (d *detectorHelper) initCache() {
+	d.cache = map[string]string{}
+
+	args := append(strings.Split(appconfig.PowerShellCommandArgs, " "), biosInfoCmd)
+
+	output, err := execCommand(appconfig.PowerShellPluginCommandName, args...)
+	if err != nil {
+		return
+	}
+
+	for _, biosLine := range strings.Split(output, "\r\n") {
+		splitLine := strings.SplitN(biosLine, ":", 2)
+		if len(splitLine) != 2 {
+			continue
+		}
+
+		key := strings.TrimSpace(splitLine[0])
+		value := strings.TrimSpace(splitLine[1])
+		d.cache[key] = value
+	}
+}
+
+func (d *detectorHelper) GetSystemInfo(attribute string) string {
+	d.lock.Lock()
+	defer d.lock.Unlock()
+
+	if d.cache == nil {
+		d.cache = map[string]string{}
+	}
+
+	var ok bool
+	var result string
+	if result, ok = d.cache[attribute]; !ok {
+		// If attribute is not set in cache, reset cache and retrieve again
+		d.initCache()
+		result, _ = d.cache[attribute]
+	}
+
+	return result
 }

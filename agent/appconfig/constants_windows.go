@@ -51,7 +51,10 @@ const (
 	// PowerShellPluginCommandArgs specifies the default arguments that we pass to powershell
 	// Use Unrestricted as Execution Policy for running the script.
 	// https://technet.microsoft.com/en-us/library/hh847748.aspx
-	PowerShellPluginCommandArgs = "-InputFormat None -Noninteractive -NoProfile -ExecutionPolicy unrestricted -f"
+	PowerShellCommandArgs = "-InputFormat None -Noninteractive -NoProfile -ExecutionPolicy unrestricted"
+
+	// Adding -f for file because powershell plugin writes script content to ps1 file and then executes
+	PowerShellPluginCommandArgs = PowerShellCommandArgs + " -f"
 
 	// Exit Code for a command that exits before completion (generally due to timeout or cancel)
 	CommandStoppedPreemptivelyExitCode = -1

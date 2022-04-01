@@ -14,6 +14,6 @@
 package nitrodetector
 
 const (
-	nitroUuidSystemInfoParam   = "uuid"
-	nitroVendorSystemInfoParam = "vendor"
+	nitroUuidSystemInfoParam   = "SerialNumber"
+	nitroVendorSystemInfoParam = "Manufacturer"
 )

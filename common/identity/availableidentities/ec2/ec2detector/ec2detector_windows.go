@@ -20,6 +20,7 @@ import (
 )
 
 func init() {
-	helper.RegisterDetector(nitrodetector.New())
-	helper.RegisterDetector(xendetector.New())
+	detectorHelper := helper.GetDetectorHelper()
+	helper.RegisterDetector(nitrodetector.New(detectorHelper))
+	helper.RegisterDetector(xendetector.New(detectorHelper))
 }

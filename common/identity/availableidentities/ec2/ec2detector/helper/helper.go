@@ -16,6 +16,7 @@ package helper
 import (
 	"regexp"
 	"strings"
+	"sync"
 )
 
 const (
@@ -47,7 +48,10 @@ type DetectorHelper interface {
 	GetSystemInfo(string) string
 }
 
-type detectorHelper struct{}
+type detectorHelper struct {
+	lock  sync.Mutex
+	cache map[string]string
+}
 
 func (*detectorHelper) MatchUuid(uuid string) bool {
 	uuid = strings.ToLower(uuid)

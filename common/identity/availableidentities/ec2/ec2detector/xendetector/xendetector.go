@@ -64,6 +64,6 @@ func (d *xenDetector) GetName() string {
 	return Name
 }
 
-func New() *xenDetector {
-	return &xenDetector{helper: helper.GetDetectorHelper()}
+func New(helper helper.DetectorHelper) *xenDetector {
+	return &xenDetector{helper: helper}
 }
