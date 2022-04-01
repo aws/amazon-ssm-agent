@@ -1,5 +1,10 @@
 Latest
 ===============
+- Updated ec2detector module to use Get-CmiInstance instead of wmic.exe
+- Fixed file creation mode of ssm-agent-users sudoer file
+
+3.1.1188.0
+===============
 - Added new ec2detector module to determine if agent is on EC2
 - Added support for port forwarding to remote host
 - Added quotes around inventory parameter ValueName on Windows
