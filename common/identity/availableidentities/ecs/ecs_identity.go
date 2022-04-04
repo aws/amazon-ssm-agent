@@ -42,7 +42,7 @@ func (e *Identity) InstanceType() (string, error) { return ecsInstanceType, nil 
 
 // Credentials returns the managed instance credentials
 func (e *Identity) Credentials() *credentials.Credentials {
-	return credentialproviders.GetDefaultCreds()
+	return credentialproviders.GetRemoteCreds()
 }
 
 // IsIdentityEnvironment returns if instance has managed instance registration
