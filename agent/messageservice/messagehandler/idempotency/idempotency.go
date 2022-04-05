@@ -55,14 +55,14 @@ func CleanupOldIdempotencyEntries(idemCtx context.T) {
 	directoryPath := getIdempotencyDir(context)
 	documentTypeDir, err := getDirectoryUnsortedOlderThan(directoryPath, nil)
 	if err != nil {
-		log.Warnf("encountered error %v while listing replies in %v", err, directoryPath)
+		log.Warnf("encountered error %v while listing directories in %v", err, directoryPath)
 	}
 	for _, docTypeDir := range documentTypeDir {
 		olderTime := time.Now().Add(time.Duration(-persistenceTimeoutMinutes) * time.Minute)
 		tempDocTypeDir := path.Join(directoryPath, docTypeDir)
 		commandDirs, err := getDirectoryUnsortedOlderThan(tempDocTypeDir, &olderTime)
 		if err != nil {
-			log.Warnf("encountered error %v while listing replies in %v", err, directoryPath)
+			log.Warnf("encountered error %v while listing entries in %v", err, directoryPath)
 		}
 		decrementCount := deletionLimit
 		for _, commandDir := range commandDirs {
@@ -70,9 +70,9 @@ func CleanupOldIdempotencyEntries(idemCtx context.T) {
 			tempCommandDir := filepath.Join(tempDocTypeDir, commandDir)
 			deleteErr := deleteDirectory(tempCommandDir)
 			if deleteErr != nil {
-				log.Warnf("encountered error %v while deleting file %v", deleteErr, tempCommandDir)
+				log.Warnf("encountered error %v while deleting entry %v", deleteErr, tempCommandDir)
 			} else {
-				log.Debugf("successfully deleted file %v", tempCommandDir)
+				log.Debugf("successfully deleted entry %v", tempCommandDir)
 			}
 			if decrementCount == 0 {
 				return // break from the deletion thread

@@ -593,7 +593,7 @@ func processCommand(context context.T, executerCreator ExecuterCreator, cancelFl
 	documentID := docState.DocumentInformation.DocumentID
 	messageID := docState.DocumentInformation.MessageID
 	e := executerCreator(context)
-	docStore := executer.NewDocumentFileStore(documentID, appconfig.DefaultLocationOfCurrent, docState, docMgr)
+	docStore := executer.NewDocumentFileStore(documentID, appconfig.DefaultLocationOfCurrent, docState, docMgr, true)
 	statusChan := e.Run(
 		cancelFlag,
 		&docStore,

@@ -94,7 +94,7 @@ func (exec ExecDocumentImpl) ExecuteDocument(config contracts.Configuration, con
 	}
 
 	docStore := executer.NewDocumentFileStore(documentID, appconfig.DefaultLocationOfCurrent, &docState,
-		NewNoOpDocumentMgr(context))
+		NewNoOpDocumentMgr(context), true)
 	cancelFlag := task.NewChanneledCancelFlag()
 	resultChannels = exec.DocExecutor.Run(cancelFlag, &docStore)
 

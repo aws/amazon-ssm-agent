@@ -35,36 +35,40 @@ type DocumentStore interface {
 	Load() contracts.DocumentState
 }
 
-//TODO need to refactor global lock in docmanager, or discard the entire package and impl the file IO here
-//DocumentFileStore dependent on the current file functions in docmanager to provide file save/load operations
+// DocumentFileStore dependent on the current file functions in docmanager to provide file save/load operations
+// TODO need to refactor global lock in docmanager, or discard the entire package and impl the file IO here
 type DocumentFileStore struct {
-	state       contracts.DocumentState
-	documentID  string
-	location    string
-	documentMgr docmanager.DocumentMgr
+	state             contracts.DocumentState
+	documentID        string
+	location          string
+	documentMgr       docmanager.DocumentMgr
+	isLocalSaveNeeded bool
 }
 
-func NewDocumentFileStore(docID, location string, state *contracts.DocumentState, docMgr docmanager.DocumentMgr) DocumentFileStore {
+func NewDocumentFileStore(docID, location string, state *contracts.DocumentState, docMgr docmanager.DocumentMgr, isLocalSaveNeeded bool) DocumentFileStore {
 	return DocumentFileStore{
-		documentID:  docID,
-		location:    location,
-		state:       *state,
-		documentMgr: docMgr,
+		documentID:        docID,
+		location:          location,
+		state:             *state,
+		documentMgr:       docMgr,
+		isLocalSaveNeeded: isLocalSaveNeeded,
 	}
 }
 
-//Save the document info struct to the current folder, Save() is desired only for crash-recovery
+// Save the document info struct to the current folder, Save() is desired only for crash-recovery
 func (f *DocumentFileStore) Save(docState contracts.DocumentState) {
 	//copy the state struct
 	f.state = docState
-	f.documentMgr.PersistDocumentState(
-		f.documentID,
-		f.location,
-		docState)
+	if f.isLocalSaveNeeded {
+		f.documentMgr.PersistDocumentState(
+			f.documentID,
+			f.location,
+			docState)
+	}
 	return
 }
 
-//Load() should happen in memory
+// Load should happen in memory
 func (f *DocumentFileStore) Load() contracts.DocumentState {
 	return f.state
 }

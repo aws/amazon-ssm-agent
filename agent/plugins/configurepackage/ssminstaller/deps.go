@@ -70,8 +70,11 @@ func (m *execDepImp) ExecuteDocument(context context.T, pluginInput []contracts.
 		},
 		InstancePluginsInformation: pluginInput,
 	}
-	//specify the subdocument's bookkeeping location
-	docStore := executer.NewDocumentFileStore(documentID, appconfig.DefaultLocationOfCurrent, &docState, docmanager.NewDocumentFileMgr(context, appconfig.DefaultDataStorePath, appconfig.DefaultDocumentRootDirName, appconfig.DefaultLocationOfState))
+	docStore := executer.NewDocumentFileStore(documentID,
+		appconfig.DefaultLocationOfCurrent,
+		&docState,
+		docmanager.NewDocumentFileMgr(context, appconfig.DefaultDataStorePath, appconfig.DefaultDocumentRootDirName, appconfig.DefaultLocationOfState),
+		false)
 	cancelFlag := task.NewChanneledCancelFlag()
 	resChan := exe.Run(cancelFlag, &docStore)
 
