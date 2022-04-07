@@ -22,6 +22,7 @@ import (
 
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/health"
+	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/ssm"
 	"github.com/stretchr/testify/assert"
 )
@@ -37,7 +38,7 @@ func TestHibernation_ExecuteHibernation_AgentTurnsActive(t *testing.T) {
 	}
 	var status health.AgentState
 	go func(h *Hibernate) {
-		status = h.ExecuteHibernation()
+		status = h.ExecuteHibernation(ctx)
 		assert.Equal(t, health.Active, status)
 	}(hibernate)
 	modeChan <- health.Active
@@ -48,6 +49,7 @@ func TestHibernation_scheduleBackOffStrategy(t *testing.T) {
 	healthMock := health.NewHealthCheck(ctx, ssm.NewService(ctx))
 
 	hibernate := NewHibernateMode(healthMock, ctx)
+	hibernate.seelogger = log.GetLogger(ctx.Log(), "<seelog levels=\"off\"/>")
 	hibernate.schedulePing = fakeScheduler
 	hibernate.currentPingInterval = 1 //second
 	hibernate.maxInterval = 4         //second

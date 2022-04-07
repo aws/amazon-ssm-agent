@@ -117,7 +117,7 @@ func start(log logger.T, shouldCheckHibernation bool) (ssmAgent agent.ISSMAgent,
 					context.Log().Errorf("Stacktrace:\n%s", debug.Stack())
 				}
 			}()
-			hibernateState.ExecuteHibernation()
+			hibernateState.ExecuteHibernation(context)
 			err = startAgent(ssmAgent, context)
 		}()
 	} else {
@@ -188,7 +188,6 @@ func run(log logger.T, shouldCheckHibernation bool) {
 	}()
 
 	log.Debugf("Current GoMaxProc value - %v", runtime.GOMAXPROCS(0))
-
 	log.WriteEvent(logger.AgentTelemetryMessage, "", logger.AmazonAgentWorkerStartEvent)
 	// run ssm agent
 	agent, err := start(log, shouldCheckHibernation)

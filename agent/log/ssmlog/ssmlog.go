@@ -33,6 +33,12 @@ var pkgMutex = new(sync.Mutex)
 // loggerInstance is the delegate logger in the wrapper
 var loggerInstance = &log.DelegateLogger{}
 
+func init() {
+	// below lines will close the Default loggers created in seelog init()
+	seelog.Default.Close()
+	seelog.Disabled.Close()
+}
+
 func SSMLogger(useWatcher bool) log.T {
 	if !isLoaded() {
 		logger := initLogger(useWatcher)
@@ -179,7 +185,6 @@ func initBaseLoggerFromBytes(seelogConfig []byte) (seelogger seelog.LoggerInterf
 		// Create logger with default config
 		seelogger, _ = seelog.LoggerFromConfigAsBytes(log.DefaultConfig())
 	}
-
 	fmt.Println("New Seelog Logger Creation Complete")
 	return
 }

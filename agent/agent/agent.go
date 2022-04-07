@@ -87,7 +87,7 @@ func (agent *SSMAgent) Hibernate() {
 	if status, err := agent.healthModule.GetAgentState(); status == health.Passive {
 		//Starting hibernate mode
 		agent.context.Log().Info("Entering SSM Agent Worker hibernate - ", err)
-		agent.hibernateState.ExecuteHibernation()
+		agent.hibernateState.ExecuteHibernation(agent.context)
 	}
 }
 
