@@ -79,6 +79,9 @@ const PlatformOpensuseLeap = "opensuseleap"
 // PlatformGentoo uses Ohai identifier for gentoo platform
 const PlatformGentoo = "gentoo"
 
+// PlatformFlatcar uses Ohai identifier for flatcar platform
+const PlatformFlatcar = "flatcar"
+
 // PlatformArch uses Ohai identifier for arch platform
 const PlatformArch = "arch"
 

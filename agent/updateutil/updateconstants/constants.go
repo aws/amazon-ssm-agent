@@ -99,6 +99,9 @@ const (
 	// PlatformAlmaLinux represents AlmaLinux
 	PlatformAlmaLinux = "almalinux"
 
+	// PlatformFlatcar represents Flatcar
+	PlatformFlatcar = "flatcar"
+
 	// PlatformSuse represents SLES(SUSe)
 	PlatformSuseOS = "sles"
 
