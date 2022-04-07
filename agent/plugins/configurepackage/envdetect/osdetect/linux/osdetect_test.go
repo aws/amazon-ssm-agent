@@ -215,6 +215,10 @@ func TestParseOSreleaseFile(t *testing.T) {
 			"bottlerocket", "1.6.0", false,
 		},
 		{
+			[]string{`NAME="Flatcar Container Linux by Kinvolk"`, `ID=flatcar`, `ID_LIKE=coreos`, `VERSION=3185.0.0`, `VERSION_ID=3185.0.0"`, `BUILD_ID=2022-03-22-0306`, `SYSEXT_LEVEL=1.0`, `PRETTY_NAME="Flatcar Container Linux by Kinvolk 3185.0.0 (Oklo)"`, `ANSI_COLOR="38;5;75"`, `HOME_URL="https://flatcar-linux.org/"`, `BUG_REPORT_URL="https://issues.flatcar-linux.org"`, `FLATCAR_BOARD="arm64-usr"`, `CPE_NAME="cpe:2.3:o:flatcar-linux:flatcar_linux:3185.0.0:*:*:*:*:*:*:*"`},
+			"flatcar", "3185.0.0", false,
+		},
+		{
 			[]string{`NAME="openSUSE Leap"`, `VERSION="42.1"`, `VERSION_ID="42.1"`, `PRETTY_NAME="openSUSE Leap 42.1 (x86_64)"`, `ID=opensuse`, `ANSI_COLOR="0;32"`, `CPE_NAME="cpe:/o:opensuse:opensuse:42.1"`, `BUG_REPORT_URL="https://bugs.opensuse.org"`, `HOME_URL="https://opensuse.org/"`, `ID_LIKE="suse"`},
 			"opensuseleap", "42.1", false,
 		},
@@ -361,6 +365,7 @@ func TestPlatformFamilyForPlatform(t *testing.T) {
 		{"alpine", "alpine", false},
 		{"asdf", "", true},
 		{"bottlerocket", "", true},
+		{"flatcar", "", true},
 	}
 
 	for _, m := range data {

@@ -96,6 +96,9 @@ const (
 	// PlatformCentOS represents CentOS
 	PlatformRockyLinux = "rocky"
 
+	// PlatformFlatcar represents Flatcar
+	PlatformFlatcar = "flatcar"
+
 	// PlatformSuse represents SLES(SUSe)
 	PlatformSuseOS = "sles"
 

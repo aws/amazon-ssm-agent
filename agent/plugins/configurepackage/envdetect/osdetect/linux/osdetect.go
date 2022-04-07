@@ -414,8 +414,8 @@ func platformFamilyForPlatform(platform string) (string, error) {
 		return c.PlatformFamilyGentoo, nil
 	case c.PlatformArch:
 		return c.PlatformFamilyArch, nil
-	case c.PlatformBottlerocket:
-		return "", fmt.Errorf("Configure Package is not supported on Bottlerocket.")
+	case c.PlatformBottlerocket, c.PlatformFlatcar:
+		return "", fmt.Errorf("configure package is not supported on %s", platform)
 	default:
 		return "", fmt.Errorf("unknown platform: %s", platform)
 	}
