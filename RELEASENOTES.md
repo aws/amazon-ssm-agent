@@ -1,5 +1,13 @@
 Latest
 ===============
+- Added missing check for invalid S3 path parameter
+- Added support for domain join using a non-local username
+- Fixed broken links in README.md
+- Fixed ECS Exec issue where agent was using environment variables for credentials
+- Updated Ec2Detector test to query smbios directly for system information
+
+3.1.1208.0
+===============
 - Updated ec2detector module to use Get-CmiInstance instead of wmic.exe
 - Fixed file creation mode of ssm-agent-users sudoer file
 
