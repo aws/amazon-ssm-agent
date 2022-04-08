@@ -50,9 +50,9 @@ func LoadLog(defaultLogDir string, logFile string, debugStatus string) []byte {
         </filter>
     </outputs>
     <formats>
-        <format id="fmterror" format="%UTCDateT%UTCTimeZ %LEVEL [%FuncShort @ %File.%Line] %Msg%n"/>
-        <format id="fmtdebug" format="%UTCDateT%UTCTimeZ %LEVEL [%FuncShort @ %File.%Line] %Msg%n"/>
-        <format id="fmtinfo" format="%UTCDateT%UTCTimeZ %LEVEL %Msg%n"/>
+        <format id="fmterror" format="%Date(2006-01-02T15:04:05Z07:00) %LEVEL [%FuncShort @ %File.%Line] %Msg%n"/>
+        <format id="fmtdebug" format="%Date(2006-01-02T15:04:05Z07:00) %LEVEL [%FuncShort @ %File.%Line] %Msg%n"/>
+        <format id="fmtinfo" format="%Date(2006-01-02T15:04:05Z07:00) %LEVEL %Msg%n"/>
     </formats>
 </seelog>
 `
