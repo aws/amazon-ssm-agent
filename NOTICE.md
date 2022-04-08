@@ -160,6 +160,8 @@ Copyright 2014 Unknwon
 Copyright 2011-2016 Canonical Ltd.
 * jmespath/go-jmespath - https://github.com/jmespath/go-jmespath
 Copyright 2015 James Saryerwinnie
+* digitalocean/go-smbios - https://github.com/digitalocean/go-smbios
+Copyright 2018 DigitalOcean, Inc
 * Workiva/go-datastructures - https://github.com/Workiva/go-datastructures
 * gorhill/cronexpr - https://github.com/gorhill/cronexpr
 * go-git/go-git - https://github.com/go-git/go-git

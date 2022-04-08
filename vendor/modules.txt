@@ -97,6 +97,9 @@ github.com/coreos/go-semver/semver
 github.com/creack/pty
 # github.com/davecgh/go-spew v1.1.1
 github.com/davecgh/go-spew/spew
+# github.com/digitalocean/go-smbios v0.0.0-20180907143718-390a4f403a8e
+## explicit
+github.com/digitalocean/go-smbios/smbios
 # github.com/emirpasic/gods v1.12.0
 github.com/emirpasic/gods/containers
 github.com/emirpasic/gods/lists
