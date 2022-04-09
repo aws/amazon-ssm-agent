@@ -42,18 +42,18 @@ func TestUuidMatcher(t *testing.T) {
 	testUpperLower(t, false, "ECFFFFFF-FFFF-FFFF-FFFF-FFFFFFFFFFFF")
 
 	// little endian formats
-	testUpperLower(t, true, "FFFF2FCE-FFFF-FFFF-FFFF-FFFFFFFFFFFF")
+	testUpperLower(t, true, "FFFF2FEC-FFFF-FFFF-FFFF-FFFFFFFFFFFF")
 
-	testUpperLower(t, false, "FFFF2FEC-FFFF-FFFF-FFFF-FFFFFFFFFFFF")
+	testUpperLower(t, false, "FFFF2FCE-FFFF-FFFF-FFFF-FFFFFFFFFFFF")
 	testUpperLower(t, false, "FFFFCF2E-FFFF-FFFF-FFFF-FFFFFFFFFFFF")
 	testUpperLower(t, false, "FFFFCFE2-FFFF-FFFF-FFFF-FFFFFFFFFFFF")
 	testUpperLower(t, false, "FFFFEFC2-FFFF-FFFF-FFFF-FFFFFFFFFFFF")
 	testUpperLower(t, false, "FFFFEF2C-FFFF-FFFF-FFFF-FFFFFFFFFFFF")
 
-	testUpperLower(t, false, "FFFFFFCE-FFFF-FFFF-FFFF-FFFFFFFFFFFF")
-	testUpperLower(t, false, "FFFF2FFE-FFFF-FFFF-FFFF-FFFFFFFFFFFF")
-	testUpperLower(t, false, "FFFF2FCF-FFFF-FFFF-FFFF-FFFFFFFFFFFF")
+	testUpperLower(t, false, "FFFFFFEC-FFFF-FFFF-FFFF-FFFFFFFFFFFF")
+	testUpperLower(t, false, "FFFF2FEF-FFFF-FFFF-FFFF-FFFFFFFFFFFF")
+	testUpperLower(t, false, "FFFF2FFC-FFFF-FFFF-FFFF-FFFFFFFFFFFF")
 
 	// both
-	testUpperLower(t, true, "EC2F2FCE-FFFF-FFFF-FFFF-FFFFFFFFFFFF")
+	testUpperLower(t, true, "EC2F2FEC-FFFF-FFFF-FFFF-FFFFFFFFFFFF")
 }

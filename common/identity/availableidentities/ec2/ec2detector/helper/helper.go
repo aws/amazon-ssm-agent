@@ -21,7 +21,7 @@ import (
 
 const (
 	bigEndianEc2UuidRegex    = "^ec2[0-9a-f]{5}(-[0-9a-f]{4}){3}-[0-9a-f]{12}$"
-	littleEndianEc2UuidRegex = "^[0-9a-f]{4}2[0-9a-f]ce(-[0-9a-f]{4}){3}-[0-9a-f]{12}$"
+	littleEndianEc2UuidRegex = "^[0-9a-f]{4}2[0-9a-f]ec(-[0-9a-f]{4}){3}-[0-9a-f]{12}$"
 )
 
 var detectors []Detector

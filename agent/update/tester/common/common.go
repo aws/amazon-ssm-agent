@@ -26,8 +26,9 @@ type ITestCase interface {
 
 // TestOutput is structure of test case execution result
 type TestOutput struct {
-	Result TestResult
-	Err    error
+	AdditionalInfo string
+	Result         TestResult
+	Err            error
 }
 
 type TestResult string

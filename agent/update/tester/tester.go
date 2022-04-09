@@ -63,9 +63,9 @@ var runTests = func(context context.T, testCases []testCommon.ITestCase, reportR
 		}
 
 		if testCaseOutput.Result == testCommon.TestCaseFail {
-			reportResults(contracts.ResultStatusTestFailure, currentRunningTest)
+			reportResults(contracts.ResultStatusTestFailure, currentRunningTest+testCaseOutput.AdditionalInfo)
 		} else if testCaseOutput.Result == testCommon.TestCasePass {
-			reportResults(contracts.ResultStatusTestPass, currentRunningTest)
+			reportResults(contracts.ResultStatusTestPass, currentRunningTest+testCaseOutput.AdditionalInfo)
 		}
 
 		testCase.CleanupTestCase()

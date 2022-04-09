@@ -16,11 +16,6 @@
 
 package testcases
 
-import (
-	"github.com/aws/amazon-ssm-agent/common/identity"
+var (
+	ec2DetectorTestCaseName = "Ec2DetectorUnix"
 )
-
-// ShouldRunTest determines if test should run
-func (l *Ec2DetectorTestCase) ShouldRunTest() bool {
-	return identity.IsEC2Instance(l.context.Identity())
-}
