@@ -131,7 +131,7 @@ func (u *SessionUtil) createSudoersFileIfNotPresent(log log.T) error {
 }
 
 // changeModeOfSudoersFile will change the sudoersFile mode to 0440 (read only).
-// This file is created with mode 0666 using os.Create() so needs to be updated to read only with chmod.
+// This file is created with mode 0640 using os.Create() so needs to be updated to read only with chmod.
 func (u *SessionUtil) changeModeOfSudoersFile(log log.T) error {
 	fileMode := os.FileMode(sudoersFileReadOnlyMode)
 	if err := os.Chmod(sudoersFile, fileMode); err != nil {
