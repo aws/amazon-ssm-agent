@@ -219,9 +219,10 @@ func initManifest(mgr *updateManager, log log.T, updateDetail *UpdateDetail) (er
 	}
 
 	log.Infof("Initiating download manifest %v", updateDetail.ManifestURL)
-	err = mgr.S3util.DownloadManifest(updateDetail.Manifest, updateDetail.ManifestURL)
-	if err != nil {
-		return mgr.failed(updateDetail, log, updateconstants.ErrorDownloadManifest, fmt.Sprintf("Failed to download manifest: %v", err), true)
+	downloadErr := mgr.S3util.DownloadManifest(updateDetail.Manifest, updateDetail.ManifestURL)
+	if downloadErr != nil && downloadErr.Error != nil {
+		errorCode := updateutil.ConvertToUpdateErrorCode(string(updateconstants.ErrorDownloadManifest), "_", downloadErr.ErrorCode)
+		return mgr.failed(updateDetail, log, errorCode, fmt.Sprintf("Failed to download manifest: %v", downloadErr.Error.Error()), true)
 	}
 
 	return mgr.initSelfUpdate(mgr, log, updateDetail)

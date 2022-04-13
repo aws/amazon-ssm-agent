@@ -100,7 +100,8 @@ func TestDownloadManifest_FailedResolveManifestUrl(t *testing.T) {
 	err := util.DownloadManifest(manifest, "RandomManifestURL")
 
 	assert.NotNil(t, err)
-	assert.Equal(t, "SomeResolveError", err.Error())
+	assert.Equal(t, "SomeResolveError", err.Error.Error())
+	assert.Equal(t, string(ResolveManifestURLErrorCode), err.ErrorCode)
 }
 
 func TestDownloadManifest_FailedCreateTempDir(t *testing.T) {
@@ -120,7 +121,7 @@ func TestDownloadManifest_FailedCreateTempDir(t *testing.T) {
 
 	err := util.DownloadManifest(manifest, "RandomManifestURL")
 	assert.NotNil(t, err)
-	assert.Equal(t, "SomeTmpError", err.Error())
+	assert.Equal(t, "SomeTmpError", err.Error.Error())
 }
 
 func TestDownloadManifest_FailedDownloadFile(t *testing.T) {
@@ -147,7 +148,8 @@ func TestDownloadManifest_FailedDownloadFile(t *testing.T) {
 
 	err := util.DownloadManifest(manifest, "RandomManifestURL")
 	assert.NotNil(t, err)
-	assert.Equal(t, "failed to download file reliably, RandomManifestURL, SomeDownloadError", err.Error())
+	assert.Equal(t, "failed to download file reliably, RandomManifestURL, SomeDownloadError", err.Error.Error())
+	assert.Equal(t, string(NetworkFileDownloadErrorCode), err.ErrorCode)
 
 	// filedownload hash not matched
 	fileDownload = func(context.T, artifact.DownloadInput) (artifact.DownloadOutput, error) {
@@ -156,7 +158,8 @@ func TestDownloadManifest_FailedDownloadFile(t *testing.T) {
 
 	err = util.DownloadManifest(manifest, "RandomManifestURL")
 	assert.NotNil(t, err)
-	assert.Equal(t, "failed to download file reliably, RandomManifestURL", err.Error())
+	assert.Equal(t, "failed to download file reliably, RandomManifestURL", err.Error.Error())
+	assert.Equal(t, string(HashMismatchErrorCode), err.ErrorCode)
 
 	// filedownload local path empty
 	fileDownload = func(context.T, artifact.DownloadInput) (artifact.DownloadOutput, error) {
@@ -165,7 +168,8 @@ func TestDownloadManifest_FailedDownloadFile(t *testing.T) {
 
 	err = util.DownloadManifest(manifest, "RandomManifestURL")
 	assert.NotNil(t, err)
-	assert.Equal(t, "failed to download file reliably, RandomManifestURL", err.Error())
+	assert.Equal(t, "failed to download file reliably, RandomManifestURL", err.Error.Error())
+	assert.Equal(t, string(LocalFilePathEmptyErrorCode), err.ErrorCode)
 }
 
 func TestDownloadManifest_FailedLoadManifest(t *testing.T) {
@@ -194,7 +198,7 @@ func TestDownloadManifest_FailedLoadManifest(t *testing.T) {
 
 	err := util.DownloadManifest(manifest, "RandomManifestURL")
 	assert.NotNil(t, err)
-	assert.Equal(t, "SomeLoadManifestError", err.Error())
+	assert.Contains(t, err.Error.Error(), "RandomManifestURL")
 }
 
 func TestDownloadManifest_Success(t *testing.T) {

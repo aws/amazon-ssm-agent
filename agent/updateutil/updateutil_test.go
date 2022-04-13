@@ -102,6 +102,17 @@ func TestBuildUpdateCommand(t *testing.T) {
 	}
 }
 
+func TestConvertToUpdateErrorCode_MulipleCases(t *testing.T) {
+	output := ConvertToUpdateErrorCode(string(updateconstants.ErrorCreateUpdateFolder), "_", "Test")
+	assert.Equal(t, string(output), "ErrorCreateUpdateFolder_Test")
+	output = ConvertToUpdateErrorCode(string(updateconstants.ErrorCreateUpdateFolder))
+	assert.Equal(t, string(output), "ErrorCreateUpdateFolder")
+	output = ConvertToUpdateErrorCode("Test")
+	assert.Equal(t, string(output), "Test")
+	output = ConvertToUpdateErrorCode()
+	assert.Equal(t, string(output), "")
+}
+
 func TestUpdateArtifactFolder(t *testing.T) {
 	testCases := []struct {
 		pkgname string

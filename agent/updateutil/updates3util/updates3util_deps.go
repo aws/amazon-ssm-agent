@@ -34,7 +34,7 @@ var removeDir = os.RemoveAll
 var currentVersion = version.Version
 
 type T interface {
-	DownloadManifest(manifest updatemanifest.T, manifestUrl string) (err error)
+	DownloadManifest(manifest updatemanifest.T, manifestUrl string) *UpdateErrorStruct
 
 	DownloadUpdater(
 		manifest updatemanifest.T,
@@ -45,4 +45,30 @@ type T interface {
 
 type updateS3UtilImpl struct {
 	context context.T
+}
+
+// DownloadManifestErrorCodes represents error codes while downloading manifest
+type DownloadManifestErrorCodes string
+
+var (
+	// ResolveManifestURLErrorCode represents error code for manifest URL resolution error
+	ResolveManifestURLErrorCode DownloadManifestErrorCodes = "d1"
+	// TmpDownloadDirCreationErrorCode represents error code for directory download error
+	TmpDownloadDirCreationErrorCode DownloadManifestErrorCodes = "d2"
+	// NetworkFileDownloadErrorCode represents error code for manifest file download error
+	NetworkFileDownloadErrorCode DownloadManifestErrorCodes = "d3"
+	// HashMismatchErrorCode represents error code for file hash mismatch failure
+	HashMismatchErrorCode DownloadManifestErrorCodes = "d4"
+	// LocalFilePathEmptyErrorCode represents error code for empty local download file path
+	LocalFilePathEmptyErrorCode DownloadManifestErrorCodes = "d5"
+	// LoadManifestErrorCode represents error code for load manifest error
+	LoadManifestErrorCode DownloadManifestErrorCodes = "d6"
+)
+
+// UpdateErrorStruct represents Update error struct
+type UpdateErrorStruct struct {
+	// Error denotes update error
+	Error error
+	// Error denotes update error code
+	ErrorCode string
 }

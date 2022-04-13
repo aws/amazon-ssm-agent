@@ -16,6 +16,7 @@ package updateutil
 
 import (
 	"bufio"
+	"bytes"
 	"errors"
 	"fmt"
 	"io"
@@ -617,6 +618,15 @@ func parseVersion(version string) (uint64, uint64, uint64, uint64, error) {
 	}
 
 	return major, minor, build, patch, nil
+}
+
+// ConvertToUpdateErrorCode joins the error string array passed and converts to update error code
+func ConvertToUpdateErrorCode(errorCodes ...string) updateconstants.ErrorCode {
+	var updateErrorCode bytes.Buffer
+	for _, errCode := range errorCodes {
+		updateErrorCode.WriteString(errCode)
+	}
+	return updateconstants.ErrorCode(updateErrorCode.String())
 }
 
 // GetManifestURLFromSourceUrl parses source url passed to the updater and generates the url for manifest

@@ -54,22 +54,23 @@ func (util *updateS3UtilImpl) resolveManifestUrl(manifestUrl string) (string, er
 }
 
 // DownloadManifest downloads the agent manifest t
-func (util *updateS3UtilImpl) DownloadManifest(manifest updatemanifest.T, manifestUrl string) (err error) {
+func (util *updateS3UtilImpl) DownloadManifest(manifest updatemanifest.T, manifestUrl string) *UpdateErrorStruct {
 	logger := util.context.Log()
 	var downloadOutput artifact.DownloadOutput
 
-	manifestUrl, err = util.resolveManifestUrl(manifestUrl)
-
+	manifestUrl, err := util.resolveManifestUrl(manifestUrl)
 	if err != nil {
-		return err
+		return &UpdateErrorStruct{Error: err, ErrorCode: string(ResolveManifestURLErrorCode)}
 	}
-
 	logger.Infof("manifest download url is %s", manifestUrl)
 
 	// Create temporary folder to download manifest to
+	// If there is problem with default temp folder path, use the update artifacts folder to store the manifest
 	tmpDownloadDir, err := createTempDir("", "")
 	if err != nil {
-		return err
+		if tmpDownloadDir, err = createTempDir(appconfig.UpdaterArtifactsRoot, ""); err != nil {
+			return &UpdateErrorStruct{Error: err, ErrorCode: string(TmpDownloadDirCreationErrorCode)}
+		}
 	}
 	defer removeDir(tmpDownloadDir)
 
@@ -77,27 +78,38 @@ func (util *updateS3UtilImpl) DownloadManifest(manifest updatemanifest.T, manife
 		SourceURL:            manifestUrl,
 		DestinationDirectory: tmpDownloadDir,
 	}
-
 	downloadOutput, err = fileDownload(util.context, downloadInput)
-	if err != nil ||
-		downloadOutput.IsHashMatched == false ||
-		downloadOutput.LocalFilePath == "" {
-		if err != nil {
-			return fmt.Errorf("failed to download file reliably, %v, %v", downloadInput.SourceURL, err.Error())
+	if err != nil {
+		return &UpdateErrorStruct{
+			Error:     fmt.Errorf("failed to download file reliably, %v, %v", downloadInput.SourceURL, err.Error()),
+			ErrorCode: string(NetworkFileDownloadErrorCode),
 		}
-		return fmt.Errorf("failed to download file reliably, %v", downloadInput.SourceURL)
+	}
+	if downloadOutput.IsHashMatched == false { // this should not happen for manifest file download
+		return &UpdateErrorStruct{
+			Error:     fmt.Errorf("failed to download file reliably, %v", downloadInput.SourceURL),
+			ErrorCode: string(HashMismatchErrorCode),
+		}
+	}
+	if downloadOutput.LocalFilePath == "" {
+		return &UpdateErrorStruct{
+			Error:     fmt.Errorf("failed to download file reliably, %v", downloadInput.SourceURL),
+			ErrorCode: string(LocalFilePathEmptyErrorCode),
+		}
 	}
 
 	logger.Infof("Succeed to download the manifest")
 	logger.Infof("Local file path : %v", downloadOutput.LocalFilePath)
 
 	if err = manifest.LoadManifest(downloadOutput.LocalFilePath); err != nil {
-		logger.Errorf("Failed to parse manifest: %v", err)
-		return err
+		logger.Errorf("failed to parse manifest: %v", err)
+		return &UpdateErrorStruct{
+			Error:     fmt.Errorf("failed to download file reliably, %v", downloadInput.SourceURL),
+			ErrorCode: string(LoadManifestErrorCode),
+		}
 	}
 
 	logger.Infof("Successfully parsed the manifest")
-
 	return nil
 }
 

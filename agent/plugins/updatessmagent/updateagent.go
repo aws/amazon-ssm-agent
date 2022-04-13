@@ -104,8 +104,8 @@ func runUpdateAgent(
 	}
 
 	//Download manifest file and populate manifest object
-	if downloadErr := s3util.DownloadManifest(manifest, pluginInput.Source); downloadErr != nil {
-		output.MarkAsFailed(downloadErr)
+	if downloadErr := s3util.DownloadManifest(manifest, pluginInput.Source); downloadErr != nil && downloadErr.Error != nil {
+		output.MarkAsFailed(downloadErr.Error)
 		return
 	}
 	output.AppendInfo("Successfully downloaded manifest\n")

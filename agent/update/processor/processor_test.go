@@ -25,6 +25,8 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/aws/amazon-ssm-agent/agent/updateutil/updates3util"
+
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
@@ -203,7 +205,8 @@ func TestInitManifest_ErrorDownloadManifest(t *testing.T) {
 	updater := createDefaultUpdaterStub()
 
 	s3Util := &updates3utilmocks.T{}
-	s3Util.On("DownloadManifest", mock.Anything, mock.Anything).Return(fmt.Errorf("SomeDownloadError"))
+	s3Util.On("DownloadManifest", mock.Anything, mock.Anything).Return(
+		&updates3util.UpdateErrorStruct{Error: fmt.Errorf("SomeDownloadError")})
 	updater.mgr.S3util = s3Util
 
 	updateDetail := createUpdateDetail(Initialized)

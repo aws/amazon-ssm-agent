@@ -110,7 +110,10 @@ func TestUpdateAgent_FailedDownloadManifest(t *testing.T) {
 	manifest := &updatemanifestmocks.T{}
 
 	s3Util := &updates3utilmocks.T{}
-	s3Util.On("DownloadManifest", mock.Anything, pluginInput.Source).Return(fmt.Errorf("SomeDownloadManifestError"))
+	s3Util.On("DownloadManifest", mock.Anything, pluginInput.Source).Return(
+		&updates3util.UpdateErrorStruct{
+			Error: fmt.Errorf("SomeDownloadManifestError"),
+		})
 
 	out := iohandler.DefaultIOHandler{}
 	execMock := &executormocks.IExecutor{}
