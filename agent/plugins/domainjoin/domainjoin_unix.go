@@ -61,6 +61,8 @@ const (
 	// Default folder name for domain join plugin
 	DomainJoinFolderName = "awsDomainJoin"
 	// SetHostName is an optional argument to set hostname name after domain join
+	KeepHostNameArgs = " --keep-hostname "
+	// KeepHostName is a flag to retain instance hostnames as assigned (by customers).
 	SetHostNameArg = " --set-hostname "
 	// SetHostNameNumAppendDigits is an optional argument to set hostname name after domain join
 	SetHostNameNumAppendDigitsArg = " --set-hostname-append-num-digits "
@@ -86,6 +88,7 @@ type DomainJoinPluginInput struct {
 	DnsIpAddresses          []string
 	HostName                string
 	HostNameNumAppendDigits string
+	KeepHostName            bool
 }
 
 // NewPlugin returns a new instance of the plugin.
@@ -335,6 +338,11 @@ func makeArguments(context context.T, scriptPath string, pluginInput DomainJoinP
 		} else {
 			return "", fmt.Errorf("Invalid DNS IP address " + pluginInput.DnsIpAddresses[index])
 		}
+	}
+
+	if pluginInput.KeepHostName {
+		buffer.WriteString(KeepHostNameArgs)
+		buffer.WriteString(" ")
 	}
 
 	return buffer.String(), nil

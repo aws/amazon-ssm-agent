@@ -53,6 +53,7 @@ DOMAIN_USERNAME=""
 DOMAIN_PASSWORD=""
 # Secrets Manager Secret ID needs to be of the form aws/directory-services/d-91673491b6/seamless-domain-join
 SECRET_ID_PREFIX="aws/directory-services"
+KEEP_HOSTNAME=""
 AWS_CLI_INSTALL_DIR="$PWD/"
 # Optional arguments to set hostname with or without appended digits
 SET_HOSTNAME=""
@@ -754,7 +755,13 @@ config_nsswitch() {
 ## Configure id-mappings in Samba                ##
 ###################################################
 config_samba() {
-    AD_INFO=$(adcli info ${DIRECTORY_NAME} | grep '^domain-short = ' | awk '{print $3}')
+    AD_INFO=$(adcli info ${DIRECTORY_NAME} | grep '^domain-name = ' | awk '{print $3}')
+    if [ -z $AD_INFO ]; then
+        echo "**Failed: adcli info output is empty" && exit 1
+    fi
+
+    cp /etc/samba/smb.conf /etc/samba/smb.conf.orig
+
     sed -i".pre-join" -r\
         "/^\[global\]/a\\
         idmap config * : backend = autorid\n\
@@ -771,8 +778,6 @@ config_samba() {
         /^\s*winbind\s+refresh/d;\
         /^\s*winbind\s+enum/d"\
         /etc/samba/smb.conf
-
-    cp /etc/samba/smb.conf /tmp
 
     # Flushing Samba Winbind databases
     net cache flush
@@ -838,6 +843,11 @@ for i in "$@"; do
         --no-proxy)
             shift;
             NO_PROXY="$1"
+            continue
+            ;;
+        --keep-hostname)
+            shift;
+            KEEP_HOSTNAME="TRUE"
             continue
             ;;
         --set-hostname)
@@ -911,9 +921,10 @@ else
     get_default_hostname
 fi
 
-echo "Host name = $COMPUTER_NAME"
+if [ -z $KEEP_HOSTNAME ]; then
+  set_hostname
+fi
 
-set_hostname
 configure_hosts_file
 
 sed -i 's/PasswordAuthentication no/PasswordAuthentication yes/g' /etc/ssh/sshd_config
