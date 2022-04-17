@@ -87,7 +87,7 @@ func httpDownload(log log.T, fileURL string, destFile string) (output DownloadOu
 		var resp *http.Response
 		resp, err = check.Do(httpRequest)
 		if err != nil {
-			log.Debug("failed to download from http/https, ", err)
+			log.Debugf("failed to download from http/https: %v", err)
 			_ = fileutil.DeleteFile(destFile)
 			_ = fileutil.DeleteFile(eTagFile)
 			return
@@ -99,10 +99,14 @@ func httpDownload(log log.T, fileURL string, destFile string) (output DownloadOu
 			output.LocalFilePath = destFile
 			return nil
 		} else if resp.StatusCode != http.StatusOK {
-			log.Debug("failed to download from http/https, ", err)
 			_ = fileutil.DeleteFile(destFile)
 			_ = fileutil.DeleteFile(eTagFile)
+			log.Debugf("failed to download from http/https: %v", err)
 			err = fmt.Errorf("http request failed. status:%v statuscode:%v", resp.Status, resp.StatusCode)
+			// skip backoff logic if permission denied to the URL
+			if resp.StatusCode == http.StatusForbidden {
+				return &backoff.PermanentError{Err: err}
+			}
 			return
 		}
 

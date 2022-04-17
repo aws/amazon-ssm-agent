@@ -89,6 +89,7 @@ func (versionQuery) getLatestVersion(resChan chan versionRegionResponse) {
 	tr := network.GetDefaultTransport(log, config)
 	client := &http.Client{
 		Transport: tr,
+		Timeout:   30 * time.Second,
 	}
 	resp, err := client.Get(s3Url)
 

@@ -17,6 +17,7 @@ package s3util
 import (
 	"net/http"
 	"strings"
+	"time"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/backoffconfig"
@@ -47,6 +48,7 @@ func (p HttpProviderImpl) Head(url string) (resp *http.Response, err error) {
 
 	httpClient := &http.Client{
 		Transport: makeHeadBucketTransport(p.logger, getHeadBucketTransportDelegate(p.logger, p.appConfig)),
+		Timeout:   30 * time.Second,
 	}
 
 	op := func() error {
@@ -106,7 +108,7 @@ func wrapForRetryer(err error) error {
 	}
 }
 
-// Sends an HTTP request an returns the result.  In most cases, returns the delegate's
+// RoundTrip sends an HTTP request and returns the result.  In most cases, returns the delegate's
 // response without modification.  The only exception is when the delegate returns a redirect
 // response with no Location header.  In that case, we change the response code to 200 keep
 // the Go http.Client from swallowing the response and returning an error.
