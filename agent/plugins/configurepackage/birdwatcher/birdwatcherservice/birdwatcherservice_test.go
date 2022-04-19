@@ -16,6 +16,7 @@ package birdwatcherservice
 
 import (
 	"errors"
+	"fmt"
 	"testing"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
@@ -410,6 +411,13 @@ func TestExtractPackageInfo(t *testing.T) {
 	}
 }
 
+func defaultCollectDataResponseObj() *envdetect.Environment {
+	return &envdetect.Environment{
+		&osdetect.OperatingSystem{"abc", "567", "", "xyz", "", ""},
+		&ec2infradetect.Ec2Infrastructure{"instanceIDX", "Reg1", "", "AZ1", "instanceTypeZ"},
+	}
+}
+
 func TestReportResult(t *testing.T) {
 	now := 420000
 	timemock := &TimeMock{}
@@ -419,10 +427,12 @@ func TestReportResult(t *testing.T) {
 	tracer.BeginSection("test segment root")
 
 	data := []struct {
-		name          string
-		facadeClient  facade.FacadeStub
-		expectedErr   bool
-		packageResult packageservice.PackageResult
+		name                   string
+		facadeClient           facade.FacadeStub
+		expectedErr            bool
+		packageResult          packageservice.PackageResult
+		collectDataResponseObj *envdetect.Environment
+		collectDataResponseErr error
 	}{
 		{
 			"successful api call",
@@ -437,6 +447,8 @@ func TestReportResult(t *testing.T) {
 				Timing:                 29347,
 				Exitcode:               815,
 			},
+			defaultCollectDataResponseObj(),
+			nil,
 		},
 		{
 			"successful api call without previous version",
@@ -450,6 +462,8 @@ func TestReportResult(t *testing.T) {
 				Timing:      29347,
 				Exitcode:    815,
 			},
+			defaultCollectDataResponseObj(),
+			nil,
 		},
 		{
 			"failing api call",
@@ -464,6 +478,24 @@ func TestReportResult(t *testing.T) {
 				Timing:                 29347,
 				Exitcode:               815,
 			},
+			defaultCollectDataResponseObj(),
+			nil,
+		},
+		{
+			"failing collect data call",
+			facade.FacadeStub{
+				PutConfigurePackageResultOutput: &ssm.PutConfigurePackageResultOutput{},
+			},
+			true,
+			packageservice.PackageResult{
+				PackageName:            "name",
+				Version:                "1234",
+				PreviousPackageVersion: "5678",
+				Timing:                 29347,
+				Exitcode:               815,
+			},
+			nil,
+			fmt.Errorf("some data collection error"),
 		},
 	}
 
@@ -471,10 +503,7 @@ func TestReportResult(t *testing.T) {
 		t.Run(testdata.name, func(t *testing.T) {
 			mockedCollector := envdetect.CollectorMock{}
 
-			mockedCollector.On("CollectData", mock.Anything).Return(&envdetect.Environment{
-				&osdetect.OperatingSystem{"abc", "567", "", "xyz", "", ""},
-				&ec2infradetect.Ec2Infrastructure{"instanceIDX", "Reg1", "", "AZ1", "instanceTypeZ"},
-			}, nil).Once()
+			mockedCollector.On("CollectData", mock.Anything).Return(testdata.collectDataResponseObj, testdata.collectDataResponseErr).Once()
 			ds := &PackageService{facadeClient: &testdata.facadeClient, manifestCache: packageservice.ManifestCacheMemNew(), collector: &mockedCollector, timeProvider: timemock}
 
 			err := ds.ReportResult(tracer, testdata.packageResult)

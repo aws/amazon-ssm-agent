@@ -115,7 +115,10 @@ func (ds *PackageService) DownloadArtifact(tracer trace.Tracer, packageName stri
 
 // ReportResult sents back the result of the install/upgrade/uninstall run back to Birdwatcher
 func (ds *PackageService) ReportResult(tracer trace.Tracer, result packageservice.PackageResult) error {
-	env, _ := ds.collector.CollectData(ds.Context)
+	env, err := ds.collector.CollectData(ds.Context)
+	if err != nil {
+		return fmt.Errorf("failed to collect data to report results: %v", err)
+	}
 
 	var previousPackageVersion *string
 	if result.PreviousPackageVersion != "" {
@@ -154,7 +157,7 @@ func (ds *PackageService) ReportResult(tracer trace.Tracer, result packageservic
 		Steps: steps,
 	}
 
-	_, err := ds.facadeClient.PutConfigurePackageResult(input)
+	_, err = ds.facadeClient.PutConfigurePackageResult(input)
 
 	if err != nil {
 		return fmt.Errorf("failed to report results: %v", err)
