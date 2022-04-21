@@ -57,6 +57,11 @@ type ICredentialRefresherAgentIdentity interface {
 	ShouldShareCredentials() bool
 }
 
+// IMetadataIdentity defines the interface for identities that will query metadata for VPC CIDR block information (ec2, ecs)
+type IMetadataIdentity interface {
+	VpcPrimaryCIDRBlock() (map[string][]string, error)
+}
+
 type agentIdentityCacher struct {
 	instanceID       string
 	shortInstanceID  string

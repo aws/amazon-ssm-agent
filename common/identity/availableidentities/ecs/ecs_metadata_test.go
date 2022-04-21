@@ -30,7 +30,7 @@ func TestFetchClusterNameAndTaskIdSuccess(t *testing.T) {
 		return []byte("{\"Cluster\": \"clusterName\"," +
 			"\"TaskARN\": \"arn:aws:ecs:us-east-2:012345678910:task/9781c248-0edd-4cdb-9a93-f63cb662a5d3\"}"), nil
 	}
-	getV3MetadataEndpoint = func() (string, error) {
+	getMetadataEndpoint = func() (string, error) {
 		return fakeV3Endpoint, nil
 	}
 
@@ -45,7 +45,7 @@ func TestFetchClusterNameAndTaskIdSuccessForFargate(t *testing.T) {
 		return []byte("{\"Cluster\": \"arn:aws:ecs:us-east-2:012345678910:cluster/clusterName\"," +
 			"\"TaskARN\": \"arn:aws:ecs:us-east-2:012345678910:task/9781c248-0edd-4cdb-9a93-f63cb662a5d3\"}"), nil
 	}
-	getV3MetadataEndpoint = func() (string, error) {
+	getMetadataEndpoint = func() (string, error) {
 		return fakeV3Endpoint, nil
 	}
 
@@ -60,7 +60,7 @@ func TestFetchContainerIdSuccess(t *testing.T) {
 		return []byte("{\"DockerId\": \"1234567890\"," +
 			"\"Name\": \"dockerName\"}"), nil
 	}
-	getV3MetadataEndpoint = func() (string, error) {
+	getMetadataEndpoint = func() (string, error) {
 		return fakeV3Endpoint, nil
 	}
 
@@ -74,7 +74,7 @@ func TestFetchRegionSuccess(t *testing.T) {
 		return []byte("{\"Cluster\": \"clusterName\"," +
 			"\"TaskARN\": \"arn:aws:ecs:us-east-2:012345678910:task/9781c248-0edd-4cdb-9a93-f63cb662a5d3\"}"), nil
 	}
-	getV3MetadataEndpoint = func() (string, error) {
+	getMetadataEndpoint = func() (string, error) {
 		return fakeV3Endpoint, nil
 	}
 

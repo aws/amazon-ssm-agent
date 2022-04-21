@@ -25,9 +25,10 @@ var cachedContainerResponse *containerResponse
 var lock sync.RWMutex
 
 const (
-	containerMetadataEnvVar = "ECS_CONTAINER_METADATA_URI"
-	maxRetries              = 2
-	ecsInstanceType         = "Container"
+	containerMetadataEnvVarV3 = "ECS_CONTAINER_METADATA_URI"
+	containerMetadataEnvVarV4 = "ECS_CONTAINER_METADATA_URI_V4"
+	maxRetries                = 2
+	ecsInstanceType           = "Container"
 
 	// IdentityType is the identity type for ECS
 	IdentityType = "ECS"
@@ -46,7 +47,8 @@ type taskResponse struct {
 	Revision         string
 	DesiredStatus    string `json:",omitempty"`
 	KnownStatus      string
-	AvailabilityZone string `json:",omitempty"`
+	AvailabilityZone string    `json:",omitempty"`
+	Networks         []network `json:",omitempty"`
 }
 
 // containerResponse defines the schema for the container response
@@ -87,7 +89,9 @@ type portResponse struct {
 
 // network is a struct that keeps track of metadata of a network interface
 type network struct {
-	NetworkMode   string   `json:"NetworkMode,omitempty"`
-	IPv4Addresses []string `json:"IPv4Addresses,omitempty"`
-	IPv6Addresses []string `json:"IPv6Addresses,omitempty"`
+	NetworkMode         string   `json:"NetworkMode,omitempty"`
+	IPv4Addresses       []string `json:"IPv4Addresses,omitempty"`
+	IPv6Addresses       []string `json:"IPv6Addresses,omitempty"`
+	IPv4SubnetCIDRBlock string   `json:"IPv4SubnetCIDRBlock,omitempty"`
+	IPv6SubnetCIDRBlock string   `json:"IPv6SubnetCIDRBlock,omitempty"`
 }

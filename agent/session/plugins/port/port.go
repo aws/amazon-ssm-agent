@@ -27,13 +27,15 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/iohandler"
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
 	"github.com/aws/amazon-ssm-agent/agent/log"
-	platform "github.com/aws/amazon-ssm-agent/agent/platform"
 	mgsConfig "github.com/aws/amazon-ssm-agent/agent/session/config"
 	mgsContracts "github.com/aws/amazon-ssm-agent/agent/session/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/session/datachannel"
 	"github.com/aws/amazon-ssm-agent/agent/session/plugins/sessionplugin"
 	"github.com/aws/amazon-ssm-agent/agent/task"
 	"github.com/aws/amazon-ssm-agent/agent/versionutil"
+	"github.com/aws/amazon-ssm-agent/common/identity"
+	"github.com/aws/amazon-ssm-agent/common/identity/availableidentities/ec2"
+	"github.com/aws/amazon-ssm-agent/common/identity/availableidentities/ecs"
 )
 
 const muxSupportedClientVersion = "1.1.70"
@@ -60,6 +62,18 @@ type IPortSession interface {
 	WritePump(channel datachannel.IDataChannel) (errorCode int)
 	IsConnectionAvailable() (isAvailable bool)
 	Stop()
+}
+
+var lookupHost = net.LookupHost
+
+var getMetadataIdentity = identity.GetMetadataIdentity
+
+var newEC2Identity = func(log log.T) identity.IAgentIdentityInner {
+	return ec2.NewEC2Identity(log)
+}
+
+var newECSIdentity = func(log log.T) identity.IAgentIdentityInner {
+	return ecs.NewECSIdentity(log)
 }
 
 // GetSession initializes session based on the type of the port session
@@ -265,20 +279,81 @@ func (p *PortPlugin) validateParameters(portParameters PortParameters, config ag
 		return errors.New(fmt.Sprintf("Port number is empty in session properties. %v", config.Properties))
 	}
 
-	ipAddress, err := platform.IP()
+	if portParameters.Host == "" {
+		return
+	}
+
+	dnsAddress, err := dnsRoutingAddress(p.context.Log())
 	if err != nil {
-		p.context.Log().Warn("Error retrieving local ip address: %v", err)
+		p.context.Log().Warn("Error retrieving vpc dns address: %v", err)
 	}
 
 	appConfig := p.context.AppConfig()
-	if portParameters.Host != "" {
-		// Port forwarding to IMDS, VPC DNS, and local IP address is not allowed
-		for _, address := range append(appConfig.Mgs.DeniedPortForwardingRemoteIPs, ipAddress) {
-			if portParameters.Host == address {
-				return errors.New(fmt.Sprintf("Forwarding to IP address %s is forbidden.", portParameters.Host))
+	resolvedAddresses, err := lookupHost(portParameters.Host)
+	if portParameters.Host != "" && err == nil {
+		for _, host := range resolvedAddresses {
+			// Port forwarding to IMDS, VPC DNS, and local IP address is not allowed
+			hostIPAddress := net.ParseIP(host)
+			for _, address := range append(appConfig.Mgs.DeniedPortForwardingRemoteIPs, dnsAddress...) {
+				if hostIPAddress.Equal(net.ParseIP(address)) {
+					return errors.New(fmt.Sprintf("Forwarding to IP address %s is forbidden.", portParameters.Host))
+				}
 			}
 		}
 	}
 
 	return
+}
+
+func dnsRoutingAddress(log log.T) ([]string, error) {
+	var ipaddress map[string][]string
+	var err error
+
+	ec2I := newEC2Identity(log)
+	ecsI := newECSIdentity(log)
+	if ecsI.IsIdentityEnvironment() {
+		if metadataI, ok := getMetadataIdentity(ecsI); ok {
+			ipaddress, err = metadataI.VpcPrimaryCIDRBlock()
+		}
+	} else if ec2I.IsIdentityEnvironment() {
+		if metadataI, ok := getMetadataIdentity(ec2I); ok {
+			ipaddress, err = metadataI.VpcPrimaryCIDRBlock()
+		}
+	}
+
+	calculation := calculateAddress(ipaddress)
+
+	return calculation, err
+}
+
+func calculateAddress(ipaddresses map[string][]string) []string {
+	var calculation []string
+	for _, ipversion := range []string{"ipv4", "ipv6"} {
+		for _, ipaddress := range ipaddresses[ipversion] {
+			ip, ipnet, err := net.ParseCIDR(ipaddress)
+			if err != nil {
+				continue
+			}
+			address := make([]string, 5)
+			dnsAddress := make(net.IP, len(ip))
+			copy(dnsAddress, ip)
+			// add  the first four and last ip address in the VPC CIDR block to deny list
+			for i := 0; i < 4; i++ {
+				address[i] = dnsAddress.String()
+				dnsAddress[len(ip)-1] += 1
+			}
+			address[len(address)-1] = broadcastAddress(ipnet.IP, ipnet.Mask)
+			calculation = append(calculation, address...)
+		}
+	}
+	return calculation
+}
+
+func broadcastAddress(ip net.IP, mask net.IPMask) string {
+	// ip | ~mask
+	address := make(net.IP, len(ip))
+	for i, bit := range mask {
+		address[i] = ip[i] | ^bit
+	}
+	return address.String()
 }

@@ -14,6 +14,7 @@
 package ecs
 
 import (
+	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/common/identity/credentialproviders"
 	"github.com/aws/aws-sdk-go/aws/credentials"
 )
@@ -51,5 +52,18 @@ func (e *Identity) IsIdentityEnvironment() bool {
 	return err == nil
 }
 
+// VpcPrimaryCIDRBlock returns ipv4, ipv6 VPC CIDR block addresses if exists
+func (e *Identity) VpcPrimaryCIDRBlock() (map[string][]string, error) {
+	return fetchCIDRBlock()
+}
+
 // IdentityType returns the identity type of the managed instance
 func (e *Identity) IdentityType() string { return IdentityType }
+
+// NewECSIdentity initializes the ecs identity
+func NewECSIdentity(log log.T) *Identity {
+	log = log.WithContext("[ECSIdentity]")
+	return &Identity{
+		Log: log,
+	}
+}

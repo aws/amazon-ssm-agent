@@ -14,6 +14,7 @@
 package ec2
 
 import (
+	"strings"
 	"time"
 
 	"github.com/aws/amazon-ssm-agent/agent/log"
@@ -73,6 +74,25 @@ func (i *Identity) IsIdentityEnvironment() bool {
 
 // IdentityType returns the identity type of the ec2 instance
 func (i *Identity) IdentityType() string { return IdentityType }
+
+// VpcPrimaryCIDRBlock returns ipv4, ipv6 VPC CIDR block addresses if exists
+func (i *Identity) VpcPrimaryCIDRBlock() (ip map[string][]string, err error) {
+	macs, err := i.Client.GetMetadata(ec2MacsResource)
+	if err != nil {
+		return map[string][]string{}, err
+	}
+
+	addresses := strings.Split(macs, "\n")
+	ipv4 := make([]string, len(addresses))
+	ipv6 := make([]string, len(addresses))
+
+	for index, address := range addresses {
+		ipv4[index], _ = i.Client.GetMetadata(ec2MacsResource + "/" + address + "/" + ec2VpcCidrBlockV4Resource)
+		ipv6[index], _ = i.Client.GetMetadata(ec2MacsResource + "/" + address + "/" + ec2VpcCidrBlockV6Resource)
+	}
+
+	return map[string][]string{"ipv4": ipv4, "ipv6": ipv6}, nil
+}
 
 // NewEC2Identity initializes the ec2 identity
 func NewEC2Identity(log log.T) *Identity {

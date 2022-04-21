@@ -109,6 +109,19 @@ func fetchContainerID() (string, error) {
 	return containerMetadata.ID, nil
 }
 
+// fetchCIDRBlock returns the CIDR block of the target
+func fetchCIDRBlock() (map[string][]string, error) {
+	containerMetadata, err := containerMetadataResponse()
+	if err != nil {
+		return map[string][]string{}, err
+	}
+	// only V4 metadata endpoint contains network information
+	if len(containerMetadata.Networks) <= 0 {
+		return map[string][]string{}, nil
+	}
+	return map[string][]string{"ipv4": {containerMetadata.Networks[0].IPv4SubnetCIDRBlock}, "ipv6": {containerMetadata.Networks[0].IPv6SubnetCIDRBlock}}, nil
+}
+
 // taskMetadataResponse returns taskMetadataResponse
 func taskMetadataResponse() (taskMetadata *taskResponse, err error) {
 	lock.RLock()
@@ -136,7 +149,7 @@ func containerMetadataResponse() (containerMetadata *containerResponse, err erro
 // getTaskMetadataResponse returns task metadata response
 func getTaskMetadataResponse() (taskMetadata *taskResponse, err error) {
 	var taskResp []byte
-	v3MetadataEndpoint, err := getV3MetadataEndpoint()
+	v3MetadataEndpoint, err := getMetadataEndpoint()
 	if err != nil {
 		return nil, err
 	}
@@ -156,7 +169,7 @@ func getTaskMetadataResponse() (taskMetadata *taskResponse, err error) {
 // getContainerMetadataResponse returns container metadata response
 func getContainerMetadataResponse() (containerMetadata *containerResponse, err error) {
 	var containerResp []byte
-	v3MetadataEndpoint, err := getV3MetadataEndpoint()
+	v3MetadataEndpoint, err := getMetadataEndpoint()
 	if err != nil {
 		return nil, err
 	}
@@ -173,14 +186,19 @@ func getContainerMetadataResponse() (containerMetadata *containerResponse, err e
 	return
 }
 
-// getV3MetadataEndpoint returns ECS metadata V3 base endpoint
-var getV3MetadataEndpoint = func() (string, error) {
-	// looks for the ECS_CONTAINER_METADATA_URI environment variables which contains the metadata endpoint V3
-	// Please refer more info about ECS metadata via the link below
+// getMetadataEndpoint returns ECS metadata endpoint
+var getMetadataEndpoint = func() (string, error) {
+	// looks for the environment variables which contains the metadata endpoint V4, if not found fall back to V3
+	// Please refer more info about ECS metadata via the links below
+	// https://docs.aws.amazon.com/AmazonECS/latest/developerguide/task-metadata-endpoint-v4.html
 	// https://docs.aws.amazon.com/AmazonECS/latest/developerguide/task-metadata-endpoint-v3.html
-	metadataEndpoint := os.Getenv(containerMetadataEnvVar)
+	metadataEndpoint := os.Getenv(containerMetadataEnvVarV4)
 	if metadataEndpoint != "" {
 		return metadataEndpoint, nil
 	}
-	return "", fmt.Errorf("Could not fetch v3 metadata endpoint")
+	metadataEndpoint = os.Getenv(containerMetadataEnvVarV3)
+	if metadataEndpoint != "" {
+		return metadataEndpoint, nil
+	}
+	return "", fmt.Errorf("Could not fetch metadata endpoint")
 }

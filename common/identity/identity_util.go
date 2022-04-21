@@ -44,3 +44,11 @@ func GetCredentialsRefresherIdentity(agentIdentity IAgentIdentity) (ICredentialR
 	credentialIdentity, ok = innerGetter.getInner().(ICredentialRefresherAgentIdentity)
 	return credentialIdentity, ok
 }
+
+// GetMetadataIdentity returns the metadata interface if the identity supports it
+func GetMetadataIdentity(agentIdentity IAgentIdentityInner) (IMetadataIdentity, bool) {
+	if metadataIdentity, ok := (agentIdentity).(IMetadataIdentity); ok {
+		return metadataIdentity, true
+	}
+	return nil, false
+}
