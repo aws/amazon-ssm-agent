@@ -18,7 +18,6 @@ import (
 	"os"
 	"runtime/debug"
 
-	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/outofproc/messaging"
@@ -29,7 +28,6 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/task"
 	"github.com/aws/amazon-ssm-agent/agent/version"
 	"github.com/aws/amazon-ssm-agent/common/filewatcherbasedipc"
-	"github.com/aws/amazon-ssm-agent/common/identity"
 )
 
 const (
@@ -53,62 +51,31 @@ var sessionPluginRunner = func(
 	close(resChan)
 }
 
-var newAgentIdentity = identity.NewAgentIdentity
-
-// initialize populates session worker information.
-//rule of thumb is, do not trigger extra file operation or other intricate dependencies during this setup, make it light weight
-func initialize(args []string) (context.T, string, error) {
-	// intialize a light weight logger, use the default seelog config logger
-	logger := ssmlog.SSMLogger(false)
-
-	// initialize appconfig
-	config, err := appconfig.Config(false)
-	if err != nil {
-		logger.Errorf("Failed to initialize config: %v", err)
-		return nil, "", err
-	}
-
-	logger.Debugf("Session worker parse args: %v", args)
-	channelName, err := proc.ParseArgv(args)
-	if err != nil {
-		logger.Errorf("Failed to parse argv: %v", err)
-	}
-
-	selector := identity.NewRuntimeConfigIdentitySelector(logger)
-	agentIdentity, err := newAgentIdentity(logger, &config, selector)
-	if err != nil {
-		return nil, "", err
-	}
-
-	//use argsVal1 as context name which is either channelName or dataChannelId
-	return context.Default(logger, config, agentIdentity).With(defaultSessionWorkerContextName).With("[" + channelName + "]"),
-		channelName,
-		err
-}
-
 // SessionWorker runs as independent worker process when invoked by master agent process and is responsible for running session plugins
 func main() {
-	args := os.Args
-
-	context, channelName, err := initialize(args)
-	log := context.Log()
-	log.Infof("ssm-session-worker - %v", version.String())
-	//ensure logs are flushed
-	defer log.Close()
+	logger := ssmlog.SSMLogger(false)
 	defer func() {
 		if err := recover(); err != nil {
-			log.Errorf("session worker panic: %v", err)
-			log.Errorf("Stacktrace:\n%s", debug.Stack())
-			log.Flush()
+			logger.Errorf("session worker panic: %v", err)
+			logger.Errorf("Stacktrace:\n%s", debug.Stack())
 		}
+
+		logger.Flush()
+		logger.Close()
 	}()
+
+	logger.Infof("ssm-session-worker - %v", version.String())
+	cfg, agentIdentity, channelName, err := proc.InitializeWorkerDependencies(logger, os.Args)
 	if err != nil {
-		log.Errorf("Session worker failed to initialize: %s", err)
+		logger.Errorf("session worker failed to initialize with error %v", err)
 		return
 	}
 
-	createFileChannelAndExecutePlugin(context, channelName)
-	log.Info("Session worker closed")
+	ctx := context.Default(logger, *cfg, agentIdentity).With(defaultSessionWorkerContextName).With("[" + channelName + "]")
+	logger = ctx.Log()
+
+	createFileChannelAndExecutePlugin(ctx, channelName)
+	logger.Info("Session worker closed")
 }
 
 // TODO Add interface for worker

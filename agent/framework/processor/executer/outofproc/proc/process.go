@@ -15,13 +15,19 @@
 package proc
 
 import (
+	"errors"
+	"fmt"
+	"os/exec"
 	"time"
 
-	"errors"
-
-	"os/exec"
-
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
+	"github.com/aws/amazon-ssm-agent/agent/log"
+	"github.com/aws/amazon-ssm-agent/common/identity"
+)
+
+var (
+	getAppConfig     = appconfig.Config
+	newAgentIdentity = identity.NewAgentIdentity
 )
 
 //OSProcess is an abstracted interface of os.Process
@@ -76,7 +82,7 @@ func StartProcess(name string, argv []string) (OSProcess, error) {
 }
 
 //TODO figure out why sometimes argv does not contain program name
-func ParseArgv(argv []string) (channelName string, err error) {
+func parseArgv(argv []string) (channelName string, err error) {
 	if len(argv) == 1 {
 		if argv[0] == appconfig.DefaultDocumentWorker || argv[0] == appconfig.DefaultSessionWorker {
 			return "", errors.New("insufficient argument number")
@@ -90,5 +96,24 @@ func ParseArgv(argv []string) (channelName string, err error) {
 	} else {
 		return "", errors.New("executable argument number mismatch")
 	}
+}
 
+func InitializeWorkerDependencies(log log.T, args []string) (*appconfig.SsmagentConfig, identity.IAgentIdentity, string, error) {
+	config, err := getAppConfig(true)
+	if err != nil {
+		return nil, nil, "", fmt.Errorf("failed to initialize config: %v", err)
+	}
+
+	channelName, err := parseArgv(args)
+	if err != nil {
+		return nil, nil, "", fmt.Errorf("failed to parse args: %v", err)
+	}
+
+	selector := identity.NewRuntimeConfigIdentitySelector(log)
+	agentIdentity, err := newAgentIdentity(log, &config, selector)
+	if err != nil {
+		return nil, nil, "", fmt.Errorf("failed to get identity: %v", err)
+	}
+
+	return &config, agentIdentity, channelName, nil
 }
