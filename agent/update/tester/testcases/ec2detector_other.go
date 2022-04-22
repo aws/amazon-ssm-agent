@@ -22,58 +22,56 @@ import (
 	"strings"
 	"time"
 
+	"github.com/aws/amazon-ssm-agent/agent/log"
 	testCommon "github.com/aws/amazon-ssm-agent/agent/update/tester/common"
 	"github.com/aws/amazon-ssm-agent/common/identity"
 	"github.com/digitalocean/go-smbios/smbios"
 )
 
-var getTimeNow = time.Now
+const (
+	failedToOpenStream          = "failed to open smbios stream"
+	failedToDecodeStream        = "failed to decode smbios"
+	failedToGetVendorAndVersion = "failed to get vendor and version"
+	failedToGetUuid             = "failed to get uuid"
+	failedQuerySystemHostInfo   = "failed to query system host info"
+)
 
 // ShouldRunTest determines if test should run
 func (l *Ec2DetectorTestCase) ShouldRunTest() bool {
 	return identity.IsEC2Instance(l.context.Identity())
 }
 
-// ExecuteTestCase executes the ec2 detector test case, test only runs when instance id starts with i-
-func (l *Ec2DetectorTestCase) ExecuteTestCase() (output testCommon.TestOutput) {
-	l.startTime = time.Now()
-	defer func() {
-		if err := recover(); err != nil {
-			l.context.Log().Warnf("test panic: %v", err)
-			l.context.Log().Warnf("Stacktrace:\n%s", debug.Stack())
-
-			output = l.generateTestOutput(false, unknown)
-			output.AdditionalInfo += "_panic"
-		}
-	}()
-
-	biosInfoList, err := l.getHostInfo()
-	if err != nil {
-		output = l.generateTestOutput(false, unknown)
-		l.context.Log().Warnf("Failed to get host info after %v with status %s", time.Now().Sub(l.startTime), output.Result)
-		return output
+func btoi(b bool) int {
+	if b {
+		return 1
 	}
-
-	hostInfo := l.extractHostInfo(biosInfoList)
-	l.uuidDP = l.getUuidDP(hostInfo)
-	l.vendorDP = l.getVendorDP(hostInfo)
-	l.versionDP = l.getVersionDP(hostInfo)
-
-	output = l.generateTestOutput(l.isEc2Instance(), l.getEc2HypervisorVendor())
-	l.context.Log().Infof("Successfully finished ec2detector test after %v with status %s", time.Now().Sub(l.startTime), output.Result)
-
-	return output
+	return 0
 }
 
 // cleanBiosString casts string to lower case and trims spaces from string
-func (l *Ec2DetectorTestCase) cleanBiosString(val string) string {
+func cleanBiosString(val string) string {
 	return strings.TrimSpace(strings.ToLower(val))
 }
 
-// extractHostInfo parses the list of smbios.Structure to a HostInfo based on SMBIOS spec
-func (l *Ec2DetectorTestCase) extractHostInfo(biosInfoList []*smbios.Structure) HostInfo {
+func matchUuid(uuid string) bool {
+	return bigEndianEc2UuidRegex.MatchString(uuid) || littleEndianEc2UuidRegex.MatchString(uuid)
+}
+
+func matchNitroEc2(info HostInfo) bool {
+	return matchUuid(info.Uuid) && info.Vendor == nitroVendorValue
+}
+
+func matchXenEc2(info HostInfo) bool {
+	return matchUuid(info.Uuid) && strings.HasSuffix(info.Version, xenVersionSuffix)
+}
+
+func isEc2Instance(info HostInfo) bool {
+	return matchXenEc2(info) || matchNitroEc2(info)
+}
+
+// extractSmbiosHostInfo parses the list of smbios.Structure to a HostInfo based on SMBIOS spec
+func extractSmbiosHostInfo(biosInfoList []*smbios.Structure) (HostInfo, error) {
 	var hostInfo HostInfo
-	l.startedParsing = true
 	// Parser created from SMBIOS spec: https://www.dmtf.org/sites/default/files/standards/documents/DSP0134_3.1.1.pdf
 	for _, biosItem := range biosInfoList {
 		// Only parse System Information with type 1
@@ -83,48 +81,51 @@ func (l *Ec2DetectorTestCase) extractHostInfo(biosInfoList []*smbios.Structure) 
 		if len(biosItem.Formatted) >= 4 {
 			manufacturerIndex := int(biosItem.Formatted[0])
 			if manufacturerIndex > 0 && len(biosItem.Strings) >= manufacturerIndex {
-				l.hasManufacturer = true
-				hostInfo.Manufacturer = l.cleanBiosString(biosItem.Strings[manufacturerIndex-1])
+				hostInfo.Vendor = cleanBiosString(biosItem.Strings[manufacturerIndex-1])
 			}
 
 			versionIndex := int(biosItem.Formatted[2])
 			if versionIndex > 0 && len(biosItem.Strings) >= versionIndex {
-				l.hasVersion = true
-				hostInfo.Version = l.cleanBiosString(biosItem.Strings[versionIndex-1])
+				hostInfo.Version = cleanBiosString(biosItem.Strings[versionIndex-1])
 			}
 
 			serialNumberIndex := int(biosItem.Formatted[3])
 			if serialNumberIndex > 0 && len(biosItem.Strings) >= serialNumberIndex {
-				l.hasSerialNumber = true
-				hostInfo.SerialNumber = l.cleanBiosString(biosItem.Strings[serialNumberIndex-1])
+				hostInfo.Uuid = cleanBiosString(biosItem.Strings[serialNumberIndex-1])
 			}
 		}
 	}
 
-	return hostInfo
+	if hostInfo.Version == "" && hostInfo.Vendor == "" {
+		return hostInfo, fmt.Errorf(failedToGetVendorAndVersion)
+	}
+
+	if hostInfo.Uuid == "" {
+		return hostInfo, fmt.Errorf(failedToGetUuid)
+	}
+
+	return hostInfo, nil
 }
 
 // streamAndDecode queries streamAndDecode with retries and sleep
-func (l *Ec2DetectorTestCase) streamAndDecode() ([]*smbios.Structure, error) {
+func streamAndDecodeSmbios() ([]*smbios.Structure, error) {
 	rc, _, err := smbios.Stream()
 	if err != nil {
-		l.streamFailures += 1
-		return []*smbios.Structure{}, fmt.Errorf("failed to open smbios stream: %v", err)
+		return []*smbios.Structure{}, fmt.Errorf("%s: %v", failedToOpenStream, err)
 	}
 	defer rc.Close()
 
 	d := smbios.NewDecoder(rc)
 	biosInfoList, err := d.Decode()
 	if err != nil {
-		l.decodeFailures += 1
-		return []*smbios.Structure{}, fmt.Errorf("failed to decode smbios structures: %v", err)
+		return []*smbios.Structure{}, fmt.Errorf("%s: %v", failedToDecodeStream, err)
 	}
 
 	return biosInfoList, nil
 }
 
-// getHostInfo queries streamAndDecode with retries and sleep
-func (l *Ec2DetectorTestCase) getHostInfo() ([]*smbios.Structure, error) {
+// getSmbiosHostInfo queries streamAndDecode with retries and sleep
+func getSmbiosHostInfo(log log.T) (HostInfo, error) {
 	var biosInfoList []*smbios.Structure
 	var err error
 
@@ -132,115 +133,83 @@ func (l *Ec2DetectorTestCase) getHostInfo() ([]*smbios.Structure, error) {
 		if i != 0 {
 			time.Sleep(sleepBetweenRetry)
 		}
-		biosInfoList, err = l.streamAndDecode()
+		biosInfoList, err = streamAndDecodeSmbios()
 
 		if err == nil {
-			return biosInfoList, err
+			return extractSmbiosHostInfo(biosInfoList)
 		}
 
-		l.context.Log().Warnf("Failed stream and decode try %d/%d with error: %v", i+1, maxRetry, err)
+		log.Warnf("Failed stream and decode try %d/%d with error: %v", i+1, maxRetry, err)
 	}
 
-	return biosInfoList, err
+	return HostInfo{}, err
 }
 
-// btoi casts boolean to a datapoint
-func (l *Ec2DetectorTestCase) btoi(b bool) dp {
-	if b {
-		return 1
+func (l *Ec2DetectorTestCase) generateHostInfoResult(info HostInfo, queryErr error, approach approachType) (bool, string) {
+	testPass := false
+	detectedHypervisor := unknown
+	errDP := errNotSet
+
+	if queryErr == nil {
+		testPass = isEc2Instance(info)
+		if testPass {
+			if matchNitroEc2(info) {
+				detectedHypervisor = nitro
+			} else {
+				detectedHypervisor = amazonXen
+			}
+		}
+	} else {
+		if strings.Contains(queryErr.Error(), failedToOpenStream) {
+			errDP = errFailedOpenStream
+		} else if strings.Contains(queryErr.Error(), failedToDecodeStream) {
+			errDP = errFailedDecodeStream
+		} else if strings.Contains(queryErr.Error(), failedQuerySystemHostInfo) {
+			errDP = errFailedQuerySystemHostInfo
+		} else if strings.Contains(queryErr.Error(), failedToGetVendorAndVersion) {
+			errDP = errFailedGetVendorAndVersion
+		} else if strings.Contains(queryErr.Error(), failedToGetUuid) {
+			errDP = errFailedGetUuid
+		} else {
+			errDP = errUnknown
+		}
 	}
-	return 0
+
+	return testPass, fmt.Sprintf("%sh%s_%se%d", approach, detectedHypervisor, approach, errDP)
+}
+
+func (l *Ec2DetectorTestCase) generateTestResult(primaryInfo HostInfo, primaryErr error, secondaryInfo HostInfo, secondaryErr error) (testCommon.TestResult, string) {
+	isPrimarySuccess, primaryAdditionalInfo := l.generateHostInfoResult(primaryInfo, primaryErr, primary)
+	isSecondarySuccess, secondaryAdditionalInfo := l.generateHostInfoResult(secondaryInfo, secondaryErr, secondary)
+
+	result := testCommon.TestCaseFail
+	if isPrimarySuccess || isSecondarySuccess {
+		result = testCommon.TestCasePass
+	}
+
+	return result, fmt.Sprintf("_p%d_s%d_%s_%s", btoi(isPrimarySuccess), btoi(isSecondarySuccess), primaryAdditionalInfo, secondaryAdditionalInfo)
 }
 
 // generateTestOutput constructs the TestOutput based on the state of Ec2DetectorTestCase attributes
-func (l *Ec2DetectorTestCase) generateTestOutput(isSuccess bool, hypervisor hypervisor) testCommon.TestOutput {
+func (l *Ec2DetectorTestCase) generateTestOutput() testCommon.TestOutput {
 	var testOutput testCommon.TestOutput
-
-	if isSuccess {
-		testOutput.Result = testCommon.TestCasePass
-	} else {
-		testOutput.Result = testCommon.TestCaseFail
-	}
-
-	timeDP := getTimeNow().Sub(l.startTime).Milliseconds() / timeDPMSIncrement
-	if timeDP > maxTimeDP {
-		timeDP = maxTimeDP
-	}
-
-	testOutput.AdditionalInfo = fmt.Sprintf("_%s_sf%d_df%d_sp%d_uuid%d_vendor%d_version%d_t%d",
-		hypervisor,
-		l.streamFailures,
-		l.decodeFailures,
-		l.btoi(l.startedParsing),
-		l.uuidDP,
-		l.vendorDP,
-		l.versionDP,
-		timeDP)
-
+	testOutput.Result, testOutput.AdditionalInfo = l.generatePlatformTestResult()
 	return testOutput
 }
 
-// getUuidDP returns the uuid datapoint for based on smbios serial number attribute
-func (l *Ec2DetectorTestCase) getUuidDP(info HostInfo) dp {
-	if !l.hasSerialNumber {
-		return uuidNotInSMBios
-	} else if info.SerialNumber == "" {
-		return uuidEmpty
-	} else if !uuidRegex.MatchString(info.SerialNumber) {
-		return uuidInvalidFormat
-	} else if bigEndianEc2UuidRegex.MatchString(info.SerialNumber) {
-		return uuidMatchBigEndian
-	} else if littleEndianEc2UuidRegex.MatchString(info.SerialNumber) {
-		return uuidMatchLittleEndian
-	}
+// ExecuteTestCase executes the ec2 detector test case, test only runs when instance id starts with i-
+func (l *Ec2DetectorTestCase) ExecuteTestCase() (output testCommon.TestOutput) {
+	defer func() {
+		if err := recover(); err != nil {
+			l.context.Log().Warnf("test panic: %v", err)
+			l.context.Log().Warnf("Stacktrace:\n%s", debug.Stack())
 
-	// uuid has valid format but does not have ec2 prefix
-	return uuidNoMatch
-}
+			output = l.generateTestOutput()
+			output.Result = testCommon.TestCaseFail
+			output.AdditionalInfo += "_panic"
+		}
+	}()
 
-// getVendorDP returns the vendor datapoint for based on smbios manufacturer attribute
-func (l *Ec2DetectorTestCase) getVendorDP(info HostInfo) dp {
-	if !l.hasManufacturer {
-		return vendorNotInSMBios
-	} else if info.Manufacturer == "" {
-		return vendorEmpty
-	} else if info.Manufacturer == XenVendorValue {
-		return vendorGenericXen
-	} else if info.Manufacturer == nitroVendorValue {
-		return vendorNitro
-	}
-
-	return vendorUnknown
-}
-
-// getVersionDP returns the version datapoint for based on smbios version attribute
-func (l *Ec2DetectorTestCase) getVersionDP(info HostInfo) dp {
-	if !l.hasVersion {
-		return versionNotInSMBios
-	} else if info.Version == "" {
-		return versionEmpty
-	} else if strings.HasSuffix(info.Version, xenVersionSuffix) {
-		return versionEndsWithDotAmazon
-	} else if strings.Contains(info.Version, amazonVersionString) {
-		return versionContainsAmazon
-	}
-
-	return versionUnknown
-}
-
-// isEc2Instance returns true of uuid starts with ec2 and if either vendor indicates nitro or if version ends with .amazon
-func (l *Ec2DetectorTestCase) isEc2Instance() bool {
-	return (l.uuidDP == uuidMatchBigEndian || l.uuidDP == uuidMatchLittleEndian) &&
-		(l.vendorDP == vendorNitro || l.versionDP == versionEndsWithDotAmazon)
-}
-
-// getEc2HypervisorVendor determines amazon hypervisor vendor based on vendor and version
-func (l *Ec2DetectorTestCase) getEc2HypervisorVendor() hypervisor {
-	if l.vendorDP == vendorNitro {
-		return nitro
-	} else if l.versionDP == versionEndsWithDotAmazon {
-		return amazonXen
-	}
-
-	return unknown
+	l.queryHostInfo()
+	return l.generateTestOutput()
 }

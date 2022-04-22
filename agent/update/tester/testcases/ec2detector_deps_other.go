@@ -24,28 +24,20 @@ import (
 )
 
 type HostInfo struct {
-	Manufacturer string
-	Version      string
-	SerialNumber string
+	Vendor  string
+	Version string
+	Uuid    string
 }
 
 // Ec2DetectorTestCase represents the test case testing the ec2 detection module in ec2 environments
 type Ec2DetectorTestCase struct {
 	context context.T
 
-	startTime time.Time
+	smbiosHostInfo HostInfo
+	smbiosErr      error
 
-	streamFailures uint8
-	decodeFailures uint8
-
-	startedParsing  bool
-	hasManufacturer bool
-	hasVersion      bool
-	hasSerialNumber bool
-
-	uuidDP    dp
-	vendorDP  dp
-	versionDP dp
+	systemHostInfo HostInfo
+	systemErr      error
 }
 
 const (
@@ -56,7 +48,6 @@ const (
 	xenVersionSuffix    = "." + amazonVersionString
 
 	nitroVendorValue = "amazon ec2"
-	XenVendorValue   = "xen"
 )
 
 // detected amazon hypervisors
@@ -68,40 +59,28 @@ const (
 	unknown   hypervisor = "u"
 )
 
+// keys indicating primary or secondary approach
+type approachType string
+
+const (
+	primary   approachType = "p"
+	secondary approachType = "s"
+)
+
 type dp uint8
 
 const (
-	// uuid states
-	uuidNotSet            dp = 0
-	uuidNotInSMBios       dp = 1
-	uuidEmpty             dp = 2
-	uuidInvalidFormat     dp = 3
-	uuidMatchBigEndian    dp = 4
-	uuidMatchLittleEndian dp = 5
-	uuidNoMatch           dp = 6
-
-	// vendor states
-	vendorNotSet      dp = 0
-	vendorNotInSMBios dp = 1
-	vendorEmpty       dp = 2
-	vendorGenericXen  dp = 3
-	vendorNitro       dp = 4
-	vendorUnknown     dp = 5
-
-	// version states
-	versionNotSet            dp = 0
-	versionNotInSMBios       dp = 1
-	versionEmpty             dp = 2
-	versionEndsWithDotAmazon dp = 3
-	versionContainsAmazon    dp = 4
-	versionUnknown           dp = 5
-
-	timeDPMSIncrement = 500
-	maxTimeDP         = 9
+	// error datapoint
+	errNotSet                    dp = 0
+	errUnknown                   dp = 1
+	errFailedOpenStream          dp = 2
+	errFailedDecodeStream        dp = 3
+	errFailedQuerySystemHostInfo    = 4
+	errFailedGetVendorAndVersion dp = 5
+	errFailedGetUuid             dp = 6
 )
 
 var (
 	bigEndianEc2UuidRegex    = regexp.MustCompile("^ec2[0-9a-f]{5}(-[0-9a-f]{4}){3}-[0-9a-f]{12}$")
 	littleEndianEc2UuidRegex = regexp.MustCompile("^[0-9a-f]{4}2[0-9a-f]ec(-[0-9a-f]{4}){3}-[0-9a-f]{12}$")
-	uuidRegex                = regexp.MustCompile("^[0-9a-f]{8}(-[0-9a-f]{4}){3}-[0-9a-f]{12}$")
 )
