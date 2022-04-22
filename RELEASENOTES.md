@@ -1,5 +1,15 @@
 Latest
 ===============
+- Added timeout for s3 HEAD requests
+- Added vpc address deny to port forwarding
+- Fixed for reboot scenario in configure package plugin
+- Fixed goroutine leak in seelog library
+- Fixed nullpointer segmentation fault in configure package plugin
+- Improved error handling in manifest download in updater
+- Improved worker initialization to improve startup failure logging
+
+3.1.1260.0
+===============
 - Added missing check for invalid S3 path parameter
 - Added support for domain join using a non-local username
 - Fixed broken links in README.md
