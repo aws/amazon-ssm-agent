@@ -17,7 +17,10 @@
 package instancedetailedinformation
 
 import (
+	"fmt"
 	"testing"
+
+	"golang.org/x/sys/unix"
 
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/inventory/model"
@@ -25,6 +28,7 @@ import (
 )
 
 var (
+	kernelVersion  = "5.10.106-102.504.amzn2.x86_64"
 	sampleDataUnix = []string{
 		// Amazon Linux XLarge
 		`Architecture:          x86_64
@@ -166,11 +170,49 @@ var sampleDataUnixParsed = []model.InstanceDetailedInformation{
 	},
 }
 
+var instanceDetailedInformationUnix = []model.InstanceDetailedInformation{
+	{
+		CPUModel:              "Intel(R) Xeon(R) CPU E5-2686 v4 @ 2.30GHz",
+		CPUSpeedMHz:           "1772",
+		CPUs:                  "64",
+		CPUSockets:            "2",
+		CPUCores:              "32",
+		CPUHyperThreadEnabled: "true",
+		KernelVersion:         kernelVersion,
+	},
+	{
+		CPUModel:              "Intel(R) Xeon(R) CPU E5-2676 v3 @ 2.40GHz",
+		CPUSpeedMHz:           "2400",
+		CPUs:                  "2",
+		CPUSockets:            "1",
+		CPUCores:              "2",
+		CPUHyperThreadEnabled: "false",
+		KernelVersion:         kernelVersion,
+	},
+	{
+		CPUModel:              "Intel(R) Xeon(R) CPU E5-2676 v3 @ 2.40GHz",
+		CPUSpeedMHz:           "2394",
+		CPUs:                  "2",
+		CPUSockets:            "1",
+		CPUCores:              "2",
+		CPUHyperThreadEnabled: "false",
+		KernelVersion:         kernelVersion,
+	},
+	{
+		CPUModel:              "Intel(R) Xeon(R) CPU E5-2676 v3 @ 2.40GHz",
+		CPUSpeedMHz:           "2400",
+		CPUs:                  "1",
+		CPUSockets:            "1",
+		CPUCores:              "1",
+		CPUHyperThreadEnabled: "false",
+		KernelVersion:         kernelVersion,
+	},
+}
+
 func TestParseLscpuOutput(t *testing.T) {
 	for i, sampleData := range sampleDataUnix {
-		parsedItems := parseLscpuOutput(sampleData)
-		assert.Equal(t, len(parsedItems), 1)
-		assert.Equal(t, sampleDataUnixParsed[i], parsedItems[0])
+		parsedItem := parseLscpuOutput(sampleData)
+		assert.Equal(t, sampleDataUnixParsed[i], parsedItem)
 	}
 }
 
@@ -178,12 +220,49 @@ func TestCollectPlatformDependentInstanceData(t *testing.T) {
 	mockContext := context.NewMockDefault()
 	for i, sampleData := range sampleDataUnix {
 		cmdExecutor = createMockExecutor(sampleData)
+		unixUname = createMockUnixUname(kernelVersion)
 		parsedItems := collectPlatformDependentInstanceData(mockContext)
 		assert.Equal(t, len(parsedItems), 1)
-		assert.Equal(t, sampleDataUnixParsed[i], parsedItems[0])
+		assert.Equal(t, instanceDetailedInformationUnix[i], parsedItems[0])
 	}
+}
 
-	cmdExecutor = MockTestExecutorWithError
+func TestCollectPlatformDependentInstanceDataWithLscpuError(t *testing.T) {
+	mockContext := context.NewMockDefault()
+	cmdExecutor = createMockExecutorWithErrorOnNthExecution(1)
 	parsedItems := collectPlatformDependentInstanceData(mockContext)
 	assert.Equal(t, len(parsedItems), 0)
+}
+
+func TestCollectPlatformDependentInstanceDataWithKernelCollectionError(t *testing.T) {
+	mockContext := context.NewMockDefault()
+	for i, sampleData := range sampleDataUnix {
+		cmdExecutor = createMockExecutor(sampleData)
+		unixUname = createMockUnixUnameError()
+		parsedItems := collectPlatformDependentInstanceData(mockContext)
+		assert.Equal(t, len(parsedItems), 1)
+		recordWithoutKernel := instanceDetailedInformationUnix[i]
+		recordWithoutKernel.KernelVersion = ""
+		assert.Equal(t, recordWithoutKernel, parsedItems[0])
+	}
+}
+
+// createMockUnixUname mocks the unix.Uname() function
+// It sets the Release field in the unix.Utsname struct to the kernel version passed into this function in
+// the format of a length 65 []byte
+func createMockUnixUname(kernelVersion string) func(*unix.Utsname) error {
+	return func(uname *unix.Utsname) error {
+		var kernelVersionAsByteArr [65]byte
+		copy(kernelVersionAsByteArr[:], kernelVersion)
+		uname.Release = kernelVersionAsByteArr
+		return nil
+	}
+}
+
+// createMockUnixUnameError mocks the unix.Uname() function
+// It returns an error upon invocation
+func createMockUnixUnameError() func(*unix.Utsname) error {
+	return func(*unix.Utsname) error {
+		return fmt.Errorf("Random Error")
+	}
 }

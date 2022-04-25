@@ -58,6 +58,11 @@ Write-Host -nonewline @"
 SELECT-OBJECT ServicePackMajorVersion,BuildNumber | % { Write-Output @"
 {"OSServicePack":"$($_.ServicePackMajorVersion)"}
 "@}`
+	KernelVersionScript = `
+$KernelVersion = (Join-Path $env:windir 'System32\ntoskrnl.exe' | Get-Item).VersionInfo.FileVersion
+Write-Host -nonewline @"
+{"KernelVersion":"$KernelVersion"}
+"@`
 )
 
 // decoupling exec.Command for easy testability
@@ -78,6 +83,12 @@ func collectPlatformDependentInstanceData(context context.T) (appData []model.In
 		// if both commands fail, return no data
 		return
 	}
+
+	err3 := collectDataFromPowershell(context, KernelVersionScript, &instanceDetailedInfo)
+	if err3 != nil {
+		log.Warnf("Failed to gather kernel version using script: %v", KernelVersionScript)
+	}
+
 	appData = append(appData, instanceDetailedInfo)
 	str, _ := json.Marshal(appData)
 	log.Debugf("%v gathered: %v", GathererName, string(str))

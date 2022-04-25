@@ -27,12 +27,13 @@ import (
 )
 
 const (
-	sysctlCmd       = "sysctl"
-	cpuModelNameKey = "machdep.cpu.brand_string"
-	cpuCoreKey      = "hw.physicalcpu"
-	cpusKey         = "hw.logicalcpu"
-	cpuFreqKey      = "hw.cpufrequency"
-	threadTypeKey   = "hw.cputhreadtype"
+	sysctlCmd        = "sysctl"
+	cpuModelNameKey  = "machdep.cpu.brand_string"
+	cpuCoreKey       = "hw.physicalcpu"
+	cpusKey          = "hw.logicalcpu"
+	cpuFreqKey       = "hw.cpufrequency"
+	threadTypeKey    = "hw.cputhreadtype"
+	kernelVersionKey = "kern.osrelease"
 )
 
 // cmdExecutor decouples exec.Command for easy testability
@@ -84,6 +85,7 @@ func parseSysctlOutput(output string) (data []model.InstanceDetailedInformation)
 		CPUSpeedMHz:           cpuSpeedMHzStr,
 		CPUSockets:            "",
 		CPUHyperThreadEnabled: hyperThreadEnabledStr,
+		KernelVersion:         getFieldValue(output, kernelVersionKey),
 	}
 
 	data = append(data, itemContent)
