@@ -45,7 +45,8 @@ import (
 )
 
 const (
-	Name = "MGSInteractor"
+	Name          = "MGSInteractor"
+	ISO8601Format = "2006-01-02T15:04:05.000Z"
 )
 
 // MGSInteractor defines the properties and methods to communicate with MDS
@@ -405,7 +406,7 @@ func (mgs *MGSInteractor) processAgentJobMessage(agentMessage mgsContracts.Agent
 				return
 			}
 		}
-		err = mgs.buildAgentJobAckMessageAndSend(agentMessage.MessageId, docState.DocumentInformation.MessageID)
+		err = mgs.buildAgentJobAckMessageAndSend(agentMessage.MessageId, docState.DocumentInformation.MessageID, agentMessage.CreatedDate)
 		if err != nil { // proceed without returning during error as the doc would have been already persisted
 			log.Errorf("could not send ack for message %v because of error: %v", docState.DocumentInformation.DocumentID, err)
 		}
@@ -439,12 +440,13 @@ func (mgs *MGSInteractor) sendDocResponse(payloadDoc messageContracts.SendReplyP
 	}
 }
 
-func (mgs *MGSInteractor) buildAgentJobAckMessageAndSend(ackMessageId uuid.UUID, jobId string) error {
+func (mgs *MGSInteractor) buildAgentJobAckMessageAndSend(ackMessageId uuid.UUID, jobId string, createdDate uint64) error {
 	log := mgs.context.Log()
 
 	ackMsg := &mgsContracts.AgentJobAck{
-		JobId:     jobId,
-		MessageId: ackMessageId.String(),
+		JobId:       jobId,
+		MessageId:   ackMessageId.String(),
+		CreatedDate: toISO8601(createdDate),
 	}
 
 	replyBytes, err := json.Marshal(ackMsg)
@@ -537,4 +539,10 @@ func getMgsEndpoint(context context.T, region string) (string, error) {
 	endpointBuilder.WriteString(mgsConfig.HttpsPrefix)
 	endpointBuilder.WriteString(hostName)
 	return endpointBuilder.String(), nil
+}
+
+// convert uint64 to ISO-8601 time stamp
+func toISO8601(createdDate uint64) string {
+	timeVal := time.Unix(0, int64(createdDate)*int64(time.Millisecond)).UTC()
+	return timeVal.Format(ISO8601Format)
 }
