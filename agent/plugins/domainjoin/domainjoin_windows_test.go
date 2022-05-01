@@ -19,12 +19,12 @@ package domainjoin
 
 import (
 	"errors"
+	"io"
 	"testing"
 
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/iohandler"
-	iohandlermocks "github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/iohandler/mock"
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/task"
@@ -109,26 +109,23 @@ func testRunCommands(t *testing.T, testCase TestCase, rawInput bool) {
 	logger.Infof("test run commands %v", testCase)
 
 	if testCase.mark {
-		utilExe = func(log log.T, cmd string, workingDir string, outputRoot string, stdOut string, stdErr string, isAsync bool) (err error) {
-			return nil
+		utilExe = func(log.T, string, []string, string, string, io.Writer, io.Writer, bool) (string, error) {
+			return "", nil
 		}
 	} else {
-		errCase := errors.New("err here")
-		utilExe = func(log log.T, cmd string, workingDir string, outputRoot string, stdOut string, stdErr string, isAsync bool) (err error) {
-			return errCase
+		utilExe = func(log.T, string, []string, string, string, io.Writer, io.Writer, bool) (string, error) {
+			return "", errors.New("err here")
 		}
 	}
 
 	makeDir = func(destinationDir string) (err error) {
 		return nil
 	}
-	makeArgs = func(log log.T, pluginInput DomainJoinPluginInput) (commandArguments string) {
-		return "cmd"
+	makeArgs = func(context.T, DomainJoinPluginInput) (string, error) {
+		return "cmd", nil
 	}
-
-	var res contracts.PluginOutput
+	iohandler.DefaultOutputConfig()
 	mockCancelFlag := new(task.MockCancelFlag)
-	mockIOHandler := new(iohandlermocks.MockIOHandler)
 	p := &Plugin{
 		context: context.NewMockDefault(),
 	}
@@ -138,22 +135,19 @@ func testRunCommands(t *testing.T, testCase TestCase, rawInput bool) {
 		err := jsonutil.Remarshal(testCase.Input, &rawPluginInput)
 		assert.Nil(t, err)
 
-		p.runCommandsRawInput(logger, rawPluginInput, orchestrationDirectory, mockCancelFlag, mockIOHandler, utilExe)
+		p.runCommandsRawInput("-", rawPluginInput, orchestrationDirectory, mockCancelFlag, iohandler.NewDefaultIOHandler(p.context, contracts.IOConfiguration{}), utilExe)
 	} else {
-		p.runCommands(logger, testCase.Input, orchestrationDirectory, mockCancelFlag, mockIOHandler, utilExe)
+		p.runCommands("-", testCase.Input, orchestrationDirectory, mockCancelFlag, iohandler.NewDefaultIOHandler(p.context, contracts.IOConfiguration{}), utilExe)
 	}
 }
 
 // TestMakeArguments tests the makeArguments methods, which build up the command for domainJoin.exe
 func TestMakeArguments(t *testing.T) {
-	logger.On("Error", mock.Anything).Return(nil)
-	getRegion = func() (string, error) {
-		return "us-east-1", nil
-	}
+	context := context.NewMockDefault()
 
 	domainJoinInput := generateDomainJoinPluginInput(testDirectoryId, testDirectoryName, []string{"172.31.4.141", "172.31.21.240"})
-	commandRes, _ := makeArguments(logger, domainJoinInput)
-	expected := "./Ec2Config.DomainJoin.exe --directory-id d-0123456789 --directory-name corp.test.com --instance-region us-east-1 --dns-addresses 172.31.4.141 172.31.21.240"
+	commandRes, _ := makeArguments(context, domainJoinInput)
+	expected := "./" + DomainJoinPluginExecutableName + " --directory-id d-0123456789 --directory-name corp.test.com --instance-region us-east-1 --dns-addresses 172.31.4.141 172.31.21.240"
 
 	assert.Equal(t, expected, commandRes)
 }

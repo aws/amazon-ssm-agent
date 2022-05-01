@@ -26,6 +26,10 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/log"
 )
 
+const (
+	fileNotFoundErrorMessage = "open : The system cannot find the file specified."
+)
+
 // Uncompress unzips the installation package
 func Uncompress(log log.T, src, dest string) error {
 	return Unzip(src, dest)

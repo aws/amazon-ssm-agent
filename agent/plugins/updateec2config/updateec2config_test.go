@@ -20,6 +20,7 @@ package updateec2config
 import (
 	"testing"
 
+	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/iohandler"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	updateinfomocks "github.com/aws/amazon-ssm-agent/agent/updateutil/updateinfo/mocks"
@@ -31,7 +32,9 @@ var logger = log.NewMockLog()
 
 //TestGenerateUpdateCmd tests the function generateUpdateCmd
 func TestGenerateUpdateCmd(t *testing.T) {
-	manager := updateManager{}
+	manager := updateManager{
+		context: context.NewMockDefault(),
+	}
 
 	result, err := manager.generateUpdateCmd(logger, "path")
 

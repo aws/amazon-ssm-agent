@@ -18,6 +18,7 @@ package github
 import (
 	"fmt"
 	"net/http"
+	"os"
 	"path/filepath"
 	"strings"
 	"testing"
@@ -81,7 +82,7 @@ func TestGitResource_DownloadFile(t *testing.T) {
 
 	fileMock.On("IsDirectory", appconfig.DownloadRoot).Return(true)
 	fileMock.On("Exists", appconfig.DownloadRoot).Return(true)
-	fileMock.On("MakeDirs", strings.TrimSuffix(appconfig.DownloadRoot, "/")).Return(nil)
+	fileMock.On("MakeDirs", strings.TrimSuffix(appconfig.DownloadRoot, string(os.PathSeparator))).Return(nil)
 	fileMock.On("WriteFile", filepath.Join(appconfig.DownloadRoot, "file.ext"), mock.Anything).Return(nil)
 
 	err, result := resource.DownloadRemoteResource(fileMock, "")
@@ -129,7 +130,7 @@ func TestGitResource_DownloadDirectory(t *testing.T) {
 	clientMock.On("IsFileContentType", mock.AnythingOfType("*github.RepositoryContent")).Return(true)
 
 	fileMock := filemock.FileSystemMock{}
-	fileMock.On("MakeDirs", strings.TrimSuffix(appconfig.DownloadRoot, "/")).Return(nil)
+	fileMock.On("MakeDirs", strings.TrimSuffix(appconfig.DownloadRoot, string(os.PathSeparator))).Return(nil)
 	fileMock.On("WriteFile", fileutil.BuildPath(appconfig.DownloadRoot, "file.rb"), mock.Anything).Return(nil)
 
 	err, result := resource.DownloadRemoteResource(fileMock, "")

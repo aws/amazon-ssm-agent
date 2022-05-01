@@ -16,6 +16,6 @@
 
 package staticpieprecondition
 
-func hasValidKernelVersion() error {
+var hasValidKernelVersion = func() error {
 	return nil
 }

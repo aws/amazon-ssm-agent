@@ -19,6 +19,7 @@
 package rundaemon
 
 import (
+	"fmt"
 	"os"
 	"os/exec"
 	"testing"
@@ -26,7 +27,9 @@ import (
 
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/iohandler"
+	iohandlermocks "github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/iohandler/mock"
 	"github.com/aws/amazon-ssm-agent/agent/task"
+	"github.com/stretchr/testify/assert"
 )
 
 var pluginConfig = iohandler.PluginConfig{
@@ -37,13 +40,14 @@ var pluginConfig = iohandler.PluginConfig{
 	OutputTruncatedSuffix: "cw",
 }
 
-func NewPlugin(pluginConfig iohandler.PluginConfig) (*Plugin, error) {
+func NewPlugin(context context.T, pluginConfig iohandler.PluginConfig) (*Plugin, error) {
 	var plugin Plugin
 	plugin.MaxStdoutLength = pluginConfig.MaxStdoutLength
 	plugin.MaxStderrLength = pluginConfig.MaxStderrLength
 	plugin.StdoutFileName = pluginConfig.StdoutFileName
 	plugin.StderrFileName = pluginConfig.StderrFileName
 	plugin.OutputTruncatedSuffix = pluginConfig.OutputTruncatedSuffix
+	plugin.Context = context
 	return &plugin, nil
 }
 
@@ -51,11 +55,11 @@ func MockRunDaemonExecutorWithNoError(daemonInvoke *exec.Cmd) (err error) {
 	return nil
 }
 
-func MockStopDaemonExecutorWithNoError(p *Plugin, context context.T) {
+func MockStopDaemonExecutorWithNoError(p *Plugin) {
 	return
 }
 
-func MockStartDaemonHelperExecutor(p *Plugin, context context.T, configuration string) error {
+func MockStartDaemonHelperExecutor(p *Plugin, configuration string) error {
 	return nil
 }
 
@@ -72,7 +76,8 @@ func MockIsDaemonRunningExecutor(p *Plugin) bool {
 func TestSingleStartStop(t *testing.T) {
 	context := context.NewMockDefault()
 	cancelFlag := task.NewMockDefault()
-	p, _ := NewPlugin(pluginConfig)
+	ioHandler := &iohandlermocks.MockIOHandler{}
+	p, _ := NewPlugin(context, pluginConfig)
 	p.Name = "TestSingleStartStop"
 	DaemonCmdExecutor = MockRunDaemonExecutorWithNoError
 	BlockWhileDaemonRunningExecutor = MockBlockWhileDaemonRunning
@@ -80,7 +85,8 @@ func TestSingleStartStop(t *testing.T) {
 	StartDaemonHelperExecutor = MockStartDaemonHelperExecutor
 	IsDaemonRunningExecutor = MockIsDaemonRunningExecutor
 	t.Logf("Daemon starting")
-	p.Start(context, "powershell Sleep 5", "", cancelFlag)
+	err := p.Start("powershell Sleep 5", "", cancelFlag, ioHandler)
+	assert.NoError(t, err, fmt.Sprintf("Expected no error but got %v", err))
 	time.Sleep(2 * time.Second)
 	t.Logf("Daemon is running")
 	if IsDaemonRunningExecutor(p) {
@@ -88,9 +94,12 @@ func TestSingleStartStop(t *testing.T) {
 		t.Fatalf("Daemon is not running. Bail out")
 	}
 	time.Sleep(2 * time.Second)
-	p.Stop(context, cancelFlag)
+	err = p.Stop(cancelFlag)
+	assert.NoError(t, err, fmt.Sprintf("Expected no error but got %v", err))
+
 	if p.Process != nil {
-		BlockWhileDaemonRunningExecutor(context, p.Process.Pid)
+		err = BlockWhileDaemonRunningExecutor(context, p.Process.Pid)
+		assert.NoError(t, err, fmt.Sprintf("Expected no error but got %v", err))
 	}
 	t.Logf("Daemon stopped")
 }
@@ -99,7 +108,9 @@ func TestSingleStartStop(t *testing.T) {
 func TestSuccessiveStarts(t *testing.T) {
 	context := context.NewMockDefault()
 	cancelFlag := task.NewMockDefault()
-	p, _ := NewPlugin(pluginConfig)
+	ioHandler := &iohandlermocks.MockIOHandler{}
+
+	p, _ := NewPlugin(context, pluginConfig)
 	var pid int
 	p.Name = "TestSuccessiveStarts"
 	DaemonCmdExecutor = MockRunDaemonExecutorWithNoError
@@ -108,7 +119,7 @@ func TestSuccessiveStarts(t *testing.T) {
 	StartDaemonHelperExecutor = MockStartDaemonHelperExecutor
 	IsDaemonRunningExecutor = MockIsDaemonRunningExecutor
 	t.Logf("Daemon starting")
-	p.Start(context, "powershell Sleep 5", "", cancelFlag)
+	p.Start("powershell Sleep 5", "", cancelFlag, ioHandler)
 	time.Sleep(1 * time.Second)
 	t.Logf("Daemon is running")
 	if IsDaemonRunningExecutor(p) {
@@ -119,7 +130,7 @@ func TestSuccessiveStarts(t *testing.T) {
 	if p.Process != nil {
 		pid = p.Process.Pid
 	}
-	p.Start(context, "", "", cancelFlag)
+	p.Start("", "", cancelFlag, ioHandler)
 	time.Sleep(2 * time.Second)
 	if p.Process != nil {
 		if p.Process.Pid == pid {
@@ -128,7 +139,7 @@ func TestSuccessiveStarts(t *testing.T) {
 			t.Fatalf("Another instance of daemon started while one running")
 		}
 	}
-	p.Stop(context, cancelFlag)
+	p.Stop(cancelFlag)
 	BlockWhileDaemonRunning(context, pid)
 	t.Logf("Daemon stopped")
 }
@@ -137,16 +148,18 @@ func TestSuccessiveStarts(t *testing.T) {
 func TestMultipleStartStop(t *testing.T) {
 	context := context.NewMockDefault()
 	cancelFlag := task.NewMockDefault()
-	p, _ := NewPlugin(pluginConfig)
+	ioHandler := &iohandlermocks.MockIOHandler{}
+	p, _ := NewPlugin(context, pluginConfig)
 	p.Name = "TestMultipleStartStop"
 	DaemonCmdExecutor = RunDaemon
 	BlockWhileDaemonRunningExecutor = BlockWhileDaemonRunning
 	StopDaemonExecutor = StopDaemon
 	StartDaemonHelperExecutor = StartDaemonHelper
 	IsDaemonRunningExecutor = IsDaemonRunning
+
 	for i := 0; i < 50; i++ {
 		t.Logf("Daemon starting")
-		p.Start(context, "powershell Sleep 5", "", cancelFlag)
+		p.Start("powershell Sleep 5", "", cancelFlag, ioHandler)
 		time.Sleep(5 * time.Second)
 		if p.Process != nil {
 			proc, err := os.FindProcess(p.Process.Pid)
@@ -162,7 +175,7 @@ func TestMultipleStartStop(t *testing.T) {
 		}
 		pid := p.Process.Pid
 		t.Logf("Daemon stopping")
-		p.Stop(context, cancelFlag)
+		p.Stop(cancelFlag)
 		BlockWhileDaemonRunningExecutor(context, pid)
 	}
 }
@@ -171,7 +184,7 @@ func TestMultipleStartStop(t *testing.T) {
 func TestStopWithoutStart(t *testing.T) {
 	context := context.NewMockDefault()
 	cancelFlag := task.NewMockDefault()
-	p, _ := NewPlugin(pluginConfig)
+	p, _ := NewPlugin(context, pluginConfig)
 	DaemonCmdExecutor = MockRunDaemonExecutorWithNoError
 	BlockWhileDaemonRunningExecutor = MockBlockWhileDaemonRunning
 	StopDaemonExecutor = MockStopDaemonExecutorWithNoError
@@ -179,7 +192,7 @@ func TestStopWithoutStart(t *testing.T) {
 	IsDaemonRunningExecutor = MockIsDaemonRunningExecutor
 	p.Name = "TestStopWithoutStart"
 	t.Logf("Attempting to Stopping a Daemon without starting")
-	err := p.Stop(context, cancelFlag)
+	err := p.Stop(cancelFlag)
 	if err != nil {
 		t.Fatalf("Stop returned errors")
 	}

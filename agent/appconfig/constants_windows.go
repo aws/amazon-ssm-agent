@@ -208,7 +208,7 @@ func init() {
 	LocalCommandRootSubmitted = filepath.Join(LocalCommandRoot, "Submitted")
 	LocalCommandRootCompleted = filepath.Join(LocalCommandRoot, "Completed")
 	LocalCommandRootInvalid = filepath.Join(LocalCommandRoot, "Invalid")
-	DownloadRoot = filepath.Join(SSMDataPath, "Download")
+	DownloadRoot = filepath.Join(SSMDataPath, "Download") + string(os.PathSeparator)
 	UpdaterArtifactsRoot = filepath.Join(SSMDataPath, "Update")
 	UpdaterPidLockfile = filepath.Join(SSMDataPath, "update.lock")
 	LegacyUpdateDownloadFolder = DownloadRoot

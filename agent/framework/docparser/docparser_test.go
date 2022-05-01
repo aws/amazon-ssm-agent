@@ -18,6 +18,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
+	"path"
 	"path/filepath"
 	"testing"
 
@@ -77,7 +78,7 @@ func TestParseDocument_ValidRuntimeConfig(t *testing.T) {
 		DefaultWorkingDir: testWorkingDir,
 	}
 
-	validdocumentruntimeconfig := loadFile(t, "../../runcommand/mds/testdata/validcommand12.json")
+	validdocumentruntimeconfig := loadFile(t, filepath.Join("..", "..", "runcommand", "mds", "testdata", "validcommand12.json"))
 	var testDocContent DocContent
 	err := json.Unmarshal(validdocumentruntimeconfig, &testDocContent)
 	if err != nil {
@@ -92,7 +93,7 @@ func TestParseDocument_ValidRuntimeConfig(t *testing.T) {
 	assert.Equal(t, "", pluginInfoTest.Result.Error)
 	assert.Equal(t, filepath.Join(testOrchDir, "awsrunShellScript"), pluginInfoTest.Configuration.OrchestrationDirectory)
 	assert.Equal(t, testS3Bucket, pluginInfoTest.Configuration.OutputS3BucketName)
-	assert.Equal(t, filepath.Join(testS3Prefix, "awsrunShellScript"), pluginInfoTest.Configuration.OutputS3KeyPrefix)
+	assert.Equal(t, path.Join(testS3Prefix, "awsrunShellScript"), pluginInfoTest.Configuration.OutputS3KeyPrefix)
 	assert.Equal(t, testMessageID, pluginInfoTest.Configuration.MessageId)
 	assert.Equal(t, testDocumentID, pluginInfoTest.Configuration.BookKeepingFileName)
 	assert.Equal(t, testWorkingDir, pluginInfoTest.Configuration.DefaultWorkingDirectory)
@@ -111,7 +112,7 @@ func TestParseDocument_ValidMainSteps(t *testing.T) {
 	}
 
 	var testDocContent DocContent
-	validdocumentmainsteps := loadFile(t, "../../runcommand/mds/testdata/validcommand20.json")
+	validdocumentmainsteps := loadFile(t, filepath.Join("..", "..", "runcommand", "mds", "testdata", "validcommand20.json"))
 	err := json.Unmarshal(validdocumentmainsteps, &testDocContent)
 	if err != nil {
 		assert.Error(t, err, "Error occurred when trying to unmarshal valid document")
@@ -125,7 +126,7 @@ func TestParseDocument_ValidMainSteps(t *testing.T) {
 	assert.Equal(t, "", pluginInfoTest.Result.Error)
 	assert.Equal(t, filepath.Join(testOrchDir, "test"), pluginInfoTest.Configuration.OrchestrationDirectory)
 	assert.Equal(t, testS3Bucket, pluginInfoTest.Configuration.OutputS3BucketName)
-	assert.Equal(t, filepath.Join(testS3Prefix, "awsrunShellScript"), pluginInfoTest.Configuration.OutputS3KeyPrefix)
+	assert.Equal(t, path.Join(testS3Prefix, "awsrunShellScript"), pluginInfoTest.Configuration.OutputS3KeyPrefix)
 	assert.Equal(t, testMessageID, pluginInfoTest.Configuration.MessageId)
 	assert.Equal(t, testDocumentID, pluginInfoTest.Configuration.BookKeepingFileName)
 	assert.Equal(t, testWorkingDir, pluginInfoTest.Configuration.DefaultWorkingDirectory)
@@ -150,7 +151,7 @@ func TestInitializeDocState_Valid(t *testing.T) {
 	}
 
 	var testDocContent DocContent
-	validdocumentruntimeconfig := loadFile(t, "../../runcommand/mds/testdata/validcommand12.json")
+	validdocumentruntimeconfig := loadFile(t, filepath.Join("..", "..", "runcommand", "mds", "testdata", "validcommand12.json"))
 	err := json.Unmarshal(validdocumentruntimeconfig, &testDocContent)
 	if err != nil {
 		assert.Error(t, err, "Error occurred when trying to unmarshal valid document")
@@ -166,7 +167,7 @@ func TestInitializeDocState_Valid(t *testing.T) {
 	assert.Equal(t, 1, len(pluginInfo))
 	assert.Equal(t, filepath.Join(testOrchDir, "awsrunShellScript"), pluginInfo[0].Configuration.OrchestrationDirectory)
 	assert.Equal(t, testS3Bucket, pluginInfo[0].Configuration.OutputS3BucketName)
-	assert.Equal(t, filepath.Join(testS3Prefix, "awsrunShellScript"), pluginInfo[0].Configuration.OutputS3KeyPrefix)
+	assert.Equal(t, path.Join(testS3Prefix, "awsrunShellScript"), pluginInfo[0].Configuration.OutputS3KeyPrefix)
 	assert.Equal(t, testMessageID, pluginInfo[0].Configuration.MessageId)
 	assert.Equal(t, testDocumentID, pluginInfo[0].Configuration.BookKeepingFileName)
 	assert.Equal(t, testWorkingDir, pluginInfo[0].Configuration.DefaultWorkingDirectory)
@@ -463,7 +464,7 @@ func TestParseDocument_InvalidSchema(t *testing.T) {
 		DefaultWorkingDir: testWorkingDir,
 	}
 	var testDocContent DocContent
-	invalidschema := loadFile(t, "testdata/schemaVersion9999.json")
+	invalidschema := loadFile(t, filepath.Join("testdata", "schemaVersion9999.json"))
 
 	err := json.Unmarshal([]byte(invalidschema), &testDocContent)
 	assert.Nil(t, err)
@@ -508,7 +509,7 @@ func TestParseDocument_ValidParameters(t *testing.T) {
 	assert.Equal(t, "", pluginInfoTest.Result.Error)
 	assert.Equal(t, filepath.Join(testOrchDir, "awsrunPowerShellScript"), pluginInfoTest.Configuration.OrchestrationDirectory)
 	assert.Equal(t, testS3Bucket, pluginInfoTest.Configuration.OutputS3BucketName)
-	assert.Equal(t, filepath.Join(testS3Prefix, "awsrunPowerShellScript"), pluginInfoTest.Configuration.OutputS3KeyPrefix)
+	assert.Equal(t, path.Join(testS3Prefix, "awsrunPowerShellScript"), pluginInfoTest.Configuration.OutputS3KeyPrefix)
 	assert.Equal(t, testMessageID, pluginInfoTest.Configuration.MessageId)
 	assert.Equal(t, testDocumentID, pluginInfoTest.Configuration.BookKeepingFileName)
 	assert.Equal(t, testWorkingDir, pluginInfoTest.Configuration.DefaultWorkingDirectory)
@@ -528,7 +529,7 @@ func TestParseDocument_ReplaceDefaultParameters(t *testing.T) {
 	}
 
 	var testDocContent DocContent
-	defaultParamatersDoc := loadFile(t, "testdata/sampleReplaceDefaultParams.json")
+	defaultParamatersDoc := loadFile(t, filepath.Join("testdata", "sampleReplaceDefaultParams.json"))
 
 	err := json.Unmarshal([]byte(defaultParamatersDoc), &testDocContent)
 	assert.Nil(t, err)
@@ -545,7 +546,7 @@ func TestParseDocument_ReplaceDefaultParameters(t *testing.T) {
 	assert.Equal(t, "", pluginInfoTest.Result.Error)
 	assert.Equal(t, filepath.Join(testOrchDir, "example"), pluginInfoTest.Configuration.OrchestrationDirectory)
 	assert.Equal(t, testS3Bucket, pluginInfoTest.Configuration.OutputS3BucketName)
-	assert.Equal(t, filepath.Join(testS3Prefix, "awsrunPowerShellScript"), pluginInfoTest.Configuration.OutputS3KeyPrefix)
+	assert.Equal(t, path.Join(testS3Prefix, "awsrunPowerShellScript"), pluginInfoTest.Configuration.OutputS3KeyPrefix)
 	assert.Equal(t, testMessageID, pluginInfoTest.Configuration.MessageId)
 	assert.Equal(t, testDocumentID, pluginInfoTest.Configuration.BookKeepingFileName)
 	assert.Equal(t, testWorkingDir, pluginInfoTest.Configuration.DefaultWorkingDirectory)
@@ -705,7 +706,7 @@ func loadMessageFromFile(t *testing.T, fileName string) (testDocContent DocConte
 	if err != nil {
 		t.Fatal(err)
 	}
-	p := loadFile(t, "testdata/sampleMessageParameters.json")
+	p := loadFile(t, filepath.Join("testdata", "sampleMessageParameters.json"))
 	err = json.Unmarshal(p, &params)
 	if err != nil {
 		t.Fatal(err)
@@ -714,7 +715,7 @@ func loadMessageFromFile(t *testing.T, fileName string) (testDocContent DocConte
 }
 
 func loadPreconditionsFromFile(t *testing.T) (preconditions map[string]map[string][]contracts.PreconditionArgument) {
-	b := loadFile(t, "testdata/sampleResolvedMessagePreconditions.json")
+	b := loadFile(t, filepath.Join("testdata", "sampleResolvedMessagePreconditions.json"))
 
 	err := json.Unmarshal(b, &preconditions)
 	if err != nil {

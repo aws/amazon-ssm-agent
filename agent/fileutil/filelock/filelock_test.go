@@ -117,7 +117,7 @@ func TestLockingTimeout(t *testing.T) {
 	assert.NoError(t, err)
 	assert.Equal(t, true, locked)
 
-	time.Sleep(2000 * time.Millisecond)
+	time.Sleep(1500 * time.Millisecond)
 
 	// Second lock, different owner - should succeed, since lock is timed out.
 	locked, err = LockFile(lockPath, ownerId2, timeoutSeconds)

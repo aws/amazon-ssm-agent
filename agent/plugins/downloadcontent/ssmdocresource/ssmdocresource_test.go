@@ -16,6 +16,7 @@ package ssmdocresource
 
 import (
 	"fmt"
+	"os"
 	"path/filepath"
 	"strings"
 	"testing"
@@ -197,7 +198,7 @@ func TestSSMDocResource_DownloadNoDestination(t *testing.T) {
 
 	fileMock.On("Exists", appconfig.DownloadRoot).Return(true)
 	fileMock.On("IsDirectory", appconfig.DownloadRoot).Return(true)
-	fileMock.On("MakeDirs", strings.TrimSuffix(dir, "/")).Return(nil)
+	fileMock.On("MakeDirs", strings.TrimSuffix(dir, string(os.PathSeparator))).Return(nil)
 	fileMock.On("WriteFile", filepath.Join(dir, "AWS-ExecuteCommand.json"), content).Return(fmt.Errorf("Error"))
 
 	ssmresource.ssmdocdep = depMock

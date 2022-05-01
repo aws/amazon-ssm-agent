@@ -91,7 +91,6 @@ func MockExecuteCommandErr(command string, args ...string) ([]byte, error) {
 
 func TestGetMetaUsingScript(t *testing.T) {
 	mockContext := context.NewMockDefault()
-	mockLog := mockContext.Log()
 	writeFileText = MockWriteFile
 	cmdExecutor = MockExecuteCommand
 	startMarker = "<startea53e72c>"
@@ -100,7 +99,7 @@ func TestGetMetaUsingScript(t *testing.T) {
 	path := []string{
 		"C:\\Windows\\Program Files",
 	}
-	data, err := getMetaData(mockLog, path)
+	data, err := getMetaData(mockContext, path)
 
 	assert.Nil(t, err)
 	assert.Equal(t, fileData, data)
@@ -108,7 +107,6 @@ func TestGetMetaUsingScript(t *testing.T) {
 
 func TestGetMetaCmdError(t *testing.T) {
 	mockContext := context.NewMockDefault()
-	mockLog := mockContext.Log()
 	writeFileText = MockWriteFileError
 	cmdExecutor = MockExecuteCommandErr
 	startMarker = "<startea53e72c>"
@@ -118,7 +116,7 @@ func TestGetMetaCmdError(t *testing.T) {
 	path := []string{
 		"C:\\Windows\\Program Files", "C:\\Windows\\Application",
 	}
-	data, err := getMetaData(mockLog, path)
+	data, err := getMetaData(mockContext, path)
 
 	assert.NotNil(t, err)
 	assert.Nil(t, data)

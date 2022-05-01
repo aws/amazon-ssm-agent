@@ -15,7 +15,7 @@
 package executers
 
 import (
-	"fmt"
+	"os"
 	"os/exec"
 	"strings"
 	"testing"
@@ -44,30 +44,31 @@ func getEnvVariableValue(env []string, envVarName string) string {
 	return ""
 }
 
-func getTestCommand(t *testing.T) *exec.Cmd {
+func getTestCommand() *exec.Cmd {
 	command := exec.Command("test")
-	assert.Empty(t, getEnvVariableValue(command.Env, envVarInstanceID), fmt.Sprintf("%s is already defined", envVarInstanceID))
-	assert.Empty(t, getEnvVariableValue(command.Env, envVarRegionName), fmt.Sprintf("%s is already defined", envVarRegionName))
+	command.Env = []string{}
 
 	return command
 }
 
 func TestEnvironmentVariables_All(t *testing.T) {
+	os.Clearenv()
 	context := context.NewMockDefault()
-	command := getTestCommand(t)
+	command := getTestCommand()
 	env := make(map[string]string)
 	env["envKey"] = "envVal"
 	prepareEnvironment(context, command, env)
 
-	assert.Equal(t, getEnvVariableValue(command.Env, envVarInstanceID), mockIdentity.MockInstanceID)
-	assert.Equal(t, getEnvVariableValue(command.Env, envVarRegionName), mockIdentity.MockRegion)
-	assert.Equal(t, getEnvVariableValue(command.Env, "envKey"), "envVal")
+	assert.Equal(t, mockIdentity.MockInstanceID, getEnvVariableValue(command.Env, envVarInstanceID))
+	assert.Equal(t, mockIdentity.MockRegion, getEnvVariableValue(command.Env, envVarRegionName))
+	assert.Equal(t, "envVal", getEnvVariableValue(command.Env, "envKey"))
 }
 
 func TestEnvironmentVariables_None(t *testing.T) {
+	os.Clearenv()
 	context := context.NewMockDefault()
 
-	command := getTestCommand(t)
+	command := getTestCommand()
 	prepareEnvironment(context, command, make(map[string]string))
 
 	assert.Empty(t, getEnvVariableValue(command.Env, mockIdentity.MockInstanceID))

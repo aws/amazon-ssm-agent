@@ -203,25 +203,40 @@ func TestHTTPResource_adjustDownloadPath(t *testing.T) {
 			true,
 		},
 		{
-			"/tmp/download.txt",
+			filepath.Join("/tmp", "download.txt"),
 			"",
-			"/tmp/download.txt",
+			filepath.Join("/tmp", "download.txt"),
 			false,
 			false,
 		},
 		{
 			"/tmp/",
 			"123",
-			"/tmp/download123",
+			filepath.Join("/tmp", "download123"),
 			false,
 			false,
 		},
 		{
+			"/tmp/",
+			"123",
+			filepath.Join("/tmp", "download123"),
+			true,
+			true,
+		},
+		{
 			"/tmp",
 			"123",
-			"/tmp/download123",
+			filepath.Join("/tmp", "download123"),
 			true,
 			true,
+		},
+
+		{
+			"/tmp",
+			"123",
+			filepath.Join("/tmp"),
+			false,
+			false,
 		},
 	}
 

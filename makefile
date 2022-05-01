@@ -81,7 +81,7 @@ quick-test-common: copy-src pre-build pre-release --quick-test-common
 quick-e2e: copy-src pre-build pre-release --quick-e2e --quick-e2e-core --quick-e2e-common
 
 .PHONY: test-all
-test-all: copy-src pre-build pre-release checkstyle --quick-integtest --quick-integtest-core --quick-integtest-common --quick-test --quick-test-core --quick-test-common --quick-e2e --quick-e2e-core --quick-e2e-common
+test-all: copy-src pre-build pre-release checkstyle --test-all
 
 .PHONY: pre-release
 pre-release:
@@ -400,6 +400,12 @@ build-tests-windows: copy-src copy-tests-src pre-build
 # if you want to restrict to some specific package, sample below
 # go test -v -gcflags "-N -l" -timeout 20m -tags=integration github.com/aws/amazon-ssm-agent/agent/fileutil/...
 	cd $(GOTEMPCOPYPATH) && go test -gcflags "-N -l" -timeout 20m -tags=integration github.com/aws/amazon-ssm-agent/agent/...
+
+.PHONY: --test-all
+--test-all:
+	cd $(GOTEMPCOPYPATH) && go test -gcflags "-N -l" -timeout 20m -tags "e2e,integration" github.com/aws/amazon-ssm-agent/agent/...
+	cd $(GOTEMPCOPYPATH) && go test -gcflags "-N -l" -timeout 20m -tags "e2e,integration" github.com/aws/amazon-ssm-agent/core/...
+	cd $(GOTEMPCOPYPATH) && go test -gcflags "-N -l" -timeout 20m -tags "e2e,integration" github.com/aws/amazon-ssm-agent/common/...
 
 .PHONY: --quick-integtest-core
 --quick-integtest-core:

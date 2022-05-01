@@ -110,6 +110,7 @@ func runConfigureDaemon(
 				ExeLocation: input.PackageLocation,
 				Name:        input.Name,
 				CommandLine: input.Command,
+				Context:     p.context,
 			},
 		}
 

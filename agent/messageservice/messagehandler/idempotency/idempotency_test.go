@@ -1,6 +1,7 @@
 package idempotency
 
 import (
+	"path/filepath"
 	"testing"
 	"time"
 
@@ -69,10 +70,10 @@ func (suite *IdeopotencyTestSuite) TestIdempotency_CleanupOldIdempotencyEntries(
 		return "c:"
 	}
 	files := make(map[string]bool)
-	files["c:/dir1/dir2"] = true
-	files["c:/dir2/dir1"] = true
-	files["c:/dir1/dir1"] = true
-	files["c:/dir2/dir2"] = true
+	files[filepath.Join("c:", "dir1", "dir2")] = true
+	files[filepath.Join("c:", "dir2", "dir1")] = true
+	files[filepath.Join("c:", "dir1", "dir1")] = true
+	files[filepath.Join("c:", "dir2", "dir2")] = true
 
 	deleteDirectory = func(dirName string) (err error) {
 		delete(files, dirName)

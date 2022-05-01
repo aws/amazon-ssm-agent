@@ -158,12 +158,12 @@ func scanSSMDataDirectory(allowLinkDeletions bool) ([]string, []string, error) {
 			for i := 1; i <= retries; i++ {
 				if pathStatInfo, err = os.Stat(path); err != nil {
 					if os.IsNotExist(err) {
-						fmt.Println("Skipping stat at %v, path no longer exists", path)
+						fmt.Printf("Skipping stat at %v, path no longer exists\n", path)
 						return nil
 					} else if i == retries {
-						return fmt.Errorf("Stat error during data folder validation at %v: %v", path, err)
+						return fmt.Errorf("stat error during data folder validation at %v: %v", path, err)
 					} else {
-						fmt.Println("Stat error during data folder validation at %v: %v", path, err)
+						fmt.Printf("Stat error during data folder validation at %v: %v\n", path, err)
 						time.Sleep(500 * time.Millisecond)
 					}
 				} else {

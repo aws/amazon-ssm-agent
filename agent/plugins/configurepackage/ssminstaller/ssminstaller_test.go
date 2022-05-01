@@ -17,7 +17,7 @@ package ssminstaller
 
 import (
 	"io/ioutil"
-	"path"
+	"path/filepath"
 	"testing"
 
 	"github.com/aws/amazon-ssm-agent/agent/context"
@@ -117,14 +117,14 @@ func testReadActionInvalid(t *testing.T, actionPathNoExt string, contentSh []byt
 }
 
 func TestReadAction(t *testing.T) {
-	actionPathNoExt := path.Join(testPackagePath, "Foo")
+	actionPathNoExt := filepath.Join(testPackagePath, "Foo")
 	testReadAction(t, actionPathNoExt, []byte("echo sh"), []byte{}, false)
 	testReadAction(t, actionPathNoExt, []byte{}, append(fileutil.CreateUTF8ByteOrderMark(), []byte("Write-Host ps1 with BOM")...), false)
 }
 
 func TestReadActionMissing(t *testing.T) {
 	mockFileSys := MockedFileSys{}
-	actionPathNoExt := path.Join(testPackagePath, "Foo")
+	actionPathNoExt := filepath.Join(testPackagePath, "Foo")
 	mockReadAction(t, &mockFileSys, actionPathNoExt, []byte{}, []byte{}, false)
 
 	mockEnvdetectCollector := &envdetect.CollectorMock{}
@@ -148,7 +148,7 @@ func TestReadActionMissing(t *testing.T) {
 
 func testReadActionTooManyActionImplementations(t *testing.T, existSh bool, existPs1 bool) {
 	mockFileSys := MockedFileSys{}
-	actionPathNoExt := path.Join(testPackagePath, "Foo")
+	actionPathNoExt := filepath.Join(testPackagePath, "Foo")
 	mockFileSys.On("Exists", actionPathNoExt+".sh").Return(existSh).Once()
 	mockFileSys.On("Exists", actionPathNoExt+".ps1").Return(existPs1).Once()
 
@@ -265,7 +265,7 @@ func TestGetEnvVarsWithEmptyAdditionalArguments(t *testing.T) {
 func TestInstall_ExecuteError(t *testing.T) {
 	// Setup mocks with expectations
 	mockFileSys := MockedFileSys{}
-	actionPathNoExt := path.Join(testPackagePath, "install")
+	actionPathNoExt := filepath.Join(testPackagePath, "install")
 	mockReadAction(t, &mockFileSys, actionPathNoExt, []byte("echo sh"), []byte{}, false)
 
 	mockExec := MockedExec{}
@@ -290,7 +290,7 @@ func TestInstall_ExecuteError(t *testing.T) {
 func TestValidate_NoAction(t *testing.T) {
 	// Setup mocks with expectations
 	mockFileSys := MockedFileSys{}
-	actionPathNoExt := path.Join(testPackagePath, "validate")
+	actionPathNoExt := filepath.Join(testPackagePath, "validate")
 	mockReadAction(t, &mockFileSys, actionPathNoExt, []byte{}, []byte{}, false)
 	mockExec := MockedExec{}
 
@@ -314,7 +314,7 @@ func TestValidate_NoAction(t *testing.T) {
 func TestUninstall_Success(t *testing.T) {
 	// Setup mocks with expectations
 	mockFileSys := MockedFileSys{}
-	actionPathNoExt := path.Join(testPackagePath, "uninstall")
+	actionPathNoExt := filepath.Join(testPackagePath, "uninstall")
 	mockReadAction(t, &mockFileSys, actionPathNoExt, []byte("echo sh"), []byte{}, false)
 
 	mockExec := MockedExec{}
@@ -344,7 +344,7 @@ func TestUninstall_Success(t *testing.T) {
 func TestUpdate_Success(t *testing.T) {
 	// Setup mocks with expectations
 	mockFileSys := MockedFileSys{}
-	actionPathNoExt := path.Join(testPackagePath, "update")
+	actionPathNoExt := filepath.Join(testPackagePath, "update")
 	mockReadAction(t, &mockFileSys, actionPathNoExt, []byte("echo sh"), []byte{}, false)
 
 	mockExec := MockedExec{}
@@ -374,7 +374,7 @@ func TestUpdate_Success(t *testing.T) {
 func TestUpdate_ExecuteError(t *testing.T) {
 	// Setup mocks with expectations
 	mockFileSys := MockedFileSys{}
-	actionPathNoExt := path.Join(testPackagePath, "update")
+	actionPathNoExt := filepath.Join(testPackagePath, "update")
 	mockReadAction(t, &mockFileSys, actionPathNoExt, []byte("echo sh"), []byte{}, false)
 
 	mockExec := MockedExec{}
@@ -399,7 +399,7 @@ func TestUpdate_ExecuteError(t *testing.T) {
 func TestUpdate_NoUpdateScript(t *testing.T) {
 	// Setup mocks with expectations
 	mockFileSys := MockedFileSys{}
-	actionPathNoExt := path.Join(testPackagePath, "update")
+	actionPathNoExt := filepath.Join(testPackagePath, "update")
 	mockReadAction(t, &mockFileSys, actionPathNoExt, []byte{}, []byte{}, false)
 
 	mockExec := MockedExec{}

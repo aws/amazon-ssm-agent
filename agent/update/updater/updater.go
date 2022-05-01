@@ -68,7 +68,10 @@ var (
 	disableDowngrade *bool
 )
 
-var newAgentIdentity = identity.NewAgentIdentity
+var (
+	newAgentIdentity                 = identity.NewAgentIdentity
+	isIdentityRuntimeConfigSupported = updateutil.IsIdentityRuntimeConfigSupported
+)
 
 func init() {
 	log = ssmlog.GetUpdaterLogger(logger.DefaultLogDir, defaultLogFileName)
@@ -229,9 +232,9 @@ func resolveAgentIdentity(appConfig appconfig.SsmagentConfig) (identity.IAgentId
 	var agentIdentity identity.IAgentIdentity
 	var err error
 	// To support downgrades and rollbacks, we want to make sure that the source version supports runtime config
-	if updateutil.IsIdentityRuntimeConfigSupported(*sourceVersion) {
+	if isIdentityRuntimeConfigSupported(*sourceVersion) {
 		selector = identity.NewRuntimeConfigIdentitySelector(log)
-		agentIdentity, err = identity.NewAgentIdentity(log, &appConfig, selector)
+		agentIdentity, err = newAgentIdentity(log, &appConfig, selector)
 
 		// If success, return the identity
 		if err == nil {

@@ -17,6 +17,7 @@ package rundocument
 
 import (
 	"fmt"
+	"path/filepath"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -278,7 +279,7 @@ func TestPlugin_RunDocumentMaxDepthExceeded(t *testing.T) {
 
 	var input RunDocumentPluginInput
 	input.DocumentType = "LocalPath"
-	input.DocumentPath = "/var/tmp/docLocation/docname.json"
+	input.DocumentPath = filepath.Join("var", "tmp", "docLocation", "docname.json")
 	conf.Properties = &input
 	var executionDepth interface{}
 	executionDepth = createStubExecutionDepth(4)
@@ -310,7 +311,7 @@ func TestPlugin_RunDocument(t *testing.T) {
 
 	var input RunDocumentPluginInput
 	input.DocumentType = LocalPathType
-	input.DocumentPath = "/var/tmp/docLocation/docname.json"
+	input.DocumentPath = filepath.Join("var", "tmp", "docLocation", "docname.json")
 	conf.Properties = &input
 
 	resChan := make(chan contracts.DocumentResult)
@@ -339,7 +340,7 @@ func TestPlugin_RunDocument(t *testing.T) {
 	plugin := contracts.PluginState{}
 	plugins := []contracts.PluginState{plugin}
 
-	fileMock.On("ReadFile", "/var/tmp/docLocation/docname.json").Return(content, nil)
+	fileMock.On("ReadFile", filepath.Join("orch", "downloads", "var", "tmp", "docLocation", "docname.json")).Return(content, nil)
 	execMock.On("ParseDocument", contextMock, []byte(content), conf.OrchestrationDirectory, conf.OutputS3BucketName, conf.OutputS3KeyPrefix, conf.MessageId, conf.PluginID, conf.DefaultWorkingDirectory, parameters).Return(plugins, nil)
 	execMock.On("ExecuteDocument", contextMock, plugins, conf.BookKeepingFileName, mock.Anything).Return(resChan, nil)
 	mockIOHandler.On("GetStatus").Return(contracts.ResultStatusSuccess)
@@ -398,9 +399,9 @@ func TestPlugin_RunDocumentFromSSMDocument(t *testing.T) {
 	}()
 
 	ssmMock.On("GetDocument", contextMock.Log(), "RunShellScript", "10").Return(&docResponse, nil)
-	fileMock.On("MakeDirs", "orch/downloads").Return(nil)
-	fileMock.On("WriteFile", "orch/downloads/RunShellScript.json", content).Return(nil)
-	fileMock.On("ReadFile", "orch/downloads/RunShellScript.json").Return(content, nil)
+	fileMock.On("MakeDirs", filepath.Join("orch", "downloads")).Return(nil)
+	fileMock.On("WriteFile", filepath.Join("orch", "downloads", "RunShellScript.json"), content).Return(nil)
+	fileMock.On("ReadFile", filepath.Join("orch", "downloads", "RunShellScript.json")).Return(content, nil)
 	execMock.On("ParseDocument", contextMock, []byte(content), conf.OrchestrationDirectory, conf.OutputS3BucketName, conf.OutputS3KeyPrefix, conf.MessageId, conf.PluginID, conf.DefaultWorkingDirectory, parameters).Return(plugins, nil)
 	execMock.On("ExecuteDocument", contextMock, plugins, conf.BookKeepingFileName, mock.Anything).Return(resChan, nil)
 	mockIOHandler.On("GetStatus").Return(contracts.ResultStatusSuccess)
@@ -459,7 +460,7 @@ func TestPlugin_RunDocumentFromAbsLocalPath(t *testing.T) {
 	}()
 	parameters := make(map[string]interface{})
 
-	fileMock.On("ReadFile", "/var/tmp/document/docName.json").Return(content, nil)
+	fileMock.On("ReadFile", filepath.Join(rootAbsPath, "tmp", "document", "docName.json")).Return(content, nil)
 	execMock.On("ParseDocument", contextMock, []byte(content), conf.OrchestrationDirectory, conf.OutputS3BucketName, conf.OutputS3KeyPrefix, conf.MessageId, conf.PluginID, conf.DefaultWorkingDirectory, parameters).Return(plugins, nil)
 	execMock.On("ExecuteDocument", contextMock, plugins, conf.BookKeepingFileName, mock.Anything).Return(resChan, nil)
 	mockIOHandler.On("GetStatus").Return(contracts.ResultStatusSuccess)
@@ -467,7 +468,7 @@ func TestPlugin_RunDocumentFromAbsLocalPath(t *testing.T) {
 
 	var input RunDocumentPluginInput
 	input.DocumentType = "LocalPath"
-	input.DocumentPath = "/var/tmp/document/docName.json"
+	input.DocumentPath = filepath.Join(rootAbsPath, "tmp", "document", "docName.json")
 	conf.Properties = &input
 
 	p := Plugin{
@@ -593,8 +594,8 @@ func TestDownloadDocumentFromSSM_ARNName(t *testing.T) {
 	}
 
 	ssmMock.On("GetDocument", contextMock.Log(), "arn:aws:ssm:us-east-1:1234567890:document/mySharedDocument", "10").Return(&docResponse, nil)
-	fileMock.On("MakeDirs", "orch/downloads").Return(nil)
-	fileMock.On("WriteFile", "orch/downloads/mySharedDocument.json", content).Return(nil)
+	fileMock.On("MakeDirs", filepath.Join("orch", "downloads")).Return(nil)
+	fileMock.On("WriteFile", filepath.Join("orch", "downloads", "mySharedDocument.json"), content).Return(nil)
 	p := Plugin{
 		context: contextMock,
 		filesys: &fileMock,
@@ -608,7 +609,7 @@ func TestDownloadDocumentFromSSM_ARNName(t *testing.T) {
 	ssmMock.AssertExpectations(t)
 	execMock.AssertExpectations(t)
 	fileMock.AssertExpectations(t)
-	assert.Equal(t, pathToFile, "orch/downloads/mySharedDocument.json")
+	assert.Equal(t, pathToFile, filepath.Join("orch", "downloads", "mySharedDocument.json"))
 
 }
 

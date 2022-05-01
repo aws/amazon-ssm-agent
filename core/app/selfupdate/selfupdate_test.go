@@ -167,7 +167,7 @@ func (suite *SelfUpdateTestSuite) TestFileName() {
 
 	fileName, err := suite.selfUpdater.getUpdaterFileName(suite.logMock, "amd64", updateconstants.CompressFormat)
 	assert.Nil(suite.T(), err)
-	assert.Equal(suite.T(), "amazon-ssm-agent-updater-linux-amd64.tar.gz", fileName)
+	assert.Equal(suite.T(), "amazon-ssm-agent-updater-linux-amd64."+updateconstants.CompressFormat, fileName)
 }
 
 func (suite *SelfUpdateTestSuite) TestLockFileBasic() {
@@ -179,6 +179,8 @@ func (suite *SelfUpdateTestSuite) TestLockFileBasic() {
 		os.RemoveAll(lockfilePath)
 	}()
 
+	suite.identityMock.On("Region").Return("us-west-2", nil)
+	suite.identityMock.On("InstanceID").Return("i-abc123", nil)
 	mockSelfUpdateObj := SelfUpdate{context: suite.contextMock}
 
 	err = mockSelfUpdateObj.updateFromS3()
@@ -186,8 +188,8 @@ func (suite *SelfUpdateTestSuite) TestLockFileBasic() {
 }
 
 func (suite *SelfUpdateTestSuite) TestLockFileWithError() {
-	suite.identityMock.On("InstanceID").Return("i-123", nil).Once()
-	suite.identityMock.On("Region").Return("us-west-2", nil).Once()
+	suite.identityMock.On("InstanceID").Return("i-123", nil).Twice()
+	suite.identityMock.On("Region").Return("us-west-2", nil).Twice()
 	workingDir, _ := os.Getwd()
 	lockfilePath := filepath.Join(workingDir, "lockDir")
 	lockFileName = filepath.Join(lockfilePath, "test.lock")
@@ -210,6 +212,8 @@ func (suite *SelfUpdateTestSuite) TestLockFileWithError() {
 	}
 	err = mockSelfUpdateObj.updateFromS3()
 	assert.Nil(suite.T(), err)
+
+	suite.identityMock.AssertExpectations(suite.T())
 }
 
 func (suite *SelfUpdateTestSuite) TestLockWithMultipleUpdates() {

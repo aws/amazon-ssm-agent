@@ -42,14 +42,14 @@ var TestCases = []TestCase{
 		Output: contracts.ResultStatusSuccessAndReboot,
 	},
 	{
-		Input:  commandStoppedPreemptivelyExitCode,
+		Input:  appconfig.CommandStoppedPreemptivelyExitCode,
 		Output: contracts.ResultStatusTimedOut,
 	},
 }
 
 // testGetStatus tests that exitCodes are mapped correctly to their respective ResultStatus
 func TestGetStatus(t *testing.T) {
-	var mockCancelFlag *task.MockCancelFlag
+	var mockCancelFlag = &task.MockCancelFlag{}
 	setCancelFlagExpectations(mockCancelFlag)
 
 	for _, testCase := range TestCases {

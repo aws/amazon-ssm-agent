@@ -80,6 +80,13 @@ func NewTracer(logger log.T) Tracer {
 	}
 }
 
+func NewTracerCustomTime(timeProvider NanoTime, logger log.T) Tracer {
+	return &TracerImpl{
+		timeProvider: timeProvider,
+		logger:       logger,
+	}
+}
+
 // BeginSection will create a new trace and registers with the tracer
 func (t *TracerImpl) BeginSection(message string) *Trace {
 	t.logger.Debugf("starting with %s", message)

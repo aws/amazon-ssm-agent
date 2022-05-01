@@ -16,7 +16,6 @@ package idempotency
 
 import (
 	"os"
-	"path"
 	"path/filepath"
 	"time"
 
@@ -59,7 +58,7 @@ func CleanupOldIdempotencyEntries(idemCtx context.T) {
 	}
 	for _, docTypeDir := range documentTypeDir {
 		olderTime := time.Now().Add(time.Duration(-persistenceTimeoutMinutes) * time.Minute)
-		tempDocTypeDir := path.Join(directoryPath, docTypeDir)
+		tempDocTypeDir := filepath.Join(directoryPath, docTypeDir)
 		commandDirs, err := getDirectoryUnsortedOlderThan(tempDocTypeDir, &olderTime)
 		if err != nil {
 			log.Warnf("encountered error %v while listing entries in %v", err, directoryPath)
@@ -88,7 +87,7 @@ func CreateIdempotencyEntry(idemCtx context.T, message *contracts.DocumentState)
 	log := context.Log()
 	directoryPath := getIdempotencyDir(context)
 	commandID, _ := messageContracts.GetCommandID(message.DocumentInformation.MessageID)
-	commandDirPath := path.Join(directoryPath, string(message.DocumentType), commandID)
+	commandDirPath := filepath.Join(directoryPath, string(message.DocumentType), commandID)
 	log.Infof("writing command in the idempotency directory for command %v", commandID)
 	if err = makeDirs(commandDirPath); err != nil {
 		log.Warnf("could not create command directory in %v for the command %v: err: %v", commandDirPath, commandID, err)
@@ -103,7 +102,7 @@ func IsDocumentAlreadyReceived(idemCtx context.T, message *contracts.DocumentSta
 	log := context.Log()
 	directoryPath := getIdempotencyDir(context)
 	commandID, _ := messageContracts.GetCommandID(message.DocumentInformation.MessageID)
-	commandDirPath := path.Join(directoryPath, string(message.DocumentType), commandID)
+	commandDirPath := filepath.Join(directoryPath, string(message.DocumentType), commandID)
 
 	if _, err := stat(commandDirPath); isNotExist(err) {
 		log.Debugf("command not found in the idempotency directory %v", commandID)
@@ -117,7 +116,7 @@ func IsDocumentAlreadyReceived(idemCtx context.T, message *contracts.DocumentSta
 func getIdempotencyDirectory(context context.T) string {
 	shortInstanceID, _ := context.Identity().ShortInstanceID()
 	context.Identity().ShortInstanceID()
-	return path.Join(appconfig.DefaultDataStorePath,
+	return filepath.Join(appconfig.DefaultDataStorePath,
 		shortInstanceID,
 		appconfig.IdempotencyDirName)
 }
