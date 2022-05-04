@@ -190,8 +190,9 @@ func TestParseAgentMessage(t *testing.T) {
 	agentJson := "{\"DataChannelId\":\"44da928d-1200-4501-a38a-f10d72e38cc4\",\"documentContent\":{\"schemaVersion\":\"1.0\"," +
 		"\"inputs\":{\"cloudWatchLogGroup\":\"\",\"s3BucketName\":\"\",\"s3KeyPrefix\":\"\"},\"description\":\"Document to hold " +
 		"regional settings for Session Manager\",\"sessionType\":\"Standard_Stream\",\"parameters\":{}," +
-		"\"properties\":{\"windows\":{\"commands\":\"date\",\"runAsElevated\":true}," +
-		"\"linux\":{\"commands\":\"ls\",\"runAsElevated\":true}, \"macos\":{\"commands\":\"ls\",\"runAsElevated\":true}}}," +
+		"\"properties\":{\"windows\":{\"commands\":\"date\",\"runAsElevated\":true, \"separateOutputStream\":true, \"stdOutSeparatorPrefix\":\"STDOUT:\\n\", \"stdErrSeparatorPrefix\":\"STDERR:\\n\"}," +
+		"\"linux\":{\"commands\":\"ls\",\"runAsElevated\":true, \"separateOutputStream\":true, \"stdOutSeparatorPrefix\":\"STDOUT:\\n\", \"stdErrSeparatorPrefix\":\"STDERR:\\n\"}," +
+		"\"macos\":{\"commands\":\"ls\",\"runAsElevated\":true, \"separateOutputStream\":true, \"stdOutSeparatorPrefix\":\"STDOUT:\\n\", \"stdErrSeparatorPrefix\":\"STDERR:\\n\"}}}," +
 		"\"sessionId\":\"44da928d-1200-4501-a38a-f10d72e38cc4\"," +
 		"\"runAsUser\":\"test-user\"," +
 		"\"DataChannelToken\":\"AAEAAdDZESkS1C2/AWLlDccG608LYJUJZJLkxcjxl0x1T70kAAAAAFrozgJYbJT2fY6yQPDqQZhygozZ83LhsoYdP7VWmuo\"}"
@@ -215,16 +216,25 @@ func TestParseAgentMessage(t *testing.T) {
 
 	shellPropsObj := ShellProperties{
 		Windows: ShellConfig{
-			Commands:      "date",
-			RunAsElevated: true,
+			Commands:              "date",
+			RunAsElevated:         true,
+			SeparateOutputStream:  true,
+			StdOutSeparatorPrefix: "STDOUT:\n",
+			StdErrSeparatorPrefix: "STDERR:\n",
 		},
 		Linux: ShellConfig{
-			Commands:      "ls",
-			RunAsElevated: true,
+			Commands:              "ls",
+			RunAsElevated:         true,
+			SeparateOutputStream:  true,
+			StdOutSeparatorPrefix: "STDOUT:\n",
+			StdErrSeparatorPrefix: "STDERR:\n",
 		},
 		MacOS: ShellConfig{
-			Commands:      "ls",
-			RunAsElevated: true,
+			Commands:              "ls",
+			RunAsElevated:         true,
+			SeparateOutputStream:  true,
+			StdOutSeparatorPrefix: "STDOUT:\n",
+			StdErrSeparatorPrefix: "STDERR:\n",
 		},
 	}
 

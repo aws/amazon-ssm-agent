@@ -64,8 +64,11 @@ type ShellProperties struct {
 }
 
 type ShellConfig struct {
-	Commands      string `json:"commands" yaml:"commands"`
-	RunAsElevated bool   `json:"runAsElevated" yaml:"runAsElevated"`
+	Commands              string      `json:"commands" yaml:"commands"`
+	RunAsElevated         bool        `json:"runAsElevated" yaml:"runAsElevated"`
+	SeparateOutputStream  interface{} `json:"separateOutputStream" yaml:"separateOutputStream"`
+	StdOutSeparatorPrefix string      `json:"stdOutSeparatorPrefix" yaml:"stdOutSeparatorPrefix"`
+	StdErrSeparatorPrefix string      `json:"stdErrSeparatorPrefix" yaml:"stdErrSeparatorPrefix"`
 }
 
 type IMessage interface {
@@ -318,6 +321,8 @@ const (
 	EncChallengeRequest  PayloadType = 8
 	EncChallengeResponse PayloadType = 9
 	Flag                 PayloadType = 10
+	StdErr               PayloadType = 11
+	ExitCode             PayloadType = 12
 )
 
 type PayloadTypeFlag uint32

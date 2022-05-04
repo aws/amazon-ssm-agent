@@ -18,16 +18,17 @@ import (
 	"fmt"
 	"math/rand"
 
-	"github.com/aws/amazon-ssm-agent/agent/log"
-
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/iohandler"
+	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
+	"github.com/aws/amazon-ssm-agent/agent/log"
 	mgsConfig "github.com/aws/amazon-ssm-agent/agent/session/config"
 	mgsContracts "github.com/aws/amazon-ssm-agent/agent/session/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/session/datachannel"
 	"github.com/aws/amazon-ssm-agent/agent/session/retry"
+	"github.com/aws/amazon-ssm-agent/agent/session/shell/constants"
 	"github.com/aws/amazon-ssm-agent/agent/task"
 )
 
@@ -85,6 +86,25 @@ func (p *SessionPlugin) Execute(
 		Properties:  p.sessionPlugin.GetPluginParameters(config.Properties),
 	}
 	if p.sessionPlugin.RequireHandshake() || encryptionEnabled {
+		if appconfig.PluginNameNonInteractiveCommands == config.PluginName {
+			var shellProps mgsContracts.ShellProperties
+			if err := jsonutil.Remarshal(config.Properties, &shellProps); err != nil {
+				errorString := fmt.Errorf("Fail to remarshal shell properties: %v", err)
+				output.MarkAsFailed(errorString)
+				log.Error(errorString)
+				return
+			}
+			separateOutPutStream, err := constants.GetSeparateOutputStream(shellProps)
+			if err != nil {
+				errorString := fmt.Errorf("Fail to get separateOutPutStream property: %v", err)
+				output.MarkAsFailed(errorString)
+				log.Error(errorString)
+				return
+			}
+			log.Debugf("Shell properties: %v, %b", shellProps, separateOutPutStream)
+
+			dataChannel.SetSeparateOutputPayload(separateOutPutStream)
+		}
 		if err = dataChannel.PerformHandshake(log, kmsKeyId, encryptionEnabled, sessionTypeRequest); err != nil {
 			errorString := fmt.Errorf("Encountered error while initiating handshake. %s", err)
 			output.MarkAsFailed(errorString)

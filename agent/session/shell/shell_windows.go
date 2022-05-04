@@ -173,21 +173,36 @@ func (p *ShellPlugin) startExecCmd(finalCmd string, log log.T, config agentContr
 		cmd = exec.Command(commands[0])
 	}
 
-	outputPath := filepath.Join(config.OrchestrationDirectory, mgsConfig.ExecOutputFileName)
-	outputWriter, err := os.OpenFile(outputPath, appconfig.FileFlagsCreateOrAppendReadWrite, appconfig.ReadWriteAccess)
-	if err != nil {
-		return fmt.Errorf("Failed to open file for writing command output. error: %s\n", err)
+	if p.separateOutput {
+		stdoutPipe, err := cmd.StdoutPipe()
+		if err != nil {
+			return fmt.Errorf("Failed to create command output pipe, error: %s\n", err)
+		}
+		errorPipe, err := cmd.StderrPipe()
+		if err != nil {
+			return fmt.Errorf("Failed to create command err pipe, error: %s\n", err)
+		}
+		p.stdin = nil
+		p.stdout = nil
+		p.stderrPipe = errorPipe
+		p.stdoutPipe = stdoutPipe
+	} else {
+		outputPath := filepath.Join(config.OrchestrationDirectory, mgsConfig.ExecOutputFileName)
+		outputWriter, err := os.OpenFile(outputPath, appconfig.FileFlagsCreateOrAppendReadWrite, appconfig.ReadWriteAccess)
+		if err != nil {
+			return fmt.Errorf("Failed to open file for writing command output. error: %s\n", err)
+		}
+		outputReader, err := os.Open(outputPath)
+		if err != nil {
+			return fmt.Errorf("Failed to read command output from file %s. error: %s\n", outputPath, err)
+		}
+		cmd.Stdout = outputWriter
+		cmd.Stderr = outputWriter
+		p.stdin = nil
+		p.stdout = outputReader
 	}
-	outputReader, err := os.Open(outputPath)
-	if err != nil {
-		return fmt.Errorf("Failed to read command output from file %s. error: %s\n", outputPath, err)
-	}
-	cmd.Stdout = outputWriter
-	cmd.Stderr = outputWriter
-	cmd.SysProcAttr = &syscall.SysProcAttr{Token: token}
 	p.runAsUser = appconfig.DefaultRunAsUserName
-	p.stdin = nil
-	p.stdout = outputReader
+	cmd.SysProcAttr = &syscall.SysProcAttr{Token: token}
 	p.execCmd = execcmd.NewExecCmd(cmd)
 	return nil
 }

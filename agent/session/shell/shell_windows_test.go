@@ -22,99 +22,17 @@ import (
 	"errors"
 	"io/ioutil"
 	"os"
-	"testing"
 	"time"
 
-	cloudwatchlogspublisher_mock "github.com/aws/amazon-ssm-agent/agent/agentlogstocloudwatch/cloudwatchlogspublisher/mock"
-	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
-	iohandlermocks "github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/iohandler/mock"
 	"github.com/aws/amazon-ssm-agent/agent/log"
-	"github.com/aws/amazon-ssm-agent/agent/s3util"
 	mgsConfig "github.com/aws/amazon-ssm-agent/agent/session/config"
 	mgsContracts "github.com/aws/amazon-ssm-agent/agent/session/contracts"
-	dataChannelMock "github.com/aws/amazon-ssm-agent/agent/session/datachannel/mocks"
-	execcmdMock "github.com/aws/amazon-ssm-agent/agent/session/shell/execcmd/mocks"
 	"github.com/aws/amazon-ssm-agent/agent/task"
-	"github.com/aws/aws-sdk-go/service/cloudwatchlogs"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
-	"github.com/stretchr/testify/suite"
 	"github.com/twinj/uuid"
 )
-
-var (
-	payload            = []byte("testPayload")
-	messageId          = "dd01e56b-ff48-483e-a508-b5f073f31b16"
-	schemaVersion      = uint32(1)
-	createdDate        = uint64(1503434274948)
-	mockLog            = log.NewMockLog()
-	sessionId          = "sessionId"
-	sessionOwner       = "sessionOwner"
-	testCwLogGroupName = "testCW"
-	testCwlLogGroup    = cloudwatchlogs.LogGroup{
-		LogGroupName: &testCwLogGroupName,
-	}
-)
-
-type ShellTestSuite struct {
-	suite.Suite
-	mockContext     *context.Mock
-	mockLog         log.T
-	mockCancelFlag  *task.MockCancelFlag
-	mockDataChannel *dataChannelMock.IDataChannel
-	mockIohandler   *iohandlermocks.MockIOHandler
-	mockCWL         *cloudwatchlogspublisher_mock.CloudWatchLogsServiceMock
-	mockS3          *s3util.MockS3Uploader
-	stdin           *os.File
-	stdout          *os.File
-	mockCmd         *execcmdMock.IExecCmd
-	plugin          *ShellPlugin
-}
-
-func (suite *ShellTestSuite) SetupTest() {
-	mockContext := context.NewMockDefault()
-	mockCancelFlag := &task.MockCancelFlag{}
-	mockDataChannel := &dataChannelMock.IDataChannel{}
-	mockCWL := new(cloudwatchlogspublisher_mock.CloudWatchLogsServiceMock)
-	mockS3 := new(s3util.MockS3Uploader)
-	mockIohandler := new(iohandlermocks.MockIOHandler)
-	mockCmd := &execcmdMock.IExecCmd{}
-
-	suite.mockContext = mockContext
-	suite.mockCancelFlag = mockCancelFlag
-	suite.mockLog = mockLog
-	suite.mockDataChannel = mockDataChannel
-	suite.mockIohandler = mockIohandler
-	suite.mockCWL = mockCWL
-	suite.mockS3 = mockS3
-	suite.mockCmd = mockCmd
-	stdout, stdin, _ := os.Pipe()
-	suite.stdin = stdin
-	suite.stdout = stdout
-	suite.plugin = &ShellPlugin{
-		stdin:       stdin,
-		stdout:      stdout,
-		dataChannel: mockDataChannel,
-		context:     mockContext,
-		logger: logger{
-			cwl:                         mockCWL,
-			s3Util:                      mockS3,
-			ptyTerminated:               make(chan bool),
-			cloudWatchStreamingFinished: make(chan bool),
-		},
-	}
-}
-
-func (suite *ShellTestSuite) TearDownTest() {
-	suite.stdin.Close()
-	suite.stdout.Close()
-}
-
-//Execute the test suite
-func TestShellTestSuite(t *testing.T) {
-	suite.Run(t, new(ShellTestSuite))
-}
 
 // Testing Execute
 func (suite *ShellTestSuite) TestExecuteWhenCancelFlagIsShutDown() {
@@ -460,7 +378,7 @@ func (suite *ShellTestSuite) TestProcessStdoutData() {
 	defer file.Close()
 
 	suite.mockDataChannel.On("SendStreamDataMessage", suite.mockLog, mgsContracts.Output, []byte("Ȁ is a utf8 character.")).Return(nil)
-	outputBuf, err := suite.plugin.processStdoutData(suite.mockLog, stdoutBytes, len(stdoutBytes), unprocessedBuf, file)
+	outputBuf, err := suite.plugin.processStdoutData(suite.mockLog, stdoutBytes, len(stdoutBytes), unprocessedBuf, file, mgsContracts.Output)
 
 	suite.mockDataChannel.AssertExpectations(suite.T())
 	assert.Equal(suite.T(), []byte("\xc9"), outputBuf.Bytes())
