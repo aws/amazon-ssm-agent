@@ -181,8 +181,11 @@ func (p *MuxPortSession) initialize() (err error) {
 		}
 		log.Debugf("Accepted a connection %s\n", conn.LocalAddr())
 
+		config := smux.DefaultConfig()
+		// Disable smux KeepAlive or else it breaks Session Manager idle timeout.
+		config.KeepAliveDisabled = true
 		var session *smux.Session
-		if session, err = smux.Server(conn, nil); err != nil {
+		if session, err = smux.Server(conn, config); err != nil {
 			log.Errorf("Unable to setup smux server: %v", err)
 			return err
 		}

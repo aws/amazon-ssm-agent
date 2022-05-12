@@ -104,7 +104,9 @@ func (suite *MuxPortTestSuite) TestWritePumpFailsToRead() {
 	suite.mockDataChannel.On("IsActive").Return(true)
 
 	out, in := net.Pipe()
-	session, _ := smux.Server(in, nil)
+	config := smux.DefaultConfig()
+	config.KeepAliveDisabled = true
+	session, _ := smux.Server(in, config)
 	defer session.Close()
 	defer in.Close()
 	out.Close()
@@ -120,7 +122,9 @@ func (suite *MuxPortTestSuite) TestWritePumpWhenDatachannelIsNotActive() {
 	suite.mockDataChannel.On("IsActive").Return(false)
 
 	out, in := net.Pipe()
-	session, _ := smux.Server(in, nil)
+	config := smux.DefaultConfig()
+	config.KeepAliveDisabled = true
+	session, _ := smux.Server(in, config)
 	defer session.Close()
 	defer out.Close()
 
@@ -147,7 +151,9 @@ func (suite *MuxPortTestSuite) TestWritePump() {
 	suite.mockDataChannel.On("SendStreamDataMessage", suite.mockContext.Log(), mgsContracts.Output, payload).Return(nil)
 
 	out, in := net.Pipe()
-	session, _ := smux.Server(in, nil)
+	config := smux.DefaultConfig()
+	config.KeepAliveDisabled = true
+	session, _ := smux.Server(in, config)
 	defer session.Close()
 	defer out.Close()
 
