@@ -1,5 +1,11 @@
 Latest
 ===============
+- Add created date to AgentJobAck message
+- Disable smux keep alive to use idle session timeout feature
+- Fix unit-tests running on windows
+
+3.1.1374.0
+===============
 - Added timeout for s3 HEAD requests
 - Added vpc address deny to port forwarding
 - Fixed for reboot scenario in configure package plugin
