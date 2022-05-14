@@ -20,6 +20,7 @@ import (
 	"fmt"
 	"path"
 	"path/filepath"
+	"regexp"
 	"strconv"
 	"strings"
 	"time"
@@ -169,9 +170,20 @@ func generateCloudWatchConfigFromPayload(context context.T, parsedMessage messag
 	if parsedMessage.CloudWatchLogGroupName != "" {
 		cloudWatchConfig.LogGroupName = parsedMessage.CloudWatchLogGroupName
 	} else {
-		cloudWatchConfig.LogGroupName = fmt.Sprintf("%s%s", CloudWatchLogGroupNamePrefix, parsedMessage.DocumentName)
+		logGroupName := fmt.Sprintf("%s%s", CloudWatchLogGroupNamePrefix, parsedMessage.DocumentName)
+		cloudWatchConfig.LogGroupName = cleanupLogGroupName(logGroupName)
 	}
 	return cloudWatchConfig, nil
+}
+
+func cleanupLogGroupName(logGroupName string) string {
+	// log group pattern referred from below URL
+	// https://docs.aws.amazon.com/AmazonCloudWatchLogs/latest/APIReference/API_CreateLogGroup.html
+	if reg, err := regexp.Compile(`[^a-zA-Z0-9_\-/\.#]`); reg != nil && err == nil {
+		// replace invalid chars with dot(.)
+		return reg.ReplaceAllString(logGroupName, ".")
+	}
+	return logGroupName
 }
 
 // ParseSendCommandMessage parses send command message
