@@ -46,6 +46,9 @@ const PlatformRedhat = "redhat"
 // PlatformRockyLinux uses ohai identifier for rocky linux platform
 const PlatformRockyLinux = "rocky"
 
+// PlatformAlmaLinux uses Ohai identifier for almalinux platform
+const PlatformAlmaLinux = "almalinux"
+
 // PlatformOracleLinux uses Ohai identifier for oracle linux platform
 const PlatformOracleLinux = "oracle"
 

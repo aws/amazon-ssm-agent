@@ -127,7 +127,7 @@ func getPlatformDetails(log log.T) (name string, version string, err error) {
 
 	} else if fileutil.Exists(systemReleaseFile) {
 		// We want to fall back to legacy behaviour in case some older versions of
-		// linux distributions do not have the or-release file
+		// linux distributions do not have the os-release file
 		log.Debugf(fetchingDetailsMessage, systemReleaseFile)
 
 		contents, err = fileutil.ReadAllText(systemReleaseFile)
@@ -174,6 +174,12 @@ func getPlatformDetails(log log.T) (name string, version string, err error) {
 				version = strings.TrimSpace(data[1])
 			}
 		} else if strings.Contains(contents, "Rocky") {
+			data := strings.Split(contents, "release")
+			name = strings.TrimSpace(data[0])
+			if len(data) >= 2 {
+				version = strings.TrimSpace(data[1])
+			}
+		} else if strings.Contains(contents, "AlmaLinux") {
 			data := strings.Split(contents, "release")
 			name = strings.TrimSpace(data[0])
 			if len(data) >= 2 {
