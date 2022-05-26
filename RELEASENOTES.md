@@ -1,5 +1,9 @@
 Latest
 ===============
+- Fix port session premature close when local server is not connected before timeout
+
+3.1.1446.0
+===============
 - Add created date to AgentJobAck message
 - Disable smux keep alive to use idle session timeout feature
 - Fix unit-tests running on windows
