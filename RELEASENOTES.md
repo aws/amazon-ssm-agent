@@ -1,5 +1,12 @@
 Latest
 ===============
+- Collect kernel version in InstanceDetailedInformation
+- Support separate output stream for non-interactive session
+- Cleanup default log group name for runcommands
+- Updated rpm spec file to include build id
+
+3.1.1476.0
+===============
 - Fix port session premature close when local server is not connected before timeout
 
 3.1.1446.0
