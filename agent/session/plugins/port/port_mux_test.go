@@ -49,8 +49,9 @@ func (suite *MuxPortTestSuite) SetupTest() {
 	suite.mockDataChannel = &dataChannelMock.IDataChannel{}
 
 	suite.session = &MuxPortSession{
-		context:   suite.mockContext,
-		cancelled: make(chan struct{})}
+		context:       suite.mockContext,
+		clientVersion: muxKeepAliveDisabledAfterThisClientVersion,
+		cancelled:     make(chan struct{})}
 }
 
 // Test HandleStreamMessage
@@ -104,7 +105,8 @@ func (suite *MuxPortTestSuite) TestWritePumpFailsToRead() {
 	suite.mockDataChannel.On("IsActive").Return(true)
 
 	out, in := net.Pipe()
-	session, _ := smux.Server(in, nil)
+	smuxConfig := smux.DefaultConfig()
+	session, _ := smux.Server(in, smuxConfig)
 	defer session.Close()
 	defer in.Close()
 	out.Close()
@@ -120,7 +122,8 @@ func (suite *MuxPortTestSuite) TestWritePumpWhenDatachannelIsNotActive() {
 	suite.mockDataChannel.On("IsActive").Return(false)
 
 	out, in := net.Pipe()
-	session, _ := smux.Server(in, nil)
+	smuxConfig := smux.DefaultConfig()
+	session, _ := smux.Server(in, smuxConfig)
 	defer session.Close()
 	defer out.Close()
 
@@ -147,7 +150,34 @@ func (suite *MuxPortTestSuite) TestWritePump() {
 	suite.mockDataChannel.On("SendStreamDataMessage", suite.mockContext.Log(), mgsContracts.Output, payload).Return(nil)
 
 	out, in := net.Pipe()
-	session, _ := smux.Server(in, nil)
+	smuxConfig := smux.DefaultConfig()
+	session, _ := smux.Server(in, smuxConfig)
+	defer session.Close()
+	defer out.Close()
+
+	go func() {
+		in.Write(payload)
+		in.Close()
+	}()
+
+	suite.session.mgsConn = &MgsConn{nil, out}
+	suite.session.muxServer = &MuxServer{in, session}
+	suite.session.WritePump(suite.mockDataChannel)
+
+	// Assert if SendStreamDataMessage function was called with same data from stdout
+	suite.mockDataChannel.AssertExpectations(suite.T())
+}
+
+func (suite *MuxPortTestSuite) TestWritePumpWithSmuxKeepDisabledOnClientSide() {
+	suite.mockDataChannel.On("IsActive").Return(true)
+	suite.mockDataChannel.On("SendStreamDataMessage", suite.mockContext.Log(), mgsContracts.Output, payload).Return(nil)
+
+	suite.session.clientVersion = "1.2.332.0"
+
+	out, in := net.Pipe()
+	smuxConfig := smux.DefaultConfig()
+	smuxConfig.KeepAliveDisabled = true
+	session, _ := smux.Server(in, smuxConfig)
 	defer session.Close()
 	defer out.Close()
 

@@ -39,6 +39,7 @@ import (
 )
 
 const muxSupportedClientVersion = "1.1.70"
+const muxKeepAliveDisabledAfterThisClientVersion = "1.2.331.0"
 
 // PortParameters contains inputs required to execute port plugin.
 type PortParameters struct {
@@ -89,7 +90,7 @@ var GetSession = func(context context.T, portParameters PortParameters, cancelle
 	if portParameters.Type == mgsConfig.LocalPortForwarding &&
 		versionutil.Compare(clientVersion, muxSupportedClientVersion, true) >= 0 {
 
-		if session, err = NewMuxPortSession(context, cancelled, destinationAddress, sessionId); err == nil {
+		if session, err = NewMuxPortSession(context, clientVersion, cancelled, destinationAddress, sessionId); err == nil {
 			return session, nil
 		}
 	} else {
