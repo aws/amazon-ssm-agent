@@ -30,7 +30,7 @@ import (
 	"github.com/cihub/seelog"
 )
 
-var LogMutex = new(sync.Mutex)
+var LogMutex = new(sync.RWMutex)
 
 // cli parameters
 var artifactsDir string

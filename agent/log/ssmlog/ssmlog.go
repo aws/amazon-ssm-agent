@@ -28,7 +28,7 @@ var loadedLogger *log.T
 var lock sync.RWMutex
 
 // pkgMutex is the lock used to serialize calls to the logger.
-var pkgMutex = new(sync.Mutex)
+var pkgMutex = new(sync.RWMutex)
 
 // loggerInstance is the delegate logger in the wrapper
 var loggerInstance = &log.DelegateLogger{}

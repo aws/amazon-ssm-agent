@@ -28,7 +28,7 @@ const (
 )
 
 var loadedLogger T
-var PkgMutex = new(sync.Mutex)
+var PkgMutex = new(sync.RWMutex)
 
 func DefaultLogger() T {
 	if loadedLogger == nil {

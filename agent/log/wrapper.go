@@ -25,7 +25,7 @@ type DelegateLogger struct {
 // Wrapper is a logger that can modify the format of a log message before delegating to another logger.
 type Wrapper struct {
 	Format      FormatFilter
-	M           *sync.Mutex
+	M           *sync.RWMutex
 	Delegate    *DelegateLogger
 	EventLogger *EventLog
 }
@@ -60,8 +60,8 @@ func (w *Wrapper) WriteEvent(eventType string, agentVersion string, event string
 // and writes to log with level = Trace.
 func (w *Wrapper) Tracef(format string, params ...interface{}) {
 	format, params = w.Format.Filterf(format, params...)
-	w.M.Lock()
-	defer w.M.Unlock()
+	w.M.RLock()
+	defer w.M.RUnlock()
 	w.Delegate.BaseLoggerInstance.Tracef(format, params...)
 }
 
@@ -70,8 +70,8 @@ func (w *Wrapper) Tracef(format string, params ...interface{}) {
 func (w *Wrapper) Debugf(format string, params ...interface{}) {
 	format, params = w.Format.Filterf(format, params...)
 
-	w.M.Lock()
-	defer w.M.Unlock()
+	w.M.RLock()
+	defer w.M.RUnlock()
 	w.Delegate.BaseLoggerInstance.Debugf(format, params...)
 }
 
@@ -80,8 +80,8 @@ func (w *Wrapper) Debugf(format string, params ...interface{}) {
 func (w *Wrapper) Infof(format string, params ...interface{}) {
 	format, params = w.Format.Filterf(format, params...)
 
-	w.M.Lock()
-	defer w.M.Unlock()
+	w.M.RLock()
+	defer w.M.RUnlock()
 	w.Delegate.BaseLoggerInstance.Infof(format, params...)
 }
 
@@ -90,8 +90,8 @@ func (w *Wrapper) Infof(format string, params ...interface{}) {
 func (w *Wrapper) Warnf(format string, params ...interface{}) error {
 	format, params = w.Format.Filterf(format, params...)
 
-	w.M.Lock()
-	defer w.M.Unlock()
+	w.M.RLock()
+	defer w.M.RUnlock()
 	return w.Delegate.BaseLoggerInstance.Warnf(format, params...)
 }
 
@@ -100,8 +100,8 @@ func (w *Wrapper) Warnf(format string, params ...interface{}) error {
 func (w *Wrapper) Errorf(format string, params ...interface{}) error {
 	format, params = w.Format.Filterf(format, params...)
 
-	w.M.Lock()
-	defer w.M.Unlock()
+	w.M.RLock()
+	defer w.M.RUnlock()
 	return w.Delegate.BaseLoggerInstance.Errorf(format, params...)
 }
 
@@ -110,8 +110,8 @@ func (w *Wrapper) Errorf(format string, params ...interface{}) error {
 func (w *Wrapper) Criticalf(format string, params ...interface{}) error {
 	format, params = w.Format.Filterf(format, params...)
 
-	w.M.Lock()
-	defer w.M.Unlock()
+	w.M.RLock()
+	defer w.M.RUnlock()
 	return w.Delegate.BaseLoggerInstance.Criticalf(format, params...)
 }
 
@@ -119,8 +119,8 @@ func (w *Wrapper) Criticalf(format string, params ...interface{}) error {
 // and writes to log with level = Trace
 func (w *Wrapper) Trace(v ...interface{}) {
 	v = w.Format.Filter(v...)
-	w.M.Lock()
-	defer w.M.Unlock()
+	w.M.RLock()
+	defer w.M.RUnlock()
 	w.Delegate.BaseLoggerInstance.Trace(v...)
 }
 
@@ -129,8 +129,8 @@ func (w *Wrapper) Trace(v ...interface{}) {
 func (w *Wrapper) Debug(v ...interface{}) {
 	v = w.Format.Filter(v...)
 
-	w.M.Lock()
-	defer w.M.Unlock()
+	w.M.RLock()
+	defer w.M.RUnlock()
 	w.Delegate.BaseLoggerInstance.Debug(v...)
 }
 
@@ -139,8 +139,8 @@ func (w *Wrapper) Debug(v ...interface{}) {
 func (w *Wrapper) Info(v ...interface{}) {
 	v = w.Format.Filter(v...)
 
-	w.M.Lock()
-	defer w.M.Unlock()
+	w.M.RLock()
+	defer w.M.RUnlock()
 	w.Delegate.BaseLoggerInstance.Info(v...)
 }
 
@@ -149,8 +149,8 @@ func (w *Wrapper) Info(v ...interface{}) {
 func (w *Wrapper) Warn(v ...interface{}) error {
 	v = w.Format.Filter(v...)
 
-	w.M.Lock()
-	defer w.M.Unlock()
+	w.M.RLock()
+	defer w.M.RUnlock()
 	return w.Delegate.BaseLoggerInstance.Warn(v...)
 }
 
@@ -159,8 +159,8 @@ func (w *Wrapper) Warn(v ...interface{}) error {
 func (w *Wrapper) Error(v ...interface{}) error {
 	v = w.Format.Filter(v...)
 
-	w.M.Lock()
-	defer w.M.Unlock()
+	w.M.RLock()
+	defer w.M.RUnlock()
 	return w.Delegate.BaseLoggerInstance.Error(v...)
 }
 
@@ -169,8 +169,8 @@ func (w *Wrapper) Error(v ...interface{}) error {
 func (w *Wrapper) Critical(v ...interface{}) error {
 	v = w.Format.Filter(v...)
 
-	w.M.Lock()
-	defer w.M.Unlock()
+	w.M.RLock()
+	defer w.M.RUnlock()
 	return w.Delegate.BaseLoggerInstance.Critical(v...)
 }
 
