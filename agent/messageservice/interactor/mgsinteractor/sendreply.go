@@ -236,6 +236,8 @@ func (mgs *MGSInteractor) processReply(result *agentReplyLocalContract) {
 externalLoop:
 	// currently, continuous retry is applicable only for agent_complete messages
 	for retryNo := 0; retryNo < totalNoOfRetries; retryNo++ {
+		// increment retries count
+		docResult.IncrementRetries()
 		err := mgs.sendReplyToMGS(docResult)
 		persist := AgentResultLocalStoreData{
 			AgentResult: docResult.GetResult(),
@@ -250,8 +252,6 @@ externalLoop:
 		if err != nil {
 			log.Errorf("error while sending reply %v to MGS - %v ", agentMessageUUID, err)
 		}
-		// increment retries count
-		docResult.IncrementRetries()
 		select {
 		case <-time.After(time.Duration(docResult.GetBackOffSecond()) * time.Second):
 			if docResult.ShouldPersistData() && ((retryNo + 1) == totalNoOfRetries) {

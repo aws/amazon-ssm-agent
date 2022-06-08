@@ -188,7 +188,7 @@ func (suite *SendReplyTestSuite) TestProcessReply_checkForWarningErrors_SkipRetr
 	mgsInteractor.processReply(reply)
 	time.Sleep(100 * time.Millisecond)
 	assert.False(suite.T(), ackChanPresent)
-	replyTypeMock.AssertNumberOfCalls(suite.T(), "IncrementRetries", 0)
+	replyTypeMock.AssertNumberOfCalls(suite.T(), "IncrementRetries", 1)
 }
 
 func (suite *SendReplyTestSuite) getReplyWithRetry(ackByte []byte, uuidVal uuid.UUID) (*replytypesmock.IReplyType, *agentReplyLocalContract) {
