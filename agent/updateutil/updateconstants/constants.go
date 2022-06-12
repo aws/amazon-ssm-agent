@@ -151,12 +151,16 @@ const (
 type UpdateScriptExitCode int
 
 const (
-	// exit code represents exit code when there is no service manager
+	// ExitCodeUnsupportedPlatform represents exit code when there is no service manager
 	// TODO: Move error to a update precondition
 	ExitCodeUnsupportedPlatform UpdateScriptExitCode = 124
 
-	// exit code represents exit code from agent update install script
+	// ExitCodeUpdateUsingPkgMgr represents exit code from agent update install script
 	ExitCodeUpdateUsingPkgMgr UpdateScriptExitCode = 125
+
+	// ExitCodeUpdateFailedDueToSnapd represents exit code from agent update install script
+	// due to snapd child process validation bug
+	ExitCodeUpdateFailedDueToSnapd UpdateScriptExitCode = 126
 )
 
 // SUb status values
@@ -253,6 +257,9 @@ const (
 	// ErrorUnsupportedServiceManager represents unsupported service manager
 	ErrorUnsupportedServiceManager ErrorCode = "ErrorUnsupportedServiceManager"
 
+	// ErrorInstallFailureDueToSnapd represents snapd child process bug failure
+	ErrorInstallFailureDueToSnapd ErrorCode = "ErrorInstallFailedDueToSnapd"
+
 	// ErrorInstallFailed represents Install failed
 	ErrorInstallFailed ErrorCode = "ErrorInstallFailed"
 
@@ -302,6 +309,7 @@ var NonAlarmingErrors = map[ErrorCode]struct{}{
 	ErrorAttemptToDowngrade:        {},
 	ErrorFailedPrecondition:        {},
 	ErrorFailedLinksCheck:          {},
+	ErrorInstallFailureDueToSnapd:  {},
 }
 
 type SelfUpdateState string

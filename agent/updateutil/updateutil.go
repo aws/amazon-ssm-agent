@@ -47,6 +47,7 @@ import (
 type T interface {
 	CreateUpdateDownloadFolder() (folder string, err error)
 	ExeCommand(log log.T, cmd string, workingDir string, updaterRoot string, stdOut string, stdErr string, isAsync bool) (pid int, exitCode updateconstants.UpdateScriptExitCode, err error)
+	ExecCommandWithOutput(log log.T, cmd string, workingDir string, updaterRoot string, stdOut string, stdErr string) (pId int, updExitCode updateconstants.UpdateScriptExitCode, stdoutBytes *bytes.Buffer, errorBytes *bytes.Buffer, cmdErr error)
 	IsServiceRunning(log log.T, i updateinfo.T) (result bool, err error)
 	IsWorkerRunning(log log.T) (result bool, err error)
 	WaitForServiceToStart(log log.T, i updateinfo.T, targetVersion string) (result bool, err error)
@@ -69,7 +70,7 @@ var execCommand = exec.Command
 var cmdStart = (*exec.Cmd).Start
 var cmdOutput = (*exec.Cmd).Output
 
-// CreateInstanceContext create instance related information such as region, platform and arch
+// CreateInstanceInfo create instance related information such as region, platform and arch
 func (util *Utility) CreateInstanceInfo(log log.T) (context updateinfo.T, err error) {
 	return nil, nil
 }
@@ -82,6 +83,72 @@ func (util *Utility) CreateUpdateDownloadFolder() (folder string, err error) {
 	}
 
 	return root, nil
+}
+
+// ExecCommandWithOutput executes shell command and returns output and error of command execution
+func (util *Utility) ExecCommandWithOutput(
+	log log.T,
+	cmd string,
+	workingDir string,
+	outputRoot string,
+	stdOut string,
+	stdErr string) (pId int, updExitCode updateconstants.UpdateScriptExitCode, stdoutBytes *bytes.Buffer, errorBytes *bytes.Buffer, cmdErr error) {
+
+	parts := strings.Fields(cmd)
+	pid := -1
+	var updateExitCode updateconstants.UpdateScriptExitCode = -1
+	tempCmd := setPlatformSpecificCommand(parts)
+	command := execCommand(tempCmd[0], tempCmd[1:]...)
+	command.Dir = workingDir
+	stdoutWriter, stderrWriter, err := setExeOutErr(outputRoot, stdOut, stdErr)
+	if err != nil {
+		return pid, updateExitCode, nil, nil, err
+	}
+	defer stdoutWriter.Close()
+	defer stderrWriter.Close()
+	var errBytes, stdOutBytes bytes.Buffer
+	command.Stdout = &stdOutBytes
+	command.Stderr = &errBytes
+
+	err = cmdStart(command)
+	if err != nil {
+		return pid, updateExitCode, &stdOutBytes, &errBytes, err
+	}
+
+	pid = GetCommandPid(command)
+
+	var timeout = updateconstants.DefaultUpdateExecutionTimeoutInSeconds
+	if util.CustomUpdateExecutionTimeoutInSeconds != 0 {
+		timeout = util.CustomUpdateExecutionTimeoutInSeconds
+	}
+	timer := time.NewTimer(time.Duration(timeout) * time.Second)
+	go killProcessOnTimeout(log, command, timer)
+	err = command.Wait()
+	if errBytes.Len() != 0 {
+		stderrWriter.Write(errBytes.Bytes())
+	}
+	if stdOutBytes.Len() != 0 {
+		stdoutWriter.Write(stdOutBytes.Bytes())
+	}
+	timedOut := !timer.Stop()
+	if err != nil {
+		log.Debugf("command returned error %v", err)
+		if exitErr, ok := err.(*exec.ExitError); ok {
+			// The program has exited with an exit code != 0
+			if status, ok := exitErr.Sys().(syscall.WaitStatus); ok {
+				exitCode := status.ExitStatus()
+				if exitCode == -1 && timedOut {
+					// set appropriate exit code based on cancel or timeout
+					exitCode = appconfig.CommandStoppedPreemptivelyExitCode
+					log.Infof("The execution of command was timedout.")
+				}
+				updateExitCode = updateconstants.UpdateScriptExitCode(exitCode)
+				err = fmt.Errorf("The execution of command returned Exit Status: %d \n %v", exitCode, err.Error())
+			}
+		}
+		return pid, updateExitCode, &stdOutBytes, &errBytes, err
+	}
+	return pid, updateExitCode, &stdOutBytes, nil, nil
 }
 
 // ExeCommand executes shell command

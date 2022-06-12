@@ -471,7 +471,9 @@ func proceedUpdate(mgr *updateManager, log log.T, updateDetail *UpdateDetail) (e
 		if exitCode == updateconstants.ExitCodeUnsupportedPlatform {
 			return mgr.failed(updateDetail, log, updateconstants.ErrorUnsupportedServiceManager, message, true)
 		}
-
+		if exitCode == updateconstants.ExitCodeUpdateFailedDueToSnapd {
+			return mgr.failed(updateDetail, log, updateconstants.ErrorInstallFailureDueToSnapd, message, true)
+		}
 		updateDetail.AppendInfo(
 			log,
 			"Initiating rollback %v to %v",
@@ -650,14 +652,32 @@ func installAgent(mgr *updateManager, log log.T, version string, updateDetail *U
 		installRetryCount = 4 // this value is taken because previous updater version had total 4 retries (2 target install + 2 rollback install)
 	}
 	for retryCounter := 1; retryCounter <= installRetryCount; retryCounter++ {
-		_, exitCode, err = mgr.util.ExeCommand(
-			log,
-			installerPath,
-			workDir,
-			updateDetail.UpdateRoot,
-			updateDetail.StdoutFileName,
-			updateDetail.StderrFileName,
-			false)
+		if retryCounter == installRetryCount && strings.Contains(mgr.Info.GetInstallScriptName(), "snap") {
+			log.Info("execute command and fetch error output for agent install using snap")
+			var errBytes *bytes.Buffer
+			_, exitCode, _, errBytes, err = mgr.util.ExecCommandWithOutput(
+				log,
+				installerPath,
+				workDir,
+				updateDetail.UpdateRoot,
+				updateDetail.StdoutFileName,
+				updateDetail.StderrFileName)
+			if err != nil && errBytes != nil && errBytes.Len() != 0 {
+				if strings.Contains(errBytes.String(), "snap \"amazon-ssm-agent\" has running apps") {
+					log.Errorf("command failure for agent installed using snap: %v", err)
+					return updateconstants.ExitCodeUpdateFailedDueToSnapd, err
+				}
+			}
+		} else {
+			_, exitCode, err = mgr.util.ExeCommand(
+				log,
+				installerPath,
+				workDir,
+				updateDetail.UpdateRoot,
+				updateDetail.StdoutFileName,
+				updateDetail.StderrFileName,
+				false)
+		}
 		if err == nil {
 			break
 		}

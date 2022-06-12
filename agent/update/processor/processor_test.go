@@ -20,6 +20,7 @@
 package processor
 
 import (
+	"bytes"
 	"fmt"
 	"path/filepath"
 	"strings"
@@ -1586,6 +1587,52 @@ func TestInstallAgent(t *testing.T) {
 	assert.Equal(t, 0, int(exitCode))
 }
 
+func TestInstallAgentUsingSnap_Success(t *testing.T) {
+	// setup
+	control := &stubControl{failExeCommand: false}
+	updater := createUpdaterWithStubsForSnap(control)
+	updateDetail := createUpdateDetail(Initialized)
+
+	// action
+	exitCode, err := installAgent(updater.mgr, logger, updateDetail.TargetVersion, updateDetail)
+
+	// assert
+	assert.NoError(t, err)
+	assert.Equal(t, 0, int(exitCode))
+}
+
+func TestInstallAgentUsingSnap_Failed(t *testing.T) {
+	// setup
+	control := &stubControl{failExeCommand: true}
+	updater := createUpdaterWithStubsForSnap(control)
+	updateDetail := createUpdateDetail(Initialized)
+
+	// action
+	exitCode, err := installAgent(updater.mgr, logger, updateDetail.TargetVersion, updateDetail)
+
+	// assert
+	assert.Contains(t, "test", err.Error())
+	assert.Equal(t, 126, int(exitCode))
+}
+
+func createUpdaterWithStubsForSnap(control *stubControl) *Updater {
+	context := context.NewMockDefault()
+	info := &updateinfomocks.T{}
+	info.On("GetPlatform").Return(updateconstants.PlatformUbuntu)
+	info.On("GetUninstallScriptName").Return("snap_" + updateconstants.UninstallScript)
+	info.On("GetInstallScriptName").Return("snap_" + updateconstants.InstallScript)
+
+	updater := NewUpdater(context, info)
+	updater.mgr.svc = &serviceStub{}
+	util := &utilityStub{controller: control}
+	util.Context = context
+	updater.mgr.util = util
+	updater.mgr.ctxMgr = &contextMgrStub{}
+	updater.mgr.Context = context
+
+	return updater
+}
+
 func TestInstallAgentFailExeCommand(t *testing.T) {
 	// setup
 	control := &stubControl{failExeCommand: true}
@@ -1598,6 +1645,41 @@ func TestInstallAgentFailExeCommand(t *testing.T) {
 	// assert
 	assert.Error(t, err)
 	assert.Equal(t, 0, int(exitCode))
+}
+
+func TestProceedUpdate_SnapdIssue_RollbackInstall(t *testing.T) {
+	// setup
+	control := &stubControl{serviceIsRunning: false}
+	updater := createUpdaterStubs(control)
+	updateDetail := createUpdateDetail(Rollback)
+	snapdIssue := "child process still running"
+
+	isVerifyCalled, isInstallCalled, isUninstallCalled := false, false, false
+
+	// stub install for updater
+	updater.mgr.install = func(mgr *updateManager, log log.T, version string, updateDetail *UpdateDetail) (exitCode updateconstants.UpdateScriptExitCode, err error) {
+		isInstallCalled = true
+		return updateconstants.ExitCodeUpdateFailedDueToSnapd, fmt.Errorf(snapdIssue)
+	}
+	updater.mgr.uninstall = func(mgr *updateManager, log log.T, version string, updateDetail *UpdateDetail) (exitCode updateconstants.UpdateScriptExitCode, err error) {
+		isUninstallCalled = true
+		return exitCode, nil
+	}
+	updater.mgr.verify = func(mgr *updateManager, log log.T, updateDetail *UpdateDetail, isRollback bool) (err error) {
+		isVerifyCalled = true
+		return nil
+	}
+	updater.mgr.finalize = func(mgr *updateManager, updateDetail *UpdateDetail, errorCode string) (err error) {
+		return nil
+	}
+	// action
+	err := rollbackInstallation(updater.mgr, logger, updateDetail)
+
+	// assert
+	assert.NoError(t, err)
+	assert.True(t, isUninstallCalled, isInstallCalled)
+	assert.False(t, isVerifyCalled)
+	assert.True(t, strings.Contains(updateDetail.StandardOut, snapdIssue))
 }
 
 func TestDownloadAndUnzipArtifact(t *testing.T) {
@@ -1697,6 +1779,15 @@ func (u *utilityStub) ExeCommand(log log.T, cmd string, workingDir string, updat
 		return -1, exitCode, fmt.Errorf("cannot run script")
 	}
 	return 1, exitCode, nil
+}
+
+func (u *utilityStub) ExecCommandWithOutput(log log.T, cmd string, workingDir string, updaterRoot string, stdOut string, stdErr string) (pid int, exitCode updateconstants.UpdateScriptExitCode, stdoutBytes *bytes.Buffer, errorBytes *bytes.Buffer, cmdErr error) {
+	var errBytes bytes.Buffer
+	errBytes.WriteString("snap \"amazon-ssm-agent\" has running apps")
+	if u.controller.failExeCommand {
+		return -1, exitCode, nil, &errBytes, fmt.Errorf("test")
+	}
+	return 1, exitCode, nil, nil, nil
 }
 
 func (u *utilityStub) SaveUpdatePluginResult(log log.T, updaterRoot string, updateResult *updateutil.UpdatePluginResult) (err error) {

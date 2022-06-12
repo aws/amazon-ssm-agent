@@ -15,6 +15,7 @@
 package updatessmagent
 
 import (
+	"bytes"
 	"fmt"
 	"testing"
 	"time"
@@ -623,6 +624,17 @@ func (u *fakeUtility) ExeCommand(
 	isAsync bool) (pid int, exitCode updateconstants.UpdateScriptExitCode, err error) {
 	u.retryCounter++
 	return u.pid, exitCode, u.execCommandError
+}
+
+func (u *fakeUtility) ExecCommandWithOutput(
+	log log.T,
+	cmd string,
+	workingDir string,
+	outputRoot string,
+	stdOut string,
+	stdErr string) (pId int, exitCode updateconstants.UpdateScriptExitCode, stdoutBytes *bytes.Buffer, errorBytes *bytes.Buffer, cmdErr error) {
+	u.retryCounter++
+	return u.pid, exitCode, nil, nil, u.execCommandError
 }
 
 func (u *fakeUtility) SaveUpdatePluginResult(
