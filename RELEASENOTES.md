@@ -1,5 +1,12 @@
 Latest
 ===============
+- Added separate metric for snapd running apps failure during update
+- Fixed idle session timeout with smux keep alive configuration based on CLI version
+- Updated AgentTaskComplete message retry
+- Updated go version to 1.18.3
+
+3.1.1511.0
+===============
 - Collect kernel version in InstanceDetailedInformation
 - Support separate output stream for non-interactive session
 - Cleanup default log group name for runcommands
