@@ -33,6 +33,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/fileutil"
 	"github.com/aws/amazon-ssm-agent/agent/log"
+	"github.com/aws/amazon-ssm-agent/agent/network"
 	"github.com/aws/amazon-ssm-agent/agent/s3util"
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/service/s3"
@@ -54,7 +55,8 @@ type DownloadInput struct {
 }
 
 // httpDownload attempts to download a file via http/s call
-func httpDownload(log log.T, fileURL string, destFile string) (output DownloadOutput, err error) {
+func httpDownload(ctx context.T, fileURL string, destFile string) (output DownloadOutput, err error) {
+	log := ctx.Log()
 	log.Debugf("attempting to download as http/https download from %v to %v", fileURL, destFile)
 
 	exponentialBackoff, err := backoffconfig.GetExponentialBackoff(200*time.Millisecond, 5)
@@ -76,12 +78,14 @@ func httpDownload(log log.T, fileURL string, destFile string) (output DownloadOu
 			existingETag, err = fileutil.ReadAllText(eTagFile)
 			httpRequest.Header.Add("If-None-Match", existingETag)
 		}
-
+		customTransport := network.GetDefaultTransport(log, ctx.AppConfig())
+		customTransport.TLSHandshakeTimeout = 20 * time.Second
 		check = http.Client{
 			CheckRedirect: func(r *http.Request, via []*http.Request) error {
 				r.URL.Opaque = r.URL.Path
 				return nil
 			},
+			Transport: customTransport,
 		}
 
 		var resp *http.Response
@@ -375,11 +379,11 @@ func Download(context context.T, input DownloadInput) (output DownloadOutput, er
 			tempOutput, err = s3Download(context, amazonS3URL, output.LocalFilePath)
 			if err != nil {
 				log.Info("An error occurred when attempting s3 download. Attempting http/https download as fallback.")
-				tempOutput, err = httpDownload(log, input.SourceURL, output.LocalFilePath)
+				tempOutput, err = httpDownload(context, input.SourceURL, output.LocalFilePath)
 			}
 			output = tempOutput
 		} else {
-			output, err = httpDownload(log, input.SourceURL, output.LocalFilePath)
+			output, err = httpDownload(context, input.SourceURL, output.LocalFilePath)
 		}
 
 		if err != nil {
