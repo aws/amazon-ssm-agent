@@ -33,15 +33,15 @@ const (
 
 type Mode string
 
-//Channel is defined as a persistent interface for raw json datagram transmission, it is designed to adopt both file ad named pipe
+// IPCChannel is defined as a persistent interface for raw json datagram transmission, it is designed to adopt both file ad named pipe
 type IPCChannel interface {
-	//send a raw json datagram to the channel, return when send is "complete" -- message is dropped to the persistent layer
+	// Send sends a raw json datagram to the channel, return when send is "complete" -- message is dropped to the persistent layer
 	Send(string) error
-	//receive a dategram, the go channel on the other end is closed when channel is closed
+	// GetMessage receives a datagram, the go channel on the other end is closed when channel is closed
 	GetMessage() <-chan string
-	//safely release all in memory resources -- drain the sending/receiving/queue and GetMessage() go channel, channel is reusable after close
+	//Close safely release all in memory resources -- drain the sending/receiving/queue and GetMessage() go channel, channel is reusable after close
 	Close()
-	//destroy the persistent channel transport, channel is no longer reusable after destroy
+	//Destroy destroys the persistent channel transport, channel is no longer reusable after destroy
 	Destroy()
 	// CleanupOwnModeFiles cleans up it own mode files
 	CleanupOwnModeFiles()
