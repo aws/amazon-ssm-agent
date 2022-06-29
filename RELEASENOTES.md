@@ -1,5 +1,11 @@
 Latest
 ===============
+- Fallback to file based IPC if named pipe creation times out
+- Increase tls handshake timeout in http download client
+- Log mds client timeout errors as WARN
+
+3.1.1575.0
+===============
 - Added separate metric for snapd running apps failure during update
 - Fixed idle session timeout with smux keep alive configuration based on CLI version
 - Updated AgentTaskComplete message retry
