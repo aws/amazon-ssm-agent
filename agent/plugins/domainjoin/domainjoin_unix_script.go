@@ -390,14 +390,14 @@ install_components() {
             exit 1
          fi
          if [ "$SUSE_MAJOR_VERSION" -eq "15" ]; then
-            sudo SUSEConnect -p PackageHub/15.1/x86_64
+            sudo SUSEConnect -p PackageHub/$SUSE_MAJOR_VERSION.$SUSE_MINOR_VERSION/x86_64
             if [ $? -ne 0 ]; then
                sudo SUSEConnect
             fi
          fi
          LINUX_DISTRO='SUSE'
          sudo zypper update -y
-         sudo zypper -n install realmd adcli sssd sssd-tools sssd-ad samba-client krb5-client samba-winbind krb5-client bind-utils python3 openldap2-client NetworkManager
+         sudo zypper -n install realmd adcli sssd sssd-tools sssd-ad samba-client krb5-client samba-winbind krb5-client bind-utils python3 openldap2-client
          if [ $? -ne 0 ]; then
             return 1
          fi
