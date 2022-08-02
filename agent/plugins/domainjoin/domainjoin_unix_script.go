@@ -767,8 +767,6 @@ config_samba() {
         idmap config * : backend = autorid\n\
         idmap config * : range = 100000000-2100000000\n\
         idmap config * : rangesize = 100000000\n\
-        idmap config ${AD_INFO} : backend = rid\n\
-        idmap config ${AD_INFO} : range = 65536 - 99999999\n\
         winbind refresh tickets = yes\n\
         kerberos method = secrets and keytab\n\
         winbind enum groups = no\n\
