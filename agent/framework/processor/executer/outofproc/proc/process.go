@@ -23,11 +23,15 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/common/identity"
+	"github.com/aws/amazon-ssm-agent/common/runtimeconfig"
 )
 
 var (
-	getAppConfig     = appconfig.Config
-	newAgentIdentity = identity.NewAgentIdentity
+	getAppConfig                         = appconfig.Config
+	newAgentIdentity                     = identity.NewAgentIdentity
+	runtimeConfigClientCreator           = runtimeconfig.NewIdentityRuntimeConfigClient
+	defaultAgentIdentitySelectorCreator  = identity.NewDefaultAgentIdentitySelector
+	runtimeConfigIdentitySelectorCreator = identity.NewRuntimeConfigIdentitySelector
 )
 
 //OSProcess is an abstracted interface of os.Process
@@ -93,9 +97,12 @@ func parseArgv(argv []string) (channelName string, err error) {
 			return argv[1], nil
 		}
 		return argv[0], nil
-	} else {
-		return "", errors.New("executable argument number mismatch")
+	} else if len(argv) == 3 {
+		if argv[0] == appconfig.DefaultDocumentWorker || argv[0] == appconfig.DefaultSessionWorker {
+			return argv[1], nil
+		}
 	}
+	return "", fmt.Errorf("executable argument number mismatch: %v", len(argv))
 }
 
 func InitializeWorkerDependencies(log log.T, args []string) (*appconfig.SsmagentConfig, identity.IAgentIdentity, string, error) {
@@ -103,14 +110,21 @@ func InitializeWorkerDependencies(log log.T, args []string) (*appconfig.Ssmagent
 	if err != nil {
 		return nil, nil, "", fmt.Errorf("failed to initialize config: %v", err)
 	}
-
 	channelName, err := parseArgv(args)
 	if err != nil {
 		return nil, nil, "", fmt.Errorf("failed to parse args: %v", err)
 	}
-
-	selector := identity.NewRuntimeConfigIdentitySelector(log)
-	agentIdentity, err := newAgentIdentity(log, &config, selector)
+	var selector identity.IAgentIdentitySelector
+	var agentIdentity identity.IAgentIdentity
+	runtimeConfigClientHandler := runtimeConfigClientCreator()
+	if ok, err := runtimeConfigClientHandler.ConfigExists(); ok && err == nil {
+		log.Info("picking up runtime config identity selector")
+		selector = runtimeConfigIdentitySelectorCreator(log)
+	} else {
+		log.Info("picking up default identity selector")
+		selector = defaultAgentIdentitySelectorCreator(log)
+	}
+	agentIdentity, err = newAgentIdentity(log, &config, selector)
 	if err != nil {
 		return nil, nil, "", fmt.Errorf("failed to get identity: %v", err)
 	}
