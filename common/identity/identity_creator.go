@@ -30,8 +30,13 @@ func init() {
 	allIdentityGenerators[customidentity.IdentityType] = newCustomIdentity
 }
 
-func newEC2Identity(log log.T, _ *appconfig.SsmagentConfig) []IAgentIdentityInner {
-	return []IAgentIdentityInner{ec2.NewEC2Identity(log)}
+func newEC2Identity(log log.T, config *appconfig.SsmagentConfig) []IAgentIdentityInner {
+	id := ec2.NewEC2Identity(log)
+	if id == nil {
+		return nil
+	}
+
+	return []IAgentIdentityInner{id}
 }
 
 func newECSIdentity(log log.T, _ *appconfig.SsmagentConfig) []IAgentIdentityInner {

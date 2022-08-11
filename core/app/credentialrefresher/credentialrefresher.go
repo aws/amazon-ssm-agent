@@ -17,25 +17,44 @@ import (
 	"fmt"
 	"math"
 	"math/rand"
+	"net/http"
 	"runtime/debug"
 	"sync"
 	"time"
 
+	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/backoffconfig"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/managedInstances/sharedCredentials"
 	"github.com/aws/amazon-ssm-agent/common/identity"
+	"github.com/aws/amazon-ssm-agent/common/identity/credentialproviders"
+	"github.com/aws/amazon-ssm-agent/common/identity/endpoint"
 	"github.com/aws/amazon-ssm-agent/common/runtimeconfig"
 	"github.com/aws/amazon-ssm-agent/core/app/context"
+
 	"github.com/aws/aws-sdk-go/aws/awserr"
 	"github.com/aws/aws-sdk-go/aws/credentials"
 	"github.com/aws/aws-sdk-go/service/ssm"
+
 	"github.com/cenkalti/backoff/v4"
 )
 
 var storeSharedCredentials = sharedCredentials.Store
 var backoffRetry = backoff.Retry
 var newSharedCredentials = credentials.NewSharedCredentials
+
+// Indicates the retrier should retry call for systems manager provided credentials
+var shouldRetry = true
+
+// Map of known http responses when requesting credentials from systems manager
+var statusCodes = map[int]bool{
+	http.StatusInternalServerError: shouldRetry,
+	http.StatusTooManyRequests:     shouldRetry,
+	http.StatusBadRequest:          !shouldRetry,
+	http.StatusUnauthorized:        !shouldRetry,
+	http.StatusForbidden:           !shouldRetry,
+	http.StatusMethodNotAllowed:    !shouldRetry,
+}
 
 type ICredentialRefresher interface {
 	Start() error
@@ -44,12 +63,14 @@ type ICredentialRefresher interface {
 
 type credentialsRefresher struct {
 	log           log.T
+	appConfig     *appconfig.SsmagentConfig
 	agentIdentity identity.IAgentIdentity
-	provider      credentials.Provider
+	provider      credentialproviders.IRemoteProvider
 	expirer       credentials.Expirer
 
 	runtimeConfigClient   runtimeconfig.IIdentityRuntimeConfigClient
 	identityRuntimeConfig runtimeconfig.IdentityRuntimeConfig
+	endpointHelper        endpoint.IEndpointHelper
 
 	backoffConfig *backoff.ExponentialBackOff
 
@@ -77,6 +98,8 @@ func NewCredentialRefresher(context context.ICoreAgentContext) ICredentialRefres
 		isCredentialRefresherRunning: false,
 		getCurrentTimeFunc:           time.Now,
 		timeAfterFunc:                time.After,
+		endpointHelper:               endpoint.NewEndpointHelper(context.Log().WithContext("[EndpointHelper]"), *context.AppConfig()),
+		appConfig:                    context.AppConfig(),
 	}
 }
 
@@ -105,22 +128,22 @@ func (c *credentialsRefresher) durationUntilRefresh() time.Duration {
 
 func (c *credentialsRefresher) Start() error {
 	var err error
-	customProviderIdentity, ok := identity.GetCredentialsRefresherIdentity(c.agentIdentity)
+	credentialProvider, ok := identity.GetRemoteProvider(c.agentIdentity)
 	if !ok {
-		c.log.Infof("Identity does not require credential refresher")
+		c.log.Infof("identity does not require credential refresher")
 		return nil
 	}
 
-	if !customProviderIdentity.ShouldShareCredentials() {
-		c.log.Infof("Identity does not want core agent to rotate credentials")
+	if !credentialProvider.SharesCredentials() {
+		c.log.Infof("identity does not want core agent to rotate credentials")
 		return nil
 	}
 
-	c.provider = customProviderIdentity.CredentialProvider()
+	c.provider = credentialProvider
 
 	// provider should always implement expirer
 	if c.expirer, ok = c.provider.(credentials.Expirer); !ok {
-		return fmt.Errorf("Credentials provider for identity %v does not implement Expirer interface", c.agentIdentity.IdentityType())
+		return fmt.Errorf("credentials provider for identity %v does not implement Expirer interface", c.agentIdentity.IdentityType())
 	}
 
 	// Initialize the identity runtime config from disk
@@ -142,7 +165,7 @@ func (c *credentialsRefresher) Start() error {
 	<-c.credentialsReadyChan
 
 	c.isCredentialRefresherRunning = true
-	c.log.Infof("CredentialRefresher has started")
+	c.log.Infof("credentialRefresher has started")
 
 	return nil
 }
@@ -163,7 +186,7 @@ func (c *credentialsRefresher) sendCredentialsReadyMessage() {
 	})
 }
 
-func (*credentialsRefresher) getBackoffRetryJitterSleepDuration(retryCount int) time.Duration {
+func getBackoffRetryJitterSleepDuration(retryCount int) time.Duration {
 	expBackoff := math.Pow(2, float64(retryCount))
 	return time.Duration(int(expBackoff)+rand.Intn(int(math.Ceil(expBackoff*0.2)))) * time.Second
 }
@@ -178,23 +201,32 @@ func (c *credentialsRefresher) retrieveCredsWithRetry() (credentials.Value, bool
 		}
 
 		// Default sleep duration for non-aws errors
-		sleepDuration := c.getBackoffRetryJitterSleepDuration(retryCount)
+		sleepDuration := getBackoffRetryJitterSleepDuration(retryCount)
 		// Max retry count is 16, which will sleep for about 18-22 hours
 		if retryCount < 16 {
 			retryCount++
 		}
 
-		if awsErr, ok := err.(awserr.Error); ok {
-			// Check if error is a non-retryable error if fingerprint changes or response is access denied exception
-			if awsErr.Code() == ssm.ErrCodeMachineFingerprintDoesNotMatch || awsErr.Code() == "AccessDeniedException" {
-				// Sleep 24 hours with random jitter of up to 2 hour if error is non-retryable to make sure we spread retries for large de-registered fleets
-				sleepDuration = 24*time.Hour + time.Second*time.Duration(rand.Intn(7200))
-				c.log.Errorf("Retrieve credentials produced unrecoverable aws error: %v", awsErr)
-			} else {
-				// Sleep additional 10 - 20 seconds in case of an aws error
-				sleepDuration += time.Second * time.Duration(10+rand.Intn(10))
-				c.log.Errorf("Retrieve credentials produced aws error: %v", awsErr)
+		// Check if error is a non-retryable error if fingerprint changes or response is access denied exception
+		if awsErr, isAwsErr := err.(awserr.Error); isAwsErr && (awsErr.Code() == ssm.ErrCodeMachineFingerprintDoesNotMatch || awsErr.Code() == "AccessDeniedException") {
+			sleepDuration = getLongSleepDuration(sleepDuration)
+			c.log.Errorf("Retrieve credentials produced unrecoverable aws error: %v", awsErr)
+
+		} else if awsRequestFailure, isRequestFailure := err.(awserr.RequestFailure); isRequestFailure {
+			// Get error details
+			c.log.Warnf("Status code %s returned from AWS API. RequestId: %s Message: %s", awsRequestFailure.StatusCode(), awsRequestFailure.RequestID(), awsRequestFailure.Message())
+			statusCode := awsRequestFailure.StatusCode()
+
+			if statusCode == http.StatusNotFound {
+				c.log.Debug("This feature is not yet available in current region")
 			}
+
+			if shouldRetry, found := statusCodes[statusCode]; !found || !shouldRetry {
+				sleepDuration = getLongSleepDuration(sleepDuration)
+			}
+		} else if isAwsErr {
+			// Sleep additional 10 - 20 seconds in case of an aws error
+			sleepDuration += time.Second * time.Duration(10+rand.Intn(10))
 		} else {
 			c.log.Errorf("Retrieve credentials produced error: %v", err)
 		}
@@ -208,6 +240,13 @@ func (c *credentialsRefresher) retrieveCredsWithRetry() (credentials.Value, bool
 	}
 }
 
+func getLongSleepDuration(sleepDuration time.Duration) time.Duration {
+	// Sleep 24 hours with random jitter of up to 2 hour if error is non-retryable to make sure we spread retries for large de-registered fleets
+	jitter := time.Second * time.Duration(rand.Intn(7200))
+	sleepDuration = 24*time.Hour + jitter
+	return sleepDuration
+}
+
 func (c *credentialsRefresher) credentialRefresherRoutine() {
 	var err error
 	defer func() {
@@ -217,6 +256,7 @@ func (c *credentialsRefresher) credentialRefresherRoutine() {
 			c.log.Flush()
 
 			// We never want to exit this loop unless explicitly asked to do so, restart loop
+			time.Sleep(5 * time.Minute)
 			go c.credentialRefresherRoutine()
 		}
 	}()
@@ -225,10 +265,9 @@ func (c *credentialsRefresher) credentialRefresherRoutine() {
 	if c.identityRuntimeConfig.CredentialsExpiresAt.After(c.getCurrentTimeFunc()) {
 		localCredsProvider := newSharedCredentials(c.identityRuntimeConfig.ShareFile, c.identityRuntimeConfig.ShareProfile)
 		if _, err := localCredsProvider.Get(); err != nil {
-			c.log.Warnf("Credentials are not available when they should: %v", err)
+			c.log.Warnf("Credentials are not available when they should be: %v", err)
 			// set expiration and retrieved to beginning of time if shared credentials are not available to force credential refresh
 			c.identityRuntimeConfig.CredentialsExpiresAt = time.Time{}
-			c.identityRuntimeConfig.CredentialsRetrievedAt = time.Time{}
 		}
 	}
 

@@ -16,6 +16,7 @@ package identity
 import (
 	"github.com/aws/amazon-ssm-agent/common/identity/availableidentities/ec2"
 	"github.com/aws/amazon-ssm-agent/common/identity/availableidentities/onprem"
+	"github.com/aws/amazon-ssm-agent/common/identity/credentialproviders"
 )
 
 // IsOnPremInstance returns true if the agent identity is onprem
@@ -28,21 +29,25 @@ func IsEC2Instance(agentIdentity IAgentIdentity) bool {
 	return agentIdentity != nil && agentIdentity.IdentityType() == ec2.IdentityType
 }
 
-// GetCredentialsRefresherIdentity returns the credentials refresher interface if the identity supports it
-func GetCredentialsRefresherIdentity(agentIdentity IAgentIdentity) (ICredentialRefresherAgentIdentity, bool) {
-	var innerGetter iInnerIdentityGetter
+// GetRemoteProvider returns the credentials refresher interface if the identity supports it
+func GetRemoteProvider(agentIdentity IAgentIdentity) (credentialproviders.IRemoteProvider, bool) {
+	var innerGetter IInnerIdentityGetter
 	var ok bool
 
 	// Cast to innerIdentityGetter interface that defined getInner
-	innerGetter, ok = agentIdentity.(iInnerIdentityGetter)
+	innerGetter, ok = agentIdentity.(IInnerIdentityGetter)
 	if !ok {
 		return nil, false
 	}
 
 	// Attempt to cast inner identity to CredentialsRefresher
 	var credentialIdentity ICredentialRefresherAgentIdentity
-	credentialIdentity, ok = innerGetter.getInner().(ICredentialRefresherAgentIdentity)
-	return credentialIdentity, ok
+	credentialIdentity, ok = innerGetter.GetInner().(ICredentialRefresherAgentIdentity)
+	if !ok {
+		return nil, ok
+	}
+
+	return credentialIdentity.CredentialProvider(), true
 }
 
 // GetMetadataIdentity returns the metadata interface if the identity supports it

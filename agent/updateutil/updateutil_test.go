@@ -22,13 +22,16 @@ import (
 	"testing"
 	"time"
 
+	"github.com/aws/amazon-ssm-agent/common/identity"
+	"github.com/aws/amazon-ssm-agent/common/identity/credentialproviders"
+	"github.com/aws/amazon-ssm-agent/common/identity/credentialproviders/mocks"
+	identityMocks "github.com/aws/amazon-ssm-agent/common/identity/mocks"
+
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/fileutil"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/updateutil/updateconstants"
-	"github.com/aws/amazon-ssm-agent/common/identity"
-	identityMocks "github.com/aws/amazon-ssm-agent/common/identity/mocks"
 	"github.com/aws/amazon-ssm-agent/core/executor"
 	"github.com/aws/amazon-ssm-agent/core/workerprovider/longrunningprovider/model"
 	"github.com/stretchr/testify/assert"
@@ -548,14 +551,14 @@ func TestUtility_setShareCredsEnvironment_SetsCommandAWSEnvironmentVariables_Whe
 	ctx.On("Identity").Return(agentIdentity)
 	ctx.On("Log").Return(log.NewMockLog())
 
-	refresherAgentIdentity := &identityMocks.ICredentialRefresherAgentIdentity{}
-	refresherAgentIdentity.On("ShouldShareCredentials").Return(true)
+	remoteProvier := &mocks.IRemoteProvider{}
+	remoteProvier.On("SharesCredentials").Return(true)
 	expectedShareProfile := "SomeShareFileLocation"
 	expectedShareFile := "SomeShareFileLocation"
-	refresherAgentIdentity.On("ShareProfile").Return(expectedShareProfile)
-	refresherAgentIdentity.On("ShareFile").Return(expectedShareFile)
-	getCredentialsRefresherIdentity = func(agentIdentity identity.IAgentIdentity) (identity.ICredentialRefresherAgentIdentity, bool) {
-		return refresherAgentIdentity, true
+	remoteProvier.On("ShareProfile").Return(expectedShareProfile)
+	remoteProvier.On("ShareFile").Return(expectedShareFile)
+	getRemoteProvider = func(agentIdentity identity.IAgentIdentity) (credentialproviders.IRemoteProvider, bool) {
+		return remoteProvier, true
 	}
 
 	utility := &Utility{

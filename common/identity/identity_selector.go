@@ -117,6 +117,11 @@ func NewAgentIdentity(log log.T, config *appconfig.SsmagentConfig, selector IAge
 
 func (d *defaultAgentIdentitySelector) selectAgentIdentity(agentIdentities []IAgentIdentityInner, identityKey string) IAgentIdentityInner {
 	for _, agentIdentity := range agentIdentities {
+		if agentIdentity == nil {
+			d.log.Errorf("'%s' identity failed to create", identityKey)
+			continue
+		}
+
 		if agentIdentity.IsIdentityEnvironment() {
 			return agentIdentity
 		}

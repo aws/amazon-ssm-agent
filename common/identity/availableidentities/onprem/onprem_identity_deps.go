@@ -16,14 +16,18 @@ package onprem
 import (
 	"sync"
 
+	"github.com/aws/amazon-ssm-agent/common/identity/credentialproviders"
+
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/managedInstances/registration"
 	"github.com/aws/aws-sdk-go/aws/credentials"
 )
 
-// IdentityType is the identity type for OnPrem
-const IdentityType = "OnPrem"
+const (
+	// IdentityType is the identity type for OnPrem
+	IdentityType = "OnPrem"
+)
 
 // Identity is the struct defining the IAgentIdentityInner for OnPrem
 type Identity struct {
@@ -31,7 +35,7 @@ type Identity struct {
 	Config                 *appconfig.SsmagentConfig
 	registrationInfo       registration.IOnpremRegistrationInfo
 	credentials            *credentials.Credentials
-	credentialsProvider    credentials.Provider
+	credentialsProvider    credentialproviders.IRemoteProvider
 	shareFile              string
 	shouldShareCredentials bool
 	credsInitMutex         sync.Mutex

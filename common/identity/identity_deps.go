@@ -18,7 +18,9 @@ import (
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/log"
+	"github.com/aws/amazon-ssm-agent/common/identity/credentialproviders"
 	"github.com/aws/amazon-ssm-agent/common/identity/endpoint"
+
 	"github.com/aws/aws-sdk-go/aws/credentials"
 )
 
@@ -35,8 +37,12 @@ type IAgentIdentity interface {
 	GetServiceEndpoint(string) string
 }
 
-type iInnerIdentityGetter interface {
-	getInner() IAgentIdentityInner
+// Registrar identity registers the agent on startup
+type Registrar interface {
+	Register() error
+}
+type IInnerIdentityGetter interface {
+	GetInner() IAgentIdentityInner
 }
 
 // IAgentIdentityInner defines the interface each identity needs to expose
@@ -51,12 +57,16 @@ type IAgentIdentityInner interface {
 	IdentityType() string
 }
 
-// ICredentialRefresherAgentIdentity defines the interface for identities that require custom credential refresh (e.g. onprem)
+// ICredentialRefresherAgentIdentity defines the interface for identities that require custom credential refresh (e.g. onprem, ec2)
 type ICredentialRefresherAgentIdentity interface {
-	CredentialProvider() credentials.Provider
+	CredentialProvider() credentialproviders.IRemoteProvider
+}
+
+// ICredentialRefresherProvider defines the interface for credential providers that require custom credential refresh
+type ICredentialRefresherProvider interface {
 	ShareProfile() string
 	ShareFile() string
-	ShouldShareCredentials() bool
+	SharesCredentials() bool
 }
 
 // IMetadataIdentity defines the interface for identities that will query metadata for VPC CIDR block information (ec2, ecs)

@@ -126,7 +126,7 @@ func TestInitializeParametersWhenHostIsProvided(t *testing.T) {
 		cancelled:   make(chan struct{}),
 	}
 	mockIdentity := &identityMock.IAgentIdentityInner{}
-	newEC2Identity = func(log log.T) identity.IAgentIdentityInner {
+	newEC2Identity = func(log log.T, _ *appconfig.SsmagentConfig) identity.IAgentIdentityInner {
 		return mockIdentity
 	}
 	newECSIdentity = newEC2Identity
@@ -169,7 +169,7 @@ func (suite *PortTestSuite) SetupTest() {
 	}
 
 	mockIdentity := &identityMock.IAgentIdentityInner{}
-	newEC2Identity = func(log log.T) identity.IAgentIdentityInner {
+	newEC2Identity = func(log log.T, _ *appconfig.SsmagentConfig) identity.IAgentIdentityInner {
 		return mockIdentity
 	}
 	newECSIdentity = newEC2Identity

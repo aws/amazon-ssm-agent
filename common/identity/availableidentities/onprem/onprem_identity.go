@@ -16,6 +16,8 @@ package onprem
 import (
 	"sync"
 
+	"github.com/aws/amazon-ssm-agent/common/identity/credentialproviders"
+
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/managedInstances/registration"
@@ -26,10 +28,14 @@ import (
 )
 
 // InstanceID returns the managed instance ID
-func (i *Identity) InstanceID() (string, error) { return i.registrationInfo.InstanceID(i.Log), nil }
+func (i *Identity) InstanceID() (string, error) {
+	return i.registrationInfo.InstanceID(i.Log, registration.RegVaultKey), nil
+}
 
 // Region returns the region of the managed instance
-func (i *Identity) Region() (string, error) { return i.registrationInfo.Region(i.Log), nil }
+func (i *Identity) Region() (string, error) {
+	return i.registrationInfo.Region(i.Log, registration.RegVaultKey), nil
+}
 
 // AvailabilityZone returns the managed instance availabilityZone
 func (*Identity) AvailabilityZone() (string, error) {
@@ -85,34 +91,20 @@ func (i *Identity) Credentials() *credentials.Credentials {
 }
 
 // CredentialProvider returns the initialized credentials provider
-func (i *Identity) CredentialProvider() credentials.Provider {
+func (i *Identity) CredentialProvider() credentialproviders.IRemoteProvider {
 	i.credsInitMutex.Lock()
 	defer i.credsInitMutex.Unlock()
 
 	if i.credentialsProvider == nil {
 		i.credentialsProvider = onpremprovider.NewCredentialsProvider(i.Log, i.Config, i.registrationInfo, i.shouldShareCredentials)
 	}
+
 	return i.credentialsProvider
-}
-
-// ShouldShareCredentials returns true if credentials refresher in core agent should rotate credentials for instance
-func (i *Identity) ShouldShareCredentials() bool {
-	return i.shouldShareCredentials
-}
-
-// ShareProfile is the profile where the agent should write shared credentials
-func (i *Identity) ShareProfile() string {
-	return i.Config.Profile.ShareProfile
-}
-
-// ShareFile is the credentials file where the agent should write shared credentials
-func (i *Identity) ShareFile() string {
-	return i.shareFile
 }
 
 // IsIdentityEnvironment returns if instance has managed instance registration
 func (i *Identity) IsIdentityEnvironment() bool {
-	return i.registrationInfo.HasManagedInstancesCredentials(i.Log)
+	return i.registrationInfo.HasManagedInstancesCredentials(i.Log, registration.RegVaultKey)
 }
 
 // IdentityType returns the identity type of the managed instance

@@ -17,6 +17,8 @@ package app
 import (
 	"runtime"
 
+	"github.com/aws/amazon-ssm-agent/core/app/registrar"
+
 	"github.com/aws/amazon-ssm-agent/agent/version"
 	"github.com/aws/amazon-ssm-agent/core/app/context"
 	"github.com/aws/amazon-ssm-agent/core/app/credentialrefresher"
@@ -37,16 +39,23 @@ type SSMCoreAgent struct {
 	container      longrunningprovider.IContainer
 	selfupdate     selfupdate.ISelfUpdate
 	credsRefresher credentialrefresher.ICredentialRefresher
+	registrar      registrar.IRetryableRegistrar
 }
 
 // NewSSMCoreAgent creates and returns and object of type CoreAgent interface
 func NewSSMCoreAgent(context context.ICoreAgentContext, messageBus messagebus.IMessageBus) CoreAgent {
-	return &SSMCoreAgent{
+	coreAgent := &SSMCoreAgent{
 		context:        context,
 		container:      longrunningprovider.NewWorkerContainer(context, messageBus),
 		selfupdate:     selfupdate.NewSelfUpdater(context),
 		credsRefresher: credentialrefresher.NewCredentialRefresher(context),
 	}
+
+	if registrar := registrar.NewRetryableRegistrar(context); registrar != nil {
+		coreAgent.registrar = registrar
+	}
+
+	return coreAgent
 }
 
 // Start the core manager
@@ -55,6 +64,12 @@ func (agent *SSMCoreAgent) Start() error {
 
 	log.Infof("amazon-ssm-agent - %v", version.String())
 	log.Infof("OS: %s, Arch: %s", runtime.GOOS, runtime.GOARCH)
+	if agent.registrar != nil {
+		log.Info("registrar detected. Attempting registration")
+		if err := agent.registrar.Start(); err != nil {
+			return err
+		}
+	}
 
 	if err := agent.credsRefresher.Start(); err != nil {
 		return err
@@ -76,6 +91,10 @@ func (agent *SSMCoreAgent) Stop() {
 	agent.selfupdate.Stop()
 	agent.container.Stop(reboot.StopTypeHardStop)
 	agent.credsRefresher.Stop()
+	if agent.registrar != nil {
+		agent.registrar.Stop()
+	}
+
 	log.Info("Bye.")
 	log.Flush()
 }

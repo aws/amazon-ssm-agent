@@ -36,7 +36,7 @@ const (
 	downloadsDir = "downloads" //Directory under the orchestration directory where the downloaded resource resides
 )
 
-var getCredentialsRefresherIdentity = identity.GetCredentialsRefresherIdentity
+var getRemoteProvider = identity.GetRemoteProvider
 
 // Plugin is the type for the runscript plugin.
 type Plugin struct {
@@ -86,13 +86,13 @@ func (p *Plugin) Execute(config contracts.Configuration, cancelFlag task.CancelF
 }
 
 func (p *Plugin) setShareCredsEnvironment(pluginInput RunScriptPluginInput) {
-	shareCredsIdentity, ok := getCredentialsRefresherIdentity(p.Context.Identity())
+	credentialProvider, ok := getRemoteProvider(p.Context.Identity())
 	if !ok {
 		return
 	}
 
 	// Don't set environment variables if credentials are not being shared
-	if !shareCredsIdentity.ShouldShareCredentials() {
+	if !credentialProvider.SharesCredentials() {
 		return
 	}
 

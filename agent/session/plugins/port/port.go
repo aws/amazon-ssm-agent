@@ -69,11 +69,11 @@ var lookupHost = net.LookupHost
 
 var getMetadataIdentity = identity.GetMetadataIdentity
 
-var newEC2Identity = func(log log.T) identity.IAgentIdentityInner {
+var newEC2Identity = func(log log.T, appConfig *appconfig.SsmagentConfig) identity.IAgentIdentityInner {
 	return ec2.NewEC2Identity(log)
 }
 
-var newECSIdentity = func(log log.T) identity.IAgentIdentityInner {
+var newECSIdentity = func(log log.T, _ *appconfig.SsmagentConfig) identity.IAgentIdentityInner {
 	return ecs.NewECSIdentity(log)
 }
 
@@ -284,12 +284,12 @@ func (p *PortPlugin) validateParameters(portParameters PortParameters, config ag
 		return
 	}
 
-	dnsAddress, err := dnsRoutingAddress(p.context.Log())
+	appConfig := p.context.AppConfig()
+	dnsAddress, err := dnsRoutingAddress(p.context.Log(), &appConfig)
 	if err != nil {
 		p.context.Log().Warn("Error retrieving vpc dns address: %v", err)
 	}
 
-	appConfig := p.context.AppConfig()
 	resolvedAddresses, err := lookupHost(portParameters.Host)
 	if portParameters.Host != "" && err == nil {
 		for _, host := range resolvedAddresses {
@@ -306,12 +306,12 @@ func (p *PortPlugin) validateParameters(portParameters PortParameters, config ag
 	return
 }
 
-func dnsRoutingAddress(log log.T) ([]string, error) {
+func dnsRoutingAddress(log log.T, appConfig *appconfig.SsmagentConfig) ([]string, error) {
 	var ipaddress map[string][]string
 	var err error
 
-	ec2I := newEC2Identity(log)
-	ecsI := newECSIdentity(log)
+	ec2I := newEC2Identity(log, appConfig)
+	ecsI := newECSIdentity(log, nil)
 	if ecsI.IsIdentityEnvironment() {
 		if metadataI, ok := getMetadataIdentity(ecsI); ok {
 			ipaddress, err = metadataI.VpcPrimaryCIDRBlock()

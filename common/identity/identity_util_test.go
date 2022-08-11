@@ -25,18 +25,9 @@ import (
 )
 
 func TestIsOnPremInstance(t *testing.T) {
-
 	logger := log.NewMockLog()
 	appConfig := &appconfig.SsmagentConfig{}
-
-	assert.False(t, IsOnPremInstance(nil))
-
 	agentIdentity := &agentIdentityCacher{
-		client: newEC2Identity(logger, appConfig)[0],
-	}
-	assert.False(t, IsOnPremInstance(agentIdentity))
-
-	agentIdentity = &agentIdentityCacher{
 		client: newECSIdentity(logger, appConfig)[0],
 	}
 	assert.False(t, IsOnPremInstance(agentIdentity))
@@ -63,11 +54,6 @@ func TestIsEC2Instance(t *testing.T) {
 		client: newECSIdentity(logger, appConfig)[0],
 	}
 	assert.False(t, IsEC2Instance(agentIdentity))
-
-	agentIdentity = &agentIdentityCacher{
-		client: newEC2Identity(logger, appConfig)[0],
-	}
-	assert.True(t, IsEC2Instance(agentIdentity))
 }
 
 func TestGetCredentialsRefresherIdentity(t *testing.T) {
@@ -75,12 +61,12 @@ func TestGetCredentialsRefresherIdentity(t *testing.T) {
 		client: &ec2.Identity{},
 	}
 
-	// Ec2 identity does not implement credentials refresher identity
-	_, isCredsRefresher := GetCredentialsRefresherIdentity(cacher)
-	assert.False(t, isCredsRefresher)
+	// Ec2 identity implements credentials refresher identity
+	_, isCredsRefresher := GetRemoteProvider(cacher)
+	assert.True(t, isCredsRefresher)
 
 	// Verify onprem identity implements credentials refresher identity
-	cacher.client = &onprem.Identity{}
-	_, isCredsRefresher = GetCredentialsRefresherIdentity(cacher)
+	cacher.client = onprem.NewOnPremIdentity(log.NewMockLog(), &appconfig.SsmagentConfig{})
+	_, isCredsRefresher = GetRemoteProvider(cacher)
 	assert.True(t, isCredsRefresher)
 }

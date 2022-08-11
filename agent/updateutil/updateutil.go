@@ -63,7 +63,7 @@ type Utility struct {
 }
 
 var getDiskSpaceInfo = fileutil.GetDiskSpaceInfo
-var getCredentialsRefresherIdentity = identity.GetCredentialsRefresherIdentity
+var getRemoteProvider = identity.GetRemoteProvider
 var mkDirAll = os.MkdirAll
 var openFile = os.OpenFile
 var execCommand = exec.Command
@@ -756,24 +756,24 @@ func IsIdentityRuntimeConfigSupported(sourceVersion string) bool {
 }
 
 func (util *Utility) setCommandEnvironmentVariables(command *exec.Cmd) {
-	shareCredsIdentity, ok := getCredentialsRefresherIdentity(util.Context.Identity())
+	credentialProvider, ok := getRemoteProvider(util.Context.Identity())
 	if !ok {
 		return
 	}
 
 	// Don't set environment variables if credentials are not being shared
-	if !shareCredsIdentity.ShouldShareCredentials() {
+	if !credentialProvider.SharesCredentials() {
 		return
 	}
 
 	osEnv := os.Environ()
 	command.Env = osEnv
-	if _, ok := os.LookupEnv("AWS_SHARED_CREDENTIALS_FILE"); !ok && shareCredsIdentity.ShareFile() != "" {
-		command.Env = append(command.Env, fmt.Sprintf("%s=%s", "AWS_SHARED_CREDENTIALS_FILE", shareCredsIdentity.ShareFile()))
+	if _, ok := os.LookupEnv("AWS_SHARED_CREDENTIALS_FILE"); !ok && credentialProvider.ShareFile() != "" {
+		command.Env = append(command.Env, fmt.Sprintf("%s=%s", "AWS_SHARED_CREDENTIALS_FILE", credentialProvider.ShareFile()))
 	}
 
-	if _, ok := os.LookupEnv("AWS_PROFILE"); !ok && shareCredsIdentity.ShareProfile() != "" {
-		command.Env = append(command.Env, fmt.Sprintf("%s=%s", "AWS_PROFILE", shareCredsIdentity.ShareProfile()))
+	if _, ok := os.LookupEnv("AWS_PROFILE"); !ok && credentialProvider.ShareProfile() != "" {
+		command.Env = append(command.Env, fmt.Sprintf("%s=%s", "AWS_PROFILE", credentialProvider.ShareProfile()))
 	}
 
 }

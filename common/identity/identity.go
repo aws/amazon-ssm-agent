@@ -152,6 +152,6 @@ func (c *agentIdentityCacher) GetServiceEndpoint(service string) string {
 	return c.endpointHelper.GetServiceEndpoint(service, region)
 }
 
-func (c *agentIdentityCacher) getInner() IAgentIdentityInner {
+func (c *agentIdentityCacher) GetInner() IAgentIdentityInner {
 	return c.client
 }

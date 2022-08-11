@@ -14,6 +14,7 @@
 package rsaauth
 
 import (
+	"fmt"
 	"net/url"
 	"strings"
 
@@ -21,6 +22,11 @@ import (
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/credentials"
 	"github.com/aws/aws-sdk-go/aws/request"
+)
+
+const (
+	// SsmAuthHeader is the header that holds private key signature for iir-rsa signed requests
+	SsmAuthHeader = "SSM-AsymmetricKeyAuthorization"
 )
 
 // Sign requests with Beagle RSA using signature version 4.
@@ -147,11 +153,36 @@ func (v4 *signer) buildRsa() {
 
 // Sign the stringToSign using the private key
 func (v4 *signer) buildRsaSignature() (err error) {
+	v4.signature, err = BuildRSASignature(v4.CredValues.SecretAccessKey, v4.stringToSign)
+	return
+}
+
+// MakeSignRsaHandler creates an http handler that signs the request using an RSA private key
+func MakeSignRsaHandler(encodedPrivateKey string) func(req *request.Request) {
+	return func(req *request.Request) {
+		authZHeader := req.HTTPRequest.Header.Get("Authorization")
+		if len(authZHeader) == 0 {
+			req.Error = fmt.Errorf("unable to build RSA signature. No Authorization header in request")
+			return
+		}
+		signature, err := BuildRSASignature(encodedPrivateKey, authZHeader)
+		if err != nil {
+			req.Error = fmt.Errorf("failed to build RSA signature. Err: %v", err)
+			return
+		}
+
+		req.HTTPRequest.Header[SsmAuthHeader] = []string{fmt.Sprintf("Signature=%s", signature)}
+	}
+}
+
+// BuildRSASignature signs a string using a private RSA signing key
+func BuildRSASignature(encodedPrivateKey string, stringToSign string) (signature string, err error) {
 	var rsaKey auth.RsaKey
-	rsaKey, err = auth.DecodePrivateKey(v4.CredValues.SecretAccessKey)
+	rsaKey, err = auth.DecodePrivateKey(encodedPrivateKey)
 	if err != nil {
 		return
 	}
-	v4.signature, err = rsaKey.Sign(v4.stringToSign)
+
+	signature, err = rsaKey.Sign(stringToSign)
 	return
 }

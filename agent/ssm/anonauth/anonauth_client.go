@@ -21,23 +21,32 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/backoffconfig"
 	logger "github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/ssm/util"
+
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/awserr"
 	"github.com/aws/aws-sdk-go/aws/credentials"
 	"github.com/aws/aws-sdk-go/aws/request"
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/ssm"
+
 	"github.com/cenkalti/backoff/v4"
 )
 
-// AnonymousService is an interface to the Anonymous methods of the SSM service.
-type AnonymousService interface {
+var backoffRetry = backoff.Retry
+
+// IClient is an interface to the Anonymous methods of the SSM service.
+type IClient interface {
 	RegisterManagedInstance(activationCode, activationID, publicKey, publicKeyType, fingerprint string) (string, error)
 }
 
-// sdkService is an service wrapper that delegates to the ssm sdk.
-type sdkService struct {
-	sdk *ssm.SSM
+// ISsmSdk defines the functions needed from the AWS SSM SDK
+type ISsmSdk interface {
+	RegisterManagedInstance(input *ssm.RegisterManagedInstanceInput) (*ssm.RegisterManagedInstanceOutput, error)
+}
+
+// Client is a service wrapper that delegates to the ssm sdk
+type Client struct {
+	sdk ISsmSdk
 }
 
 // shouldRetryAwsRequest determines if request should be retried
@@ -58,8 +67,8 @@ func shouldRetryAwsRequest(err error) bool {
 	return true
 }
 
-// NewAnonymousService creates a new SSM service instance.
-func NewAnonymousService(logger logger.T, region string) AnonymousService {
+// NewClient creates a new SSM client instance
+func NewClient(logger logger.T, region string) IClient {
 
 	log.SetFlags(0)
 
@@ -79,11 +88,11 @@ func NewAnonymousService(logger logger.T, region string) AnonymousService {
 	ssmSess.Handlers.Build.PushBack(request.MakeAddToUserAgentHandler(appConfig.Agent.Name, appConfig.Agent.Version))
 
 	ssmService := ssm.New(ssmSess)
-	return &sdkService{sdk: ssmService}
+	return &Client{sdk: ssmService}
 }
 
 // RegisterManagedInstance calls the RegisterManagedInstance SSM API.
-func (svc *sdkService) RegisterManagedInstance(activationCode, activationID, publicKey, publicKeyType, fingerprint string) (string, error) {
+func (svc *Client) RegisterManagedInstance(activationCode, activationID, publicKey, publicKeyType, fingerprint string) (string, error) {
 	exponentialBackoff, err := backoffconfig.GetDefaultExponentialBackoff()
 	if err != nil {
 		return "", err
@@ -98,7 +107,7 @@ func (svc *sdkService) RegisterManagedInstance(activationCode, activationID, pub
 	}
 
 	var result *ssm.RegisterManagedInstanceOutput
-	_ = backoff.Retry(func() error {
+	_ = backoffRetry(func() error {
 		result, err = svc.sdk.RegisterManagedInstance(&params)
 		if shouldRetryAwsRequest(err) {
 			return err

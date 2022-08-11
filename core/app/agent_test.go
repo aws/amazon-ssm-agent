@@ -37,6 +37,8 @@ type AgentTestSuite struct {
 	mockconatiner           *containermocks.IContainer
 	mockselfupdate          *selfupdatemocks.ISelfUpdate
 	mockCredentialRefresher *refresherMocks.ICredentialRefresher
+	mockIdentity            *MockIdentity
+	mockInnerIdentity       *MockInnerIdentityRegistrar
 }
 
 // SetupTest makes sure that all the components referenced in the test case are initialized
@@ -46,6 +48,9 @@ func (suite *AgentTestSuite) SetupTest() {
 	suite.context = &contextmocks.ICoreAgentContext{}
 	suite.mockselfupdate = &selfupdatemocks.ISelfUpdate{}
 	suite.mockCredentialRefresher = &refresherMocks.ICredentialRefresher{}
+	suite.mockIdentity = &MockIdentity{}
+	suite.mockInnerIdentity = &MockInnerIdentityRegistrar{}
+
 	suite.coreAgent = &SSMCoreAgent{
 		context:        suite.context,
 		container:      suite.mockconatiner,
@@ -68,6 +73,9 @@ func (suite *AgentTestSuite) TestAgentStart() {
 	suite.mockconatiner.On("Start").Return([]error{})
 	suite.mockselfupdate.On("Start").Return()
 	suite.mockCredentialRefresher.On("Start").Return(nil)
+	suite.context.On("Identity").Return(suite.mockIdentity)
+	suite.mockIdentity.On("GetInner").Return(suite.mockInnerIdentity)
+	suite.mockInnerIdentity.On("Register").Return()
 
 	suite.coreAgent.Start()
 	time.Sleep(10 * time.Millisecond)
@@ -81,6 +89,9 @@ func (suite *AgentTestSuite) TestAgentStart_WithStartWorkerError() {
 		[]error{fmt.Errorf("test1"), fmt.Errorf("test2")})
 	suite.mockselfupdate.On("Start").Return()
 	suite.mockCredentialRefresher.On("Start").Return(nil)
+	suite.context.On("Identity").Return(suite.mockIdentity)
+	suite.mockIdentity.On("GetInner").Return(suite.mockInnerIdentity)
+	suite.mockInnerIdentity.On("Register").Return()
 
 	suite.coreAgent.Start()
 	time.Sleep(10 * time.Millisecond)
@@ -93,6 +104,9 @@ func (suite *AgentTestSuite) TestAgentStart_WithCredentialRefresherError() {
 	suite.mockconatiner.On("Start").Return([]error{})
 	suite.mockselfupdate.On("Start").Return()
 	suite.mockCredentialRefresher.On("Start").Return(fmt.Errorf("SomeStartError"))
+	suite.context.On("Identity").Return(suite.mockIdentity)
+	suite.mockIdentity.On("GetInner").Return(suite.mockInnerIdentity)
+	suite.mockInnerIdentity.On("Register").Return()
 
 	suite.coreAgent.Start()
 	time.Sleep(10 * time.Millisecond)

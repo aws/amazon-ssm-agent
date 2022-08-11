@@ -52,11 +52,12 @@ func (r *runtimeConfigInit) getCurrentIdentityRuntimeConfig() (runtimeconfig.Ide
 
 	currentConfig.IdentityType = r.agentIdentity.IdentityType()
 	currentConfig.InstanceId, err = r.agentIdentity.InstanceID()
+
 	if err != nil {
 		return currentConfig, err
 	}
 
-	if credentialsRefresherIdentity, ok := identity.GetCredentialsRefresherIdentity(r.agentIdentity); ok {
+	if credentialsRefresherIdentity, ok := identity.GetRemoteProvider(r.agentIdentity); ok {
 		currentConfig.ShareFile = credentialsRefresherIdentity.ShareFile()
 		currentConfig.ShareProfile = credentialsRefresherIdentity.ShareProfile()
 	}

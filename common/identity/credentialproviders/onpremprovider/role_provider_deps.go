@@ -21,9 +21,11 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/managedInstances/registration"
-	"github.com/aws/amazon-ssm-agent/common/identity/credentialproviders/onpremprovider/rsaauth"
+	"github.com/aws/amazon-ssm-agent/agent/ssm/authtokenrequest"
 	"github.com/aws/amazon-ssm-agent/common/identity/endpoint"
+
 	"github.com/aws/aws-sdk-go/aws/credentials"
+
 	"github.com/cenkalti/backoff/v4"
 )
 
@@ -46,7 +48,7 @@ type onpremCredentialsProvider struct {
 	ExpiryWindow time.Duration
 
 	// client is the required SSM managed instance service client to use when connecting to SSM Auth service.
-	client rsaauth.RsaSignedService
+	client authtokenrequest.IClient
 	config *appconfig.SsmagentConfig
 	log    log.T
 
@@ -54,6 +56,7 @@ type onpremCredentialsProvider struct {
 
 	isSharingCreds        bool
 	executableToRotateKey string
+	shareFile             string
 
 	endpointHelper endpoint.IEndpointHelper
 }

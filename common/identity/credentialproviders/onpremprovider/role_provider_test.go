@@ -23,8 +23,10 @@ import (
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/log"
-	"github.com/aws/amazon-ssm-agent/common/identity/credentialproviders/onpremprovider/rsaauth"
+	"github.com/aws/amazon-ssm-agent/agent/ssm/authtokenrequest"
+
 	"github.com/aws/aws-sdk-go/service/ssm"
+
 	"github.com/cenkalti/backoff/v4"
 	"github.com/stretchr/testify/assert"
 )
@@ -40,7 +42,7 @@ func init() {
 		return fun()
 	}
 
-	createNewClient = func(m *onpremCredentialsProvider, privateKey string) rsaauth.RsaSignedService {
+	createNewClient = func(m *onpremCredentialsProvider, privateKey string) authtokenrequest.IClient {
 		return m.client
 	}
 }
@@ -293,9 +295,9 @@ func (r *registrationStub) getErr() error {
 	return err
 }
 
-func (r *registrationStub) InstanceID(log log.T) string { return r.instanceID }
+func (r *registrationStub) InstanceID(log log.T, vaultKey string) string { return r.instanceID }
 
-func (r *registrationStub) Region(log log.T) string { return r.region }
+func (r *registrationStub) Region(log log.T, vaultKey string) string { return r.region }
 
 func (r *registrationStub) InstanceType(log log.T) string { return r.instanceType }
 
@@ -305,19 +307,21 @@ func (r *registrationStub) Fingerprint(log log.T) (string, error) {
 	return r.fingerprint, r.getErr()
 }
 
-func (r *registrationStub) PrivateKey(log log.T) string { return r.privateKey }
+func (r *registrationStub) PrivateKey(log log.T, vaultKey string) string { return r.privateKey }
 
-func (r *registrationStub) PrivateKeyType(log log.T) string { return r.keyType }
+func (r *registrationStub) PrivateKeyType(log log.T, vaultKey string) string {
+	return r.keyType
+}
 
 func (r *registrationStub) GenerateKeyPair() (publicKey, privateKey, keyType string, err error) {
 	return r.publicKey, r.privateKey, r.keyType, r.getErr()
 }
 
-func (r *registrationStub) UpdatePrivateKey(log log.T, privateKey, privateKeyType string) (err error) {
+func (r *registrationStub) UpdatePrivateKey(log log.T, privateKey, privateKeyType, vaultKey string) (err error) {
 	return r.getErr()
 }
 
-func (r *registrationStub) ShouldRotatePrivateKey(log.T, string, int, bool) (bool, error) {
+func (r *registrationStub) ShouldRotatePrivateKey(log.T, string, int, bool, string) (bool, error) {
 	return r.shouldRotate, r.getErr()
 }
 
@@ -325,8 +329,8 @@ func (r *registrationStub) GeneratePublicKey(string) (string, error) {
 	return r.publicKey, r.getErr()
 }
 
-func (r *registrationStub) HasManagedInstancesCredentials(log log.T) bool {
+func (r *registrationStub) HasManagedInstancesCredentials(log log.T, vaultKey string) bool {
 	return r.hasCreds
 }
 
-func (r *registrationStub) ReloadInstanceInfo(log log.T) {}
+func (r *registrationStub) ReloadInstanceInfo(log log.T, vaultKey string) {}

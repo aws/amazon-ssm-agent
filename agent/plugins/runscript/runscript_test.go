@@ -17,6 +17,9 @@ import (
 	"fmt"
 	"testing"
 
+	"github.com/aws/amazon-ssm-agent/common/identity/credentialproviders"
+	credentialprovidermocks "github.com/aws/amazon-ssm-agent/common/identity/credentialproviders/mocks"
+
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/executers"
@@ -27,7 +30,6 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/task"
 	"github.com/aws/amazon-ssm-agent/common/identity"
-	identitymocks "github.com/aws/amazon-ssm-agent/common/identity/mocks"
 	"github.com/aws/amazon-ssm-agent/common/runtimeconfig"
 	"github.com/aws/amazon-ssm-agent/common/runtimeconfig/mocks"
 	"github.com/stretchr/testify/assert"
@@ -165,8 +167,8 @@ func testRunScripts(t *testing.T, testCase TestCase, rawInput bool) {
 }
 
 func TestSetSharedCredsEnvironment(t *testing.T) {
-	oldFunc := getCredentialsRefresherIdentity
-	defer func() { getCredentialsRefresherIdentity = oldFunc }()
+	oldFunc := getRemoteProvider
+	defer func() { getRemoteProvider = oldFunc }()
 
 	p := &Plugin{
 		Context: context.NewMockDefault(),
@@ -176,27 +178,27 @@ func TestSetSharedCredsEnvironment(t *testing.T) {
 	}
 
 	// Test identity not credential rotation agent identity
-	getCredentialsRefresherIdentity = func(agentIdentity identity.IAgentIdentity) (identity.ICredentialRefresherAgentIdentity, bool) {
+	getRemoteProvider = func(agentIdentity identity.IAgentIdentity) (credentialproviders.IRemoteProvider, bool) {
 		return nil, false
 	}
 	p.setShareCredsEnvironment(pluginInput)
 	assert.Len(t, pluginInput.Environment, 0)
 
 	// Test identity does not share creds
-	refresherIdentity := &identitymocks.ICredentialRefresherAgentIdentity{}
-	refresherIdentity.On("ShouldShareCredentials").Return(false)
-	getCredentialsRefresherIdentity = func(agentIdentity identity.IAgentIdentity) (identity.ICredentialRefresherAgentIdentity, bool) {
-		return refresherIdentity, true
+	remoteProvider := &credentialprovidermocks.IRemoteProvider{}
+	remoteProvider.On("SharesCredentials").Return(false)
+	getRemoteProvider = func(agentIdentity identity.IAgentIdentity) (credentialproviders.IRemoteProvider, bool) {
+		return remoteProvider, true
 	}
 	p.setShareCredsEnvironment(pluginInput)
 	assert.Len(t, pluginInput.Environment, 0)
-	refresherIdentity.AssertExpectations(t)
+	remoteProvider.AssertExpectations(t)
 
 	// Test failed to read identity runtime config
-	refresherIdentity = &identitymocks.ICredentialRefresherAgentIdentity{}
-	refresherIdentity.On("ShouldShareCredentials").Return(true)
-	getCredentialsRefresherIdentity = func(agentIdentity identity.IAgentIdentity) (identity.ICredentialRefresherAgentIdentity, bool) {
-		return refresherIdentity, true
+	remoteProvider = &credentialprovidermocks.IRemoteProvider{}
+	remoteProvider.On("SharesCredentials").Return(true)
+	getRemoteProvider = func(agentIdentity identity.IAgentIdentity) (credentialproviders.IRemoteProvider, bool) {
+		return remoteProvider, true
 	}
 	r := &mocks.IIdentityRuntimeConfigClient{}
 	r.On("GetConfig").Return(runtimeconfig.IdentityRuntimeConfig{}, fmt.Errorf("SomeError"))
@@ -204,13 +206,14 @@ func TestSetSharedCredsEnvironment(t *testing.T) {
 	p.setShareCredsEnvironment(pluginInput)
 	assert.Len(t, pluginInput.Environment, 0)
 	r.AssertExpectations(t)
-	refresherIdentity.AssertExpectations(t)
+	remoteProvider.AssertExpectations(t)
 
 	// Test shareProfile and shareFile values empty
-	refresherIdentity = &identitymocks.ICredentialRefresherAgentIdentity{}
-	refresherIdentity.On("ShouldShareCredentials").Return(true)
-	getCredentialsRefresherIdentity = func(agentIdentity identity.IAgentIdentity) (identity.ICredentialRefresherAgentIdentity, bool) {
-		return refresherIdentity, true
+	remoteProvider = &credentialprovidermocks.IRemoteProvider{}
+	remoteProvider.On("SharesCredentials").Return(true)
+
+	getRemoteProvider = func(agentIdentity identity.IAgentIdentity) (credentialproviders.IRemoteProvider, bool) {
+		return remoteProvider, true
 	}
 	r = &mocks.IIdentityRuntimeConfigClient{}
 	r.On("GetConfig").Return(runtimeconfig.IdentityRuntimeConfig{}, nil)
@@ -218,26 +221,26 @@ func TestSetSharedCredsEnvironment(t *testing.T) {
 	p.setShareCredsEnvironment(pluginInput)
 	assert.Len(t, pluginInput.Environment, 0)
 	r.AssertExpectations(t)
-	refresherIdentity.AssertExpectations(t)
+	remoteProvider.AssertExpectations(t)
 
 	// Test shareProfile and shareFile values not empty
-	refresherIdentity = &identitymocks.ICredentialRefresherAgentIdentity{}
-	refresherIdentity.On("ShouldShareCredentials").Return(true)
+	remoteProvider = &credentialprovidermocks.IRemoteProvider{}
+	remoteProvider.On("SharesCredentials").Return(true)
 	r = &mocks.IIdentityRuntimeConfigClient{}
 	r.On("GetConfig").Return(runtimeconfig.IdentityRuntimeConfig{
 		ShareProfile: "SomeProfile",
 		ShareFile:    "SomeFile",
 	}, nil)
 	p.IdentityRuntimeClient = r
-	getCredentialsRefresherIdentity = func(agentIdentity identity.IAgentIdentity) (identity.ICredentialRefresherAgentIdentity, bool) {
-		return refresherIdentity, true
+	getRemoteProvider = func(agentIdentity identity.IAgentIdentity) (credentialproviders.IRemoteProvider, bool) {
+		return remoteProvider, true
 	}
 	p.setShareCredsEnvironment(pluginInput)
 	assert.Len(t, pluginInput.Environment, 2)
 	assert.Equal(t, "SomeFile", pluginInput.Environment["AWS_SHARED_CREDENTIALS_FILE"])
 	assert.Equal(t, "SomeProfile", pluginInput.Environment["AWS_PROFILE"])
 	r.AssertExpectations(t)
-	refresherIdentity.AssertExpectations(t)
+	remoteProvider.AssertExpectations(t)
 }
 
 func TestSetCommandIdEnvironment(t *testing.T) {

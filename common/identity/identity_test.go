@@ -16,8 +16,9 @@ package identity
 import (
 	"testing"
 
+	"github.com/aws/amazon-ssm-agent/common/identity/availableidentities/ec2/mocks"
+
 	"github.com/aws/amazon-ssm-agent/agent/log"
-	identityMocks "github.com/aws/amazon-ssm-agent/common/identity/mocks"
 	"github.com/aws/aws-sdk-go/aws/credentials"
 	"github.com/stretchr/testify/assert"
 )
@@ -27,10 +28,10 @@ func TestAgentIdentityCacher_InstanceID(t *testing.T) {
 	var resErr error
 
 	val := "us-east-1a"
-	agentIdentityInner := identityMocks.IAgentIdentityInner{}
+	agentIdentityInner := &mocks.IEC2Identity{}
 	agentIdentityInner.On("InstanceID").Return(val, nil).Once()
 
-	cacher := agentIdentityCacher{log: log.NewMockLog(), client: &agentIdentityInner}
+	cacher := agentIdentityCacher{log: log.NewMockLog(), client: agentIdentityInner}
 
 	resStr, resErr = cacher.InstanceID()
 	assert.Equal(t, val, resStr)
@@ -45,7 +46,7 @@ func TestAgentIdentityCacher_AvailabilityZone(t *testing.T) {
 	var resErr error
 
 	val := "us-east-1a"
-	agentIdentityInner := &identityMocks.IAgentIdentityInner{}
+	agentIdentityInner := &mocks.IEC2Identity{}
 	agentIdentityInner.On("AvailabilityZone").Return(val, nil).Once()
 
 	cacher := agentIdentityCacher{log: log.NewMockLog(), client: agentIdentityInner}
@@ -63,7 +64,7 @@ func TestAgentIdentityCacher_AvailabilityZoneId(t *testing.T) {
 	var resErr error
 
 	val := "use1-az2"
-	agentIdentityInner := &identityMocks.IAgentIdentityInner{}
+	agentIdentityInner := &mocks.IEC2Identity{}
 	agentIdentityInner.On("AvailabilityZoneId").Return(val, nil).Once()
 
 	cacher := agentIdentityCacher{log: log.NewMockLog(), client: agentIdentityInner}
@@ -81,10 +82,10 @@ func TestAgentIdentityCacher_InstanceType(t *testing.T) {
 	var resErr error
 
 	val := "SomeInstanceType"
-	agentIdentityInner := identityMocks.IAgentIdentityInner{}
+	agentIdentityInner := &mocks.IEC2Identity{}
 	agentIdentityInner.On("InstanceType").Return(val, nil).Once()
 
-	cacher := agentIdentityCacher{log: log.NewMockLog(), client: &agentIdentityInner}
+	cacher := agentIdentityCacher{log: log.NewMockLog(), client: agentIdentityInner}
 
 	resStr, resErr = cacher.InstanceType()
 	assert.Equal(t, val, resStr)
@@ -96,10 +97,10 @@ func TestAgentIdentityCacher_InstanceType(t *testing.T) {
 
 func TestAgentIdentityCacher_Credentials(t *testing.T) {
 	val := &credentials.Credentials{}
-	agentIdentityInner := identityMocks.IAgentIdentityInner{}
+	agentIdentityInner := &mocks.IEC2Identity{}
 	agentIdentityInner.On("Credentials").Return(val).Once()
 
-	cacher := agentIdentityCacher{log: log.NewMockLog(), client: &agentIdentityInner}
+	cacher := agentIdentityCacher{log: log.NewMockLog(), client: agentIdentityInner}
 
 	assert.Equal(t, val, cacher.Credentials())
 	assert.Equal(t, val, cacher.Credentials())
@@ -109,10 +110,10 @@ func TestAgentIdentityCacher_IdentityType(t *testing.T) {
 	var resStr string
 
 	val := "SomeIdentityType"
-	agentIdentityInner := identityMocks.IAgentIdentityInner{}
+	agentIdentityInner := &mocks.IEC2Identity{}
 	agentIdentityInner.On("IdentityType").Return(val, nil).Once()
 
-	cacher := agentIdentityCacher{log: log.NewMockLog(), client: &agentIdentityInner}
+	cacher := agentIdentityCacher{log: log.NewMockLog(), client: agentIdentityInner}
 
 	resStr = cacher.IdentityType()
 	assert.Equal(t, val, resStr)

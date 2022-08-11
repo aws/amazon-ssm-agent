@@ -39,12 +39,14 @@ type instanceInfo struct {
 }
 
 var (
-	lock             sync.RWMutex
-	loadedServerInfo instanceInfo
+	lock                = &sync.RWMutex{}
+	loadedServerInfo    instanceInfo
+	loadedServerInfoKey string
 )
 
 const (
-	RegVaultKey = "RegistrationKey"
+	RegVaultKey             = "RegistrationKey"
+	EC2RegistrationVaultKey = "EC2RegistrationKey"
 
 	// If not date is stored with private key, the default age is 10 years
 	defaultPrivateKeyAgeInDays = 3650
@@ -52,26 +54,26 @@ const (
 )
 
 // InstanceID of the managed instance.
-func InstanceID(log log.T) string {
-	instance := getInstanceInfo(log)
+func InstanceID(log log.T, vaultKey string) string {
+	instance := getInstanceInfo(log, vaultKey)
 	return instance.InstanceID
 }
 
 // Region of the managed instance.
-func Region(log log.T) string {
-	instance := getInstanceInfo(log)
+func Region(log log.T, vaultKey string) string {
+	instance := getInstanceInfo(log, vaultKey)
 	return instance.Region
 }
 
 // PrivateKey of the managed instance.
-func PrivateKey(log log.T) string {
-	instance := getInstanceInfo(log)
+func PrivateKey(log log.T, vaultKey string) string {
+	instance := getInstanceInfo(log, vaultKey)
 	return instance.PrivateKey
 }
 
 // PrivateKeyType of the managed instance.
-func PrivateKeyType(log log.T) string {
-	instance := getInstanceInfo(log)
+func PrivateKeyType(log log.T, vaultKey string) string {
+	instance := getInstanceInfo(log, vaultKey)
 	return instance.PrivateKeyType
 }
 
@@ -81,23 +83,24 @@ func Fingerprint(log log.T) (string, error) {
 }
 
 // HasManagedInstancesCredentials returns true when the valid registration information is present
-func HasManagedInstancesCredentials(log log.T) bool {
-	info := getInstanceInfo(log)
+func HasManagedInstancesCredentials(log log.T, vaultKey string) bool {
+	info := getInstanceInfo(log, vaultKey)
 
 	// check if we need to activate instance
 	return info.PrivateKey != "" && info.Region != "" && info.InstanceID != ""
 }
 
 // UpdatePrivateKey saves the private key into the registration persistence store
-func UpdatePrivateKey(log log.T, privateKey, privateKeyType string) (err error) {
-	info := getInstanceInfo(log)
+func UpdatePrivateKey(log log.T, privateKey, privateKeyType string, vaultKey string) (err error) {
+	info := getInstanceInfo(log, vaultKey)
 	info.PrivateKey = privateKey
 	info.PrivateKeyType = privateKeyType
 	info.PrivateKeyCreatedDate = time.Now().Format(defaultDateStringFormat)
-	return updateServerInfo(info)
+	return updateServerInfo(info, vaultKey)
 }
 
-func ShouldRotatePrivateKey(log log.T, executableToRotateKey string, privateKeyMaxDaysAge int, serviceSaysRotate bool) (bool, error) {
+// ShouldRotatePrivateKey returns true if serviceSaysRotate or private key has surpassed privateKeyMaxDaysAge
+func ShouldRotatePrivateKey(log log.T, executableToRotateKey string, privateKeyMaxDaysAge int, serviceSaysRotate bool, vaultKey string) (bool, error) {
 	// only one executable should rotate private key to reduce chances of race condition
 	if !strings.HasPrefix(filepath.Base(os.Args[0]), executableToRotateKey) {
 		return false, nil
@@ -112,7 +115,7 @@ func ShouldRotatePrivateKey(log log.T, executableToRotateKey string, privateKeyM
 	if privateKeyMaxDaysAge <= 0 {
 		return false, nil
 	}
-	info := getInstanceInfo(log)
+	info := getInstanceInfo(log, vaultKey)
 
 	keyAgeInDays := defaultPrivateKeyAgeInDays
 	if info.PrivateKeyCreatedDate != "" {
@@ -139,7 +142,7 @@ func GeneratePublicKey(privateKey string) (publicKey string, err error) {
 }
 
 // UpdateServerInfo saves the instance info into the registration persistence store
-func UpdateServerInfo(instanceID, region, privateKey, privateKeyType string) (err error) {
+func UpdateServerInfo(instanceID, region, privateKey, privateKeyType, vaultKey string) (err error) {
 	info := instanceInfo{
 		InstanceID:            instanceID,
 		Region:                region,
@@ -147,7 +150,8 @@ func UpdateServerInfo(instanceID, region, privateKey, privateKeyType string) (er
 		PrivateKeyType:        privateKeyType,
 		PrivateKeyCreatedDate: time.Now().Format(defaultDateStringFormat),
 	}
-	return updateServerInfo(info)
+
+	return updateServerInfo(info, vaultKey)
 }
 
 // GenerateKeyPair generate a new keypair
@@ -173,27 +177,28 @@ func GenerateKeyPair() (publicKey, privateKey, keyType string, err error) {
 	return
 }
 
-func updateServerInfo(info instanceInfo) (err error) {
+func updateServerInfo(info instanceInfo, vaultKey string) (err error) {
 	lock.Lock()
 	defer lock.Unlock()
 
 	var data []byte
 	if data, err = json.Marshal(info); err != nil {
 		return fmt.Errorf("Failed to marshal instance info. %v", err)
-	} else {
-		//call vault apis here and update the refId
-		if err = vault.Store(RegVaultKey, data); err != nil {
-			return fmt.Errorf("Failed to store instance info in vault. %v", err)
-		}
+	}
+
+	//call vault apis here and update the refId
+	if err = vault.Store(vaultKey, data); err != nil {
+		return fmt.Errorf("Failed to store instance info in vault. %v", err)
 	}
 
 	loadedServerInfo = info
+	loadedServerInfoKey = vaultKey
 	return
 }
 
-func loadServerInfo() (loadErr error) {
-	lock.Lock()
-	defer lock.Unlock()
+func loadServerInfo(vaultKey string) (loadErr error) {
+	lock.RLock()
+	defer lock.RUnlock()
 
 	var info instanceInfo = instanceInfo{}
 
@@ -201,30 +206,32 @@ func loadServerInfo() (loadErr error) {
 		loadedServerInfo = info
 		return nil
 	}
-	if d, err := vault.Retrieve(RegVaultKey); err != nil {
+
+	if d, err := vault.Retrieve(vaultKey); err != nil {
 		return fmt.Errorf("Failed to load instance info from vault. %v", err)
 	} else {
 		if err = json.Unmarshal(d, &info); err != nil {
 			return fmt.Errorf("Failed to unmarshal instance info. %v", err)
 		}
 	}
+
 	loadedServerInfo = info
+	loadedServerInfoKey = vaultKey
 	return nil
 }
 
-func getInstanceInfo(log log.T) instanceInfo {
-	if loadedServerInfo.InstanceID == "" {
-		if err := loadServerInfo(); err != nil {
+func getInstanceInfo(log log.T, vaultKey string) instanceInfo {
+	if loadedServerInfo.InstanceID == "" || loadedServerInfoKey != vaultKey {
+		if err := loadServerInfo(vaultKey); err != nil {
 			log.Warnf("error while loading server info", err)
 		}
 	}
-	lock.RLock()
-	defer lock.RUnlock()
+
 	return loadedServerInfo
 }
 
-func ReloadInstanceInfo(log log.T) {
-	if err := loadServerInfo(); err != nil {
+func ReloadInstanceInfo(log log.T, vaultKey string) {
+	if err := loadServerInfo(vaultKey); err != nil {
 		log.Warnf("error while loading server info", err)
 	}
 }
@@ -235,32 +242,40 @@ func NewOnpremRegistrationInfo() IOnpremRegistrationInfo {
 }
 
 type IOnpremRegistrationInfo interface {
-	InstanceID(log.T) string
-	Region(log.T) string
-	PrivateKey(log.T) string
-	PrivateKeyType(log log.T) string
+	InstanceID(log.T, string) string
+	Region(log.T, string) string
+	PrivateKey(log.T, string) string
+	PrivateKeyType(log.T, string) string
 	Fingerprint(log.T) (string, error)
 	GenerateKeyPair() (string, string, string, error)
-	UpdatePrivateKey(log.T, string, string) error
-	HasManagedInstancesCredentials(log.T) bool
+	UpdatePrivateKey(log.T, string, string, string) error
+	HasManagedInstancesCredentials(log.T, string) bool
 	GeneratePublicKey(string) (string, error)
-	ShouldRotatePrivateKey(log.T, string, int, bool) (bool, error)
-	ReloadInstanceInfo(log log.T)
+	ShouldRotatePrivateKey(log.T, string, int, bool, string) (bool, error)
+	ReloadInstanceInfo(log log.T, string2 string)
 }
 
 type onpremRegistation struct{}
 
 // InstanceID returns the managed instance ID
-func (onpremRegistation) InstanceID(log log.T) string { return InstanceID(log) }
+func (onpremRegistation) InstanceID(log log.T, vaultKey string) string {
+	return InstanceID(log, vaultKey)
+}
 
 // Region returns the managed instance region
-func (onpremRegistation) Region(log log.T) string { return Region(log) }
+func (onpremRegistation) Region(log log.T, vaultKey string) string {
+	return Region(log, vaultKey)
+}
 
 // PrivateKey returns the managed instance PrivateKey
-func (onpremRegistation) PrivateKey(log log.T) string { return PrivateKey(log) }
+func (onpremRegistation) PrivateKey(log log.T, vaultKey string) string {
+	return PrivateKey(log, vaultKey)
+}
 
 // PrivateKeyType returns the managed instance PrivateKey
-func (onpremRegistation) PrivateKeyType(log log.T) string { return PrivateKeyType(log) }
+func (onpremRegistation) PrivateKeyType(log log.T, vaultKey string) string {
+	return PrivateKeyType(log, vaultKey)
+}
 
 // Fingerprint returns the managed instance fingerprint
 func (onpremRegistation) Fingerprint(log log.T) (string, error) { return Fingerprint(log) }
@@ -271,18 +286,18 @@ func (onpremRegistation) GenerateKeyPair() (publicKey, privateKey, keyType strin
 }
 
 // UpdatePrivateKey saves the private key into the registration persistence store
-func (onpremRegistation) UpdatePrivateKey(log log.T, privateKey, privateKeyType string) (err error) {
-	return UpdatePrivateKey(log, privateKey, privateKeyType)
+func (onpremRegistation) UpdatePrivateKey(log log.T, privateKey, privateKeyType string, vaultKey string) (err error) {
+	return UpdatePrivateKey(log, privateKey, privateKeyType, vaultKey)
 }
 
 // HasManagedInstancesCredentials returns if the instance has registration
-func (onpremRegistation) HasManagedInstancesCredentials(log log.T) bool {
-	return HasManagedInstancesCredentials(log)
+func (onpremRegistation) HasManagedInstancesCredentials(log log.T, vaultKey string) bool {
+	return HasManagedInstancesCredentials(log, vaultKey)
 }
 
 // ShouldRotatePrivateKey returns true of the age of the private key is greater or equal than argument.
-func (onpremRegistation) ShouldRotatePrivateKey(log log.T, executableToRotateKey string, privateKeyMaxDaysAge int, serviceSaysRotate bool) (bool, error) {
-	return ShouldRotatePrivateKey(log, executableToRotateKey, privateKeyMaxDaysAge, serviceSaysRotate)
+func (onpremRegistation) ShouldRotatePrivateKey(log log.T, executableToRotateKey string, privateKeyMaxDaysAge int, serviceSaysRotate bool, vaultKey string) (bool, error) {
+	return ShouldRotatePrivateKey(log, executableToRotateKey, privateKeyMaxDaysAge, serviceSaysRotate, vaultKey)
 }
 
 // GeneratePublicKey generate the public key of a provided private key
@@ -291,6 +306,6 @@ func (onpremRegistation) GeneratePublicKey(privateKey string) (string, error) {
 }
 
 // ReloadInstanceInfo reloads instance info from disk
-func (onpremRegistation) ReloadInstanceInfo(log log.T) {
-	ReloadInstanceInfo(log)
+func (onpremRegistation) ReloadInstanceInfo(log log.T, vaultKey string) {
+	ReloadInstanceInfo(log, vaultKey)
 }

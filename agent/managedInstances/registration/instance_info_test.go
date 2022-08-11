@@ -41,8 +41,8 @@ var (
 func ExampleRegion() {
 	file = fileStub{}
 	vault = vaultStub{rKey: sampleRegistrationKey, data: sampleJson, exists: true}
-	loadServerInfo() // load info with mocked vault
-	region := Region(log.NewMockLog())
+	loadServerInfo(RegVaultKey) // load info with mocked vault
+	region := Region(log.NewMockLog(), RegVaultKey)
 	fmt.Println(region)
 	// Output:
 	// us-west-1
@@ -51,8 +51,8 @@ func ExampleRegion() {
 func ExampleInstanceID() {
 	file = fileStub{}
 	vault = vaultStub{rKey: sampleRegistrationKey, data: sampleJson, exists: true}
-	loadServerInfo() // load info with mocked vault
-	instanceID := InstanceID(log.NewMockLog())
+	loadServerInfo(RegVaultKey) // load info with mocked vault
+	instanceID := InstanceID(log.NewMockLog(), RegVaultKey)
 	fmt.Println(instanceID)
 	// Output:
 	// mi-e6c6f145e6c6f145
@@ -61,8 +61,8 @@ func ExampleInstanceID() {
 func ExamplePrivateKey() {
 	file = fileStub{}
 	vault = vaultStub{rKey: sampleRegistrationKey, data: sampleJson, exists: true}
-	loadServerInfo() // load info with mocked vault
-	privateKey := PrivateKey(log.NewMockLog())
+	loadServerInfo(RegVaultKey) // load info with mocked vault
+	privateKey := PrivateKey(log.NewMockLog(), RegVaultKey)
 	fmt.Println(privateKey)
 	// Output:
 	// KEYe6c6f145e6c6f145
@@ -82,7 +82,7 @@ func TestShouldRotatePrivateKey(t *testing.T) {
 	var err error
 
 	// Test not ssm-agent-worker
-	rotate, err = ShouldRotatePrivateKey(log.NewMockLog(), "ssm-agent-worker", 0, true)
+	rotate, err = ShouldRotatePrivateKey(log.NewMockLog(), "ssm-agent-worker", 0, true, RegVaultKey)
 	assert.False(t, rotate)
 	assert.NoError(t, err)
 
@@ -90,54 +90,55 @@ func TestShouldRotatePrivateKey(t *testing.T) {
 	oldArgs := os.Args
 	defer func() { os.Args = oldArgs }()
 	os.Args = []string{"ssm-agent-worker.exe"}
-	rotate, err = ShouldRotatePrivateKey(log.NewMockLog(), "ssm-agent-worker", 0, true)
+	rotate, err = ShouldRotatePrivateKey(log.NewMockLog(), "ssm-agent-worker", 0, true, RegVaultKey)
 	assert.True(t, rotate)
 	assert.NoError(t, err)
 
 	// Test ssm-agent-worker and service says should rotate but only amazon-ssm-agent should rotate
 	os.Args = []string{"ssm-agent-worker.exe"}
-	rotate, err = ShouldRotatePrivateKey(log.NewMockLog(), "amazon-ssm-agent", 0, true)
+	rotate, err = ShouldRotatePrivateKey(log.NewMockLog(), "amazon-ssm-agent", 0, true, RegVaultKey)
 	assert.False(t, rotate)
 	assert.NoError(t, err)
 
 	// Test amazon-ssm-agent and service says should rotate but only amazon-ssm-agent should rotate
 	os.Args = []string{"amazon-ssm-agent.exe"}
-	rotate, err = ShouldRotatePrivateKey(log.NewMockLog(), "amazon-ssm-agent", 0, true)
+	rotate, err = ShouldRotatePrivateKey(log.NewMockLog(), "amazon-ssm-agent", 0, true, RegVaultKey)
 	assert.True(t, rotate)
 	assert.NoError(t, err)
 
 	// Test private key max age less or equal to 0
 	os.Args = []string{"amazon-ssm-agent.exe"}
-	rotate, err = ShouldRotatePrivateKey(log.NewMockLog(), "amazon-ssm-agent", 0, false)
+	rotate, err = ShouldRotatePrivateKey(log.NewMockLog(), "amazon-ssm-agent", 0, false, RegVaultKey)
 	assert.False(t, rotate)
 	assert.NoError(t, err)
-	rotate, err = ShouldRotatePrivateKey(log.NewMockLog(), "amazon-ssm-agent", -1, false)
+	rotate, err = ShouldRotatePrivateKey(log.NewMockLog(), "amazon-ssm-agent", -1, false, RegVaultKey)
 	assert.False(t, rotate)
 	assert.NoError(t, err)
 
 	loadedServerInfo.InstanceID = "notempty"
+	loadedServerInfoKey = RegVaultKey
 
 	//Test empty created date
 	loadedServerInfo.PrivateKeyCreatedDate = ""
-	rotate, err = ShouldRotatePrivateKey(log.NewMockLog(), "amazon-ssm-agent", 1, false)
+	rotate, err = ShouldRotatePrivateKey(log.NewMockLog(), "amazon-ssm-agent", 1, false, RegVaultKey)
 	assert.True(t, rotate)
 	assert.NoError(t, err)
 
 	//Test incorrect date format
 	loadedServerInfo.PrivateKeyCreatedDate = "2006-01-02T15:04:05.999999999 PST"
-	rotate, err = ShouldRotatePrivateKey(log.NewMockLog(), "amazon-ssm-agent", 1, false)
+	rotate, err = ShouldRotatePrivateKey(log.NewMockLog(), "amazon-ssm-agent", 1, false, RegVaultKey)
 	assert.False(t, rotate)
 	assert.Error(t, err)
 
 	//Test correct date format with recently rotated key
 	loadedServerInfo.PrivateKeyCreatedDate = time.Now().Format(defaultDateStringFormat)
-	rotate, err = ShouldRotatePrivateKey(log.NewMockLog(), "amazon-ssm-agent", 1, false)
+	rotate, err = ShouldRotatePrivateKey(log.NewMockLog(), "amazon-ssm-agent", 1, false, RegVaultKey)
 	assert.False(t, rotate)
 	assert.NoError(t, err)
 
 	//Test correct date format with old key
 	loadedServerInfo.PrivateKeyCreatedDate = time.Now().Add(-24 * time.Hour).Format(defaultDateStringFormat)
-	rotate, err = ShouldRotatePrivateKey(log.NewMockLog(), "amazon-ssm-agent", 1, false)
+	rotate, err = ShouldRotatePrivateKey(log.NewMockLog(), "amazon-ssm-agent", 1, false, RegVaultKey)
 	assert.True(t, rotate)
 	assert.NoError(t, err)
 }

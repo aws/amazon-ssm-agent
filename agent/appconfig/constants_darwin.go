@@ -104,4 +104,6 @@ var (
 	RunCommandScriptName = "_script.sh"
 
 	RuntimeConfigFolderPath = DefaultProgramFolder + "runtimeconfig"
+
+	DefaultEC2SharedCredentialsFilePath = DefaultDataStorePath + "credentials"
 )
