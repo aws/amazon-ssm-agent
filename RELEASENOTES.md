@@ -1,5 +1,10 @@
 Latest
 ===============
+- Add code in document/session worker to fallback to default identity selector when runtime config not present
+- Fix to handle command-line-arguments in document/session worker when launched by old agent workers
+
+3.1.1634.0
+===============
 - Fallback to file based IPC if named pipe creation times out
 - Increase tls handshake timeout in http download client
 - Log mds client timeout errors as WARN
