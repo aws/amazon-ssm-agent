@@ -21,9 +21,13 @@ import (
 
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
+	"github.com/aws/amazon-ssm-agent/agent/health"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/ssm"
 	"github.com/aws/amazon-ssm-agent/agent/updateutil/updateconstants"
+	"github.com/aws/amazon-ssm-agent/common/identity"
+	identityMock "github.com/aws/amazon-ssm-agent/common/identity/mocks"
+
 	ssmService "github.com/aws/aws-sdk-go/service/ssm"
 	"github.com/stretchr/testify/assert"
 )
@@ -132,12 +136,26 @@ func TestUpdateHealthCheck(t *testing.T) {
 	updateDetail := createUpdateDetail(Installed)
 	service := &svcManager{}
 
+	mockIdentity := &identityMock.IAgentIdentityInner{}
+	newEC2Identity = func(log log.T) identity.IAgentIdentityInner {
+		return mockIdentity
+	}
+
+	availabilityZone := "us-east-1a"
+	availabilityZoneId := "use1-az2"
+	mockIdentity.On("IsIdentityEnvironment").Return(true)
+	mockIdentity.On("AvailabilityZone").Return(availabilityZone, nil)
+	mockIdentity.On("AvailabilityZoneId").Return(availabilityZoneId, nil)
+
 	mockObj := ssm.NewMockDefault()
 	mockObj.On(
 		"UpdateInstanceInformation",
 		logger,
 		updateDetail.SourceVersion,
-		fmt.Sprintf("%v-%v", updateInProgress, updateDetail.TargetVersion)).Return(&ssmService.UpdateInstanceInformationOutput{}, nil)
+		fmt.Sprintf("%v-%v", updateInProgress, updateDetail.TargetVersion),
+		health.AgentName,
+		availabilityZone,
+		availabilityZoneId).Return(&ssmService.UpdateInstanceInformationOutput{}, nil)
 
 	// setup
 	newSsmSvc = func(context context.T) ssm.Service {

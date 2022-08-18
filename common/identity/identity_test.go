@@ -58,6 +58,24 @@ func TestAgentIdentityCacher_AvailabilityZone(t *testing.T) {
 	assert.NoError(t, resErr)
 }
 
+func TestAgentIdentityCacher_AvailabilityZoneId(t *testing.T) {
+	var resStr string
+	var resErr error
+
+	val := "use1-az2"
+	agentIdentityInner := &identityMocks.IAgentIdentityInner{}
+	agentIdentityInner.On("AvailabilityZoneId").Return(val, nil).Once()
+
+	cacher := agentIdentityCacher{log: log.NewMockLog(), client: agentIdentityInner}
+
+	resStr, resErr = cacher.AvailabilityZoneId()
+	assert.Equal(t, val, resStr)
+	assert.NoError(t, resErr)
+	resStr, resErr = cacher.AvailabilityZoneId()
+	assert.Equal(t, val, resStr)
+	assert.NoError(t, resErr)
+}
+
 func TestAgentIdentityCacher_InstanceType(t *testing.T) {
 	var resStr string
 	var resErr error

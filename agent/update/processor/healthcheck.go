@@ -25,6 +25,8 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/ssm"
 	"github.com/aws/amazon-ssm-agent/agent/updateutil/updateconstants"
+	"github.com/aws/amazon-ssm-agent/common/identity"
+	"github.com/aws/amazon-ssm-agent/common/identity/availableidentities/ec2"
 )
 
 const (
@@ -56,6 +58,9 @@ var ssmSvc ssm.Service
 var ssmSvcOnce sync.Once
 
 var newSsmSvc = ssm.NewService
+var newEC2Identity = func(log log.T) identity.IAgentIdentityInner {
+	return ec2.NewEC2Identity(log)
+}
 
 // UpdateHealthCheck sends the health check information back to the service
 func (s *svcManager) UpdateHealthCheck(log log.T, update *UpdateDetail, errorCode string) (err error) {
@@ -64,7 +69,14 @@ func (s *svcManager) UpdateHealthCheck(log log.T, update *UpdateDetail, errorCod
 		return fmt.Errorf("Failed to load ssm service, %v", err)
 	}
 	status := PrepareHealthStatus(update, errorCode, update.TargetVersion)
-	if _, err = svc.UpdateInstanceInformation(log, update.SourceVersion, status, health.AgentName); err != nil {
+	ec2Identity := newEC2Identity(log)
+	var availabilityZone = ""
+	var availabilityZoneId = ""
+	if ec2Identity.IsIdentityEnvironment() {
+		availabilityZone, _ = ec2Identity.AvailabilityZone()
+		availabilityZoneId, _ = ec2Identity.AvailabilityZoneId()
+	}
+	if _, err = svc.UpdateInstanceInformation(log, update.SourceVersion, status, health.AgentName, availabilityZone, availabilityZoneId); err != nil {
 		return
 	}
 

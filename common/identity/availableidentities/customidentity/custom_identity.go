@@ -29,9 +29,14 @@ func (i *Identity) Region() (region string, err error) {
 	return i.CustomIdentity.Region, nil
 }
 
-// AvailabilityZone returns the availabilityZone ec2 instance
+// AvailabilityZone returns the availabilityZone of the ec2 instance
 func (i *Identity) AvailabilityZone() (string, error) {
 	return i.CustomIdentity.AvailabilityZone, nil
+}
+
+// AvailabilityZoneId returns the availabilityZoneId of the ec2 instance
+func (i *Identity) AvailabilityZoneId() (string, error) {
+	return i.CustomIdentity.AvailabilityZoneId, nil
 }
 
 // InstanceType returns the instance type of the ec2 instance

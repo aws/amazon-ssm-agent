@@ -93,6 +93,18 @@ func (c *agentIdentityCacher) AvailabilityZone() (string, error) {
 	return c.availabilityZone, err
 }
 
+func (c *agentIdentityCacher) AvailabilityZoneId() (string, error) {
+	c.mutex.Lock()
+	defer c.mutex.Unlock()
+	if c.availabilityZoneId != "" {
+		return c.availabilityZoneId, nil
+	}
+
+	var err error
+	c.availabilityZoneId, err = c.client.AvailabilityZoneId()
+	return c.availabilityZoneId, err
+}
+
 func (c *agentIdentityCacher) InstanceType() (string, error) {
 	c.mutex.Lock()
 	defer c.mutex.Unlock()

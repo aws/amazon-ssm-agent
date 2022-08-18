@@ -25,6 +25,9 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/sdkutil"
 	ssmMock "github.com/aws/amazon-ssm-agent/agent/ssm/mocks"
 	"github.com/aws/amazon-ssm-agent/agent/version"
+	"github.com/aws/amazon-ssm-agent/common/identity"
+	identityMock "github.com/aws/amazon-ssm-agent/common/identity/mocks"
+
 	"github.com/carlescere/scheduler"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
@@ -82,14 +85,26 @@ func (suite *HealthCheckTestSuite) TestModuleExecute() {
 			HealthFrequencyMinutes: appconfig.DefaultSsmHealthFrequencyMinutes,
 		},
 	}
+
+	mockIdentity := &identityMock.IAgentIdentityInner{}
+	newEC2Identity = func(log log.T) identity.IAgentIdentityInner {
+		return mockIdentity
+	}
+
+	availabilityZone := "us-east-1a"
+	availabilityZoneId := "use1-az2"
+	mockIdentity.On("IsIdentityEnvironment").Return(true)
+	mockIdentity.On("AvailabilityZone").Return(availabilityZone, nil)
+	mockIdentity.On("AvailabilityZoneId").Return(availabilityZoneId, nil)
+
 	// Turn on the mock method
 	suite.contextMock.On("AppConfig").Return(*appconfigMock)
-	suite.serviceMock.On("UpdateInstanceInformation", mock.Anything, version.Version, "Active", AgentName).Return(nil, nil)
+	suite.serviceMock.On("UpdateInstanceInformation", mock.Anything, version.Version, "Active", AgentName, availabilityZone, availabilityZoneId).Return(nil, nil)
 	suite.healthCheck.ModuleExecute()
 	// Because ModuleExecute will launch two new go routine, wait five second to make sure the updateHealth() has launched
 	time.Sleep(100 * time.Millisecond)
 	// Assert the UpdateInstanceInformation get called in updateHealth() function, and the agent status is same as input.
-	suite.serviceMock.AssertCalled(suite.T(), "UpdateInstanceInformation", mock.Anything, version.Version, "Active", AgentName)
+	suite.serviceMock.AssertCalled(suite.T(), "UpdateInstanceInformation", mock.Anything, version.Version, "Active", AgentName, availabilityZone, availabilityZoneId)
 }
 
 // Testing the ModuleStop method with healthjob define

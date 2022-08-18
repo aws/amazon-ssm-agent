@@ -132,6 +132,7 @@ type CustomIdentity struct {
 	InstanceID          string
 	Region              string
 	AvailabilityZone    string
+	AvailabilityZoneId  string
 	InstanceType        string
 	CredentialsProvider string
 }

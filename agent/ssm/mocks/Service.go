@@ -394,13 +394,13 @@ func (_m *Service) UpdateInstanceAssociationStatus(_a0 log.T, associationID stri
 	return r0, r1
 }
 
-// UpdateInstanceInformation provides a mock function with given fields: _a0, agentVersion, agentStatus, agentName
-func (_m *Service) UpdateInstanceInformation(_a0 log.T, agentVersion string, agentStatus string, agentName string) (*ssm.UpdateInstanceInformationOutput, error) {
-	ret := _m.Called(_a0, agentVersion, agentStatus, agentName)
+// UpdateInstanceInformation provides a mock function with given fields: _a0, agentVersion, agentStatus, agentName, availabilityZone, availabilityZoneId
+func (_m *Service) UpdateInstanceInformation(_a0 log.T, agentVersion string, agentStatus string, agentName string, availabilityZone string, availabilityZoneId string) (*ssm.UpdateInstanceInformationOutput, error) {
+	ret := _m.Called(_a0, agentVersion, agentStatus, agentName, availabilityZone, availabilityZoneId)
 
 	var r0 *ssm.UpdateInstanceInformationOutput
-	if rf, ok := ret.Get(0).(func(log.T, string, string, string) *ssm.UpdateInstanceInformationOutput); ok {
-		r0 = rf(_a0, agentVersion, agentStatus, agentName)
+	if rf, ok := ret.Get(0).(func(log.T, string, string, string, string, string) *ssm.UpdateInstanceInformationOutput); ok {
+		r0 = rf(_a0, agentVersion, agentStatus, agentName, availabilityZone, availabilityZoneId)
 	} else {
 		if ret.Get(0) != nil {
 			r0 = ret.Get(0).(*ssm.UpdateInstanceInformationOutput)
@@ -408,8 +408,8 @@ func (_m *Service) UpdateInstanceInformation(_a0 log.T, agentVersion string, age
 	}
 
 	var r1 error
-	if rf, ok := ret.Get(1).(func(log.T, string, string, string) error); ok {
-		r1 = rf(_a0, agentVersion, agentStatus, agentName)
+	if rf, ok := ret.Get(1).(func(log.T, string, string, string, string, string) error); ok {
+		r1 = rf(_a0, agentVersion, agentStatus, agentName, availabilityZone, availabilityZoneId)
 	} else {
 		r1 = ret.Error(1)
 	}

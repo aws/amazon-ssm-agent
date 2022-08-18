@@ -84,6 +84,21 @@ func TestEC2IdentityType_AvailabilityZone(t *testing.T) {
 	assert.NoError(t, err)
 }
 
+func TestEC2IdentityType_AvailabilityZoneId(t *testing.T) {
+	client := &iEC2MdsSdkClientMock{}
+
+	identity := Identity{
+		Log:    log.NewMockLog(),
+		Client: client,
+	}
+	val := "SomeAZ"
+	client.On("GetMetadata", ec2AvailabilityZoneResourceId).Return(val, nil).Once()
+
+	res, err := identity.AvailabilityZoneId()
+	assert.Equal(t, res, val)
+	assert.NoError(t, err)
+}
+
 func TestEC2IdentityType_InstanceType(t *testing.T) {
 	client := &iEC2MdsSdkClientMock{}
 

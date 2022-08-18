@@ -36,6 +36,11 @@ func (*Identity) AvailabilityZone() (string, error) {
 	return IdentityType, nil
 }
 
+// AvailabilityZoneId returns empty if the managed instance is not EC2
+func (*Identity) AvailabilityZoneId() (string, error) {
+	return "", nil
+}
+
 // InstanceType returns the managed instance instanceType
 func (*Identity) InstanceType() (string, error) {
 	return IdentityType, nil

@@ -20,9 +20,13 @@ import (
 	"time"
 
 	"github.com/aws/amazon-ssm-agent/agent/context"
+	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/sdkutil"
 	"github.com/aws/amazon-ssm-agent/agent/ssm"
 	"github.com/aws/amazon-ssm-agent/agent/version"
+	"github.com/aws/amazon-ssm-agent/common/identity"
+	"github.com/aws/amazon-ssm-agent/common/identity/availableidentities/ec2"
+
 	"github.com/carlescere/scheduler"
 )
 
@@ -48,6 +52,10 @@ const (
 )
 
 var healthModule *HealthCheck
+
+var newEC2Identity = func(log log.T) identity.IAgentIdentityInner {
+	return ec2.NewEC2Identity(log)
+}
 
 // AgentState enumerates active and passive agentMode
 type AgentState int32
@@ -98,10 +106,19 @@ func (h *HealthCheck) updateHealth() {
 
 	log.Infof("%s reporting agent health.", name)
 
+	ec2Identity := newEC2Identity(log)
+
+	var availabilityZone = ""
+	var availabilityZoneId = ""
+	if ec2Identity.IsIdentityEnvironment() {
+		availabilityZone, _ = ec2Identity.AvailabilityZone()
+		availabilityZoneId, _ = ec2Identity.AvailabilityZoneId()
+	}
+
 	var err error
 	//TODO when will status become inactive?
 	// If both ssm config and command is inactive => agent is inactive.
-	if _, err = h.service.UpdateInstanceInformation(log, version.Version, "Active", AgentName); err != nil {
+	if _, err = h.service.UpdateInstanceInformation(log, version.Version, "Active", AgentName, availabilityZone, availabilityZoneId); err != nil {
 		sdkutil.HandleAwsError(log, err, h.healthCheckStopPolicy)
 	}
 

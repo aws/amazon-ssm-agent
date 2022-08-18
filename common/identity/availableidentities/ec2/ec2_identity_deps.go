@@ -19,13 +19,14 @@ import (
 )
 
 const (
-	ec2InstanceIDResource       = "instance-id"
-	ec2InstanceTypeResource     = "instance-type"
-	ec2AvailabilityZoneResource = "placement/availability-zone"
-	ec2ServiceDomainResource    = "services/domain"
-	ec2MacsResource             = "network/interfaces/macs"
-	ec2VpcCidrBlockV4Resource   = "vpc-ipv4-cidr-block"
-	ec2VpcCidrBlockV6Resource   = "vpc-ipv6-cidr-blocks"
+	ec2InstanceIDResource         = "instance-id"
+	ec2InstanceTypeResource       = "instance-type"
+	ec2AvailabilityZoneResource   = "placement/availability-zone"
+	ec2AvailabilityZoneResourceId = "placement/availability-zone-id"
+	ec2ServiceDomainResource      = "services/domain"
+	ec2MacsResource               = "network/interfaces/macs"
+	ec2VpcCidrBlockV4Resource     = "vpc-ipv4-cidr-block"
+	ec2VpcCidrBlockV6Resource     = "vpc-ipv6-cidr-blocks"
 	// IdentityType is the identity type for EC2
 	IdentityType = "EC2"
 )

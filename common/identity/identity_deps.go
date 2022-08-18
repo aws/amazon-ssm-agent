@@ -28,6 +28,7 @@ type IAgentIdentity interface {
 	ShortInstanceID() (string, error)
 	Region() (string, error)
 	AvailabilityZone() (string, error)
+	AvailabilityZoneId() (string, error)
 	InstanceType() (string, error)
 	Credentials() *credentials.Credentials
 	IdentityType() string
@@ -43,6 +44,7 @@ type IAgentIdentityInner interface {
 	InstanceID() (string, error)
 	Region() (string, error)
 	AvailabilityZone() (string, error)
+	AvailabilityZoneId() (string, error)
 	InstanceType() (string, error)
 	IsIdentityEnvironment() bool
 	Credentials() *credentials.Credentials
@@ -63,17 +65,18 @@ type IMetadataIdentity interface {
 }
 
 type agentIdentityCacher struct {
-	instanceID       string
-	shortInstanceID  string
-	region           string
-	availabilityZone string
-	instanceType     string
-	creds            *credentials.Credentials
-	identityType     string
-	mutex            sync.Mutex
-	log              log.T
-	client           IAgentIdentityInner
-	endpointHelper   endpoint.IEndpointHelper
+	instanceID         string
+	shortInstanceID    string
+	region             string
+	availabilityZone   string
+	availabilityZoneId string
+	instanceType       string
+	creds              *credentials.Credentials
+	identityType       string
+	mutex              sync.Mutex
+	log                log.T
+	client             IAgentIdentityInner
+	endpointHelper     endpoint.IEndpointHelper
 }
 
 type createIdentityFunc func(log.T, *appconfig.SsmagentConfig) []IAgentIdentityInner

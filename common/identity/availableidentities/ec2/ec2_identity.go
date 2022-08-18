@@ -48,6 +48,11 @@ func (i *Identity) AvailabilityZone() (string, error) {
 	return i.Client.GetMetadata(ec2AvailabilityZoneResource)
 }
 
+// AvailabilityZoneId returns the availabilityZoneId ec2 instance
+func (i *Identity) AvailabilityZoneId() (string, error) {
+	return i.Client.GetMetadata(ec2AvailabilityZoneResourceId)
+}
+
 // InstanceType returns the instance type of the ec2 instance
 func (i *Identity) InstanceType() (string, error) {
 	return i.Client.GetMetadata(ec2InstanceTypeResource)
