@@ -33,7 +33,6 @@ var (
 		`","ApplicationType":"` + mark(`admin`) + `","Architecture":"` + mark(`amd64`) + `","Url":"","Summary":"` +
 		mark(`Description with "quotes" 'and' `+"tabs\t and carriage returns\r"+` and
 		new lines`) + `","PackageId":"` + mark(`amazon-ssm-agent_1.2_amd64.rpm`) + `"},` +
-
 		`{"Name":"` + mark(`adduser`) + `","Version":"` + mark(`3.113+nmu3ubuntu3`) + `","Publisher":"` +
 		mark(`Ubuntu Core Developers <ubuntu-devel-discuss@lists.ubuntu.com>`) + `","Release":"` + mark(`9.amzn2`) + `","Epoch":"` + mark(`14`) +
 		`","ApplicationType":"` + mark(`admin`) + `","Architecture":"` + mark(`all`) +
@@ -41,13 +40,11 @@ var (
 		`"Summary":"` + mark(`add and remove users and groups
  This package includes the 'adduser' and 'deluser' commands for creating
  and removing users.`) + `","PackageId":"` + mark(`adduser_3.113+nmu3ubuntu4_all.deb`) + `"},` +
-
 		`{"Name":"` + mark(`"sed"`) + `","Publisher":"` + mark(`"Amazon.com"`) + `","Version":"` + mark(`"4.2.1"`) +
 		`","InstalledTime":"` + mark(`1454346676`) + `",` +
 		`"ApplicationType":"` + mark(`"Applications/Text"`) + `","Architecture":"` + mark(`"x86_64"`) + `","Url":"` +
 		mark(`"http://sed.sourceforge.net/"`) + `",` + `"Summary":"` + mark(`A GNU "stream" text editor`) + `","PackageId":"` +
 		mark(`"sed-4.2.1-7.9.amzn1.src.rpm"`) + `"},` +
-
 		`{"Name":"` + mark(`sed`) + `","Version":"` + mark(`4.2.2-7`) + `","Publisher":"` + mark(`Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>`) +
 		`","ApplicationType":"` + mark(`utils`) + `","Architecture":"` + mark(`amd64`) + `","Url":"` + mark(`http://www.gnu.org/software/sed/`) + `",` +
 		`"Summary":"` + mark(`The GNU sed stream editor
@@ -55,7 +52,6 @@ sed reads the specified files or the standard input if no
 files are specified, makes editing changes according to a
 list of commands, and writes the results to the standard
 output.`) + `","PackageId":"` + mark(`sed_4.2.2-7_amd64.deb`) + `"},` +
-
 		`{"Name":"` + mark(`vim-filesystem`) + `","Version":"` + mark(`8.0.0503`) + `","Publisher":"` +
 		mark(`Amazon.com`) + `","Release":"` + mark(`1.45.amzn1`) + `","Epoch":"` + mark(`(none)`) +
 		`","ApplicationType":"` + mark(`Applications/Editors`) + `","Architecture":"` + mark(`x86_64`) +
@@ -131,7 +127,7 @@ var sampleDataParsed = []model.ApplicationData{
 
 var snapSampleDataParsed = `{"Name":"` + mark(`core`) + `","Publisher":"` + mark(`canonical*`) + `","Version":"` + mark(`16-2.43.3`) +
 	`","ApplicationType":"` + mark(`admin`) + `","Architecture":"` + mark(``) + `","Url":"` + mark(``) + `",` +
-	`"Summary":"` + mark(``) + `","PackageId":"` + mark(``) + `"}`
+	`"Summary":"` + mark(``) + `","PackageId":"` + mark(`pkg:snap/canonical*/core@16-2.43.3`) + `"}`
 
 func MockTestExecutorWithError(command string, args ...string) ([]byte, error) {
 	var result []byte
@@ -190,23 +186,43 @@ func TestParseSnapOutput(t *testing.T) {
 	assert.Equal(t, snapSampleDataParsed, data)
 }
 
-func TestCollectApplicationData(t *testing.T) {
+func TestCollectApplicationData_CollectsBothRpmAndDpkgPackages(t *testing.T) {
 	mockContext := context.NewMockDefault()
 	oldCheckCmd := checkCommandExists
 	defer func() { checkCommandExists = oldCheckCmd }()
 
-	// test with finding dpkg
-	checkCommandExists = func(string) bool { return true }
+	returnList := []bool{true, true}
+	checkCommandExists = func(string) bool {
+		retVal := returnList[0]
+		returnList = returnList[1:]
+		return retVal
+	}
+	cmdExecutor = MockTestExecutorWithoutError
+	data := collectPlatformDependentApplicationData(mockContext)
+	assertEqual(t, append(sampleDataParsed, sampleDataParsed...), data)
+}
+
+func TestCollectApplicationData_CollectsOnlyDpkgPackages(t *testing.T) {
+	mockContext := context.NewMockDefault()
+	oldCheckCmd := checkCommandExists
+	defer func() { checkCommandExists = oldCheckCmd }()
+
+	returnList := []bool{true, false}
+	checkCommandExists = func(string) bool {
+		retVal := returnList[0]
+		returnList = returnList[1:]
+		return retVal
+	}
 	cmdExecutor = MockTestExecutorWithoutError
 	data := collectPlatformDependentApplicationData(mockContext)
 	assertEqual(t, sampleDataParsed, data)
+}
 
-	// neither dpkg nor rpm are found
-	checkCommandExists = func(string) bool { return false }
-	data = collectPlatformDependentApplicationData(mockContext)
-	assert.Equal(t, 0, len(data), "when no package managers are found- application dataset must be empty")
+func TestCollectApplicationData_CollectsOnlyRpmPackages(t *testing.T) {
+	mockContext := context.NewMockDefault()
+	oldCheckCmd := checkCommandExists
+	defer func() { checkCommandExists = oldCheckCmd }()
 
-	// test with finding rpm
 	returnList := []bool{false, true}
 	checkCommandExists = func(string) bool {
 		retVal := returnList[0]
@@ -214,17 +230,38 @@ func TestCollectApplicationData(t *testing.T) {
 		return retVal
 	}
 	cmdExecutor = MockTestExecutorWithoutError
-	data = collectPlatformDependentApplicationData(mockContext)
+	data := collectPlatformDependentApplicationData(mockContext)
 	assertEqual(t, sampleDataParsed, data)
+}
 
-	// test with finding rpm but executor executor error
-	returnList = []bool{false, true}
+func TestCollectApplicationData_CollectsNeitherRpmNorDpkgPackages(t *testing.T) {
+	mockContext := context.NewMockDefault()
+	oldCheckCmd := checkCommandExists
+	defer func() { checkCommandExists = oldCheckCmd }()
+
+	returnList := []bool{false, false}
+	checkCommandExists = func(string) bool {
+		retVal := returnList[0]
+		returnList = returnList[1:]
+		return retVal
+	}
+	cmdExecutor = MockTestExecutorWithoutError
+	data := collectPlatformDependentApplicationData(mockContext)
+	assert.Equal(t, 0, len(data), "when no package managers are found - application dataset must be empty")
+}
+
+func TestCollectApplicationData_FindsRpmButEncountersExecutorError(t *testing.T) {
+	mockContext := context.NewMockDefault()
+	oldCheckCmd := checkCommandExists
+	defer func() { checkCommandExists = oldCheckCmd }()
+
+	returnList := []bool{false, true}
 	checkCommandExists = func(string) bool {
 		retVal := returnList[0]
 		returnList = returnList[1:]
 		return retVal
 	}
 	cmdExecutor = MockTestExecutorWithError
-	data = collectPlatformDependentApplicationData(mockContext)
+	data := collectPlatformDependentApplicationData(mockContext)
 	assert.Equal(t, 0, len(data), "When command execution fails - application dataset must be empty")
 }

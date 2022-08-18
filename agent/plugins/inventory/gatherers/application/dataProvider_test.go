@@ -139,7 +139,7 @@ func TestStripCtlFromUTF8(t *testing.T) {
 }
 
 func assertEqual(t *testing.T, expected []model.ApplicationData, found []model.ApplicationData) {
-	assert.Equal(t, len(expected), len(found))
+	assert.Equal(t, len(expected), len(found), "expected length of both expected and actual list of application data to be same")
 	for i, expectedApp := range expected {
 		foundApp := found[i]
 		assertEqualApps(t, expectedApp, foundApp)
