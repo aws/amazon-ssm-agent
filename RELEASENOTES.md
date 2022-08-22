@@ -1,5 +1,9 @@
 Latest
 ===============
+- Fix samba configuration for sub-domains
+
+3.1.1732.0
+===============
 - Add code in document/session worker to fallback to default identity selector when runtime config not present
 - Fix to handle command-line-arguments in document/session worker when launched by old agent workers
 
